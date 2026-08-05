@@ -1,6 +1,6 @@
 name: weekly_vif_verifier
 description: Canonical Weekly Drift Reviewer prompt for Journal Entry Conflict decisions.
-version: '2.0'
+version: '3.0'
 input_variables:
   - declared_values
   - cumulative_history
@@ -14,10 +14,17 @@ template: |
   intention, external constraint, biography, or ambiguous prose. When the text
   cannot support a reliable decision, abstain.
 
+  Use direct_behavior_or_choice for a conflict. A conflict must have medium or
+  high confidence. A low-confidence possible conflict must be abstain. A
+  not_conflict decision means only that this Journal Entry does not clearly
+  conflict with the value. It does not prove supportive behavior, improvement,
+  success, or recovery.
+
   Return exactly one assessment for every combination of CURRENT-WEEK entry and
   declared core value. Do not assess earlier entries again. An evidence quote
   for a conflict must be an exact substring of that entry. For not_conflict or
-  abstain, the evidence quote may be empty.
+  abstain, the evidence quote may be empty. Every supplied evidence quote must
+  be an exact substring of that entry.
 
   DECLARED CORE VALUES
   {{ declared_values }}

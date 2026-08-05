@@ -49,7 +49,7 @@ def test_complete_development_population_and_prompt_counts() -> None:
 def test_canonical_prompt_metadata_rejects_vif_critic_input() -> None:
     metadata = get_prompt_metadata("weekly_vif_verifier")
 
-    assert metadata["version"] == "2.0"
+    assert metadata["version"] == "3.0"
     assert metadata["input_variables"] == [
         "declared_values",
         "cumulative_history",

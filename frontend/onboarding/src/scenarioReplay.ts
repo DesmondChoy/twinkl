@@ -22,10 +22,10 @@ export interface ScenarioCatalogItem {
   culture: string;
   core_values: string[];
   role:
-    | "stable"
+    | "no_active_drift"
     | "active_drift"
-    | "recovered_drift"
-    | "uncertain"
+    | "drift_ended"
+    | "insufficient_evidence"
     | "two_core_values";
   progression: ScenarioDeliveryState[];
   summary: string;
@@ -87,10 +87,10 @@ function validateCatalogItem(
   }
   const role = text(item.role, `${name}.role`);
   if (![
-    "stable",
+    "no_active_drift",
     "active_drift",
-    "recovered_drift",
-    "uncertain",
+    "drift_ended",
+    "insufficient_evidence",
     "two_core_values",
   ].includes(role)) {
     throw new Error(`${name}.role is incompatible`);
@@ -99,7 +99,7 @@ function validateCatalogItem(
     throw new Error(`${name}.progression must not be empty`);
   }
   const progression = item.progression.map((state, stateIndex) => {
-    if (!["stable", "active", "recovered", "uncertain", "mixed"].includes(
+    if (!["active_drift", "no_active_drift", "insufficient_evidence"].includes(
       String(state),
     )) {
       throw new Error(`${name}.progression[${stateIndex}] is incompatible`);

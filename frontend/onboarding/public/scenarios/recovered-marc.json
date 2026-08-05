@@ -405,12 +405,24 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "988d1a65",
       "cutoff_t_index": 0,
       "cutoff_date": "2025-02-16",
-      "delivery_state": "stable",
-      "core_value_states": {},
+      "delivery_state": "no_active_drift",
+      "core_value_states": {
+        "power": "no_active_drift"
+      },
+      "core_value_details": {
+        "power": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 0,
+          "last_date": "2025-02-16"
+        }
+      },
       "drifts": []
     },
     "weekly_digest": {
@@ -418,9 +430,9 @@
       "persona_name": "Marc Vandenberghe",
       "week_start": "2025-02-10",
       "week_end": "2025-02-16",
-      "response_mode": "stable",
+      "response_mode": "no_active_drift",
       "mode_source": "drift_detector",
-      "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+      "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
       "signal_source": "weekly_drift_reviewer",
       "n_entries": 1,
       "overall_mean": null,
@@ -429,7 +441,20 @@
         "power"
       ],
       "goal_context": null,
-      "drift_states": {},
+      "drift_states": {
+        "power": "no_active_drift"
+      },
+      "drift_details": {
+        "power": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 0,
+          "last_date": "2025-02-16"
+        }
+      },
+      "state_comparisons": [],
       "drift_reasons": [],
       "top_tensions": [],
       "top_strengths": [],
@@ -439,7 +464,9 @@
           "date": "2025-02-16",
           "t_index": 0,
           "direction": "context",
-          "dimensions": [],
+          "dimensions": [
+            "power"
+          ],
           "score_mean": null,
           "excerpt": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight..."
         }
@@ -470,8 +497,8 @@
   "scenario": {
     "schema_version": "experience-inspect-v1",
     "scenario_id": "recovered-marc",
-    "title": "Marc — status pressure and repair",
-    "description": "A manager notices how status anxiety shapes his choices, then takes a clear corrective action that recovers Power Drift.",
+    "title": "Marc — status pressure and a changed choice",
+    "description": "A manager notices how status anxiety shapes his choices, then takes a clear later choice that ends the active Power Drift pattern.",
     "source": "saved_replay",
     "persona_id": "988d1a65",
     "profile": {
@@ -1084,13 +1111,23 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "988d1a65",
       "cutoff_t_index": 11,
       "cutoff_date": "2025-03-31",
-      "delivery_state": "recovered",
+      "delivery_state": "no_active_drift",
       "core_value_states": {
-        "power": "recovered"
+        "power": "no_active_drift"
+      },
+      "core_value_details": {
+        "power": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "not_conflict",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-03-31"
+        }
       },
       "drifts": [
         {
@@ -1111,7 +1148,7 @@
             "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen.",
             "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled and nodded like it was a collaborative discussion."
           ],
-          "delivery_state": "recovered",
+          "termination_reason": "not_conflict",
           "termination_t_index": 7,
           "termination_date": "2025-03-21",
           "termination_verdict": "not_conflict"
@@ -1123,9 +1160,9 @@
       "persona_name": "Marc Vandenberghe",
       "week_start": "2025-03-31",
       "week_end": "2025-04-06",
-      "response_mode": "recovered",
+      "response_mode": "no_active_drift",
       "mode_source": "drift_detector",
-      "mode_rationale": "The latest confirmed Drift state is recovered.",
+      "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
       "signal_source": "weekly_drift_reviewer",
       "n_entries": 1,
       "overall_mean": null,
@@ -1135,46 +1172,101 @@
       ],
       "goal_context": null,
       "drift_states": {
-        "power": "recovered"
+        "power": "no_active_drift"
       },
+      "drift_details": {
+        "power": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "not_conflict",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-03-31"
+        }
+      },
+      "state_comparisons": [
+        {
+          "core_value": "power",
+          "previous_week_start": "2025-03-24",
+          "previous_week_end": "2025-03-30",
+          "current_week_start": "2025-03-31",
+          "current_week_end": "2025-04-06",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-03-25",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
+            },
+            {
+              "date": "2025-03-26",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-03-31",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "End of Q1. Numbers look solid, team's holding together, nothing on fire. Booked a table at De Kas for Lotte's birthday next week. Normal Monday, which at this point I'll take."
+            }
+          ]
+        }
+      ],
       "drift_reasons": [
-        "988d1a65:power:5:recovered"
+        "988d1a65:power:5:not_conflict"
       ],
-      "top_tensions": [
-        "power"
-      ],
+      "top_tensions": [],
       "top_strengths": [],
       "dimensions": [],
       "evidence": [
         {
-          "date": "2025-03-10",
-          "t_index": 5,
-          "direction": "misaligned",
+          "date": "2025-03-25",
+          "t_index": 9,
+          "direction": "context",
           "dimensions": [
             "power"
           ],
           "score_mean": null,
-          "excerpt": "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen."
+          "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
         },
         {
-          "date": "2025-03-16",
-          "t_index": 6,
-          "direction": "misaligned",
+          "date": "2025-03-26",
+          "t_index": 10,
+          "direction": "context",
           "dimensions": [
             "power"
           ],
           "score_mean": null,
-          "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+          "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
         },
         {
-          "date": "2025-03-21",
-          "t_index": 7,
-          "direction": "recovery",
+          "date": "2025-03-31",
+          "t_index": 11,
+          "direction": "context",
           "dimensions": [
             "power"
           ],
           "score_mean": null,
-          "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+          "excerpt": "End of Q1. Numbers look solid, team's holding together, nothing on fire. Booked a table at De Kas for Lotte's birthday next week. Normal Monday, which at this point I'll take."
         }
       ],
       "coach_narrative": null,
@@ -1199,7 +1291,7 @@
           "recovered-marc:event:008",
           "recovered-marc:event:009"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "recovered-marc:week:2",
@@ -1222,7 +1314,7 @@
           "recovered-marc:event:019",
           "recovered-marc:event:020"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "recovered-marc:week:3",
@@ -1240,7 +1332,7 @@
           "recovered-marc:event:026",
           "recovered-marc:event:027"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "recovered-marc:week:4",
@@ -1258,7 +1350,7 @@
           "recovered-marc:event:033",
           "recovered-marc:event:034"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "recovered-marc:week:5",
@@ -1282,7 +1374,7 @@
           "recovered-marc:event:045",
           "recovered-marc:event:046"
         ],
-        "expected_delivery_state": "active"
+        "expected_delivery_state": "active_drift"
       },
       {
         "week_id": "recovered-marc:week:6",
@@ -1304,7 +1396,7 @@
           "recovered-marc:event:055",
           "recovered-marc:event:056"
         ],
-        "expected_delivery_state": "recovered"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "recovered-marc:week:7",
@@ -1327,7 +1419,7 @@
           "recovered-marc:event:066",
           "recovered-marc:event:067"
         ],
-        "expected_delivery_state": "recovered"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "recovered-marc:week:8",
@@ -1345,7 +1437,7 @@
           "recovered-marc:event:073",
           "recovered-marc:event:074"
         ],
-        "expected_delivery_state": "recovered"
+        "expected_delivery_state": "no_active_drift"
       }
     ],
     "trace_event_ids": [
@@ -1865,12 +1957,24 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 0,
           "cutoff_date": "2025-02-16",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-02-16"
+            }
+          },
           "drifts": []
         },
         "weekly_digest": {
@@ -1878,9 +1982,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-02-10",
           "week_end": "2025-02-16",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -1889,7 +1993,20 @@
             "power"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "power": "no_active_drift"
+          },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-02-16"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
@@ -1899,7 +2016,9 @@
               "date": "2025-02-16",
               "t_index": 0,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "power"
+              ],
               "score_mean": null,
               "excerpt": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight..."
             }
@@ -1930,8 +2049,8 @@
       "scenario": {
         "schema_version": "experience-inspect-v1",
         "scenario_id": "recovered-marc",
-        "title": "Marc — status pressure and repair",
-        "description": "A manager notices how status anxiety shapes his choices, then takes a clear corrective action that recovers Power Drift.",
+        "title": "Marc — status pressure and a changed choice",
+        "description": "A manager notices how status anxiety shapes his choices, then takes a clear later choice that ends the active Power Drift pattern.",
         "source": "saved_replay",
         "persona_id": "988d1a65",
         "profile": {
@@ -2544,13 +2663,23 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 11,
           "cutoff_date": "2025-03-31",
-          "delivery_state": "recovered",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "power": "recovered"
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-03-31"
+            }
           },
           "drifts": [
             {
@@ -2571,7 +2700,7 @@
                 "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen.",
                 "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled and nodded like it was a collaborative discussion."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 7,
               "termination_date": "2025-03-21",
               "termination_verdict": "not_conflict"
@@ -2583,9 +2712,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-03-31",
           "week_end": "2025-04-06",
-          "response_mode": "recovered",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is recovered.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -2595,46 +2724,101 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "power": "recovered"
+            "power": "no_active_drift"
           },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-03-31"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "power",
+              "previous_week_start": "2025-03-24",
+              "previous_week_end": "2025-03-30",
+              "current_week_start": "2025-03-31",
+              "current_week_end": "2025-04-06",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-03-25",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
+                },
+                {
+                  "date": "2025-03-26",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-03-31",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "End of Q1. Numbers look solid, team's holding together, nothing on fire. Booked a table at De Kas for Lotte's birthday next week. Normal Monday, which at this point I'll take."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "988d1a65:power:5:recovered"
+            "988d1a65:power:5:not_conflict"
           ],
-          "top_tensions": [
-            "power"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-03-10",
-              "t_index": 5,
-              "direction": "misaligned",
+              "date": "2025-03-25",
+              "t_index": 9,
+              "direction": "context",
               "dimensions": [
                 "power"
               ],
               "score_mean": null,
-              "excerpt": "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen."
+              "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
             },
             {
-              "date": "2025-03-16",
-              "t_index": 6,
-              "direction": "misaligned",
+              "date": "2025-03-26",
+              "t_index": 10,
+              "direction": "context",
               "dimensions": [
                 "power"
               ],
               "score_mean": null,
-              "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+              "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
             },
             {
-              "date": "2025-03-21",
-              "t_index": 7,
-              "direction": "recovery",
+              "date": "2025-03-31",
+              "t_index": 11,
+              "direction": "context",
               "dimensions": [
                 "power"
               ],
               "score_mean": null,
-              "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+              "excerpt": "End of Q1. Numbers look solid, team's holding together, nothing on fire. Booked a table at De Kas for Lotte's birthday next week. Normal Monday, which at this point I'll take."
             }
           ],
           "coach_narrative": null,
@@ -2659,7 +2843,7 @@
               "recovered-marc:event:008",
               "recovered-marc:event:009"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "recovered-marc:week:2",
@@ -2682,7 +2866,7 @@
               "recovered-marc:event:019",
               "recovered-marc:event:020"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "recovered-marc:week:3",
@@ -2700,7 +2884,7 @@
               "recovered-marc:event:026",
               "recovered-marc:event:027"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "recovered-marc:week:4",
@@ -2718,7 +2902,7 @@
               "recovered-marc:event:033",
               "recovered-marc:event:034"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "recovered-marc:week:5",
@@ -2742,7 +2926,7 @@
               "recovered-marc:event:045",
               "recovered-marc:event:046"
             ],
-            "expected_delivery_state": "active"
+            "expected_delivery_state": "active_drift"
           },
           {
             "week_id": "recovered-marc:week:6",
@@ -2764,7 +2948,7 @@
               "recovered-marc:event:055",
               "recovered-marc:event:056"
             ],
-            "expected_delivery_state": "recovered"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "recovered-marc:week:7",
@@ -2787,7 +2971,7 @@
               "recovered-marc:event:066",
               "recovered-marc:event:067"
             ],
-            "expected_delivery_state": "recovered"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "recovered-marc:week:8",
@@ -2805,7 +2989,7 @@
               "recovered-marc:event:073",
               "recovered-marc:event:074"
             ],
-            "expected_delivery_state": "recovered"
+            "expected_delivery_state": "no_active_drift"
           }
         ],
         "trace_event_ids": [
@@ -3710,7 +3894,7 @@
           "id": "recovered-marc:week:1"
         }
       ],
-      "input_hash": "8ab8f608a256fb64daf908c90d3d77078704ecc7208d448586327b110b5fa939",
+      "input_hash": "4be9609634518a9dec9070f27bb5c251b2d73246bd6c9ba18cb96367562f7a10",
       "error": null,
       "details": {
         "decisions": [
@@ -3733,17 +3917,31 @@
             "t_index": 0,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 0,
           "cutoff_date": "2025-02-16",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-02-16"
+            }
+          },
           "drifts": []
         }
       }
@@ -3783,7 +3981,7 @@
           "id": "recovered-marc:week:1"
         }
       ],
-      "input_hash": "1a609626563768bd5a4bcf0697abc97c5ec4535d6f41498d8f882f1930934148",
+      "input_hash": "a23c6711314ab3323c089aaf25678a4a9161f314a2e82a563b65a531e387df91",
       "error": null,
       "details": {
         "digest": {
@@ -3791,9 +3989,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-02-10",
           "week_end": "2025-02-16",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -3802,7 +4000,20 @@
             "power"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "power": "no_active_drift"
+          },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-02-16"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
@@ -3812,7 +4023,9 @@
               "date": "2025-02-16",
               "t_index": 0,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "power"
+              ],
               "score_mean": null,
               "excerpt": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight..."
             }
@@ -4390,7 +4603,7 @@
           "id": "recovered-marc:week:2"
         }
       ],
-      "input_hash": "73bb60087cf65bd1c9142243ff310db020c2fa3a65ad5e55d1d86772e3cf2cdb",
+      "input_hash": "bdc6a90ea5f0d956e9d73f929b0e83cf8d3c3640fae0d22408c99a3f923366ae",
       "error": null,
       "details": {
         "decisions": [
@@ -4439,31 +4652,49 @@
             "t_index": 0,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 2,
           "cutoff_date": "2025-02-23",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 2,
+              "last_date": "2025-02-23"
+            }
+          },
           "drifts": []
         }
       }
@@ -4503,7 +4734,7 @@
           "id": "recovered-marc:week:2"
         }
       ],
-      "input_hash": "ecb987b9df8d80661c0e47d0267ddfc68f40e23e92ba6f70a65cc1c2e764b879",
+      "input_hash": "f6b031d8d305db05b01bc61b25c353f0c610f85c71ae235449fe946f06e19a39",
       "error": null,
       "details": {
         "digest": {
@@ -4511,9 +4742,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-02-17",
           "week_end": "2025-02-23",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -4522,17 +4753,88 @@
             "power"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "power": "no_active_drift"
+          },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 2,
+              "last_date": "2025-02-23"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "power",
+              "previous_week_start": "2025-02-10",
+              "previous_week_end": "2025-02-16",
+              "current_week_start": "2025-02-17",
+              "current_week_end": "2025-02-23",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-02-16",
+                  "t_index": 0,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-02-22",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative. The room was quiet in that good way where people are actually listening. Felt like the division is finally mine in the way I..."
+                },
+                {
+                  "date": "2025-02-23",
+                  "t_index": 2,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Needed sign-off from Legal on the new supplier contract. Straightforward, or so I thought. Sent it Thursday, followed up Friday morning, got told Anke was \"reviewing priorities\" and would get to it when she could. Meanwhile the supplier's deadline is..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-02-16",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight..."
+            },
+            {
               "date": "2025-02-22",
               "t_index": 1,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "power"
+              ],
               "score_mean": null,
               "excerpt": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative. The room was quiet in that good way where people are actually listening. Felt like the division is finally mine in the way I..."
             },
@@ -4540,7 +4842,9 @@
               "date": "2025-02-23",
               "t_index": 2,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "power"
+              ],
               "score_mean": null,
               "excerpt": "Needed sign-off from Legal on the new supplier contract. Straightforward, or so I thought. Sent it Thursday, followed up Friday morning, got told Anke was \"reviewing priorities\" and would get to it when she could. Meanwhile the supplier's deadline is..."
             }
@@ -4549,6 +4853,7 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "988d1a65:entry:0",
           "988d1a65:entry:1",
           "988d1a65:entry:2"
         ]
@@ -4932,7 +5237,7 @@
           "id": "recovered-marc:week:3"
         }
       ],
-      "input_hash": "c6d1f5e23c79f1121ba46d6128b0a084aec78906b434ed3291b5b80110a43710",
+      "input_hash": "40fa87f48c88e0591a5c508adebedb694c207e7745ce3464fcaa901745552f16",
       "error": null,
       "details": {
         "decisions": [
@@ -4994,38 +5299,58 @@
             "t_index": 0,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 3,
           "cutoff_date": "2025-02-26",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 3,
+              "last_date": "2025-02-26"
+            }
+          },
           "drifts": []
         }
       }
@@ -5065,7 +5390,7 @@
           "id": "recovered-marc:week:3"
         }
       ],
-      "input_hash": "16e7110bd8d5a216c44ccc03482a43473c127ded56b33cd605bdb2cc0e6e2410",
+      "input_hash": "42066c957782293ede747c4f80368ffb5f15fdfbb0cf9e134e55bd0602809003",
       "error": null,
       "details": {
         "digest": {
@@ -5073,9 +5398,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-02-24",
           "week_end": "2025-03-02",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -5084,17 +5409,98 @@
             "power"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "power": "no_active_drift"
+          },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 3,
+              "last_date": "2025-02-26"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "power",
+              "previous_week_start": "2025-02-17",
+              "previous_week_end": "2025-02-23",
+              "current_week_start": "2025-02-24",
+              "current_week_end": "2025-03-02",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-02-22",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative. The room was quiet in that good way where people are actually listening. Felt like the division is finally mine in the way I..."
+                },
+                {
+                  "date": "2025-02-23",
+                  "t_index": 2,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Needed sign-off from Legal on the new supplier contract. Straightforward, or so I thought. Sent it Thursday, followed up Friday morning, got told Anke was \"reviewing priorities\" and would get to it when she could. Meanwhile the supplier's deadline is..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-02-26",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Routine day. Back-to-back calls, budget reconciliation, nothing unusual. Grabbed a broodje kroket from the canteen and ate it at my desk between meetings."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-02-22",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative. The room was quiet in that good way where people are actually listening. Felt like the division is finally mine in the way I..."
+            },
+            {
+              "date": "2025-02-23",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Needed sign-off from Legal on the new supplier contract. Straightforward, or so I thought. Sent it Thursday, followed up Friday morning, got told Anke was \"reviewing priorities\" and would get to it when she could. Meanwhile the supplier's deadline is..."
+            },
+            {
               "date": "2025-02-26",
               "t_index": 3,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "power"
+              ],
               "score_mean": null,
               "excerpt": "Routine day. Back-to-back calls, budget reconciliation, nothing unusual. Grabbed a broodje kroket from the canteen and ate it at my desk between meetings."
             }
@@ -5103,6 +5509,8 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "988d1a65:entry:1",
+          "988d1a65:entry:2",
           "988d1a65:entry:3"
         ]
       }
@@ -5494,7 +5902,7 @@
           "id": "recovered-marc:week:4"
         }
       ],
-      "input_hash": "5e47af6304dd401094409f29d9c6915bbe16db9723e0f91a9b569f47a40a9c67",
+      "input_hash": "ae31970fd78142719798f9866968142e829ca97dbedd08dd1be4fc07c3e9781c",
       "error": null,
       "details": {
         "decisions": [
@@ -5569,45 +5977,67 @@
             "t_index": 0,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 4,
           "cutoff_date": "2025-03-03",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 4,
+              "last_date": "2025-03-03"
+            }
+          },
           "drifts": []
         }
       }
@@ -5647,7 +6077,7 @@
           "id": "recovered-marc:week:4"
         }
       ],
-      "input_hash": "da6d72377550bb7eab8d4cfb1ac242c11f5d90806899fa311f201b7776603d25",
+      "input_hash": "19b9c7276a1d851af33cf414780c5ce08d260698920e1750aaad57d71b961143",
       "error": null,
       "details": {
         "digest": {
@@ -5655,9 +6085,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-03-03",
           "week_end": "2025-03-09",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -5666,17 +6096,78 @@
             "power"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "power": "no_active_drift"
+          },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 4,
+              "last_date": "2025-03-03"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "power",
+              "previous_week_start": "2025-02-24",
+              "previous_week_end": "2025-03-02",
+              "current_week_start": "2025-03-03",
+              "current_week_end": "2025-03-09",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-02-26",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Routine day. Back-to-back calls, budget reconciliation, nothing unusual. Grabbed a broodje kroket from the canteen and ate it at my desk between meetings."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-03-03",
+                  "t_index": 4,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Monday. Staff meeting went long because Thomas wanted to discuss the new reporting structure again. I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-02-26",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Routine day. Back-to-back calls, budget reconciliation, nothing unusual. Grabbed a broodje kroket from the canteen and ate it at my desk between meetings."
+            },
+            {
               "date": "2025-03-03",
               "t_index": 4,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "power"
+              ],
               "score_mean": null,
               "excerpt": "Monday. Staff meeting went long because Thomas wanted to discuss the new reporting structure again. I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten..."
             }
@@ -5685,6 +6176,7 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "988d1a65:entry:3",
           "988d1a65:entry:4"
         ]
       }
@@ -6340,7 +6832,7 @@
           "id": "recovered-marc:week:5"
         }
       ],
-      "input_hash": "c7af941b495ae0f9e95b7d7d3796b4b0136abe73f3a2fdffdae194860938a04a",
+      "input_hash": "c413695ddd7a52b51c21b4c2c3d35234af7b70c1d74bbbb9d60689a7e9f83cfd",
       "error": null,
       "details": {
         "decisions": [
@@ -6441,60 +6933,84 @@
             "t_index": 0,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "power",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 6,
             "core_value": "power",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 6,
           "cutoff_date": "2025-03-16",
-          "delivery_state": "active",
+          "delivery_state": "active_drift",
           "core_value_states": {
-            "power": "active"
+            "power": "active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 6,
+              "last_date": "2025-03-16"
+            }
           },
           "drifts": [
             {
@@ -6515,7 +7031,7 @@
                 "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen.",
                 "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled and nodded like it was a collaborative discussion."
               ],
-              "delivery_state": "active",
+              "termination_reason": null,
               "termination_t_index": null,
               "termination_date": null,
               "termination_verdict": null
@@ -6559,7 +7075,7 @@
           "id": "recovered-marc:week:5"
         }
       ],
-      "input_hash": "505056dd0b90ae1f49e6fe4a4a8c3e501ecbc40ff42752c457ed28876b291763",
+      "input_hash": "d3beeb96da598572ff2d3b910800977fbdbd9129c1bd21aeaededa539de937ce",
       "error": null,
       "details": {
         "digest": {
@@ -6567,9 +7083,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-03-10",
           "week_end": "2025-03-16",
-          "response_mode": "active",
+          "response_mode": "active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is active.",
+          "mode_rationale": "At least one Core Value has active Drift.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -6579,10 +7095,67 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "power": "active"
+            "power": "active_drift"
           },
+          "drift_details": {
+            "power": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 6,
+              "last_date": "2025-03-16"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "power",
+              "previous_week_start": "2025-03-03",
+              "previous_week_end": "2025-03-09",
+              "current_week_start": "2025-03-10",
+              "current_week_end": "2025-03-16",
+              "previous_state": "no_active_drift",
+              "current_state": "active_drift",
+              "change": "active_drift_started",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-03-03",
+                  "t_index": 4,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Monday. Staff meeting went long because Thomas wanted to discuss the new reporting structure again. I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-03-10",
+                  "t_index": 5,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen."
+                },
+                {
+                  "date": "2025-03-16",
+                  "t_index": 6,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "988d1a65:power:5:active"
+            "988d1a65:power:5:open"
           ],
           "top_tensions": [
             "power"
@@ -6590,6 +7163,16 @@
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
+            {
+              "date": "2025-03-03",
+              "t_index": 4,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Monday. Staff meeting went long because Thomas wanted to discuss the new reporting structure again. I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten..."
+            },
             {
               "date": "2025-03-10",
               "t_index": 5,
@@ -6615,6 +7198,7 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "988d1a65:entry:4",
           "988d1a65:entry:5",
           "988d1a65:entry:6"
         ]
@@ -7195,7 +7779,7 @@
           "id": "recovered-marc:week:6"
         }
       ],
-      "input_hash": "594e71ce39a75769081a2fd61cdf759b4278c010c87a227e07ead1a42fd8e376",
+      "input_hash": "dbc3605e5cd10ac410541e132ccae6249e1d9867fcda8494f7bcec2c56b4ac99",
       "error": null,
       "details": {
         "decisions": [
@@ -7322,74 +7906,102 @@
             "t_index": 0,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "power",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 6,
             "core_value": "power",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 7,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "recover"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 8,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 8,
           "cutoff_date": "2025-03-23",
-          "delivery_state": "recovered",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "power": "recovered"
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 8,
+              "last_date": "2025-03-23"
+            }
           },
           "drifts": [
             {
@@ -7410,7 +8022,7 @@
                 "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen.",
                 "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled and nodded like it was a collaborative discussion."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 7,
               "termination_date": "2025-03-21",
               "termination_verdict": "not_conflict"
@@ -7454,7 +8066,7 @@
           "id": "recovered-marc:week:6"
         }
       ],
-      "input_hash": "f0afed540aa5939f3b10965db47369641c52d35c38852bad706d1b8d9316cf62",
+      "input_hash": "2e8e8a855179a3e13b2372126dd928df653b3dcc290dc1fbccb8bc4658dd474a",
       "error": null,
       "details": {
         "digest": {
@@ -7462,9 +8074,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-03-17",
           "week_end": "2025-03-23",
-          "response_mode": "recovered",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is recovered.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -7474,14 +8086,79 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "power": "recovered"
+            "power": "no_active_drift"
           },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 8,
+              "last_date": "2025-03-23"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "power",
+              "previous_week_start": "2025-03-10",
+              "previous_week_end": "2025-03-16",
+              "current_week_start": "2025-03-17",
+              "current_week_end": "2025-03-23",
+              "previous_state": "active_drift",
+              "current_state": "no_active_drift",
+              "change": "active_drift_ended",
+              "end_reason": "not_conflict",
+              "previous_evidence": [
+                {
+                  "date": "2025-03-10",
+                  "t_index": 5,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen."
+                },
+                {
+                  "date": "2025-03-16",
+                  "t_index": 6,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-03-21",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+                },
+                {
+                  "date": "2025-03-23",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Quiet Sunday, Lotte took the girls to her mother's in Leiden. House to myself. Made coffee the slow way, French press, sat in the kitchen looking at the garden. The hedge needs cutting again. Thought about calling my brother but..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "988d1a65:power:5:recovered"
+            "988d1a65:power:5:not_conflict"
           ],
-          "top_tensions": [
-            "power"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
@@ -7508,12 +8185,22 @@
             {
               "date": "2025-03-21",
               "t_index": 7,
-              "direction": "recovery",
+              "direction": "context",
               "dimensions": [
                 "power"
               ],
               "score_mean": null,
               "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+            },
+            {
+              "date": "2025-03-23",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Quiet Sunday, Lotte took the girls to her mother's in Leiden. House to myself. Made coffee the slow way, French press, sat in the kitchen looking at the garden. The hedge needs cutting again. Thought about calling my brother but..."
             }
           ],
           "coach_narrative": null,
@@ -7522,7 +8209,8 @@
         "cited_journal_entry_ids": [
           "988d1a65:entry:5",
           "988d1a65:entry:6",
-          "988d1a65:entry:7"
+          "988d1a65:entry:7",
+          "988d1a65:entry:8"
         ]
       }
     },
@@ -8166,7 +8854,7 @@
           "id": "recovered-marc:week:7"
         }
       ],
-      "input_hash": "4fbc71f5ce68cc5ab578754e02b809dd104d7f8c9c0c19c188aae8d341a33ed6",
+      "input_hash": "5067f918742107db1e5ecc8a090436f4a811dbe337c7ee33dcc4481f8fe42cbe",
       "error": null,
       "details": {
         "decisions": [
@@ -8319,88 +9007,120 @@
             "t_index": 0,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "power",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 6,
             "core_value": "power",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 7,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "recover"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 8,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 10,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 10,
           "cutoff_date": "2025-03-26",
-          "delivery_state": "recovered",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "power": "recovered"
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 10,
+              "last_date": "2025-03-26"
+            }
           },
           "drifts": [
             {
@@ -8421,7 +9141,7 @@
                 "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen.",
                 "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled and nodded like it was a collaborative discussion."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 7,
               "termination_date": "2025-03-21",
               "termination_verdict": "not_conflict"
@@ -8465,7 +9185,7 @@
           "id": "recovered-marc:week:7"
         }
       ],
-      "input_hash": "5865d0b8b8225950145d95ccbc40f9da9701830adfefc04eee77a5d380687601",
+      "input_hash": "bb70c169fcb8aa937441bac281af73e5620fc6da6affea17eb192fd71870af7f",
       "error": null,
       "details": {
         "digest": {
@@ -8473,9 +9193,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-03-24",
           "week_end": "2025-03-30",
-          "response_mode": "recovered",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is recovered.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -8485,55 +9205,131 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "power": "recovered"
+            "power": "no_active_drift"
           },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 10,
+              "last_date": "2025-03-26"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "power",
+              "previous_week_start": "2025-03-17",
+              "previous_week_end": "2025-03-23",
+              "current_week_start": "2025-03-24",
+              "current_week_end": "2025-03-30",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-03-21",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+                },
+                {
+                  "date": "2025-03-23",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Quiet Sunday, Lotte took the girls to her mother's in Leiden. House to myself. Made coffee the slow way, French press, sat in the kitchen looking at the garden. The hedge needs cutting again. Thought about calling my brother but..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-03-25",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
+                },
+                {
+                  "date": "2025-03-26",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "988d1a65:power:5:recovered"
+            "988d1a65:power:5:not_conflict"
           ],
-          "top_tensions": [
-            "power"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-03-10",
-              "t_index": 5,
-              "direction": "misaligned",
-              "dimensions": [
-                "power"
-              ],
-              "score_mean": null,
-              "excerpt": "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen."
-            },
-            {
-              "date": "2025-03-16",
-              "t_index": 6,
-              "direction": "misaligned",
-              "dimensions": [
-                "power"
-              ],
-              "score_mean": null,
-              "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
-            },
-            {
               "date": "2025-03-21",
               "t_index": 7,
-              "direction": "recovery",
+              "direction": "context",
               "dimensions": [
                 "power"
               ],
               "score_mean": null,
               "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+            },
+            {
+              "date": "2025-03-23",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Quiet Sunday, Lotte took the girls to her mother's in Leiden. House to myself. Made coffee the slow way, French press, sat in the kitchen looking at the garden. The hedge needs cutting again. Thought about calling my brother but..."
+            },
+            {
+              "date": "2025-03-25",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
+            },
+            {
+              "date": "2025-03-26",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
-          "988d1a65:entry:5",
-          "988d1a65:entry:6",
-          "988d1a65:entry:7"
+          "988d1a65:entry:7",
+          "988d1a65:entry:8",
+          "988d1a65:entry:9",
+          "988d1a65:entry:10"
         ]
       }
     },
@@ -8987,7 +9783,7 @@
           "id": "recovered-marc:week:8"
         }
       ],
-      "input_hash": "45061dfe1a1fb110a51a0f98bbaf70009955a7dbf5c33089c4c7981cbe7d0bf9",
+      "input_hash": "6461d32cb789b38da53e548ce66688e0cc6110de919e557a9d85192099d4ad36",
       "error": null,
       "details": {
         "decisions": [
@@ -9153,95 +9949,129 @@
             "t_index": 0,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "power",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 6,
             "core_value": "power",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 7,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "recover"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 8,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 10,
             "core_value": "power",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 11,
             "core_value": "power",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "988d1a65",
           "cutoff_t_index": 11,
           "cutoff_date": "2025-03-31",
-          "delivery_state": "recovered",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "power": "recovered"
+            "power": "no_active_drift"
+          },
+          "core_value_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-03-31"
+            }
           },
           "drifts": [
             {
@@ -9262,7 +10092,7 @@
                 "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen.",
                 "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled and nodded like it was a collaborative discussion."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 7,
               "termination_date": "2025-03-21",
               "termination_verdict": "not_conflict"
@@ -9306,7 +10136,7 @@
           "id": "recovered-marc:week:8"
         }
       ],
-      "input_hash": "fb6821df4208cacab940c10935c2ce2bc6cb8714087cc8ba3d932ce8f162c92d",
+      "input_hash": "a9192fdc9c9b956648009b30f77a0deb86ad27a244ac1476abc3c81f52dd6fd7",
       "error": null,
       "details": {
         "digest": {
@@ -9314,9 +10144,9 @@
           "persona_name": "Marc Vandenberghe",
           "week_start": "2025-03-31",
           "week_end": "2025-04-06",
-          "response_mode": "recovered",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is recovered.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -9326,55 +10156,110 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "power": "recovered"
+            "power": "no_active_drift"
           },
+          "drift_details": {
+            "power": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-03-31"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "power",
+              "previous_week_start": "2025-03-24",
+              "previous_week_end": "2025-03-30",
+              "current_week_start": "2025-03-31",
+              "current_week_end": "2025-04-06",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-03-25",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
+                },
+                {
+                  "date": "2025-03-26",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-03-31",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "power"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "End of Q1. Numbers look solid, team's holding together, nothing on fire. Booked a table at De Kas for Lotte's birthday next week. Normal Monday, which at this point I'll take."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "988d1a65:power:5:recovered"
+            "988d1a65:power:5:not_conflict"
           ],
-          "top_tensions": [
-            "power"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-03-10",
-              "t_index": 5,
-              "direction": "misaligned",
+              "date": "2025-03-25",
+              "t_index": 9,
+              "direction": "context",
               "dimensions": [
                 "power"
               ],
               "score_mean": null,
-              "excerpt": "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen."
+              "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
             },
             {
-              "date": "2025-03-16",
-              "t_index": 6,
-              "direction": "misaligned",
+              "date": "2025-03-26",
+              "t_index": 10,
+              "direction": "context",
               "dimensions": [
                 "power"
               ],
               "score_mean": null,
-              "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+              "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
             },
             {
-              "date": "2025-03-21",
-              "t_index": 7,
-              "direction": "recovery",
+              "date": "2025-03-31",
+              "t_index": 11,
+              "direction": "context",
               "dimensions": [
                 "power"
               ],
               "score_mean": null,
-              "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+              "excerpt": "End of Q1. Numbers look solid, team's holding together, nothing on fire. Booked a table at De Kas for Lotte's birthday next week. Normal Monday, which at this point I'll take."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
-          "988d1a65:entry:5",
-          "988d1a65:entry:6",
-          "988d1a65:entry:7"
+          "988d1a65:entry:9",
+          "988d1a65:entry:10",
+          "988d1a65:entry:11"
         ]
       }
     }

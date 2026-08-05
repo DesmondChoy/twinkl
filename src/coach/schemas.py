@@ -5,6 +5,9 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 CoachResponseMode = Literal[
+    "active_drift",
+    "no_active_drift",
+    "insufficient_evidence",
     "active",
     "recovered",
     "uncertain",
@@ -21,6 +24,19 @@ CoachDigestPolicy = Literal[
     "drift_detected",
     "no_current_drift",
     "more_reflection_needed",
+]
+CoreValueDriftState = Literal[
+    "active_drift",
+    "no_active_drift",
+    "insufficient_evidence",
+]
+CoreValueStateChange = Literal[
+    "unchanged",
+    "active_drift_started",
+    "active_drift_restarted",
+    "active_drift_ended",
+    "evidence_became_insufficient",
+    "evidence_resolved",
 ]
 
 DriftDimensionClassification = Literal["stable", "evolution", "drift"]
@@ -61,6 +77,33 @@ class EvidenceSnippet(BaseModel):
     dimensions: list[str]
     score_mean: float | None = None
     excerpt: str
+
+
+class CoreValueDigestDetail(BaseModel):
+    """Compact current state metadata supplied to the Coach Digest."""
+
+    state: CoreValueDriftState
+    current_run_length: int = Field(ge=0)
+    last_decision: Literal["conflict", "not_conflict", "abstain"]
+    last_review_status: Literal["ok", "refusal", "invalid", "error"]
+    last_t_index: int = Field(ge=0)
+    last_date: str
+
+
+class CoreValueWeekComparison(BaseModel):
+    """Deterministic prior-week comparison for one Core Value."""
+
+    core_value: str
+    previous_week_start: str
+    previous_week_end: str
+    current_week_start: str
+    current_week_end: str
+    previous_state: CoreValueDriftState
+    current_state: CoreValueDriftState
+    change: CoreValueStateChange
+    end_reason: Literal["not_conflict", "abstain", "gap"] | None = None
+    previous_evidence: list[EvidenceSnippet] = Field(default_factory=list)
+    current_evidence: list[EvidenceSnippet] = Field(default_factory=list)
 
 
 class JournalHistoryEntry(BaseModel):
@@ -116,6 +159,19 @@ class DigestValidation(BaseModel):
     @property
     def length_passed(self) -> bool:
         return any(check.name == "length" and check.passed for check in self.checks)
+
+    @property
+    def all_passed(self) -> bool:
+        """Return whether every required Coach Digest Validation passed."""
+        required = {
+            "groundedness",
+            "non_circularity",
+            "value_leakage",
+            "state_claims",
+            "length",
+        }
+        observed = {check.name for check in self.checks}
+        return required <= observed and all(check.passed for check in self.checks)
 
 
 class DriftDetectionResult(BaseModel):
@@ -191,9 +247,9 @@ class WeeklyDigest(BaseModel):
     overall_uncertainty: float | None = None
     core_values: list[str] = Field(default_factory=list)
     goal_context: str | None = None
-    drift_states: dict[str, Literal["active", "recovered", "uncertain"]] = Field(
-        default_factory=dict
-    )
+    drift_states: dict[str, CoreValueDriftState] = Field(default_factory=dict)
+    drift_details: dict[str, CoreValueDigestDetail] = Field(default_factory=dict)
+    state_comparisons: list[CoreValueWeekComparison] = Field(default_factory=list)
     drift_reasons: list[str] = Field(default_factory=list)
     top_tensions: list[str]
     top_strengths: list[str]

@@ -1,12 +1,13 @@
 name: weekly_digest_coach
 description: Prompt scaffold for generating a reflective Coach Digest response from explicit Weekly Drift Detection findings
-version: "3.0"
+version: "4.0"
 input_variables:
   - persona_name
   - week_window
   - response_policy
   - compass_context_lines
   - drift_summary_lines
+  - state_comparison_lines
   - evidence_lines
 
 template: |
@@ -20,10 +21,13 @@ template: |
   Use the preferred name naturally at most once if it improves warmth; do not force it.
   Internal Schwartz labels are supplied only to connect the user's compass, Weekly Drift Detection findings, and cited Journal Entries. Never reproduce those labels in the response, in any casing, and do not frame the reflection around abstract value categories. Translate them into the user-facing compass phrases and lived specifics.
   Do not invent a tension, recovery, success, or positive pattern that is absent from the supplied findings and evidence.
+  Treat not_conflict as the end of a Conflict run only. It does not prove supportive behavior, improvement, success, or recovery.
+  You may say that a repeated pattern did not continue only when a deterministic prior-week comparison says active_drift_ended with end reason not_conflict.
+  Do not praise progress when the latest decision is conflict or abstain. Do not use the words improve, improved, improvement, progress, progressed, recover, recovered, recovery, better, or success.
 
   Coach Digest policy:
   - drift_detected: Explain the confirmed active Drift through cited Journal Entries, then ask one reflective question.
-  - no_current_drift: Offer warm, evidence-based encouragement without claiming that no Drift proves success. If recovery is supplied, acknowledge the change without treating it as a separate response type.
+  - no_current_drift: Give a warm, evidence-based reflection without treating the absence of active Drift as positive behavior.
   - more_reflection_needed: State the ambiguity gently and ask a question that could help the user notice or record more context. Do not decide whether Drift exists.
 
   Preferred name: {{ persona_name }}
@@ -37,6 +41,11 @@ template: |
 
   Weekly Drift Detection findings:
   {% for line in drift_summary_lines %}
+  {{ line }}
+  {% endfor %}
+
+  Prior closed week compared with this week:
+  {% for line in state_comparison_lines %}
   {{ line }}
   {% endfor %}
 

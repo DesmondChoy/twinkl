@@ -79,32 +79,34 @@ def test_required_drift_progressions_are_preserved(loaded_scenarios) -> None:
     _, fixtures = loaded_scenarios
 
     stable = fixtures["stable-meera"].scenario.drift_result
-    assert stable.delivery_state == "stable"
+    assert stable.delivery_state == "no_active_drift"
     assert stable.drifts == []
 
     active = fixtures["active-wei-jun"].scenario.drift_result
-    assert active.delivery_state == "active"
+    assert active.delivery_state == "active_drift"
     assert [
         (drift.core_value, drift.onset_t_index, drift.confirmation_t_index)
         for drift in active.drifts
     ] == [("universalism", 8, 9)]
 
-    recovered = fixtures["recovered-marc"].scenario.drift_result
-    assert recovered.delivery_state == "recovered"
-    assert recovered.drifts[0].termination_verdict == "not_conflict"
+    ended = fixtures["recovered-marc"].scenario.drift_result
+    assert ended.delivery_state == "no_active_drift"
+    assert ended.drifts[0].termination_verdict == "not_conflict"
 
     uncertain_fixture = fixtures["uncertain-noor"]
-    assert uncertain_fixture.scenario.drift_result.delivery_state == "uncertain"
+    assert "insufficient_evidence" in {
+        week.expected_delivery_state for week in uncertain_fixture.scenario.weeks
+    }
     assert any(
         decision.verdict == "abstain"
         for decision in uncertain_fixture.scenario.weekly_reviewer_decisions
     )
 
     two_values = fixtures["two-values-lukas"].scenario.drift_result
-    assert two_values.delivery_state == "mixed"
+    assert two_values.delivery_state == "insufficient_evidence"
     assert two_values.core_value_states == {
-        "conformity": "recovered",
-        "self_direction": "uncertain",
+        "conformity": "no_active_drift",
+        "self_direction": "insufficient_evidence",
     }
 
 

@@ -209,8 +209,9 @@ the final state. Controls provide:
 
 Advancing a week reveals only the Journal Entries and results available by that
 week. This preserves the temporal meaning of Drift and lets the professor see
-the user experience change from stable to active, recovered, uncertain, or
-mixed. Future weeks remain disabled. A separate **Jump to key moment** action
+the user experience change between Active Drift, No Active Drift, and
+Insufficient Evidence. Historical Drift Records remain available after the
+current state changes. Future weeks remain disabled. A separate **Jump to key moment** action
 provides explicit fast navigation without making future results look available.
 
 Manual next-step movement and automatic replay use the same sequence. Journal
@@ -240,17 +241,17 @@ rail.
 Profile details remain collapsed by default and include a short Persona context.
 The Persona header always names the selected Schwartz Core Values. State-change
 evidence appears with the Weekly Drift Detection result. The first two Conflicts
-show where Drift started. Later Conflicts show that Drift continued. Recovered
-Drift cites the recovery Journal Entry and its Not Conflict Weekly Drift
-Reviewer Decision. Uncertain cites the Journal Entry, its Abstain Weekly Drift
-Reviewer Decision, and the reason.
+show where Drift started. Later Conflicts show that Drift continued. No Active
+Drift cites current Journal Entries and their Weekly Drift Reviewer Decisions.
+Insufficient Evidence cites the blocking Journal Entry and its Abstain or
+failed review status when available.
 
 Each cited Weekly Drift Reviewer Decision provides its saved model name,
 reasoning effort, parsed model output, and recorded justification. Desktop
 shows these details when the evidence card is hovered or receives keyboard
 focus. An **AI review** action opens the same details. On a phone, that action
-opens a bottom sheet. The details are available for No Drift, Active Drift,
-Recovered Drift, Uncertain, and Mixed results. The replay identifies itself as
+opens a bottom sheet. The details are available for Active Drift, No Active
+Drift, and Insufficient Evidence. The replay identifies itself as
 saved synthetic evidence throughout. The staged reveal must not imply live
 model inference.
 
@@ -485,8 +486,11 @@ framework:
 - Version 1 is strict: unknown fields or incompatible values are rejected. The
   assessment clock is an optional, assessment-only extension. Browser sessions
   without it migrate with no assessment controls. Saved Persona bundles use a
-  null clock and keep their existing behavior. A later incompatible change
-  requires a new contract version and explicit React and Python compatibility
+  null clock and keep their existing behavior. Nested records can use their own
+  version. The current Drift Detector record is `drift-detector-result-v2`, and
+  React and Python both handle that exact version. A later incompatible change
+  to the operation envelope requires a new Experience and Inspect contract
+  version and explicit React and Python compatibility
   handling.
 
 ### 7.2 Live model trust boundary
@@ -569,22 +573,23 @@ The capstone demo uses these five curated scenarios:
 
 | Scenario | Persona | Core Values | Saved progression |
 |---|---|---|---|
-| Stable | Meera Krishnamurthy, South Asian teacher, 45–54 | Achievement, Security | Stable throughout |
-| Active Drift | Wei Jun Chen, East Asian software engineer, 35–44 | Universalism | Stable → active |
-| Recovered Drift | Marc Vandenberghe, Western European manager, 45–54 | Power | Stable → active → recovered |
-| Uncertain | Noor Haddad, Middle Eastern stay-at-home parent, 18–24 | Self-Direction, Tradition | Stable → active → uncertain |
-| Two Core Values | Lukas Vermeer, Western European software engineer, 25–34 | Self-Direction, Conformity | Conformity recovers while Self-Direction becomes uncertain, producing a mixed state |
+| No Active Drift | Meera Krishnamurthy, South Asian teacher, 45–54 | Achievement, Security | No Active Drift throughout |
+| Active Drift | Wei Jun Chen, East Asian software engineer, 35–44 | Universalism | No Active Drift → Active Drift |
+| Drift ended | Marc Vandenberghe, Western European manager, 45–54 | Power | No Active Drift → Active Drift → No Active Drift |
+| Insufficient Evidence | Noor Haddad, Middle Eastern stay-at-home parent, 18–24 | Self-Direction, Tradition | Insufficient Evidence → No Active Drift → Active Drift → No Active Drift |
+| Two Core Values | Lukas Vermeer, Western European software engineer, 25–34 | Self-Direction, Conformity | Conformity has No Active Drift while Self-Direction has Insufficient Evidence |
 
 Lukas is the recommended professor walkthrough because his nine-week replay
 shows displayed nudges and responses, two independent Core Value histories,
-recovery, Abstain, mixed Drift state, and a grounded Coach Digest response in
+an ended Historical Drift Record, Abstain, Insufficient Evidence, and a grounded Coach Digest response in
 the key week. The other four personas make each individual state easy to
 demonstrate.
 
 This menu covers seven Schwartz Core Values, four cultural backgrounds, four
 age bands, and several work and family contexts. Selection favored coherent
 week-by-week behavior over maximizing Core Value count: the reviewed
-eight-value alternative began Uncertain without a useful stable progression.
+eight-value alternative began with Insufficient Evidence without a useful
+No Active Drift progression.
 
 Each saved scenario bundle contains or references:
 
@@ -686,7 +691,7 @@ A release is assessment-ready when one uninterrupted walkthrough can:
    Drift Detector steps;
 7. return to Experience and read the Coach Digest response and reflective
    question;
-8. demonstrate one recovered or uncertain scenario; and
+8. demonstrate one ended Historical Drift Record or Insufficient Evidence; and
 9. distinguish saved replay from an optional live run.
 
 ## 14. Implementation Order
@@ -739,7 +744,7 @@ walkthrough.
   model outcomes.
 - End-to-end browser tests cover the professor walkthrough, open-week Journal
   Entries without weekly events, reply and skip, Journal Entry removal, active
-  and recovered Drift, and view-state preservation.
+  Drift that ends, Insufficient Evidence, and view-state preservation.
 - Accessibility checks cover keyboard operation, focus, names, status updates,
   and reduced motion.
 - Responsive checks treat representative narrow-screen phone viewports as the

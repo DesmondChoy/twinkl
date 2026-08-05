@@ -424,13 +424,23 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "persona-demo",
       "cutoff_t_index": 1,
       "cutoff_date": "2026-07-13",
-      "delivery_state": "active",
+      "delivery_state": "active_drift",
       "core_value_states": {
-        "benevolence": "active"
+        "benevolence": "active_drift"
+      },
+      "core_value_details": {
+        "benevolence": {
+          "state": "active_drift",
+          "current_run_length": 2,
+          "last_decision": "conflict",
+          "last_review_status": "ok",
+          "last_t_index": 1,
+          "last_date": "2026-07-13"
+        }
       },
       "drifts": [
         {
@@ -451,7 +461,7 @@
             "Cancelled dinner with my sister to stay at work.",
             "Ignored my sister's call to finish another deadline."
           ],
-          "delivery_state": "active",
+          "termination_reason": null,
           "termination_t_index": null,
           "termination_date": null,
           "termination_verdict": null
@@ -463,7 +473,7 @@
       "persona_name": "Casey",
       "week_start": "2026-07-06",
       "week_end": "2026-07-13",
-      "response_mode": "active",
+      "response_mode": "active_drift",
       "mode_source": "drift_detector",
       "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
       "signal_source": "weekly_drift_reviewer",
@@ -475,8 +485,19 @@
       ],
       "goal_context": "I want to be more present for people I care about",
       "drift_states": {
-        "benevolence": "active"
+        "benevolence": "active_drift"
       },
+      "drift_details": {
+        "benevolence": {
+          "state": "active_drift",
+          "current_run_length": 2,
+          "last_decision": "conflict",
+          "last_review_status": "ok",
+          "last_t_index": 1,
+          "last_date": "2026-07-13"
+        }
+      },
+      "state_comparisons": [],
       "drift_reasons": [
         "Benevolence: Journal Entries 0 and 1 were Conflicts."
       ],
@@ -528,6 +549,16 @@
             "name": "non_circularity",
             "passed": true,
             "details": "Specific"
+          },
+          {
+            "name": "value_leakage",
+            "passed": true,
+            "details": "No labels"
+          },
+          {
+            "name": "state_claims",
+            "passed": true,
+            "details": "Supported"
           },
           {
             "name": "length",
@@ -979,13 +1010,23 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "persona-demo",
       "cutoff_t_index": 1,
       "cutoff_date": "2026-07-13",
-      "delivery_state": "active",
+      "delivery_state": "active_drift",
       "core_value_states": {
-        "benevolence": "active"
+        "benevolence": "active_drift"
+      },
+      "core_value_details": {
+        "benevolence": {
+          "state": "active_drift",
+          "current_run_length": 2,
+          "last_decision": "conflict",
+          "last_review_status": "ok",
+          "last_t_index": 1,
+          "last_date": "2026-07-13"
+        }
       },
       "drifts": [
         {
@@ -1006,7 +1047,7 @@
             "Cancelled dinner with my sister to stay at work.",
             "Ignored my sister's call to finish another deadline."
           ],
-          "delivery_state": "active",
+          "termination_reason": null,
           "termination_t_index": null,
           "termination_date": null,
           "termination_verdict": null
@@ -1018,7 +1059,7 @@
       "persona_name": "Casey",
       "week_start": "2026-07-06",
       "week_end": "2026-07-13",
-      "response_mode": "active",
+      "response_mode": "active_drift",
       "mode_source": "drift_detector",
       "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
       "signal_source": "weekly_drift_reviewer",
@@ -1030,8 +1071,19 @@
       ],
       "goal_context": "I want to be more present for people I care about",
       "drift_states": {
-        "benevolence": "active"
+        "benevolence": "active_drift"
       },
+      "drift_details": {
+        "benevolence": {
+          "state": "active_drift",
+          "current_run_length": 2,
+          "last_decision": "conflict",
+          "last_review_status": "ok",
+          "last_t_index": 1,
+          "last_date": "2026-07-13"
+        }
+      },
+      "state_comparisons": [],
       "drift_reasons": [
         "Benevolence: Journal Entries 0 and 1 were Conflicts."
       ],
@@ -1085,6 +1137,16 @@
             "details": "Specific"
           },
           {
+            "name": "value_leakage",
+            "passed": true,
+            "details": "No labels"
+          },
+          {
+            "name": "state_claims",
+            "passed": true,
+            "details": "Supported"
+          },
+          {
             "name": "length",
             "passed": true,
             "details": "Within limit"
@@ -1105,7 +1167,7 @@
           "event-07",
           "event-08"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "2026-07-13",
@@ -1120,7 +1182,7 @@
           "event-10",
           "event-11"
         ],
-        "expected_delivery_state": "active"
+        "expected_delivery_state": "active_drift"
       }
     ],
     "trace_event_ids": [
@@ -1993,13 +2055,23 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "persona-demo",
           "cutoff_t_index": 1,
           "cutoff_date": "2026-07-13",
-          "delivery_state": "active",
+          "delivery_state": "active_drift",
           "core_value_states": {
-            "benevolence": "active"
+            "benevolence": "active_drift"
+          },
+          "core_value_details": {
+            "benevolence": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2026-07-13"
+            }
           },
           "drifts": [
             {
@@ -2020,7 +2092,7 @@
                 "Cancelled dinner with my sister to stay at work.",
                 "Ignored my sister's call to finish another deadline."
               ],
-              "delivery_state": "active",
+              "termination_reason": null,
               "termination_t_index": null,
               "termination_date": null,
               "termination_verdict": null
@@ -2032,7 +2104,7 @@
           "persona_name": "Casey",
           "week_start": "2026-07-06",
           "week_end": "2026-07-13",
-          "response_mode": "active",
+          "response_mode": "active_drift",
           "mode_source": "drift_detector",
           "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
           "signal_source": "weekly_drift_reviewer",
@@ -2044,8 +2116,19 @@
           ],
           "goal_context": "I want to be more present for people I care about",
           "drift_states": {
-            "benevolence": "active"
+            "benevolence": "active_drift"
           },
+          "drift_details": {
+            "benevolence": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2026-07-13"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [
             "Benevolence: Journal Entries 0 and 1 were Conflicts."
           ],
@@ -2097,6 +2180,16 @@
                 "name": "non_circularity",
                 "passed": true,
                 "details": "Specific"
+              },
+              {
+                "name": "value_leakage",
+                "passed": true,
+                "details": "No labels"
+              },
+              {
+                "name": "state_claims",
+                "passed": true,
+                "details": "Supported"
               },
               {
                 "name": "length",
@@ -2574,13 +2667,23 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "persona-demo",
           "cutoff_t_index": 1,
           "cutoff_date": "2026-07-13",
-          "delivery_state": "active",
+          "delivery_state": "active_drift",
           "core_value_states": {
-            "benevolence": "active"
+            "benevolence": "active_drift"
+          },
+          "core_value_details": {
+            "benevolence": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2026-07-13"
+            }
           },
           "drifts": [
             {
@@ -2601,7 +2704,7 @@
                 "Cancelled dinner with my sister to stay at work.",
                 "Ignored my sister's call to finish another deadline."
               ],
-              "delivery_state": "active",
+              "termination_reason": null,
               "termination_t_index": null,
               "termination_date": null,
               "termination_verdict": null
@@ -2613,7 +2716,7 @@
           "persona_name": "Casey",
           "week_start": "2026-07-06",
           "week_end": "2026-07-13",
-          "response_mode": "active",
+          "response_mode": "active_drift",
           "mode_source": "drift_detector",
           "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
           "signal_source": "weekly_drift_reviewer",
@@ -2625,8 +2728,19 @@
           ],
           "goal_context": "I want to be more present for people I care about",
           "drift_states": {
-            "benevolence": "active"
+            "benevolence": "active_drift"
           },
+          "drift_details": {
+            "benevolence": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2026-07-13"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [
             "Benevolence: Journal Entries 0 and 1 were Conflicts."
           ],
@@ -2678,6 +2792,16 @@
                 "name": "non_circularity",
                 "passed": true,
                 "details": "Specific"
+              },
+              {
+                "name": "value_leakage",
+                "passed": true,
+                "details": "No labels"
+              },
+              {
+                "name": "state_claims",
+                "passed": true,
+                "details": "Supported"
               },
               {
                 "name": "length",
@@ -3497,7 +3621,7 @@
             1
           ],
           "prompt_name": "weekly_vif_verifier",
-          "prompt_version": "2.0",
+          "prompt_version": "3.0",
           "prompt_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "runtime_text_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
           "requested_model": "gpt-5.6-luna",
@@ -3631,25 +3755,39 @@
             "t_index": 0,
             "core_value": "benevolence",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 1,
             "core_value": "benevolence",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "persona-demo",
           "cutoff_t_index": 1,
           "cutoff_date": "2026-07-13",
-          "delivery_state": "active",
+          "delivery_state": "active_drift",
           "core_value_states": {
-            "benevolence": "active"
+            "benevolence": "active_drift"
+          },
+          "core_value_details": {
+            "benevolence": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2026-07-13"
+            }
           },
           "drifts": [
             {
@@ -3670,7 +3808,7 @@
                 "Cancelled dinner with my sister to stay at work.",
                 "Ignored my sister's call to finish another deadline."
               ],
-              "delivery_state": "active",
+              "termination_reason": null,
               "termination_t_index": null,
               "termination_date": null,
               "termination_verdict": null
@@ -3726,7 +3864,7 @@
           "persona_name": "Casey",
           "week_start": "2026-07-06",
           "week_end": "2026-07-13",
-          "response_mode": "active",
+          "response_mode": "active_drift",
           "mode_source": "drift_detector",
           "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
           "signal_source": "weekly_drift_reviewer",
@@ -3738,8 +3876,19 @@
           ],
           "goal_context": "I want to be more present for people I care about",
           "drift_states": {
-            "benevolence": "active"
+            "benevolence": "active_drift"
           },
+          "drift_details": {
+            "benevolence": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2026-07-13"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [
             "Benevolence: Journal Entries 0 and 1 were Conflicts."
           ],
@@ -3791,6 +3940,16 @@
                 "name": "non_circularity",
                 "passed": true,
                 "details": "Specific"
+              },
+              {
+                "name": "value_leakage",
+                "passed": true,
+                "details": "No labels"
+              },
+              {
+                "name": "state_claims",
+                "passed": true,
+                "details": "Supported"
               },
               {
                 "name": "length",
@@ -3869,6 +4028,16 @@
               "name": "non_circularity",
               "passed": true,
               "details": "Specific"
+            },
+            {
+              "name": "value_leakage",
+              "passed": true,
+              "details": "No labels"
+            },
+            {
+              "name": "state_claims",
+              "passed": true,
+              "details": "Supported"
             },
             {
               "name": "length",
@@ -3976,7 +4145,7 @@
             1
           ],
           "prompt_name": "weekly_vif_verifier",
-          "prompt_version": "2.0",
+          "prompt_version": "3.0",
           "prompt_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "runtime_text_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
           "requested_model": "gpt-5.6-luna",

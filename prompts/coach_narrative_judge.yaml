@@ -3,13 +3,14 @@ description: >-
   AI evaluation rubric for Coach Digest responses. Scores correctness,
   specificity, non-prescriptive tone, and tension honesty against Weekly Drift
   Detection output. Not a substitute for human validation.
-version: '2.0'
+version: '3.0'
 input_variables:
   - persona_name
   - week_window
   - response_policy
   - compass_context_lines
   - drift_summary_lines
+  - state_comparison_lines
   - evidence_lines
   - weekly_mirror
   - tension_explanation
@@ -38,6 +39,11 @@ template: |
   {{ line }}
   {% endfor %}
 
+  Prior closed week compared with this week:
+  {% for line in state_comparison_lines %}
+  {{ line }}
+  {% endfor %}
+
   Cited Journal Entries:
   {% for line in evidence_lines %}
   {{ line }}
@@ -61,10 +67,11 @@ template: |
     prescriptive.)
   - tension_honesty: Apply the selected policy literally. For drift_detected,
     explain only active Drift stated in the findings. For no_current_drift, do
-    not claim current Drift or treat its absence as proof of success; recovered
-    Drift may be acknowledged when supplied. For more_reflection_needed, state
-    the ambiguity without deciding whether Drift exists. A material policy
-    mismatch must score 2 or lower.
+    not claim current Drift or treat its absence as proof of success or
+    improvement. A claim that a pattern did not continue requires an
+    active_drift_ended comparison with end reason not_conflict. For
+    more_reflection_needed, state the evidence limit without deciding whether
+    Drift exists. A material policy mismatch must score 2 or lower.
 
   Also evaluate the reflective question with a boolean:
   - question_is_open_and_relevant: true if the question is open-ended, relevant

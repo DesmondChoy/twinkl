@@ -96,6 +96,48 @@ def test_conflict_quote_must_be_an_exact_journal_entry_substring():
         validate_weekly_drift_reviewer_response(response, request)
 
 
+def test_non_conflict_quote_must_also_be_an_exact_substring():
+    request = _request()
+    response = WeeklyVerifierResponse(
+        assessments=[
+            _assessment().model_copy(
+                update={
+                    "verdict": "not_conflict",
+                    "reason_code": "direct_aligned_or_neutral_behavior",
+                    "evidence_quote": "Invented quote",
+                }
+            )
+        ]
+    )
+
+    with pytest.raises(ValueError, match="Evidence quote"):
+        validate_weekly_drift_reviewer_response(response, request)
+
+
+@pytest.mark.parametrize(
+    ("confidence", "reason_code"),
+    [
+        ("low", "direct_behavior_or_choice"),
+        ("high", "feeling_or_intent_only"),
+    ],
+)
+def test_conflict_requires_reliable_direct_behavior(
+    confidence: str,
+    reason_code: str,
+):
+    request = _request()
+    response = WeeklyVerifierResponse(
+        assessments=[
+            _assessment().model_copy(
+                update={"confidence": confidence, "reason_code": reason_code}
+            )
+        ]
+    )
+
+    with pytest.raises(ValueError, match="direct behavior"):
+        validate_weekly_drift_reviewer_response(response, request)
+
+
 class _FakeResponses:
     def __init__(self, parsed):
         self.parsed = parsed

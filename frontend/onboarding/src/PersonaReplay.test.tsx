@@ -252,7 +252,7 @@ describe("persona replay", () => {
     render(<ReplayHarness />);
 
     expect(screen.getByText("Week 1 of 6")).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: "No Drift" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "No Active Drift" })).toBeNull();
     expect(screen.queryByRole("button", {
       name: /Open Journal Entry 1/,
     })).toBeNull();
@@ -266,14 +266,14 @@ describe("persona replay", () => {
       name: /Open Journal Entry 1/,
     })).toBeTruthy();
     expect(screen.queryByLabelText("Nudge for Journal Entry 1")).toBeNull();
-    expect(screen.queryByRole("heading", { name: "No Drift" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "No Active Drift" })).toBeNull();
 
     await user.click(screen.getByRole("button", { name: "Next step" }));
     expect(screen.getByLabelText("Nudge for Journal Entry 1")).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: "No Drift" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "No Active Drift" })).toBeNull();
 
     await user.click(screen.getByRole("button", { name: "Next step" }));
-    expect(screen.getByRole("heading", { name: "No Drift" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "No Active Drift" })).toBeTruthy();
     expect(screen.getByRole("heading", {
       name: "Weekly Drift Detection (based on 1 Journal Entry through Jun 1)",
     })).toBeTruthy();
@@ -284,7 +284,7 @@ describe("persona replay", () => {
     await user.click(screen.getByRole("button", { name: "Restart" }));
     expect(screen.getByText("Week 1 of 6")).toBeTruthy();
     expect(
-      screen.queryByRole("button", { name: "Show week 1: no drift" }),
+      screen.queryByRole("button", { name: "Show week 1: no active drift" }),
     ).toBeNull();
     expect(
       screen.getByRole("listitem", {
@@ -314,9 +314,9 @@ describe("persona replay", () => {
     act(() => vi.advanceTimersByTime(1));
     expect(screen.getByLabelText("Nudge for Journal Entry 1")).toBeTruthy();
     act(() => vi.advanceTimersByTime(3_199));
-    expect(screen.queryByRole("heading", { name: "No Drift" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "No Active Drift" })).toBeNull();
     act(() => vi.advanceTimersByTime(1));
-    expect(screen.getByRole("heading", { name: "No Drift" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "No Active Drift" })).toBeTruthy();
     act(() => vi.advanceTimersByTime(5_999));
     expect(screen.getByText("Week 1 of 6")).toBeTruthy();
     act(() => vi.advanceTimersByTime(1));
@@ -411,7 +411,7 @@ describe("persona replay", () => {
     expect(screen.getByText("Week 6 of 6")).toBeTruthy();
     await user.click(
       screen.getByRole("button", {
-        name: "Show week 1: no drift",
+        name: "Show week 1: no active drift",
       }),
     );
 
@@ -423,7 +423,7 @@ describe("persona replay", () => {
     ).toBe(false);
     await user.click(
       screen.getByRole("button", {
-        name: "Show week 3: no drift",
+        name: "Show week 3: no active drift",
       }),
     );
     expect(screen.getByText("Week 3 of 6")).toBeTruthy();
@@ -452,11 +452,11 @@ describe("persona replay", () => {
   });
 
   it.each([
-    ["stable-meera", stableReplayJson, "No Drift"],
+    ["stable-meera", stableReplayJson, "No Active Drift"],
     ["active-wei-jun", activeReplayJson, "Active Drift"],
-    ["recovered-marc", recoveredReplayJson, "Recovered Drift"],
-    ["uncertain-noor", uncertainReplayJson, "Uncertain"],
-    ["two-values-lukas", twoValuesReplayJson, "Mixed"],
+    ["recovered-marc", recoveredReplayJson, "No Active Drift"],
+    ["uncertain-noor", uncertainReplayJson, "No Active Drift"],
+    ["two-values-lukas", twoValuesReplayJson, "Insufficient evidence"],
   ])("renders the final %s progression", (scenarioId, scenarioJson, label) => {
     matchMedia(false);
     const scenarioFixture = validateExperienceInspectFixture(scenarioJson);
@@ -599,7 +599,9 @@ describe("persona replay", () => {
       />,
     );
 
-    const result = screen.getByRole("article", { name: "Mixed" });
+    const result = screen.getByRole("article", {
+      name: "Insufficient evidence",
+    });
     const coachHeading = screen.getByRole("heading", {
       name: /You wrote that you "Accepted on the spot/,
     });
@@ -612,7 +614,7 @@ describe("persona replay", () => {
       result.compareDocumentPosition(coachCard!)
       & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
-    expect(within(result).getByText("Why this state changed")).toBeTruthy();
+    expect(within(result).getByText("Why this state")).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "Inspect decision" }));
     const coachEvent = [...experience.trace_events]
@@ -678,14 +680,14 @@ describe("persona replay", () => {
     [
       "recovered-marc",
       recoveredReplayJson,
-      "The Weekly Drift Reviewer marked this Journal Entry as Not Conflict.",
+      "No active Drift is confirmed at this cutoff.",
       "Not Conflict",
     ],
     [
       "uncertain-noor",
       uncertainReplayJson,
-      "The Weekly Drift Reviewer abstained",
-      "Abstain",
+      "No active Drift is confirmed at this cutoff.",
+      "Not Conflict",
     ],
   ])(
     "explains the final state change for %s",
@@ -710,7 +712,8 @@ describe("persona replay", () => {
         />,
       );
 
-      expect(screen.getByText((content) => content.includes(reason))).toBeTruthy();
+      expect(screen.getAllByText((content) => content.includes(reason)).length)
+        .toBeGreaterThan(0);
       expect(screen.getAllByText(decision).length).toBeGreaterThan(0);
     },
   );

@@ -425,12 +425,33 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "11de77e8",
       "cutoff_t_index": 0,
       "cutoff_date": "2025-08-23",
-      "delivery_state": "stable",
-      "core_value_states": {},
+      "delivery_state": "no_active_drift",
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "core_value_details": {
+        "conformity": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "not_conflict",
+          "last_review_status": "ok",
+          "last_t_index": 0,
+          "last_date": "2025-08-23"
+        },
+        "self_direction": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 0,
+          "last_date": "2025-08-23"
+        }
+      },
       "drifts": []
     },
     "weekly_digest": {
@@ -438,9 +459,9 @@
       "persona_name": "Lukas Vermeer",
       "week_start": "2025-08-18",
       "week_end": "2025-08-24",
-      "response_mode": "stable",
+      "response_mode": "no_active_drift",
       "mode_source": "drift_detector",
-      "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+      "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
       "signal_source": "weekly_drift_reviewer",
       "n_entries": 1,
       "overall_mean": null,
@@ -450,7 +471,29 @@
         "conformity"
       ],
       "goal_context": null,
-      "drift_states": {},
+      "drift_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "drift_details": {
+        "conformity": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "not_conflict",
+          "last_review_status": "ok",
+          "last_t_index": 0,
+          "last_date": "2025-08-23"
+        },
+        "self_direction": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 0,
+          "last_date": "2025-08-23"
+        }
+      },
+      "state_comparisons": [],
       "drift_reasons": [],
       "top_tensions": [],
       "top_strengths": [],
@@ -460,7 +503,19 @@
           "date": "2025-08-23",
           "t_index": 0,
           "direction": "context",
-          "dimensions": [],
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+        },
+        {
+          "date": "2025-08-23",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
           "score_mean": null,
           "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
         }
@@ -492,7 +547,7 @@
     "schema_version": "experience-inspect-v1",
     "scenario_id": "two-values-lukas",
     "title": "Lukas — belonging without losing direction",
-    "description": "A software engineer moves through recovered Conformity Drift and uncertain Self-Direction Drift as independent Core Value histories.",
+    "description": "A software engineer has an ended Conformity Drift episode and insufficient Self-Direction evidence in independent histories.",
     "source": "saved_replay",
     "persona_id": "11de77e8",
     "profile": {
@@ -1268,14 +1323,32 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "11de77e8",
       "cutoff_t_index": 11,
       "cutoff_date": "2025-10-14",
-      "delivery_state": "mixed",
+      "delivery_state": "insufficient_evidence",
       "core_value_states": {
-        "conformity": "recovered",
-        "self_direction": "uncertain"
+        "conformity": "no_active_drift",
+        "self_direction": "insufficient_evidence"
+      },
+      "core_value_details": {
+        "conformity": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-10-14"
+        },
+        "self_direction": {
+          "state": "insufficient_evidence",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-10-14"
+        }
       },
       "drifts": [
         {
@@ -1296,7 +1369,7 @@
             "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
             "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
           ],
-          "delivery_state": "recovered",
+          "termination_reason": "not_conflict",
           "termination_t_index": 6,
           "termination_date": "2025-09-26",
           "termination_verdict": "not_conflict"
@@ -1319,7 +1392,7 @@
             "So I default to the smooth version.",
             "Accepted on the spot because that's what you do."
           ],
-          "delivery_state": "uncertain",
+          "termination_reason": "abstain",
           "termination_t_index": 11,
           "termination_date": "2025-10-14",
           "termination_verdict": "abstain"
@@ -1331,9 +1404,9 @@
       "persona_name": "Lukas Vermeer",
       "week_start": "2025-10-13",
       "week_end": "2025-10-19",
-      "response_mode": "mixed",
+      "response_mode": "insufficient_evidence",
       "mode_source": "drift_detector",
-      "mode_rationale": "Core Values have different active, recovered, or uncertain Drift states.",
+      "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
       "signal_source": "weekly_drift_reviewer",
       "n_entries": 2,
       "overall_mean": null,
@@ -1344,49 +1417,178 @@
       ],
       "goal_context": null,
       "drift_states": {
-        "conformity": "recovered",
-        "self_direction": "uncertain"
+        "conformity": "no_active_drift",
+        "self_direction": "insufficient_evidence"
       },
+      "drift_details": {
+        "conformity": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-10-14"
+        },
+        "self_direction": {
+          "state": "insufficient_evidence",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-10-14"
+        }
+      },
+      "state_comparisons": [
+        {
+          "core_value": "self_direction",
+          "previous_week_start": "2025-10-06",
+          "previous_week_end": "2025-10-12",
+          "current_week_start": "2025-10-13",
+          "current_week_end": "2025-10-19",
+          "previous_state": "no_active_drift",
+          "current_state": "insufficient_evidence",
+          "change": "evidence_became_insufficient",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+            },
+            {
+              "date": "2025-10-11",
+              "t_index": 9,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "So I default to the smooth version."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-10-14",
+              "t_index": 10,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Accepted on the spot because that's what you do."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+            }
+          ]
+        },
+        {
+          "core_value": "conformity",
+          "previous_week_start": "2025-10-06",
+          "previous_week_end": "2025-10-12",
+          "current_week_start": "2025-10-13",
+          "current_week_end": "2025-10-19",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+            },
+            {
+              "date": "2025-10-11",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't — I've been keeping my velocity up..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-10-14",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+            }
+          ]
+        }
+      ],
       "drift_reasons": [
-        "11de77e8:conformity:4:recovered",
-        "11de77e8:self_direction:9:uncertain"
+        "11de77e8:conformity:4:not_conflict",
+        "11de77e8:self_direction:9:abstain"
       ],
       "top_tensions": [
-        "conformity",
         "self_direction"
       ],
       "top_strengths": [],
       "dimensions": [],
       "evidence": [
         {
-          "date": "2025-09-12",
-          "t_index": 4,
-          "direction": "misaligned",
+          "date": "2025-10-07",
+          "t_index": 8,
+          "direction": "context",
           "dimensions": [
             "conformity"
           ],
           "score_mean": null,
-          "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
+          "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
         },
         {
-          "date": "2025-09-19",
-          "t_index": 5,
-          "direction": "misaligned",
+          "date": "2025-10-07",
+          "t_index": 8,
+          "direction": "context",
           "dimensions": [
-            "conformity"
+            "self_direction"
           ],
           "score_mean": null,
-          "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+          "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
         },
         {
-          "date": "2025-09-26",
-          "t_index": 6,
-          "direction": "recovery",
+          "date": "2025-10-11",
+          "t_index": 9,
+          "direction": "context",
           "dimensions": [
             "conformity"
           ],
           "score_mean": null,
-          "excerpt": "I thanked him and said I'd put my best foot forward."
+          "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't — I've been keeping my velocity up..."
         },
         {
           "date": "2025-10-11",
@@ -1401,17 +1603,47 @@
         {
           "date": "2025-10-14",
           "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 10,
           "direction": "misaligned",
           "dimensions": [
             "self_direction"
           ],
           "score_mean": null,
           "excerpt": "Accepted on the spot because that's what you do."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
         }
       ],
       "coach_narrative": {
         "weekly_mirror": "You wrote that you \"Accepted on the spot because that's what you do\", then noticed that relief came before excitement.",
-        "tension_explanation": "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+        "tension_explanation": "Your reason for accepting the new role still feels unclear because relief and expectation both shaped the choice.",
         "reflective_question": "When you separate relief from expectation, what do you want this new role to mean for you?"
       },
       "validation": {
@@ -1434,6 +1666,11 @@
             "name": "value_leakage",
             "passed": true,
             "details": "Response avoids naming raw Schwartz value labels."
+          },
+          {
+            "name": "state_claims",
+            "passed": true,
+            "details": "Response makes only supported current-state claims."
           },
           {
             "name": "length",
@@ -1462,7 +1699,7 @@
           "two-values-lukas:event:008",
           "two-values-lukas:event:009"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "two-values-lukas:week:2",
@@ -1481,7 +1718,7 @@
           "two-values-lukas:event:016",
           "two-values-lukas:event:017"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "two-values-lukas:week:3",
@@ -1499,7 +1736,7 @@
           "two-values-lukas:event:023",
           "two-values-lukas:event:024"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "two-values-lukas:week:4",
@@ -1522,7 +1759,7 @@
           "two-values-lukas:event:034",
           "two-values-lukas:event:035"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "two-values-lukas:week:5",
@@ -1541,7 +1778,7 @@
           "two-values-lukas:event:042",
           "two-values-lukas:event:043"
         ],
-        "expected_delivery_state": "active"
+        "expected_delivery_state": "active_drift"
       },
       {
         "week_id": "two-values-lukas:week:6",
@@ -1559,7 +1796,7 @@
           "two-values-lukas:event:049",
           "two-values-lukas:event:050"
         ],
-        "expected_delivery_state": "recovered"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "two-values-lukas:week:7",
@@ -1577,7 +1814,7 @@
           "two-values-lukas:event:056",
           "two-values-lukas:event:057"
         ],
-        "expected_delivery_state": "recovered"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "two-values-lukas:week:8",
@@ -1601,7 +1838,7 @@
           "two-values-lukas:event:068",
           "two-values-lukas:event:069"
         ],
-        "expected_delivery_state": "recovered"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "two-values-lukas:week:9",
@@ -1624,7 +1861,7 @@
           "two-values-lukas:event:079",
           "two-values-lukas:event:080"
         ],
-        "expected_delivery_state": "mixed"
+        "expected_delivery_state": "insufficient_evidence"
       }
     ],
     "trace_event_ids": [
@@ -2170,12 +2407,33 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 0,
           "cutoff_date": "2025-08-23",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-08-23"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-08-23"
+            }
+          },
           "drifts": []
         },
         "weekly_digest": {
@@ -2183,9 +2441,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-08-18",
           "week_end": "2025-08-24",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -2195,7 +2453,29 @@
             "conformity"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-08-23"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-08-23"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
@@ -2205,7 +2485,19 @@
               "date": "2025-08-23",
               "t_index": 0,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+            },
+            {
+              "date": "2025-08-23",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
               "score_mean": null,
               "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
             }
@@ -2237,7 +2529,7 @@
         "schema_version": "experience-inspect-v1",
         "scenario_id": "two-values-lukas",
         "title": "Lukas — belonging without losing direction",
-        "description": "A software engineer moves through recovered Conformity Drift and uncertain Self-Direction Drift as independent Core Value histories.",
+        "description": "A software engineer has an ended Conformity Drift episode and insufficient Self-Direction evidence in independent histories.",
         "source": "saved_replay",
         "persona_id": "11de77e8",
         "profile": {
@@ -3013,14 +3305,32 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 11,
           "cutoff_date": "2025-10-14",
-          "delivery_state": "mixed",
+          "delivery_state": "insufficient_evidence",
           "core_value_states": {
-            "conformity": "recovered",
-            "self_direction": "uncertain"
+            "conformity": "no_active_drift",
+            "self_direction": "insufficient_evidence"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-10-14"
+            },
+            "self_direction": {
+              "state": "insufficient_evidence",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-10-14"
+            }
           },
           "drifts": [
             {
@@ -3041,7 +3351,7 @@
                 "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
                 "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 6,
               "termination_date": "2025-09-26",
               "termination_verdict": "not_conflict"
@@ -3064,7 +3374,7 @@
                 "So I default to the smooth version.",
                 "Accepted on the spot because that's what you do."
               ],
-              "delivery_state": "uncertain",
+              "termination_reason": "abstain",
               "termination_t_index": 11,
               "termination_date": "2025-10-14",
               "termination_verdict": "abstain"
@@ -3076,9 +3386,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-10-13",
           "week_end": "2025-10-19",
-          "response_mode": "mixed",
+          "response_mode": "insufficient_evidence",
           "mode_source": "drift_detector",
-          "mode_rationale": "Core Values have different active, recovered, or uncertain Drift states.",
+          "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -3089,49 +3399,178 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "conformity": "recovered",
-            "self_direction": "uncertain"
+            "conformity": "no_active_drift",
+            "self_direction": "insufficient_evidence"
           },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-10-14"
+            },
+            "self_direction": {
+              "state": "insufficient_evidence",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-10-14"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-10-06",
+              "previous_week_end": "2025-10-12",
+              "current_week_start": "2025-10-13",
+              "current_week_end": "2025-10-19",
+              "previous_state": "no_active_drift",
+              "current_state": "insufficient_evidence",
+              "change": "evidence_became_insufficient",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-10-07",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+                },
+                {
+                  "date": "2025-10-11",
+                  "t_index": 9,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "So I default to the smooth version."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-10-14",
+                  "t_index": 10,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Accepted on the spot because that's what you do."
+                },
+                {
+                  "date": "2025-10-14",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-10-06",
+              "previous_week_end": "2025-10-12",
+              "current_week_start": "2025-10-13",
+              "current_week_end": "2025-10-19",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-10-07",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+                },
+                {
+                  "date": "2025-10-11",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't — I've been keeping my velocity up..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-10-14",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+                },
+                {
+                  "date": "2025-10-14",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "11de77e8:conformity:4:recovered",
-            "11de77e8:self_direction:9:uncertain"
+            "11de77e8:conformity:4:not_conflict",
+            "11de77e8:self_direction:9:abstain"
           ],
           "top_tensions": [
-            "conformity",
             "self_direction"
           ],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-09-12",
-              "t_index": 4,
-              "direction": "misaligned",
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
             },
             {
-              "date": "2025-09-19",
-              "t_index": 5,
-              "direction": "misaligned",
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
               "dimensions": [
-                "conformity"
+                "self_direction"
               ],
               "score_mean": null,
-              "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
             },
             {
-              "date": "2025-09-26",
-              "t_index": 6,
-              "direction": "recovery",
+              "date": "2025-10-11",
+              "t_index": 9,
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "I thanked him and said I'd put my best foot forward."
+              "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't — I've been keeping my velocity up..."
             },
             {
               "date": "2025-10-11",
@@ -3146,17 +3585,47 @@
             {
               "date": "2025-10-14",
               "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 10,
               "direction": "misaligned",
               "dimensions": [
                 "self_direction"
               ],
               "score_mean": null,
               "excerpt": "Accepted on the spot because that's what you do."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
             }
           ],
           "coach_narrative": {
             "weekly_mirror": "You wrote that you \"Accepted on the spot because that's what you do\", then noticed that relief came before excitement.",
-            "tension_explanation": "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+            "tension_explanation": "Your reason for accepting the new role still feels unclear because relief and expectation both shaped the choice.",
             "reflective_question": "When you separate relief from expectation, what do you want this new role to mean for you?"
           },
           "validation": {
@@ -3179,6 +3648,11 @@
                 "name": "value_leakage",
                 "passed": true,
                 "details": "Response avoids naming raw Schwartz value labels."
+              },
+              {
+                "name": "state_claims",
+                "passed": true,
+                "details": "Response makes only supported current-state claims."
               },
               {
                 "name": "length",
@@ -3207,7 +3681,7 @@
               "two-values-lukas:event:008",
               "two-values-lukas:event:009"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "two-values-lukas:week:2",
@@ -3226,7 +3700,7 @@
               "two-values-lukas:event:016",
               "two-values-lukas:event:017"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "two-values-lukas:week:3",
@@ -3244,7 +3718,7 @@
               "two-values-lukas:event:023",
               "two-values-lukas:event:024"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "two-values-lukas:week:4",
@@ -3267,7 +3741,7 @@
               "two-values-lukas:event:034",
               "two-values-lukas:event:035"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "two-values-lukas:week:5",
@@ -3286,7 +3760,7 @@
               "two-values-lukas:event:042",
               "two-values-lukas:event:043"
             ],
-            "expected_delivery_state": "active"
+            "expected_delivery_state": "active_drift"
           },
           {
             "week_id": "two-values-lukas:week:6",
@@ -3304,7 +3778,7 @@
               "two-values-lukas:event:049",
               "two-values-lukas:event:050"
             ],
-            "expected_delivery_state": "recovered"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "two-values-lukas:week:7",
@@ -3322,7 +3796,7 @@
               "two-values-lukas:event:056",
               "two-values-lukas:event:057"
             ],
-            "expected_delivery_state": "recovered"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "two-values-lukas:week:8",
@@ -3346,7 +3820,7 @@
               "two-values-lukas:event:068",
               "two-values-lukas:event:069"
             ],
-            "expected_delivery_state": "recovered"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "two-values-lukas:week:9",
@@ -3369,7 +3843,7 @@
               "two-values-lukas:event:079",
               "two-values-lukas:event:080"
             ],
-            "expected_delivery_state": "mixed"
+            "expected_delivery_state": "insufficient_evidence"
           }
         ],
         "trace_event_ids": [
@@ -4322,7 +4796,7 @@
           "id": "two-values-lukas:week:1"
         }
       ],
-      "input_hash": "9bf22600d7d4b522bb05afd8895fccdedca2528ace2fb258b54b52bff3b431bd",
+      "input_hash": "239cf97a0f854a9e9fbff243e68bcef949c93e24a3c00eb4b1ff538fd2f8d00c",
       "error": null,
       "details": {
         "decisions": [
@@ -4358,24 +4832,49 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 0,
           "cutoff_date": "2025-08-23",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-08-23"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-08-23"
+            }
+          },
           "drifts": []
         }
       }
@@ -4415,7 +4914,7 @@
           "id": "two-values-lukas:week:1"
         }
       ],
-      "input_hash": "bfb445d3e1a677386dcb9cf78222bfebceb92654bad2eff1f1770d2860f3f0a8",
+      "input_hash": "4250ac7120c676a282d564e1447696d99fc30c403f1226b76432d91348ea44e8",
       "error": null,
       "details": {
         "digest": {
@@ -4423,9 +4922,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-08-18",
           "week_end": "2025-08-24",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -4435,7 +4934,29 @@
             "conformity"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-08-23"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-08-23"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
@@ -4445,7 +4966,19 @@
               "date": "2025-08-23",
               "t_index": 0,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+            },
+            {
+              "date": "2025-08-23",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
               "score_mean": null,
               "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
             }
@@ -4454,6 +4987,7 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "11de77e8:entry:0",
           "11de77e8:entry:0"
         ]
       }
@@ -4898,7 +5432,7 @@
           "id": "two-values-lukas:week:2"
         }
       ],
-      "input_hash": "6c042d952b580cc7bb24dad37ea66e1d88fd0a468c6a40d75ce0822cb7289f88",
+      "input_hash": "c632525dd6a38783a1de8bdf19827ffc4b45c64bba62b431c5e69c14fce0bdab",
       "error": null,
       "details": {
         "decisions": [
@@ -4960,38 +5494,67 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 1,
           "cutoff_date": "2025-08-30",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-08-30"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-08-30"
+            }
+          },
           "drifts": []
         }
       }
@@ -5031,7 +5594,7 @@
           "id": "two-values-lukas:week:2"
         }
       ],
-      "input_hash": "672efd39bb13f858bfddcb015964f2636c2c2a68338c645fc429ea37ce28286b",
+      "input_hash": "59f621cdfbdd38fe6a0c69fd691a110037fb24d179efdf1e3231177275eaf875",
       "error": null,
       "details": {
         "digest": {
@@ -5039,9 +5602,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-08-25",
           "week_end": "2025-08-31",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -5051,17 +5614,142 @@
             "conformity"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-08-30"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-08-30"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-08-18",
+              "previous_week_end": "2025-08-24",
+              "current_week_start": "2025-08-25",
+              "current_week_end": "2025-08-31",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-08-23",
+                  "t_index": 0,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-08-30",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-08-18",
+              "previous_week_end": "2025-08-24",
+              "current_week_start": "2025-08-25",
+              "current_week_end": "2025-08-31",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-08-23",
+                  "t_index": 0,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-08-30",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-08-23",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+            },
+            {
+              "date": "2025-08-23",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+            },
+            {
               "date": "2025-08-30",
               "t_index": 1,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
+            },
+            {
+              "date": "2025-08-30",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
               "score_mean": null,
               "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
             }
@@ -5070,6 +5758,9 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "11de77e8:entry:0",
+          "11de77e8:entry:0",
+          "11de77e8:entry:1",
           "11de77e8:entry:1"
         ]
       }
@@ -5477,7 +6168,7 @@
           "id": "two-values-lukas:week:3"
         }
       ],
-      "input_hash": "05aaef29ec73c0efb767b40cad5c096ca04e396a2f2e0b0f202f581dacec1688",
+      "input_hash": "3930d6ad73eb24cd0da8fb552d4b78c1125d470725f5476efd5e7fca72756284",
       "error": null,
       "details": {
         "decisions": [
@@ -5565,52 +6256,85 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 2,
           "cutoff_date": "2025-09-05",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 2,
+              "last_date": "2025-09-05"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 2,
+              "last_date": "2025-09-05"
+            }
+          },
           "drifts": []
         }
       }
@@ -5650,7 +6374,7 @@
           "id": "two-values-lukas:week:3"
         }
       ],
-      "input_hash": "727eb2f19f6d676da6f0e9b976f0145ef2fe2e27dfa91477a5347c2cd0e467e2",
+      "input_hash": "b7734a96381a410337b4141be130993ba6cf2bab55e7e45f3c5bb9a1d517c659",
       "error": null,
       "details": {
         "digest": {
@@ -5658,9 +6382,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-09-01",
           "week_end": "2025-09-07",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -5670,25 +6394,153 @@
             "conformity"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 2,
+              "last_date": "2025-09-05"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 2,
+              "last_date": "2025-09-05"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-08-25",
+              "previous_week_end": "2025-08-31",
+              "current_week_start": "2025-09-01",
+              "current_week_end": "2025-09-07",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-08-30",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-09-05",
+                  "t_index": 2,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Didn't say it though. The senior architects set up the current flow and they were in the call."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-08-25",
+              "previous_week_end": "2025-08-31",
+              "current_week_start": "2025-09-01",
+              "current_week_end": "2025-09-07",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-08-30",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-09-05",
+                  "t_index": 2,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Sprint retro got a bit heated. Devika suggested we rethink the approval flow for deployments because she thinks it slows us down. She's right, technically — it does add a half-day lag. I had a whole alternative sketched in my..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-08-30",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
+            },
+            {
+              "date": "2025-08-30",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
+            },
+            {
               "date": "2025-09-05",
               "t_index": 2,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "conformity"
+              ],
               "score_mean": null,
               "excerpt": "Sprint retro got a bit heated. Devika suggested we rethink the approval flow for deployments because she thinks it slows us down. She's right, technically — it does add a half-day lag. I had a whole alternative sketched in my..."
+            },
+            {
+              "date": "2025-09-05",
+              "t_index": 2,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Didn't say it though. The senior architects set up the current flow and they were in the call."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "11de77e8:entry:1",
+          "11de77e8:entry:1",
+          "11de77e8:entry:2",
           "11de77e8:entry:2"
         ]
       }
@@ -6347,7 +7199,7 @@
           "id": "two-values-lukas:week:4"
         }
       ],
-      "input_hash": "817788328c47810dbd1516775865f8724c774a7f36fc4f0e22cfb94984089c62",
+      "input_hash": "b62b4d2167e2346df1cf185f90d7db4286e200e44a4a9b933cfc47a67795115f",
       "error": null,
       "details": {
         "decisions": [
@@ -6487,80 +7339,121 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 3,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 4,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 4,
           "cutoff_date": "2025-09-12",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 4,
+              "last_date": "2025-09-12"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 4,
+              "last_date": "2025-09-12"
+            }
+          },
           "drifts": []
         }
       }
@@ -6600,7 +7493,7 @@
           "id": "two-values-lukas:week:4"
         }
       ],
-      "input_hash": "4ada223ef83be40eb3fb01dedbf6116231e73378d0b1ad424e4c99c97f3cf608",
+      "input_hash": "1384a4ec4fe9ed505d37ed6a7da2f4772825422ed3744bd99bb9a52b22e13ed6",
       "error": null,
       "details": {
         "digest": {
@@ -6608,9 +7501,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-09-08",
           "week_end": "2025-09-14",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -6620,25 +7513,182 @@
             "conformity"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 4,
+              "last_date": "2025-09-12"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 4,
+              "last_date": "2025-09-12"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-09-01",
+              "previous_week_end": "2025-09-07",
+              "current_week_start": "2025-09-08",
+              "current_week_end": "2025-09-14",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-09-05",
+                  "t_index": 2,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Didn't say it though. The senior architects set up the current flow and they were in the call."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-09-10",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
+                },
+                {
+                  "date": "2025-09-12",
+                  "t_index": 4,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer. Felt more engaged in that hour than I have all sprint on..."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-09-01",
+              "previous_week_end": "2025-09-07",
+              "current_week_start": "2025-09-08",
+              "current_week_end": "2025-09-14",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-09-05",
+                  "t_index": 2,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Sprint retro got a bit heated. Devika suggested we rethink the approval flow for deployments because she thinks it slows us down. She's right, technically — it does add a half-day lag. I had a whole alternative sketched in my..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-09-10",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
+                },
+                {
+                  "date": "2025-09-12",
+                  "t_index": 4,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-09-05",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Sprint retro got a bit heated. Devika suggested we rethink the approval flow for deployments because she thinks it slows us down. She's right, technically — it does add a half-day lag. I had a whole alternative sketched in my..."
+            },
+            {
+              "date": "2025-09-05",
+              "t_index": 2,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Didn't say it though. The senior architects set up the current flow and they were in the call."
+            },
+            {
               "date": "2025-09-10",
               "t_index": 3,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
+            },
+            {
+              "date": "2025-09-10",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
               "score_mean": null,
               "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
             },
             {
               "date": "2025-09-12",
               "t_index": 4,
+              "direction": "misaligned",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
+            },
+            {
+              "date": "2025-09-12",
+              "t_index": 4,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "self_direction"
+              ],
               "score_mean": null,
               "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer. Felt more engaged in that hour than I have all sprint on..."
             }
@@ -6647,7 +7697,11 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "11de77e8:entry:2",
+          "11de77e8:entry:2",
           "11de77e8:entry:3",
+          "11de77e8:entry:3",
+          "11de77e8:entry:4",
           "11de77e8:entry:4"
         ]
       }
@@ -7130,7 +8184,7 @@
           "id": "two-values-lukas:week:5"
         }
       ],
-      "input_hash": "11200815681ecce7b0624044765afee4aca2a27e771c8746ce043dfa4f6ddf6c",
+      "input_hash": "d16a601088617029faf894914f271a1ca2b276056b8e063d06893bd232be9062",
       "error": null,
       "details": {
         "decisions": [
@@ -7296,95 +8350,138 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 3,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 4,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 5,
           "cutoff_date": "2025-09-19",
-          "delivery_state": "active",
+          "delivery_state": "active_drift",
           "core_value_states": {
-            "conformity": "active"
+            "conformity": "active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-09-19"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-09-19"
+            }
           },
           "drifts": [
             {
@@ -7405,7 +8502,7 @@
                 "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
                 "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
               ],
-              "delivery_state": "active",
+              "termination_reason": null,
               "termination_t_index": null,
               "termination_date": null,
               "termination_verdict": null
@@ -7449,7 +8546,7 @@
           "id": "two-values-lukas:week:5"
         }
       ],
-      "input_hash": "fa1518f9af18faff3f3f2ad71bb3d84d543ee009748cf8860696b36c00aaa408",
+      "input_hash": "234e1dafd3b6c4857fdc43d1dee68767d27ddc6ffa45469e2bf6d7e514987d79",
       "error": null,
       "details": {
         "digest": {
@@ -7457,9 +8554,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-09-15",
           "week_end": "2025-09-21",
-          "response_mode": "active",
+          "response_mode": "active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is active.",
+          "mode_rationale": "At least one Core Value has active Drift.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -7470,10 +8567,121 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "conformity": "active"
+            "conformity": "active_drift",
+            "self_direction": "no_active_drift"
           },
+          "drift_details": {
+            "conformity": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-09-19"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-09-19"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-09-08",
+              "previous_week_end": "2025-09-14",
+              "current_week_start": "2025-09-15",
+              "current_week_end": "2025-09-21",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-09-10",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
+                },
+                {
+                  "date": "2025-09-12",
+                  "t_index": 4,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer. Felt more engaged in that hour than I have all sprint on..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-09-19",
+                  "t_index": 5,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Noor and I went to dinner with her parents in Rotterdam on Saturday. Her dad asked about the promotion and I gave the standard answer — it's in progress, I'm grateful for the opportunity, etc. He seemed pleased. On the..."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-09-08",
+              "previous_week_end": "2025-09-14",
+              "current_week_start": "2025-09-15",
+              "current_week_end": "2025-09-21",
+              "previous_state": "no_active_drift",
+              "current_state": "active_drift",
+              "change": "active_drift_started",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-09-10",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
+                },
+                {
+                  "date": "2025-09-12",
+                  "t_index": 4,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-09-19",
+                  "t_index": 5,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "11de77e8:conformity:4:active"
+            "11de77e8:conformity:4:open"
           ],
           "top_tensions": [
             "conformity"
@@ -7481,6 +8689,26 @@
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
+            {
+              "date": "2025-09-10",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
+            },
+            {
+              "date": "2025-09-10",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
+            },
             {
               "date": "2025-09-12",
               "t_index": 4,
@@ -7492,6 +8720,16 @@
               "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
             },
             {
+              "date": "2025-09-12",
+              "t_index": 4,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer. Felt more engaged in that hour than I have all sprint on..."
+            },
+            {
               "date": "2025-09-19",
               "t_index": 5,
               "direction": "misaligned",
@@ -7500,13 +8738,27 @@
               ],
               "score_mean": null,
               "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+            },
+            {
+              "date": "2025-09-19",
+              "t_index": 5,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Noor and I went to dinner with her parents in Rotterdam on Saturday. Her dad asked about the promotion and I gave the standard answer — it's in progress, I'm grateful for the opportunity, etc. He seemed pleased. On the..."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "11de77e8:entry:3",
+          "11de77e8:entry:3",
           "11de77e8:entry:4",
+          "11de77e8:entry:4",
+          "11de77e8:entry:5",
           "11de77e8:entry:5"
         ]
       }
@@ -7951,7 +9203,7 @@
           "id": "two-values-lukas:week:6"
         }
       ],
-      "input_hash": "02c4d57bb8232ac750f856fcfe3baee53a0e3708af6e4bf3932d411b6aeb2b18",
+      "input_hash": "31eeeb2e67d572f7e4e474fe2f2102c643ea9983275c16f9de0701c7805eba7c",
       "error": null,
       "details": {
         "decisions": [
@@ -8143,109 +9395,156 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 3,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 4,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 6,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "recover"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 6,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 6,
           "cutoff_date": "2025-09-26",
-          "delivery_state": "recovered",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "conformity": "recovered"
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 6,
+              "last_date": "2025-09-26"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 6,
+              "last_date": "2025-09-26"
+            }
           },
           "drifts": [
             {
@@ -8266,7 +9565,7 @@
                 "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
                 "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 6,
               "termination_date": "2025-09-26",
               "termination_verdict": "not_conflict"
@@ -8310,7 +9609,7 @@
           "id": "two-values-lukas:week:6"
         }
       ],
-      "input_hash": "244ced757e982409440739d2aaf683dd740036aa6f8a048fee062520d11a3e72",
+      "input_hash": "048fd4476b896443da1f15f05943e3b626d960e0a7bed3616770763fdfd6faa6",
       "error": null,
       "details": {
         "digest": {
@@ -8318,9 +9617,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-09-22",
           "week_end": "2025-09-28",
-          "response_mode": "recovered",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is recovered.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -8331,27 +9630,106 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "conformity": "recovered"
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
           },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 6,
+              "last_date": "2025-09-26"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 6,
+              "last_date": "2025-09-26"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-09-15",
+              "previous_week_end": "2025-09-21",
+              "current_week_start": "2025-09-22",
+              "current_week_end": "2025-09-28",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-09-19",
+                  "t_index": 5,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Noor and I went to dinner with her parents in Rotterdam on Saturday. Her dad asked about the promotion and I gave the standard answer — it's in progress, I'm grateful for the opportunity, etc. He seemed pleased. On the..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-09-26",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to..."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-09-15",
+              "previous_week_end": "2025-09-21",
+              "current_week_start": "2025-09-22",
+              "current_week_end": "2025-09-28",
+              "previous_state": "active_drift",
+              "current_state": "no_active_drift",
+              "change": "active_drift_ended",
+              "end_reason": "not_conflict",
+              "previous_evidence": [
+                {
+                  "date": "2025-09-19",
+                  "t_index": 5,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-09-26",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "11de77e8:conformity:4:recovered"
+            "11de77e8:conformity:4:not_conflict"
           ],
-          "top_tensions": [
-            "conformity"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
-            {
-              "date": "2025-09-12",
-              "t_index": 4,
-              "direction": "misaligned",
-              "dimensions": [
-                "conformity"
-              ],
-              "score_mean": null,
-              "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
-            },
             {
               "date": "2025-09-19",
               "t_index": 5,
@@ -8363,22 +9741,43 @@
               "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
             },
             {
+              "date": "2025-09-19",
+              "t_index": 5,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Noor and I went to dinner with her parents in Rotterdam on Saturday. Her dad asked about the promotion and I gave the standard answer — it's in progress, I'm grateful for the opportunity, etc. He seemed pleased. On the..."
+            },
+            {
               "date": "2025-09-26",
               "t_index": 6,
-              "direction": "recovery",
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "I thanked him and said I'd put my best foot forward."
+              "excerpt": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to..."
+            },
+            {
+              "date": "2025-09-26",
+              "t_index": 6,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to..."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
-          "11de77e8:entry:4",
           "11de77e8:entry:5",
+          "11de77e8:entry:5",
+          "11de77e8:entry:6",
           "11de77e8:entry:6"
         ]
       }
@@ -8832,7 +10231,7 @@
           "id": "two-values-lukas:week:7"
         }
       ],
-      "input_hash": "7b2467e158dc84fc4a0e6686e9f8025b2fa0d7feeb3f6a141d522db5e5dc29d8",
+      "input_hash": "58f4e8af94becba9f5691af5b7531faf4a5b6d88f121135035af88cbb2a0e0bb",
       "error": null,
       "details": {
         "decisions": [
@@ -9050,123 +10449,174 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 3,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 4,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 6,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "recover"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 6,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 7,
           "cutoff_date": "2025-10-02",
-          "delivery_state": "recovered",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "conformity": "recovered"
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 7,
+              "last_date": "2025-10-02"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 7,
+              "last_date": "2025-10-02"
+            }
           },
           "drifts": [
             {
@@ -9187,7 +10637,7 @@
                 "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
                 "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 6,
               "termination_date": "2025-09-26",
               "termination_verdict": "not_conflict"
@@ -9231,7 +10681,7 @@
           "id": "two-values-lukas:week:7"
         }
       ],
-      "input_hash": "b55ac7de3638b4e27d59b635b42af5700baafba160fac5926d344270c4adeabd",
+      "input_hash": "2c4aadc63cee32e2def2d4685bae3cf091df0db31ce8208aa0d5efc7166b34ac",
       "error": null,
       "details": {
         "digest": {
@@ -9239,9 +10689,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-09-29",
           "week_end": "2025-10-05",
-          "response_mode": "recovered",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is recovered.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -9252,55 +10702,155 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "conformity": "recovered"
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
           },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 7,
+              "last_date": "2025-10-02"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 7,
+              "last_date": "2025-10-02"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-09-22",
+              "previous_week_end": "2025-09-28",
+              "current_week_start": "2025-09-29",
+              "current_week_end": "2025-10-05",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-09-26",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-10-02",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it..."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-09-22",
+              "previous_week_end": "2025-09-28",
+              "current_week_start": "2025-09-29",
+              "current_week_end": "2025-10-05",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-09-26",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-10-02",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "11de77e8:conformity:4:recovered"
+            "11de77e8:conformity:4:not_conflict"
           ],
-          "top_tensions": [
-            "conformity"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-09-12",
-              "t_index": 4,
-              "direction": "misaligned",
+              "date": "2025-09-26",
+              "t_index": 6,
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
-            },
-            {
-              "date": "2025-09-19",
-              "t_index": 5,
-              "direction": "misaligned",
-              "dimensions": [
-                "conformity"
-              ],
-              "score_mean": null,
-              "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+              "excerpt": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to..."
             },
             {
               "date": "2025-09-26",
               "t_index": 6,
-              "direction": "recovery",
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to..."
+            },
+            {
+              "date": "2025-10-02",
+              "t_index": 7,
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "I thanked him and said I'd put my best foot forward."
+              "excerpt": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it..."
+            },
+            {
+              "date": "2025-10-02",
+              "t_index": 7,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it..."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
-          "11de77e8:entry:4",
-          "11de77e8:entry:5",
-          "11de77e8:entry:6"
+          "11de77e8:entry:6",
+          "11de77e8:entry:6",
+          "11de77e8:entry:7",
+          "11de77e8:entry:7"
         ]
       }
     },
@@ -10050,7 +11600,7 @@
           "id": "two-values-lukas:week:8"
         }
       ],
-      "input_hash": "85a772112dea7b821a0ff28127777a16fa8245d96a9b886001c722a09b889d7c",
+      "input_hash": "394df6d3fbe1d9e925bf13679d210de88fc9464f281943e41ae680dd6164cbdd",
       "error": null,
       "details": {
         "decisions": [
@@ -10320,151 +11870,210 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 3,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 4,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 6,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "recover"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 6,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 9,
           "cutoff_date": "2025-10-11",
-          "delivery_state": "recovered",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "conformity": "recovered"
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 9,
+              "last_date": "2025-10-11"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 9,
+              "last_date": "2025-10-11"
+            }
           },
           "drifts": [
             {
@@ -10485,7 +12094,7 @@
                 "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
                 "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 6,
               "termination_date": "2025-09-26",
               "termination_verdict": "not_conflict"
@@ -10529,7 +12138,7 @@
           "id": "two-values-lukas:week:8"
         }
       ],
-      "input_hash": "7d96bed1ed7c54153bc62476a4cd234aaa05191e3e3bee5f425767a65141c02a",
+      "input_hash": "a41aea3f4573ac01a1cb8204ad54c06e92c72c5662545df7ffb6a615f893f3aa",
       "error": null,
       "details": {
         "digest": {
@@ -10537,9 +12146,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-10-06",
           "week_end": "2025-10-12",
-          "response_mode": "recovered",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is recovered.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -10550,55 +12159,197 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "conformity": "recovered"
+            "conformity": "no_active_drift",
+            "self_direction": "no_active_drift"
           },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 9,
+              "last_date": "2025-10-11"
+            },
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 9,
+              "last_date": "2025-10-11"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-09-29",
+              "previous_week_end": "2025-10-05",
+              "current_week_start": "2025-10-06",
+              "current_week_end": "2025-10-12",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-10-02",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-10-07",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+                },
+                {
+                  "date": "2025-10-11",
+                  "t_index": 9,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "So I default to the smooth version."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-09-29",
+              "previous_week_end": "2025-10-05",
+              "current_week_start": "2025-10-06",
+              "current_week_end": "2025-10-12",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-10-02",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-10-07",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+                },
+                {
+                  "date": "2025-10-11",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't — I've been keeping my velocity up..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "11de77e8:conformity:4:recovered"
+            "11de77e8:conformity:4:not_conflict"
           ],
-          "top_tensions": [
-            "conformity"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-09-12",
-              "t_index": 4,
-              "direction": "misaligned",
+              "date": "2025-10-02",
+              "t_index": 7,
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
+              "excerpt": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it..."
             },
             {
-              "date": "2025-09-19",
-              "t_index": 5,
-              "direction": "misaligned",
+              "date": "2025-10-02",
+              "t_index": 7,
+              "direction": "context",
               "dimensions": [
-                "conformity"
+                "self_direction"
               ],
               "score_mean": null,
-              "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+              "excerpt": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it..."
             },
             {
-              "date": "2025-09-26",
-              "t_index": 6,
-              "direction": "recovery",
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "I thanked him and said I'd put my best foot forward."
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+            },
+            {
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+            },
+            {
+              "date": "2025-10-11",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't — I've been keeping my velocity up..."
+            },
+            {
+              "date": "2025-10-11",
+              "t_index": 9,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "So I default to the smooth version."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
-          "11de77e8:entry:4",
-          "11de77e8:entry:5",
-          "11de77e8:entry:6"
+          "11de77e8:entry:7",
+          "11de77e8:entry:7",
+          "11de77e8:entry:8",
+          "11de77e8:entry:8",
+          "11de77e8:entry:9",
+          "11de77e8:entry:9"
         ]
       }
     },
@@ -11272,7 +13023,7 @@
           "id": "two-values-lukas:week:9"
         }
       ],
-      "input_hash": "a83fe3e23000b0d4c61c83ce4be86fafba60b0b76152192d564b0dc71ca415e0",
+      "input_hash": "1b65033f950db61482cb5d84f508170ae8cefa232cefa15aafe024728a6cc599",
       "error": null,
       "details": {
         "decisions": [
@@ -11594,180 +13345,246 @@
             "t_index": 0,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 3,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 4,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "conformity",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 6,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "recover"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 6,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 10,
             "core_value": "conformity",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 10,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 11,
             "core_value": "conformity",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 11,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "11de77e8",
           "cutoff_t_index": 11,
           "cutoff_date": "2025-10-14",
-          "delivery_state": "mixed",
+          "delivery_state": "insufficient_evidence",
           "core_value_states": {
-            "conformity": "recovered",
-            "self_direction": "uncertain"
+            "conformity": "no_active_drift",
+            "self_direction": "insufficient_evidence"
+          },
+          "core_value_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-10-14"
+            },
+            "self_direction": {
+              "state": "insufficient_evidence",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-10-14"
+            }
           },
           "drifts": [
             {
@@ -11788,7 +13605,7 @@
                 "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
                 "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
               ],
-              "delivery_state": "recovered",
+              "termination_reason": "not_conflict",
               "termination_t_index": 6,
               "termination_date": "2025-09-26",
               "termination_verdict": "not_conflict"
@@ -11811,7 +13628,7 @@
                 "So I default to the smooth version.",
                 "Accepted on the spot because that's what you do."
               ],
-              "delivery_state": "uncertain",
+              "termination_reason": "abstain",
               "termination_t_index": 11,
               "termination_date": "2025-10-14",
               "termination_verdict": "abstain"
@@ -11855,7 +13672,7 @@
           "id": "two-values-lukas:week:9"
         }
       ],
-      "input_hash": "693412ae2b3e8ff7533f10646b07e9af6f68f45980c9038aca3b046dc3f7d1a9",
+      "input_hash": "c8293a13b46d676cf8ffac47511985f7d092355add12d4f00531f9da293381f7",
       "error": null,
       "details": {
         "digest": {
@@ -11863,9 +13680,9 @@
           "persona_name": "Lukas Vermeer",
           "week_start": "2025-10-13",
           "week_end": "2025-10-19",
-          "response_mode": "mixed",
+          "response_mode": "insufficient_evidence",
           "mode_source": "drift_detector",
-          "mode_rationale": "Core Values have different active, recovered, or uncertain Drift states.",
+          "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -11876,49 +13693,178 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "conformity": "recovered",
-            "self_direction": "uncertain"
+            "conformity": "no_active_drift",
+            "self_direction": "insufficient_evidence"
           },
+          "drift_details": {
+            "conformity": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-10-14"
+            },
+            "self_direction": {
+              "state": "insufficient_evidence",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-10-14"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-10-06",
+              "previous_week_end": "2025-10-12",
+              "current_week_start": "2025-10-13",
+              "current_week_end": "2025-10-19",
+              "previous_state": "no_active_drift",
+              "current_state": "insufficient_evidence",
+              "change": "evidence_became_insufficient",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-10-07",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+                },
+                {
+                  "date": "2025-10-11",
+                  "t_index": 9,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "So I default to the smooth version."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-10-14",
+                  "t_index": 10,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Accepted on the spot because that's what you do."
+                },
+                {
+                  "date": "2025-10-14",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+                }
+              ]
+            },
+            {
+              "core_value": "conformity",
+              "previous_week_start": "2025-10-06",
+              "previous_week_end": "2025-10-12",
+              "current_week_start": "2025-10-13",
+              "current_week_end": "2025-10-19",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-10-07",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+                },
+                {
+                  "date": "2025-10-11",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't — I've been keeping my velocity up..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-10-14",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+                },
+                {
+                  "date": "2025-10-14",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "conformity"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "11de77e8:conformity:4:recovered",
-            "11de77e8:self_direction:9:uncertain"
+            "11de77e8:conformity:4:not_conflict",
+            "11de77e8:self_direction:9:abstain"
           ],
           "top_tensions": [
-            "conformity",
             "self_direction"
           ],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-09-12",
-              "t_index": 4,
-              "direction": "misaligned",
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer."
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
             },
             {
-              "date": "2025-09-19",
-              "t_index": 5,
-              "direction": "misaligned",
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
               "dimensions": [
-                "conformity"
+                "self_direction"
               ],
               "score_mean": null,
-              "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
             },
             {
-              "date": "2025-09-26",
-              "t_index": 6,
-              "direction": "recovery",
+              "date": "2025-10-11",
+              "t_index": 9,
+              "direction": "context",
               "dimensions": [
                 "conformity"
               ],
               "score_mean": null,
-              "excerpt": "I thanked him and said I'd put my best foot forward."
+              "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't — I've been keeping my velocity up..."
             },
             {
               "date": "2025-10-11",
@@ -11933,17 +13879,47 @@
             {
               "date": "2025-10-14",
               "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 10,
               "direction": "misaligned",
               "dimensions": [
                 "self_direction"
               ],
               "score_mean": null,
               "excerpt": "Accepted on the spot because that's what you do."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
             }
           ],
           "coach_narrative": {
             "weekly_mirror": "You wrote that you \"Accepted on the spot because that's what you do\", then noticed that relief came before excitement.",
-            "tension_explanation": "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+            "tension_explanation": "Your reason for accepting the new role still feels unclear because relief and expectation both shaped the choice.",
             "reflective_question": "When you separate relief from expectation, what do you want this new role to mean for you?"
           },
           "validation": {
@@ -11968,6 +13944,11 @@
                 "details": "Response avoids naming raw Schwartz value labels."
               },
               {
+                "name": "state_claims",
+                "passed": true,
+                "details": "Response makes only supported current-state claims."
+              },
+              {
                 "name": "length",
                 "passed": true,
                 "details": "Combined response length is 55 words (target 25-180)."
@@ -11976,11 +13957,14 @@
           }
         },
         "cited_journal_entry_ids": [
-          "11de77e8:entry:4",
-          "11de77e8:entry:5",
-          "11de77e8:entry:6",
+          "11de77e8:entry:8",
+          "11de77e8:entry:8",
           "11de77e8:entry:9",
-          "11de77e8:entry:10"
+          "11de77e8:entry:9",
+          "11de77e8:entry:10",
+          "11de77e8:entry:10",
+          "11de77e8:entry:11",
+          "11de77e8:entry:11"
         ]
       }
     },
@@ -12015,12 +13999,12 @@
           "id": "two-values-lukas:week:9"
         }
       ],
-      "input_hash": "99327712c86f915277b721dc218cdf1d4d872d1a1caebd6cd7a4584912721e63",
+      "input_hash": "121657a49c4ea476c82506f6479a2d522c4a3b32c63632b0edf7a9d0122ee1b0",
       "error": null,
       "details": {
         "narrative": {
           "weekly_mirror": "You wrote that you \"Accepted on the spot because that's what you do\", then noticed that relief came before excitement.",
-          "tension_explanation": "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+          "tension_explanation": "Your reason for accepting the new role still feels unclear because relief and expectation both shaped the choice.",
           "reflective_question": "When you separate relief from expectation, what do you want this new role to mean for you?"
         },
         "validation": {
@@ -12043,6 +14027,11 @@
               "name": "value_leakage",
               "passed": true,
               "details": "Response avoids naming raw Schwartz value labels."
+            },
+            {
+              "name": "state_claims",
+              "passed": true,
+              "details": "Response makes only supported current-state claims."
             },
             {
               "name": "length",

@@ -87,7 +87,8 @@ def run_weekly_coach_cycle(
             if narrative is not None
             else None
         )
-        digest = attach_coach_artifacts(digest, narrative, validation)
+        if narrative is not None and validation is not None and validation.all_passed:
+            digest = attach_coach_artifacts(digest, narrative, validation)
 
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)

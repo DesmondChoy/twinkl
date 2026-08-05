@@ -5,7 +5,7 @@
     {
       "scenario_id": "stable-meera",
       "file": "stable-meera.json",
-      "content_sha256": "1e3f3a259aef8f4bba73b9d02605c097953f1ebb0d782580869271481f75f1b4",
+      "content_sha256": "0a3c9ef6b72aa93a7daf9feb76b8cd26b4e1667bea5e4b69d62d58b65db3f1de",
       "persona_id": "23d101f8",
       "persona_name": "Meera Krishnamurthy",
       "age": "45-54",
@@ -15,15 +15,15 @@
         "achievement",
         "security"
       ],
-      "role": "stable",
+      "role": "no_active_drift",
       "progression": [
-        "stable",
-        "stable",
-        "stable",
-        "stable",
-        "stable",
-        "stable",
-        "stable"
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift"
       ],
       "summary": "A calm baseline with meaningful nudges and no confirmed Drift.",
       "recommended": false
@@ -31,7 +31,7 @@
     {
       "scenario_id": "active-wei-jun",
       "file": "active-wei-jun.json",
-      "content_sha256": "75857b82571ece6d0ee5ae1f6535962c5b1f07265a5431ddc0a03b533a267de4",
+      "content_sha256": "0924c2c02d8868911ac204fb4a122dd7a772e8e66de1d7237e7ca7ce34b02bab",
       "persona_id": "8f83c818",
       "persona_name": "Wei Jun Chen",
       "age": "35-44",
@@ -42,12 +42,12 @@
       ],
       "role": "active_drift",
       "progression": [
-        "stable",
-        "stable",
-        "stable",
-        "stable",
-        "stable",
-        "active"
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "active_drift"
       ],
       "summary": "The clearest two-consecutive-Conflict path into active Drift.",
       "recommended": false
@@ -55,7 +55,7 @@
     {
       "scenario_id": "recovered-marc",
       "file": "recovered-marc.json",
-      "content_sha256": "dd40b418a528a1ea2babceb9872439ca734a4b69646035fbe37942e1ab69b38f",
+      "content_sha256": "bf6d1b894ab001c8dbb13d0d34169023ef61fc7e5557de2f59be0c86394098de",
       "persona_id": "988d1a65",
       "persona_name": "Marc Vandenberghe",
       "age": "45-54",
@@ -64,24 +64,24 @@
       "core_values": [
         "power"
       ],
-      "role": "recovered_drift",
+      "role": "drift_ended",
       "progression": [
-        "stable",
-        "stable",
-        "stable",
-        "stable",
-        "active",
-        "recovered",
-        "recovered",
-        "recovered"
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift"
       ],
-      "summary": "A compact active-to-recovered Drift progression.",
+      "summary": "A compact active-to-no-active Drift progression.",
       "recommended": false
     },
     {
       "scenario_id": "uncertain-noor",
       "file": "uncertain-noor.json",
-      "content_sha256": "790bc8543077eb372c5677e7756b28201059694c82d6b3395041c1838a7ca0e0",
+      "content_sha256": "e7398c1c513ab98fa666a29ce026214d9dcada9e27c3b7ad87c6ff3248b24a6f",
       "persona_id": "02fb94f3",
       "persona_name": "Noor Haddad",
       "age": "18-24",
@@ -91,14 +91,14 @@
         "self_direction",
         "tradition"
       ],
-      "role": "uncertain",
+      "role": "insufficient_evidence",
       "progression": [
-        "stable",
-        "stable",
-        "active",
-        "uncertain",
-        "uncertain",
-        "uncertain"
+        "insufficient_evidence",
+        "no_active_drift",
+        "active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift"
       ],
       "summary": "A nuanced case where the Weekly Drift Reviewer does not overclaim.",
       "recommended": false
@@ -106,7 +106,7 @@
     {
       "scenario_id": "two-values-lukas",
       "file": "two-values-lukas.json",
-      "content_sha256": "7ce93a8a7e78a21005ea5b0127bd22d1df7bba1d6460a5b17fbfb84a358e91ad",
+      "content_sha256": "96940665163a66f33043e4d19eed65a931982fad607226865a3aba9daf8bfdf1",
       "persona_id": "11de77e8",
       "persona_name": "Lukas Vermeer",
       "age": "25-34",
@@ -118,15 +118,15 @@
       ],
       "role": "two_core_values",
       "progression": [
-        "stable",
-        "stable",
-        "stable",
-        "stable",
-        "active",
-        "recovered",
-        "recovered",
-        "recovered",
-        "mixed"
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "insufficient_evidence"
       ],
       "summary": "Recommended: the fullest walkthrough and clearest state independence.",
       "recommended": true

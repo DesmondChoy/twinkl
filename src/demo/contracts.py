@@ -9,7 +9,11 @@ from typing import Annotated, Any, Literal, cast
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from src.coach.schemas import CoachNarrative, DigestValidation, WeeklyDigest
-from src.drift_detector import DriftDetectorResult
+from src.drift_detector import (
+    CoreValueDriftState,
+    DriftDetectorResult,
+    drift_decision_transitions,
+)
 from src.models.nudge import NudgeCategory
 from src.weekly_drift_reviewer import (
     WeeklyDriftReviewerDecision,
@@ -508,45 +512,35 @@ class DriftRuleStep(ContractModel):
     t_index: int = Field(ge=0)
     core_value: CoreValue
     verdict: Literal["conflict", "not_conflict", "abstain"]
-    pending_run_length: int = Field(ge=0)
-    effect: Literal["start", "confirm", "extend", "recover", "uncertain", "break"]
+    current_run_length: int = Field(ge=0)
+    current_state: CoreValueDriftState
+    gap_before: bool
+    effect: Literal["start", "confirm", "extend", "end", "insufficient", "reset"]
 
 
 def build_drift_rule_steps(
     decisions: Sequence[WeeklyDriftReviewerDecision],
 ) -> list[DriftRuleStep]:
     """Explain the deterministic Drift Detector transitions for Inspect."""
-    state: dict[str, tuple[int, bool]] = {}
     steps: list[DriftRuleStep] = []
-    for decision in sorted(decisions, key=lambda row: (row.t_index, row.core_value)):
-        run_length, confirmed = state.get(decision.core_value, (0, False))
-        effect: Literal["start", "confirm", "extend", "recover", "uncertain", "break"]
-        if decision.verdict == "conflict":
-            if run_length == 0:
-                effect = "start"
-            elif run_length == 1:
-                effect = "confirm"
-                confirmed = True
-            else:
-                effect = "extend"
-            run_length += 1
-        elif decision.verdict == "not_conflict":
-            effect = "recover" if confirmed else "break"
-            run_length, confirmed = 0, False
-        else:
-            effect = "uncertain"
-            run_length, confirmed = 0, False
-        state[decision.core_value] = (run_length, confirmed)
-        steps.append(
-            DriftRuleStep(
-                t_index=decision.t_index,
-                core_value=cast(CoreValue, decision.core_value),
-                verdict=decision.verdict,
-                pending_run_length=run_length,
-                effect=effect,
+    core_values = sorted({decision.core_value for decision in decisions})
+    for core_value in core_values:
+        value_decisions = [
+            decision for decision in decisions if decision.core_value == core_value
+        ]
+        for transition in drift_decision_transitions(value_decisions):
+            steps.append(
+                DriftRuleStep(
+                    t_index=transition.decision.t_index,
+                    core_value=cast(CoreValue, transition.decision.core_value),
+                    verdict=transition.decision.verdict,
+                    current_run_length=transition.current_run_length,
+                    current_state=transition.current_state,
+                    gap_before=transition.gap_before,
+                    effect=transition.effect,
+                )
             )
-        )
-    return steps
+    return sorted(steps, key=lambda row: (row.t_index, row.core_value))
 
 
 class DriftDetectedDetails(ContractModel):
@@ -771,9 +765,7 @@ class ScenarioWeek(ContractModel):
     week_end: str
     journal_entry_ids: list[str]
     event_ids: list[str]
-    expected_delivery_state: Literal[
-        "stable", "active", "recovered", "uncertain", "mixed"
-    ]
+    expected_delivery_state: CoreValueDriftState
 
 
 class ScenarioManifest(ContractModel):

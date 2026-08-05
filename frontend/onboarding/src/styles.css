@@ -2733,13 +2733,12 @@ h2 {
   text-transform: uppercase;
 }
 
-.replay-controls__state--active,
-.replay-controls__state--mixed {
+.replay-controls__state--active_drift {
   color: #8b3d2f;
   background: rgba(255, 138, 91, 0.17);
 }
 
-.replay-controls__state--uncertain {
+.replay-controls__state--insufficient_evidence {
   color: #66521f;
   background: rgba(218, 179, 71, 0.2);
 }
@@ -2796,12 +2795,11 @@ h2 {
   background: var(--verdigris);
 }
 
-.week-rail__week--revealed.week-rail__week--active,
-.week-rail__week--revealed.week-rail__week--mixed {
+.week-rail__week--revealed.week-rail__week--active_drift {
   background: var(--apricot);
 }
 
-.week-rail__week--revealed.week-rail__week--uncertain {
+.week-rail__week--revealed.week-rail__week--insufficient_evidence {
   color: var(--ink);
   background: #dab347;
 }
@@ -3242,13 +3240,12 @@ h2 {
   text-transform: uppercase;
 }
 
-.weekly-experience__state--active,
-.weekly-experience__state--mixed {
+.weekly-experience__state--active_drift {
   color: #8b3d2f;
   background: rgba(255, 138, 91, 0.16);
 }
 
-.weekly-experience__state--uncertain {
+.weekly-experience__state--insufficient_evidence {
   color: #66521f;
   background: rgba(218, 179, 71, 0.18);
 }
@@ -4994,7 +4991,7 @@ h2 {
     ) center / 100% 2px no-repeat;
 }
 
-.persona-option--recovered_drift .persona-option__thread {
+.persona-option--drift_ended .persona-option__thread {
   background:
     linear-gradient(120deg, transparent 47%, var(--verdigris) 48% 52%, transparent 53%)
       center / 40px 28px repeat-x,
@@ -5002,7 +4999,7 @@ h2 {
       no-repeat;
 }
 
-.persona-option--uncertain .persona-option__thread {
+.persona-option--insufficient_evidence .persona-option__thread {
   background:
     radial-gradient(circle, #b78e25 0 3px, transparent 3.5px)
       0 50% / 25px 22px repeat-x;
@@ -5135,8 +5132,7 @@ h2 {
   white-space: nowrap;
 }
 
-.week-rail__week--revealed.week-rail__week--active,
-.week-rail__week--revealed.week-rail__week--mixed {
+.week-rail__week--revealed.week-rail__week--active_drift {
   background: #a84c32;
 }
 
@@ -5170,8 +5166,7 @@ h2 {
   border-color: color-mix(in srgb, var(--verdigris) 30%, var(--line));
 }
 
-.weekly-experience--active,
-.weekly-experience--mixed {
+.weekly-experience--active_drift {
   border-color: color-mix(in srgb, #a84c32 34%, var(--line));
 }
 
@@ -5181,8 +5176,7 @@ h2 {
   line-height: 1.05;
 }
 
-.weekly-experience__state--active,
-.weekly-experience__state--mixed {
+.weekly-experience__state--active_drift {
   color: #78301f;
   background: #f4ded5;
 }
@@ -5221,8 +5215,7 @@ h2 {
   text-transform: uppercase;
 }
 
-.weekly-value--active .weekly-value__heading strong,
-.weekly-value--mixed .weekly-value__heading strong {
+.weekly-value--active_drift .weekly-value__heading strong {
   color: #78301f;
 }
 
@@ -6131,41 +6124,32 @@ h2 {
   background: var(--verdigris);
 }
 
-.replay-result--active {
+.replay-result--active_drift {
   border-color: rgba(157, 65, 42, 0.32);
   background: rgba(168, 76, 50, 0.075);
 }
 
-.replay-result--active .replay-result__node {
+.replay-result--active_drift .replay-result__node {
   background: #a84c32;
 }
 
-.replay-result--uncertain {
+.replay-result--insufficient_evidence {
   border-color: rgba(183, 142, 37, 0.36);
   background: rgba(218, 179, 71, 0.11);
 }
 
-.replay-result--uncertain .replay-result__node {
+.replay-result--insufficient_evidence .replay-result__node {
   color: var(--ink);
   background: #dab347;
 }
 
-.replay-result--recovered {
+.replay-result--no_active_drift {
   border-color: rgba(46, 113, 153, 0.3);
   background: rgba(65, 129, 164, 0.08);
 }
 
-.replay-result--recovered .replay-result__node {
+.replay-result--no_active_drift .replay-result__node {
   background: #397fa0;
-}
-
-.replay-result--mixed {
-  border-color: rgba(111, 88, 164, 0.3);
-  background: rgba(111, 88, 164, 0.075);
-}
-
-.replay-result--mixed .replay-result__node {
-  background: #6f58a4;
 }
 
 .replay-result__body > header {
@@ -6197,24 +6181,19 @@ h2 {
   text-transform: uppercase;
 }
 
-.replay-state--active {
+.replay-state--active_drift {
   color: #78301f;
   background: #f4ded5;
 }
 
-.replay-state--uncertain {
+.replay-state--insufficient_evidence {
   color: #66521f;
   background: rgba(218, 179, 71, 0.26);
 }
 
-.replay-state--recovered {
+.replay-state--no_active_drift {
   color: #225b76;
   background: rgba(65, 129, 164, 0.15);
-}
-
-.replay-state--mixed {
-  color: #4e3c78;
-  background: rgba(111, 88, 164, 0.14);
 }
 
 .replay-result__body > p {

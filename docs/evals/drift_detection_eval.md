@@ -72,10 +72,11 @@ See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
   coverage and abstention, cross-week hits, detection delay, entry-level and
   per-Core-Value metrics, response status, latency, token use, and cost.
 
-The cleaned prompt is version `2.0`. The user explicitly accepted no
-development rerun, and the capstone stops without scoring this prompt on a
-fresh final test. Frozen historical prompts and results remain bound to their
-original hashes.
+The prompt used for the reported development Runs is version `2.0`. Current
+runtime prompt version `3.0` adds stricter confidence, reason, and exact-quote
+rules. The user explicitly accepted no development rerun, and the capstone
+stops without scoring version `3.0` on a fresh final test. Frozen historical
+prompts and results remain bound to their original hashes.
 
 The approved Drift Detector uses two consecutive Weekly Drift Reviewer
 Conflicts for the same Core Value. The user-facing path does not run the VIF

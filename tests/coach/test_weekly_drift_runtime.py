@@ -118,23 +118,72 @@ async def test_approved_runtime_persists_reviews_drift_and_digest(tmp_path: Path
     )
 
     assert responses.call_count == 3
-    assert digest.response_mode == "recovered"
+    assert digest.response_mode == "no_active_drift"
     assert digest.signal_source == "weekly_drift_reviewer"
     assert digest.overall_mean is None
-    assert digest.drift_states == {"benevolence": "recovered"}
-    assert len(digest.evidence) == 3
-    assert digest.evidence[-1].direction == "recovery"
+    assert digest.drift_states == {"benevolence": "no_active_drift"}
+    assert digest.state_comparisons[-1].previous_state == "active_drift"
+    assert digest.state_comparisons[-1].change == "active_drift_ended"
+    assert digest.state_comparisons[-1].end_reason == "not_conflict"
+    assert {
+        item.date for item in digest.state_comparisons[-1].previous_evidence
+    } == {"2025-01-13"}
+    assert {
+        item.date for item in digest.state_comparisons[-1].current_evidence
+    } == {"2025-01-20"}
     assert Path(artifact_paths["review_receipt_1_path"]).exists()
     assert Path(artifact_paths["drift_json_path"]).exists()
     assert Path(artifact_paths["digest_json_path"]).exists()
     assert Path(artifact_paths["parquet_path"]).exists()
 
     payload = json.loads(Path(artifact_paths["drift_json_path"]).read_text())
-    assert payload["delivery_state"] == "recovered"
+    assert payload["delivery_state"] == "no_active_drift"
     prompt = Path(artifact_paths["prompt_path"]).read_text()
     assert '"response_policy":"no_current_drift"' in prompt
-    assert "Drift is recovered" in prompt
+    assert "deterministic change: active_drift_ended" in prompt
     assert "Overall mean alignment" not in prompt
+
+
+@pytest.mark.asyncio
+async def test_runtime_does_not_attach_an_invalid_coach_response(tmp_path: Path):
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir()
+    _write_wrangled(wrangled_dir / "persona_deadbeef.md")
+    reviewer = OpenAIWeeklyDriftReviewer(
+        client=SimpleNamespace(responses=_SequencedResponses())
+    )
+
+    async def invalid_coach(
+        _prompt: str,
+        _response_format: dict | None,
+        _instructions: str | None = None,
+    ) -> str:
+        return json.dumps(
+            {
+                "weekly_mirror": (
+                    'You wrote "Called my sister and protected the evening for '
+                    'family," and this proves improvement.'
+                ),
+                "tension_explanation": (
+                    "The latest choice shows that the earlier concern is now fixed."
+                ),
+                "reflective_question": (
+                    "What helped you make that change and keep it going next week?"
+                ),
+            }
+        )
+
+    digest, _paths = await run_weekly_drift_coach_cycle(
+        persona_id="deadbeef",
+        wrangled_dir=wrangled_dir,
+        output_dir=tmp_path / "exports",
+        parquet_path=tmp_path / "weekly_digests.parquet",
+        reviewer=reviewer,
+        coach_llm_complete=invalid_coach,
+    )
+
+    assert digest.coach_narrative is None
+    assert digest.validation is None
 
 
 def _write_onboarding_profile(path: Path, **overrides) -> None:
@@ -175,7 +224,7 @@ async def test_onboarding_profile_supplies_runtime_core_values(tmp_path: Path):
     )
 
     assert digest.core_values == ["self_direction"]
-    assert digest.drift_states == {"self_direction": "recovered"}
+    assert digest.drift_states == {"self_direction": "no_active_drift"}
     assert digest.persona_name == "Desmond"
     assert digest.goal_context == "I feel stuck or unclear about my direction"
 
@@ -349,7 +398,7 @@ def test_no_drift_digest_includes_recent_journal_context(tmp_path: Path):
         drift_result=drift_result,
     )
 
-    assert digest.response_mode == "stable"
+    assert digest.response_mode == "no_active_drift"
     assert [snippet.direction for snippet in digest.evidence] == [
         "context",
         "context",
@@ -357,4 +406,4 @@ def test_no_drift_digest_includes_recent_journal_context(tmp_path: Path):
     prompt = render_digest_prompt(digest)
     assert '"response_policy":"no_current_drift"' in prompt
     assert "Cancelled dinner with my family" in prompt
-    assert "does not by itself prove positive behavior" in prompt
+    assert "does not prove supportive behavior, improvement, or success" in prompt

@@ -412,12 +412,24 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "8f83c818",
       "cutoff_t_index": 0,
       "cutoff_date": "2025-05-31",
-      "delivery_state": "stable",
-      "core_value_states": {},
+      "delivery_state": "no_active_drift",
+      "core_value_states": {
+        "universalism": "no_active_drift"
+      },
+      "core_value_details": {
+        "universalism": {
+          "state": "no_active_drift",
+          "current_run_length": 1,
+          "last_decision": "conflict",
+          "last_review_status": "ok",
+          "last_t_index": 0,
+          "last_date": "2025-05-31"
+        }
+      },
       "drifts": []
     },
     "weekly_digest": {
@@ -425,9 +437,9 @@
       "persona_name": "Wei Jun Chen",
       "week_start": "2025-05-26",
       "week_end": "2025-06-01",
-      "response_mode": "stable",
+      "response_mode": "no_active_drift",
       "mode_source": "drift_detector",
-      "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+      "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
       "signal_source": "weekly_drift_reviewer",
       "n_entries": 1,
       "overall_mean": null,
@@ -436,7 +448,20 @@
         "universalism"
       ],
       "goal_context": null,
-      "drift_states": {},
+      "drift_states": {
+        "universalism": "no_active_drift"
+      },
+      "drift_details": {
+        "universalism": {
+          "state": "no_active_drift",
+          "current_run_length": 1,
+          "last_decision": "conflict",
+          "last_review_status": "ok",
+          "last_t_index": 0,
+          "last_date": "2025-05-31"
+        }
+      },
+      "state_comparisons": [],
       "drift_reasons": [],
       "top_tensions": [],
       "top_strengths": [],
@@ -445,10 +470,12 @@
         {
           "date": "2025-05-31",
           "t_index": 0,
-          "direction": "context",
-          "dimensions": [],
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
           "score_mean": null,
-          "excerpt": "Had a team standup today and Ravi brought up that our payment processing pipeline is rejecting a disproportionate number of transactions from certain Southeast Asian corridors. The data was right there in the dashboard. Mostly remittance flows, the kind migrant..."
+          "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
         }
       ],
       "coach_narrative": null,
@@ -1078,13 +1105,23 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "8f83c818",
       "cutoff_t_index": 10,
       "cutoff_date": "2025-07-05",
-      "delivery_state": "active",
+      "delivery_state": "active_drift",
       "core_value_states": {
-        "universalism": "active"
+        "universalism": "active_drift"
+      },
+      "core_value_details": {
+        "universalism": {
+          "state": "active_drift",
+          "current_run_length": 3,
+          "last_decision": "conflict",
+          "last_review_status": "ok",
+          "last_t_index": 10,
+          "last_date": "2025-07-05"
+        }
       },
       "drifts": [
         {
@@ -1107,7 +1144,7 @@
             "I nodded.",
             "I've been choosing convenience over doing what I know matters"
           ],
-          "delivery_state": "active",
+          "termination_reason": null,
           "termination_t_index": null,
           "termination_date": null,
           "termination_verdict": null
@@ -1119,9 +1156,9 @@
       "persona_name": "Wei Jun Chen",
       "week_start": "2025-06-30",
       "week_end": "2025-07-06",
-      "response_mode": "active",
+      "response_mode": "active_drift",
       "mode_source": "drift_detector",
-      "mode_rationale": "The latest confirmed Drift state is active.",
+      "mode_rationale": "At least one Core Value has active Drift.",
       "signal_source": "weekly_drift_reviewer",
       "n_entries": 2,
       "overall_mean": null,
@@ -1131,10 +1168,67 @@
       ],
       "goal_context": null,
       "drift_states": {
-        "universalism": "active"
+        "universalism": "active_drift"
       },
+      "drift_details": {
+        "universalism": {
+          "state": "active_drift",
+          "current_run_length": 3,
+          "last_decision": "conflict",
+          "last_review_status": "ok",
+          "last_t_index": 10,
+          "last_date": "2025-07-05"
+        }
+      },
+      "state_comparisons": [
+        {
+          "core_value": "universalism",
+          "previous_week_start": "2025-06-23",
+          "previous_week_end": "2025-06-29",
+          "current_week_start": "2025-06-30",
+          "current_week_end": "2025-07-06",
+          "previous_state": "no_active_drift",
+          "current_state": "active_drift",
+          "change": "active_drift_started",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-06-25",
+              "t_index": 8,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "I said okay."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-07-01",
+              "t_index": 9,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "I nodded."
+            },
+            {
+              "date": "2025-07-05",
+              "t_index": 10,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "I've been choosing convenience over doing what I know matters"
+            }
+          ]
+        }
+      ],
       "drift_reasons": [
-        "8f83c818:universalism:8:active"
+        "8f83c818:universalism:8:open"
       ],
       "top_tensions": [
         "universalism"
@@ -1195,7 +1289,7 @@
           "active-wei-jun:event:008",
           "active-wei-jun:event:009"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "active-wei-jun:week:2",
@@ -1214,7 +1308,7 @@
           "active-wei-jun:event:016",
           "active-wei-jun:event:017"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "active-wei-jun:week:3",
@@ -1245,7 +1339,7 @@
           "active-wei-jun:event:033",
           "active-wei-jun:event:034"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "active-wei-jun:week:4",
@@ -1268,7 +1362,7 @@
           "active-wei-jun:event:044",
           "active-wei-jun:event:045"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "active-wei-jun:week:5",
@@ -1286,7 +1380,7 @@
           "active-wei-jun:event:051",
           "active-wei-jun:event:052"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "active-wei-jun:week:6",
@@ -1310,7 +1404,7 @@
           "active-wei-jun:event:063",
           "active-wei-jun:event:064"
         ],
-        "expected_delivery_state": "active"
+        "expected_delivery_state": "active_drift"
       }
     ],
     "trace_event_ids": [
@@ -1827,12 +1921,24 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "8f83c818",
           "cutoff_t_index": 0,
           "cutoff_date": "2025-05-31",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "universalism": "no_active_drift"
+          },
+          "core_value_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-05-31"
+            }
+          },
           "drifts": []
         },
         "weekly_digest": {
@@ -1840,9 +1946,9 @@
           "persona_name": "Wei Jun Chen",
           "week_start": "2025-05-26",
           "week_end": "2025-06-01",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -1851,7 +1957,20 @@
             "universalism"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "universalism": "no_active_drift"
+          },
+          "drift_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-05-31"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
@@ -1860,10 +1979,12 @@
             {
               "date": "2025-05-31",
               "t_index": 0,
-              "direction": "context",
-              "dimensions": [],
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
               "score_mean": null,
-              "excerpt": "Had a team standup today and Ravi brought up that our payment processing pipeline is rejecting a disproportionate number of transactions from certain Southeast Asian corridors. The data was right there in the dashboard. Mostly remittance flows, the kind migrant..."
+              "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
             }
           ],
           "coach_narrative": null,
@@ -2493,13 +2614,23 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "8f83c818",
           "cutoff_t_index": 10,
           "cutoff_date": "2025-07-05",
-          "delivery_state": "active",
+          "delivery_state": "active_drift",
           "core_value_states": {
-            "universalism": "active"
+            "universalism": "active_drift"
+          },
+          "core_value_details": {
+            "universalism": {
+              "state": "active_drift",
+              "current_run_length": 3,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 10,
+              "last_date": "2025-07-05"
+            }
           },
           "drifts": [
             {
@@ -2522,7 +2653,7 @@
                 "I nodded.",
                 "I've been choosing convenience over doing what I know matters"
               ],
-              "delivery_state": "active",
+              "termination_reason": null,
               "termination_t_index": null,
               "termination_date": null,
               "termination_verdict": null
@@ -2534,9 +2665,9 @@
           "persona_name": "Wei Jun Chen",
           "week_start": "2025-06-30",
           "week_end": "2025-07-06",
-          "response_mode": "active",
+          "response_mode": "active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is active.",
+          "mode_rationale": "At least one Core Value has active Drift.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -2546,10 +2677,67 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "universalism": "active"
+            "universalism": "active_drift"
           },
+          "drift_details": {
+            "universalism": {
+              "state": "active_drift",
+              "current_run_length": 3,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 10,
+              "last_date": "2025-07-05"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "universalism",
+              "previous_week_start": "2025-06-23",
+              "previous_week_end": "2025-06-29",
+              "current_week_start": "2025-06-30",
+              "current_week_end": "2025-07-06",
+              "previous_state": "no_active_drift",
+              "current_state": "active_drift",
+              "change": "active_drift_started",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-06-25",
+                  "t_index": 8,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I said okay."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-07-01",
+                  "t_index": 9,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I nodded."
+                },
+                {
+                  "date": "2025-07-05",
+                  "t_index": 10,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I've been choosing convenience over doing what I know matters"
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "8f83c818:universalism:8:active"
+            "8f83c818:universalism:8:open"
           ],
           "top_tensions": [
             "universalism"
@@ -2610,7 +2798,7 @@
               "active-wei-jun:event:008",
               "active-wei-jun:event:009"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "active-wei-jun:week:2",
@@ -2629,7 +2817,7 @@
               "active-wei-jun:event:016",
               "active-wei-jun:event:017"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "active-wei-jun:week:3",
@@ -2660,7 +2848,7 @@
               "active-wei-jun:event:033",
               "active-wei-jun:event:034"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "active-wei-jun:week:4",
@@ -2683,7 +2871,7 @@
               "active-wei-jun:event:044",
               "active-wei-jun:event:045"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "active-wei-jun:week:5",
@@ -2701,7 +2889,7 @@
               "active-wei-jun:event:051",
               "active-wei-jun:event:052"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "active-wei-jun:week:6",
@@ -2725,7 +2913,7 @@
               "active-wei-jun:event:063",
               "active-wei-jun:event:064"
             ],
-            "expected_delivery_state": "active"
+            "expected_delivery_state": "active_drift"
           }
         ],
         "trace_event_ids": [
@@ -3627,7 +3815,7 @@
           "id": "active-wei-jun:week:1"
         }
       ],
-      "input_hash": "cf9528847aef2c4b2443bc3bae41dd3f47ac3ddbfaa2d750aeec0547200228a5",
+      "input_hash": "fe5772cfebfc5f4b5610d5d061cec64306cf053617a7d0f9fb59f0c0b61bdfd1",
       "error": null,
       "details": {
         "decisions": [
@@ -3650,17 +3838,31 @@
             "t_index": 0,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "8f83c818",
           "cutoff_t_index": 0,
           "cutoff_date": "2025-05-31",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "universalism": "no_active_drift"
+          },
+          "core_value_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-05-31"
+            }
+          },
           "drifts": []
         }
       }
@@ -3700,7 +3902,7 @@
           "id": "active-wei-jun:week:1"
         }
       ],
-      "input_hash": "6f8cc87488970e8631b79d5d23023ae8370763dced13c8b6ab5e140707968a71",
+      "input_hash": "e07d62c5846ba5611f9ba73fc7801b2de1e7dd0dac548b0e47302068cf900db7",
       "error": null,
       "details": {
         "digest": {
@@ -3708,9 +3910,9 @@
           "persona_name": "Wei Jun Chen",
           "week_start": "2025-05-26",
           "week_end": "2025-06-01",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -3719,7 +3921,20 @@
             "universalism"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "universalism": "no_active_drift"
+          },
+          "drift_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 0,
+              "last_date": "2025-05-31"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
@@ -3728,10 +3943,12 @@
             {
               "date": "2025-05-31",
               "t_index": 0,
-              "direction": "context",
-              "dimensions": [],
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
               "score_mean": null,
-              "excerpt": "Had a team standup today and Ravi brought up that our payment processing pipeline is rejecting a disproportionate number of transactions from certain Southeast Asian corridors. The data was right there in the dashboard. Mostly remittance flows, the kind migrant..."
+              "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
             }
           ],
           "coach_narrative": null,
@@ -4147,7 +4364,7 @@
           "id": "active-wei-jun:week:2"
         }
       ],
-      "input_hash": "c0311dd04f7b4ac5e68dc66aeeb376030cada8d2f3c88dc6171a815c78e3a8e4",
+      "input_hash": "4bc01aa94b334c6db77211f0cd846d50da59b272552d35fe5acbe9851af4e1b3",
       "error": null,
       "details": {
         "decisions": [
@@ -4183,24 +4400,40 @@
             "t_index": 0,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 1,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "8f83c818",
           "cutoff_t_index": 1,
           "cutoff_date": "2025-06-07",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "universalism": "no_active_drift"
+          },
+          "core_value_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-06-07"
+            }
+          },
           "drifts": []
         }
       }
@@ -4240,7 +4473,7 @@
           "id": "active-wei-jun:week:2"
         }
       ],
-      "input_hash": "68ac772e4ffecdae6d8d45027bf6c10fbb98197b6f833981420de5b3e03a890b",
+      "input_hash": "782ea733b3dabda915632730607a1d79469432b51876b3e72cac225e669de534",
       "error": null,
       "details": {
         "digest": {
@@ -4248,9 +4481,9 @@
           "persona_name": "Wei Jun Chen",
           "week_start": "2025-06-02",
           "week_end": "2025-06-08",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -4259,17 +4492,78 @@
             "universalism"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "universalism": "no_active_drift"
+          },
+          "drift_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-06-07"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "universalism",
+              "previous_week_start": "2025-05-26",
+              "previous_week_end": "2025-06-01",
+              "current_week_start": "2025-06-02",
+              "current_week_end": "2025-06-08",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-05-31",
+                  "t_index": 0,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-06-07",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-05-31",
+              "t_index": 0,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+            },
+            {
               "date": "2025-06-07",
               "t_index": 1,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "universalism"
+              ],
               "score_mean": null,
               "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
             }
@@ -4278,6 +4572,7 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "8f83c818:entry:0",
           "8f83c818:entry:1"
         ]
       }
@@ -5180,7 +5475,7 @@
           "id": "active-wei-jun:week:3"
         }
       ],
-      "input_hash": "a86c3bff6ccd7b6bf04e942d48ee963955c9b423ab774780814bd290534b309b",
+      "input_hash": "6ac017279831453c601fce863241ccf19d8aefb5ff2f2de6a2e2c558f647ad09",
       "error": null,
       "details": {
         "decisions": [
@@ -5268,52 +5563,76 @@
             "t_index": 0,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 1,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 5,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "8f83c818",
           "cutoff_t_index": 5,
           "cutoff_date": "2025-06-13",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "universalism": "no_active_drift"
+          },
+          "core_value_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-06-13"
+            }
+          },
           "drifts": []
         }
       }
@@ -5353,7 +5672,7 @@
           "id": "active-wei-jun:week:3"
         }
       ],
-      "input_hash": "24929cd8515489e6dac3e2bb65447fd32629ad668c241d6ac3a27ff95f09c7ff",
+      "input_hash": "f6a82333e8ec0dd5b1dadacac0d977053180fbbe7004c671d66c920170fe8be7",
       "error": null,
       "details": {
         "digest": {
@@ -5361,9 +5680,9 @@
           "persona_name": "Wei Jun Chen",
           "week_start": "2025-06-09",
           "week_end": "2025-06-15",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 4,
           "overall_mean": null,
@@ -5372,33 +5691,128 @@
             "universalism"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "universalism": "no_active_drift"
+          },
+          "drift_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-06-13"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "universalism",
+              "previous_week_start": "2025-06-02",
+              "previous_week_end": "2025-06-08",
+              "current_week_start": "2025-06-09",
+              "current_week_end": "2025-06-15",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-06-07",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-06-09",
+                  "t_index": 3,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Ordered from Grab because I was too tired to cook."
+                },
+                {
+                  "date": "2025-06-10",
+                  "t_index": 4,
+                  "direction": "context",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT."
+                },
+                {
+                  "date": "2025-06-13",
+                  "t_index": 5,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I didn't laugh but I also didn't say anything."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-06-07",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+            },
+            {
+              "date": "2025-06-09",
+              "t_index": 3,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "Ordered from Grab because I was too tired to cook."
+            },
+            {
               "date": "2025-06-10",
               "t_index": 4,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "universalism"
+              ],
               "score_mean": null,
               "excerpt": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT."
             },
             {
               "date": "2025-06-13",
               "t_index": 5,
-              "direction": "context",
-              "dimensions": [],
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
               "score_mean": null,
-              "excerpt": "Team dinner tonight. Quarterly thing, company card. The conversation turned to hiring and someone made a comment about how candidates from certain countries need more \"handholding.\" A few people laughed. I didn't laugh but I also didn't say anything. Just..."
+              "excerpt": "I didn't laugh but I also didn't say anything."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "8f83c818:entry:1",
+          "8f83c818:entry:3",
           "8f83c818:entry:4",
           "8f83c818:entry:5"
         ]
@@ -6017,7 +6431,7 @@
           "id": "active-wei-jun:week:4"
         }
       ],
-      "input_hash": "350e6cc85c5db062309d597f8bda68e7d069bcb301c233e670288531526e4150",
+      "input_hash": "e39d532470f37df8d23073f7df26802c1f23b08ae16027433fe813003defb75f",
       "error": null,
       "details": {
         "decisions": [
@@ -6131,66 +6545,94 @@
             "t_index": 0,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 1,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 5,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 6,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 7,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "8f83c818",
           "cutoff_t_index": 7,
           "cutoff_date": "2025-06-22",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "universalism": "no_active_drift"
+          },
+          "core_value_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 7,
+              "last_date": "2025-06-22"
+            }
+          },
           "drifts": []
         }
       }
@@ -6230,7 +6672,7 @@
           "id": "active-wei-jun:week:4"
         }
       ],
-      "input_hash": "4624743a7a82c20fa796f5982bcccb6756d2bc8cea0686331fd8c227620a314e",
+      "input_hash": "66324a6f7b3dd097f9be90b8c908729172ade5a724971021b85b968f0bfeab5b",
       "error": null,
       "details": {
         "digest": {
@@ -6238,9 +6680,9 @@
           "persona_name": "Wei Jun Chen",
           "week_start": "2025-06-16",
           "week_end": "2025-06-22",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -6249,17 +6691,128 @@
             "universalism"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "universalism": "no_active_drift"
+          },
+          "drift_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 7,
+              "last_date": "2025-06-22"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "universalism",
+              "previous_week_start": "2025-06-09",
+              "previous_week_end": "2025-06-15",
+              "current_week_start": "2025-06-16",
+              "current_week_end": "2025-06-22",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-06-09",
+                  "t_index": 3,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Ordered from Grab because I was too tired to cook."
+                },
+                {
+                  "date": "2025-06-10",
+                  "t_index": 4,
+                  "direction": "context",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT."
+                },
+                {
+                  "date": "2025-06-13",
+                  "t_index": 5,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I didn't laugh but I also didn't say anything."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-06-16",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+                },
+                {
+                  "date": "2025-06-22",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-06-09",
+              "t_index": 3,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "Ordered from Grab because I was too tired to cook."
+            },
+            {
+              "date": "2025-06-10",
+              "t_index": 4,
+              "direction": "context",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT."
+            },
+            {
+              "date": "2025-06-13",
+              "t_index": 5,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "I didn't laugh but I also didn't say anything."
+            },
+            {
               "date": "2025-06-16",
               "t_index": 6,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "universalism"
+              ],
               "score_mean": null,
               "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
             },
@@ -6267,7 +6820,9 @@
               "date": "2025-06-22",
               "t_index": 7,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "universalism"
+              ],
               "score_mean": null,
               "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
             }
@@ -6276,6 +6831,9 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "8f83c818:entry:3",
+          "8f83c818:entry:4",
+          "8f83c818:entry:5",
           "8f83c818:entry:6",
           "8f83c818:entry:7"
         ]
@@ -6704,7 +7262,7 @@
           "id": "active-wei-jun:week:5"
         }
       ],
-      "input_hash": "2e419ddea0df0dd9e82a6756225b25b2ee8997d4b1475c36cf95cb9af6474bf1",
+      "input_hash": "907486360cb8aaade4b9bbcb226ec723daeae2b1cf3dd9c5d8cc847a2c3af573",
       "error": null,
       "details": {
         "decisions": [
@@ -6831,73 +7389,103 @@
             "t_index": 0,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 1,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 5,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 6,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 7,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "8f83c818",
           "cutoff_t_index": 8,
           "cutoff_date": "2025-06-25",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "universalism": "no_active_drift"
+          },
+          "core_value_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 8,
+              "last_date": "2025-06-25"
+            }
+          },
           "drifts": []
         }
       }
@@ -6937,7 +7525,7 @@
           "id": "active-wei-jun:week:5"
         }
       ],
-      "input_hash": "045d98477624e4b8b035891269f504a5a36d9f6cb683bb5eeb75ecb9fd41d3fe",
+      "input_hash": "398bc9959bbc83f102063a74b09143a18b8f2f8b35f9cf63d7efddfe33a77171",
       "error": null,
       "details": {
         "digest": {
@@ -6945,9 +7533,9 @@
           "persona_name": "Wei Jun Chen",
           "week_start": "2025-06-23",
           "week_end": "2025-06-29",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -6956,25 +7544,108 @@
             "universalism"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "universalism": "no_active_drift"
+          },
+          "drift_details": {
+            "universalism": {
+              "state": "no_active_drift",
+              "current_run_length": 1,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 8,
+              "last_date": "2025-06-25"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "universalism",
+              "previous_week_start": "2025-06-16",
+              "previous_week_end": "2025-06-22",
+              "current_week_start": "2025-06-23",
+              "current_week_end": "2025-06-29",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-06-16",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+                },
+                {
+                  "date": "2025-06-22",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-06-25",
+                  "t_index": 8,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I said okay."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-06-16",
+              "t_index": 6,
+              "direction": "context",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+            },
+            {
+              "date": "2025-06-22",
+              "t_index": 7,
+              "direction": "context",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+            },
+            {
               "date": "2025-06-25",
               "t_index": 8,
-              "direction": "context",
-              "dimensions": [],
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
               "score_mean": null,
-              "excerpt": "Sprint deadline tomorrow and I'm at the office late. The PM asked me to cut corners on the data validation layer for the remittance feature, the same one Ravi flagged weeks ago. She said we'll circle back to it after..."
+              "excerpt": "I said okay."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "8f83c818:entry:6",
+          "8f83c818:entry:7",
           "8f83c818:entry:8"
         ]
       }
@@ -7666,7 +8337,7 @@
           "id": "active-wei-jun:week:6"
         }
       ],
-      "input_hash": "1df2464299980a96bb93c5adb906dd7a907a7c0a715170d95618680c6eeb9a96",
+      "input_hash": "e9377281556f2259ca0d8afc55d975aed31878cc5f19ce5ba4d88e0d29915e80",
       "error": null,
       "details": {
         "decisions": [
@@ -7819,88 +8490,120 @@
             "t_index": 0,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 1,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 4,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 5,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 6,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 7,
             "core_value": "universalism",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 9,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 10,
             "core_value": "universalism",
             "verdict": "conflict",
-            "pending_run_length": 3,
+            "current_run_length": 3,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "extend"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "8f83c818",
           "cutoff_t_index": 10,
           "cutoff_date": "2025-07-05",
-          "delivery_state": "active",
+          "delivery_state": "active_drift",
           "core_value_states": {
-            "universalism": "active"
+            "universalism": "active_drift"
+          },
+          "core_value_details": {
+            "universalism": {
+              "state": "active_drift",
+              "current_run_length": 3,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 10,
+              "last_date": "2025-07-05"
+            }
           },
           "drifts": [
             {
@@ -7923,7 +8626,7 @@
                 "I nodded.",
                 "I've been choosing convenience over doing what I know matters"
               ],
-              "delivery_state": "active",
+              "termination_reason": null,
               "termination_t_index": null,
               "termination_date": null,
               "termination_verdict": null
@@ -7967,7 +8670,7 @@
           "id": "active-wei-jun:week:6"
         }
       ],
-      "input_hash": "cc6f5168ec5660f227dd2dcd44d357eee4aecd0702d20614a88b1f68b973e6e7",
+      "input_hash": "a769026eed4e0d88f57c2b233af802f56b39d9208f460287a75fdabac29071cf",
       "error": null,
       "details": {
         "digest": {
@@ -7975,9 +8678,9 @@
           "persona_name": "Wei Jun Chen",
           "week_start": "2025-06-30",
           "week_end": "2025-07-06",
-          "response_mode": "active",
+          "response_mode": "active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is active.",
+          "mode_rationale": "At least one Core Value has active Drift.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -7987,10 +8690,67 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "universalism": "active"
+            "universalism": "active_drift"
           },
+          "drift_details": {
+            "universalism": {
+              "state": "active_drift",
+              "current_run_length": 3,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 10,
+              "last_date": "2025-07-05"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "universalism",
+              "previous_week_start": "2025-06-23",
+              "previous_week_end": "2025-06-29",
+              "current_week_start": "2025-06-30",
+              "current_week_end": "2025-07-06",
+              "previous_state": "no_active_drift",
+              "current_state": "active_drift",
+              "change": "active_drift_started",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-06-25",
+                  "t_index": 8,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I said okay."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-07-01",
+                  "t_index": 9,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I nodded."
+                },
+                {
+                  "date": "2025-07-05",
+                  "t_index": 10,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "universalism"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I've been choosing convenience over doing what I know matters"
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "8f83c818:universalism:8:active"
+            "8f83c818:universalism:8:open"
           ],
           "top_tensions": [
             "universalism"

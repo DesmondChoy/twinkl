@@ -15,7 +15,10 @@ import type {
 import { journalEntryAnchorId } from "./journalEntryAnchor";
 
 type JsonObject = Record<string, unknown>;
-type DeliveryState = "stable" | "active" | "recovered" | "uncertain" | "mixed";
+type DeliveryState =
+  | "active_drift"
+  | "no_active_drift"
+  | "insufficient_evidence";
 
 interface WeeklyExperienceProps {
   profile: OnboardingProfile;
@@ -44,52 +47,43 @@ function object(value: unknown): JsonObject | null {
 
 function stateLabel(state: DeliveryState): string {
   switch (state) {
-    case "active":
+    case "active_drift":
       return "Active Drift";
-    case "recovered":
-      return "Recovered Drift";
-    case "uncertain":
-      return "Uncertain";
-    case "mixed":
-      return "Mixed";
+    case "insufficient_evidence":
+      return "Insufficient evidence";
     default:
-      return "No Drift";
+      return "No Active Drift";
   }
 }
 
 function deliveryState(value: unknown): DeliveryState {
-  return ["active", "recovered", "uncertain", "mixed"].includes(String(value))
+  return ["active_drift", "no_active_drift", "insufficient_evidence"].includes(String(value))
     ? value as DeliveryState
-    : "stable";
+    : "no_active_drift";
 }
 
 function stateExplanation(state: DeliveryState): string {
   switch (state) {
-    case "active":
+    case "active_drift":
       return "Two consecutive Journal Entries went against this priority.";
-    case "recovered":
-      return "A later Journal Entry ended the earlier pattern.";
-    case "uncertain":
-      return "The latest Journal Entry was unclear, so Twinkl did not claim a current pattern.";
-    case "mixed":
-      return "The Core Values have different current states.";
+    case "insufficient_evidence":
+      return (
+        "A review failure prevented a current claim, or an Abstain or "
+        + "Journal Entry gap blocked recent Conflict evidence."
+      );
     default:
-      return "No repeated conflict was found this week.";
+      return "No active Drift is confirmed now. This does not prove a positive change.";
   }
 }
 
 function stateHeading(state: DeliveryState): string {
   switch (state) {
-    case "active":
+    case "active_drift":
       return "A repeated conflict surfaced.";
-    case "recovered":
-      return "The earlier pattern eased.";
-    case "uncertain":
+    case "insufficient_evidence":
       return "Not enough evidence yet.";
-    case "mixed":
-      return "Two priorities moved differently.";
     default:
-      return "No repeated conflict this week.";
+      return "No active Drift now.";
   }
 }
 

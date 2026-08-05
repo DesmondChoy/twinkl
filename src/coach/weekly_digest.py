@@ -14,7 +14,7 @@ import re
 from collections.abc import Awaitable, Sequence
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Protocol, cast
+from typing import Literal, Protocol, cast
 
 import polars as pl
 import yaml
@@ -31,6 +31,10 @@ from src.coach.schemas import (
     CoachDigestPolicy,
     CoachNarrative,
     CoachResponseMode,
+    CoreValueDigestDetail,
+    CoreValueDriftState,
+    CoreValueStateChange,
+    CoreValueWeekComparison,
     DigestValidation,
     DimensionDigest,
     DriftDetectionResult,
@@ -39,7 +43,7 @@ from src.coach.schemas import (
     ValidationCheck,
     WeeklyDigest,
 )
-from src.drift_detector import DriftDetectorResult
+from src.drift_detector import DriftDetectorResult, detect_drift
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.prompt_boundary import (
     protect_instructions,
@@ -133,9 +137,9 @@ def _summarize_compass_context(
 def _coach_digest_policy(digest: WeeklyDigest) -> CoachDigestPolicy:
     """Reduce auditable Drift states to three Coach Digest delivery policies."""
     states = set(digest.drift_states.values())
-    if "active" in states:
+    if "active_drift" in states:
         return "drift_detected"
-    if "uncertain" in states:
+    if "insufficient_evidence" in states:
         return "more_reflection_needed"
     if digest.response_mode in {
         "uncertain",
@@ -161,26 +165,64 @@ def _drift_summary_lines(digest: WeeklyDigest) -> list[str]:
         ]
 
     meanings = {
-        "active": (
+        "active_drift": (
             "Drift is active: two consecutive Journal Entries each showed a clear "
             "behavior or choice against this Core Value, with no later Journal "
             "Entry ending the pattern."
         ),
-        "recovered": (
-            "Drift is recovered: after two consecutive Journal Entries showed "
-            "behavior or choices against this Core Value, the next Journal Entry "
-            "did not clearly conflict with it."
+        "no_active_drift": (
+            "No active Drift is confirmed for this Core Value at the cutoff. This "
+            "does not prove supportive behavior, improvement, or success."
         ),
-        "uncertain": (
-            "Drift status is uncertain: two consecutive Journal Entries showed "
-            "behavior or choices against this Core Value, but later evidence did "
-            "not clearly establish whether that pattern ended."
+        "insufficient_evidence": (
+            "Current Drift status has insufficient evidence because a review "
+            "failure prevents a current claim, or an Abstain or Journal Entry gap "
+            "blocked recent Conflict evidence."
         ),
     }
-    return [
-        f"- Internal Schwartz label: {_format_dim_name(core_value)} | {meanings[state]}"
-        for core_value, state in digest.drift_states.items()
-    ]
+    lines: list[str] = []
+    for core_value, state in digest.drift_states.items():
+        line = (
+            f"- Internal Schwartz label: {_format_dim_name(core_value)} | "
+            f"{meanings[state]}"
+        )
+        detail = digest.drift_details.get(core_value)
+        if detail is not None:
+            line += (
+                f" | current run length: {detail.current_run_length}"
+                f" | last decision: {detail.last_decision}"
+                f" | last review status: {detail.last_review_status}"
+            )
+        lines.append(line)
+    return lines
+
+
+def _state_comparison_lines(digest: WeeklyDigest) -> list[str]:
+    """Render deterministic prior-week facts without asking the Coach to infer them."""
+    if not digest.state_comparisons:
+        return ["- No prior closed-week comparison is available."]
+    lines: list[str] = []
+    for comparison in digest.state_comparisons:
+        line = (
+            f"- Internal Schwartz label: {_format_dim_name(comparison.core_value)} | "
+            f"previous state: {comparison.previous_state} | "
+            f"current state: {comparison.current_state} | "
+            f"deterministic change: {comparison.change}"
+        )
+        if comparison.end_reason is not None:
+            line += f" | end reason: {comparison.end_reason}"
+        lines.append(line)
+        lines.extend(
+            f"  prior evidence {item.date}: "
+            f"{json.dumps(item.excerpt, ensure_ascii=False)}"
+            for item in comparison.previous_evidence
+        )
+        lines.extend(
+            f"  current evidence {item.date}: "
+            f"{json.dumps(item.excerpt, ensure_ascii=False)}"
+            for item in comparison.current_evidence
+        )
+    return lines
 
 
 def _evidence_role(direction: str) -> str:
@@ -700,6 +742,123 @@ def build_weekly_digest(
     )
 
 
+def _evidence_from_decisions(
+    decisions: Sequence[WeeklyDriftReviewerDecision],
+    *,
+    entry_texts: dict[tuple[str, int], str],
+    limit: int = 3,
+) -> list[EvidenceSnippet]:
+    """Build capped evidence with exact Conflict quotes and displayed text."""
+    snippets: list[EvidenceSnippet] = []
+    for decision in sorted(decisions, key=lambda row: row.t_index)[-limit:]:
+        key = (decision.date, decision.t_index)
+        excerpt = (
+            decision.evidence_quote.strip()
+            if decision.verdict == "conflict"
+            else entry_texts.get(key, "")
+        ) or entry_texts.get(key, "")
+        if not excerpt:
+            continue
+        snippets.append(
+            EvidenceSnippet(
+                date=decision.date,
+                t_index=decision.t_index,
+                direction=(
+                    "misaligned" if decision.verdict == "conflict" else "context"
+                ),
+                dimensions=[decision.core_value],
+                excerpt=_truncate_excerpt(excerpt),
+            )
+        )
+    return snippets
+
+
+def _relevant_state_decisions(
+    *,
+    core_value: str,
+    state: CoreValueDriftState,
+    decisions: Sequence[WeeklyDriftReviewerDecision],
+    drift_result: DriftDetectorResult,
+    window_start: date | None = None,
+    window_end: date | None = None,
+) -> list[WeeklyDriftReviewerDecision]:
+    """Select the smallest decision set that explains one current state."""
+    value_decisions = [
+        decision for decision in decisions if decision.core_value == core_value
+    ]
+    if window_start is not None and window_end is not None:
+        window_decisions = [
+            decision
+            for decision in value_decisions
+            if window_start <= _parse_iso_date(decision.date) <= window_end
+        ]
+        if window_decisions:
+            return window_decisions[-3:]
+    if state == "active_drift":
+        active = next(
+            (
+                drift
+                for drift in reversed(drift_result.drifts)
+                if drift.core_value == core_value and drift.termination_reason is None
+            ),
+            None,
+        )
+        if active is not None:
+            indices = set(active.supporting_t_indices[-3:])
+            return [
+                decision
+                for decision in value_decisions
+                if decision.t_index in indices
+            ]
+    return value_decisions[-3:]
+
+
+def _comparison_change(
+    previous_state: CoreValueDriftState,
+    current_state: CoreValueDriftState,
+    *,
+    restarted: bool,
+) -> CoreValueStateChange:
+    if restarted:
+        return "active_drift_restarted"
+    if current_state == "active_drift" and previous_state != "active_drift":
+        return "active_drift_started"
+    if previous_state == "active_drift" and current_state == "no_active_drift":
+        return "active_drift_ended"
+    if (
+        current_state == "insufficient_evidence"
+        and previous_state != "insufficient_evidence"
+    ):
+        return "evidence_became_insufficient"
+    if (
+        previous_state == "insufficient_evidence"
+        and current_state != "insufficient_evidence"
+    ):
+        return "evidence_resolved"
+    return "unchanged"
+
+
+def _comparison_end_reason(
+    *,
+    previous_state: CoreValueDriftState,
+    current_decisions: Sequence[WeeklyDriftReviewerDecision],
+    previous_last_t_index: int,
+) -> Literal["not_conflict", "abstain", "gap"] | None:
+    if previous_state != "active_drift":
+        return None
+    ordered = sorted(current_decisions, key=lambda row: row.t_index)
+    expected_t_index = previous_last_t_index + 1
+    for decision in ordered:
+        if decision.t_index != expected_t_index:
+            return "gap"
+        if decision.review_status != "ok" or decision.verdict == "abstain":
+            return "abstain"
+        if decision.verdict == "not_conflict":
+            return "not_conflict"
+        expected_t_index = decision.t_index + 1
+    return None
+
+
 def build_weekly_drift_reviewer_digest_from_entries(
     *,
     persona_id: str,
@@ -734,67 +893,136 @@ def build_weekly_drift_reviewer_digest_from_entries(
         )
 
     entry_texts = {(entry.date, entry.t_index): entry.text for entry in history}
-    decision_by_coordinate = {
-        (decision.t_index, decision.core_value): decision for decision in decisions
-    }
-    evidence: list[EvidenceSnippet] = []
-    seen_coordinates: set[tuple[int, str]] = set()
-    for drift in drift_result.drifts:
-        for t_index in drift.supporting_t_indices:
-            coordinate = (t_index, drift.core_value)
-            if coordinate in seen_coordinates:
-                continue
-            decision = decision_by_coordinate.get(coordinate)
-            if decision is None:
-                continue
-            seen_coordinates.add(coordinate)
-            key = (decision.date, decision.t_index)
-            excerpt = decision.evidence_quote.strip() or entry_texts.get(key, "")
-            evidence.append(
-                EvidenceSnippet(
-                    date=decision.date,
-                    t_index=decision.t_index,
-                    direction="misaligned",
-                    dimensions=[drift.core_value],
-                    excerpt=_truncate_excerpt(excerpt),
-                )
-            )
-        if (
-            drift.delivery_state == "recovered"
-            and drift.termination_t_index is not None
-            and drift.termination_date is not None
-        ):
-            coordinate = (drift.termination_t_index, drift.core_value)
-            decision = decision_by_coordinate.get(coordinate)
-            key = (drift.termination_date, drift.termination_t_index)
-            excerpt = (
-                decision.evidence_quote.strip()
-                if decision is not None
-                else ""
-            ) or entry_texts.get(key, "")
-            if coordinate not in seen_coordinates and excerpt:
-                seen_coordinates.add(coordinate)
-                evidence.append(
-                    EvidenceSnippet(
-                        date=drift.termination_date,
-                        t_index=drift.termination_t_index,
-                        direction="recovery",
-                        dimensions=[drift.core_value],
-                        excerpt=_truncate_excerpt(excerpt),
-                    )
-                )
+    current_decisions = [
+        decision
+        for decision in decisions
+        if resolved_start <= _parse_iso_date(decision.date) <= resolved_end
+    ]
+    previous_end = resolved_start - timedelta(days=1)
+    previous_start = resolved_start - timedelta(days=7)
+    previous_cutoff_decisions = [
+        decision
+        for decision in decisions
+        if _parse_iso_date(decision.date) <= previous_end
+    ]
+    previous_result = (
+        detect_drift(previous_cutoff_decisions, persona_id=persona_id)
+        if previous_cutoff_decisions
+        else None
+    )
 
-    if not evidence:
-        for entry in window_entries[-2:]:
-            evidence.append(
-                EvidenceSnippet(
-                    date=entry.date,
-                    t_index=entry.t_index,
-                    direction="context",
-                    dimensions=[],
-                    excerpt=_truncate_excerpt(entry.text),
-                )
+    state_comparisons: list[CoreValueWeekComparison] = []
+    evidence_by_coordinate: dict[tuple[int, str], EvidenceSnippet] = {}
+    for core_value in core_values:
+        current_state = drift_result.core_value_states[core_value]
+        current_relevant = _relevant_state_decisions(
+            core_value=core_value,
+            state=current_state,
+            decisions=decisions,
+            drift_result=drift_result,
+            window_start=resolved_start,
+            window_end=resolved_end,
+        )
+        current_evidence = _evidence_from_decisions(
+            current_relevant,
+            entry_texts=entry_texts,
+        )
+        for item in current_evidence:
+            evidence_by_coordinate[(item.t_index, core_value)] = item
+
+        if (
+            previous_result is None
+            or core_value not in previous_result.core_value_states
+        ):
+            continue
+        previous_state = previous_result.core_value_states[core_value]
+        previous_relevant = _relevant_state_decisions(
+            core_value=core_value,
+            state=previous_state,
+            decisions=previous_cutoff_decisions,
+            drift_result=previous_result,
+            window_start=previous_start,
+            window_end=previous_end,
+        )
+        previous_evidence = _evidence_from_decisions(
+            previous_relevant,
+            entry_texts=entry_texts,
+        )
+        value_current_decisions = [
+            decision
+            for decision in current_decisions
+            if decision.core_value == core_value
+        ]
+        previous_open_ids = {
+            drift.drift_id
+            for drift in previous_result.drifts
+            if drift.core_value == core_value and drift.termination_reason is None
+        }
+        current_drifts = [
+            drift
+            for drift in drift_result.drifts
+            if drift.core_value == core_value
+        ]
+        restarted = (
+            previous_state == "active_drift"
+            and current_state == "active_drift"
+            and any(
+                drift.drift_id not in previous_open_ids
+                and resolved_start
+                <= _parse_iso_date(drift.confirmation_date)
+                <= resolved_end
+                for drift in current_drifts
             )
+            and any(
+                drift.drift_id in previous_open_ids
+                and drift.termination_reason is not None
+                for drift in current_drifts
+            )
+        )
+        end_reason = _comparison_end_reason(
+            previous_state=previous_state,
+            current_decisions=value_current_decisions,
+            previous_last_t_index=(
+                previous_result.core_value_details[core_value].last_t_index
+            ),
+        )
+        state_comparisons.append(
+            CoreValueWeekComparison(
+                core_value=core_value,
+                previous_week_start=previous_start.isoformat(),
+                previous_week_end=previous_end.isoformat(),
+                current_week_start=resolved_start.isoformat(),
+                current_week_end=resolved_end.isoformat(),
+                previous_state=previous_state,
+                current_state=current_state,
+                change=_comparison_change(
+                    previous_state,
+                    current_state,
+                    restarted=restarted,
+                ),
+                end_reason=end_reason,
+                previous_evidence=previous_evidence,
+                current_evidence=current_evidence,
+            )
+        )
+        for item in previous_evidence:
+            evidence_by_coordinate.setdefault((item.t_index, core_value), item)
+
+    evidence = sorted(
+        evidence_by_coordinate.values(),
+        key=lambda item: (item.t_index, item.dimensions),
+    )
+    if not evidence:
+        evidence = [
+            EvidenceSnippet(
+                date=entry.date,
+                t_index=entry.t_index,
+                direction="context",
+                dimensions=[],
+                excerpt=_truncate_excerpt(entry.text),
+            )
+            for entry in window_entries[-2:]
+        ]
 
     state = drift_result.delivery_state
     review_unavailable = not any(
@@ -806,24 +1034,26 @@ def build_weekly_drift_reviewer_digest_from_entries(
         rationale = (
             "The Weekly Drift Reviewer could not return usable evidence for this week."
         )
-    elif state == "stable":
-        rationale = "No Core Value has two consecutive Weekly Drift Reviewer Conflicts."
-    elif state == "mixed":
+    elif state == "no_active_drift":
         rationale = (
-            "Core Values have different active, recovered, or uncertain Drift states."
+            "No Core Value has active Drift at this cutoff. This does not prove "
+            "supportive behavior or improvement."
         )
+    elif state == "insufficient_evidence":
+        rationale = "A recent Conflict run lacks enough evidence for a current claim."
     else:
-        rationale = f"The latest confirmed Drift state is {state}."
+        rationale = "At least one Core Value has active Drift."
 
     drift_reasons = [
-        f"{drift.drift_id}:{drift.delivery_state}" for drift in drift_result.drifts
+        f"{drift.drift_id}:{drift.termination_reason or 'open'}"
+        for drift in drift_result.drifts
     ]
     return WeeklyDigest(
         persona_id=persona_id,
         persona_name=persona_name,
         week_start=week_start,
         week_end=week_end,
-        response_mode="high_uncertainty" if review_unavailable else state,
+        response_mode=state,
         mode_source="drift_detector",
         mode_rationale=rationale,
         signal_source="weekly_drift_reviewer",
@@ -832,8 +1062,17 @@ def build_weekly_drift_reviewer_digest_from_entries(
         overall_uncertainty=None,
         core_values=core_values,
         drift_states=drift_result.core_value_states,
+        drift_details={
+            core_value: CoreValueDigestDetail.model_validate(detail.model_dump())
+            for core_value, detail in drift_result.core_value_details.items()
+        },
+        state_comparisons=state_comparisons,
         drift_reasons=drift_reasons,
-        top_tensions=list(drift_result.core_value_states),
+        top_tensions=[
+            core_value
+            for core_value, core_state in drift_result.core_value_states.items()
+            if core_state != "no_active_drift"
+        ],
         top_strengths=[],
         dimensions=[],
         evidence=evidence,
@@ -905,6 +1144,7 @@ def build_coach_digest_prompt_inputs(
         "response_policy": _coach_digest_policy(digest),
         "compass_context_lines": compass_context_lines,
         "drift_summary_lines": _drift_summary_lines(digest),
+        "state_comparison_lines": _state_comparison_lines(digest),
         "evidence_lines": evidence_lines,
     }
 
@@ -919,6 +1159,7 @@ def render_digest_messages(digest: WeeklyDigest) -> tuple[str, str]:
         "response_policy": "UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
         "compass_context_lines": [],
         "drift_summary_lines": [],
+        "state_comparison_lines": [],
         "evidence_lines": [],
     }
     rendered = cast(str, prompt.render(**instruction_placeholders)).strip()
@@ -1136,6 +1377,48 @@ def validate_weekly_digest_narrative(
     leaked_values = _detect_value_label_leakage(combined_text, config_path)
     value_leakage_passed = not leaked_values
 
+    positive_transition_patterns = {
+        "better": r"\bbetter\b",
+        "improve": r"\bimprov\w*\b",
+        "progress": r"\bprogress\w*\b",
+        "recover": r"\brecover\w*\b",
+        "success": r"\bsuccess\w*\b",
+    }
+    lowered_text = combined_text.lower()
+    found_transition_terms = sorted(
+        label
+        for label, pattern in positive_transition_patterns.items()
+        if re.search(pattern, lowered_text)
+    )
+    end_claim_patterns = [
+        r"\bdid not continue\b",
+        r"\bdidn't continue\b",
+        r"\bpattern (?:has )?ended\b",
+        r"\bpattern (?:has )?stopped\b",
+    ]
+    has_end_claim = any(
+        re.search(pattern, lowered_text) for pattern in end_claim_patterns
+    )
+    supports_end_claim = any(
+        comparison.change == "active_drift_ended"
+        and comparison.end_reason == "not_conflict"
+        for comparison in digest.state_comparisons
+    )
+    state_claims_passed = not found_transition_terms and (
+        not has_end_claim or supports_end_claim
+    )
+    state_claim_details = "Response makes only supported current-state claims."
+    if found_transition_terms:
+        state_claim_details = (
+            "Response makes an unsupported positive transition claim with: "
+            f"{', '.join(found_transition_terms)}."
+        )
+    elif has_end_claim and not supports_end_claim:
+        state_claim_details = (
+            "Response says a pattern ended without an active-to-no-active "
+            "comparison ended by a Not Conflict decision."
+        )
+
     checks = [
         ValidationCheck(
             name="groundedness",
@@ -1170,6 +1453,11 @@ def validate_weekly_digest_narrative(
                     f"{', '.join(leaked_values)}."
                 )
             ),
+        ),
+        ValidationCheck(
+            name="state_claims",
+            passed=state_claims_passed,
+            details=state_claim_details,
         ),
         ValidationCheck(
             name="length",
@@ -1221,6 +1509,15 @@ def persist_weekly_digest_record(
         "core_values_json": json.dumps(digest.core_values),
         "goal_context": digest.goal_context,
         "drift_states_json": json.dumps(digest.drift_states),
+        "drift_details_json": json.dumps(
+            {
+                core_value: detail.model_dump()
+                for core_value, detail in digest.drift_details.items()
+            }
+        ),
+        "state_comparisons_json": json.dumps(
+            [comparison.model_dump() for comparison in digest.state_comparisons]
+        ),
         "drift_reasons_json": json.dumps(digest.drift_reasons),
         "top_tensions_json": json.dumps(digest.top_tensions),
         "top_strengths_json": json.dumps(digest.top_strengths),

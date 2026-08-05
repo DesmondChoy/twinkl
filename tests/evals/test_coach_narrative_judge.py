@@ -88,13 +88,14 @@ def test_render_judge_prompt_includes_facts_and_narrative():
 def test_judge_prompt_declares_generation_facts_plus_narrative():
     metadata = get_prompt_metadata("coach_narrative_judge")
 
-    assert metadata["version"] == "2.0"
+    assert metadata["version"] == "3.0"
     assert metadata["input_variables"] == [
         "persona_name",
         "week_window",
         "response_policy",
         "compass_context_lines",
         "drift_summary_lines",
+        "state_comparison_lines",
         "evidence_lines",
         "weekly_mirror",
         "tension_explanation",
@@ -105,24 +106,32 @@ def test_judge_prompt_declares_generation_facts_plus_narrative():
 @pytest.mark.parametrize(
     ("response_mode", "drift_states", "expected_policy", "expected_findings"),
     [
-        ("active", {"benevolence": "active"}, "drift_detected", ("Drift is active",)),
         (
-            "recovered",
-            {"benevolence": "recovered"},
-            "no_current_drift",
-            ("Drift is recovered",),
-        ),
-        (
-            "uncertain",
-            {"benevolence": "uncertain"},
-            "more_reflection_needed",
-            ("Drift status is uncertain",),
-        ),
-        (
-            "mixed",
-            {"benevolence": "active", "self_direction": "recovered"},
+            "active_drift",
+            {"benevolence": "active_drift"},
             "drift_detected",
-            ("Drift is active", "Drift is recovered"),
+            ("Drift is active",),
+        ),
+        (
+            "no_active_drift",
+            {"benevolence": "no_active_drift"},
+            "no_current_drift",
+            ("No active Drift is confirmed",),
+        ),
+        (
+            "insufficient_evidence",
+            {"benevolence": "insufficient_evidence"},
+            "more_reflection_needed",
+            ("insufficient evidence",),
+        ),
+        (
+            "active_drift",
+            {
+                "benevolence": "active_drift",
+                "self_direction": "insufficient_evidence",
+            },
+            "drift_detected",
+            ("Drift is active", "insufficient evidence"),
         ),
         (
             "stable",

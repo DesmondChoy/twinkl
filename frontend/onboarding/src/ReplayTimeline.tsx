@@ -50,31 +50,26 @@ function object(value: unknown): JsonObject | null {
 
 function replayStateLabel(state: string): string {
   switch (state) {
-    case "active":
+    case "active_drift":
       return "Active Drift";
-    case "recovered":
-      return "Recovered Drift";
-    case "uncertain":
-      return "Uncertain";
-    case "mixed":
-      return "Mixed";
+    case "insufficient_evidence":
+      return "Insufficient evidence";
     default:
-      return "No Drift";
+      return "No Active Drift";
   }
 }
 
 function stateExplanation(state: ScenarioDeliveryState): string {
   switch (state) {
-    case "active":
+    case "active_drift":
       return "A repeated conflict with a Core Value is now active.";
-    case "recovered":
-      return "A later Journal Entry ended the earlier conflict pattern.";
-    case "uncertain":
-      return "The evidence is unclear, so Twinkl does not claim Drift.";
-    case "mixed":
-      return "The Core Values have different current states.";
+    case "insufficient_evidence":
+      return (
+        "A review failure prevents a current claim, or an Abstain or gap "
+        + "blocks recent Conflict evidence."
+      );
     default:
-      return "No repeated conflict with a Core Value was found.";
+      return "No active Drift is confirmed at this cutoff.";
   }
 }
 
@@ -409,7 +404,7 @@ export default function ReplayTimeline({
                     className="replay-result__details"
                     aria-labelledby="state-change-title"
                   >
-                    <h4 id="state-change-title">Why this state changed</h4>
+                    <h4 id="state-change-title">Why this state</h4>
                     <DriftStateExplanation
                       profile={profile}
                       journalEntries={reviewedJournalEntries}

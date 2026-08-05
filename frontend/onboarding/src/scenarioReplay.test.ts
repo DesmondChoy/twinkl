@@ -21,10 +21,10 @@ describe("saved persona replay", () => {
     expect(catalog.scenarios.filter((item) => item.recommended)).toHaveLength(1);
     expect(new Set(catalog.scenarios.map((item) => item.role))).toEqual(
       new Set([
-        "stable",
+        "no_active_drift",
         "active_drift",
-        "recovered_drift",
-        "uncertain",
+        "drift_ended",
+        "insufficient_evidence",
         "two_core_values",
       ]),
     );
@@ -56,7 +56,7 @@ describe("saved persona replay", () => {
     expect(final.session.journal_entries).toEqual(
       fixture.scenario.journal_entries,
     );
-    expect(final.session.drift_result?.delivery_state).toBe("active");
+    expect(final.session.drift_result?.delivery_state).toBe("active_drift");
   });
 
   it("is deterministic and rejects week boundaries", () => {
@@ -87,7 +87,7 @@ describe("saved persona replay", () => {
       weekly_mirror:
         'You wrote that you "Accepted on the spot because that\'s what you do", then noticed that relief came before excitement.',
       tension_explanation:
-        "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+        "Your reason for accepting the new role still feels unclear because relief and expectation both shaped the choice.",
       reflective_question:
         "When you separate relief from expectation, what do you want this new role to mean for you?",
     });

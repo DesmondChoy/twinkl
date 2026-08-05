@@ -30,6 +30,19 @@ const EVENT_STATUSES = new Set([
 const EVENT_SOURCES = new Set(["saved_replay", "live_run"]);
 const REVIEW_VERDICTS = new Set(["conflict", "not_conflict", "abstain"]);
 const REVIEW_STATUSES = new Set(["ok", "refusal", "invalid", "error"]);
+const DRIFT_STATES = new Set([
+  "active_drift",
+  "no_active_drift",
+  "insufficient_evidence",
+]);
+const DRIFT_STEP_EFFECTS = new Set([
+  "start",
+  "confirm",
+  "extend",
+  "end",
+  "insufficient",
+  "reset",
+]);
 const OPERATIONS = new Set([
   "create_session",
   "submit_journal_entry",
@@ -118,11 +131,9 @@ export interface ExperienceSessionContract extends JsonObject {
 }
 
 export type ScenarioDeliveryState =
-  | "stable"
-  | "active"
-  | "recovered"
-  | "uncertain"
-  | "mixed";
+  | "active_drift"
+  | "no_active_drift"
+  | "insufficient_evidence";
 
 export interface ScenarioWeekContract extends JsonObject {
   week_id: string;
@@ -265,6 +276,11 @@ function integer(value: unknown, name: string): number {
   return value as number;
 }
 
+function nullableInteger(value: unknown, name: string): number | null {
+  if (value === null) return null;
+  return integer(value, name);
+}
+
 function boolean(value: unknown, name: string): boolean {
   if (typeof value !== "boolean") throw new Error(`${name} must be a boolean`);
   return value;
@@ -282,6 +298,146 @@ function version(value: JsonObject, name: string): void {
   if (value.schema_version !== EXPERIENCE_INSPECT_CONTRACT_VERSION) {
     throw new Error(`${name} has an incompatible schema_version`);
   }
+}
+
+function validateDriftState(value: unknown, name: string): ScenarioDeliveryState {
+  if (!DRIFT_STATES.has(String(value))) {
+    throw new Error(`${name} is incompatible`);
+  }
+  return value as ScenarioDeliveryState;
+}
+
+function validateDriftResult(value: unknown, name: string): JsonObject {
+  const result = object(value, name);
+  exactKeys(
+    result,
+    [
+      "schema_version",
+      "persona_id",
+      "cutoff_t_index",
+      "cutoff_date",
+      "delivery_state",
+      "core_value_states",
+      "core_value_details",
+      "drifts",
+    ],
+    name,
+  );
+  if (result.schema_version !== "drift-detector-result-v2") {
+    throw new Error(`${name} has an incompatible schema_version`);
+  }
+  string(result.persona_id, `${name}.persona_id`);
+  integer(result.cutoff_t_index, `${name}.cutoff_t_index`);
+  string(result.cutoff_date, `${name}.cutoff_date`);
+  validateDriftState(result.delivery_state, `${name}.delivery_state`);
+  const states = object(result.core_value_states, `${name}.core_value_states`);
+  const details = object(result.core_value_details, `${name}.core_value_details`);
+  if (
+    JSON.stringify(Object.keys(states).sort()) !==
+    JSON.stringify(Object.keys(details).sort())
+  ) {
+    throw new Error(`${name}.core_value_states and core_value_details differ`);
+  }
+  const stateValues: ScenarioDeliveryState[] = [];
+  for (const [coreValue, rawState] of Object.entries(states)) {
+    const state = validateDriftState(
+      rawState,
+      `${name}.core_value_states.${coreValue}`,
+    );
+    stateValues.push(state);
+    const detail = object(details[coreValue], `${name}.core_value_details.${coreValue}`);
+    exactKeys(
+      detail,
+      [
+        "state",
+        "current_run_length",
+        "last_decision",
+        "last_review_status",
+        "last_t_index",
+        "last_date",
+      ],
+      `${name}.core_value_details.${coreValue}`,
+    );
+    if (detail.state !== state) {
+      throw new Error(`${name}.core_value_details.${coreValue}.state differs`);
+    }
+    integer(
+      detail.current_run_length,
+      `${name}.core_value_details.${coreValue}.current_run_length`,
+    );
+    if (!REVIEW_VERDICTS.has(String(detail.last_decision))) {
+      throw new Error(`${name}.core_value_details.${coreValue}.last_decision is incompatible`);
+    }
+    if (!REVIEW_STATUSES.has(String(detail.last_review_status))) {
+      throw new Error(
+        `${name}.core_value_details.${coreValue}.last_review_status is incompatible`,
+      );
+    }
+    integer(detail.last_t_index, `${name}.core_value_details.${coreValue}.last_t_index`);
+    string(detail.last_date, `${name}.core_value_details.${coreValue}.last_date`);
+  }
+  const expectedDeliveryState = stateValues.includes("active_drift")
+    ? "active_drift"
+    : stateValues.includes("insufficient_evidence")
+      ? "insufficient_evidence"
+      : "no_active_drift";
+  if (result.delivery_state !== expectedDeliveryState) {
+    throw new Error(`${name}.delivery_state differs from Core Value states`);
+  }
+  array(result.drifts, `${name}.drifts`).forEach((value, index) => {
+    const driftName = `${name}.drifts[${index}]`;
+    const drift = object(value, driftName);
+    exactKeys(
+      drift,
+      [
+        "drift_id",
+        "persona_id",
+        "core_value",
+        "onset_t_index",
+        "confirmation_t_index",
+        "end_t_index",
+        "onset_date",
+        "confirmation_date",
+        "end_date",
+        "supporting_t_indices",
+        "evidence_quotes",
+        "termination_reason",
+        "termination_t_index",
+        "termination_date",
+        "termination_verdict",
+      ],
+      driftName,
+    );
+    string(drift.drift_id, `${driftName}.drift_id`);
+    string(drift.persona_id, `${driftName}.persona_id`);
+    string(drift.core_value, `${driftName}.core_value`);
+    integer(drift.onset_t_index, `${driftName}.onset_t_index`);
+    integer(drift.confirmation_t_index, `${driftName}.confirmation_t_index`);
+    integer(drift.end_t_index, `${driftName}.end_t_index`);
+    string(drift.onset_date, `${driftName}.onset_date`);
+    string(drift.confirmation_date, `${driftName}.confirmation_date`);
+    string(drift.end_date, `${driftName}.end_date`);
+    array(drift.supporting_t_indices, `${driftName}.supporting_t_indices`).forEach(
+      (tIndex, itemIndex) =>
+        integer(tIndex, `${driftName}.supporting_t_indices[${itemIndex}]`),
+    );
+    stringArray(drift.evidence_quotes, `${driftName}.evidence_quotes`);
+    if (
+      drift.termination_reason !== null &&
+      !["not_conflict", "abstain", "gap"].includes(String(drift.termination_reason))
+    ) {
+      throw new Error(`${driftName}.termination_reason is incompatible`);
+    }
+    nullableInteger(drift.termination_t_index, `${driftName}.termination_t_index`);
+    nullableString(drift.termination_date, `${driftName}.termination_date`);
+    if (
+      drift.termination_verdict !== null &&
+      !["not_conflict", "abstain"].includes(String(drift.termination_verdict))
+    ) {
+      throw new Error(`${driftName}.termination_verdict is incompatible`);
+    }
+  });
+  return result;
 }
 
 function stringArray(value: unknown, name: string): string[] {
@@ -480,10 +636,7 @@ function validateSession(value: unknown, name: string): ExperienceSessionContrac
     (decision, index) => validateDecision(decision, `${name}.weekly_reviewer_decisions[${index}]`),
   );
   if (session.drift_result !== null) {
-    const drift = object(session.drift_result, `${name}.drift_result`);
-    if (drift.schema_version !== "drift-detector-result-v1") {
-      throw new Error(`${name}.drift_result has an incompatible schema_version`);
-    }
+    validateDriftResult(session.drift_result, `${name}.drift_result`);
   }
   if (session.weekly_digest !== null) object(session.weekly_digest, `${name}.weekly_digest`);
   if (session.assessment_clock !== null) {
@@ -605,9 +758,35 @@ function validateEventDetails(event: JsonObject, name: string): void {
       array(details.decisions, `${name}.details.decisions`).forEach((decision, index) =>
         validateDecision(decision, `${name}.details.decisions[${index}]`),
       );
-      if (object(details.result, `${name}.details.result`).schema_version !== "drift-detector-result-v1") {
-        throw new Error(`${name}.details.result has an incompatible schema_version`);
-      }
+      array(details.steps, `${name}.details.steps`).forEach((value, index) => {
+        const stepName = `${name}.details.steps[${index}]`;
+        const step = object(value, stepName);
+        exactKeys(
+          step,
+          [
+            "t_index",
+            "core_value",
+            "verdict",
+            "current_run_length",
+            "current_state",
+            "gap_before",
+            "effect",
+          ],
+          stepName,
+        );
+        integer(step.t_index, `${stepName}.t_index`);
+        string(step.core_value, `${stepName}.core_value`);
+        if (!REVIEW_VERDICTS.has(String(step.verdict))) {
+          throw new Error(`${stepName}.verdict is incompatible`);
+        }
+        integer(step.current_run_length, `${stepName}.current_run_length`);
+        validateDriftState(step.current_state, `${stepName}.current_state`);
+        boolean(step.gap_before, `${stepName}.gap_before`);
+        if (!DRIFT_STEP_EFFECTS.has(String(step.effect))) {
+          throw new Error(`${stepName}.effect is incompatible`);
+        }
+      });
+      validateDriftResult(details.result, `${name}.details.result`);
       break;
     case "weekly_digest_built":
       exactKeys(details, ["digest", "cited_journal_entry_ids"], `${name}.details`);
@@ -723,7 +902,7 @@ function validateScenarioWeek(value: unknown, name: string): ScenarioWeekContrac
   string(week.week_end, `${name}.week_end`);
   stringArray(week.journal_entry_ids, `${name}.journal_entry_ids`);
   stringArray(week.event_ids, `${name}.event_ids`);
-  if (!["stable", "active", "recovered", "uncertain", "mixed"].includes(
+  if (!["active_drift", "no_active_drift", "insufficient_evidence"].includes(
     String(week.expected_delivery_state),
   )) {
     throw new Error(`${name}.expected_delivery_state is incompatible`);
@@ -771,9 +950,7 @@ function validateScenario(value: unknown, name: string): ScenarioBundleContract 
       `${name}.weekly_reviewer_decisions[${index}]`,
     ),
   );
-  if (object(scenario.drift_result, `${name}.drift_result`).schema_version !== "drift-detector-result-v1") {
-    throw new Error(`${name}.drift_result has an incompatible schema_version`);
-  }
+  validateDriftResult(scenario.drift_result, `${name}.drift_result`);
   object(scenario.weekly_digest, `${name}.weekly_digest`);
   const weeks = array(scenario.weeks, `${name}.weeks`).map((week, index) =>
     validateScenarioWeek(week, `${name}.weeks[${index}]`),

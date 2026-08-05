@@ -6,6 +6,7 @@ from typing import Any
 
 from src.coach.schemas import (
     CoachNarrative,
+    CoreValueDigestDetail,
     DigestValidation,
     EvidenceSnippet,
     ValidationCheck,
@@ -37,8 +38,9 @@ from src.demo.contracts import (
     SessionSelection,
     TraceReadRequest,
     WeeklyDriftReviewerDecisionContract,
+    build_drift_rule_steps,
 )
-from src.drift_detector import detect_drift
+from src.drift_detector import DriftDetectorResult, detect_drift
 from src.weekly_drift_reviewer import (
     VerifierAssessment,
     WeeklyDriftReviewerDecision,
@@ -204,7 +206,7 @@ def _review_decisions() -> list[WeeklyDriftReviewerDecisionContract]:
     ]
 
 
-def _digest() -> WeeklyDigest:
+def _digest(drift_result: DriftDetectorResult) -> WeeklyDigest:
     narrative = CoachNarrative(
         weekly_mirror=(
             "You wrote twice about choosing work over time with your sister."
@@ -221,6 +223,8 @@ def _digest() -> WeeklyDigest:
         checks=[
             ValidationCheck(name="groundedness", passed=True, details="Two citations"),
             ValidationCheck(name="non_circularity", passed=True, details="Specific"),
+            ValidationCheck(name="value_leakage", passed=True, details="No labels"),
+            ValidationCheck(name="state_claims", passed=True, details="Supported"),
             ValidationCheck(name="length", passed=True, details="Within limit"),
         ],
     )
@@ -229,7 +233,7 @@ def _digest() -> WeeklyDigest:
         persona_name="Casey",
         week_start="2026-07-06",
         week_end="2026-07-13",
-        response_mode="active",
+        response_mode="active_drift",
         mode_source="drift_detector",
         mode_rationale="Two consecutive Conflicts for Benevolence formed Drift.",
         signal_source="weekly_drift_reviewer",
@@ -238,7 +242,11 @@ def _digest() -> WeeklyDigest:
         overall_uncertainty=None,
         core_values=["benevolence"],
         goal_context="I want to be more present for people I care about",
-        drift_states={"benevolence": "active"},
+        drift_states=drift_result.core_value_states,
+        drift_details={
+            core_value: CoreValueDigestDetail.model_validate(detail.model_dump())
+            for core_value, detail in drift_result.core_value_details.items()
+        },
         drift_reasons=["Benevolence: Journal Entries 0 and 1 were Conflicts."],
         top_tensions=["Work repeatedly displaced time with a close relationship."],
         top_strengths=[],
@@ -338,7 +346,7 @@ def build_canonical_fixture() -> ContractFixtureSet:
     )
     decisions = _review_decisions()
     drift_result = detect_drift(decisions, persona_id=PERSONA_ID)
-    digest = _digest()
+    digest = _digest(drift_result)
     history = [
         WeeklyDriftReviewerEntry(
             t_index=entry.t_index,
@@ -377,7 +385,7 @@ def build_canonical_fixture() -> ContractFixtureSet:
         core_values=["benevolence"],
         current_t_indices=[0, 1],
         prompt_name="weekly_vif_verifier",
-        prompt_version="2.0",
+        prompt_version="3.0",
         prompt_sha256="a" * 64,
         runtime_text_sha256="b" * 64,
         requested_model="gpt-5.6-luna",
@@ -531,22 +539,7 @@ def build_canonical_fixture() -> ContractFixtureSet:
         source="saved_replay",
         details={
             "decisions": [decision.model_dump() for decision in decisions],
-            "steps": [
-                {
-                    "t_index": 0,
-                    "core_value": "benevolence",
-                    "verdict": "conflict",
-                    "pending_run_length": 1,
-                    "effect": "start",
-                },
-                {
-                    "t_index": 1,
-                    "core_value": "benevolence",
-                    "verdict": "conflict",
-                    "pending_run_length": 2,
-                    "effect": "confirm",
-                },
-            ],
+            "steps": [step.model_dump() for step in build_drift_rule_steps(decisions)],
             "result": drift_result.model_dump(),
         },
         input_refs=[{"kind": "weekly_review", "id": "response-demo"}],
@@ -728,7 +721,7 @@ def build_canonical_fixture() -> ContractFixtureSet:
                 week_end="2026-07-12",
                 journal_entry_ids=["entry-0"],
                 event_ids=["event-02", "event-07", "event-08"],
-                expected_delivery_state="stable",
+                expected_delivery_state="no_active_drift",
             ),
             ScenarioWeek(
                 week_id="2026-07-13",
@@ -736,7 +729,7 @@ def build_canonical_fixture() -> ContractFixtureSet:
                 week_end="2026-07-19",
                 journal_entry_ids=["entry-1"],
                 event_ids=["event-03", "event-09", "event-10", "event-11"],
-                expected_delivery_state="active",
+                expected_delivery_state="active_drift",
             ),
         ],
         trace_event_ids=main_event_ids,

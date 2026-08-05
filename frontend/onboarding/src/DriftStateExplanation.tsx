@@ -17,7 +17,10 @@ import type {
 } from "./demoContracts";
 
 type JsonObject = Record<string, unknown>;
-type CoreValueState = "stable" | "active" | "recovered" | "uncertain";
+type CoreValueState =
+  | "active_drift"
+  | "no_active_drift"
+  | "insufficient_evidence";
 
 interface DriftStateExplanationProps {
   profile: OnboardingProfile;
@@ -62,9 +65,11 @@ function object(value: unknown): JsonObject | null {
 }
 
 function coreValueState(value: unknown): CoreValueState {
-  return ["active", "recovered", "uncertain"].includes(String(value))
+  return ["active_drift", "no_active_drift", "insufficient_evidence"].includes(
+    String(value),
+  )
     ? value as CoreValueState
-    : "stable";
+    : "no_active_drift";
 }
 
 function decisionLabel(
@@ -98,19 +103,6 @@ function reasonLabel(reasonCode: string | null | undefined): string {
       return "The Journal Entry is too ambiguous for a clear decision.";
     default:
       return "No separate justification was recorded.";
-  }
-}
-
-function abstainReason(reasonCode: string | null | undefined): string {
-  switch (reasonCode) {
-    case "feeling_or_intent_only":
-      return "The Journal Entry states a feeling or intent, but no clear action.";
-    case "external_constraint":
-      return "An external constraint prevents a clear decision about the person's choice.";
-    case "missing_text":
-      return "The Journal Entry does not contain enough text for a clear decision.";
-    default:
-      return "The Journal Entry does not support a clear decision.";
   }
 }
 
@@ -467,13 +459,6 @@ export default function DriftStateExplanation({
                   decisionFor(tIndex, coreValue)?.verdict === "conflict",
               )
             : [];
-          const terminationIndex =
-            drift && Number.isInteger(drift.termination_t_index)
-              ? Number(drift.termination_t_index)
-              : null;
-          const terminationEntry = terminationIndex === null
-            ? null
-            : entriesByIndex.get(terminationIndex) ?? null;
           const currentDecisions = weeklyReviewerDecisions.filter(
             (decision) =>
               decision.core_value === coreValue
@@ -490,10 +475,11 @@ export default function DriftStateExplanation({
                 <span>{VALUES[coreValue as ValueKey]?.name ?? coreValue}</span>
               </header>
 
-              {state === "stable" || !drift ? (
+              {state === "no_active_drift" ? (
                 <>
                   <p className="state-change__summary">
-                    No two consecutive Weekly Drift Reviewer Conflicts were found.
+                    No active Drift is confirmed at this cutoff. This does not
+                    prove a positive change.
                   </p>
                   {currentDecisions.length > 0 ? (
                     <div className="state-change__evidence-pair">
@@ -512,7 +498,7 @@ export default function DriftStateExplanation({
                 </>
               ) : null}
 
-              {state === "active" ? (
+              {state === "active_drift" && drift ? (
                 <>
                   <p className="state-change__marker">Drift started here.</p>
                   <div className="state-change__evidence-pair">
@@ -547,34 +533,24 @@ export default function DriftStateExplanation({
                 </>
               ) : null}
 
-              {state === "recovered" && terminationEntry ? (
+              {state === "insufficient_evidence" ? (
                 <>
                   <p className="state-change__summary">
-                    The Weekly Drift Reviewer marked this Journal Entry as Not
-                    Conflict. The Drift Detector ended the earlier Drift.
+                    A review failure prevented a current claim, or an Abstain
+                    or Journal Entry gap blocked recent Conflict evidence.
                   </p>
-                  {renderDecisionEvidence(
-                    terminationEntry,
-                    decisionFor(terminationEntry.t_index, coreValue),
-                    `${coreValue}-${terminationEntry.t_index}`,
-                  )}
-                </>
-              ) : null}
-
-              {state === "uncertain" && terminationEntry ? (
-                <>
-                  <p className="state-change__summary">
-                    {abstainReason(
-                      decisionFor(terminationEntry.t_index, coreValue)
-                        ?.reason_code,
-                    )} The Weekly Drift Reviewer abstained, so the Drift Detector
-                    did not claim a new state.
-                  </p>
-                  {renderDecisionEvidence(
-                    terminationEntry,
-                    decisionFor(terminationEntry.t_index, coreValue),
-                    `${coreValue}-${terminationEntry.t_index}`,
-                  )}
+                  <div className="state-change__evidence-pair">
+                    {currentDecisions.flatMap((decision) => {
+                      const entry = entriesByIndex.get(decision.t_index);
+                      return entry
+                        ? [renderDecisionEvidence(
+                            entry,
+                            decision,
+                            `${coreValue}-${decision.t_index}`,
+                          )]
+                        : [];
+                    })}
+                  </div>
                 </>
               ) : null}
             </section>

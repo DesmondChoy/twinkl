@@ -45,6 +45,15 @@ describe("Experience and Inspect v1 contract", () => {
     expect(() => validateExperienceInspectFixture(missingHash)).toThrow("incompatible fields");
   });
 
+  it("rejects an old Drift Detector state", () => {
+    const fixture = fixtureCopy() as {
+      session: { drift_result: Record<string, unknown> };
+    };
+    fixture.session.drift_result.delivery_state = "mixed";
+
+    expect(() => validateExperienceInspectFixture(fixture)).toThrow("delivery_state");
+  });
+
   it("keeps Weekly Drift Reviewer Decisions distinct from VIF Critic Predictions", () => {
     const fixture = fixtureCopy() as {
       session: { weekly_reviewer_decisions: Array<Record<string, unknown>> };

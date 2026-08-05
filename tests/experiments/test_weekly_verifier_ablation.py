@@ -41,7 +41,7 @@ def test_canonical_prompt_has_no_vif_critic_input() -> None:
             "Canonical Weekly Drift Reviewer prompt for Journal Entry Conflict "
             "decisions."
         ),
-        "version": "2.0",
+        "version": "3.0",
         "input_variables": [
             "declared_values",
             "cumulative_history",

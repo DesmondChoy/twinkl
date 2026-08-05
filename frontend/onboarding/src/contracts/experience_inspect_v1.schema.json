@@ -631,6 +631,218 @@
       "title": "CoachNarrative",
       "type": "object"
     },
+    "CoreValueDigestDetail": {
+      "description": "Compact current state metadata supplied to the Coach Digest.",
+      "properties": {
+        "current_run_length": {
+          "minimum": 0,
+          "title": "Current Run Length",
+          "type": "integer"
+        },
+        "last_date": {
+          "title": "Last Date",
+          "type": "string"
+        },
+        "last_decision": {
+          "enum": [
+            "conflict",
+            "not_conflict",
+            "abstain"
+          ],
+          "title": "Last Decision",
+          "type": "string"
+        },
+        "last_review_status": {
+          "enum": [
+            "ok",
+            "refusal",
+            "invalid",
+            "error"
+          ],
+          "title": "Last Review Status",
+          "type": "string"
+        },
+        "last_t_index": {
+          "minimum": 0,
+          "title": "Last T Index",
+          "type": "integer"
+        },
+        "state": {
+          "enum": [
+            "active_drift",
+            "no_active_drift",
+            "insufficient_evidence"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "state",
+        "current_run_length",
+        "last_decision",
+        "last_review_status",
+        "last_t_index",
+        "last_date"
+      ],
+      "title": "CoreValueDigestDetail",
+      "type": "object"
+    },
+    "CoreValueDriftDetail": {
+      "description": "Current derived state and compact decision metadata for one Core Value.",
+      "properties": {
+        "current_run_length": {
+          "minimum": 0,
+          "title": "Current Run Length",
+          "type": "integer"
+        },
+        "last_date": {
+          "title": "Last Date",
+          "type": "string"
+        },
+        "last_decision": {
+          "enum": [
+            "conflict",
+            "not_conflict",
+            "abstain"
+          ],
+          "title": "Last Decision",
+          "type": "string"
+        },
+        "last_review_status": {
+          "enum": [
+            "ok",
+            "refusal",
+            "invalid",
+            "error"
+          ],
+          "title": "Last Review Status",
+          "type": "string"
+        },
+        "last_t_index": {
+          "minimum": 0,
+          "title": "Last T Index",
+          "type": "integer"
+        },
+        "state": {
+          "enum": [
+            "active_drift",
+            "no_active_drift",
+            "insufficient_evidence"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "state",
+        "current_run_length",
+        "last_decision",
+        "last_review_status",
+        "last_t_index",
+        "last_date"
+      ],
+      "title": "CoreValueDriftDetail",
+      "type": "object"
+    },
+    "CoreValueWeekComparison": {
+      "description": "Deterministic prior-week comparison for one Core Value.",
+      "properties": {
+        "change": {
+          "enum": [
+            "unchanged",
+            "active_drift_started",
+            "active_drift_restarted",
+            "active_drift_ended",
+            "evidence_became_insufficient",
+            "evidence_resolved"
+          ],
+          "title": "Change",
+          "type": "string"
+        },
+        "core_value": {
+          "title": "Core Value",
+          "type": "string"
+        },
+        "current_evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceSnippet"
+          },
+          "title": "Current Evidence",
+          "type": "array"
+        },
+        "current_state": {
+          "enum": [
+            "active_drift",
+            "no_active_drift",
+            "insufficient_evidence"
+          ],
+          "title": "Current State",
+          "type": "string"
+        },
+        "current_week_end": {
+          "title": "Current Week End",
+          "type": "string"
+        },
+        "current_week_start": {
+          "title": "Current Week Start",
+          "type": "string"
+        },
+        "end_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "not_conflict",
+                "abstain",
+                "gap"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Reason"
+        },
+        "previous_evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceSnippet"
+          },
+          "title": "Previous Evidence",
+          "type": "array"
+        },
+        "previous_state": {
+          "enum": [
+            "active_drift",
+            "no_active_drift",
+            "insufficient_evidence"
+          ],
+          "title": "Previous State",
+          "type": "string"
+        },
+        "previous_week_end": {
+          "title": "Previous Week End",
+          "type": "string"
+        },
+        "previous_week_start": {
+          "title": "Previous Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "core_value",
+        "previous_week_start",
+        "previous_week_end",
+        "current_week_start",
+        "current_week_end",
+        "previous_state",
+        "current_state",
+        "change"
+      ],
+      "title": "CoreValueWeekComparison",
+      "type": "object"
+    },
     "DigestValidation": {
       "description": "Coach Digest Validations for one Coach Digest response.",
       "properties": {
@@ -908,14 +1120,21 @@
       "type": "object"
     },
     "DriftDetectorResult": {
-      "description": "Auditable Drift Detector result at one delivery cutoff.",
+      "description": "Auditable current state and historical Drifts at one delivery cutoff.",
       "properties": {
+        "core_value_details": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CoreValueDriftDetail"
+          },
+          "title": "Core Value Details",
+          "type": "object"
+        },
         "core_value_states": {
           "additionalProperties": {
             "enum": [
-              "active",
-              "recovered",
-              "uncertain"
+              "active_drift",
+              "no_active_drift",
+              "insufficient_evidence"
             ],
             "type": "string"
           },
@@ -933,11 +1152,9 @@
         },
         "delivery_state": {
           "enum": [
-            "stable",
-            "active",
-            "recovered",
-            "uncertain",
-            "mixed"
+            "active_drift",
+            "no_active_drift",
+            "insufficient_evidence"
           ],
           "title": "Delivery State",
           "type": "string"
@@ -954,8 +1171,8 @@
           "type": "string"
         },
         "schema_version": {
-          "const": "drift-detector-result-v1",
-          "default": "drift-detector-result-v1",
+          "const": "drift-detector-result-v2",
+          "default": "drift-detector-result-v2",
           "title": "Schema Version",
           "type": "string"
         }
@@ -964,13 +1181,15 @@
         "persona_id",
         "cutoff_t_index",
         "cutoff_date",
-        "delivery_state"
+        "delivery_state",
+        "core_value_states",
+        "core_value_details"
       ],
       "title": "DriftDetectorResult",
       "type": "object"
     },
     "DriftRecord": {
-      "description": "One confirmed Drift for one Core Value.",
+      "description": "One confirmed historical Drift for one Core Value.",
       "properties": {
         "confirmation_date": {
           "title": "Confirmation Date",
@@ -983,15 +1202,6 @@
         },
         "core_value": {
           "title": "Core Value",
-          "type": "string"
-        },
-        "delivery_state": {
-          "enum": [
-            "active",
-            "recovered",
-            "uncertain"
-          ],
-          "title": "Delivery State",
           "type": "string"
         },
         "drift_id": {
@@ -1046,6 +1256,23 @@
           "default": null,
           "title": "Termination Date"
         },
+        "termination_reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "not_conflict",
+                "abstain",
+                "gap"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Termination Reason"
+        },
         "termination_t_index": {
           "anyOf": [
             {
@@ -1087,8 +1314,7 @@
         "confirmation_date",
         "end_date",
         "supporting_t_indices",
-        "evidence_quotes",
-        "delivery_state"
+        "evidence_quotes"
       ],
       "title": "DriftRecord",
       "type": "object"
@@ -1112,22 +1338,35 @@
           "title": "Core Value",
           "type": "string"
         },
+        "current_run_length": {
+          "minimum": 0,
+          "title": "Current Run Length",
+          "type": "integer"
+        },
+        "current_state": {
+          "enum": [
+            "active_drift",
+            "no_active_drift",
+            "insufficient_evidence"
+          ],
+          "title": "Current State",
+          "type": "string"
+        },
         "effect": {
           "enum": [
             "start",
             "confirm",
             "extend",
-            "recover",
-            "uncertain",
-            "break"
+            "end",
+            "insufficient",
+            "reset"
           ],
           "title": "Effect",
           "type": "string"
         },
-        "pending_run_length": {
-          "minimum": 0,
-          "title": "Pending Run Length",
-          "type": "integer"
+        "gap_before": {
+          "title": "Gap Before",
+          "type": "boolean"
         },
         "t_index": {
           "minimum": 0,
@@ -1148,7 +1387,9 @@
         "t_index",
         "core_value",
         "verdict",
-        "pending_run_length",
+        "current_run_length",
+        "current_state",
+        "gap_before",
         "effect"
       ],
       "title": "DriftRuleStep",
@@ -3179,11 +3420,9 @@
         },
         "expected_delivery_state": {
           "enum": [
-            "stable",
-            "active",
-            "recovered",
-            "uncertain",
-            "mixed"
+            "active_drift",
+            "no_active_drift",
+            "insufficient_evidence"
           ],
           "title": "Expected Delivery State",
           "type": "string"
@@ -3957,6 +4196,13 @@
           "title": "Dimensions",
           "type": "array"
         },
+        "drift_details": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CoreValueDigestDetail"
+          },
+          "title": "Drift Details",
+          "type": "object"
+        },
         "drift_reasons": {
           "items": {
             "type": "string"
@@ -3967,9 +4213,9 @@
         "drift_states": {
           "additionalProperties": {
             "enum": [
-              "active",
-              "recovered",
-              "uncertain"
+              "active_drift",
+              "no_active_drift",
+              "insufficient_evidence"
             ],
             "type": "string"
           },
@@ -4051,6 +4297,9 @@
         },
         "response_mode": {
           "enum": [
+            "active_drift",
+            "no_active_drift",
+            "insufficient_evidence",
             "active",
             "recovered",
             "uncertain",
@@ -4071,6 +4320,13 @@
           "description": "Origin of the numeric signals used to build this digest.",
           "title": "Signal Source",
           "type": "string"
+        },
+        "state_comparisons": {
+          "items": {
+            "$ref": "#/$defs/CoreValueWeekComparison"
+          },
+          "title": "State Comparisons",
+          "type": "array"
         },
         "top_strengths": {
           "items": {

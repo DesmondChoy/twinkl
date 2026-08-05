@@ -1028,7 +1028,7 @@ describe("manual Journal Entry Experience", () => {
     expect(inspectRun).toHaveBeenLastCalledWith("event-11");
   });
 
-  it("does not call an unavailable weekly review No Drift", () => {
+  it("does not call an unavailable weekly review No Active Drift", () => {
     const savedEntry = entry();
     const initial: ExperienceState = {
       ...createExperienceState(),
@@ -1049,8 +1049,8 @@ describe("manual Journal Entry Experience", () => {
       }],
       drift_result: {
         persona_id: "persona-1",
-        delivery_state: "stable",
-        core_value_states: { [profile.top_values[0]]: "stable" },
+        delivery_state: "insufficient_evidence",
+        core_value_states: { [profile.top_values[0]]: "insufficient_evidence" },
       },
       weekly_digest: {
         week_start: "2026-07-20",
@@ -1063,7 +1063,7 @@ describe("manual Journal Entry Experience", () => {
     render(<Harness initial={initial} />);
 
     expect(screen.getAllByText("Review unavailable")).toHaveLength(1);
-    expect(screen.queryByText("No Drift")).toBeNull();
+    expect(screen.queryByText("No Active Drift")).toBeNull();
   });
 
   it("keeps Weekly Drift Detection when Coach Digest is unavailable", () => {

@@ -232,7 +232,10 @@ def test_run_weekly_coach_cycle_attaches_narrative_with_llm(tmp_path: Path, monk
         assert response_format is not None
         return json.dumps(
             {
-                "weekly_mirror": "A short reflective mirror sentence for the week that stays grounded.",
+                "weekly_mirror": (
+                    'You wrote, "Protected the evening for family and left the '
+                    'laptop shut", during a week with competing demands.'
+                ),
                 "tension_explanation": "The week pulled between staying late for work and protecting family time.",
                 "reflective_question": "What made it easier to shut the laptop on the evenings you managed to?",
             }
@@ -249,7 +252,7 @@ def test_run_weekly_coach_cycle_attaches_narrative_with_llm(tmp_path: Path, monk
     )
 
     assert digest.coach_narrative is not None
-    assert digest.coach_narrative.weekly_mirror.startswith("A short reflective")
+    assert digest.coach_narrative.weekly_mirror.startswith("You wrote")
     assert digest.validation is not None
 
 

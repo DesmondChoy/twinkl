@@ -8,7 +8,7 @@ Values, cited evidence, and Drift state.
 
 The Coach Digest is a separate workflow. It supplies the structured Weekly
 Drift Detection output to a prompt. It runs after each Weekly Drift Detection
-result, including No Drift. It then tries to produce the user response. If it
+result, including No Active Drift. It then tries to produce the user response. If it
 cannot return a valid response, the Weekly Drift Detection result remains
 available. It does not decide whether Drift exists.
 
@@ -211,8 +211,8 @@ not the Weekly Drift Detection runtime. See
    expected Journal Entry and Core Value coordinate.
 5. Apply the two-consecutive-Conflict Drift Detector independently per Core
    Value, including across week boundaries.
-6. Record active, recovered, or uncertain state per Core Value. Derive mixed
-   only when the structured output combines different states.
+6. Record Active Drift, No Active Drift, or Insufficient Evidence per Core
+   Value. Keep Historical Drift Records separate from the current state.
 7. Store Weekly Drift Detection output from cited Journal Entry evidence in
    Weekly Drift Reviewer Decisions. Do not include VIF Critic or LLM-Judge
    numeric summaries.
@@ -257,6 +257,10 @@ The `WeeklyDigest` compatibility schema stores:
 - Core Values;
 - optional user-confirmed goal context;
 - per-Core-Value Drift states;
+- current run length and the latest Weekly Drift Reviewer Decision per Core
+  Value;
+- Historical Drift Records with their end reason;
+- prior closed-week state comparisons with separate prior and current evidence;
 - per-dimension summaries;
 - representative evidence snippets;
 - evidence selected from Journal Entries no later than `week_end`;
@@ -271,25 +275,25 @@ manual Experience sequence.
 
 ### Drift States, Coach Digest Policies, and Compatibility Modes
 
-The approved runtime uses five delivery modes:
+The approved runtime uses three current states per Core Value and for the
+aggregate result:
 
-- `stable`
-- `active`
-- `recovered`
-- `uncertain`
-- `mixed`
+- `active_drift`
+- `no_active_drift`
+- `insufficient_evidence`
 
 The Coach Digest reduces those auditable states to three delivery policies:
 
-- `drift_detected`: at least one Core Value has active Drift;
-- `no_current_drift`: no Core Value has active or uncertain Drift, including
-  stable and recovered results; and
-- `more_reflection_needed`: evidence remains uncertain and no active Drift
+- `drift_detected`: at least one Core Value has Active Drift;
+- `no_current_drift`: all Core Values have No Active Drift; and
+- `more_reflection_needed`: at least one Core Value has Insufficient Evidence
+  and no Active Drift
   finding takes priority.
 
-An aggregate `mixed` result is routed from its individual Core Value states. An
-active Drift therefore remains visible even when another Core Value is
-recovered. Evaluation is offline and is not a Coach Digest policy.
+Aggregate precedence is Active Drift, then Insufficient Evidence, then No
+Active Drift. Different Core Value states do not create a fourth `mixed`
+state. A sequence of Conflict, Conflict, and Abstain has Insufficient Evidence
+as its current state. Its confirmed Historical Drift Record remains stored.
 
 The compatibility path shares `stable` and can also emit six legacy-only
 modes:
@@ -355,24 +359,24 @@ The former consensus-derived frozen benchmark is retired historical evidence.
 The crash/rut/evolution output modes are explicitly deprecated compatibility
 values, not the accepted v1 definition.
 
-### Delivery-Time Recovery
+### Current State and Historical Drift Records
 
 The student-visible target records whether Drift occurred. The Coach Digest
 wording reflects the state when its response is delivered.
 
-For each value-specific Drift:
+For each Core Value:
 
-- **active**: its conflict run reaches the digest cutoff;
-- **recovered**: a later non-Conflict decision closes the run before the cutoff;
-- **uncertain**: a later Weekly Drift Reviewer abstention prevents a confident
-  active-versus-recovered claim; and
-- **mixed**: a structured output state when relevant value-specific Drifts have
-  different delivery states. It is not a fourth Drift type.
+- **Active Drift**: an uninterrupted Conflict run has at least two Journal
+  Entries at the cutoff;
+- **No Active Drift**: the latest usable decision leaves no active or blocked
+  Conflict run; and
+- **Insufficient Evidence**: a failed review prevents a current claim, or an
+  Abstain or Journal Entry gap blocks a claim after recent Conflict evidence.
 
-A sequence such as `-1, -1, +1, +1, +1` therefore remains a true Drift but is
-described as recovered rather than active. The implemented Drift Detector keeps
-each Core Value independent, extends uninterrupted Conflict runs without a new
-alert, and preserves historical Drift after recovery.
+A Not Conflict decision can end Active Drift. It does not prove support,
+improvement, or success. The Drift Detector keeps each Core Value independent.
+It extends uninterrupted Conflict runs without a new alert. It keeps each
+confirmed Drift as a Historical Drift Record after the current state changes.
 
 ---
 
@@ -406,6 +410,8 @@ The Coach Digest prompt requires:
 - internal Schwartz labels paired with the user-facing compass phrases and
   optional confirmed goal context;
 - explicit Weekly Drift Detection findings with plain-English state meanings;
+- one prior closed-week comparison per Core Value, when available;
+- separate cited evidence for the prior and current weeks;
 - cited Journal Entries;
 - reflective rather than prescriptive language;
 - no score jargon, gamification, or judgmental framing;
@@ -423,6 +429,9 @@ Coach Digest Validations:
 - `value_leakage`: the response does not name raw Schwartz value labels
   (for example Benevolence or Self-Direction) sourced from
   `config/schwartz_values.yaml`; and
+- `state_claims`: the response does not claim improvement, recovery, or another
+  positive change. A claim that a pattern ended requires an Active Drift to No
+  Active Drift comparison ended by a Not Conflict decision; and
 - `length`: total response length remains within configured bounds.
 
 The `tension_explanation` field follows the selected policy. Active Drift may
@@ -441,8 +450,8 @@ These checks are narrow guardrails, not a complete explanation-quality claim.
   `week_end`.
 - A no-current-Drift prompt receives recent Journal Entry context so grounded
   encouragement does not require invented praise.
-- Recovered Drift includes recovery context when the terminating Journal Entry
-  is available.
+- A prior-week comparison includes separate prior and current evidence. The
+  Coach Digest can describe a supported change without claiming improvement.
 - Acute grief/distress fallback favors presence over brittle value scoring.
 - Mixed-state and background-strain fallbacks preserve nuance that a weekly
   mean can hide.

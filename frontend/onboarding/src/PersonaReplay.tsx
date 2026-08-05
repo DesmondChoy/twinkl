@@ -52,16 +52,12 @@ function replayStepsFor(
 
 function replayStateLabel(state: string): string {
   switch (state) {
-    case "active":
+    case "active_drift":
       return "Active Drift";
-    case "recovered":
-      return "Recovered Drift";
-    case "uncertain":
-      return "Uncertain";
-    case "mixed":
-      return "Mixed";
+    case "insufficient_evidence":
+      return "Insufficient evidence";
     default:
-      return "No Drift";
+      return "No Active Drift";
   }
 }
 
@@ -75,14 +71,14 @@ function personaLesson(item: ScenarioCatalogItem): {
         label: "Emergence",
         copy: "Watch a pattern become Active Drift.",
       };
-    case "recovered_drift":
+    case "drift_ended":
       return {
-        label: "Recovery",
+        label: "Pattern ended",
         copy: "See what ends an Active Drift run.",
       };
-    case "uncertain":
+    case "insufficient_evidence":
       return {
-        label: "Uncertainty",
+        label: "Evidence limit",
         copy: "See Twinkl pause when evidence is unclear.",
       };
     case "two_core_values":
@@ -92,8 +88,8 @@ function personaLesson(item: ScenarioCatalogItem): {
       };
     default:
       return {
-        label: "Steady",
-        copy: `See ${item.progression.length} weeks with No Drift.`,
+        label: "No Active Drift",
+        copy: `See ${item.progression.length} weeks without Active Drift.`,
       };
   }
 }
@@ -103,16 +99,37 @@ function keyMomentState(
 ): ScenarioDeliveryState | null {
   switch (role) {
     case "active_drift":
-      return "active";
-    case "recovered_drift":
-      return "recovered";
-    case "uncertain":
-      return "uncertain";
+      return "active_drift";
+    case "drift_ended":
+      return "no_active_drift";
+    case "insufficient_evidence":
+      return "insufficient_evidence";
     case "two_core_values":
-      return "mixed";
+      return "insufficient_evidence";
     default:
       return null;
   }
+}
+
+function keyMomentIndexFor(
+  role: ScenarioCatalogItem["role"],
+  weeks: LoadedScenario["fixture"]["scenario"]["weeks"],
+): number {
+  if (role === "drift_ended") {
+    return weeks.findIndex(
+      (week, index) =>
+        week.expected_delivery_state === "no_active_drift"
+        && weeks.slice(0, index).some(
+          (prior) => prior.expected_delivery_state === "active_drift",
+        ),
+    );
+  }
+  const preferredState = keyMomentState(role);
+  return preferredState === null
+    ? weeks.length - 1
+    : weeks.findIndex(
+        (week) => week.expected_delivery_state === preferredState,
+      );
 }
 
 function usePrefersReducedMotion(): boolean {
@@ -352,12 +369,7 @@ export function PersonaReplayExperience({
   const resultVisible = revealedSteps.some((step) => step.kind === "result");
   const isFirst = safeWeekIndex === 0;
   const isLast = safeWeekIndex === weeks.length - 1;
-  const preferredKeyState = keyMomentState(loaded.catalogItem.role);
-  const preferredKeyIndex = preferredKeyState === null
-    ? weeks.length - 1
-    : weeks.findIndex(
-        (week) => week.expected_delivery_state === preferredKeyState,
-      );
+  const preferredKeyIndex = keyMomentIndexFor(loaded.catalogItem.role, weeks);
   const keyMomentIndex = preferredKeyIndex >= 0
     ? preferredKeyIndex
     : weeks.length - 1;

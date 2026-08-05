@@ -467,12 +467,33 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "02fb94f3",
       "cutoff_t_index": 1,
       "cutoff_date": "2025-04-20",
-      "delivery_state": "stable",
-      "core_value_states": {},
+      "delivery_state": "insufficient_evidence",
+      "core_value_states": {
+        "self_direction": "insufficient_evidence",
+        "tradition": "no_active_drift"
+      },
+      "core_value_details": {
+        "self_direction": {
+          "state": "insufficient_evidence",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 1,
+          "last_date": "2025-04-20"
+        },
+        "tradition": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 1,
+          "last_date": "2025-04-20"
+        }
+      },
       "drifts": []
     },
     "weekly_digest": {
@@ -480,9 +501,9 @@
       "persona_name": "Noor Haddad",
       "week_start": "2025-04-14",
       "week_end": "2025-04-20",
-      "response_mode": "stable",
+      "response_mode": "insufficient_evidence",
       "mode_source": "drift_detector",
-      "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+      "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
       "signal_source": "weekly_drift_reviewer",
       "n_entries": 2,
       "overall_mean": null,
@@ -492,17 +513,53 @@
         "tradition"
       ],
       "goal_context": null,
-      "drift_states": {},
+      "drift_states": {
+        "self_direction": "insufficient_evidence",
+        "tradition": "no_active_drift"
+      },
+      "drift_details": {
+        "self_direction": {
+          "state": "insufficient_evidence",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 1,
+          "last_date": "2025-04-20"
+        },
+        "tradition": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 1,
+          "last_date": "2025-04-20"
+        }
+      },
+      "state_comparisons": [],
       "drift_reasons": [],
-      "top_tensions": [],
+      "top_tensions": [
+        "self_direction"
+      ],
       "top_strengths": [],
       "dimensions": [],
       "evidence": [
         {
           "date": "2025-04-15",
           "t_index": 0,
+          "direction": "misaligned",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "I just didn't say anything."
+        },
+        {
+          "date": "2025-04-15",
+          "t_index": 0,
           "direction": "context",
-          "dimensions": [],
+          "dimensions": [
+            "tradition"
+          ],
           "score_mean": null,
           "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
         },
@@ -510,7 +567,19 @@
           "date": "2025-04-20",
           "t_index": 1,
           "direction": "context",
-          "dimensions": [],
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+        },
+        {
+          "date": "2025-04-20",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
           "score_mean": null,
           "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
         }
@@ -546,7 +615,7 @@
     "schema_version": "experience-inspect-v1",
     "scenario_id": "uncertain-noor",
     "title": "Noor — autonomy, family, and ambiguity",
-    "description": "A young parent navigates Self-Direction and Tradition; an effective Abstain leaves the latest Drift state uncertain.",
+    "description": "A young parent navigates Self-Direction and Tradition; an effective Abstain leaves insufficient evidence for one weekly Drift state.",
     "source": "saved_replay",
     "persona_id": "02fb94f3",
     "profile": {
@@ -1322,13 +1391,32 @@
       }
     ],
     "drift_result": {
-      "schema_version": "drift-detector-result-v1",
+      "schema_version": "drift-detector-result-v2",
       "persona_id": "02fb94f3",
       "cutoff_t_index": 11,
       "cutoff_date": "2025-05-22",
-      "delivery_state": "uncertain",
+      "delivery_state": "no_active_drift",
       "core_value_states": {
-        "tradition": "uncertain"
+        "self_direction": "no_active_drift",
+        "tradition": "no_active_drift"
+      },
+      "core_value_details": {
+        "self_direction": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-05-22"
+        },
+        "tradition": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-05-22"
+        }
       },
       "drifts": [
         {
@@ -1349,7 +1437,7 @@
             "I put the dress in my closet anyway. I'll wear it.",
             "Later. Wore the dress."
           ],
-          "delivery_state": "uncertain",
+          "termination_reason": "abstain",
           "termination_t_index": 6,
           "termination_date": "2025-05-05",
           "termination_verdict": "abstain"
@@ -1361,9 +1449,9 @@
       "persona_name": "Noor Haddad",
       "week_start": "2025-05-19",
       "week_end": "2025-05-25",
-      "response_mode": "uncertain",
+      "response_mode": "no_active_drift",
       "mode_source": "drift_detector",
-      "mode_rationale": "The latest confirmed Drift state is uncertain.",
+      "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
       "signal_source": "weekly_drift_reviewer",
       "n_entries": 2,
       "overall_mean": null,
@@ -1374,36 +1462,185 @@
       ],
       "goal_context": null,
       "drift_states": {
-        "tradition": "uncertain"
+        "self_direction": "no_active_drift",
+        "tradition": "no_active_drift"
       },
+      "drift_details": {
+        "self_direction": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-05-22"
+        },
+        "tradition": {
+          "state": "no_active_drift",
+          "current_run_length": 0,
+          "last_decision": "abstain",
+          "last_review_status": "ok",
+          "last_t_index": 11,
+          "last_date": "2025-05-22"
+        }
+      },
+      "state_comparisons": [
+        {
+          "core_value": "self_direction",
+          "previous_week_start": "2025-05-12",
+          "previous_week_end": "2025-05-18",
+          "current_week_start": "2025-05-19",
+          "current_week_end": "2025-05-25",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-05-22",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+            }
+          ]
+        },
+        {
+          "core_value": "tradition",
+          "previous_week_start": "2025-05-12",
+          "previous_week_end": "2025-05-18",
+          "current_week_start": "2025-05-19",
+          "current_week_end": "2025-05-25",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-05-22",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+            }
+          ]
+        }
+      ],
       "drift_reasons": [
-        "02fb94f3:tradition:4:uncertain"
+        "02fb94f3:tradition:4:abstain"
       ],
-      "top_tensions": [
-        "tradition"
-      ],
+      "top_tensions": [],
       "top_strengths": [],
       "dimensions": [],
       "evidence": [
         {
-          "date": "2025-05-02",
-          "t_index": 4,
-          "direction": "misaligned",
+          "date": "2025-05-15",
+          "t_index": 9,
+          "direction": "context",
           "dimensions": [
-            "tradition"
+            "self_direction"
           ],
           "score_mean": null,
-          "excerpt": "I put the dress in my closet anyway. I'll wear it."
+          "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
         },
         {
-          "date": "2025-05-02",
-          "t_index": 5,
-          "direction": "misaligned",
+          "date": "2025-05-15",
+          "t_index": 9,
+          "direction": "context",
           "dimensions": [
             "tradition"
           ],
           "score_mean": null,
-          "excerpt": "Later. Wore the dress."
+          "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
         }
       ],
       "coach_narrative": null,
@@ -1433,7 +1670,7 @@
           "uncertain-noor:event:012",
           "uncertain-noor:event:013"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "insufficient_evidence"
       },
       {
         "week_id": "uncertain-noor:week:2",
@@ -1455,7 +1692,7 @@
           "uncertain-noor:event:022",
           "uncertain-noor:event:023"
         ],
-        "expected_delivery_state": "stable"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "uncertain-noor:week:3",
@@ -1478,7 +1715,7 @@
           "uncertain-noor:event:033",
           "uncertain-noor:event:034"
         ],
-        "expected_delivery_state": "active"
+        "expected_delivery_state": "active_drift"
       },
       {
         "week_id": "uncertain-noor:week:4",
@@ -1505,7 +1742,7 @@
           "uncertain-noor:event:047",
           "uncertain-noor:event:048"
         ],
-        "expected_delivery_state": "uncertain"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "uncertain-noor:week:5",
@@ -1524,7 +1761,7 @@
           "uncertain-noor:event:055",
           "uncertain-noor:event:056"
         ],
-        "expected_delivery_state": "uncertain"
+        "expected_delivery_state": "no_active_drift"
       },
       {
         "week_id": "uncertain-noor:week:6",
@@ -1547,7 +1784,7 @@
           "uncertain-noor:event:066",
           "uncertain-noor:event:067"
         ],
-        "expected_delivery_state": "uncertain"
+        "expected_delivery_state": "no_active_drift"
       }
     ],
     "trace_event_ids": [
@@ -2122,12 +2359,33 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "02fb94f3",
           "cutoff_t_index": 1,
           "cutoff_date": "2025-04-20",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "insufficient_evidence",
+          "core_value_states": {
+            "self_direction": "insufficient_evidence",
+            "tradition": "no_active_drift"
+          },
+          "core_value_details": {
+            "self_direction": {
+              "state": "insufficient_evidence",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-04-20"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-04-20"
+            }
+          },
           "drifts": []
         },
         "weekly_digest": {
@@ -2135,9 +2393,9 @@
           "persona_name": "Noor Haddad",
           "week_start": "2025-04-14",
           "week_end": "2025-04-20",
-          "response_mode": "stable",
+          "response_mode": "insufficient_evidence",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -2147,17 +2405,53 @@
             "tradition"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "self_direction": "insufficient_evidence",
+            "tradition": "no_active_drift"
+          },
+          "drift_details": {
+            "self_direction": {
+              "state": "insufficient_evidence",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-04-20"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-04-20"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [],
-          "top_tensions": [],
+          "top_tensions": [
+            "self_direction"
+          ],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
               "date": "2025-04-15",
               "t_index": 0,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "I just didn't say anything."
+            },
+            {
+              "date": "2025-04-15",
+              "t_index": 0,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "tradition"
+              ],
               "score_mean": null,
               "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
             },
@@ -2165,7 +2459,19 @@
               "date": "2025-04-20",
               "t_index": 1,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+            },
+            {
+              "date": "2025-04-20",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
               "score_mean": null,
               "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
             }
@@ -2201,7 +2507,7 @@
         "schema_version": "experience-inspect-v1",
         "scenario_id": "uncertain-noor",
         "title": "Noor — autonomy, family, and ambiguity",
-        "description": "A young parent navigates Self-Direction and Tradition; an effective Abstain leaves the latest Drift state uncertain.",
+        "description": "A young parent navigates Self-Direction and Tradition; an effective Abstain leaves insufficient evidence for one weekly Drift state.",
         "source": "saved_replay",
         "persona_id": "02fb94f3",
         "profile": {
@@ -2977,13 +3283,32 @@
           }
         ],
         "drift_result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "02fb94f3",
           "cutoff_t_index": 11,
           "cutoff_date": "2025-05-22",
-          "delivery_state": "uncertain",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "tradition": "uncertain"
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
+          },
+          "core_value_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-05-22"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-05-22"
+            }
           },
           "drifts": [
             {
@@ -3004,7 +3329,7 @@
                 "I put the dress in my closet anyway. I'll wear it.",
                 "Later. Wore the dress."
               ],
-              "delivery_state": "uncertain",
+              "termination_reason": "abstain",
               "termination_t_index": 6,
               "termination_date": "2025-05-05",
               "termination_verdict": "abstain"
@@ -3016,9 +3341,9 @@
           "persona_name": "Noor Haddad",
           "week_start": "2025-05-19",
           "week_end": "2025-05-25",
-          "response_mode": "uncertain",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is uncertain.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -3029,36 +3354,185 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "tradition": "uncertain"
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
           },
+          "drift_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-05-22"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-05-22"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-05-12",
+              "previous_week_end": "2025-05-18",
+              "current_week_start": "2025-05-19",
+              "current_week_end": "2025-05-25",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-05-15",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-22",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+                },
+                {
+                  "date": "2025-05-22",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+                }
+              ]
+            },
+            {
+              "core_value": "tradition",
+              "previous_week_start": "2025-05-12",
+              "previous_week_end": "2025-05-18",
+              "current_week_start": "2025-05-19",
+              "current_week_end": "2025-05-25",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-05-15",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-22",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+                },
+                {
+                  "date": "2025-05-22",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "02fb94f3:tradition:4:uncertain"
+            "02fb94f3:tradition:4:abstain"
           ],
-          "top_tensions": [
-            "tradition"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-05-02",
-              "t_index": 4,
-              "direction": "misaligned",
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
               "dimensions": [
-                "tradition"
+                "self_direction"
               ],
               "score_mean": null,
-              "excerpt": "I put the dress in my closet anyway. I'll wear it."
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
             },
             {
-              "date": "2025-05-02",
-              "t_index": 5,
-              "direction": "misaligned",
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
               "dimensions": [
                 "tradition"
               ],
               "score_mean": null,
-              "excerpt": "Later. Wore the dress."
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
             }
           ],
           "coach_narrative": null,
@@ -3088,7 +3562,7 @@
               "uncertain-noor:event:012",
               "uncertain-noor:event:013"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "insufficient_evidence"
           },
           {
             "week_id": "uncertain-noor:week:2",
@@ -3110,7 +3584,7 @@
               "uncertain-noor:event:022",
               "uncertain-noor:event:023"
             ],
-            "expected_delivery_state": "stable"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "uncertain-noor:week:3",
@@ -3133,7 +3607,7 @@
               "uncertain-noor:event:033",
               "uncertain-noor:event:034"
             ],
-            "expected_delivery_state": "active"
+            "expected_delivery_state": "active_drift"
           },
           {
             "week_id": "uncertain-noor:week:4",
@@ -3160,7 +3634,7 @@
               "uncertain-noor:event:047",
               "uncertain-noor:event:048"
             ],
-            "expected_delivery_state": "uncertain"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "uncertain-noor:week:5",
@@ -3179,7 +3653,7 @@
               "uncertain-noor:event:055",
               "uncertain-noor:event:056"
             ],
-            "expected_delivery_state": "uncertain"
+            "expected_delivery_state": "no_active_drift"
           },
           {
             "week_id": "uncertain-noor:week:6",
@@ -3202,7 +3676,7 @@
               "uncertain-noor:event:066",
               "uncertain-noor:event:067"
             ],
-            "expected_delivery_state": "uncertain"
+            "expected_delivery_state": "no_active_drift"
           }
         ],
         "trace_event_ids": [
@@ -4385,7 +4859,7 @@
           "id": "uncertain-noor:week:1"
         }
       ],
-      "input_hash": "c30a594ac32c1b9d21212fa4f526d2c3b35e39a9bce99c5042c389ba2ac7926f",
+      "input_hash": "623a6a1df590cf9366aa5af106216462e39277e3b30b0e4eec7b7d1318494676",
       "error": null,
       "details": {
         "decisions": [
@@ -4447,38 +4921,67 @@
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 0,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 1,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "02fb94f3",
           "cutoff_t_index": 1,
           "cutoff_date": "2025-04-20",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "insufficient_evidence",
+          "core_value_states": {
+            "self_direction": "insufficient_evidence",
+            "tradition": "no_active_drift"
+          },
+          "core_value_details": {
+            "self_direction": {
+              "state": "insufficient_evidence",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-04-20"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-04-20"
+            }
+          },
           "drifts": []
         }
       }
@@ -4518,7 +5021,7 @@
           "id": "uncertain-noor:week:1"
         }
       ],
-      "input_hash": "6c5abf44387b428c95eadbf64a184d0eae45133e4dfc502668ef914f7206baad",
+      "input_hash": "7e07c6174f16b31627fb1ba3ef2b538cba0acba338419c795dfed26e7b45afe9",
       "error": null,
       "details": {
         "digest": {
@@ -4526,9 +5029,9 @@
           "persona_name": "Noor Haddad",
           "week_start": "2025-04-14",
           "week_end": "2025-04-20",
-          "response_mode": "stable",
+          "response_mode": "insufficient_evidence",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -4538,17 +5041,53 @@
             "tradition"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "self_direction": "insufficient_evidence",
+            "tradition": "no_active_drift"
+          },
+          "drift_details": {
+            "self_direction": {
+              "state": "insufficient_evidence",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-04-20"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 1,
+              "last_date": "2025-04-20"
+            }
+          },
+          "state_comparisons": [],
           "drift_reasons": [],
-          "top_tensions": [],
+          "top_tensions": [
+            "self_direction"
+          ],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
               "date": "2025-04-15",
               "t_index": 0,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "I just didn't say anything."
+            },
+            {
+              "date": "2025-04-15",
+              "t_index": 0,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "tradition"
+              ],
               "score_mean": null,
               "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
             },
@@ -4556,7 +5095,19 @@
               "date": "2025-04-20",
               "t_index": 1,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+            },
+            {
+              "date": "2025-04-20",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
               "score_mean": null,
               "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
             }
@@ -4566,6 +5117,8 @@
         },
         "cited_journal_entry_ids": [
           "02fb94f3:entry:0",
+          "02fb94f3:entry:0",
+          "02fb94f3:entry:1",
           "02fb94f3:entry:1"
         ]
       }
@@ -5167,7 +5720,7 @@
           "id": "uncertain-noor:week:2"
         }
       ],
-      "input_hash": "2c91cddb9fefa6e949538a5778867fc62eeedbe90cc1aa4ad96f7b66ce06b02e",
+      "input_hash": "bab21973073d7938847b760827c2353a9b2178c18c9103c20fa895baefebe33c",
       "error": null,
       "details": {
         "decisions": [
@@ -5281,66 +5834,103 @@
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 0,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 1,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "02fb94f3",
           "cutoff_t_index": 3,
           "cutoff_date": "2025-04-27",
-          "delivery_state": "stable",
-          "core_value_states": {},
+          "delivery_state": "no_active_drift",
+          "core_value_states": {
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
+          },
+          "core_value_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 3,
+              "last_date": "2025-04-27"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 3,
+              "last_date": "2025-04-27"
+            }
+          },
           "drifts": []
         }
       }
@@ -5380,7 +5970,7 @@
           "id": "uncertain-noor:week:2"
         }
       ],
-      "input_hash": "577b014248a754e34483f7008873774a87b5a3e0684a4303ccd538db0ab8d865",
+      "input_hash": "775af50635ee20e9126babda88e7443ec31a5de73fdf2001c7c33dfc970f31d3",
       "error": null,
       "details": {
         "digest": {
@@ -5388,9 +5978,9 @@
           "persona_name": "Noor Haddad",
           "week_start": "2025-04-21",
           "week_end": "2025-04-27",
-          "response_mode": "stable",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "No Core Value has two consecutive Weekly Drift Reviewer Conflicts.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -5400,17 +5990,202 @@
             "tradition"
           ],
           "goal_context": null,
-          "drift_states": {},
+          "drift_states": {
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
+          },
+          "drift_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 3,
+              "last_date": "2025-04-27"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 3,
+              "last_date": "2025-04-27"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-04-14",
+              "previous_week_end": "2025-04-20",
+              "current_week_start": "2025-04-21",
+              "current_week_end": "2025-04-27",
+              "previous_state": "insufficient_evidence",
+              "current_state": "no_active_drift",
+              "change": "evidence_resolved",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-04-15",
+                  "t_index": 0,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I just didn't say anything."
+                },
+                {
+                  "date": "2025-04-20",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-04-21",
+                  "t_index": 2,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+                },
+                {
+                  "date": "2025-04-27",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+                }
+              ]
+            },
+            {
+              "core_value": "tradition",
+              "previous_week_start": "2025-04-14",
+              "previous_week_end": "2025-04-20",
+              "current_week_start": "2025-04-21",
+              "current_week_end": "2025-04-27",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-04-15",
+                  "t_index": 0,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+                },
+                {
+                  "date": "2025-04-20",
+                  "t_index": 1,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-04-21",
+                  "t_index": 2,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+                },
+                {
+                  "date": "2025-04-27",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
+              "date": "2025-04-15",
+              "t_index": 0,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "I just didn't say anything."
+            },
+            {
+              "date": "2025-04-15",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+            },
+            {
+              "date": "2025-04-20",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+            },
+            {
+              "date": "2025-04-20",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+            },
+            {
               "date": "2025-04-21",
               "t_index": 2,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+            },
+            {
+              "date": "2025-04-21",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
               "score_mean": null,
               "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
             },
@@ -5418,7 +6193,19 @@
               "date": "2025-04-27",
               "t_index": 3,
               "direction": "context",
-              "dimensions": [],
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+            },
+            {
+              "date": "2025-04-27",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
               "score_mean": null,
               "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
             }
@@ -5427,7 +6214,13 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "02fb94f3:entry:0",
+          "02fb94f3:entry:0",
+          "02fb94f3:entry:1",
+          "02fb94f3:entry:1",
           "02fb94f3:entry:2",
+          "02fb94f3:entry:2",
+          "02fb94f3:entry:3",
           "02fb94f3:entry:3"
         ]
       }
@@ -6095,7 +6888,7 @@
           "id": "uncertain-noor:week:3"
         }
       ],
-      "input_hash": "8145f4d94f49b9246cdeb6de10eb67c9e8ea341d5f0756ee453d61f0291bf5eb",
+      "input_hash": "4ee9e17153a075a2a11c7b01d9f73df9f24c31585af87450e1008ed11a2b0165",
       "error": null,
       "details": {
         "decisions": [
@@ -6261,95 +7054,138 @@
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 0,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 1,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "tradition",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "tradition",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "02fb94f3",
           "cutoff_t_index": 5,
           "cutoff_date": "2025-05-02",
-          "delivery_state": "active",
+          "delivery_state": "active_drift",
           "core_value_states": {
-            "tradition": "active"
+            "self_direction": "no_active_drift",
+            "tradition": "active_drift"
+          },
+          "core_value_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-05-02"
+            },
+            "tradition": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-05-02"
+            }
           },
           "drifts": [
             {
@@ -6370,7 +7206,7 @@
                 "I put the dress in my closet anyway. I'll wear it.",
                 "Later. Wore the dress."
               ],
-              "delivery_state": "active",
+              "termination_reason": null,
               "termination_t_index": null,
               "termination_date": null,
               "termination_verdict": null
@@ -6414,7 +7250,7 @@
           "id": "uncertain-noor:week:3"
         }
       ],
-      "input_hash": "e4bdcaba36c57759c4bf2dfa9a0c31543e35e36a790abd7ec5488dc4e61335b7",
+      "input_hash": "cf87d40eedef86d21517450ca854e062db2e43ec25064935c85fb28596f3da12",
       "error": null,
       "details": {
         "digest": {
@@ -6422,9 +7258,9 @@
           "persona_name": "Noor Haddad",
           "week_start": "2025-04-28",
           "week_end": "2025-05-04",
-          "response_mode": "active",
+          "response_mode": "active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is active.",
+          "mode_rationale": "At least one Core Value has active Drift.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -6435,10 +7271,141 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "tradition": "active"
+            "self_direction": "no_active_drift",
+            "tradition": "active_drift"
           },
+          "drift_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-05-02"
+            },
+            "tradition": {
+              "state": "active_drift",
+              "current_run_length": 2,
+              "last_decision": "conflict",
+              "last_review_status": "ok",
+              "last_t_index": 5,
+              "last_date": "2025-05-02"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-04-21",
+              "previous_week_end": "2025-04-27",
+              "current_week_start": "2025-04-28",
+              "current_week_end": "2025-05-04",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-04-21",
+                  "t_index": 2,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+                },
+                {
+                  "date": "2025-04-27",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-02",
+                  "t_index": 4,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+                },
+                {
+                  "date": "2025-05-02",
+                  "t_index": 5,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+                }
+              ]
+            },
+            {
+              "core_value": "tradition",
+              "previous_week_start": "2025-04-21",
+              "previous_week_end": "2025-04-27",
+              "current_week_start": "2025-04-28",
+              "current_week_end": "2025-05-04",
+              "previous_state": "no_active_drift",
+              "current_state": "active_drift",
+              "change": "active_drift_started",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-04-21",
+                  "t_index": 2,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+                },
+                {
+                  "date": "2025-04-27",
+                  "t_index": 3,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-02",
+                  "t_index": 4,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I put the dress in my closet anyway. I'll wear it."
+                },
+                {
+                  "date": "2025-05-02",
+                  "t_index": 5,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Later. Wore the dress."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "02fb94f3:tradition:4:active"
+            "02fb94f3:tradition:4:open"
           ],
           "top_tensions": [
             "tradition"
@@ -6446,6 +7413,56 @@
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
+            {
+              "date": "2025-04-21",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+            },
+            {
+              "date": "2025-04-21",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+            },
+            {
+              "date": "2025-04-27",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+            },
+            {
+              "date": "2025-04-27",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+            },
+            {
+              "date": "2025-05-02",
+              "t_index": 4,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+            },
             {
               "date": "2025-05-02",
               "t_index": 4,
@@ -6455,6 +7472,16 @@
               ],
               "score_mean": null,
               "excerpt": "I put the dress in my closet anyway. I'll wear it."
+            },
+            {
+              "date": "2025-05-02",
+              "t_index": 5,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
             },
             {
               "date": "2025-05-02",
@@ -6471,7 +7498,13 @@
           "validation": null
         },
         "cited_journal_entry_ids": [
+          "02fb94f3:entry:2",
+          "02fb94f3:entry:2",
+          "02fb94f3:entry:3",
+          "02fb94f3:entry:3",
           "02fb94f3:entry:4",
+          "02fb94f3:entry:4",
+          "02fb94f3:entry:5",
           "02fb94f3:entry:5"
         ]
       }
@@ -7351,7 +8384,7 @@
           "id": "uncertain-noor:week:4"
         }
       ],
-      "input_hash": "b2867d5ea7f3c975f30140c6cc474de9c85173b0fb666354a8df8008dc9d9cf2",
+      "input_hash": "3d5220d21ab4f18e27c0bbd4e3b3454785c052f8d5ab76c6ba9a44490a1f9161",
       "error": null,
       "details": {
         "decisions": [
@@ -7595,137 +8628,192 @@
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 0,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 1,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "tradition",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "tradition",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 6,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 6,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 7,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 8,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "02fb94f3",
           "cutoff_t_index": 8,
           "cutoff_date": "2025-05-10",
-          "delivery_state": "uncertain",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "tradition": "uncertain"
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
+          },
+          "core_value_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 8,
+              "last_date": "2025-05-10"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 8,
+              "last_date": "2025-05-10"
+            }
           },
           "drifts": [
             {
@@ -7746,7 +8834,7 @@
                 "I put the dress in my closet anyway. I'll wear it.",
                 "Later. Wore the dress."
               ],
-              "delivery_state": "uncertain",
+              "termination_reason": "abstain",
               "termination_t_index": 6,
               "termination_date": "2025-05-05",
               "termination_verdict": "abstain"
@@ -7790,7 +8878,7 @@
           "id": "uncertain-noor:week:4"
         }
       ],
-      "input_hash": "c30aac3961563d0d2b0f25924a441155220caf36722c6c11b4f18b4c953b6610",
+      "input_hash": "6e6ef659affdcdff85896a71dd19268c7a68ce3aabfaf8cff408952781b2b82c",
       "error": null,
       "details": {
         "digest": {
@@ -7798,9 +8886,9 @@
           "persona_name": "Noor Haddad",
           "week_start": "2025-05-05",
           "week_end": "2025-05-11",
-          "response_mode": "uncertain",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is uncertain.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 3,
           "overall_mean": null,
@@ -7811,17 +8899,176 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "tradition": "uncertain"
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
           },
+          "drift_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 8,
+              "last_date": "2025-05-10"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 8,
+              "last_date": "2025-05-10"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-04-28",
+              "previous_week_end": "2025-05-04",
+              "current_week_start": "2025-05-05",
+              "current_week_end": "2025-05-11",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-05-02",
+                  "t_index": 4,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+                },
+                {
+                  "date": "2025-05-02",
+                  "t_index": 5,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-05",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+                },
+                {
+                  "date": "2025-05-06",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+                },
+                {
+                  "date": "2025-05-10",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+                }
+              ]
+            },
+            {
+              "core_value": "tradition",
+              "previous_week_start": "2025-04-28",
+              "previous_week_end": "2025-05-04",
+              "current_week_start": "2025-05-05",
+              "current_week_end": "2025-05-11",
+              "previous_state": "active_drift",
+              "current_state": "no_active_drift",
+              "change": "active_drift_ended",
+              "end_reason": "abstain",
+              "previous_evidence": [
+                {
+                  "date": "2025-05-02",
+                  "t_index": 4,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "I put the dress in my closet anyway. I'll wear it."
+                },
+                {
+                  "date": "2025-05-02",
+                  "t_index": 5,
+                  "direction": "misaligned",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Later. Wore the dress."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-05",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+                },
+                {
+                  "date": "2025-05-06",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+                },
+                {
+                  "date": "2025-05-10",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "02fb94f3:tradition:4:uncertain"
+            "02fb94f3:tradition:4:abstain"
           ],
-          "top_tensions": [
-            "tradition"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
+            {
+              "date": "2025-05-02",
+              "t_index": 4,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+            },
             {
               "date": "2025-05-02",
               "t_index": 4,
@@ -7835,12 +9082,82 @@
             {
               "date": "2025-05-02",
               "t_index": 5,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+            },
+            {
+              "date": "2025-05-02",
+              "t_index": 5,
               "direction": "misaligned",
               "dimensions": [
                 "tradition"
               ],
               "score_mean": null,
               "excerpt": "Later. Wore the dress."
+            },
+            {
+              "date": "2025-05-05",
+              "t_index": 6,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+            },
+            {
+              "date": "2025-05-05",
+              "t_index": 6,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+            },
+            {
+              "date": "2025-05-06",
+              "t_index": 7,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+            },
+            {
+              "date": "2025-05-06",
+              "t_index": 7,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+            },
+            {
+              "date": "2025-05-10",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+            },
+            {
+              "date": "2025-05-10",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
             }
           ],
           "coach_narrative": null,
@@ -7848,7 +9165,15 @@
         },
         "cited_journal_entry_ids": [
           "02fb94f3:entry:4",
-          "02fb94f3:entry:5"
+          "02fb94f3:entry:4",
+          "02fb94f3:entry:5",
+          "02fb94f3:entry:5",
+          "02fb94f3:entry:6",
+          "02fb94f3:entry:6",
+          "02fb94f3:entry:7",
+          "02fb94f3:entry:7",
+          "02fb94f3:entry:8",
+          "02fb94f3:entry:8"
         ]
       }
     },
@@ -8366,7 +9691,7 @@
           "id": "uncertain-noor:week:5"
         }
       ],
-      "input_hash": "3678fd1aea115bf014856a71e8e7bce8b790628d996e10b172576820ca2fe6f7",
+      "input_hash": "5ea0658d6d35110adb870ee53a3d883e1e4dd35a012f275f95d6cb6a79b71363",
       "error": null,
       "details": {
         "decisions": [
@@ -8636,151 +9961,210 @@
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 0,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 1,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "tradition",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "tradition",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 6,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 6,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 7,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 8,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "02fb94f3",
           "cutoff_t_index": 9,
           "cutoff_date": "2025-05-15",
-          "delivery_state": "uncertain",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "tradition": "uncertain"
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
+          },
+          "core_value_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 9,
+              "last_date": "2025-05-15"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 9,
+              "last_date": "2025-05-15"
+            }
           },
           "drifts": [
             {
@@ -8801,7 +10185,7 @@
                 "I put the dress in my closet anyway. I'll wear it.",
                 "Later. Wore the dress."
               ],
-              "delivery_state": "uncertain",
+              "termination_reason": "abstain",
               "termination_t_index": 6,
               "termination_date": "2025-05-05",
               "termination_verdict": "abstain"
@@ -8845,7 +10229,7 @@
           "id": "uncertain-noor:week:5"
         }
       ],
-      "input_hash": "a84c45ea89adf8d2bc54a8f4102a26c9ca24b82ebac882cf4d051efeefff1dac",
+      "input_hash": "990f925d0217a322ea8ca93c6ee6db7292444dc2d37a63f5c89bee210eef7979",
       "error": null,
       "details": {
         "digest": {
@@ -8853,9 +10237,9 @@
           "persona_name": "Noor Haddad",
           "week_start": "2025-05-12",
           "week_end": "2025-05-18",
-          "response_mode": "uncertain",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is uncertain.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 1,
           "overall_mean": null,
@@ -8866,44 +10250,239 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "tradition": "uncertain"
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
           },
+          "drift_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 9,
+              "last_date": "2025-05-15"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "not_conflict",
+              "last_review_status": "ok",
+              "last_t_index": 9,
+              "last_date": "2025-05-15"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-05-05",
+              "previous_week_end": "2025-05-11",
+              "current_week_start": "2025-05-12",
+              "current_week_end": "2025-05-18",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-05-05",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+                },
+                {
+                  "date": "2025-05-06",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+                },
+                {
+                  "date": "2025-05-10",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-15",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+                }
+              ]
+            },
+            {
+              "core_value": "tradition",
+              "previous_week_start": "2025-05-05",
+              "previous_week_end": "2025-05-11",
+              "current_week_start": "2025-05-12",
+              "current_week_end": "2025-05-18",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-05-05",
+                  "t_index": 6,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+                },
+                {
+                  "date": "2025-05-06",
+                  "t_index": 7,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+                },
+                {
+                  "date": "2025-05-10",
+                  "t_index": 8,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-15",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "02fb94f3:tradition:4:uncertain"
+            "02fb94f3:tradition:4:abstain"
           ],
-          "top_tensions": [
-            "tradition"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-05-02",
-              "t_index": 4,
-              "direction": "misaligned",
+              "date": "2025-05-05",
+              "t_index": 6,
+              "direction": "context",
               "dimensions": [
-                "tradition"
+                "self_direction"
               ],
               "score_mean": null,
-              "excerpt": "I put the dress in my closet anyway. I'll wear it."
+              "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
             },
             {
-              "date": "2025-05-02",
-              "t_index": 5,
-              "direction": "misaligned",
+              "date": "2025-05-05",
+              "t_index": 6,
+              "direction": "context",
               "dimensions": [
                 "tradition"
               ],
               "score_mean": null,
-              "excerpt": "Later. Wore the dress."
+              "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+            },
+            {
+              "date": "2025-05-06",
+              "t_index": 7,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+            },
+            {
+              "date": "2025-05-06",
+              "t_index": 7,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+            },
+            {
+              "date": "2025-05-10",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+            },
+            {
+              "date": "2025-05-10",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+            },
+            {
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+            },
+            {
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
-          "02fb94f3:entry:4",
-          "02fb94f3:entry:5"
+          "02fb94f3:entry:6",
+          "02fb94f3:entry:6",
+          "02fb94f3:entry:7",
+          "02fb94f3:entry:7",
+          "02fb94f3:entry:8",
+          "02fb94f3:entry:8",
+          "02fb94f3:entry:9",
+          "02fb94f3:entry:9"
         ]
       }
     },
@@ -9624,7 +11203,7 @@
           "id": "uncertain-noor:week:6"
         }
       ],
-      "input_hash": "2e38a8594d7224f34ed8032c69d2f2742151015d0b42aabcabd553144fc744d2",
+      "input_hash": "28fe8e8b41cb283daa9dbb27aa69d837ee4bf41d4372e93bff6ef012fa61c356",
       "error": null,
       "details": {
         "decisions": [
@@ -9946,179 +11525,246 @@
             "t_index": 0,
             "core_value": "self_direction",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 0,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 1,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 1,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 2,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 2,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 3,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 4,
             "core_value": "tradition",
             "verdict": "conflict",
-            "pending_run_length": 1,
+            "current_run_length": 1,
+            "current_state": "no_active_drift",
+            "gap_before": false,
             "effect": "start"
           },
           {
             "t_index": 5,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 5,
             "core_value": "tradition",
             "verdict": "conflict",
-            "pending_run_length": 2,
+            "current_run_length": 2,
+            "current_state": "active_drift",
+            "gap_before": false,
             "effect": "confirm"
           },
           {
             "t_index": 6,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 6,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "insufficient_evidence",
+            "gap_before": false,
+            "effect": "insufficient"
           },
           {
             "t_index": 7,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 7,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "end"
           },
           {
             "t_index": 8,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 8,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 9,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 10,
             "core_value": "self_direction",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 10,
             "core_value": "tradition",
             "verdict": "not_conflict",
-            "pending_run_length": 0,
-            "effect": "break"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 11,
             "core_value": "self_direction",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           },
           {
             "t_index": 11,
             "core_value": "tradition",
             "verdict": "abstain",
-            "pending_run_length": 0,
-            "effect": "uncertain"
+            "current_run_length": 0,
+            "current_state": "no_active_drift",
+            "gap_before": false,
+            "effect": "reset"
           }
         ],
         "result": {
-          "schema_version": "drift-detector-result-v1",
+          "schema_version": "drift-detector-result-v2",
           "persona_id": "02fb94f3",
           "cutoff_t_index": 11,
           "cutoff_date": "2025-05-22",
-          "delivery_state": "uncertain",
+          "delivery_state": "no_active_drift",
           "core_value_states": {
-            "tradition": "uncertain"
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
+          },
+          "core_value_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-05-22"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-05-22"
+            }
           },
           "drifts": [
             {
@@ -10139,7 +11785,7 @@
                 "I put the dress in my closet anyway. I'll wear it.",
                 "Later. Wore the dress."
               ],
-              "delivery_state": "uncertain",
+              "termination_reason": "abstain",
               "termination_t_index": 6,
               "termination_date": "2025-05-05",
               "termination_verdict": "abstain"
@@ -10183,7 +11829,7 @@
           "id": "uncertain-noor:week:6"
         }
       ],
-      "input_hash": "cceb911ece73ebeee9e9ef126d7e0fe3da66091f059282fce2c52e616a8bdfd0",
+      "input_hash": "bbace9c8847266a2e4d5030e219114f6b0469f933f7a26084cbe5a0d21f05446",
       "error": null,
       "details": {
         "digest": {
@@ -10191,9 +11837,9 @@
           "persona_name": "Noor Haddad",
           "week_start": "2025-05-19",
           "week_end": "2025-05-25",
-          "response_mode": "uncertain",
+          "response_mode": "no_active_drift",
           "mode_source": "drift_detector",
-          "mode_rationale": "The latest confirmed Drift state is uncertain.",
+          "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
           "signal_source": "weekly_drift_reviewer",
           "n_entries": 2,
           "overall_mean": null,
@@ -10204,44 +11850,197 @@
           ],
           "goal_context": null,
           "drift_states": {
-            "tradition": "uncertain"
+            "self_direction": "no_active_drift",
+            "tradition": "no_active_drift"
           },
+          "drift_details": {
+            "self_direction": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-05-22"
+            },
+            "tradition": {
+              "state": "no_active_drift",
+              "current_run_length": 0,
+              "last_decision": "abstain",
+              "last_review_status": "ok",
+              "last_t_index": 11,
+              "last_date": "2025-05-22"
+            }
+          },
+          "state_comparisons": [
+            {
+              "core_value": "self_direction",
+              "previous_week_start": "2025-05-12",
+              "previous_week_end": "2025-05-18",
+              "current_week_start": "2025-05-19",
+              "current_week_end": "2025-05-25",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-05-15",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-22",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+                },
+                {
+                  "date": "2025-05-22",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "self_direction"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+                }
+              ]
+            },
+            {
+              "core_value": "tradition",
+              "previous_week_start": "2025-05-12",
+              "previous_week_end": "2025-05-18",
+              "current_week_start": "2025-05-19",
+              "current_week_end": "2025-05-25",
+              "previous_state": "no_active_drift",
+              "current_state": "no_active_drift",
+              "change": "unchanged",
+              "end_reason": null,
+              "previous_evidence": [
+                {
+                  "date": "2025-05-15",
+                  "t_index": 9,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+                }
+              ],
+              "current_evidence": [
+                {
+                  "date": "2025-05-22",
+                  "t_index": 10,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+                },
+                {
+                  "date": "2025-05-22",
+                  "t_index": 11,
+                  "direction": "context",
+                  "dimensions": [
+                    "tradition"
+                  ],
+                  "score_mean": null,
+                  "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+                }
+              ]
+            }
+          ],
           "drift_reasons": [
-            "02fb94f3:tradition:4:uncertain"
+            "02fb94f3:tradition:4:abstain"
           ],
-          "top_tensions": [
-            "tradition"
-          ],
+          "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
           "evidence": [
             {
-              "date": "2025-05-02",
-              "t_index": 4,
-              "direction": "misaligned",
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
               "dimensions": [
-                "tradition"
+                "self_direction"
               ],
               "score_mean": null,
-              "excerpt": "I put the dress in my closet anyway. I'll wear it."
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
             },
             {
-              "date": "2025-05-02",
-              "t_index": 5,
-              "direction": "misaligned",
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
               "dimensions": [
                 "tradition"
               ],
               "score_mean": null,
-              "excerpt": "Later. Wore the dress."
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
             }
           ],
           "coach_narrative": null,
           "validation": null
         },
         "cited_journal_entry_ids": [
-          "02fb94f3:entry:4",
-          "02fb94f3:entry:5"
+          "02fb94f3:entry:9",
+          "02fb94f3:entry:9",
+          "02fb94f3:entry:10",
+          "02fb94f3:entry:10",
+          "02fb94f3:entry:11",
+          "02fb94f3:entry:11"
         ]
       }
     }

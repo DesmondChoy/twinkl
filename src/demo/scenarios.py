@@ -71,8 +71,8 @@ SAVED_COACH_NARRATIVE = CoachNarrative(
         "then noticed that relief came before excitement."
     ),
     tension_explanation=(
-        "An earlier pattern ended before this week, but your reason for accepting "
-        "the new role still feels unclear."
+        "Your reason for accepting the new role still feels unclear because relief "
+        "and expectation both shaped the choice."
     ),
     reflective_question=(
         "When you separate relief from expectation, what do you want this new role "
@@ -81,10 +81,10 @@ SAVED_COACH_NARRATIVE = CoachNarrative(
 )
 
 ScenarioRole = Literal[
-    "stable",
+    "no_active_drift",
     "active_drift",
-    "recovered_drift",
-    "uncertain",
+    "drift_ended",
+    "insufficient_evidence",
     "two_core_values",
 ]
 
@@ -107,11 +107,11 @@ SELECTIONS = (
     ScenarioSelection(
         scenario_id="stable-meera",
         persona_id="23d101f8",
-        role="stable",
+        role="no_active_drift",
         title="Meera — steady priorities under pressure",
         description=(
             "A teacher balances school change and family responsibilities while "
-            "Achievement and Security remain stable."
+            "Achievement and Security have no active Drift."
         ),
         summary="A calm baseline with meaningful nudges and no confirmed Drift.",
     ),
@@ -129,22 +129,22 @@ SELECTIONS = (
     ScenarioSelection(
         scenario_id="recovered-marc",
         persona_id="988d1a65",
-        role="recovered_drift",
-        title="Marc — status pressure and repair",
+        role="drift_ended",
+        title="Marc — status pressure and a changed choice",
         description=(
             "A manager notices how status anxiety shapes his choices, then takes a "
-            "clear corrective action that recovers Power Drift."
+            "clear later choice that ends the active Power Drift pattern."
         ),
-        summary="A compact active-to-recovered Drift progression.",
+        summary="A compact active-to-no-active Drift progression.",
     ),
     ScenarioSelection(
         scenario_id="uncertain-noor",
         persona_id="02fb94f3",
-        role="uncertain",
+        role="insufficient_evidence",
         title="Noor — autonomy, family, and ambiguity",
         description=(
             "A young parent navigates Self-Direction and Tradition; an effective "
-            "Abstain leaves the latest Drift state uncertain."
+            "Abstain leaves insufficient evidence for one weekly Drift state."
         ),
         summary="A nuanced case where the Weekly Drift Reviewer does not overclaim.",
     ),
@@ -154,8 +154,8 @@ SELECTIONS = (
         role="two_core_values",
         title="Lukas — belonging without losing direction",
         description=(
-            "A software engineer moves through recovered Conformity Drift and "
-            "uncertain Self-Direction Drift as independent Core Value histories."
+            "A software engineer has an ended Conformity Drift episode and "
+            "insufficient Self-Direction evidence in independent histories."
         ),
         summary="Recommended: the fullest walkthrough and clearest state independence.",
         recommended=True,
@@ -197,10 +197,10 @@ class ScenarioCatalog(CatalogModel):
         if sum(item.recommended for item in self.scenarios) != 1:
             raise ValueError("Exactly one scenario must be recommended")
         if {item.role for item in self.scenarios} != {
-            "stable",
+            "no_active_drift",
             "active_drift",
-            "recovered_drift",
-            "uncertain",
+            "drift_ended",
+            "insufficient_evidence",
             "two_core_values",
         }:
             raise ValueError("The menu must cover all five scenario roles")

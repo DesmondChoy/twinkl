@@ -493,7 +493,7 @@ async def test_closed_week_review_forms_drift_and_cites_visible_entries() -> Non
     assert second.operation == "submit_journal_entry"
     assert second.session.drift_result is None
     assert reviewed.drift_result is not None
-    assert reviewed.drift_result.delivery_state == "active"
+    assert reviewed.drift_result.delivery_state == "active_drift"
     assert len(reviewed.weekly_reviewer_decisions) == 2
     assert reviewed.weekly_digest is not None
     assert [row.t_index for row in reviewed.weekly_digest.evidence] == [0, 1]
@@ -751,9 +751,9 @@ async def test_weekly_integration_fails_closed_to_abstain(
         decision.verdict for decision in reviewed.weekly_reviewer_decisions
     } == {"abstain"}
     assert reviewed.drift_result is not None
-    assert reviewed.drift_result.delivery_state == "stable"
+    assert reviewed.drift_result.delivery_state == "insufficient_evidence"
     assert reviewed.weekly_digest is not None
-    assert reviewed.weekly_digest.response_mode == "high_uncertainty"
+    assert reviewed.weekly_digest.response_mode == "insufficient_evidence"
     assert reviewed.weekly_digest.mode_rationale == (
         "The Weekly Drift Reviewer could not return usable evidence for this week."
     )

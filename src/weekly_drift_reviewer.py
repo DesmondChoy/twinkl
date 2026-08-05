@@ -12,7 +12,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from prompts import get_prompt_metadata, load_prompt
 from src.models.judge import SCHWARTZ_VALUE_ORDER
@@ -126,6 +126,22 @@ class WeeklyDriftReviewerDecision(BaseModel):
     reason_code: ReasonCode | None = None
     evidence_quote: str = ""
     review_status: ReviewStatus
+
+    @model_validator(mode="after")
+    def validate_failed_review_decision(self) -> WeeklyDriftReviewerDecision:
+        if self.review_status == "ok":
+            return self
+        if (
+            self.verdict != "abstain"
+            or self.confidence is not None
+            or self.reason_code is not None
+            or self.evidence_quote
+        ):
+            raise ValueError(
+                "An unavailable Weekly Drift Reviewer result must fail closed "
+                "to an empty Abstain decision"
+            )
+        return self
 
 
 class WeeklyDriftReviewerReceipt(BaseModel):
@@ -299,11 +315,17 @@ def validate_weekly_drift_reviewer_assessments(
         quote = assessment.evidence_quote.strip()
         if assessment.verdict == "conflict" and not quote:
             raise ValueError("Conflict assessment is missing an evidence quote")
-        if assessment.verdict == "conflict" and quote not in entry_text_by_t_index.get(
-            assessment.t_index, ""
-        ):
+        if quote and quote not in entry_text_by_t_index.get(assessment.t_index, ""):
             raise ValueError(
                 f"Evidence quote is not present in t_index={assessment.t_index}"
+            )
+        if assessment.verdict == "conflict" and (
+            assessment.reason_code != "direct_behavior_or_choice"
+            or assessment.confidence == "low"
+        ):
+            raise ValueError(
+                "Conflict requires direct behavior or choice with medium or high "
+                "confidence"
             )
 
 
