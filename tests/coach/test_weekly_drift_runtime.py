@@ -188,8 +188,8 @@ async def test_runtime_does_not_attach_an_invalid_coach_response(tmp_path: Path)
 
 def _write_onboarding_profile(path: Path, **overrides) -> None:
     payload = {
-        "schema_version": 3,
-        "onboarding_version": "2.2.0",
+        "schema_version": 4,
+        "onboarding_version": "2.3.0",
         "user_id": "deadbeef",
         "preferred_name": "Desmond",
         "user_confirmed": True,
@@ -249,6 +249,40 @@ def test_onboarding_profile_accepts_legacy_version(tmp_path: Path):
     ) == ["self_direction"]
 
 
+def test_onboarding_profile_rejects_legacy_profile_with_more_than_two_values(
+    tmp_path: Path,
+):
+    profile_path = tmp_path / "profile.json"
+    _write_onboarding_profile(
+        profile_path,
+        schema_version=3,
+        onboarding_version="2.2.0",
+        top_values=["self_direction", "stimulation", "hedonism"],
+        value_profile={
+            "top_values": ["self_direction", "stimulation", "hedonism"]
+        },
+    )
+
+    with pytest.raises(ValueError, match="at most two Core Values"):
+        load_onboarding_core_values(profile_path, persona_id="deadbeef")
+
+
+def test_onboarding_profile_accepts_two_selected_tied_candidates(tmp_path: Path):
+    profile_path = tmp_path / "profile.json"
+    _write_onboarding_profile(
+        profile_path,
+        top_values=["self_direction", "stimulation"],
+        value_profile={
+            "top_values": ["self_direction", "stimulation", "hedonism"]
+        },
+    )
+
+    assert load_onboarding_core_values(
+        profile_path,
+        persona_id="deadbeef",
+    ) == ["self_direction", "stimulation"]
+
+
 @pytest.mark.parametrize(
     ("overrides", "match"),
     [
@@ -278,6 +312,15 @@ def test_onboarding_profile_accepts_legacy_version(tmp_path: Path):
         (
             {"value_profile": {"top_values": ["security"]}},
             "must match",
+        ),
+        (
+            {
+                "top_values": ["self_direction", "stimulation", "hedonism"],
+                "value_profile": {
+                    "top_values": ["self_direction", "stimulation", "hedonism"]
+                },
+            },
+            "at most two",
         ),
         ({"preferred_name": "   "}, "preferred_name"),
         ({"goal_category": "not_a_goal"}, "goal_category"),

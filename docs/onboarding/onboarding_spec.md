@@ -208,14 +208,18 @@ directly. It shows friendly descriptions for every ten-value score tied for
 highest without revealing Schwartz labels or numerical scores. Every tied
 description has equal visual weight.
 
+If one or two values share the highest score, `Confirm my compass` confirms
+them as the user's Core Values. If more than two values share the highest
+score, the app asks: “When you cannot fully honour all of these values at once,
+which two should guide you first?” The user must select exactly two of the tied
+descriptions before confirmation. Unselected descriptions become unavailable
+after the second selection until the user clears one choice.
+
 The summary explains that the result reflects the Most and Least choices made
-most consistently across all 11 groups. It also says that the result gives
-Twinkl a direction to remember and that later Journal Entries can show where
-the user's days follow that direction. `Confirm my compass` confirms the
-displayed descriptions as the user's Core Values and emits the Profile. The user
-is not asked to rank, promote, or demote the internal Schwartz categories. The
-confirmed Core Value descriptions remain visible through the first Journal
-Entry handoff and manual editor.
+across all 11 groups. It also says that the result gives Twinkl a direction to
+remember and that later Journal Entries can show where the user's days follow
+that direction. The confirmed Core Value descriptions remain visible through
+the first Journal Entry handoff and manual editor.
 
 On wide screens, the summary and Profile confirmation handoff compact their
 spacing so the primary action remains in view for typical results. Longer
@@ -283,9 +287,12 @@ order and sum to one, but they are product features—not BWS utilities,
 probabilities, ratio-scale measurements, or preference shares. A two-to-one
 weight ratio has no psychometric interpretation.
 
-`top_values` contains every value tied for the highest transformed score in
-canonical order. The confirmation screen turns those displayed descriptions
-into Core Values. Exact ties are never broken or truncated.
+`value_profile.top_values` contains every value tied for the highest
+transformed score in canonical order. This candidate list is never truncated.
+The Profile root `top_values` contains the confirmed Core Values in canonical
+order. It matches the candidate list when that list contains one or two values.
+When the candidate list contains more than two values, root `top_values`
+contains exactly the two values that the user selected.
 
 ### 5.3 No confidence field
 
@@ -302,8 +309,8 @@ The abbreviated shape is:
 
 ```json
 {
-  "schema_version": 3,
-  "onboarding_version": "2.2.0",
+  "schema_version": 4,
+  "onboarding_version": "2.3.0",
   "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
   "scoring_method": "best_minus_worst_divided_by_appearances_v1",
   "user_id": "uuid",
@@ -339,10 +346,10 @@ The abbreviated shape is:
     "method": "mean_universalism_facets_then_shift_normalize_v1",
     "scores": {},
     "weights": {},
-    "top_values": ["benevolence"],
+    "top_values": ["self_direction", "stimulation", "benevolence"],
     "bottom_values": ["power"]
   },
-  "top_values": ["benevolence"],
+  "top_values": ["self_direction", "benevolence"],
   "user_confirmed": true,
   "provenance": {
     "source": "react_onboarding_poc",
@@ -355,14 +362,25 @@ The abbreviated shape is:
 A confirmed Profile requires all 11 canonical groups exactly once, six valid
 objects per response, distinct valid Most and Least choices, non-negative
 integer response time, and explicit summary confirmation. Validation rebuilds
-the Profile deterministically and rejects any mismatch.
+the Profile deterministically. It rejects more than two confirmed Core Values,
+an invalid tie selection, or any other mismatch.
 
-The resumable browser session uses schema version `8` and storage key
-`twinkl.onboarding.session.v8`. It stores the randomized group order, each
-canonical group's randomized card order, and the shared Experience and Inspect
-view state. Versions `4` through `7` migrate without losing responses; a
-version `6` goal stage resumes at the Core Value summary, and a confirmed
-version `2` Profile migrates to version `3` without `goal_category`.
+The resumable browser session uses schema version `9` and storage key
+`twinkl.onboarding.session.v9`. It stores the randomized group order, each
+canonical group's randomized card order, the tie selection, and the shared
+Experience and Inspect view state. Versions `4` through `8` migrate when a
+confirmed legacy Profile contains at most two Core Values. A version `6` goal
+stage resumes at the Core Value summary. Confirmed version `2` and `3` Profiles
+with at most two Core Values migrate to version `4` without `goal_category`.
+If a confirmed legacy Profile contains more than two Core Values, the session
+returns to the summary and requires a two-value choice. The migration preserves
+the preferred name, SVBWS responses, Journal Entries, draft text, and Simulated
+time. It assigns a new Experience session ID and removes the old Profile,
+nudges, Weekly Drift Detection results, Coach Digest responses, and Inspect
+events. After confirmation, React records the new Profile and the preserved
+Journal Entries in a minimal validated trace. The Python runtime rejects a
+standalone legacy Profile with more than two Core Values because it cannot make
+the required user choice.
 
 ## 7. Integration Status
 

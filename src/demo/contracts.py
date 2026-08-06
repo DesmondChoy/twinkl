@@ -273,6 +273,20 @@ class ProfileTransform(ContractModel):
         expected = set(CORE_VALUE_ORDER)
         if set(self.scores) != expected or set(self.weights) != expected:
             raise ValueError("Profile vectors must contain all ten values")
+        highest = max(self.scores.values())
+        lowest = min(self.scores.values())
+        expected_top: list[CoreValue] = [
+            cast(CoreValue, value)
+            for value in CORE_VALUE_ORDER
+            if abs(self.scores[cast(CoreValue, value)] - highest) <= 1e-8
+        ]
+        expected_bottom: list[CoreValue] = [
+            cast(CoreValue, value)
+            for value in CORE_VALUE_ORDER
+            if abs(self.scores[cast(CoreValue, value)] - lowest) <= 1e-8
+        ]
+        if self.top_values != expected_top or self.bottom_values != expected_bottom:
+            raise ValueError("Profile extrema must match the transformed scores")
         return self
 
 
@@ -297,8 +311,8 @@ ProfileProvenance = Annotated[
 class OnboardingProfile(ContractModel):
     """Authoritative confirmed Profile shape emitted by React onboarding."""
 
-    schema_version: Literal[3]
-    onboarding_version: Literal["2.2.0"]
+    schema_version: Literal[4]
+    onboarding_version: Literal["2.3.0"]
     instrument: Literal["svbws_lee_soutar_louviere_2008_ui_adaptation_v2"]
     scoring_method: Literal["best_minus_worst_divided_by_appearances_v1"]
     user_id: str = Field(min_length=1)
@@ -309,7 +323,7 @@ class OnboardingProfile(ContractModel):
     bws_responses: list[BwsResponse] = Field(min_length=11, max_length=11)
     bws_results: BwsResults
     value_profile: ProfileTransform
-    top_values: list[CoreValue] = Field(min_length=1)
+    top_values: list[CoreValue] = Field(min_length=1, max_length=2)
     user_confirmed: Literal[True]
     provenance: ProfileProvenance
 
@@ -333,8 +347,18 @@ class OnboardingProfile(ContractModel):
     def validate_profile(self) -> OnboardingProfile:
         if {row.set_number for row in self.bws_responses} != set(range(1, 12)):
             raise ValueError("A confirmed Profile requires all 11 SVBWS groups")
-        if self.top_values != self.value_profile.top_values:
-            raise ValueError("Profile top_values must match value_profile.top_values")
+        candidates = self.value_profile.top_values
+        if len(candidates) <= 2 and self.top_values != candidates:
+            raise ValueError(
+                "Profile top_values must match the highest-score candidates"
+            )
+        if len(candidates) > 2 and (
+            len(self.top_values) != 2
+            or any(value not in candidates for value in self.top_values)
+        ):
+            raise ValueError(
+                "Profile top_values must contain two highest-score candidates"
+            )
         canonical = [value for value in CORE_VALUE_ORDER if value in self.top_values]
         if self.top_values != canonical:
             raise ValueError("Profile top_values must use canonical order")

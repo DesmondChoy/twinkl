@@ -100,10 +100,10 @@ approved runtime can import the saved JSON:
 
 ```json
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "user_id": "sarah",
   "session_id": "example-session",
-  "onboarding_version": "2.2.0",
+  "onboarding_version": "2.3.0",
   "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
   "scoring_method": "best_minus_worst_divided_by_appearances_v1",
   "bws_results": {

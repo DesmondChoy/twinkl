@@ -184,8 +184,8 @@ def build_projected_profile(
         OnboardingProfile,
         OnboardingProfile.model_validate(
             {
-                "schema_version": 3,
-                "onboarding_version": "2.2.0",
+                "schema_version": 4,
+                "onboarding_version": "2.3.0",
                 "instrument": ("svbws_lee_soutar_louviere_2008_ui_adaptation_v2"),
                 "scoring_method": ("best_minus_worst_divided_by_appearances_v1"),
                 "user_id": persona_id,

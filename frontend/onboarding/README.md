@@ -14,8 +14,10 @@ to make Most and Least choices. Schwartz labels remain internal. The Profile
 stores the preferred name and keeps raw
 11-object BWS results separate from the ten-value product transformation, with
 no midpoint result or confidence proxy. The 11th group advances directly to
-the label-free Core Value summary. The final action opens the manual
-Journal Entry flow. The React Experience passes the confirmed Profile and
+the label-free Core Value summary. A Profile has at most two Core Values. If
+more than two values share the highest score, the user selects exactly two and
+the Profile retains the full tied candidate list. The final action opens the
+manual Journal Entry flow. The React Experience passes the confirmed Profile and
 ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
 skip actions. Saving a Journal Entry does not review its open
@@ -105,6 +107,10 @@ Python boundary keeps the active session and idempotency receipts in memory,
 so restarting it clears backend state. Before the next Journal Entry, React
 restores the confirmed browser-held Journal Entries, nudges, and trace events
 through the validated session request. Provider keys stay on the Python side.
+If an older confirmed Profile contains more than two Core Values, React keeps
+the SVBWS responses, Journal Entries, draft text, and Simulated time. It asks
+the user to choose two Core Values, starts a new Experience session, and clears
+old Profile-dependent outputs.
 Nudge reply and skip outcomes remain in the resumable browser session, while
 the Python boundary records nudge generation events for Inspect. Saving either
 outcome, or confirming Journal Entry removal, advances the session revision and

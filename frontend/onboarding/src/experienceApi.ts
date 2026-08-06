@@ -2,12 +2,14 @@ import type { OnboardingProfile } from "./domain";
 import {
   EXPERIENCE_INSPECT_CONTRACT_VERSION,
   type AssessmentTimeAdvancedResponseContract,
+  type AssessmentClockContract,
   type ExperienceApiResponseContract,
   type ExperienceResumeStateContract,
   type JournalEntryContract,
   type JournalEntrySubmittedResponseContract,
   type SessionCreatedResponseContract,
   type TraceReadResponseContract,
+  type TraceEventContract,
   validateExperienceApiResponse,
 } from "./demoContracts";
 
@@ -39,6 +41,83 @@ async function sha256(value: unknown): Promise<string> {
   return Array.from(new Uint8Array(digest))
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
+}
+
+export async function buildProfileReselectionResumeState(
+  profile: OnboardingProfile,
+  journalEntries: JournalEntryContract[],
+  assessmentClock: AssessmentClockContract | null,
+): Promise<ExperienceResumeStateContract> {
+  const completedAt = profile.timestamp;
+  const profileEventId = `profile-reselection:${profile.session_id}:profile`;
+  const traceEvents: TraceEventContract[] = [
+    {
+      schema_version: EXPERIENCE_INSPECT_CONTRACT_VERSION,
+      event_id: profileEventId,
+      session_id: profile.session_id,
+      parent_event_id: null,
+      event_type: "profile_confirmed",
+      status: "complete",
+      source: "live_run",
+      started_at: completedAt,
+      completed_at: completedAt,
+      duration_ms: 0,
+      input_refs: [],
+      model_contract: null,
+      prompt: null,
+      raw_response: null,
+      validation: {
+        valid: true,
+        schema_name: "profile-reselection-v1",
+        errors: [],
+      },
+      result_refs: [{ kind: "profile", id: profile.session_id }],
+      input_hash: await sha256({ operation: "profile_reselection", profile }),
+      error: null,
+      details: { profile },
+    },
+  ];
+  for (const entry of journalEntries) {
+    const parentEventId = traceEvents.at(-1)!.event_id;
+    const eventId = `profile-reselection:${profile.session_id}:journal:${entry.journal_entry_id}`;
+    traceEvents.push({
+      schema_version: EXPERIENCE_INSPECT_CONTRACT_VERSION,
+      event_id: eventId,
+      session_id: profile.session_id,
+      parent_event_id: parentEventId,
+      event_type: "journal_entry_submitted",
+      status: "complete",
+      source: "live_run",
+      started_at: completedAt,
+      completed_at: completedAt,
+      duration_ms: 0,
+      input_refs: [{ kind: "profile", id: profile.session_id }],
+      model_contract: null,
+      prompt: null,
+      raw_response: null,
+      validation: {
+        valid: true,
+        schema_name: "journal-entry-preserved-v1",
+        errors: [],
+      },
+      result_refs: [{ kind: "journal_entry", id: entry.journal_entry_id }],
+      input_hash: await sha256({
+        operation: "preserve_journal_entry",
+        session_id: profile.session_id,
+        entry,
+      }),
+      error: null,
+      details: { journal_entry: entry, ordering_valid: true },
+    });
+  }
+  return {
+    session_id: profile.session_id,
+    revision: journalEntries.length,
+    journal_entries: journalEntries,
+    nudges: [],
+    assessment_clock: assessmentClock,
+    trace_events: traceEvents,
+  };
 }
 
 async function postExperience(

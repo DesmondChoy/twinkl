@@ -2700,7 +2700,7 @@
           "type": "string"
         },
         "onboarding_version": {
-          "const": "2.2.0",
+          "const": "2.3.0",
           "title": "Onboarding Version",
           "type": "string"
         },
@@ -2737,7 +2737,7 @@
           "title": "Provenance"
         },
         "schema_version": {
-          "const": 3,
+          "const": 4,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -2775,6 +2775,7 @@
             ],
             "type": "string"
           },
+          "maxItems": 2,
           "minItems": 1,
           "title": "Top Values",
           "type": "array"

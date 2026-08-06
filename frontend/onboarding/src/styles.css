@@ -2427,7 +2427,33 @@ h2 {
   margin: 32px 0;
 }
 
-.core-values article {
+.summary-choice-question {
+  max-width: 680px;
+  margin: 0;
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-size: clamp(1.08rem, 2vw, 1.32rem);
+  line-height: 1.45;
+}
+
+.summary-choice-status {
+  margin: 10px 0 0;
+  color: var(--verdigris);
+  font-size: 0.72rem;
+  font-weight: 820;
+  letter-spacing: 0.04em;
+}
+
+.core-values--choices {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: min(390px, 42vh);
+  gap: 9px;
+  overflow-y: auto;
+  padding: 4px 8px 4px 4px;
+  scrollbar-color: rgba(46, 140, 130, 0.42) transparent;
+}
+
+.core-values article,
+.core-value-choice {
   display: grid;
   grid-template-columns: 28px 1fr;
   gap: 16px;
@@ -2436,13 +2462,52 @@ h2 {
   padding: 16px 0;
 }
 
-.core-values article > span {
+.core-value-choice {
+  width: 100%;
+  min-height: 72px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 13px 14px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.core-value-choice:hover:not([aria-disabled="true"]) {
+  border-color: rgba(46, 140, 130, 0.48);
+  transform: translateY(-1px);
+}
+
+.core-value-choice--selected {
+  border-color: var(--verdigris);
+  background: rgba(46, 140, 130, 0.09);
+  box-shadow: 0 8px 22px rgba(20, 34, 59, 0.08);
+}
+
+.core-value-choice[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.core-values article > span,
+.core-value-choice > span {
   color: var(--apricot);
   font-family: "Source Serif 4 Variable", Georgia, serif;
   font-size: 1rem;
 }
 
-.core-values article p {
+.core-value-choice--selected > span {
+  color: var(--verdigris);
+}
+
+.core-values article p,
+.core-value-choice p {
   margin: 0;
   font-size: clamp(1.1rem, 2vw, 1.45rem);
   font-weight: 650;
@@ -2462,6 +2527,13 @@ h2 {
   font-family: "Source Serif 4 Variable", Georgia, serif;
   font-size: clamp(1.05rem, 1.8vw, 1.25rem);
   line-height: 1.5;
+}
+
+@media (max-width: 620px) {
+  .core-values--choices {
+    grid-template-columns: 1fr;
+    max-height: 46vh;
+  }
 }
 
 .core-value-reminder {
@@ -3444,12 +3516,18 @@ h2 {
     margin: clamp(12px, 2vh, 18px) 0;
   }
 
-  .app-shell--summary .core-values article {
+  .app-shell--summary .core-values article,
+  .app-shell--summary .core-value-choice {
     gap: 12px;
     padding: clamp(9px, 1.5vh, 13px) 0;
   }
 
-  .app-shell--summary .core-values article p {
+  .app-shell--summary .core-value-choice {
+    padding-inline: 13px;
+  }
+
+  .app-shell--summary .core-values article p,
+  .app-shell--summary .core-value-choice p {
     font-size: clamp(1rem, 1.5vw, 1.2rem);
   }
 

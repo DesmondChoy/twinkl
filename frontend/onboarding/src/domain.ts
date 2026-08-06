@@ -239,6 +239,7 @@ export interface ProfileTransform {
   method: "mean_universalism_facets_then_shift_normalize_v1";
   scores: ValueVector;
   weights: ValueVector;
+  // Highest-score candidates remain separate from the confirmed Core Values.
   top_values: ValueKey[];
   bottom_values: ValueKey[];
 }
@@ -249,8 +250,8 @@ export interface ScoreBundle {
 }
 
 export interface OnboardingProfile {
-  schema_version: 3;
-  onboarding_version: "2.2.0";
+  schema_version: 4;
+  onboarding_version: "2.3.0";
   instrument: "svbws_lee_soutar_louviere_2008_ui_adaptation_v2";
   scoring_method: "best_minus_worst_divided_by_appearances_v1";
   user_id: string;
@@ -277,9 +278,14 @@ export interface OnboardingProfile {
 }
 
 const BWS_OBJECT_SET = new Set<string>(BWS_OBJECT_ORDER);
+const VALUE_SET = new Set<string>(VALUE_ORDER);
 
 export function isBwsObjectKey(value: unknown): value is BwsObjectKey {
   return typeof value === "string" && BWS_OBJECT_SET.has(value);
+}
+
+export function isValueKey(value: unknown): value is ValueKey {
+  return typeof value === "string" && VALUE_SET.has(value);
 }
 
 export function bwsObjectVector(initial = 0): BwsObjectVector {
@@ -423,6 +429,7 @@ export interface CreateProfileInput {
   startedAt: string;
   completedAt: string;
   responses: BwsResponse[];
+  selectedTopValues?: ValueKey[];
   userConfirmed: boolean;
 }
 
@@ -442,9 +449,36 @@ export function createProfile(input: CreateProfileInput): OnboardingProfile {
     throw new Error("An onboarding Profile cannot be emitted before confirmation");
   }
   const results = scoreResponses(input.responses, true);
+  const candidates = results.profile.top_values;
+  const selectedTopValues = input.selectedTopValues ?? [];
+  let topValues: ValueKey[];
+  if (candidates.length <= 2) {
+    if (
+      selectedTopValues.length > 0 &&
+      JSON.stringify(selectedTopValues) !== JSON.stringify(candidates)
+    ) {
+      throw new Error("Core Values must match the highest-score candidates");
+    }
+    topValues = candidates;
+  } else {
+    if (
+      selectedTopValues.length !== 2 ||
+      new Set(selectedTopValues).size !== 2 ||
+      selectedTopValues.some((value) => !candidates.includes(value))
+    ) {
+      throw new Error("Choose exactly two highest-score candidates as Core Values");
+    }
+    const canonicalSelection = VALUE_ORDER.filter((value) =>
+      selectedTopValues.includes(value),
+    );
+    if (JSON.stringify(selectedTopValues) !== JSON.stringify(canonicalSelection)) {
+      throw new Error("Selected Core Values must use canonical order");
+    }
+    topValues = canonicalSelection;
+  }
   return {
-    schema_version: 3,
-    onboarding_version: "2.2.0",
+    schema_version: 4,
+    onboarding_version: "2.3.0",
     instrument: "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
     scoring_method: "best_minus_worst_divided_by_appearances_v1",
     user_id: input.userId,
@@ -455,7 +489,7 @@ export function createProfile(input: CreateProfileInput): OnboardingProfile {
     bws_responses: input.responses,
     bws_results: results.bws,
     value_profile: results.profile,
-    top_values: results.profile.top_values,
+    top_values: topValues,
     user_confirmed: true,
     provenance: {
       source: "react_onboarding_poc",
@@ -473,8 +507,8 @@ export function validateProfile(value: unknown): OnboardingProfile {
     preferred_name?: string | null;
   };
   if (
-    profile.schema_version !== 3 ||
-    profile.onboarding_version !== "2.2.0" ||
+    profile.schema_version !== 4 ||
+    profile.onboarding_version !== "2.3.0" ||
     profile.instrument !== "svbws_lee_soutar_louviere_2008_ui_adaptation_v2" ||
     profile.scoring_method !== "best_minus_worst_divided_by_appearances_v1" ||
     profile.user_confirmed !== true ||
@@ -498,6 +532,7 @@ export function validateProfile(value: unknown): OnboardingProfile {
     startedAt: profile.started_at,
     completedAt: profile.timestamp,
     responses: profile.bws_responses,
+    selectedTopValues: profile.top_values,
     userConfirmed: true,
   });
   if (profile.preferred_name == null) {

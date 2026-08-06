@@ -5,7 +5,7 @@
     {
       "scenario_id": "stable-meera",
       "file": "stable-meera.json",
-      "content_sha256": "0a3c9ef6b72aa93a7daf9feb76b8cd26b4e1667bea5e4b69d62d58b65db3f1de",
+      "content_sha256": "3ea3fdd0ea29ddbe57907355a56b7bbb67cb6b6003afd62d6b30746581e1085d",
       "persona_id": "23d101f8",
       "persona_name": "Meera Krishnamurthy",
       "age": "45-54",
@@ -31,7 +31,7 @@
     {
       "scenario_id": "active-wei-jun",
       "file": "active-wei-jun.json",
-      "content_sha256": "0924c2c02d8868911ac204fb4a122dd7a772e8e66de1d7237e7ca7ce34b02bab",
+      "content_sha256": "196bf41df47d2d541e9728275d70e41299d624ca24fadfeb1a571fbd79686bb5",
       "persona_id": "8f83c818",
       "persona_name": "Wei Jun Chen",
       "age": "35-44",
@@ -55,7 +55,7 @@
     {
       "scenario_id": "recovered-marc",
       "file": "recovered-marc.json",
-      "content_sha256": "bf6d1b894ab001c8dbb13d0d34169023ef61fc7e5557de2f59be0c86394098de",
+      "content_sha256": "8ef1314efbaa004c20a7c57e4468538da98b117b76694dddea55d59f44c4844e",
       "persona_id": "988d1a65",
       "persona_name": "Marc Vandenberghe",
       "age": "45-54",
@@ -81,7 +81,7 @@
     {
       "scenario_id": "uncertain-noor",
       "file": "uncertain-noor.json",
-      "content_sha256": "e7398c1c513ab98fa666a29ce026214d9dcada9e27c3b7ad87c6ff3248b24a6f",
+      "content_sha256": "59f9e4cf5e58004cf8504ab16fe6d8eb751cb89c81df349a89e540db3864ae07",
       "persona_id": "02fb94f3",
       "persona_name": "Noor Haddad",
       "age": "18-24",
@@ -106,7 +106,7 @@
     {
       "scenario_id": "two-values-lukas",
       "file": "two-values-lukas.json",
-      "content_sha256": "96940665163a66f33043e4d19eed65a931982fad607226865a3aba9daf8bfdf1",
+      "content_sha256": "442f876155f6b10d442692a92932b7c6d0bcc71db5b6f10f63944feed05eef79",
       "persona_id": "11de77e8",
       "persona_name": "Lukas Vermeer",
       "age": "25-34",

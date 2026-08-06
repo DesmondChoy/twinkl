@@ -11,8 +11,10 @@ from src.coach.weekly_drift_runtime import load_onboarding_core_values
 from src.demo.canonical_fixture import build_canonical_fixture
 from src.demo.contracts import (
     CONTRACT_VERSION,
+    CORE_VALUE_ORDER,
     SCHEMA_ID,
     ContractFixtureSet,
+    OnboardingProfile,
 )
 
 FIXTURE_PATH = Path(
@@ -79,6 +81,26 @@ def test_profile_fixture_matches_runtime_import_contract(tmp_path: Path) -> None
         profile_path,
         persona_id="persona-demo",
     ) == ["benevolence"]
+
+
+def test_profile_contract_separates_tied_candidates_from_core_values() -> None:
+    profile = deepcopy(_fixture_payload()["session"]["profile"])
+    candidates = list(CORE_VALUE_ORDER[:3])
+    scores = profile["value_profile"]["scores"]
+    for value in CORE_VALUE_ORDER:
+        scores[value] = 1.0 if value in candidates else 0.0
+    profile["value_profile"]["top_values"] = candidates
+    profile["value_profile"]["bottom_values"] = list(CORE_VALUE_ORDER[3:])
+    profile["top_values"] = candidates[:2]
+
+    parsed = OnboardingProfile.model_validate(profile)
+
+    assert parsed.value_profile.top_values == candidates
+    assert parsed.top_values == candidates[:2]
+
+    profile["top_values"] = [candidates[0], CORE_VALUE_ORDER[3]]
+    with pytest.raises(ValidationError, match="highest-score candidates"):
+        OnboardingProfile.model_validate(profile)
 
 
 @pytest.mark.parametrize(

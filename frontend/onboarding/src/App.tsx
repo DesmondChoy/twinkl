@@ -12,12 +12,14 @@ import {
 import {
   BWS_OBJECTS,
   BWS_SETS,
+  VALUE_ORDER,
   VALUES,
   createProfile,
   normalizePreferredName,
   scoreResponses,
   type BwsObjectKey,
   type OnboardingProfile,
+  type ValueKey,
 } from "./domain";
 import AssessmentSectionMap from "./AssessmentSectionMap";
 import CoreValueReminder from "./CoreValueReminder";
@@ -25,10 +27,16 @@ import ExperienceSectionMap, {
   type ExperienceSectionMapView,
 } from "./ExperienceSectionMap";
 import {
+  buildProfileReselectionResumeState,
   createExperienceSession,
   ExperienceApiError,
   readExperienceTrace,
 } from "./experienceApi";
+import type {
+  AssessmentClockContract,
+  ExperienceResumeStateContract,
+  JournalEntryContract,
+} from "./demoContracts";
 import {
   clearSession,
   clearChoice,
@@ -58,6 +66,11 @@ const CARD_BACKGROUNDS = [
   "/card-backgrounds/memory-atlas-05.jpg",
   "/card-backgrounds/memory-atlas-06.jpg",
 ] as const;
+
+interface ProfileResumeSeed {
+  journalEntries: JournalEntryContract[];
+  assessmentClock: AssessmentClockContract | null;
+}
 
 export class AppErrorBoundary extends Component<
   { children: ReactNode },
@@ -426,6 +439,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
   const synchronizeProfileTrace = useCallback(async (
     profile: OnboardingProfile,
+    resumeSeed: ProfileResumeSeed | null = null,
   ): Promise<boolean> => {
     if (profileSyncInFlightRef.current?.sessionId === profile.session_id) {
       return false;
@@ -441,7 +455,16 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       error_message: null,
     });
     try {
-      const response = await createExperienceSession(profile);
+      const resumeState: ExperienceResumeStateContract | null = resumeSeed
+        ? await buildProfileReselectionResumeState(
+            profile,
+            resumeSeed.journalEntries,
+            resumeSeed.assessmentClock,
+          )
+        : null;
+      const response = resumeState
+        ? await createExperienceSession(profile, resumeState)
+        : await createExperienceSession(profile);
       const trace = await readExperienceTrace(profile.session_id);
       if (
         !trace.events.some(
@@ -552,6 +575,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     if (session.responses.length === 0) return null;
     return scoreResponses(session.responses);
   }, [session.responses]);
+  const topValueCandidates = scores?.profile.top_values ?? [];
+  const requiresTopValueChoice = topValueCandidates.length > 2;
+  const topValueChoiceComplete =
+    !requiresTopValueChoice || session.selected_top_values.length === 2;
   const hasJournalEntryWork =
     session.experience.journal_entries.length > 0
     || session.experience.trace_events.some(
@@ -604,6 +631,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       responses: profile.bws_responses,
       draft_best: null,
       draft_worst: null,
+      selected_top_values:
+        profile.value_profile.top_values.length > 2
+          ? [...profile.top_values]
+          : [],
       confirmed_profile: profile,
     });
     updateExperience({
@@ -764,6 +795,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       set_index: isLastSet ? session.set_index : session.set_index + 1,
       draft_best: null,
       draft_worst: null,
+      selected_top_values: [],
       stage_started_at_ms: Date.now(),
     });
   };
@@ -775,6 +807,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   }, [isReviewing, session.set_index, session.draft_best, session.draft_worst]);
 
   const confirm = () => {
+    if (!topValueChoiceComplete) return;
     const completedAt = new Date().toISOString();
     const profile = createProfile({
       userId: session.user_id,
@@ -783,11 +816,38 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       startedAt: session.started_at,
       completedAt,
       responses: session.responses,
+      selectedTopValues: session.selected_top_values,
       userConfirmed: true,
     });
+    const resumeSeed: ProfileResumeSeed | null =
+      session.experience.journal_started &&
+      session.experience.trace_events.length === 0
+        ? {
+            journalEntries: session.experience.journal_entries,
+            assessmentClock: session.experience.assessment_clock,
+          }
+        : null;
     update({
       stage: "complete",
       confirmed_profile: profile,
+    });
+    if (resumeSeed) {
+      void synchronizeProfileTrace(profile, resumeSeed);
+    }
+  };
+
+  const toggleTopValue = (value: ValueKey) => {
+    if (!requiresTopValueChoice) return;
+    const selected = session.selected_top_values.includes(value);
+    const nextSelection = selected
+      ? session.selected_top_values.filter((candidate) => candidate !== value)
+      : session.selected_top_values.length < 2
+        ? [...session.selected_top_values, value]
+        : session.selected_top_values;
+    update({
+      selected_top_values: VALUE_ORDER.filter((candidate) =>
+        nextSelection.includes(candidate),
+      ),
     });
   };
 
@@ -1164,17 +1224,69 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               <h1 ref={headingRef} tabIndex={-1}>
                 What sits at the center.
               </h1>
-              <div className="core-values">
-                {scores.profile.top_values.map((value) => (
-                  <article key={value}>
-                    <span aria-hidden="true">✦</span>
-                    <p>{VALUES[value].phrase}</p>
-                  </article>
-                ))}
+              {requiresTopValueChoice ? (
+                <>
+                  <p className="summary-choice-question" id="core-value-choice-question">
+                    When you cannot fully honour all of these values at once,
+                    which two should guide you first?
+                  </p>
+                  <p
+                    className="summary-choice-status"
+                    id="core-value-choice-status"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {session.selected_top_values.length} of 2 selected
+                    {session.selected_top_values.length === 2
+                      ? " · Clear one to change your choice."
+                      : ""}
+                  </p>
+                </>
+              ) : null}
+              <div
+                className={`core-values${requiresTopValueChoice ? " core-values--choices" : ""}`}
+                role={requiresTopValueChoice ? "group" : undefined}
+                aria-labelledby={requiresTopValueChoice
+                  ? "core-value-choice-question"
+                  : undefined}
+                aria-describedby={requiresTopValueChoice
+                  ? "core-value-choice-status"
+                  : undefined}
+              >
+                {topValueCandidates.map((value) => {
+                  if (!requiresTopValueChoice) {
+                    return (
+                      <article key={value}>
+                        <span aria-hidden="true">✦</span>
+                        <p>{VALUES[value].phrase}</p>
+                      </article>
+                    );
+                  }
+                  const selected = session.selected_top_values.includes(value);
+                  const unavailable =
+                    !selected && session.selected_top_values.length === 2;
+                  return (
+                    <button
+                      key={value}
+                      className={`core-value-choice${selected ? " core-value-choice--selected" : ""}`}
+                      type="button"
+                      data-value={value}
+                      aria-pressed={selected}
+                      aria-disabled={unavailable || undefined}
+                      onClick={() => {
+                        if (!unavailable) toggleTopValue(value);
+                      }}
+                    >
+                      <span aria-hidden="true">{selected ? "✓" : "✦"}</span>
+                      <p>{VALUES[value].phrase}</p>
+                    </button>
+                  );
+                })}
               </div>
               <p className="summary-explainer">
-                This result reflects the Most and Least choices you made most
-                consistently across all 11 groups.
+                {requiresTopValueChoice
+                  ? "These values share the highest result from your Most and Least choices."
+                  : "This result reflects the Most and Least choices you made most consistently across all 11 groups."}
               </p>
               <p className="summary-purpose">
                 This is the direction you want Twinkl to remember. Your Journal
@@ -1184,7 +1296,13 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 className="actions actions--end"
                 id="experience-confirm"
               >
-                <button className="button button--primary" type="button" onClick={confirm}>
+                <button
+                  className="button button--primary"
+                  type="button"
+                  disabled={!topValueChoiceComplete}
+                  aria-describedby={requiresTopValueChoice ? "core-value-choice-status" : undefined}
+                  onClick={confirm}
+                >
                   Confirm my compass
                 </button>
               </div>
@@ -1303,7 +1421,18 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 profileTraceFailed && session.experience.retryable
                   ? () => {
                     if (session.confirmed_profile) {
-                      void synchronizeProfileTrace(session.confirmed_profile);
+                      const resumeSeed: ProfileResumeSeed | null =
+                        session.experience.journal_started &&
+                        session.experience.trace_events.length === 0
+                          ? {
+                              journalEntries: session.experience.journal_entries,
+                              assessmentClock: session.experience.assessment_clock,
+                            }
+                          : null;
+                      void synchronizeProfileTrace(
+                        session.confirmed_profile,
+                        resumeSeed,
+                      );
                     }
                   }
                   : undefined

@@ -136,7 +136,8 @@ screen position and selection where practical.
 Preserve the complete React onboarding flow:
 
 1. 11 randomized SVBWS groups with one Most and one Least choice;
-2. label-free Core Value confirmation; and
+2. label-free Core Value confirmation, with an exact two-value choice when
+   more than two values share the highest score; and
 3. first Journal Entry handoff.
 
 Do not add backend telemetry to the SVBWS card screens. Profile JSON, raw

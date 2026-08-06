@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { BWS_SETS, createProfile, type BwsResponse } from "./domain";
+import {
+  BWS_SETS,
+  VALUE_ORDER,
+  createProfile,
+  scoreResponses,
+  type BwsResponse,
+} from "./domain";
 import {
   clearChoice,
   createSession,
@@ -20,10 +26,34 @@ describe("onboarding session", () => {
       response_time_ms: 1_000,
     }));
 
+  const tiedSelectedPairs = [
+    ["achievement", "universalism_social"],
+    ["power", "benevolence"],
+    ["stimulation", "power"],
+    ["hedonism", "conformity"],
+    ["universalism_nature", "hedonism"],
+    ["self_direction", "achievement"],
+    ["tradition", "universalism_nature"],
+    ["conformity", "stimulation"],
+    ["security", "tradition"],
+    ["universalism_social", "self_direction"],
+    ["benevolence", "security"],
+  ] as const;
+
+  const tiedResponses = (): BwsResponse[] =>
+    BWS_SETS.map((set, index) => ({
+      set_number: set.setNumber,
+      items: [...set.items],
+      item_order_shown: [...set.items],
+      selected_best: tiedSelectedPairs[index][0],
+      selected_worst: tiedSelectedPairs[index][1],
+      response_time_ms: 1_000,
+    }));
+
   it("randomizes set order and every prescribed card order once, then round-trips", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
-    expect(session.schema_version).toBe(8);
+    expect(session.schema_version).toBe(9);
     expect(session.stage).toBe("name");
     expect(session.preferred_name).toBe("");
     expect(session.experience).toMatchObject({
@@ -70,7 +100,7 @@ describe("onboarding session", () => {
     delete legacy.preferred_name;
     delete legacy.experience;
     const migrated = parseSession(JSON.stringify(legacy));
-    expect(migrated?.schema_version).toBe(8);
+    expect(migrated?.schema_version).toBe(9);
     expect(migrated?.preferred_name).toBe("Friend");
     expect(migrated?.experience.active_view).toBe("experience");
     expect(migrated?.responses).toEqual(legacy.responses);
@@ -87,7 +117,7 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(8);
+    expect(migrated?.schema_version).toBe(9);
     expect(migrated?.experience.journal_draft).toBe("A draft worth keeping.");
     expect(migrated?.experience.trace_event_ids).toEqual([]);
     expect(migrated?.experience.trace_events).toEqual([]);
@@ -105,6 +135,7 @@ describe("onboarding session", () => {
       startedAt: legacy.started_at,
       completedAt: "2026-07-19T00:02:00.000Z",
       responses,
+      selectedTopValues: scoreResponses(responses, true).profile.top_values.slice(0, 2),
       userConfirmed: true,
     });
     legacy.schema_version = 6;
@@ -121,9 +152,121 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(8);
-    expect(migrated?.confirmed_profile?.schema_version).toBe(3);
+    expect(migrated?.schema_version).toBe(9);
+    expect(migrated?.confirmed_profile?.schema_version).toBe(4);
     expect(migrated?.confirmed_profile).not.toHaveProperty("goal_category");
+  });
+
+  it("migrates a version 3 Profile with at most two Core Values", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.preferred_name = "Casey";
+    const responses = completeResponses();
+    const profile = createProfile({
+      userId: legacy.user_id,
+      preferredName: legacy.preferred_name,
+      sessionId: legacy.session_id,
+      startedAt: legacy.started_at,
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses,
+      userConfirmed: true,
+    });
+    legacy.schema_version = 8;
+    legacy.stage = "complete";
+    legacy.set_index = 10;
+    legacy.responses = responses;
+    legacy.confirmed_profile = {
+      ...profile,
+      schema_version: 3,
+      onboarding_version: "2.2.0",
+    };
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.confirmed_profile).toMatchObject({
+      schema_version: 4,
+      onboarding_version: "2.3.0",
+      top_values: profile.top_values,
+    });
+  });
+
+  it("preserves raw Experience data when a legacy tie requires reselection", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.preferred_name = "Casey";
+    const responses = tiedResponses();
+    const profile = createProfile({
+      userId: legacy.user_id,
+      preferredName: legacy.preferred_name,
+      sessionId: legacy.session_id,
+      startedAt: legacy.started_at,
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses,
+      selectedTopValues: VALUE_ORDER.slice(0, 2),
+      userConfirmed: true,
+    });
+    legacy.schema_version = 8;
+    legacy.stage = "complete";
+    legacy.set_index = 10;
+    legacy.responses = responses;
+    legacy.confirmed_profile = {
+      ...profile,
+      schema_version: 3,
+      onboarding_version: "2.2.0",
+      top_values: [...VALUE_ORDER],
+    };
+    legacy.experience = {
+      ...legacy.experience,
+      journal_started: true,
+      journal_draft: "A draft worth preserving.",
+      revision: 4,
+      journal_entries: [{
+        journal_entry_id: "entry-1",
+        t_index: 0,
+        date: "2026-07-20",
+        content: "A saved Journal Entry.",
+        nudge_response: null,
+      }],
+      nudges: [{ nudge_id: "old-nudge" }],
+      weekly_reviewer_decisions: [{ verdict: "conflict" }],
+      drift_result: { state: "active_drift" },
+      weekly_digest: { text: "Old digest" },
+      weekly_coach: { text: "Old Coach Digest" },
+      assessment_clock: {
+        mode: "simulated_assessment",
+        current_date: "2026-07-21",
+        timezone: "Asia/Singapore",
+      },
+      run_state: "complete",
+      trace_event_ids: ["old-event"],
+      trace_events: [{ event_id: "old-event" }],
+      selected_event_id: "old-event",
+    };
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated).toMatchObject({
+      schema_version: 9,
+      session_id: `${legacy.session_id}:core-values-v2`,
+      stage: "summary",
+      selected_top_values: [],
+      confirmed_profile: null,
+    });
+    expect(migrated?.responses).toEqual(responses);
+    expect(migrated?.experience).toMatchObject({
+      journal_started: true,
+      journal_draft: "A draft worth preserving.",
+      revision: 1,
+      journal_entries: legacy.experience.journal_entries,
+      nudges: [],
+      weekly_reviewer_decisions: [],
+      drift_result: null,
+      weekly_digest: null,
+      weekly_coach: null,
+      assessment_clock: legacy.experience.assessment_clock,
+      run_state: "idle",
+      trace_event_ids: [],
+      trace_events: [],
+      selected_event_id: null,
+    });
   });
 
   it("migrates version 7 sessions without an assessment clock", () => {
@@ -133,7 +276,7 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(8);
+    expect(migrated?.schema_version).toBe(9);
     expect(migrated?.experience.assessment_clock).toBeNull();
   });
 
@@ -152,6 +295,7 @@ describe("onboarding session", () => {
       startedAt: legacy.started_at,
       completedAt: "2026-07-19T00:02:00.000Z",
       responses,
+      selectedTopValues: scoreResponses(responses, true).profile.top_values.slice(0, 2),
       userConfirmed: true,
     });
     delete legacy.preferred_name;

@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { canonicalInspectFixture } from "./inspectFixture";
 import {
   advanceAssessmentTime,
+  buildProfileReselectionResumeState,
   createExperienceSession,
   ExperienceApiError,
   readExperienceTrace,
@@ -30,6 +31,37 @@ afterEach(() => {
 });
 
 describe("Experience API client", () => {
+  it("rebuilds a factual resume state after Core Value reselection", async () => {
+    const resumeState = await buildProfileReselectionResumeState(
+      profile,
+      [entry],
+      canonicalInspectFixture.session.assessment_clock,
+    );
+
+    expect(resumeState).toMatchObject({
+      session_id: profile.session_id,
+      revision: 1,
+      journal_entries: [entry],
+      nudges: [],
+      assessment_clock: canonicalInspectFixture.session.assessment_clock,
+    });
+    expect(resumeState.trace_events).toHaveLength(2);
+    expect(resumeState.trace_events[0]).toMatchObject({
+      event_type: "profile_confirmed",
+      parent_event_id: null,
+      details: { profile },
+    });
+    expect(resumeState.trace_events[1]).toMatchObject({
+      event_type: "journal_entry_submitted",
+      parent_event_id: resumeState.trace_events[0].event_id,
+      details: { journal_entry: entry, ordering_valid: true },
+    });
+    expect(
+      resumeState.trace_events.every((event) =>
+        /^[0-9a-f]{64}$/.test(event.input_hash)),
+    ).toBe(true);
+  });
+
   it("sends browser-held state when creating a resumable session", async () => {
     fetchMock.mockResolvedValueOnce(
       jsonResponse({

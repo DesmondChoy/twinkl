@@ -1,9 +1,12 @@
 import {
   BWS_SETS,
+  VALUE_ORDER,
   type BwsObjectKey,
   type BwsResponse,
   type OnboardingProfile,
+  type ValueKey,
   isBwsObjectKey,
+  isValueKey,
   normalizePreferredName,
   scoreResponses,
   validateProfile,
@@ -16,11 +19,14 @@ import type {
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 
-export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v8";
-export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v7";
-export const OLDER_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
-export const OLDEST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
-export const FIRST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
+export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v9";
+export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v8";
+export const OLDER_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v7";
+export const OLDEST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
+export const FIRST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
+export const EARLIEST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
+
+const PROFILE_RESELECTION_SESSION_SUFFIX = "core-values-v2";
 
 export type DemoView = "experience" | "inspect";
 export type DemoRunState =
@@ -72,7 +78,7 @@ export interface ExperienceState {
 export type OnboardingStage = "name" | "set" | "summary" | "complete";
 
 export interface OnboardingSession {
-  schema_version: 8;
+  schema_version: 9;
   user_id: string;
   preferred_name: string;
   session_id: string;
@@ -85,6 +91,7 @@ export interface OnboardingSession {
   responses: BwsResponse[];
   draft_best: BwsObjectKey | null;
   draft_worst: BwsObjectKey | null;
+  selected_top_values: ValueKey[];
   confirmed_profile: OnboardingProfile | null;
   experience: ExperienceState;
 }
@@ -116,6 +123,25 @@ export function createExperienceState(): ExperienceState {
   };
 }
 
+function preserveExperienceForProfileReselection(
+  experience: ExperienceState,
+): ExperienceState {
+  const pendingDraft = experience.pending_submission?.entry.content ?? "";
+  const journalDraft = experience.journal_draft || pendingDraft;
+  const journalEntries = experience.journal_entries;
+  return {
+    ...createExperienceState(),
+    journal_started:
+      experience.journal_started ||
+      journalEntries.length > 0 ||
+      journalDraft.length > 0,
+    journal_draft: journalDraft,
+    revision: journalEntries.length,
+    journal_entries: journalEntries,
+    assessment_clock: experience.assessment_clock,
+  };
+}
+
 function shuffled<T>(items: readonly T[], random: () => number): T[] {
   const result = [...items];
   for (let index = result.length - 1; index > 0; index -= 1) {
@@ -131,7 +157,7 @@ export function createSession(
   makeId: () => string = () => crypto.randomUUID(),
 ): OnboardingSession {
   return {
-    schema_version: 8,
+    schema_version: 9,
     user_id: makeId(),
     preferred_name: "",
     session_id: makeId(),
@@ -144,6 +170,7 @@ export function createSession(
     responses: [],
     draft_best: null,
     draft_worst: null,
+    selected_top_values: [],
     confirmed_profile: null,
     experience: createExperienceState(),
   };
@@ -261,10 +288,11 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       schema_version?: number;
       stage?: OnboardingStage | "goal";
       goal_category?: unknown;
+      selected_top_values?: unknown;
       confirmed_profile?: unknown;
     };
     let session = parsed;
-    if ([4, 5, 6, 7].includes(parsed.schema_version ?? -1)) {
+    if ([4, 5, 6, 7, 8].includes(parsed.schema_version ?? -1)) {
       const { goal_category: _goalCategory, ...withoutGoal } = parsed;
       let experience = parsed.experience;
       if (parsed.schema_version === 4) {
@@ -282,40 +310,73 @@ export function parseSession(raw: string | null): OnboardingSession | null {
           trace_event_ids: [],
           trace_events: [],
         };
-      } else {
+      } else if (parsed.schema_version === 6 || parsed.schema_version === 7) {
         experience = {
           ...createExperienceState(),
           ...(isSessionRecord(parsed.experience) ? parsed.experience : {}),
           assessment_clock: null,
         };
+      } else {
+        experience = {
+          ...createExperienceState(),
+          ...(isSessionRecord(parsed.experience) ? parsed.experience : {}),
+        };
       }
       let confirmedProfile = parsed.confirmed_profile;
-      if (
-        isSessionRecord(confirmedProfile) &&
-        confirmedProfile.schema_version === 2 &&
-        confirmedProfile.onboarding_version === "2.1.0"
-      ) {
+      let profileReselectionRequired = false;
+      if (isSessionRecord(confirmedProfile) && [2, 3].includes(
+        Number(confirmedProfile.schema_version),
+      )) {
+        const supportedLegacyProfile =
+          (confirmedProfile.schema_version === 2 &&
+            confirmedProfile.onboarding_version === "2.1.0") ||
+          (confirmedProfile.schema_version === 3 &&
+            confirmedProfile.onboarding_version === "2.2.0");
+        if (!supportedLegacyProfile) return null;
         const { goal_category: _legacyGoal, ...profileWithoutGoal } = confirmedProfile;
-        confirmedProfile = {
-          ...profileWithoutGoal,
-          schema_version: 3,
-          onboarding_version: "2.2.0",
-        };
+        if (
+          !Array.isArray(profileWithoutGoal.top_values) ||
+          profileWithoutGoal.top_values.length === 0
+        ) {
+          return null;
+        }
+        if (profileWithoutGoal.top_values.length > 2) {
+          confirmedProfile = null;
+          profileReselectionRequired = true;
+        } else {
+          confirmedProfile = {
+            ...profileWithoutGoal,
+            schema_version: 4,
+            onboarding_version: "2.3.0",
+          };
+        }
+      }
+      if (profileReselectionRequired) {
+        if (!isExperienceState(experience)) return null;
+        experience = preserveExperienceForProfileReselection(experience);
       }
       session = {
         ...withoutGoal,
-        schema_version: 8,
+        schema_version: 9,
+        session_id:
+          profileReselectionRequired && typeof parsed.session_id === "string"
+            ? `${parsed.session_id}:${PROFILE_RESELECTION_SESSION_SUFFIX}`
+            : parsed.session_id,
         preferred_name:
           typeof parsed.preferred_name === "string"
             ? parsed.preferred_name
             : "Friend",
-        stage: parsed.stage === "goal" ? "summary" : parsed.stage,
+        stage:
+          profileReselectionRequired || parsed.stage === "goal"
+            ? "summary"
+            : parsed.stage,
+        selected_top_values: [],
         confirmed_profile: confirmedProfile,
         experience,
       };
     }
     if (
-      session.schema_version !== 8 ||
+      session.schema_version !== 9 ||
       typeof session.user_id !== "string" ||
       typeof session.preferred_name !== "string" ||
       typeof session.session_id !== "string" ||
@@ -330,6 +391,13 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       !Array.isArray(session.responses) ||
       !(session.draft_best === null || isBwsObjectKey(session.draft_best)) ||
       !(session.draft_worst === null || isBwsObjectKey(session.draft_worst)) ||
+      !Array.isArray(session.selected_top_values) ||
+      session.selected_top_values.length > 2 ||
+      session.selected_top_values.some((value) => !isValueKey(value)) ||
+      new Set(session.selected_top_values).size !== session.selected_top_values.length ||
+      JSON.stringify(session.selected_top_values) !== JSON.stringify(
+        VALUE_ORDER.filter((value) => session.selected_top_values?.includes(value)),
+      ) ||
       !(
         session.confirmed_profile === null ||
         (typeof session.confirmed_profile === "object" && session.confirmed_profile !== undefined)
@@ -354,8 +422,29 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     ) {
       return null;
     }
-    if (session.responses.length > 0) {
-      scoreResponses(session.responses);
+    const scores = session.responses.length > 0
+      ? scoreResponses(session.responses)
+      : null;
+    if (
+      scores &&
+      session.selected_top_values.some(
+        (value) => !scores.profile.top_values.includes(value),
+      )
+    ) {
+      return null;
+    }
+    if (
+      (session.stage === "name" || session.stage === "set") &&
+      session.selected_top_values.length > 0
+    ) {
+      return null;
+    }
+    if (
+      scores &&
+      scores.profile.top_values.length <= 2 &&
+      session.selected_top_values.length > 0
+    ) {
+      return null;
     }
     if (session.stage === "name" && (session.responses.length !== 0 || setIndex !== 0)) {
       return null;
@@ -387,6 +476,13 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     if (session.stage === "complete") {
       const profile = validateProfile(session.confirmed_profile);
       if (
+        scores &&
+        scores.profile.top_values.length > 2 &&
+        JSON.stringify(session.selected_top_values) !== JSON.stringify(profile.top_values)
+      ) {
+        return null;
+      }
+      if (
         profile.preferred_name !== undefined &&
         profile.preferred_name !== session.preferred_name
       ) {
@@ -412,6 +508,7 @@ export function loadOrCreateSession(): OnboardingSession {
     parseSession(localStorage.getItem(OLDER_SESSION_STORAGE_KEY)) ??
     parseSession(localStorage.getItem(OLDEST_SESSION_STORAGE_KEY)) ??
     parseSession(localStorage.getItem(FIRST_SESSION_STORAGE_KEY)) ??
+    parseSession(localStorage.getItem(EARLIEST_SESSION_STORAGE_KEY)) ??
     createSession()
   );
 }
@@ -423,6 +520,7 @@ export function persistSession(session: OnboardingSession): boolean {
     localStorage.removeItem(OLDER_SESSION_STORAGE_KEY);
     localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
     localStorage.removeItem(FIRST_SESSION_STORAGE_KEY);
+    localStorage.removeItem(EARLIEST_SESSION_STORAGE_KEY);
     return true;
   } catch {
     return false;
@@ -436,6 +534,7 @@ export function clearSession(): boolean {
     localStorage.removeItem(OLDER_SESSION_STORAGE_KEY);
     localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
     localStorage.removeItem(FIRST_SESSION_STORAGE_KEY);
+    localStorage.removeItem(EARLIEST_SESSION_STORAGE_KEY);
     return true;
   } catch {
     return false;

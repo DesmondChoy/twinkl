@@ -82,10 +82,10 @@ def load_onboarding_coach_context(
     if not isinstance(payload, dict):
         raise ValueError("Onboarding Profile must be a JSON object")
     version = (payload.get("schema_version"), payload.get("onboarding_version"))
-    if version not in {(2, "2.1.0"), (3, "2.2.0")}:
+    if version not in {(2, "2.1.0"), (3, "2.2.0"), (4, "2.3.0")}:
         raise ValueError(
             "Onboarding Profile schema_version/onboarding_version must be "
-            "3/2.2.0 or legacy 2/2.1.0"
+            "4/2.3.0 or a supported legacy version"
         )
     if payload.get("user_confirmed") is not True:
         raise ValueError("Onboarding Profile must be confirmed")
@@ -99,6 +99,13 @@ def load_onboarding_coach_context(
         raise ValueError("Onboarding Profile top_values must contain strings")
     if len(set(top_values)) != len(top_values):
         raise ValueError("Onboarding Profile top_values must not contain duplicates")
+    if len(top_values) > 2:
+        if version in {(2, "2.1.0"), (3, "2.2.0")}:
+            raise ValueError(
+                "Legacy Onboarding Profile must contain at most two Core Values; "
+                "the user must select two in onboarding"
+            )
+        raise ValueError("Onboarding Profile must contain at most two Core Values")
     invalid_values = [
         value for value in top_values if value not in SCHWARTZ_VALUE_ORDER
     ]
@@ -116,9 +123,40 @@ def load_onboarding_coach_context(
     value_profile = payload.get("value_profile")
     if not isinstance(value_profile, dict):
         raise ValueError("Onboarding Profile value_profile must be an object")
-    if value_profile.get("top_values") != top_values:
+    candidates = value_profile.get("top_values")
+    if (
+        not isinstance(candidates, list)
+        or not candidates
+        or any(not isinstance(value, str) for value in candidates)
+        or len(set(candidates)) != len(candidates)
+        or any(value not in SCHWARTZ_VALUE_ORDER for value in candidates)
+    ):
         raise ValueError(
-            "Onboarding Profile top_values must match value_profile.top_values"
+            "Onboarding Profile value_profile.top_values must contain valid candidates"
+        )
+    canonical_candidates = [
+        value for value in SCHWARTZ_VALUE_ORDER if value in candidates
+    ]
+    if candidates != canonical_candidates:
+        raise ValueError(
+            "Onboarding Profile value_profile.top_values must use canonical ordering"
+        )
+    if version == (4, "2.3.0"):
+        if len(candidates) <= 2 and top_values != candidates:
+            raise ValueError(
+                "Onboarding Profile top_values must match the highest-score candidates"
+            )
+        if len(candidates) > 2 and (
+            len(top_values) != 2
+            or any(value not in candidates for value in top_values)
+        ):
+            raise ValueError(
+                "Onboarding Profile top_values must contain two "
+                "highest-score candidates"
+            )
+    elif candidates != top_values:
+        raise ValueError(
+            "Legacy Onboarding Profile top_values must match value_profile.top_values"
         )
 
     preferred_name = payload.get("preferred_name")

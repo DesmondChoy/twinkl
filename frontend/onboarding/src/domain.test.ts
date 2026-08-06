@@ -134,14 +134,23 @@ describe("versioned Profile", () => {
     expect(() => createProfile({ ...input, userConfirmed: false })).toThrow(
       "before confirmation",
     );
-    const profile = createProfile({ ...input, userConfirmed: true });
-    expect(profile.schema_version).toBe(3);
-    expect(profile.onboarding_version).toBe("2.2.0");
+    expect(() => createProfile({ ...input, userConfirmed: true })).toThrow(
+      "exactly two",
+    );
+    const profile = createProfile({
+      ...input,
+      selectedTopValues: VALUE_ORDER.slice(0, 2),
+      userConfirmed: true,
+    });
+    expect(profile.schema_version).toBe(4);
+    expect(profile.onboarding_version).toBe("2.3.0");
     expect(profile.instrument).toBe(
       "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
     );
     expect(profile.bws_results.scores).toHaveProperty("universalism_nature");
     expect(profile.value_profile.scores).toHaveProperty("universalism");
+    expect(profile.value_profile.top_values).toEqual(VALUE_ORDER);
+    expect(profile.top_values).toEqual(VALUE_ORDER.slice(0, 2));
     expect(profile).not.toHaveProperty("confidence");
     expect(validateProfile(JSON.parse(JSON.stringify(profile)))).toEqual(profile);
   });
@@ -154,6 +163,7 @@ describe("versioned Profile", () => {
       startedAt: "2026-07-19T00:00:00.000Z",
       completedAt: "2026-07-19T00:02:00.000Z",
       responses: completeResponses(),
+      selectedTopValues: VALUE_ORDER.slice(0, 2),
       userConfirmed: true,
     });
     profile.provenance = {
@@ -181,6 +191,7 @@ describe("versioned Profile", () => {
       startedAt: "2026-07-19T00:00:00.000Z",
       completedAt: "2026-07-19T00:02:00.000Z",
       responses: completeResponses(),
+      selectedTopValues: VALUE_ORDER.slice(0, 2),
       userConfirmed: true,
     });
     const savedProfile = structuredClone(profile) as unknown as Record<

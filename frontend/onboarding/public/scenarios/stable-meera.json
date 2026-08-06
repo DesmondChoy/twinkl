@@ -5,8 +5,8 @@
     "session_id": "scenario-session:stable-meera",
     "revision": 3,
     "profile": {
-      "schema_version": 3,
-      "onboarding_version": "2.2.0",
+      "schema_version": 4,
+      "onboarding_version": "2.3.0",
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "23d101f8",
@@ -673,8 +673,8 @@
     "source": "saved_replay",
     "persona_id": "23d101f8",
     "profile": {
-      "schema_version": 3,
-      "onboarding_version": "2.2.0",
+      "schema_version": 4,
+      "onboarding_version": "2.3.0",
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "23d101f8",
@@ -1903,8 +1903,8 @@
         "session_id": "scenario-session:stable-meera",
         "revision": 3,
         "profile": {
-          "schema_version": 3,
-          "onboarding_version": "2.2.0",
+          "schema_version": 4,
+          "onboarding_version": "2.3.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",
@@ -2571,8 +2571,8 @@
         "source": "saved_replay",
         "persona_id": "23d101f8",
         "profile": {
-          "schema_version": 3,
-          "onboarding_version": "2.2.0",
+          "schema_version": 4,
+          "onboarding_version": "2.3.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",
@@ -3829,12 +3829,12 @@
           "id": "23d101f8"
         }
       ],
-      "input_hash": "4f046f43f04a5386d0de577e7c49a1636196f461b06435cad4411f3b6ddb0471",
+      "input_hash": "658b2a956b40d97a2651afe34c98db135367b6e221719a0554c51c710bb35d02",
       "error": null,
       "details": {
         "profile": {
-          "schema_version": 3,
-          "onboarding_version": "2.2.0",
+          "schema_version": 4,
+          "onboarding_version": "2.3.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",

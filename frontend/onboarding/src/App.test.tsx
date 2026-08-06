@@ -1,7 +1,13 @@
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App, { AppErrorBoundary } from "./App";
+import {
+  BWS_SETS,
+  VALUE_ORDER,
+  createProfile,
+  type BwsResponse,
+} from "./domain";
 import type {
   JournalEntrySubmittedResponseContract,
   SessionCreatedResponseContract,
@@ -15,7 +21,11 @@ import {
   submitJournalEntry,
 } from "./experienceApi";
 import { canonicalInspectFixture } from "./inspectFixture";
-import { SESSION_STORAGE_KEY } from "./session";
+import {
+  LEGACY_SESSION_STORAGE_KEY,
+  SESSION_STORAGE_KEY,
+  createSession,
+} from "./session";
 
 vi.mock("./experienceApi", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./experienceApi")>();
@@ -30,6 +40,30 @@ vi.mock("./experienceApi", async (importOriginal) => {
 vi.stubGlobal("confirm", () => true);
 
 const profileEvents = new Map<string, TraceEventContract>();
+const tiedSelectedPairs = [
+  ["achievement", "universalism_social"],
+  ["power", "benevolence"],
+  ["stimulation", "power"],
+  ["hedonism", "conformity"],
+  ["universalism_nature", "hedonism"],
+  ["self_direction", "achievement"],
+  ["tradition", "universalism_nature"],
+  ["conformity", "stimulation"],
+  ["security", "tradition"],
+  ["universalism_social", "self_direction"],
+  ["benevolence", "security"],
+] as const;
+
+function tiedResponses(): BwsResponse[] {
+  return BWS_SETS.map((set, index) => ({
+    set_number: set.setNumber,
+    items: [...set.items],
+    item_order_shown: [...set.items],
+    selected_best: tiedSelectedPairs[index][0],
+    selected_worst: tiedSelectedPairs[index][1],
+    response_time_ms: 1_000,
+  }));
+}
 
 function answerSet() {
   const first = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
@@ -37,6 +71,13 @@ function answerSet() {
   const second = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
   fireEvent.click(second);
   act(() => vi.advanceTimersByTime(1_000));
+}
+
+function chooseTwoCoreValuesIfNeeded() {
+  const choices = Array.from(
+    document.querySelectorAll<HTMLButtonElement>(".core-value-choice"),
+  );
+  choices.slice(0, 2).forEach((choice) => fireEvent.click(choice));
 }
 
 function enterPreferredName(name = "Casey") {
@@ -358,6 +399,119 @@ describe("onboarding app", () => {
     expect(new Set(accents).size).toBe(1);
   });
 
+  it("requires two user choices when more than two values share the highest score", () => {
+    const session = createSession(
+      () => 0.5,
+      new Date("2026-08-06T00:00:00.000Z"),
+      () => "tie-session",
+    );
+    session.preferred_name = "Casey";
+    session.stage = "summary";
+    session.set_index = 10;
+    session.responses = tiedResponses();
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+
+    render(<App />);
+
+    const confirm = screen.getByRole("button", { name: "Confirm my compass" });
+    const choices = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".core-value-choice"),
+    );
+    expect(choices).toHaveLength(VALUE_ORDER.length);
+    expect(
+      screen.getByRole("group", {
+        name: "When you cannot fully honour all of these values at once, which two should guide you first?",
+      }),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "These values share the highest result from your Most and Least choices.",
+      ),
+    ).toBeTruthy();
+    expect(screen.getByRole("status").textContent).toContain("0 of 2 selected");
+    expect((confirm as HTMLButtonElement).disabled).toBe(true);
+
+    fireEvent.click(choices[0]);
+    fireEvent.click(choices[1]);
+
+    expect(screen.getByRole("status").textContent).toContain("2 of 2 selected");
+    expect((confirm as HTMLButtonElement).disabled).toBe(false);
+    expect(choices[2].disabled).toBe(false);
+    expect(choices[2].getAttribute("aria-disabled")).toBe("true");
+    choices[2].focus();
+    expect(document.activeElement).toBe(choices[2]);
+    fireEvent.click(choices[2]);
+    expect(screen.getByRole("status").textContent).toContain("2 of 2 selected");
+    fireEvent.click(confirm);
+
+    const stored = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)!);
+    expect(stored.confirmed_profile.top_values).toEqual(VALUE_ORDER.slice(0, 2));
+    expect(stored.confirmed_profile.value_profile.top_values).toEqual(VALUE_ORDER);
+  });
+
+  it("resumes preserved Journal Entries after legacy Core Value reselection", async () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(
+      () => 0.5,
+      new Date("2026-08-06T00:00:00.000Z"),
+      () => "legacy-tie-session",
+    )));
+    legacy.schema_version = 8;
+    legacy.preferred_name = "Casey";
+    legacy.stage = "complete";
+    legacy.set_index = 10;
+    legacy.responses = tiedResponses();
+    const profile = createProfile({
+      userId: legacy.user_id,
+      preferredName: legacy.preferred_name,
+      sessionId: legacy.session_id,
+      startedAt: legacy.started_at,
+      completedAt: "2026-08-06T00:05:00.000Z",
+      responses: legacy.responses,
+      selectedTopValues: VALUE_ORDER.slice(0, 2),
+      userConfirmed: true,
+    });
+    legacy.confirmed_profile = {
+      ...profile,
+      schema_version: 3,
+      onboarding_version: "2.2.0",
+      top_values: [...VALUE_ORDER],
+    };
+    legacy.experience.journal_started = true;
+    legacy.experience.revision = 1;
+    legacy.experience.journal_entries = [{
+      journal_entry_id: "legacy-entry",
+      t_index: 0,
+      date: "2026-08-05",
+      content: "A Journal Entry that must survive migration.",
+      nudge_response: null,
+    }];
+    localStorage.setItem(
+      LEGACY_SESSION_STORAGE_KEY,
+      JSON.stringify(legacy),
+    );
+
+    render(<App />);
+    const choices = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".core-value-choice"),
+    );
+    fireEvent.click(choices[0]);
+    fireEvent.click(choices[1]);
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+
+    await waitFor(() => expect(createExperienceSession).toHaveBeenCalled());
+    const [migratedProfile, resumeState] = vi.mocked(createExperienceSession)
+      .mock.calls.at(-1)!;
+    expect(migratedProfile.session_id).toBe(
+      `${legacy.session_id}:core-values-v2`,
+    );
+    expect(resumeState).toMatchObject({
+      session_id: migratedProfile.session_id,
+      revision: 1,
+      journal_entries: legacy.experience.journal_entries,
+      nudges: [],
+    });
+  });
+
   it("completes the phase-aware flow and hands the Profile to the first Journal Entry", async () => {
     vi.useFakeTimers();
     const onStartJournal = vi.fn();
@@ -426,6 +580,7 @@ describe("onboarding app", () => {
     expect(screen.getByText(/Confirm the result in Experience/)).toBeTruthy();
     expect(screen.queryByText("Profile confirmed")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Return to Experience" }));
+    chooseTwoCoreValuesIfNeeded();
     fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     expect(
       screen.getByRole("heading", {
@@ -646,6 +801,7 @@ describe("onboarding app", () => {
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }
+    chooseTwoCoreValuesIfNeeded();
     fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     await act(async () => undefined);
     fireEvent.click(
@@ -707,6 +863,7 @@ describe("onboarding app", () => {
       answerSet();
     }
 
+    chooseTwoCoreValuesIfNeeded();
     fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     await act(async () => undefined);
     expect(
@@ -741,6 +898,7 @@ describe("onboarding app", () => {
       answerSet();
     }
 
+    chooseTwoCoreValuesIfNeeded();
     fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     await act(async () => undefined);
     fireEvent.click(
@@ -765,6 +923,7 @@ describe("onboarding app", () => {
       answerSet();
     }
 
+    chooseTwoCoreValuesIfNeeded();
     fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     await act(async () => undefined);
     expect(createExperienceSession).toHaveBeenCalledTimes(1);
