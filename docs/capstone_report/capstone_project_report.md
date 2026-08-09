@@ -259,6 +259,7 @@
 - Development-study token cost and latency measurements
 - No public-demo, per-user, or production cost benchmark
 - Conditions for a future cheaper model
+- Interactive synthesis in the [VIF Critic to Weekly Drift Detection Research Path](vif-to-weekly-drift-research-path.html)
 - Final boundary in the [VIF Capstone Decision](../vif/05_capstone_scope_decision.md)
 
 ## 5. Evaluation and Results

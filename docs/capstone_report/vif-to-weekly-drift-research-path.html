@@ -1,0 +1,1706 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Twinkl Research Path</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Twinkl Research Path" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Twinkl Research Path&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: var(--border-radius-lg, 12.5px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed=&quot;true&quot;],
+    [aria-selected=&quot;true&quot;],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: 16px !important;
+  height: 16px !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;twinkl-research-path&quot;&gt;
+  &lt;style&gt;
+    #twinkl-research-path {
+      width: 100%;
+      color: var(--foreground);
+      font-family: inherit;
+      line-height: 1.35;
+    }
+    #twinkl-research-path * { box-sizing: border-box; }
+    #twinkl-research-path .figure-title {
+      margin: 0;
+      font-size: clamp(20px, 3vw, 29px);
+      font-weight: 720;
+      letter-spacing: -0.025em;
+    }
+    #twinkl-research-path .figure-subtitle {
+      margin: 6px 0 24px;
+      max-width: 880px;
+      color: var(--muted-foreground);
+      font-size: 14px;
+    }
+    #twinkl-research-path .panel { margin: 0; }
+    #twinkl-research-path .panel-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 0 0 5px;
+    }
+    #twinkl-research-path .panel-kicker {
+      color: var(--muted-foreground);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    #twinkl-research-path .panel-title {
+      margin: 2px 0 0;
+      font-size: 17px;
+      font-weight: 690;
+    }
+    #twinkl-research-path .panel-subtitle {
+      margin: 3px 0 0;
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+    #twinkl-research-path .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 2px 10px;
+      max-width: 52%;
+    }
+    #twinkl-research-path .legend button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 24px;
+      padding: 0;
+      border: 0;
+      color: var(--foreground);
+      background: transparent;
+      font: inherit;
+      font-size: 11px;
+      cursor: pointer;
+      opacity: 1;
+    }
+    #twinkl-research-path .legend button[aria-pressed=&quot;false&quot;] { opacity: 0.42; }
+    #twinkl-research-path .swatch {
+      width: 13px;
+      height: 3px;
+      background: var(--swatch);
+    }
+    #twinkl-research-path .swatch.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    #twinkl-research-path .chart-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 340px;
+    }
+    #twinkl-research-path svg {
+      display: block;
+      width: 100%;
+      height: 340px;
+      overflow: visible;
+      font-family: inherit;
+    }
+    #twinkl-research-path svg text {
+      fill: var(--foreground);
+      font-size: 12px;
+    }
+    #twinkl-research-path .tick text { opacity: 0.72; }
+    #twinkl-research-path .tick line,
+    #twinkl-research-path .domain { stroke: var(--border); }
+    #twinkl-research-path .grid line {
+      stroke: var(--border);
+      stroke-opacity: 0.48;
+    }
+    #twinkl-research-path .axis-title { font-weight: 600; }
+    #twinkl-research-path .phase-label {
+      font-size: 11px;
+      font-weight: 650;
+      opacity: 0.64;
+    }
+    #twinkl-research-path .annotation {
+      font-size: 11px;
+      font-weight: 620;
+    }
+    #twinkl-research-path .annotation-line {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 1;
+    }
+    #twinkl-research-path .panel-caption {
+      margin: 2px 0 0 68px;
+      color: var(--muted-foreground);
+      font-size: 11px;
+    }
+    #twinkl-research-path .bridge-story {
+      display: grid;
+      grid-template-columns: 1fr auto 1.15fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+      margin: 26px 0 28px;
+      padding: 13px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      color: var(--muted-foreground);
+      font-size: 12px;
+    }
+    #twinkl-research-path .bridge-story strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--foreground);
+      font-size: 12px;
+    }
+    #twinkl-research-path .bridge-arrow {
+      color: var(--viz-series-3);
+      font-size: 20px;
+    }
+    #twinkl-research-path .figure-note {
+      margin: 17px 0 0;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      color: var(--muted-foreground);
+      font-size: 11px;
+    }
+    #twinkl-research-path .tooltip {
+      position: absolute;
+      z-index: 20;
+      width: max-content;
+      max-width: min(280px, calc(100% - 18px));
+      padding: 9px 10px;
+      border: 1px solid var(--border);
+      color: var(--popover-foreground);
+      background: var(--popover);
+      box-shadow: 0 8px 24px color-mix(in srgb, var(--foreground) 14%, transparent);
+      font-size: 11px;
+      line-height: 1.45;
+      pointer-events: none;
+      opacity: 0;
+    }
+    #twinkl-research-path .tooltip strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 12px;
+    }
+    #twinkl-research-path .tooltip-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    #twinkl-research-path .tooltip-row span:first-child { color: var(--muted-foreground); }
+    #twinkl-research-path .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    @media (max-width: 620px) {
+      #twinkl-research-path .panel-heading { display: block; }
+      #twinkl-research-path .legend {
+        justify-content: flex-start;
+        max-width: none;
+        margin-top: 6px;
+      }
+      #twinkl-research-path .panel-caption { margin-left: 58px; }
+      #twinkl-research-path .bridge-story {
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+      #twinkl-research-path .bridge-arrow {
+        transform: rotate(90deg);
+        width: 20px;
+        line-height: 1;
+      }
+    }
+  &lt;/style&gt;
+
+  &lt;h2 class=&quot;figure-title&quot;&gt;From local Conflict screening to Weekly Drift Detection&lt;/h2&gt;
+  &lt;p class=&quot;figure-subtitle&quot;&gt;The research question changed from “Can an MLP recover Conflict in one Journal Entry?” to “Can weekly evidence support a reliable Drift decision?”&lt;/p&gt;
+
+  &lt;figure class=&quot;panel&quot; aria-labelledby=&quot;vif-panel-title&quot;&gt;
+    &lt;div class=&quot;panel-heading&quot;&gt;
+      &lt;div&gt;
+        &lt;div class=&quot;panel-kicker&quot;&gt;Stage 1 · offline research&lt;/div&gt;
+        &lt;h3 class=&quot;panel-title&quot; id=&quot;vif-panel-title&quot;&gt;VIF Critic MLP experiments&lt;/h3&gt;
+        &lt;p class=&quot;panel-subtitle&quot;&gt;Per-Journal-Entry Conflict recall across 133 candidate evaluations&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;legend&quot; aria-label=&quot;VIF Critic chart series&quot;&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;vif&quot; data-toggle=&quot;candidate&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch dot&quot; style=&quot;--swatch:var(--muted-foreground)&quot;&gt;&lt;/span&gt;Candidate results&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;vif&quot; data-toggle=&quot;ceiling&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch&quot; style=&quot;--swatch:var(--viz-series-2)&quot;&gt;&lt;/span&gt;Observed ceiling&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;vif&quot; data-toggle=&quot;milestone&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch dot&quot; style=&quot;--swatch:var(--viz-series-3)&quot;&gt;&lt;/span&gt;Research milestones&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;chart-wrap&quot; data-wrap=&quot;vif&quot;&gt;
+      &lt;svg id=&quot;twinkl-vif-chart&quot; role=&quot;img&quot; aria-label=&quot;Scatter plot of VIF Critic per-entry Conflict recall by chronological candidate evaluation order.&quot;&gt;&lt;/svg&gt;
+    &lt;/div&gt;
+    &lt;figcaption class=&quot;panel-caption&quot;&gt;The ceiling resets when the evaluation regime changes. It is an observed recall ceiling, not a deployment path; QWK and validation policy also governed selection.&lt;/figcaption&gt;
+  &lt;/figure&gt;
+
+  &lt;div class=&quot;bridge-story&quot; aria-label=&quot;Research transition&quot;&gt;
+    &lt;div&gt;&lt;strong&gt;1 · Learn the local signal&lt;/strong&gt;The MLP established that one Journal Entry can contain a usable Conflict signal.&lt;/div&gt;
+    &lt;div class=&quot;bridge-arrow&quot; aria-hidden=&quot;true&quot;&gt;→&lt;/div&gt;
+    &lt;div&gt;&lt;strong&gt;2 · Test the hand-off&lt;/strong&gt;Raw VIF Critic input did not improve Drift recall. Twinkl kept the VIF Critic offline.&lt;/div&gt;
+    &lt;div class=&quot;bridge-arrow&quot; aria-hidden=&quot;true&quot;&gt;→&lt;/div&gt;
+    &lt;div&gt;&lt;strong&gt;3 · Move the decision&lt;/strong&gt;The user-facing path became an LLM weekly review plus the deterministic two-Conflict rule.&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;figure class=&quot;panel&quot; aria-labelledby=&quot;drift-panel-title&quot;&gt;
+    &lt;div class=&quot;panel-heading&quot;&gt;
+      &lt;div&gt;
+        &lt;div class=&quot;panel-kicker&quot;&gt;Stage 2 · user-facing decision&lt;/div&gt;
+        &lt;h3 class=&quot;panel-title&quot; id=&quot;drift-panel-title&quot;&gt;Weekly Drift Detection experiments&lt;/h3&gt;
+        &lt;p class=&quot;panel-subtitle&quot;&gt;Drift recall, repeat range, false alerts, and median response latency&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;legend&quot; aria-label=&quot;Weekly Drift Detection chart series&quot;&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;integration&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch dot&quot; style=&quot;--swatch:var(--viz-series-5)&quot;&gt;&lt;/span&gt;VIF integration study&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;model&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch dot&quot; style=&quot;--swatch:var(--viz-series-1)&quot;&gt;&lt;/span&gt;Model + reasoning&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;best&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch&quot; style=&quot;--swatch:var(--viz-series-3)&quot;&gt;&lt;/span&gt;Best observed recall&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;chart-wrap&quot; data-wrap=&quot;drift&quot;&gt;
+      &lt;svg id=&quot;twinkl-drift-chart&quot; role=&quot;img&quot; aria-label=&quot;Point and range plot comparing VIF integration variants and LLM reasoning levels on Drift recall.&quot;&gt;&lt;/svg&gt;
+    &lt;/div&gt;
+    &lt;figcaption class=&quot;panel-caption&quot;&gt;Current product contract: Luna low → Weekly Drift Reviewer Decision → deterministic two-Conflict Drift Detector. Xhigh has the highest recall, but it also has more false alerts and higher latency.&lt;/figcaption&gt;
+  &lt;/figure&gt;
+
+  &lt;p class=&quot;figure-note&quot;&gt;The panels share a numerical scale, but not a metric: the VIF Critic uses per-entry Conflict recall; Weekly Drift Detection uses Drift recall. The integration study used 33 known Drifts and 106 trajectories. The model study used 42 known Drifts and 292 trajectories. Results use AI-reviewed synthetic development data.&lt;/p&gt;
+  &lt;div class=&quot;tooltip&quot; role=&quot;tooltip&quot;&gt;&lt;/div&gt;
+  &lt;p class=&quot;sr-only&quot;&gt;The VIF Critic experiments increased observed per-entry Conflict recall, but raw VIF Critic input did not improve weekly Drift recall. The current product uses Luna low for the weekly review. Luna xhigh reached higher recall with more false alerts and longer latency.&lt;/p&gt;
+
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    (function () {
+      var root = document.getElementById(&#x27;twinkl-research-path&#x27;);
+      if (!root || !window.d3) return;
+
+      var d3 = window.d3;
+      var tooltip = root.querySelector(&#x27;.tooltip&#x27;);
+      var modelNames = [&#x27;BalancedSoftmax&#x27;,&#x27;CDWCE a2&#x27;,&#x27;CDWCE a3&#x27;,&#x27;CDWCE a5&#x27;,&#x27;CORAL&#x27;,&#x27;CORAL IW&#x27;,&#x27;CORN&#x27;,&#x27;EMD&#x27;,&#x27;LDAM DRW&#x27;,&#x27;MSE&#x27;,&#x27;SLACE&#x27;,&#x27;SoftOrdinal&#x27;,&#x27;Two-stage BalancedSoftmax&#x27;];
+      var rawVif = [[1,4,0.0564,0.3978],[1,6,0.0719,0.3838],[1,7,0.1179,0.3949],[1,9,0.2657,0.3384],[1,11,0.116,0.4171],[2,4,0.0488,0.3345],[2,6,0.0443,0.3552],[2,7,0.1012,0.3653],[2,9,0.2227,0.3485],[2,11,0.0627,0.3852],[3,4,0.0265,0.369],[3,6,0.0454,0.3264],[3,7,0.1103,0.4104],[3,11,0.0858,0.383],[4,4,0.0577,0.3306],[4,6,0.0706,0.2907],[4,7,0.1204,0.3912],[4,11,0.0929,0.3849],[5,4,0.0087,0.2817],[5,6,0.013,0.2537],[5,7,0.067,0.2716],[5,11,0.0391,0.304],[6,4,0.0174,0.278],[6,6,0.0261,0.2797],[6,7,0.0265,0.324],[6,11,0.0265,0.3585],[7,4,0.0694,0.3672],[7,6,0.1031,0.4132],[7,7,0.0674,0.3575],[7,11,0.0674,0.3144],[8,4,0.0492,0.3409],[8,6,0.0572,0.3441],[8,7,0.081,0.3647],[8,11,0.0673,0.3537],[9,4,0.011,0.1758],[9,6,0.0063,0.2266],[9,7,0.0589,0.2593],[9,11,0.0515,0.2357],[10,4,0.0634,0.3636],[10,5,0.0994,0.3015],[10,6,0.0892,0.434],[10,7,0.0721,0.3617],[10,11,0.0619,0.3083],[11,4,0.0422,0.3391],[11,5,0.0515,0.2694],[11,6,0.0563,0.3346],[11,7,0.0532,0.3818],[11,11,0.0691,0.3326],[12,4,0.0853,0.3591],[12,5,0.0998,0.271],[12,6,0.096,0.3457],[12,7,0.0651,0.3689],[12,11,0.0833,0.3339],[13,4,0.0612,0.3838],[13,6,0.0748,0.3819],[13,7,0.0564,0.391],[13,11,0.0589,0.3344],[14,4,0.0541,0.3294],[14,6,0.0604,0.3136],[14,7,0.0575,0.3726],[14,11,0.0748,0.3882],[15,1,0.0376,0.3224],[15,2,0.0562,0.4019],[15,3,0.012,0.2997],[15,4,0.0637,0.3492],[15,6,0.0604,0.3284],[15,7,0.0559,0.3719],[15,11,0.0642,0.3351],[16,2,0.0858,0.3547],[16,6,0.0888,0.3151],[16,11,0.1006,0.3884],[17,2,0.1279,0.3534],[17,6,0.0852,0.315],[17,11,0.0686,0.3296],[18,2,0.1041,0.3379],[18,6,0.1023,0.3552],[18,11,0.077,0.3458],[19,0,0.2765,0.3619],[19,8,0.0592,0.3291],[20,0,0.3416,0.3777],[20,8,0.0797,0.3582],[21,0,0.3132,0.3582],[22,0,0.3663,0.3488],[23,0,0.3085,0.3716],[24,0,0.342,0.3393],[25,0,0.3053,0.3459],[25,11,0.11,0.3416],[26,0,0.3829,0.334],[26,11,0.0676,0.3215],[27,0,0.3279,0.3511],[27,11,0.0819,0.34],[28,0,0.265,0.3836],[29,0,0.2789,0.3473],[30,0,0.2393,0.3175],[31,0,0.2668,0.3527],[32,0,0.3545,0.3664],[33,0,0.2602,0.3723],[34,0,0.2985,0.3419],[35,0,0.3779,0.321],[36,0,0.3866,0.3807],[37,0,0.2685,0.3175],[38,0,0.2458,0.2994],[39,0,0.3362,0.3048],[40,0,0.2963,0.3555],[41,10,0.1337,0.3383],[42,0,0.3181,0.3782],[43,0,0.2963,0.3555],[44,0,0.3701,0.3704],[45,12,0.2664,0.3926],[46,12,0.2659,0.3603],[47,12,0.2267,0.3388],[48,0,0.2593,0.3719],[49,0,0.2697,0.3687],[50,0,0.3378,0.3927],[51,0,0.2563,0.3648],[52,0,0.2569,0.3744],[53,0,0.3235,0.403],[54,0,0.281,0.3445],[55,0,0.3759,0.3286],[56,0,0.3913,0.3674],[57,0,0.3372,0.3425],[58,0,0.2966,0.3631],[59,0,0.4395,0.3195],[60,0,0.3547,0.3353],[61,0,0.3242,0.3535],[62,0,0.376,0.3633],[63,0,0.32,0.3894],[64,0,0.3075,0.405],[65,0,0.2412,0.389],[66,0,0.3467,0.3769],[67,0,0.3267,0.3998],[68,0,0.3008,0.3966],[69,0,0.3033,0.3424]];
+      var vif = rawVif.map(function (d, i) {
+        var phase = d[0] &lt; 16 ? 0 : d[0] &lt; 48 ? 1 : d[0] &lt; 57 ? 2 : 3;
+        return {i:i + 1, run:d[0], model:modelNames[d[1]], recall:d[2], qwk:d[3], phase:phase};
+      });
+      var drift = [
+        {x:0, key:&#x27;weekly&#x27;, label:&#x27;Weekly only&#x27;, group:&#x27;integration&#x27;, recall:0.2727, min:0.2424, max:0.2727, fa:0, latency:null},
+        {x:1, key:&#x27;raw-vif&#x27;, label:&#x27;Raw VIF input&#x27;, group:&#x27;integration&#x27;, recall:0.2121, min:0.1818, max:0.2121, fa:3, latency:null},
+        {x:2, key:&#x27;vif-trigger&#x27;, label:&#x27;VIF-triggered&#x27;, group:&#x27;integration&#x27;, recall:0.2727, min:0.2727, max:0.2727, fa:1, latency:null},
+        {x:4, key:&#x27;mini&#x27;, label:&#x27;Mini · none&#x27;, group:&#x27;model&#x27;, recall:0.1667, min:0.1667, max:0.2381, fa:5, latency:1.61},
+        {x:5, key:&#x27;none&#x27;, label:&#x27;Luna · none&#x27;, group:&#x27;model&#x27;, recall:0.4762, min:0.4286, max:0.5238, fa:13, latency:1.38},
+        {x:6, key:&#x27;low&#x27;, label:&#x27;Luna · low&#x27;, group:&#x27;model&#x27;, recall:0.5476, min:0.5476, max:0.5714, fa:4, latency:2.81, current:true},
+        {x:7, key:&#x27;medium&#x27;, label:&#x27;Luna · medium&#x27;, group:&#x27;model&#x27;, recall:0.5714, min:0.5000, max:0.5714, fa:4, latency:2.96},
+        {x:8, key:&#x27;high&#x27;, label:&#x27;Luna · high&#x27;, group:&#x27;model&#x27;, recall:0.6190, min:0.5952, max:0.6190, fa:8, latency:3.66},
+        {x:9, key:&#x27;xhigh&#x27;, label:&#x27;Luna · xhigh&#x27;, group:&#x27;model&#x27;, recall:0.6667, min:0.6429, max:0.6667, fa:9, latency:4.91, peak:true}
+      ];
+      var sharedYMax = Math.ceil((d3.max(vif.map(function (d) { return d.recall; }).concat(drift.map(function (d) { return d.max; }))) + 0.04) * 20) / 20;
+      var state = {
+        vif:{candidate:true, ceiling:true, milestone:true},
+        drift:{integration:true, model:true, best:true}
+      };
+      var format3 = d3.format(&#x27;.3f&#x27;);
+
+      function showTooltip(wrap, event, title, rows) {
+        tooltip.innerHTML = &#x27;&lt;strong&gt;&#x27; + title + &#x27;&lt;/strong&gt;&#x27; + rows.map(function (r) {
+          return &#x27;&lt;div class=&quot;tooltip-row&quot;&gt;&lt;span&gt;&#x27; + r[0] + &#x27;&lt;/span&gt;&lt;span&gt;&#x27; + r[1] + &#x27;&lt;/span&gt;&lt;/div&gt;&#x27;;
+        }).join(&#x27;&#x27;);
+        tooltip.style.opacity = &#x27;1&#x27;;
+        var rootBox = root.getBoundingClientRect();
+        var wrapBox = wrap.getBoundingClientRect();
+        var left = event.clientX - rootBox.left + 12;
+        var top = event.clientY - rootBox.top + 12;
+        var width = tooltip.offsetWidth;
+        if (left + width &gt; rootBox.width - 8) left = event.clientX - rootBox.left - width - 12;
+        if (left &lt; 8) left = 8;
+        tooltip.style.left = left + &#x27;px&#x27;;
+        tooltip.style.top = Math.max(8, top) + &#x27;px&#x27;;
+      }
+      function hideTooltip() { tooltip.style.opacity = &#x27;0&#x27;; }
+
+      function baseChart(svgNode, width, height, margin, yTitle, xTitle, xDomain) {
+        var svg = d3.select(svgNode);
+        svg.selectAll(&#x27;*&#x27;).remove();
+        svg.attr(&#x27;viewBox&#x27;, &#x27;0 0 &#x27; + width + &#x27; &#x27; + height);
+        var innerW = width - margin.left - margin.right;
+        var innerH = height - margin.top - margin.bottom;
+        var g = svg.append(&#x27;g&#x27;).attr(&#x27;transform&#x27;, &#x27;translate(&#x27; + margin.left + &#x27;,&#x27; + margin.top + &#x27;)&#x27;);
+        var y = d3.scaleLinear().domain([0, sharedYMax]).nice().range([innerH, 0]);
+        var x = d3.scaleLinear().domain(xDomain).range([0, innerW]);
+        g.append(&#x27;rect&#x27;).attr(&#x27;data-chart-frame&#x27;,&#x27;&#x27;).attr(&#x27;x&#x27;,0).attr(&#x27;y&#x27;,0).attr(&#x27;width&#x27;,innerW).attr(&#x27;height&#x27;,innerH).attr(&#x27;fill&#x27;,&#x27;none&#x27;).attr(&#x27;stroke&#x27;,&#x27;var(--border)&#x27;);
+        g.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;grid&#x27;).call(d3.axisLeft(y).ticks(6).tickSize(-innerW).tickFormat(&#x27;&#x27;)).call(function (s) { s.select(&#x27;.domain&#x27;).remove(); });
+        g.append(&#x27;g&#x27;).attr(&#x27;transform&#x27;,&#x27;translate(0,&#x27; + innerH + &#x27;)&#x27;).attr(&#x27;class&#x27;,&#x27;x-axis&#x27;);
+        g.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;y-axis&#x27;).call(d3.axisLeft(y).ticks(6).tickFormat(d3.format(&#x27;.2f&#x27;)));
+        svg.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;axis-title&#x27;).attr(&#x27;data-axis&#x27;,&#x27;y&#x27;).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).attr(&#x27;transform&#x27;,&#x27;translate(17,&#x27; + (margin.top + innerH / 2) + &#x27;) rotate(-90)&#x27;).text(yTitle);
+        svg.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;axis-title&#x27;).attr(&#x27;data-axis&#x27;,&#x27;x&#x27;).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).attr(&#x27;x&#x27;,margin.left + innerW / 2).attr(&#x27;y&#x27;,height - 6).text(xTitle);
+        return {svg:svg,g:g,x:x,y:y,innerW:innerW,innerH:innerH,margin:margin};
+      }
+
+      function drawVif() {
+        var wrap = root.querySelector(&#x27;[data-wrap=&quot;vif&quot;]&#x27;);
+        var width = Math.max(320, Math.floor(wrap.getBoundingClientRect().width));
+        var height = 340;
+        var margin = {top:30,right:width &lt; 520 ? 12 : 20,bottom:51,left:width &lt; 520 ? 58 : 68};
+        var xExtent = d3.extent(vif, function (d) { return d.i; });
+        var c = baseChart(root.querySelector(&#x27;#twinkl-vif-chart&#x27;), width, height, margin, &#x27;Conflict recall (per Journal Entry)&#x27;, &#x27;Candidate evaluation order&#x27;, [xExtent[0] - 1.5, xExtent[1] + 1.5]);
+        var tickCount = width &lt; 480 ? 4 : width &lt; 760 ? 6 : 9;
+        c.g.select(&#x27;.x-axis&#x27;).call(d3.axisBottom(c.x).ticks(tickCount).tickFormat(d3.format(&#x27;d&#x27;)));
+
+        var phaseNames = [&#x27;Original split&#x27;,&#x27;Corrected split&#x27;,&#x27;Labels&#x27;,&#x27;Repair + close-out&#x27;];
+        var phases = d3.groups(vif, function (d) { return d.phase; });
+        phases.forEach(function (entry, idx) {
+          var values = entry[1];
+          var lo = d3.min(values, function (d) { return d.i; });
+          var hi = d3.max(values, function (d) { return d.i; });
+          if (idx &gt; 0) c.g.append(&#x27;line&#x27;).attr(&#x27;x1&#x27;,c.x(lo - 0.5)).attr(&#x27;x2&#x27;,c.x(lo - 0.5)).attr(&#x27;y1&#x27;,0).attr(&#x27;y2&#x27;,c.innerH).attr(&#x27;stroke&#x27;,&#x27;var(--border)&#x27;).attr(&#x27;stroke-dasharray&#x27;,&#x27;3 3&#x27;);
+          var label = width &lt; 520 ? [&#x27;Original&#x27;,&#x27;Corrected&#x27;,&#x27;&#x27;,&#x27;Repair&#x27;][entry[0]] : phaseNames[entry[0]];
+          if (width &lt; 850 &amp;&amp; entry[0] === 2) label = &#x27;&#x27;;
+          c.g.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label&#x27;).attr(&#x27;x&#x27;,c.x((lo + hi) / 2)).attr(&#x27;y&#x27;,-10).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(label);
+        });
+
+        var pointLayer = c.g.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;series-candidate&#x27;).style(&#x27;display&#x27;,state.vif.candidate ? null : &#x27;none&#x27;);
+        pointLayer.selectAll(&#x27;circle&#x27;).data(vif).join(&#x27;circle&#x27;)
+          .attr(&#x27;cx&#x27;,function (d) { return c.x(d.i); })
+          .attr(&#x27;cy&#x27;,function (d) { return c.y(d.recall); })
+          .attr(&#x27;r&#x27;,2.5)
+          .attr(&#x27;fill&#x27;,&#x27;var(--muted-foreground)&#x27;)
+          .attr(&#x27;opacity&#x27;,0.25);
+
+        var ceilingLayer = c.g.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;series-ceiling&#x27;).style(&#x27;display&#x27;,state.vif.ceiling ? null : &#x27;none&#x27;);
+        phases.forEach(function (entry) {
+          var best = -Infinity;
+          var run = entry[1].map(function (d) {
+            best = Math.max(best, d.recall);
+            return {i:d.i, recall:best};
+          });
+          ceilingLayer.append(&#x27;path&#x27;).datum(run)
+            .attr(&#x27;fill&#x27;,&#x27;none&#x27;)
+            .attr(&#x27;stroke&#x27;,&#x27;var(--viz-series-2)&#x27;)
+            .attr(&#x27;stroke-width&#x27;,1.6)
+            .attr(&#x27;opacity&#x27;,0.78)
+            .attr(&#x27;d&#x27;,d3.line().curve(d3.curveStepAfter).x(function (d) { return c.x(d.i); }).y(function (d) { return c.y(d.recall); }));
+        });
+
+        var milestoneSpecs = [
+          {run:10, model:&#x27;CORN&#x27;, text:&#x27;QWK leader · recall 0.089&#x27;, dx:12, dy:-30},
+          {run:20, model:&#x27;BalancedSoftmax&#x27;, text:&#x27;Corrected split · 0.342&#x27;, dx:12, dy:-25},
+          {run:36, model:&#x27;BalancedSoftmax&#x27;, text:&#x27;Weighted reference · 0.387&#x27;, dx:-8, dy:-30},
+          {run:59, model:&#x27;BalancedSoftmax&#x27;, text:&#x27;Recall peak; QWK 0.320&#x27;, dx:-8, dy:-28},
+          {run:60, model:&#x27;BalancedSoftmax&#x27;, text:&#x27;Offline checkpoint · 0.355&#x27;, dx:-10, dy:31, selected:true}
+        ];
+        var milestones = milestoneSpecs.map(function (m) {
+          var d = vif.find(function (v) { return v.run === m.run &amp;&amp; v.model === m.model; });
+          return Object.assign({}, d, m);
+        }).filter(Boolean);
+        var milestoneLayer = c.g.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;series-milestone&#x27;).style(&#x27;display&#x27;,state.vif.milestone ? null : &#x27;none&#x27;);
+        milestoneLayer.selectAll(&#x27;circle&#x27;).data(milestones).join(&#x27;circle&#x27;)
+          .attr(&#x27;cx&#x27;,function (d) { return c.x(d.i); })
+          .attr(&#x27;cy&#x27;,function (d) { return c.y(d.recall); })
+          .attr(&#x27;r&#x27;,function (d) { return d.selected ? 5.5 : 4.2; })
+          .attr(&#x27;fill&#x27;,function (d) { return d.selected ? &#x27;var(--viz-series-3)&#x27; : &#x27;var(--viz-series-2)&#x27;; })
+          .attr(&#x27;stroke&#x27;,&#x27;var(--popover)&#x27;)
+          .attr(&#x27;stroke-width&#x27;,1.5);
+        if (width &gt;= 680) {
+          var labels = milestoneLayer.selectAll(&#x27;g.m-label&#x27;).data(milestones).join(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;m-label&#x27;);
+          labels.append(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;annotation-line&#x27;).attr(&#x27;d&#x27;,function (d) {
+            var x1 = c.x(d.i), y1 = c.y(d.recall), x2 = x1 + d.dx, y2 = y1 + d.dy;
+            return &#x27;M&#x27; + x1 + &#x27;,&#x27; + y1 + &#x27;L&#x27; + x2 + &#x27;,&#x27; + y2;
+          });
+          labels.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;annotation&#x27;).attr(&#x27;x&#x27;,function (d) { return c.x(d.i) + d.dx + (d.dx &lt; 0 ? -3 : 3); }).attr(&#x27;y&#x27;,function (d) { return c.y(d.recall) + d.dy + 3; }).attr(&#x27;text-anchor&#x27;,function (d) { return d.dx &lt; 0 ? &#x27;end&#x27; : &#x27;start&#x27;; }).text(function (d) { return d.text; });
+        }
+
+        var nearest = c.g.append(&#x27;circle&#x27;).attr(&#x27;r&#x27;,5).attr(&#x27;fill&#x27;,&#x27;none&#x27;).attr(&#x27;stroke&#x27;,&#x27;var(--foreground)&#x27;).attr(&#x27;stroke-width&#x27;,1).style(&#x27;display&#x27;,&#x27;none&#x27;);
+        c.g.append(&#x27;rect&#x27;)
+          .attr(&#x27;data-chart-hit&#x27;,&#x27;&#x27;)
+          .attr(&#x27;x&#x27;,0).attr(&#x27;y&#x27;,0).attr(&#x27;width&#x27;,c.innerW).attr(&#x27;height&#x27;,c.innerH)
+          .attr(&#x27;fill&#x27;,&#x27;transparent&#x27;)
+          .style(&#x27;pointer-events&#x27;,state.vif.candidate ? &#x27;all&#x27; : &#x27;none&#x27;)
+          .on(&#x27;mousemove&#x27;,function (event) {
+            if (!state.vif.candidate) return;
+            var p = d3.pointer(event, this);
+            var d = d3.least(vif, function (v) {
+              var dx = c.x(v.i) - p[0], dy = c.y(v.recall) - p[1];
+              return dx * dx + dy * dy;
+            });
+            nearest.style(&#x27;display&#x27;,null).attr(&#x27;cx&#x27;,c.x(d.i)).attr(&#x27;cy&#x27;,c.y(d.recall));
+            showTooltip(wrap,event,&#x27;Run &#x27; + String(d.run).padStart(3,&#x27;0&#x27;) + &#x27; · &#x27; + d.model,[
+              [&#x27;Conflict recall&#x27;,format3(d.recall)],
+              [&#x27;QWK&#x27;,format3(d.qwk)],
+              [&#x27;Evaluation order&#x27;,d.i]
+            ]);
+          })
+          .on(&#x27;mouseleave&#x27;,function () { nearest.style(&#x27;display&#x27;,&#x27;none&#x27;); hideTooltip(); });
+      }
+
+      function drawDrift() {
+        var wrap = root.querySelector(&#x27;[data-wrap=&quot;drift&quot;]&#x27;);
+        var width = Math.max(320, Math.floor(wrap.getBoundingClientRect().width));
+        var height = 340;
+        var margin = {top:36,right:width &lt; 520 ? 12 : 22,bottom:68,left:width &lt; 520 ? 58 : 68};
+        var xExtent = d3.extent(drift, function (d) { return d.x; });
+        var c = baseChart(root.querySelector(&#x27;#twinkl-drift-chart&#x27;), width, height, margin, &#x27;Drift recall&#x27;, &#x27;Ordered experiment configurations&#x27;, [xExtent[0] - 0.55, xExtent[1] + 0.55]);
+        var visibleTicks = width &lt; 480 ? [0,2,5,9] : drift.map(function (d) { return d.x; });
+        var byX = new Map(drift.map(function (d) { return [d.x,d]; }));
+        c.g.select(&#x27;.x-axis&#x27;).call(d3.axisBottom(c.x).tickValues(visibleTicks).tickFormat(function (x) {
+          var d = byX.get(x);
+          if (!d) return &#x27;&#x27;;
+          if (width &lt; 480) return {0:&#x27;Weekly&#x27;,2:&#x27;VIF trigger&#x27;,5:&#x27;None&#x27;,9:&#x27;Xhigh&#x27;}[x];
+          return d.label.replace(&#x27;Luna · &#x27;,&#x27;&#x27;);
+        })).selectAll(&#x27;text&#x27;).attr(&#x27;transform&#x27;,width &lt; 820 ? &#x27;rotate(-28)&#x27; : null).style(&#x27;text-anchor&#x27;,width &lt; 820 ? &#x27;end&#x27; : &#x27;middle&#x27;);
+
+        c.g.append(&#x27;line&#x27;).attr(&#x27;x1&#x27;,c.x(3)).attr(&#x27;x2&#x27;,c.x(3)).attr(&#x27;y1&#x27;,0).attr(&#x27;y2&#x27;,c.innerH).attr(&#x27;stroke&#x27;,&#x27;var(--border)&#x27;).attr(&#x27;stroke-dasharray&#x27;,&#x27;4 4&#x27;);
+        c.g.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label&#x27;).attr(&#x27;x&#x27;,c.x(1)).attr(&#x27;y&#x27;,-14).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(width &lt; 520 ? &#x27;33 Drifts · VIF input&#x27; : &#x27;VIF integration study · 33 known Drifts&#x27;);
+        c.g.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label&#x27;).attr(&#x27;x&#x27;,c.x(6.5)).attr(&#x27;y&#x27;,-14).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(width &lt; 520 ? &#x27;42 Drifts · model study&#x27; : &#x27;Model + reasoning study · 42 known Drifts&#x27;);
+
+        function drawGroup(groupName, color) {
+          var values = drift.filter(function (d) { return d.group === groupName; });
+          var layer = c.g.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;series-&#x27; + groupName).style(&#x27;display&#x27;,state.drift[groupName] ? null : &#x27;none&#x27;);
+          layer.selectAll(&#x27;line.range&#x27;).data(values).join(&#x27;line&#x27;).attr(&#x27;class&#x27;,&#x27;range&#x27;)
+            .attr(&#x27;x1&#x27;,function (d) { return c.x(d.x); }).attr(&#x27;x2&#x27;,function (d) { return c.x(d.x); })
+            .attr(&#x27;y1&#x27;,function (d) { return c.y(d.min); }).attr(&#x27;y2&#x27;,function (d) { return c.y(d.max); })
+            .attr(&#x27;stroke&#x27;,color).attr(&#x27;stroke-width&#x27;,2);
+          layer.selectAll(&#x27;line.cap-top&#x27;).data(values).join(&#x27;line&#x27;)
+            .attr(&#x27;x1&#x27;,function (d) { return c.x(d.x)-5; }).attr(&#x27;x2&#x27;,function (d) { return c.x(d.x)+5; })
+            .attr(&#x27;y1&#x27;,function (d) { return c.y(d.max); }).attr(&#x27;y2&#x27;,function (d) { return c.y(d.max); })
+            .attr(&#x27;stroke&#x27;,color).attr(&#x27;stroke-width&#x27;,1.5);
+          layer.selectAll(&#x27;line.cap-bottom&#x27;).data(values).join(&#x27;line&#x27;)
+            .attr(&#x27;x1&#x27;,function (d) { return c.x(d.x)-5; }).attr(&#x27;x2&#x27;,function (d) { return c.x(d.x)+5; })
+            .attr(&#x27;y1&#x27;,function (d) { return c.y(d.min); }).attr(&#x27;y2&#x27;,function (d) { return c.y(d.min); })
+            .attr(&#x27;stroke&#x27;,color).attr(&#x27;stroke-width&#x27;,1.5);
+          layer.selectAll(&#x27;circle.mark&#x27;).data(values).join(&#x27;circle&#x27;).attr(&#x27;class&#x27;,&#x27;mark&#x27;)
+            .attr(&#x27;cx&#x27;,function (d) { return c.x(d.x); }).attr(&#x27;cy&#x27;,function (d) { return c.y(d.recall); })
+            .attr(&#x27;r&#x27;,function (d) { return d.current || d.peak ? 6 : 4.5; })
+            .attr(&#x27;fill&#x27;,function (d) { return d.current ? &#x27;var(--viz-series-3)&#x27; : d.peak ? &#x27;var(--viz-series-2)&#x27; : color; })
+            .attr(&#x27;stroke&#x27;,&#x27;var(--popover)&#x27;).attr(&#x27;stroke-width&#x27;,1.5);
+          layer.selectAll(&#x27;text.value&#x27;).data(values).join(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;annotation value&#x27;)
+            .attr(&#x27;x&#x27;,function (d) { return c.x(d.x); }).attr(&#x27;y&#x27;,function (d) { return c.y(d.max)-9; })
+            .attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(function (d) {
+              if (width &lt; 560 &amp;&amp; d.group === &#x27;model&#x27; &amp;&amp; [&#x27;mini&#x27;,&#x27;none&#x27;,&#x27;low&#x27;,&#x27;xhigh&#x27;].indexOf(d.key) === -1) return &#x27;&#x27;;
+              return format3(d.recall);
+            });
+          layer.selectAll(&#x27;text.meta&#x27;).data(values).join(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label meta&#x27;)
+            .attr(&#x27;x&#x27;,function (d) { return c.x(d.x); }).attr(&#x27;y&#x27;,function (d) { return c.y(d.min)+16; })
+            .attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).style(&#x27;display&#x27;,width &lt; 560 &amp;&amp; !d3.select ? &#x27;none&#x27; : null)
+            .text(function (d) {
+              if (width &lt; 560 &amp;&amp; !d.current &amp;&amp; !d.peak) return &#x27;&#x27;;
+              return d.latency === null ? &#x27;FA &#x27; + d.fa : &#x27;FA &#x27; + d.fa + &#x27; · &#x27; + d.latency.toFixed(1) + &#x27;s&#x27;;
+            });
+          layer.selectAll(&#x27;rect.hit&#x27;).data(values).join(&#x27;rect&#x27;)
+            .attr(&#x27;class&#x27;,&#x27;hit&#x27;)
+            .attr(&#x27;data-chart-hit&#x27;,&#x27;&#x27;)
+            .attr(&#x27;x&#x27;,function (d) { return c.x(d.x)-18; }).attr(&#x27;y&#x27;,function (d) { return c.y(d.recall)-18; })
+            .attr(&#x27;width&#x27;,36).attr(&#x27;height&#x27;,36).attr(&#x27;fill&#x27;,&#x27;transparent&#x27;)
+            .on(&#x27;mouseenter&#x27;,function (event,d) {
+              var rows = [
+                [&#x27;Median recall&#x27;,format3(d.recall)],
+                [&#x27;Repeat range&#x27;,format3(d.min) + &#x27;–&#x27; + format3(d.max)],
+                [&#x27;Median false alerts&#x27;,d.fa]
+              ];
+              if (d.latency !== null) rows.push([&#x27;Median latency&#x27;,d.latency.toFixed(2) + &#x27; s&#x27;]);
+              else rows.push([&#x27;Benchmark&#x27;,&#x27;33 Drifts · 106 trajectories&#x27;]);
+              showTooltip(wrap,event,d.label,rows);
+            })
+            .on(&#x27;mousemove&#x27;,function (event,d) {
+              var rows = [
+                [&#x27;Median recall&#x27;,format3(d.recall)],
+                [&#x27;Repeat range&#x27;,format3(d.min) + &#x27;–&#x27; + format3(d.max)],
+                [&#x27;Median false alerts&#x27;,d.fa]
+              ];
+              if (d.latency !== null) rows.push([&#x27;Median latency&#x27;,d.latency.toFixed(2) + &#x27; s&#x27;]);
+              else rows.push([&#x27;Benchmark&#x27;,&#x27;33 Drifts · 106 trajectories&#x27;]);
+              showTooltip(wrap,event,d.label,rows);
+            })
+            .on(&#x27;mouseleave&#x27;,hideTooltip);
+        }
+        drawGroup(&#x27;integration&#x27;,&#x27;var(--viz-series-5)&#x27;);
+        drawGroup(&#x27;model&#x27;,&#x27;var(--viz-series-1)&#x27;);
+
+        var modelValues = drift.filter(function (d) { return d.group === &#x27;model&#x27;; });
+        var best = -Infinity;
+        var bestValues = modelValues.map(function (d) {
+          best = Math.max(best,d.recall);
+          return {x:d.x,recall:best};
+        });
+        var bestLayer = c.g.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;series-best&#x27;).style(&#x27;display&#x27;,state.drift.best ? null : &#x27;none&#x27;);
+        bestLayer.append(&#x27;path&#x27;).datum(bestValues).attr(&#x27;fill&#x27;,&#x27;none&#x27;).attr(&#x27;stroke&#x27;,&#x27;var(--viz-series-3)&#x27;).attr(&#x27;stroke-width&#x27;,1.8).attr(&#x27;opacity&#x27;,0.78)
+          .attr(&#x27;d&#x27;,d3.line().curve(d3.curveStepAfter).x(function (d) { return c.x(d.x); }).y(function (d) { return c.y(d.recall); }));
+
+        if (width &gt;= 700) {
+          var direct = drift.filter(function (d) { return d.current || d.peak; });
+          var labels = c.g.append(&#x27;g&#x27;).selectAll(&#x27;g&#x27;).data(direct).join(&#x27;g&#x27;);
+          labels.append(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;annotation-line&#x27;).attr(&#x27;d&#x27;,function (d) {
+            var dx = d.current ? -22 : -18, dy = d.current ? -54 : -34;
+            return &#x27;M&#x27; + c.x(d.x) + &#x27;,&#x27; + c.y(d.recall) + &#x27;L&#x27; + (c.x(d.x)+dx) + &#x27;,&#x27; + (c.y(d.recall)+dy);
+          });
+          labels.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;annotation&#x27;).attr(&#x27;x&#x27;,function (d) { return c.x(d.x) + (d.current ? -25 : -21); }).attr(&#x27;y&#x27;,function (d) { return c.y(d.recall) + (d.current ? -57 : -37); }).attr(&#x27;text-anchor&#x27;,&#x27;end&#x27;).text(function (d) { return d.current ? &#x27;Current · 4 FA · 2.8 s&#x27; : &#x27;Highest recall · 9 FA · 4.9 s&#x27;; });
+        }
+
+        var guide = c.g.append(&#x27;line&#x27;).attr(&#x27;data-chart-hover-guide&#x27;,&#x27;&#x27;).attr(&#x27;y1&#x27;,0).attr(&#x27;y2&#x27;,c.innerH).attr(&#x27;stroke&#x27;,&#x27;var(--border)&#x27;).attr(&#x27;stroke-dasharray&#x27;,&#x27;3 3&#x27;).style(&#x27;display&#x27;,&#x27;none&#x27;);
+        var guideMarker = c.g.append(&#x27;circle&#x27;).attr(&#x27;data-chart-hover-marker&#x27;,&#x27;&#x27;).attr(&#x27;r&#x27;,4).attr(&#x27;fill&#x27;,&#x27;var(--viz-series-3)&#x27;).attr(&#x27;stroke&#x27;,&#x27;var(--popover)&#x27;).style(&#x27;display&#x27;,&#x27;none&#x27;);
+        c.g.insert(&#x27;rect&#x27;,&#x27;:first-child&#x27;)
+          .attr(&#x27;data-chart-hit&#x27;,&#x27;&#x27;)
+          .attr(&#x27;data-chart-hover-overlay&#x27;,&#x27;cross-series&#x27;)
+          .attr(&#x27;x&#x27;,0).attr(&#x27;y&#x27;,0).attr(&#x27;width&#x27;,c.innerW).attr(&#x27;height&#x27;,c.innerH)
+          .attr(&#x27;fill&#x27;,&#x27;transparent&#x27;)
+          .style(&#x27;pointer-events&#x27;,state.drift.best ? &#x27;all&#x27; : &#x27;none&#x27;)
+          .on(&#x27;mousemove&#x27;,function (event) {
+            if (!state.drift.best) return;
+            var px = d3.pointer(event,this)[0];
+            var xv = c.x.invert(px);
+            if (xv &lt; 4 || xv &gt; 9) { guide.style(&#x27;display&#x27;,&#x27;none&#x27;); guideMarker.style(&#x27;display&#x27;,&#x27;none&#x27;); return; }
+            var leftIndex = Math.max(0,Math.min(bestValues.length-2,d3.bisector(function (d) { return d.x; }).right(bestValues,xv)-1));
+            var a = bestValues[leftIndex], b = bestValues[leftIndex+1];
+            var t = b.x === a.x ? 0 : (xv-a.x)/(b.x-a.x);
+            var yv = a.recall + (b.recall-a.recall)*Math.max(0,Math.min(1,t));
+            guide.style(&#x27;display&#x27;,null).attr(&#x27;x1&#x27;,px).attr(&#x27;x2&#x27;,px);
+            guideMarker.style(&#x27;display&#x27;,null).attr(&#x27;cx&#x27;,px).attr(&#x27;cy&#x27;,c.y(yv));
+          })
+          .on(&#x27;mouseleave&#x27;,function () { guide.style(&#x27;display&#x27;,&#x27;none&#x27;); guideMarker.style(&#x27;display&#x27;,&#x27;none&#x27;); });
+      }
+
+      root.querySelectorAll(&#x27;.legend button&#x27;).forEach(function (button) {
+        button.addEventListener(&#x27;click&#x27;,function () {
+          var chart = button.getAttribute(&#x27;data-chart&#x27;);
+          var key = button.getAttribute(&#x27;data-toggle&#x27;);
+          state[chart][key] = !state[chart][key];
+          button.setAttribute(&#x27;aria-pressed&#x27;,String(state[chart][key]));
+          if (chart === &#x27;vif&#x27;) drawVif(); else drawDrift();
+        });
+      });
+
+      var resizeTimer;
+      function redraw() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () { drawVif(); drawDrift(); },40);
+      }
+      drawVif();
+      drawDrift();
+      var observer = new ResizeObserver(redraw);
+      observer.observe(root);
+    })();
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>
