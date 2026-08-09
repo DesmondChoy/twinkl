@@ -1,0 +1,200 @@
+{
+  "config_sha256": "5b686e25f05a0604f1d70966ef17775878825d65f71c4a575fa076d3c4118308",
+  "counts": {
+    "cases": 292,
+    "drift_trajectories": 36,
+    "drifts": 42,
+    "entries": 1651,
+    "entry_value_cells": 2377,
+    "persona_weeks": 951,
+    "personas": 204,
+    "resolved_entry_value_cells": 2375
+  },
+  "estimates": {
+    "high": {
+      "estimated_cost_usd": 1.368732,
+      "estimated_input_tokens": 3976800,
+      "estimated_output_tokens": 477810,
+      "max_budget_usd": 3.0,
+      "repeats": 3,
+      "successful_calls": 2853,
+      "token_estimator": "ceil(utf8_characters/4); output=55+45*assessment_count+35*pair_assessment_count",
+      "unique_prompts": 951
+    },
+    "medium": {
+      "estimated_cost_usd": 1.368732,
+      "estimated_input_tokens": 3976800,
+      "estimated_output_tokens": 477810,
+      "max_budget_usd": 3.0,
+      "repeats": 3,
+      "successful_calls": 2853,
+      "token_estimator": "ceil(utf8_characters/4); output=55+45*assessment_count+35*pair_assessment_count",
+      "unique_prompts": 951
+    },
+    "xhigh": {
+      "estimated_cost_usd": 1.368732,
+      "estimated_input_tokens": 3976800,
+      "estimated_output_tokens": 477810,
+      "max_budget_usd": 8.0,
+      "repeats": 3,
+      "successful_calls": 2853,
+      "token_estimator": "ceil(utf8_characters/4); output=55+45*assessment_count+35*pair_assessment_count",
+      "unique_prompts": 951
+    }
+  },
+  "frozen_luna_low": {
+    "config_sha256": "32461bda8a1b7663922ff47e097e9dcc6b5d6b4f7f513746e358306cb2118406",
+    "manifest_sha256": "2547ca6fa2cc859ccf7d85c2cc7c0f3ddab1eefa56b4a9444de4af19bd76d08e",
+    "metrics_sha256": "89d62ab68202944eea5f0bd02388db79a4fb10760587d3d76e4be79467f08410",
+    "prompts_sha256": "f0c7e68b5906c3ceeaf27dfc5d5b305252ee2298d688193363d79f6ac370c539",
+    "published_commit": "aadccd3",
+    "responses_sha256": "4c31726b49e24a98aa2c1592b9e3c64371dade90b491e3a7b03a018284e491c7"
+  },
+  "frozen_luna_none": {
+    "config_sha256": "9db3843b20c6cbe64a60f630840144bf8b5d645c3b799b67edc1521b794bad0b",
+    "manifest_sha256": "5e99c77064f6566e3f7ffb691bca16e9983f78be6762350f9f1a63c8bcf98fb5",
+    "metrics_sha256": "3c404fc717300f84393bf2230ab8f6dbf5d7df043af26160ddac79b0b4b8bcc9",
+    "prompts_sha256": "f0c7e68b5906c3ceeaf27dfc5d5b305252ee2298d688193363d79f6ac370c539",
+    "published_commit": "905a7e3",
+    "responses_sha256": "77f3491e9e7ee4ae99d8d36b8b00fe52719c4086ebf74338132ae5f4de7dd005"
+  },
+  "initial_attempt": {
+    "high": {
+      "incomplete_responses": 14,
+      "max_output_tokens": 2000,
+      "responses": 456,
+      "responses_sha256": "c030d4da98e30d5799a2734f14e3491f38bccf2a7e8e47f3df0a12815947ce50",
+      "smoke_responses_sha256": "b653dc89cd8c4132825d9d9981c74db548f268244f56f92ef71aea42e2ad78ac",
+      "status_counts": {
+        "error": 2,
+        "invalid": 1,
+        "ok": 439,
+        "refusal": 14
+      }
+    },
+    "medium": {
+      "incomplete_responses": 0,
+      "max_output_tokens": 2000,
+      "responses": 692,
+      "responses_sha256": "ad8e23dbfa473be7ac182e2d5b050cc7db994ba434c617fd0d1a9665804d5ccc",
+      "smoke_responses_sha256": "c2b3b1fa94d99116dc6f71d84e17d4890f19b29a31ae3f6f4c7800a64417ecbc",
+      "status_counts": {
+        "invalid": 4,
+        "ok": 688
+      }
+    },
+    "xhigh": {
+      "incomplete_responses": 52,
+      "max_output_tokens": 2000,
+      "responses": 304,
+      "responses_sha256": "ab08f11b78e4e13b571c3caa0c386b843ce6f47f55319378945165c1330ab936",
+      "smoke_responses_sha256": "e2b4b8b87119625756413008b78ddfba7f7ca377eb087ce58804ce1695a81fe8",
+      "status_counts": {
+        "error": 2,
+        "invalid": 1,
+        "ok": 250,
+        "refusal": 51
+      }
+    }
+  },
+  "intermediate_xhigh_attempt": {
+    "incomplete_responses": 2,
+    "responses": 350,
+    "responses_sha256": "f70307105acdfcada09465e39895148111aef4d5a24a63c01c3e4a64770812c1"
+  },
+  "luna_low_runner_sha256": "e36d3064fe431f40e74f7eba44100c45bcfcd6aa531948a126d7b6be6185c9fc",
+  "max_budget_usd": 15.0,
+  "model_runner_sha256": "f3b7210b69efc75c035dbefa08723e867a3d6ef3984b299968f4c090b3ce319c",
+  "models": [
+    {
+      "key": "luna_medium",
+      "max_budget_usd": 3.0,
+      "max_output_tokens": 8000,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "medium"
+    },
+    {
+      "key": "luna_high",
+      "max_budget_usd": 3.0,
+      "max_output_tokens": 8000,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "high"
+    },
+    {
+      "key": "luna_xhigh",
+      "max_budget_usd": 8.0,
+      "max_output_tokens": 32000,
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "xhigh"
+    }
+  ],
+  "planned_calls_per_effort": 2853,
+  "planned_calls_total": 8559,
+  "prepared_at": "2026-08-09T11:19:37.543244+00:00",
+  "pricing": {
+    "source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+    "usd_per_million_tokens": {
+      "cache_write": 0.25,
+      "cached_input": 0.02,
+      "input": 0.2,
+      "output": 1.2
+    },
+    "verified_at": "2026-08-09"
+  },
+  "prompt_contract": {
+    "development_labels_in_prompt": false,
+    "fresh_final_test_inspected": false,
+    "same_as_luna_low": true,
+    "store": false,
+    "vif_critic_input": false
+  },
+  "protocol_amendment": {
+    "amended_at": "2026-08-09",
+    "amended_max_output_tokens": 8000,
+    "concurrency_note": "Client concurrency changed after valid continuation receipts showed long xhigh wall time. It moved from 4 to 12 and then 24. This changes call scheduling only. Latency remains a diagnostic and is not directly comparable with Luna low.",
+    "continuation_rule": "Preserve every initial receipt. Reuse only completed valid or fail-closed receipts. Retry incomplete and non-terminal error receipts at the amended ceiling.",
+    "execution_note": "The initial executor waited for each complete batch. The final executor uses a continuous 24-worker pool so one long response does not stop new calls. The maximum number of concurrent calls is unchanged.",
+    "final_client_concurrency": 24,
+    "initial_client_concurrency": 4,
+    "initial_max_output_tokens": 2000,
+    "intermediate_client_concurrency": 12,
+    "reason": "The length-stratified smoke tests passed at 2,000 tokens, but the full runs produced incomplete max_output_tokens responses. The higher ceiling avoids measuring truncation instead of reasoning effort.",
+    "xhigh_final_max_output_tokens": 32000,
+    "xhigh_reason": "Two xhigh continuation calls reached 8,000 output tokens. The xhigh-only ceiling increased to 32,000. Medium and high remain at 8,000."
+  },
+  "repeats": 3,
+  "repo_head": "0fb2675bf84644e38733cb5446d0f5180d33ae9b",
+  "runner_sha256": "66fd3dc67e46942a9421e52583c00b19de82cef850ffc700f92dd5df46977171",
+  "schema_version": "twinkl-ck3w-luna-higher-reasoning-v1",
+  "setup": "weekly_without_critic",
+  "shared_api_runner_sha256": "ec8cdecdd5c5420013c58d33a3f9b8650d4f6df887aa454da0b9f665b055b8be",
+  "shared_scorer_sha256": "60ef090738b4acba8476251cf44c2db0b5dd356dd08c6ee6e2a4963516a08053",
+  "smoke_prompt_count": 24,
+  "smoke_prompt_sha256": [
+    "108b7463d4e2f5c55a97100920b68630717591d45c354ca04f3fa5c8a6516c5c",
+    "e791e79f8c31c5cb452b7ad12b1eaa6ddb7d507d774ab09c72d20a57ae978a73",
+    "8432ce193467f0c56e7f55387ed2fbd6bcfd60964ad338630df96f57035223f2",
+    "567f2ad98510960bf791f767f5ce51e049b65201be6ec5dbf803b1170004bb37",
+    "c28dbd9ddcc809d9a700d83e956908e9c149d871803a714832e384b73bb066c3",
+    "dc4c31ec3e62558f6792114fc7be3da25877832a86b77129edd236bb2da67cbe",
+    "90ccac3989b42c03f4a5295f4a6ddbc5ca41dde0e25b451294dcfd1820974cf9",
+    "60d51ede10e215f62e7e907763bc11f0d9a1d4d9b9c14144559b00f83a4e0970",
+    "420aa54a7a97d8526265b38083a82974e4c6d1e9da7acef02ca6e5cc1cda21ad",
+    "abb0988fbfd8a3e59ec88abf41443d6fb0fa008d08da255ee81e42b95e3a3bc1",
+    "62059b2d45633e3ccdd56faaafd5730b5a564d7952267bc5995c93d29edc023a",
+    "5ae6406cc48ba1d8ff134ad4875ca82e0c5d1f21751fed1e2c54ede8bc13e3ff",
+    "7a26e9803daad1bd96e9e2cbae1f5fdd3a2fd37cdadd2e8e5e1c0e37a24ebd01",
+    "9d710431ab995f97c522aadb5e128310b9dbe1465ae0c304d2fe140664288060",
+    "5b71d58a06b8092e2f62254802780e5c357fbf4fcc0cc72179284f9fbe6cc389",
+    "5b56ceda04e532108f6635a2fac995faa373580af79d93710f1178cd938b80d3",
+    "ab297b180965856221de82a01969e08fde8c787a001554225e9c7c4dc2ecd541",
+    "81d92a7cf2813e2024916195222f446850d71adfedd013f9a70b9de6b2d09259",
+    "8ae36911aaf5e14380b62eccd0afd0ad759440d503c6805315e32b4c0c075743",
+    "42a18a7b7b2bfcebc379ced397fa5fd5555a887a875ed845055c772288585798",
+    "30dd1b851a5d5fc4b1cbf45bdfd7dec6fa3cd136737de78d844d4ae1c96a4110",
+    "dd9a84fd7f86f6d7a738f992cc79d9ca21fab44f1c4fd62dbbb7f228c239cbe6",
+    "a3498e5c2347113ccfbb007cfe7a56e975459818009157fb7922ece059eec609",
+    "abd8cd5776331b71f2fe315b05d709bf0a15145000b6c61f810dec8c55d61f40"
+  ],
+  "study_id": "twinkl_ck3w_luna_higher_reasoning_v1"
+}

@@ -52,7 +52,7 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Security target decision (2026-07-11):** [`twinkl-a30f`](reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md) completed a receipt-bound, full-corpus active-state Security review and the paired `run_057`-`run_062` comparison. Repaired-target training raises median test Security QWK from `0.156` to `0.328` under repaired labels and from `0.205` to `0.372` under historical labels. Future `window_size: 1` training should use `security_active_critic_state_v1`, but the repaired runs stay off the historical frontier table because 678 Security labels changed. Absolute Security QWK and disagreement-case accuracy still leave representation and semantic work open.
 >
-> **Current drift-target status (2026-07-15):** The complete 292-case development analysis contains 42 Drifts across 36 Drift trajectories. The earlier `twinkl-752.5` reassessment remains a 106-case, 33-Drift result: median Drift recall was `0.273` for weekly review without VIF Critic input, `0.212` with raw VIF Critic input, and `0.273` for VIF-Critic-triggered early-plus-weekly review. Its raw-input recall interval crossed zero, so the old rejection is inconclusive; scheduling changed delay but added no Drift hits. On the complete data, `twinkl-52zz` found median Drift recall of `0.167` for `gpt-5.4-mini` and `0.476` for `gpt-5.6-luna`, with median false Drift alerts of 5 and 13 respectively. The reasoning-effort-`low` follow-up then raised median Drift recall to `0.548` and cut false Drift alerts to 4, while coverage fell from `0.777` to `0.637`. The approved hierarchy ranks Drift recall first, false Drift alerts second, and coverage as diagnostic, so Luna at reasoning effort `low` is the current development Weekly Drift Reviewer. The study stops before `medium`. The former 24-person `twinkl-v8pb` final-test data is development-only; `twinkl-pv6s` must build a fresh final test. No Weekly Drift Reviewer, VIF Critic, scheduler, or architecture has deployment approval, and the active entry-level frontier stays unchanged.
+> **Current drift-target status (2026-08-09):** The complete 292-case development analysis contains 42 Drifts across 36 Drift trajectories. The earlier `twinkl-752.5` reassessment remains a 106-case, 33-Drift result: median Drift recall was `0.273` for weekly review without VIF Critic input, `0.212` with raw VIF Critic input, and `0.273` for VIF-Critic-triggered early-plus-weekly review. Its raw-input recall interval crossed zero, so the old rejection is inconclusive; scheduling changed delay but added no Drift hits. On the complete data, `twinkl-52zz` found median Drift recall of `0.167` for `gpt-5.4-mini` and `0.476` for `gpt-5.6-luna`, with median false Drift alerts of 5 and 13 respectively. The reasoning-effort-`low` follow-up then raised median Drift recall to `0.548` and cut false Drift alerts to 4, while coverage fell from `0.777` to `0.637`. The `twinkl-ck3w` follow-up found median Drift recall of `0.571`, `0.619`, and `0.667` for Luna `medium`, `high`, and `xhigh`, with 4, 8, and 9 false Drift alerts. Only `xhigh` had a statistically clear Drift-recall gain over `low`, and it also had a statistically clear increase in false Drift alerts. Median end-to-end API latency per terminal persona-week call was 1.38, 2.81, 2.96, 3.66, and 4.91 seconds for `none` through `xhigh`. The latency values are diagnostic because the runs used different dates and client scheduling. Luna `low` remains the fixed development Weekly Drift Reviewer pending an explicit decision on this trade-off. The former 24-person `twinkl-v8pb` final-test data is development-only; `twinkl-pv6s` must build a fresh final test. No Weekly Drift Reviewer, VIF Critic, scheduler, or architecture has deployment approval, and the active entry-level frontier stays unchanged.
 >
 > **Staged VIF architecture decision (2026-07-14; scope narrowed 2026-07-17):** Under `twinkl-752.2`, the user approved Weekly Drift Reviewer decisions without VIF Critic input followed by the deterministic two-Conflict Drift Detector as the current user-facing path. The VIF Critic remains required for stored prediction, uncertainty, independent disagreement review, offline candidate mining, and retraining. The optional user-facing candidate-confirmation path is outside the remaining capstone scope; revisiting it requires a new scope decision and fresh evaluation. Raw prompt input, direct VIF Critic Drift decisions, and early-plus-weekly scheduling are not selected. This is an architecture decision, not deployment approval.
 >
@@ -263,6 +263,36 @@ It is not the forward model-development policy after `twinkl-752`.
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-08-09 — Luna `xhigh` raises Drift recall and false Drift alerts (`twinkl-ck3w`)
+
+The higher-reasoning follow-up used the frozen 951 prompts and complete
+204-persona development data. It ran three repeats each for `gpt-5.6-luna` at
+reasoning effort `medium`, `high`, and `xhigh`, without VIF Critic input. The
+analysis also uses the frozen `none` and `low` responses as references.
+
+Median Drift recall was `0.571` for `medium`, `0.619` for `high`, and `0.667`
+for `xhigh`, versus `0.548` for the frozen `low` setup. Median false Drift
+alerts were 4, 8, and 9, versus 4 for `low`. The paired `xhigh`-minus-`low`
+Drift-recall delta was `+0.095` with 95% interval `[+0.023, +0.186]`. Its
+false-alert delta was `+5` with interval `[+1, +9]`. `Xhigh` is the only setup
+with a statistically clear Drift-recall gain, and it also has a statistically
+clear rise in false Drift alerts. The current recall-first hierarchy ranks it
+first, but Luna `low` remains fixed pending an explicit decision on the
+trade-off.
+
+Against `none`, the paired Drift-recall delta was `+0.143` for `high` with 95%
+interval `[+0.027, +0.257]` and `+0.190` for `xhigh` with interval `[+0.053,
++0.318]`. Median call latency was 1.38 seconds for `none`, 2.81 for `low`, 2.96
+for `medium`, 3.66 for `high`, and 4.91 for `xhigh`. Latency is diagnostic
+because run dates and client scheduling differ.
+
+Current Luna rates produced a $9.7050432 standard-rate token calculation for
+all paid study activity, including smoke tests and discarded incomplete
+attempts. The output-token ceiling required documented amendments before the
+final response sets completed. No fresh final test was opened, and no setup
+receives deployment approval. Full details:
+[`reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md`](reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md).
 
 ### 2026-07-14 — Luna `low` selected for development (`twinkl-52zz`)
 

@@ -1,0 +1,135 @@
+study_id: twinkl_ck3w_luna_higher_reasoning_v1
+status: amended_preregistered
+created_at: '2026-08-09'
+
+baseline:
+  config_path: config/evals/twinkl_52zz_luna_low_v1.yaml
+  manifest_path: logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/manifest.json
+  responses_path: logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/responses_gpt_5_6_luna_low.jsonl
+  metrics_path: logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/metrics.json
+  published_commit: aadccd3
+  expected_sha256:
+    config: 32461bda8a1b7663922ff47e097e9dcc6b5d6b4f7f513746e358306cb2118406
+    manifest: 2547ca6fa2cc859ccf7d85c2cc7c0f3ddab1eefa56b4a9444de4af19bd76d08e
+    responses: 4c31726b49e24a98aa2c1592b9e3c64371dade90b491e3a7b03a018284e491c7
+    metrics: 89d62ab68202944eea5f0bd02388db79a4fb10760587d3d76e4be79467f08410
+
+no_reasoning_baseline:
+  config_path: config/evals/twinkl_52zz_model_comparison_v1.yaml
+  manifest_path: logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/manifest.json
+  responses_path: logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/responses_gpt_5_6_luna.jsonl
+  metrics_path: logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/metrics.json
+  published_commit: 905a7e3
+  expected_sha256:
+    config: 9db3843b20c6cbe64a60f630840144bf8b5d645c3b799b67edc1521b794bad0b
+    manifest: 5e99c77064f6566e3f7ffb691bca16e9983f78be6762350f9f1a63c8bcf98fb5
+    responses: 77f3491e9e7ee4ae99d8d36b8b00fe52719c4086ebf74338132ae5f4de7dd005
+    metrics: 3c404fc717300f84393bf2230ab8f6dbf5d7df043af26160ddac79b0b4b8bcc9
+    prompts: f0c7e68b5906c3ceeaf27dfc5d5b305252ee2298d688193363d79f6ac370c539
+
+study:
+  setup: weekly_without_critic
+  repeats: 3
+  expected_personas: 204
+  expected_persona_weeks: 951
+  expected_calls_per_effort: 2853
+  expected_total_calls: 8559
+
+models:
+  - key: luna_medium
+    model: gpt-5.6-luna
+    reasoning_effort: medium
+    max_output_tokens: 8000
+    max_budget_usd: 3.0
+  - key: luna_high
+    model: gpt-5.6-luna
+    reasoning_effort: high
+    max_output_tokens: 8000
+    max_budget_usd: 3.0
+  - key: luna_xhigh
+    model: gpt-5.6-luna
+    reasoning_effort: xhigh
+    max_output_tokens: 32000
+    max_budget_usd: 8.0
+
+api:
+  provider: openai
+  endpoint: responses
+  max_output_tokens: 8000
+  timeout_seconds: 60
+  max_attempts: 2
+  concurrency: 24
+  service_tier: default
+  store: false
+  max_budget_usd: 15.0
+  pricing_verified_at: '2026-08-09'
+  pricing_source: https://developers.openai.com/api/docs/models/gpt-5.6-luna
+  pricing_usd_per_million_tokens:
+    input: 0.20
+    cached_input: 0.02
+    cache_write: 0.25
+    output: 1.20
+
+smoke:
+  prompt_count: 24
+  repeats: 1
+  max_budget_usd_per_effort: 0.15
+  full_run_contingency: 1.20
+
+protocol_amendment:
+  amended_at: '2026-08-09'
+  initial_max_output_tokens: 2000
+  amended_max_output_tokens: 8000
+  xhigh_final_max_output_tokens: 32000
+  initial_client_concurrency: 4
+  intermediate_client_concurrency: 12
+  final_client_concurrency: 24
+  reason: >-
+    The length-stratified smoke tests passed at 2,000 tokens, but the full runs
+    produced incomplete max_output_tokens responses. The higher ceiling avoids
+    measuring truncation instead of reasoning effort.
+  xhigh_reason: >-
+    Two xhigh continuation calls reached 8,000 output tokens. The xhigh-only
+    ceiling increased to 32,000. Medium and high remain at 8,000.
+  continuation_rule: >-
+    Preserve every initial receipt. Reuse only completed valid or fail-closed
+    receipts. Retry incomplete and non-terminal error receipts at the amended
+    ceiling.
+  concurrency_note: >-
+    Client concurrency changed after valid continuation receipts showed long
+    xhigh wall time. It moved from 4 to 12 and then 24. This changes call
+    scheduling only. Latency remains a diagnostic and is not directly
+    comparable with Luna low.
+  execution_note: >-
+    The initial executor waited for each complete batch. The final executor
+    uses a continuous 24-worker pool so one long response does not stop new
+    calls. The maximum number of concurrent calls is unchanged.
+
+bootstrap:
+  unit: trajectory
+  random_seed: 5256000
+  repeats: 10000
+  interval: 0.95
+
+decision:
+  metric_hierarchy:
+    - Drift recall
+    - false Drift alerts
+    - coverage and abstention as diagnostics
+  status: pending_user_decision
+  restrictions:
+    - Development-only AI-reviewed synthetic evidence; no human validation.
+    - The complete development data is not a fresh final test.
+    - The Weekly Drift Reviewer receives no VIF Critic input.
+    - The smoke tests check execution, token limits, and cost only.
+    - No prompt variant, final test, deployment approval, or runtime architecture change is tested.
+
+artifacts:
+  output_dir: logs/experiments/artifacts/twinkl_ck3w_luna_higher_reasoning_20260809
+  manifest_filename: manifest.json
+  smoke_responses_pattern: smoke_responses_{effort}.jsonl
+  responses_pattern: responses_gpt_5_6_luna_{effort}.jsonl
+  initial_smoke_responses_pattern: initial_smoke_responses_2000_{effort}.jsonl
+  initial_responses_pattern: initial_responses_2000_{effort}.jsonl
+  intermediate_xhigh_responses_filename: intermediate_responses_8000_xhigh.jsonl
+  metrics_filename: metrics.json
