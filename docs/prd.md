@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-08-05*
+*Last updated: 2026-08-11*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -16,10 +16,10 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 380 saved annotations across 24 personas, with a 115-entry shared subset across 19 personas used for the current inter-rater agreement benchmark; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Drift Inspection App** | ✅ Complete | Read-only desktop Shiny app for comparing Runs 1–3 across three frozen Weekly Drift Reviewer setups: `gpt-5.4-mini` at reasoning effort `none`, `gpt-5.6-luna` at reasoning effort `none`, and `gpt-5.6-luna` at reasoning effort `low`. It shows complete development and persona-level results, Journal Entries, AI-reviewed LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, cited evidence, and verified input cutoffs without model or provider API calls. Local and Railway launch paths are documented in the [app guide](demo/weekly_drift_review_app.md). |
 | **Conversational Nudging** | ✅ Complete | The runtime and manual Experience integration are implemented and tested, including safe failure, retry, reply, skip, and linked Inspect events. A displayed nudge gives the user an immediate, contextual interaction between Journal Entries and the Coach Digest. It is a product design choice. It does not depend on measurable gains for the VIF Critic or Weekly Drift Detection. A future external pilot can measure response rate, continued journaling, and perceived relevance. |
-| **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input and recomputes the full history at each cutoff. It applies the deterministic two-consecutive-Conflict rule across week boundaries. Each Core Value has one current state: Active Drift, No Active Drift, or Insufficient Evidence. The output also keeps Historical Drift Records, current run length, the latest decision, and the end reason. An Abstain after two Conflicts gives Insufficient Evidence. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence; no fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
+| **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input and recomputes the full history at each cutoff. It applies the deterministic two-consecutive-Conflict rule across week boundaries. Each Core Value has one current state: Active Drift, No Active Drift, or Insufficient Evidence. The output also keeps Historical Drift Records, current run length, the latest decision, and the end reason. An Abstain after two Conflicts gives Insufficient Evidence. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence. A later development-only comparison found median Drift recall of `0.667` and 9 false Drift alerts for Luna-`xhigh`, compared with `0.548` recall and 4 false Drift alerts for Luna-low. Twinkl retains Luna-low because `xhigh` is a more aggressive operating point, not a clean improvement. No fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
 | **Coach Digest** | 🧪 Experimental | The Coach Digest runs after each Weekly Drift Detection result, including No Active Drift. It supplies the current state, a prior closed-week comparison, separate prior and current evidence, and cited Journal Entries to a prompt. It can describe that an active pattern did not continue only when a Not Conflict decision supports that deterministic change. It cannot treat Not Conflict as proof of improvement. If it cannot return a valid response, the Weekly Drift Detection result remains available. Coach Digest Validations and Coach Digest Evals are implemented, but no current batch result or future human calibration of the AI review is complete. No fresh final test or deployment approval is claimed. |
 | **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC implements the published 11-group, six-object balanced SVBWS design, then presents a label-free Core Value summary and first Journal Entry handoff. A confirmed Profile has at most two Core Values. If more than two values share the highest score, the user selects exactly two while the Profile retains all tied candidates. The app randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. The approved runtime can import Core Values from a saved confirmed Profile; automated browser-to-service storage is outside the capstone. It is a research-grounded pilot instrument, not a validated Twinkl instrument. [Full spec](onboarding/onboarding_spec.md) |
-| **Experience and Inspect React App** | 🚧 In Progress | Shared contracts, five deterministic week-by-week Persona replays, manual Journal Entries, displayed nudges with reply and skip actions, Journal Entry removal, Simulated time, explicit closed-week review, affected-week recomputation, safe retry, live Weekly Drift Reviewer integration, Drift, required Coach Digest runs, and linked Inspect events are implemented. Manual Journal Entry cards show the newest entry first, while Weekly Drift Detection and Inspect keep chronological order. Monday-through-Sunday weeks become eligible only after Sunday closes; saving a Journal Entry never reviews its open week. Persona selection, manual next-step replay, previous-week navigation, optional automatic replay and pause, restart, Jump to key moment, reduced-motion behavior, and no-future-data projection are wired into the shared React session. The release quality gate is complete; professor walkthrough and capstone evidence remain. Narrow-screen phones remain the primary verification target. [Design](demo/experience_inspect_app.md) |
+| **Experience and Inspect React App** | 🚧 In Progress | Shared contracts, five deterministic week-by-week Persona replays, manual Journal Entries, displayed nudges with reply and skip actions, Journal Entry removal, Simulated time, explicit closed-week review, affected-week recomputation, safe retry, live Weekly Drift Reviewer integration, Drift, required Coach Digest runs, and linked Inspect events are implemented. Manual Journal Entry cards show the newest entry first, while Weekly Drift Detection and Inspect keep chronological order. Monday-through-Sunday weeks become eligible only after Sunday closes; saving a Journal Entry never reviews its open week. Persona selection, manual next-step replay, previous-week navigation, optional automatic replay and pause, restart, Jump to key moment, reduced-motion behavior, and no-future-data projection are wired into the shared React session. The core release quality gate is complete. Pilot privacy controls, Coach Digest feedback, longitudinal Core Value history, current Coach Digest evaluation results, and final professor walkthrough evidence remain open. Optional live rerun remains separate work. Narrow-screen phones remain the primary verification target. [Design](demo/experience_inspect_app.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -52,10 +52,14 @@ models/
 # Elevator Pitch
 
 * **Working name:** Twinkl — a long-horizon "inner compass."
-* **What:** Journal reflections feed a living user model (values, identity themes, north star) that mirrors back where behaviour diverges from intent; it is not another "feel-better" journal.
+* **What:** A confirmed Profile anchors longitudinal Journal Entry review. Twinkl
+  shows where behavior conflicts with Core Values; it is not another
+  "feel-better" journal. Automatic Profile evolution is future work.
 * **Promise:** Honest, explainable alignment check-ins that combine deep introspection with accountability so users stop drifting from their declared priorities.
 * **Capstone hook:** Pattern recognition + hybrid reasoning + explainable UX → direct throughline to all submodules.
-* **Key properties:** Dynamic self-model that updates gradually, identity treated as slowly evolving, value-alignment questions over dopamine loops.
+* **Key properties:** A confirmed Profile anchors the current capstone POC.
+  Journal Entries add longitudinal evidence without automatically changing that
+  Profile. An evolving Profile is future work.
 
 # Pain Point(s) it solves & Target Users
 
@@ -69,12 +73,12 @@ models/
 
 # Difference vs commercial peers
 
-AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journal, Rosebud) summarise moods and trends yet treat every entry as an isolated blob; none maintain a dynamic, explainable self-model that challenges users when their actions contradict their stated direction—leaving a white space for people already paying for coaching or multiple journaling subscriptions.
+AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journal, Rosebud) summarise moods and trends yet often treat each entry as an isolated item. Twinkl starts with a declared Profile, reviews Journal Entries over time, and cites evidence when behavior conflicts with Core Values. Automatic Profile evolution remains future work.
 
 | Feature                | Scenario A: Current AI Journals (The "Summarizer")                                                                                                                                                                | Scenario B: Twinkl (The "Alignment Engine")                                                                                                                                                                       |
 | :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Core Premise**       | **Starts with a "Blank Slate."** Knowledge is built *only* from the Journal Entries as they come in.                                                                                                              | **Starts with a "Self-Model."** The user first defines their Core Values, goals, and priorities during onboarding.                                                                                                |
-| **Example Self-Model** | *None exists.*                                                                                                                                                                                                    | **Value 1:** "My health is my foundation." **Value 2:** "My relationship is my anchor." **Priority 1:** "The 'Project X' at work is my focus this month."                                                         |
+| **Core Premise**       | **Starts with a "Blank Slate."** Knowledge is built *only* from the Journal Entries as they come in.                                                                                                              | **Starts with a confirmed Profile.** The user first defines their Core Values, goals, and priorities during onboarding.                                                                                                |
+| **Example Profile** | *None exists.*                                                                                                                                                                                                    | **Value 1:** "My health is my foundation." **Value 2:** "My relationship is my anchor." **Priority 1:** "The 'Project X' at work is my focus this month."                                                         |
 | **User Entries**       | *(Constant for both scenarios)*  1\. "So stressed, the big project at work is derailing everything." 2\. "Skipped the gym again... feel guilty." 3\. "Had a nice dinner with my partner, which was a good break." | *(Constant for both scenarios)*  1\. "So stressed, the big project at work is derailing everything." 2\. "Skipped the gym again... feel guilty." 3\. "Had a nice dinner with my partner, which was a good break." |
 
 * **Alignment engine:** Weekly reasoning compares lived behaviour vs. declared priorities, surfaces tensions, and cites evidence snippets—turning “you said X but did Y” into actionable prompts.
@@ -88,8 +92,12 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 
 ## **System loop**
 
-1. **Perception:** Typed Journal Entries flow through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
-2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
+1. **Perception:** Typed Journal Entries and Core Values enter the displayed
+   nudge path and Weekly Drift Detection.
+2. **Memory:** The Experience service stores the confirmed Profile, Journal
+   Entries, displayed nudges and responses, Weekly Drift Detection outputs, and
+   Coach Digest responses. The current POC does not update the Profile from
+   Journal Entries. An evolving or decay-aware Profile is future work.
 3. **Reasoning + action:** The required user-facing path reviews closed Monday-through-Sunday calendar weeks. The first partial week becomes eligible after its first Sunday; saving a Journal Entry does not review the open week. The completed **[VIF Critic](vif/01_concepts_and_roadmap.md)** remains an offline research component:
    * **VIF Critic:** A numeric, uncertainty-aware model that predicts `-1`, `0`, or `+1` for each value from the current Journal Entry plus the normalized 10-dimensional value profile. It uses [LLM-Judge labels for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). At `window_size: 1`, it has no date/time-gap feature, prior Journal Entries, demographics, or biography; larger legal-history windows remain diagnostic experiments. Existing code supports training, evaluation, raw output export, and timeline inference. A generalized review-and-retrain loop is not implemented or planned for the time-boxed capstone. The exact relabeling invariant is defined in the [Security target contract](vif/security_target_contract.md).
    * **Weekly Drift Detection:** At the end of each week, the internal Weekly Drift Reviewer reviews Journal Entries without VIF Critic input. Its fixed model contract is `gpt-5.6-luna` with reasoning effort `low`. The internal Drift Detector then applies the rule that two consecutive Conflicts for the same Core Value form Drift. The Drift Detector recomputes all stored decisions. It stores Active Drift, No Active Drift, or Insufficient Evidence per Core Value and keeps Historical Drift Records separately. It fails closed to Abstain on invalid or refused responses. The complete development analysis contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. The fixed Luna-low setup had median Drift recall of `0.548`, 4 false Drift alerts, and `0.637` coverage. These are AI-reviewed synthetic development results. The capstone has no fresh final test or deployment approval. The crash/rut/evolution router remains only for historical compatibility.
@@ -118,6 +126,12 @@ same Core Value.
   with 5, 4, and 4 false Drift alerts across 256 non-Drift Core Value
   trajectories. No development rerun is required after the prompt cleanup.
   The capstone does not proceed to a fresh final test or deployment approval.
+- `twinkl-ck3w` later compared Luna `medium`, `high`, and `xhigh` on the same
+  development data. Luna-`xhigh` raised median Drift recall from `0.548` to
+  `0.667`, but raised median false Drift alerts from 4 to 9 and increased the
+  current-rate full-run calculation. Twinkl therefore retains Luna-low as the
+  fixed capstone contract. This no-change decision uses development evidence
+  and grants no deployment approval.
 - QWK, `+1` recall, calibration, and circumplex metrics remain diagnostics.
 - Only Core Values, stored in `top_values`, can produce Drift. `+1` evidence is
   non-gating and may support occasional positive Coach Digest acknowledgment.
@@ -180,7 +194,8 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 
 * **Weekly Drift Detection** ✅: Review end-of-week Journal Entries, apply the Drift rule, and store structured output with cited evidence (Pattern Recognition + Reasoning).
 * **Coach Digest** ⚠️: Supply Weekly Drift Detection output to a prompt, then produce the user response (Reasoning).
-* **Conversational introspection agent** 🧪: Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation. The system uses a three-category **nudge taxonomy**:
+* **Conversational introspection agent** ✅: The displayed nudge interaction is
+  complete for the capstone POC. It uses a three-category **nudge taxonomy**:
   - **Clarification** — for vague entries lacking concrete details
   - **Elaboration** — for surface-level entries with unexplored depth
   - **Tension-surfacing** — for hedging language or conflicted statements
@@ -205,7 +220,10 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 
 **Implementation path**
 
-1. Frame the research question (“How do we sustain a dynamic model of values/identity and reflect alignment?”) and map subsystems to submodules.
+1. Frame the original research question (“How do we sustain a dynamic model of
+   values and identity and reflect alignment?”) and map components to
+   submodules. The capstone POC narrows this question to a confirmed Profile and
+   longitudinal evidence. Profile evolution is future work.
 2. Define the MVP loop: onboarding (SVBWS values assessment — see [spec](onboarding/onboarding_spec.md))
 3. **Scoping Strategy:** Adopt a **Hybrid Approach** (simple journaling loop + Weekly Drift Detection + Coach Digest + lightweight trajectory visualization). Build small slices of each feature to demonstrate breadth without over-building.
 4. Specify the profile schema:
@@ -219,20 +237,25 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 
    > **Status:** Steps 1-5 complete (204 personas, 1,651 labeled Journal Entries). Human annotation tool is operational with 380 saved annotations, including the current 115-entry shared subset used for inter-rater agreement. Multiple VIF Critic architectures have been evaluated (ordinal MLP heads, BNN, TCN). See [Implementation Status](#implementation-status) for current progress. Step 6 (additional lightweight classifiers) is not planned for the time-boxed capstone.
 
-6. Tooling: start with API LLM for tagging + reflection, add lightweight classifiers later if needed; keep reasoning layer explainable for XRAI.
-7. Evaluation plan: combine Likert feedback on "felt accurate?" with inter-rater agreement on value tags and stability metrics for the profile.
-8. Instrument the inspiration feed so each recommendation decision (accept/reject/ignore) is stored as structured evidence linked to values, identities, and interest embeddings, enabling closed-loop personalization.
+6. Tooling: the time-boxed capstone does not add another lightweight
+   classifier. The completed VIF Critic remains offline research.
+7. Evaluation plan: collect optional Coach Digest perceived-accuracy feedback
+   without changing the fixed Profile. A future external pilot can add broader
+   user measures.
+8. The inspiration feed and its recommendation feedback loop are future work.
 
 | Component | Traditional Journaling (Summarizer) | Twinkl (Alignment Engine) |
 | :--- | :--- | :--- |
-| **Process** | **1. Tagging:** Identifies sentiment and topics.<br>• Journal Entry 1: Negative, Work<br>• Journal Entry 2: Guilt, Health<br>• Journal Entry 3: Positive, Partner<br>**2. Aggregation:** Groups these tags together. | **1. Reasoning:** Compares Journal Entries *against* the Self-Model.<br>• Journal Entry 1 → **Matches** Priority 1 = **Expected Friction**<br>• Journal Entry 2 → **Conflicts with** Value 1 = **Conflict (`-1`)**<br>• Journal Entry 3 → **Matches** Value 2 = **Alignment** |
+| **Process** | **1. Tagging:** Identifies sentiment and topics.<br>• Journal Entry 1: Negative, Work<br>• Journal Entry 2: Guilt, Health<br>• Journal Entry 3: Positive, Partner<br>**2. Aggregation:** Groups these tags together. | **1. Reasoning:** Compares Journal Entries *against* the confirmed Profile.<br>• Journal Entry 1 → **Matches** Priority 1 = **Expected Friction**<br>• Journal Entry 2 → **Conflicts with** Value 1 = **Conflict (`-1`)**<br>• Journal Entry 3 → **Matches** Value 2 = **Alignment** |
 | **Question it Answers** | **"What have I been feeling/talking about?"** | **"Am I living in line with what I *said* I value?"** |
 | **Final Output (Insight)** | A high-level summary: "This week, your mood was primarily **stressed** and **guilty**. Your main topics were **'Work'** and the **'Gym'**. A dinner with your **'Partner'** was a positive moment." | An evidence-based alignment report:<br>**1. Alignment (Partner):** You honored your 'Partnership' value. (Evidence: *'nice dinner...'*)<br>**2. Misalignment (Health):** You broke your 'Health' value. (Evidence: *'Skipped the gym...'*)<br>**Prompt:** Your 'Work' priority is creating high stress, just as you expected, but it is now in conflict with your 'Health' value. Is this an acceptable trade-off for this week?" |
 | **Core Concept** | **Retrospective Summarization** | **Prospective Accountability** |
 
 **Twinkl’s edge**
 
-* **Structured self-model:** Onboarding + ongoing journaling build a knowledge base of values, goals, tensions, and identity themes that evolves with decay-aware updates.
+* **Structured Profile:** Onboarding creates the confirmed Profile and Core
+  Values. Ongoing journaling adds longitudinal evidence. Automatic Profile
+  evolution and decay-aware updates are future work.
 * **Alignment engine:** Weekly reasoning compares lived behaviour vs. declared priorities, surfaces tensions, and cites evidence snippets—turning “you said X but did Y” into actionable prompts.
 * **Explainable accountability:** Every nudge shows why (phrases, time windows, rules), plus contextual quotes/interventions tuned to the conflict at hand.
 * **Capstone-ready architecture:** Synthetic-data generation, LLM-Judge
@@ -286,8 +309,6 @@ listed here is planned.
 | **Neuro-symbolic reasoning** | Add a tiny knowledge graph + rule layer on top of LLM outputs to show which logical checks fired (great for XRAI storytelling). |
 | **Multimodal fusion** | *Future work (out of scope for capstone):* Blend text + prosodic audio cues to extend Intelligent Sensing value beyond text-only analysis. |
 | **Personalised quote recommender** | Build embeddings of quotes + user resonance to deliver “micro-anchors” tuned to each identity conflict. |
-| **Distilled VIF Critic** | Train a smaller supervised model from LLM-Judge labels, reducing latency and cost while enabling offline inference. (See [Model Training](vif/03_model_training.md)) |
-| **Ordinal regression models** | Treat alignment as ordinal classification {-1, 0, +1} instead of regression; architectures under investigation include CORAL, CORN, EMD, and soft ordinal ranking losses. |
 | **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. (See [Uncertainty Logic](vif/04_uncertainty_logic.md)) |
 | **VIF Critic extensions** | Keep the VIF Critic (Offline) as the current-Journal-Entry POC. Short-history inputs, calibrated prediction, and time-aware multimodal research remain outside the time-boxed capstone. See [VIF design](vif/01_concepts_and_roadmap.md). |
 
@@ -295,10 +316,10 @@ listed here is planned.
 
 | Submodule                         | Features in Twinkl                                                                                                                                                                                                                  |
 | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Intelligent Reasoning Systems** | Formal value/goal knowledge base + decay rules cover knowledge representation; a hybrid reasoning layer mixes LLM inference with symbolic “if value X high but mentions drop Y weeks → flag misalignment” rules, and the inspiration feed performs decision-theoretic ranking (with [uncertainty-aware scoring](vif/04_uncertainty_logic.md)) of real-time search hits plus logged user accept/reject choices. |
-| **Pattern Recognition Systems**   | Transformer tagging for sentiment/topics, sequential models for cadence baselines, clustering/trajectory viz (“Map of Me”) to detect seasons, and anomaly detection that spots journal absences while continuously re-learning from the recommendation-choice dataset. |
-| **Intelligent Sensing Systems**   | Text-based sensing: entry content analysis (value mentions, sentiment, hedging), temporal patterns (entry cadence, time-of-day), and journal gap detection. The real-time search layer acts as an external "sensor" that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. *(Multimodal audio sensing deferred to future work.)* |
-| **Architecting AI Systems**       | Agentic loop (Perception → Memory → Reasoning → Action), explainable feedback via XRAI, privacy-first storage of sensitive logs, and orchestration of background workers that run anomaly checks, call external APIs, and write preference updates while following MLSecOps guardrails. |
+| **Intelligent Reasoning Systems** | The confirmed Profile supplies Core Values. The Weekly Drift Reviewer decides Conflict, Not Conflict, or Abstain. The deterministic Drift Detector applies the two-consecutive-Conflict rule. The Coach Digest uses the stored result. |
+| **Pattern Recognition Systems**   | The offline VIF Critic compares Journal Entries with a ten-dimensional Profile. The completed research covers ordinal prediction, uncertainty, embeddings, hard-dimension analysis, and recall-first checkpoint selection. |
+| **Intelligent Sensing Systems**   | The capstone uses text from Journal Entries, displayed nudges, and responses. Journal gap detection, real-time search input, and multimodal sensing are future work. |
+| **Architecting AI Systems**       | The React app and Python service use versioned session, scenario, and trace contracts. Saved Persona replay, fail-closed provider handling, prompt boundaries, and Inspect show the current orchestration. Production multi-user storage and background schedules are outside scope. |
 
 
 
@@ -354,6 +375,7 @@ listed here is planned.
 | [twinkl-752.5 reassessment](../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md) | Raw VIF Critic input, scheduling, trigger placement, and subgroup results |
 | [twinkl-qtwz complete development review](../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md) | Complete 292-case development labels and 42-Drift contract |
 | [twinkl-52zz Luna reasoning-effort comparison](../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md) | Evidence behind the fixed Luna-low model contract, metric hierarchy, cost, and limitations |
+| [twinkl-ck3w Luna higher-reasoning comparison](../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md) | Medium, high, and xhigh development results and the no-change Luna-low decision |
 | **Other** | |
 | [architecture/e2e_architecture.md](architecture/e2e_architecture.md) | High-level product and system map |
 | [weekly/weekly_drift_detection.md](weekly/weekly_drift_detection.md) | Weekly Drift Detection and Coach Digest contracts, runtime commands, and generated files |

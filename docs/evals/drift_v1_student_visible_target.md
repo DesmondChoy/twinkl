@@ -17,9 +17,10 @@ The locked final-test review covered 24 cases / 191 Journal Entries. The reviews
 on 23/24 case decisions (0.95833) and 180/191 Journal Entry decisions (0.94241), but
 case_023 remains unresolved across 19 Journal Entries. The deployment-approval score was
 therefore deliberately not performed: scoring only the agreed 23 cases would
-cherry-pick the easier data. No VIF Critic has deployment approval; production wiring
-and `twinkl-a2w` remain blocked. There is no fallback to the retired frozen
-benchmark.
+cherry-pick the easier data. No VIF Critic has deployment approval. The later
+`twinkl-a2w` work implemented the approved Weekly Drift Reviewer and Drift
+Detector runtime without VIF Critic input. There is no fallback to the retired
+frozen benchmark.
 
 ## Rule
 
@@ -33,21 +34,23 @@ Do not mark a Journal Entry as a Conflict merely because it contains:
 - biography, history, or facts not in the displayed Journal Entries; or
 - ambiguous prose that could reasonably mean more than one thing.
 
-Two consecutive Conflicts for the same Core Value form one Drift. A
-non-Conflict or uncertain Journal Entry breaks the run. Later Journal
-Entries describe whether recorded Drift is active, recovered, or uncertain;
-they do not change whether the earlier adjacent pair occurred.
+Two consecutive Conflicts for the same Core Value form one Drift. A Not Conflict
+decision ends the active run. An Abstain decision can block a current claim.
+Later Journal Entries do not change whether the earlier adjacent pair occurred.
+The current implementation stores Active Drift, No Active Drift, or
+Insufficient Evidence and keeps confirmed past Drift in Historical Drift
+Records.
 
 ## Evidence boundary
 
-The target uses two separate sets:
+The original protocol used two separate sets:
 
 1. The original fixed validation personas are the development set. They
    may define the rule and select one detector threshold.
-2. The 24 registry personas added after the original 180-person model split are
-   the exact locked final test set for the existing `run_020` checkpoint.
-   Their IDs are recorded in the target manifest. They are not used to write the
-   rule or choose the threshold.
+2. The 24 registry personas added after the original 180-person model split
+   formed the locked final-test set for the existing `run_020` checkpoint.
+   Their IDs remain in the target manifest. Later review work made this set
+   development-only, so it cannot support a future deployment claim.
 
 The original frozen test set is retired. It is not in either set.
 
@@ -78,9 +81,10 @@ not enforced technical isolation; the audit manifest records that limitation.
 
 ## Scope limits
 
-The fresh final test set covers targeted Security, Power, and Hedonism batches. A
-failure there is enough to keep production wiring blocked. A pass is useful POC
-evidence but cannot by itself approve a general ten-value production trigger.
+The former final-test set covered targeted Security, Power, and Hedonism
+batches. It is now development-only. A future final test would need a fresh,
+independently resolved cohort. That work and deployment approval are outside
+the time-boxed capstone.
 
 The original five-pass consensus table remains label provenance and diagnostic
 evidence. It is not a Drift target, a threshold-selection input, or a final

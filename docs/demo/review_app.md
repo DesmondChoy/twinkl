@@ -14,7 +14,8 @@ model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`.
 
 The app is a review and debugging interface for the deprecated compatibility
 path. The approved capstone POC runtime is
-`src.coach.weekly_drift_runtime`; it does not yet have a dedicated UI.
+`src.coach.weekly_drift_runtime`. The separate Experience and Inspect React App
+shows current Weekly Drift Detection and Coach Digest results.
 
 ## What It Does
 

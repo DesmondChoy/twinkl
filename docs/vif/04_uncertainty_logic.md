@@ -153,19 +153,22 @@ recover within two Journal Entries, while three-step and multi-week definitions 
 sparse for the short observed trajectories. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md).
 
-### 5.1 Delivery-Time Recovery
+### 5.1 Current State and Historical Drift Records
 
 Weekly Drift Detection and Coach Digest wording answer different questions.
 The student-visible target records whether Drift occurred. Weekly Drift
-Detection stores the state at delivery time.
+Detection stores one current state for each Core Value: Active Drift, No Active
+Drift, or Insufficient Evidence. It keeps confirmed past Drift in Historical
+Drift Records.
 
-For example, `-1, -1, +1, +1, +1` remains a true benchmark Drift, but the
-Coach Digest should describe it as **recovered** rather than **active**.
-**Mixed** is a stored summary used only when relevant value-specific Drifts
-have different delivery states. It is not another state for one Drift.
-**Uncertain** applies when a later Weekly Drift Reviewer Abstain prevents a
-confident active-versus-recovered decision. These transition rules are
-implemented and covered by scenario tests.
+For example, `-1, -1, +1, +1, +1` remains a true benchmark Drift. If the later
+resolved Weekly Drift Reviewer Decision is Not Conflict, the current state is
+No Active Drift and the earlier pair remains in a Historical Drift Record. The
+Coach Digest can state that the earlier pattern did not continue when the
+stored prior-week comparison supports that claim. It cannot call Not Conflict
+proof of recovery or improvement. A later Abstain can produce Insufficient
+Evidence when it blocks a current claim. These rules are implemented and
+covered by scenario tests.
 
 Abstention is not a correct negative. Coverage and reference Drifts suppressed
 by Weekly Drift Reviewer abstention must remain visible, so apparent precision
@@ -250,7 +253,7 @@ The fallbacks are local safety scaffolding around Weekly Drift Detection output 
 | `src/vif/runtime.py` | Per-Journal-Entry and weekly VIF parquet generation |
 | `src/vif/weekly_schema.py` | Shared weekly frame names and required-column validation |
 | `src/weekly_drift_reviewer.py` | Frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
-| `src/drift_detector.py` | Deterministic Drift Detector and delivery states |
+| `src/drift_detector.py` | Deterministic Drift Detector, current states, and Historical Drift Records |
 | `src/coach/weekly_drift_runtime.py` | Weekly Drift Detection and Coach Digest orchestration |
 | `src/vif/drift.py` | Deprecated weekly crash/rut/evolution/high-uncertainty router |
 | `src/vif/evolution.py` | Experimental `stable`/`evolution`/`drift` classifier |

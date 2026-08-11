@@ -50,14 +50,15 @@ produce Abstain decisions. This fail-closed behavior prevents an unsupported
 Drift claim.
 
 The Drift Detector applies one deterministic rule: two consecutive Conflicts
-for the same Core Value form Drift. It also records extension, recovery,
-uncertainty, and mixed Core Value states.
+for the same Core Value form Drift. It stores Active Drift, No Active Drift, or
+Insufficient Evidence as the current state for each Core Value. It stores each
+confirmed past Drift as a Historical Drift Record.
 
 Weekly Drift Detection stores structured output with Core Values, cited Journal
 Entries, and Drift state. The Coach Digest runs after every stored result,
-including No Drift. Coach Digest Validations check cited text, restricted terms,
-and response length. If no valid response is available, the Weekly Drift
-Detection output remains available.
+including No Active Drift. Coach Digest Validations check cited text,
+restricted terms, and response length. If no valid response is available, the
+Weekly Drift Detection output remains available.
 
 Inspect reads the same Profile, Journal Entries, Weekly Drift Reviewer
 Decisions, Drift state, Weekly Drift Detection output, and trace events as

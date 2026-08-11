@@ -14,13 +14,15 @@ Evaluate this rule independently for each `(persona, declared_core_value)`:
 - Labels on other values do not cancel, offset, or complete the Drift.
 - The first Conflict starts a possible Drift; the second confirms it.
 - Further consecutive Conflicts extend the same Drift.
-- The first non-Conflict or uncertain Journal Entry ends the run. A later pair
-  starts a new Drift.
+- A Not Conflict decision ends the active Conflict run. An Abstain decision can
+  produce Insufficient Evidence when it blocks a current claim. A later pair of
+  Conflicts starts a new Drift.
 - Consecutive means consecutive observed Journal Entries after sorting by
   `t_index` and date. Same-day Journal Entries and Journal Entries across a
   week boundary count. V1 adds no maximum elapsed-time threshold.
-- A non-Conflict Journal Entry can support recovery; an uncertain Journal Entry
-  supports uncertainty instead.
+- A Not Conflict decision can support a claim that the earlier pattern did not
+  continue. It does not prove improvement. An Abstain decision does not support
+  a No Active Drift claim after recent Conflict evidence.
 
 One persona may therefore have separate or simultaneous Drifts on several Core
 Values. The reference records them separately by value; it never averages Core
@@ -33,9 +35,9 @@ the two-consecutive-Conflict rule. The workflow stores structured output. The
 Coach Digest uses that output to produce the user response. The prior
 consensus-derived benchmark and former final-test population are development
 evidence only. The approved capstone POC path is wired, but the time-boxed
-capstone stops without a fresh final test or deployment approval. Its delivery
-vocabulary is **active**, **recovered**, **mixed**, or **uncertain**, with
-implemented and tested state transitions.
+capstone stops without a fresh final test or deployment approval. Each Core
+Value has one current state: Active Drift, No Active Drift, or Insufficient
+Evidence. Confirmed past Drift remains in Historical Drift Records.
 
 The team recorded this adoption on 2026-07-10 in
 [GitHub issue #49](https://github.com/DesmondChoy/twinkl/issues/49).

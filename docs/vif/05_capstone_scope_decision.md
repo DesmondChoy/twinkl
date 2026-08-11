@@ -12,7 +12,8 @@ research rather than an essential architecture dependency. The user later
 closed the fresh final test as not planned and chose to end the time-boxed
 capstone without deployment approval. The user then marked VIF Critic Training
 complete for the time-boxed capstone and closed further VIF Critic research as
-not planned.
+not planned. On 2026-08-11, Twinkl reviewed `twinkl-ck3w` and retained Luna-low
+after Luna-`xhigh` raised both Drift recall and false Drift alerts.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -93,9 +94,11 @@ writer making a behavior or choice against the same Core Value.
 - Values are evaluated independently; aligned evidence on another value cannot
   cancel a Conflict or Drift.
 - A longer uninterrupted Conflict run is one Drift, not repeated alerts.
-- A non-Conflict or uncertain Journal Entry breaks the run.
-- Later recovery changes Coach Digest wording to recovered or mixed; it does
-  not erase the earlier Drift.
+- A Not Conflict decision ends the active Conflict run. An Abstain decision can
+  produce Insufficient Evidence when it blocks a current claim.
+- A later Not Conflict decision does not erase the earlier Drift. The Drift
+  Detector keeps that Drift in a Historical Drift Record and can set the current
+  state to No Active Drift. This state does not prove improvement.
 
 The current user-facing path uses decisions from `gpt-5.6-luna` at reasoning
 effort `low`, without VIF Critic input. The deterministic Drift Detector then
@@ -234,10 +237,13 @@ rather than substituted.
   false Drift alerts to 4, while coverage fell from `0.777` to `0.637`. `low`
   mechanically failed the preregistered coverage gate, but the approved metric
   hierarchy treats coverage as diagnostic. The comparison selected Luna at
-  reasoning effort `low`, the model contract is now fixed on that setup, and
-  the study stopped before `medium`. This choice does not change the approved
-  component boundaries, validate the fixed setup on a fresh final test, or
-  grant deployment approval.
+  reasoning effort `low`, and the model contract is fixed on that setup.
+  `twinkl-ck3w` later compared Luna `medium`, `high`, and `xhigh` on
+  the same development data. Luna-`xhigh` raised median Drift recall to `0.667`
+  and raised median false Drift alerts to 9. Luna-low remains the fixed contract
+  because `xhigh` is a more aggressive operating point, not a clean improvement.
+  This no-change decision does not change the approved component boundaries,
+  validate the fixed setup on a fresh final test, or grant deployment approval.
 
 The experiment history and numeric evidence remain in
 [`logs/experiments/index.md`](../../logs/experiments/index.md).
@@ -270,7 +276,8 @@ See [VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
 The user-facing runtime can import Core Values from a confirmed onboarding
 Profile. Automatic browser-to-service storage, a fresh independently resolved
-final test, and deployment approval are outside the time-boxed capstone scope.
+final test, deployment approval, and automatic Profile evolution are outside
+the time-boxed capstone scope.
 
 The VIF Critic review-and-retrain demonstration, data-scaling curve, candidate
 confirmation, and conversion to a binary Conflict model are not planned for

@@ -479,7 +479,7 @@ deployment approval are also outside its scope.
 | Module | Role |
 |---|---|
 | `src/weekly_drift_reviewer.py` | Frozen Weekly Drift Reviewer schema, validation, Luna-low caller, fail-closed Weekly Drift Reviewer Decisions, and JSON persistence |
-| `src/drift_detector.py` | Deterministic two-Conflict Drift Detector and delivery states |
+| `src/drift_detector.py` | Deterministic two-Conflict Drift Detector, current states, and Historical Drift Records |
 | `src/coach/weekly_drift_runtime.py` | Approved Weekly Drift Detection and Coach Digest orchestration |
 | `src/coach/weekly_digest.py` | Compatibility output construction, fallback routing, prompt rendering, validation, and persistence |
 | `src/coach/runtime.py` | Deprecated VIF Critic checkpoint-to-digest compatibility orchestration |

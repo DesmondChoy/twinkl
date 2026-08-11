@@ -21,16 +21,21 @@ The LLM-Judge produces training labels for the VIF Critic. This evaluation valid
 - Agreement report: avg Cohen's κ 0.66, Fleiss' κ 0.56 ([report](../../logs/exports/agreement_report_20260318_130642.md))
 - Historical reachability audit completed for hard dimensions with a diagnostic recommendation to change the target regime for `security` and use targeted relabeling for `hedonism` / `stimulation` ([report](../../logs/exports/twinkl_747/reachability_audit_report.md)); its legacy experiment setups did not exactly match the active VIF Critic input and did not create a repaired target
 - Repeated-call self-consistency and full-corpus stability analysis completed via the 5-pass `twinkl-754` rerun ([report](../../logs/exports/twinkl_754/consensus_rejudging_report.md))
+- Receipt-bound exact-state Security review and the
+  `security_active_critic_state_v1` target completed under `twinkl-a30f`
+- Matched Hedonism hard-set review completed under `twinkl-748`; the result did
+  not establish a stronger VIF Critic operating point
 
 ### What's Missing
 - Automated quality checks (all-zero rate, sparsity, distribution)
-- Exact-state hard-dimension review, target redesign, and follow-up relabeling after the `twinkl-747` / `twinkl-754` findings
+- Optional human re-annotation after future rubric or target changes
 
 ### Next Steps
 1. Add automated quality checks as post-labeling validation
-2. Use the `twinkl-747` findings to redesign or relabel hard-dimension targets, especially `security`
-3. Build the matched hard-set follow-up in `twinkl-748` so hard cases can be audited and re-evaluated more cleanly
-4. Re-annotate a subset after rubric / target improvements to measure κ improvement
+2. Re-annotate a subset only if a future rubric or target change requires a new
+   agreement measure
+
+No further VIF Critic target work is planned for the time-boxed capstone.
 
 ---
 

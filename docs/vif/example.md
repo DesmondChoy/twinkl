@@ -6,8 +6,8 @@
 > |---|---|
 > | Stage 0 (Offline Training) | ✅ Complete for the capstone POC — synthetic generation, LLM-Judge labeling, and VIF Critic training are implemented; known model limits remain documented |
 > | Stage 1 (Onboarding) | 🧪 Experimental — the standalone React POC implements the complete local, user-facing flow and internal Profile; automatic browser-to-service storage remains outside the capstone |
-> | Stages 2–4 (Journaling + weekly workflows) | ⚠️ Partial — Weekly Drift Detection, onboarding Profile import, structured output storage, and Coach Digest prompt rendering are implemented; the Journaling UI and product orchestration remain incomplete |
-> | Stage 5 (Uncertain delivery) | ✅ Complete for the capstone POC — Weekly Drift Detection fails closed to Abstain and stores uncertain state; no deployment approval is claimed |
+> | Stages 2–4 (Journaling + weekly workflows) | ✅ Complete for the core capstone POC — the React Experience, displayed nudges, Weekly Drift Detection, Coach Digest generation, saved Persona replay, and linked Inspect events are implemented; current Coach Digest evaluation results and final capstone evidence remain open |
+> | Stage 5 (Insufficient Evidence) | ✅ Complete for the capstone POC — Weekly Drift Detection fails closed to Abstain and can store Insufficient Evidence; no deployment approval is claimed |
 >
 > See the [Implementation Status](../prd.md#implementation-status) table in prd.md for the full breakdown.
 
@@ -141,7 +141,7 @@ their explicit `core_values` compatibility path.
 
 ---
 
-## Stage 2: Week 4 — Stable Alignment
+## Stage 2: Week 4 — No Active Drift with Aligned Evidence
 
 Sarah has been journaling for a month. Here is this week's Journal Entry:
 
@@ -156,12 +156,12 @@ Sarah has been journaling for a month. Here is this week's Journal Entry:
 | Generator | N/A | Only used during offline training |
 | LLM-Judge | N/A | Offline labeling is complete |
 | VIF Critic | **OFFLINE REPRODUCTION** | Can reproduce saved research behavior; it does not affect the user-facing path |
-| Weekly Drift Detection | **IMPLEMENTED POC** | Finds no Drift and stores the supporting state |
+| Weekly Drift Detection | **IMPLEMENTED POC** | Stores No Active Drift with supporting evidence |
 | Coach Digest | **ACTIVE** (occasional) | Offers evidence-based acknowledgment |
 
 ### VIF Critic Processing
 
-**Input:** Configured sentence embedding of the Journal Entry + Sarah's profile
+**Input:** Configured sentence embedding of the Journal Entry + Sarah's Profile
 
 **Output:** Alignment scores across all 10 Schwartz dimensions (showing Sarah's Core Values below)
 
@@ -261,7 +261,7 @@ The Coach Digest uses the stored output, which cites both Journal Entries:
 
 ---
 
-## Stage 4: Weeks 9–12 — Recovery Changes the Wording
+## Stage 4: Weeks 9–12 — Historical Drift and No Active Drift
 
 The benchmark Drift remains part of Sarah's history, but later evidence
 changes what the Coach Digest should say:
@@ -277,16 +277,18 @@ changes what the Coach Digest should say:
 |---|---:|---|
 | 7 | Conflict | Conflict evidence begins |
 | 8 | Conflict | Drift confirmed |
-| 9 | non-Conflict | Conflict is no longer accumulating |
-| 10–12 | non-Conflict | recovery is sustained |
+| 9 | Not Conflict | The earlier Conflict run ends |
+| 10–12 | Not Conflict | No new Conflict run forms |
 
-The v1 benchmark still counts the Weeks 7–8 Drift. At Week 12, the Coach Digest
-should not say Sarah is in ongoing Drift. It can acknowledge the
-recovery with evidence and remain alert to recurrence.
+The v1 benchmark still counts the Weeks 7–8 Drift. At Week 12, Weekly Drift
+Detection stores No Active Drift and keeps the earlier pair in a Historical
+Drift Record. The Coach Digest can state that the earlier pattern did not
+continue because the Not Conflict decisions support that change. It cannot call
+this proof of improvement.
 
-The implemented delivery-time vocabulary is **active**, **recovered**,
-**mixed**, or **uncertain**. See
-[Uncertainty and Drift Review Logic](04_uncertainty_logic.md).
+The implemented current states are Active Drift, No Active Drift, and
+Insufficient Evidence. See [Uncertainty and Drift Review
+Logic](04_uncertainty_logic.md).
 
 ### Coach Digest Response
 
@@ -298,7 +300,7 @@ The implemented delivery-time vocabulary is **active**, **recovered**,
 
 ---
 
-## Stage 5: Week 14 — Uncertain Delivery (Novel Situation)
+## Stage 5: Week 14 — Insufficient Evidence (Novel Situation)
 
 Something happens outside the VIF Critic's training distribution and does not
 support an ordinary value judgment from text.
@@ -355,10 +357,10 @@ decide the user-facing response. The Coach Digest responds with presence.
 |-------|-----------|-----------|------------|------------------------|--------------|
 | Offline Training | ✅ Creates data | ✅ Labels data | ✅ Trains | — | — |
 | Onboarding | — | — | — | — | — |
-| Stable Alignment | — | — | ✅ Stores offline evidence | ✅ Finds no Conflict | ✅ Occasional acknowledgment |
+| No Active Drift | — | — | ✅ Stores offline evidence | ✅ Stores No Active Drift | ✅ Evidence-based response |
 | Drift | — | Reference only | ✅ Stores offline evidence | ✅ Confirms Conflicts | ✅ Surfaces confirmed Drift |
-| Recovery at Delivery | — | Reference only | ✅ Continues offline scoring | ✅ Finds later non-Conflict | ✅ Describes recovery rather than ongoing Drift |
-| Uncertain Delivery | — | — | ✅ Stores uncertainty | ✅ Abstains | ✅ Offers presence |
+| Historical Drift, No Active Drift | — | Reference only | ✅ Continues offline scoring | ✅ Keeps the Historical Drift Record | ✅ Can state that the pattern did not continue |
+| Insufficient Evidence | — | — | ✅ Stores uncertainty | ✅ Abstains | ✅ Asks for more reflection |
 
 Key insight: The Generator and LLM-Judge create and label training data before
 any user arrives. The completed VIF Critic remains available for offline

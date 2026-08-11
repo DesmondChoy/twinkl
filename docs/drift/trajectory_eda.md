@@ -229,15 +229,17 @@ final-test score. That population is now development-only. The time-boxed
 capstone stops without a replacement final test or deployment approval. The
 historical AI audit is not human ground truth.
 
-### Weekly delivery and recovery
+### Weekly delivery and Historical Drift Records
 
-The benchmark records whether a sustained-conflict episode occurred. The Weekly
-Coach describes the state at delivery time using **active**, **recovered**,
-**mixed**, or **uncertain**. A sequence such as `-1, -1, +1, +1, +1` remains a
-true reference episode, but the Weekly Drift Detection output stores it as
-recovered rather than active. The Coach Digest uses that state in its response.
-The implemented Drift Detector keeps Core Values independent and
-does not map deprecated compatibility modes into these delivery states.
+The benchmark records whether Drift occurred. Weekly Drift Detection stores
+Active Drift, No Active Drift, or Insufficient Evidence as the current state for
+each Core Value. A sequence such as `-1, -1, +1, +1, +1` remains a true reference
+Drift. If the later resolved decision is Not Conflict, the current state is No
+Active Drift and the earlier Drift remains in a Historical Drift Record. The
+Coach Digest can state that the earlier pattern did not continue when the stored
+comparison supports that claim. It cannot claim improvement from Not Conflict
+alone. The Drift Detector keeps Core Values independent and does not map
+deprecated compatibility modes into the current states.
 
 ## Soft-label note
 

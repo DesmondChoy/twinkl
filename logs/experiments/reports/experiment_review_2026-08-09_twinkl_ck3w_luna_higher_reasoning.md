@@ -1,7 +1,7 @@
 # Luna Higher-Reasoning Comparison (`twinkl-ck3w`)
 
 **Date:** 2026-08-09
-**Decision status:** pending user decision; Luna `low` remains the fixed
+**Decision status:** no change on 2026-08-11; Luna `low` remains the fixed
 development Weekly Drift Reviewer
 
 ## Result
@@ -56,8 +56,13 @@ The approved metric hierarchy ranks Drift recall first, false Drift alerts
 second, and coverage as a diagnostic. Under that hierarchy, `xhigh` ranks
 first. Selecting it would accept a median rise from 4 to 9 false Drift alerts
 and a current-rate full-run calculation that is about 2.9 times the `low`
-calculation. This report does not change the fixed Luna-`low` contract without
-an explicit user decision.
+calculation.
+
+On 2026-08-11, Twinkl retained Luna `low` as the fixed capstone contract.
+`xhigh` establishes a more aggressive operating point, not a clean improvement:
+it raises Drift recall and false Drift alerts together, costs more at the
+recorded current rates, and has no fresh final-test evidence. This no-change
+decision does not grant deployment approval.
 
 ## Repeat stability
 

@@ -17,7 +17,7 @@ a submitted milestone file.
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
-- **Status date:** 2026-08-01
+- **Status date:** 2026-08-11
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -29,6 +29,8 @@ a submitted milestone file.
 
 - Add final figures and tables.
 - Complete the Coach Digest Validations and Coach Digest Evals reports.
+- Complete or move to future work the tracked pilot privacy, Coach Digest
+  feedback, and longitudinal Core Value history additions.
 - Complete the citation-to-claim audit.
 - Add exact reproduction commands, environment versions, configurations, seeds,
   input versions, and output paths.
@@ -38,8 +40,8 @@ a submitted milestone file.
 - Record the [public Railway assessment
   URL](https://onboarding-production-1dd2.up.railway.app/), browser-session reset
   behavior, possible provider cost, and assessment-only scope.
-- If `twinkl-rklc.12` closes before submission, decide whether the saved Coach
-  Digest replay belongs in Section 5.4.
+- Include the completed saved Coach Digest replay in Section 5.4 and verify that
+  its screenshots match the final interface.
 - Confirm the final paper format and page limit with the advisor.
 - Confirm whether the advisor requires a short team-contribution statement in
   the paper.

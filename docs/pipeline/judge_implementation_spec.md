@@ -1,6 +1,9 @@
 # LLM-Judge Implementation Specification
 
-This document specifies the **LLM-Judge** component that produces training labels for the Value Identity Function (VIF). This is **Phase 2** of the Generator–LLM-Judge–VIF Critic workflow.
+This document specifies the **LLM-Judge** component that produces training
+labels for the Value Identity Function (VIF). It records the completed Phase 2
+workflow. Twinkl has 1 651 labeled Journal Entries across 204 personas, and VIF
+Critic training is complete for the time-boxed capstone.
 
 ---
 
@@ -397,23 +400,25 @@ If quality is poor:
 
 ---
 
-## Checklist
+## Completed Checklist
 
 **Data Wrangling (required for both options):**
-- [ ] Run `python -m src.wrangling.parse_synthetic_data`
-- [ ] Confirm `logs/wrangled/persona_*.md` files were produced
+- [x] Run `python -m src.wrangling.parse_synthetic_data`
+- [x] Confirm `logs/wrangled/persona_*.md` files were produced
 
 **Option A (Scripts) or Option B (Claude Code):**
-- [ ] Run LLM-Judge on 3-5 personas as pilot
-- [ ] Manually review pilot results
-- [ ] If quality acceptable, run on full dataset
-- [ ] Save labels (`persona_*_labels.json`) and consolidate to parquet
+- [x] Run LLM-Judge on 3-5 personas as pilot
+- [x] Manually review pilot results
+- [x] Run on the full dataset
+- [x] Save labels (`persona_*_labels.json`) and consolidate to parquet
 
 ---
 
-## Next Steps (Phase 3: VIF Training)
+## Completed Phase 3: VIF Training
 
-Once you have `logs/judge_labels/judge_labels.parquet`, see `docs/vif/03_model_training.md` for the training workflow.
+VIF Critic training and evaluation are complete for the time-boxed capstone.
+See `docs/vif/03_model_training.md` for the reproducible workflow and current
+results.
 
 ---
 

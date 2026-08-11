@@ -18,12 +18,15 @@ The current VIF implementation is intentionally narrow:
 - **Modality**: text only
 - **Training target**: immediate per-dimension alignment labels in `{-1, 0, +1}`
 - **Encoder**: frozen sentence encoder configured in `config/vif.yaml`
-- **State**: text window + time gaps + 10-dim value-profile weights
+- **Current default state**: current Journal Entry text + 10-dimensional
+  value-profile weights; larger text windows and time gaps are configurable
+  diagnostics
 - **Runtime output**: per-Journal-Entry alignment means and uncertainties, plus weekly aggregates
 - **Primary capstone role**: recover visible Conflict (`-1`) evidence; retain
   ternary outputs for diagnostics and non-gating positive context
-- **Current executable downstream use**: Weekly Drift Detection and the Coach
-  Digest, plus a deprecated VIF Critic crash/rut/evolution compatibility path
+- **Current executable paths**: the approved Weekly Drift Detection and Coach
+  Digest path does not consume VIF Critic Predictions; a separate deprecated
+  crash/rut/evolution path does consume them
 - **Fixed Weekly Drift Reviewer**: `gpt-5.6-luna` with reasoning effort `low`,
   without VIF Critic input
 - **Approved user-facing runtime**: Weekly Drift Detection followed by the
@@ -179,8 +182,8 @@ state/target rows:
 - **StateTargetSample**: the flattened state vector paired with the target vector
 
 The mainline VIF Critic trains on persisted single-pass LLM-Judge labels in
-`judge_labels.parquet`. The five-pass LLM-Judge table is diagnostic retraining
-data. Drift v1 uses it strictly: each qualifying reference Conflict requires
+`judge_labels.parquet`. The five-pass LLM-Judge table is diagnostic evidence.
+Drift v1 uses it strictly: each qualifying reference Conflict requires
 `alignment_<value> == -1`. It is not the
 mainline training target or the six-detector comparison's detector vote.
 
@@ -254,8 +257,9 @@ Per-Journal-Entry outputs are aggregated into weekly tables containing:
 - profile-weighted overall mean alignment
 - profile-weighted overall uncertainty
 
-These weekly parquet files are the inputs for Drift experiments and Coach Digest
-generation.
+These weekly parquet files are inputs for historical Drift experiments and the
+deprecated Coach Digest compatibility path. The approved user-facing path does
+not consume them.
 
 `src/vif/weekly_schema.py` owns the ordered column contract between
 `aggregate_timeline_by_week()` and `detect_weekly_drift()`. It defines the
@@ -274,7 +278,7 @@ Weekly Drift Detection is narrower: the internal Weekly Drift Reviewer is fixed
 at `gpt-5.6-luna` with reasoning effort `low` and reads Journal Entries and Core
 Values without VIF Critic predictions. The internal Drift Detector declares
 Drift after two consecutive Conflicts for the same Core Value. The workflow
-stores its delivery state as structured output. The former
+stores a current state and Historical Drift Records as structured output. The former
 consensus-derived frozen benchmark is retired historical evidence; it does not
 implement or justify the active target. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
 is historical. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
@@ -290,8 +294,9 @@ user-facing path. The later [`twinkl-qtwz` complete
 review](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md)
 expanded the development data to 292 resolved cases with 42 Drifts across 36
 Drift trajectories; it did not rerun or change the `twinkl-752.5` results. The
-production connection remains absent, and the existing weekly router remains a
-compatibility prototype.
+approved capstone POC connection is implemented. The existing VIF Critic weekly
+router remains a compatibility prototype, and no deployment approval is
+claimed.
 See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).
@@ -325,7 +330,8 @@ Weekly Drift Detection:
 - reads Journal Entries and Core Values without VIF Critic Predictions
 - applies the internal Drift Detector after the reviewer decides Conflict, Not
   Conflict, or Abstain
-- stores structured output with Core Values, cited evidence, and Drift state
+- stores structured output with Core Values, cited evidence, a current state,
+  and Historical Drift Records
 
 ### 5.3 Coach Digest
 
@@ -352,7 +358,7 @@ Key files for the architecture described here:
 | `src/vif/runtime.py` | Rebuilds states from history and emits runtime parquet files |
 | `src/vif/weekly_schema.py` | Defines and validates the weekly signal-frame contract |
 | `src/weekly_drift_reviewer.py` | Implements the frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
-| `src/drift_detector.py` | Implements the deterministic Drift Detector and delivery states |
+| `src/drift_detector.py` | Implements the deterministic Drift Detector, current states, and Historical Drift Records |
 | `src/coach/weekly_drift_runtime.py` | Orchestrates Weekly Drift Detection and the Coach Digest |
 | `src/vif/drift.py` | Implements the deprecated weekly crash/rut/evolution compatibility router |
 | `src/vif/evolution.py` | Supplies the prototype's automatic evolution classification |
@@ -371,3 +377,5 @@ spine:
 - richer profile conditioning
 - multimodal inputs
 - retrieval once journal histories outgrow the context window
+- user-confirmed Profile evolution; automatic Profile changes remain outside
+  the current POC

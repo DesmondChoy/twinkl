@@ -25,7 +25,7 @@ The current layers of the contract are deliberately different:
 | Capstone POC runtime | Weekly Drift Detection persists versioned Luna-low Weekly Drift Reviewer Decisions without VIF Critic input. It applies the deterministic Drift Detector and stores structured output. The deprecated crash/rut/evolution runtime remains only for compatibility. |
 | User delivery | The Coach Digest consumes the structured output. Its response cites relevant evidence without score jargon. No fresh final test or deployment approval is claimed. |
 
-### Adopted metric hierarchy (`twinkl-752`, updated under `twinkl-52zz`)
+### Adopted metric hierarchy (`twinkl-752`, updated under `twinkl-52zz` and `twinkl-ck3w`)
 
 - The product decision unit is **Drift**, not an
   isolated Journal Entry or aggregate QWK.
@@ -38,6 +38,11 @@ The current layers of the contract are deliberately different:
   counts were 5, 4, and 4 across 256 non-Drift Core Value trajectories. Each
   Run therefore exceeded `0.50` Drift recall and stayed at or below a `2%`
   false-alert burden. These are development results, not deployment approval.
+- `twinkl-ck3w` found that Luna-`xhigh` raised median Drift recall from `0.548`
+  to `0.667` and raised median false Drift alerts from 4 to 9. On 2026-08-11,
+  Twinkl retained Luna-`low`. Luna-`xhigh` is a more aggressive and more
+  costly operating point, and it has no fresh final-test evidence. This
+  no-change decision does not grant deployment approval.
 - Any future fresh final test should use the same response schema, fail-closed
   request handling, scoring, three-Run protocol, and reported metrics as the
   Luna-low development study. There is no separate efficiency gate.
@@ -45,7 +50,7 @@ The current layers of the contract are deliberately different:
   cannot be recovered when either component Conflict is missed.
 - QWK and `+1` recall are diagnostics. Positive evidence cannot trigger or
   cancel Drift.
-- An uncertain or abstaining Weekly Drift Reviewer produces no Drift claim.
+- An Abstain Weekly Drift Reviewer Decision produces no Drift claim.
   Coverage, abstention, and true Drifts suppressed by abstention must be
   reported.
 
@@ -271,9 +276,12 @@ No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
 
-- Persisted onboarding Core Values for the user-facing runtime
-- Batch Coach Digest response checks for active, recovered, mixed, and uncertain
-  states
+- Current batch results for Coach Digest Validations and Coach Digest Evals
+- Coach Digest feedback and perceived-accuracy capture for a future pilot
+
+The user-facing runtime can import Core Values from a confirmed onboarding
+Profile. Weekly Drift Detection and Coach Digest scenario tests cover Active
+Drift, No Active Drift, Insufficient Evidence, and Historical Drift Records.
 
 A fresh, independently resolved final test and deployment approval are outside
 the time-boxed capstone scope.
@@ -310,10 +318,12 @@ behavior or choice against a Core Value. Frustration, guilt, wishes,
 outside constraints without a voluntary choice, biography, and ambiguous prose
 do not qualify on their own.
 
-Two consecutive Conflicts for the same Core Value form one Drift. A
-non-Conflict or uncertain Journal Entry breaks the run. Later Journal Entries
-can describe whether an already-recorded Drift is active,
-recovered, or uncertain; they do not change whether the earlier pair occurred.
+Two consecutive Conflicts for the same Core Value form one Drift. A Not Conflict
+decision ends the active run. An Abstain decision can produce Insufficient
+Evidence when it blocks a current claim. Later Journal Entries do not erase the
+earlier pair. Weekly Drift Detection keeps it in a Historical Drift Record and
+stores Active Drift, No Active Drift, or Insufficient Evidence as the current
+state.
 
 The target used two deliberately separate sets. The development review
 used the original fixed validation personas; the locked final-test review used
@@ -338,7 +348,7 @@ The current user-facing target is deterministic:
 
 1. The Weekly Drift Reviewer reads Journal Entries and Core Values without VIF
    Critic predictions.
-2. It decides Conflict, non-Conflict, or abstention for each relevant Journal
+2. It decides Conflict, Not Conflict, or Abstain for each relevant Journal
    Entry.
 3. The Drift Detector declares one Drift when two consecutive Weekly Drift
    Reviewer Conflicts concern the same Core Value.
@@ -411,7 +421,10 @@ above.
 | Complete development review (`twinkl-qtwz`) | 42 Drifts across 36 Drift trajectories; 292/292 case-level outcomes resolved | Frozen input used by `twinkl-52zz`; the nine newly found Drifts all have historical training provenance |
 | `gpt-5.4-mini` Weekly Drift Reviewer (`twinkl-52zz`) | 7/42 median Drift hits / recall 0.167 / precision 0.583 / 5 false Drift alerts / coverage 0.740 | Complete-development baseline over three repeats |
 | `gpt-5.6-luna` Weekly Drift Reviewer (`twinkl-52zz`) | 20/42 median Drift hits / recall 0.476 / precision 0.606 / 13 false Drift alerts / coverage 0.777 | Frozen reasoning-effort-`none` baseline for the follow-up; superseded by the fixed reasoning-effort-`low` contract |
-| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Fixed Weekly Drift Reviewer model contract under the approved hierarchy: Drift recall first, false Drift alerts second, and coverage diagnostic; the study stopped before `medium`; no final-test validation or deployment approval is claimed |
+| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Fixed Weekly Drift Reviewer model contract; no final-test validation or deployment approval is claimed |
+| `gpt-5.6-luna` reasoning-effort-`medium` (`twinkl-ck3w`) | 24/42 median Drift hits / recall 0.571 / precision 0.857 / 4 false Drift alerts / coverage 0.682 | Development-only follow-up; no established Drift-recall gain over Luna-low |
+| `gpt-5.6-luna` reasoning-effort-`high` (`twinkl-ck3w`) | 26/42 median Drift hits / recall 0.619 / precision 0.758 / 8 false Drift alerts / coverage 0.716 | Development-only follow-up; the paired Drift-recall interval against Luna-low includes zero |
+| `gpt-5.6-luna` reasoning-effort-`xhigh` (`twinkl-ck3w`) | 28/42 median Drift hits / recall 0.667 / precision 0.750 / 9 false Drift alerts / coverage 0.702 | Established both a Drift-recall gain and more false Drift alerts against Luna-low; not adopted because it is a more aggressive operating point |
 | Legacy candidate confirmation (`twinkl-752.4`) | 22/44 (50.0%) | Resolved development candidates only; selection-biased diagnostic |
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
@@ -435,9 +448,9 @@ cannot substitute for a fresh, resolved locked final test set.
 
 Any future final test should reuse the Luna-low reporting fields listed in the
 frozen contract above, including entry-level results by Schwartz value
-dimension. Deployment criteria do not add further required slices. Active,
-recovered, mixed, and uncertain Weekly Drift Detection output behavior is verified separately
-through runtime scenario tests.
+dimension. Deployment criteria do not add further required slices. Active
+Drift, No Active Drift, Insufficient Evidence, and Historical Drift Record
+behavior is verified separately through runtime scenario tests.
 
 ## Reproduction
 
@@ -486,6 +499,7 @@ Re-score the committed Weekly Drift Reviewer responses without API calls:
 ```sh
 uv run python -m scripts.experiments.compare_twinkl_52zz_models score
 uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning score
+uv run python -m scripts.experiments.compare_twinkl_ck3w_luna_higher_reasoning score
 ```
 
 The model-comparison runner exposes `prepare`, `estimate`, `run`, and `score`;
@@ -495,6 +509,11 @@ exposes `prepare`, `smoke`, `run`, and `score`; `smoke` and `run` require
 `--execute`. Both runners accept `--root` and `--config`. The experiment reports
 record the frozen commands and inputs; paid execution is unnecessary for
 re-scoring the committed responses.
+
+The Luna higher-reasoning runner exposes `prepare`, `estimate`, `smoke`,
+`run`, and `score`. The committed responses are sufficient for `score`. The
+[`twinkl-ck3w` report](../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md)
+records the full protocol, amendments, results, and no-change decision.
 
 ---
 
@@ -528,7 +547,7 @@ re-scoring the committed responses.
 | [`src/vif/runtime.py`](../../src/vif/runtime.py) | Per-entry inference and weekly aggregation |
 | [`src/vif/weekly_schema.py`](../../src/vif/weekly_schema.py) | Weekly producer/consumer column contract |
 | [`src/weekly_drift_reviewer.py`](../../src/weekly_drift_reviewer.py) | Frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
-| [`src/drift_detector.py`](../../src/drift_detector.py) | Deterministic Drift Detector and delivery states |
+| [`src/drift_detector.py`](../../src/drift_detector.py) | Deterministic Drift Detector, current states, and Historical Drift Records |
 | [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py) | Weekly Drift Detection and Coach Digest orchestration |
 | [`src/vif/drift.py`](../../src/vif/drift.py) | Deprecated experimental weekly router |
 | [`src/coach/runtime.py`](../../src/coach/runtime.py) | Deprecated VIF Critic compatibility orchestration |
@@ -555,6 +574,9 @@ re-scoring the committed responses.
 | [`../../config/evals/twinkl_52zz_luna_low_v1.yaml`](../../config/evals/twinkl_52zz_luna_low_v1.yaml) | Preregistered Luna reasoning-effort-`low` protocol and historical selection gate |
 | [`../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py`](../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py) | Luna reasoning-effort execution, receipt, and scoring workflow |
 | [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md) | Complete Luna reasoning-effort result and evidence behind the fixed model contract |
+| [`../../config/evals/twinkl_ck3w_luna_higher_reasoning_v1.yaml`](../../config/evals/twinkl_ck3w_luna_higher_reasoning_v1.yaml) | Frozen Luna higher-reasoning comparison contract |
+| [`../../scripts/experiments/compare_twinkl_ck3w_luna_higher_reasoning.py`](../../scripts/experiments/compare_twinkl_ck3w_luna_higher_reasoning.py) | Higher-reasoning preparation, execution, receipt, and scoring workflow |
+| [`../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md`](../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md) | Development result and no-change Luna-low decision |
 | [`../../src/drift_review_app/data.py`](../../src/drift_review_app/data.py) | Frozen-input verification and result loading for the Drift Inspection App |
 | [`../demo/weekly_drift_review_app.md`](../demo/weekly_drift_review_app.md) | Drift Inspection App contract, launch commands, and input boundary |
 | [`../../scripts/experiments/resolve_twinkl_752_5_null_cases.py`](../../scripts/experiments/resolve_twinkl_752_5_null_cases.py) | Freezes and materializes the blind Opus follow-up |

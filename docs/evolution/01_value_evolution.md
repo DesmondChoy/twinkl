@@ -3,7 +3,7 @@
 > **Scope:** Value evolution is a future product concept, not part of the
 > selected Drift v1 contract. An experimental classifier is
 > invoked automatically by the deprecated weekly compatibility router, but onboarding
-> profile updates, user confirmation, and production Coach Digest messaging
+> Profile updates, user confirmation, and production Coach Digest messaging
 > are not implemented. Current Drift scope is defined in
 > [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md).
 
@@ -21,12 +21,12 @@ vector `w_u`.
 
 The flow has no midpoint result or value-specific card art. The end summary
 uses friendly descriptions instead of Schwartz labels; `Confirm my compass`
-confirms those descriptions as Core Values. The Profile is still not wired
-into the runtime.
+confirms those descriptions as Core Values. The approved runtime can import the
+confirmed Profile and use `top_values` as Core Values.
 
-The synthetic runtime assigns equal mass to Core Values, with a
-uniform fallback. The graded BWS profile remains an integration gap. Once a
-profile exists, `w_u` is treated as fixed. The VIF notation uses
+The graded BWS weight vector does not enter VIF Critic state construction. The
+synthetic compatibility path assigns equal mass to Core Values, with a uniform
+fallback. Once a Profile exists, `w_u` is treated as fixed. The VIF notation uses
 `w_{u,t}` to suggest time-dependence, and the architecture describes it as
 "piecewise constant, updated infrequently" — but no update mechanism exists
 in the current implementation.
@@ -36,8 +36,10 @@ in the current implementation.
 Once the user starts journaling:
 
 1. Each Journal Entry is embedded via a frozen sentence encoder (SBERT).
-2. The **state encoder** constructs a state vector from recent text embeddings,
-   time gaps between entries, and `w_u`.
+2. The current **state encoder** constructs a state vector from the current
+   Journal Entry embedding and normalized `w_u`. The active `window_size: 1`
+   contract has no time-gap or prior-Journal-Entry feature. Larger legal-history
+   windows remain diagnostic experiments.
 3. The **VIF Critic** — an MLP with 2-3 ReLU layers — processes this state
    and outputs per-dimension alignment estimates:
    `a_hat_{u,t} in {-1, 0, +1}^10`.
@@ -151,8 +153,9 @@ The design documents acknowledge this gap without solving it:
   trigger.
 - Major life event detection was listed as future work.
 
-The missing piece is a **classification step** that distinguishes genuine value
-evolution from volatile divergence before the Drift Detector runs.
+The missing adopted product component is a **classification step** that
+distinguishes genuine value evolution from volatile divergence. The existing
+experimental classifier is only part of the deprecated compatibility router.
 
 ---
 
@@ -229,16 +232,18 @@ Benevolence have grown. Would you like to update your profile?"*
 ### 4.1 Workflow Integration
 
 ```
-                          Current Workflow
-                          ================
+                          Current User-Facing Workflow
+                          ============================
 
-Journal Entry → Text Encoder → State Encoder → VIF Critic → Predictions
-                                                              |
-                                                              v
-                                                      Drift Detector
-                                                              |
-                                                              v
-                                                      Coach Digest
+Journal Entries + confirmed Profile → Weekly Drift Reviewer → Drift Detector
+                                                                  |
+                                                                  v
+                                                Weekly Drift Detection output
+                                                                  |
+                                                                  v
+                                                            Coach Digest
+
+The VIF Critic remains a separate offline research component.
 
 
                     Workflow with Evolution Detection
@@ -277,7 +282,7 @@ Value before claiming Drift.
 | **VIF Critic** | Produces alignment predictions and uncertainty | Unchanged |
 | **Evolution Detection** | Outside committed scope | Classifies per-dimension patterns |
 | **Drift Detector** | Detects Drift | Skips user-confirmed evolution classifications |
-| **Coach Digest** | Reflects active, recovered, mixed, or uncertain states | Asks whether priorities are shifting |
+| **Coach Digest** | Reflects Active Drift, No Active Drift, Insufficient Evidence, and Historical Drift Records | Asks whether priorities are shifting |
 | **Profile `w_u`** | Fixed runtime input | Updates only after explicit user confirmation |
 
 ### 4.3 Coach Digest Messaging Differences

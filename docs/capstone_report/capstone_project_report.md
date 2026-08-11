@@ -46,7 +46,7 @@
 - Human agreement with LLM-Judge VIF Labels
 - VIF Critic Conflict and Drift performance against user-facing requirements
 - Evidence that led from the VIF Critic to the Weekly Drift Reviewer
-- Weekly Drift Reviewer and Drift Detector recovery of known Drifts
+- Weekly Drift Reviewer and Drift Detector Drift recall
 - Coach Digest evidence grounding and validation
 - Longitudinal synthetic data and provenance-aware label workflow
 - 69 Runs and 133 VIF Critic experiment configurations
@@ -72,7 +72,9 @@
 - **Assessment-only deployment:** public Experience and Inspect demo on Railway
 - **Implemented structural control:** live model instructions are separate from
   user-controlled JSON data
-- **In progress:** professor walkthrough evidence
+- **In progress:** pilot privacy controls, current Coach Digest evaluation
+  results, Coach Digest feedback capture, longitudinal Core Value history, and
+  professor walkthrough evidence
 - No fresh final test or deployment approval
 - User-facing Drift path separated from offline VIF Critic research
 
@@ -155,8 +157,9 @@
 - Two consecutive Conflicts for one Core Value as Drift
 - Independent Core Value sequences
 - Cross-week detection and longer Conflict runs
-- Recovery, uncertainty, and deduplication rules
-- Active, recovered, uncertain, and mixed delivery states
+- Current-run, Abstain, and deduplication rules
+- Active Drift, No Active Drift, and Insufficient Evidence current states
+- Historical Drift Records with start, evidence, end, and end reason
 - Detailed design in [Drift Detection Architecture](../architecture/drift_detection.md)
 
 ### 3.4 Displayed Nudge, Coach Digest, and Demo
@@ -298,7 +301,7 @@
 
 - 292 resolved development cases
 - 42 known Drifts across 36 Drift trajectories
-- Comparison of three Weekly Drift Reviewer model and reasoning-effort setups
+- Comparison of six Weekly Drift Reviewer model and reasoning-effort setups
 - Three complete Runs per experiment setup
 - Drift recall as the first selection metric
 - False Drift alerts as the second selection metric
@@ -309,6 +312,12 @@
 - Luna-low median request latency of `2.81` seconds
 - Cache-aware token cost calculation of `$6.96` for 2,853 development calls, not a billing export
 - Cost and latency provenance in the [Luna Reasoning-Effort Review](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
+- Luna-`xhigh` median Drift recall of `0.667` and 9 false Drift alerts in the
+  later `twinkl-ck3w` development-only comparison
+- No-change decision: retain Luna-low because Luna-`xhigh` is a more aggressive
+  operating point, with more false Drift alerts and a higher current-rate cost
+  calculation
+- Higher-reasoning provenance in the [Luna Higher-Reasoning Comparison](../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md)
 - Missed Drift and false Drift alert categories
 - Fixed Luna-low Weekly Drift Reviewer contract
 - Development-only conclusion
@@ -318,7 +327,8 @@
 ### 5.4 Coach Digest and Demo Results
 
 - Weekly Drift Detection output schema and cited Journal Entry evidence
-- Active, recovered, uncertain, and mixed examples
+- Active Drift, No Active Drift, and Insufficient Evidence examples
+- Historical Drift Records that remain after current Conflict runs end
 - Coach Digest Validations for groundedness, jargon, and length
 - No current Coach Digest Validations or Coach Digest Evals results
 - No Coach Digest usefulness claim without batch results and human validation
@@ -407,8 +417,9 @@
 ### 7.2 Focused Future Work
 
 - Fresh final test excluded from model and prompt development
-- Coach Digest batch evaluation and human validation
-- Real-user pilot with explicit consent and privacy controls
+- Future human calibration of the Coach Digest AI review
+- Real-user pilot after the current minimum privacy controls
+- Automatic Profile evolution and decay-aware Profile updates
 - Displayed nudge response rate, later-Journal-Entry rate, and perceived
   relevance in the real-user pilot
 - Final runtime cost, latency, and provider-use measurement
@@ -472,6 +483,7 @@
 - [Agreement Report](../../logs/exports/agreement_report_20260318_130642.md)
 - [Luna Model Comparison](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_model_comparison.md)
 - [Luna Reasoning-Effort Review](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
+- [Luna Higher-Reasoning Comparison](../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md)
 - [`scripts/experiments/compare_twinkl_52zz_models.py`](../../scripts/experiments/compare_twinkl_52zz_models.py)
 - [`tests/test_drift_detector.py`](../../tests/test_drift_detector.py)
 - [`tests/coach/test_weekly_digest.py`](../../tests/coach/test_weekly_digest.py)

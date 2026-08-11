@@ -1,6 +1,10 @@
 # Twinkl
 
-Twinkl is an "inner compass" that helps users align their daily behavior with their long-term values. Unlike traditional journaling apps that summarize moods and topics, Twinkl maintains a dynamic self-model of the user's declared priorities and surfaces tensions when behavior drifts from intent. It answers the question: *"Am I living in line with what I said I value?"*
+Twinkl is an "inner compass" that helps users compare daily behavior with
+long-term values. Unlike traditional journaling apps that summarize moods and
+topics, Twinkl starts with a confirmed Profile, reviews Journal Entries over
+time, and shows evidence when behavior conflicts with Core Values. The current
+POC keeps the Profile fixed. Profile evolution is future work.
 
 > **Project status:** Twinkl is under active development as an academic capstone. Status markers in each section indicate capability maturity:
 > ✅ Complete · 🧪 Experimental · ⚠️ Partial · 📋 Specified · ❌ Not Started
@@ -85,9 +89,13 @@ Key features:
 - Longitudinal Journal Entries that exhibit value tensions, Conflicts, and ambiguity
 - Parallel asynchronous generation workflow
 - Configurable tone, verbosity, and reflection mode per entry
-- 🧪 Two-way conversational journaling with nudge system (LLM-based classification determines when/how to nudge, LLM generates contextual follow-up questions)
+- ✅ Two-way conversational journaling with displayed nudge classification,
+  generation, reply, skip, safe failure, and retry behavior
 
-**🧪 Experimental**: Assessing whether nudging helps improve VIF data signal quality. See `docs/pipeline/annotation_guidelines.md` for the study methodology.
+The displayed nudge interaction is complete for the capstone POC. It is a
+product interaction, not a method for improving the VIF Critic or Weekly Drift
+Detection. A future external pilot can measure response rate, continued
+journaling, and perceived relevance.
 
 See `docs/pipeline/pipeline_specs.md` for implementation details.
 
@@ -345,7 +353,7 @@ opening.
 |---|---|---|
 | Onboarding (SVBWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and a versioned Profile. The approved runtime can import its Core Values from saved Profile JSON; automated browser-to-service storage remains outside the capstone. |
 | Coach Digest validation depth | ⚠️ Partial | Coach Digest Validations and Coach Digest Evals are implemented. No current batch result or future human calibration of the AI review is complete. |
-| Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
+| Displayed nudge pilot evidence | ✅ Complete implementation | A future external pilot can measure response rate, continued journaling, and perceived relevance. These user measures are not a capstone implementation blocker. |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |
 | Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. The evidence is AI-reviewed synthetic development evidence; no fresh final test was run, so no deployment approval is claimed. |
 | Journaling anomaly radar | ❌ Not Started | Cadence/gap detection beyond the current prototype-router tooling |

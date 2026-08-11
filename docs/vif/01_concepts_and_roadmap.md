@@ -156,8 +156,9 @@ planned for the time-boxed capstone.
   * VIF Critic candidate confirmation is outside the remaining capstone scope.
     Raw prompt input, confidence-only fallback, and direct VIF Critic Drift
     decisions remain unapproved.
-  * Drift rule: the same deterministic definition for Core Values, with active,
-    recovered, mixed, or uncertain weekly wording.
+  * Drift rule: the same deterministic definition for Core Values, with Active
+    Drift, No Active Drift, or Insufficient Evidence as current state and
+    Historical Drift Records kept separately.
 
 * **Out-of-Scope Multimodal VIF Research**
   * State: multimodal, sliding-window state with audio/physio.
