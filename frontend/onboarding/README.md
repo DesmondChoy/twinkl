@@ -126,3 +126,12 @@ Removed Journal Entry positions are not reused, and Inspect marks their
 immutable submission events as removed from the current Experience. Production
 authentication, multi-tenant storage, and generalized persistence remain
 outside the time-boxed capstone.
+
+Before the first manual Journal Entry, Experience explains browser storage,
+temporary Python memory, AI provider processing, assessment-only use, and the
+non-therapy boundary. Saved Persona replay does not require acknowledgement.
+Delete session removes the matching Python session and request receipts before
+React clears browser storage. If Python deletion fails, React keeps the browser
+session and does not claim success. If browser removal fails after Python
+deletion, React keeps the current view and states the partial result. Data
+export and provider-side deletion remain outside this capstone POC.

@@ -16,6 +16,7 @@ import type {
 } from "./demoContracts";
 import {
   createExperienceSession,
+  deleteExperienceSession,
   ExperienceApiError,
   readExperienceTrace,
   submitJournalEntry,
@@ -32,6 +33,7 @@ vi.mock("./experienceApi", async (importOriginal) => {
   return {
     ...actual,
     createExperienceSession: vi.fn(),
+    deleteExperienceSession: vi.fn(),
     readExperienceTrace: vi.fn(),
     submitJournalEntry: vi.fn(),
   };
@@ -91,8 +93,17 @@ beforeEach(() => {
   localStorage.clear();
   profileEvents.clear();
   vi.mocked(createExperienceSession).mockReset();
+  vi.mocked(deleteExperienceSession).mockReset();
   vi.mocked(readExperienceTrace).mockReset();
   vi.mocked(submitJournalEntry).mockReset();
+  vi.mocked(deleteExperienceSession).mockResolvedValue({
+    schema_version: canonicalInspectFixture.schema_version,
+    operation: "delete_session",
+    request_id: "delete-session",
+    status: "ok",
+    session_id: canonicalInspectFixture.session.session_id,
+    deleted: true,
+  });
   vi.mocked(createExperienceSession).mockImplementation(async (profile) => {
     const fixtureEvent = canonicalInspectFixture.trace_events.find(
       (event) => event.event_type === "profile_confirmed",
@@ -184,6 +195,73 @@ describe("onboarding app", () => {
     );
     expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
     storageWrite.mockRestore();
+  });
+
+  it("does not clear browser data until Python deletion is confirmed", async () => {
+    vi.useFakeTimers();
+    vi.mocked(deleteExperienceSession).mockRejectedValueOnce(
+      new ExperienceApiError("Delete unavailable."),
+    );
+    render(<App />);
+    enterPreferredName("Casey");
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
+      answerSet();
+    }
+    chooseTwoCoreValuesIfNeeded();
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    await act(async () => undefined);
+    vi.useRealTimers();
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole("button", { name: "Delete session" }));
+
+    expect(await screen.findByRole("alert")).toHaveProperty(
+      "textContent",
+      expect.stringContaining("Deletion was not confirmed"),
+    );
+    expect(localStorage.getItem(SESSION_STORAGE_KEY)).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Delete session" })).toBeTruthy();
+
+    await user.click(screen.getByRole("button", { name: "Delete session" }));
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "What should Twinkl call you?" }),
+      ).toBeTruthy(),
+    );
+    expect(deleteExperienceSession).toHaveBeenCalledTimes(2);
+    const stored = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)!);
+    expect(stored.confirmed_profile).toBeNull();
+  });
+
+  it("does not claim complete deletion when browser removal fails", async () => {
+    vi.useFakeTimers();
+    render(<App />);
+    enterPreferredName("Casey");
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
+      answerSet();
+    }
+    chooseTwoCoreValuesIfNeeded();
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    await act(async () => undefined);
+    vi.useRealTimers();
+    const storageRemoval = vi
+      .spyOn(Storage.prototype, "removeItem")
+      .mockImplementation(() => {
+        throw new Error("Storage unavailable.");
+      });
+    const user = userEvent.setup();
+
+    await user.click(screen.getByRole("button", { name: "Delete session" }));
+
+    expect(await screen.findByRole("alert")).toHaveProperty(
+      "textContent",
+      expect.stringContaining(
+        "The Python session was deleted, but browser data could not be cleared",
+      ),
+    );
+    expect(screen.getByRole("button", { name: "Delete session" })).toBeTruthy();
+    storageRemoval.mockRestore();
   });
 
   it("asks for a preferred name before the first set", () => {
@@ -514,6 +592,7 @@ describe("onboarding app", () => {
 
   it("completes the phase-aware flow and hands the Profile to the first Journal Entry", async () => {
     vi.useFakeTimers();
+    vi.spyOn(Math, "random").mockReturnValue(0);
     const onStartJournal = vi.fn();
     const { unmount } = render(<App onStartJournal={onStartJournal} />);
     enterPreferredName("Desmond");
@@ -621,6 +700,12 @@ describe("onboarding app", () => {
       name: "When did you feel most like yourself?",
     });
     expect(journalHeading).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { name: "Know where your text goes." }),
+    ).toBeTruthy();
+    fireEvent.click(
+      screen.getByRole("button", { name: "Continue with manual demo" }),
+    );
     const journalSections = screen.getByRole("navigation", {
       name: "Experience sections",
     });
@@ -807,6 +892,9 @@ describe("onboarding app", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Start my first Journal Entry" }),
     );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Continue with manual demo" }),
+    );
 
     vi.useRealTimers();
     const user = userEvent.setup();
@@ -904,6 +992,9 @@ describe("onboarding app", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Start my first Journal Entry" }),
     );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Continue with manual demo" }),
+    );
 
     expect(
       screen.getByRole("textbox", { name: "First Journal Entry" }),
@@ -929,6 +1020,9 @@ describe("onboarding app", () => {
     expect(createExperienceSession).toHaveBeenCalledTimes(1);
     fireEvent.click(
       screen.getByRole("button", { name: "Start my first Journal Entry" }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Continue with manual demo" }),
     );
 
     const editor = screen.getByRole("textbox", {

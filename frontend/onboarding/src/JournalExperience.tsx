@@ -969,6 +969,35 @@ export default function JournalExperience({
         </header>
       ) : null}
 
+      {mode === "manual" && !experience.data_notice_acknowledged ? (
+        <section className="data-notice" aria-labelledby="data-notice-title">
+          <p className="eyebrow">Before you write</p>
+          <h2 id="data-notice-title">Know where your text goes.</h2>
+          <p>
+            Twinkl saves manual text in this browser and in temporary Python
+            service memory. Live work sends the text to the configured AI
+            provider.
+          </p>
+          <p>
+            This is an academic assessment POC, not therapy. Use sample or
+            non-sensitive text.
+          </p>
+          <p>
+            Delete session removes browser and Python service data. Twinkl does
+            not request deletion from the AI provider.
+          </p>
+          <button
+            className="button button--primary"
+            type="button"
+            onClick={() =>
+              updateExperience({ data_notice_acknowledged: true })
+            }
+          >
+            Continue with manual demo
+          </button>
+        </section>
+      ) : null}
+
       {mode === "manual" && experience.assessment_clock ? (
         <aside className="simulated-time" aria-label="Simulated time">
           <div>
@@ -981,7 +1010,9 @@ export default function JournalExperience({
         </aside>
       ) : null}
 
-      {mode === "manual" && !isAwaitingResponse ? (
+      {mode === "manual" &&
+        experience.data_notice_acknowledged &&
+        !isAwaitingResponse ? (
         <form
           className="journal-composer"
           id="experience-journal-compose"

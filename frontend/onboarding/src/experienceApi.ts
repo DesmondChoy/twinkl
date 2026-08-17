@@ -7,6 +7,7 @@ import {
   type ExperienceResumeStateContract,
   type JournalEntryContract,
   type JournalEntrySubmittedResponseContract,
+  type SessionDeletedResponseContract,
   type SessionCreatedResponseContract,
   type TraceReadResponseContract,
   type TraceEventContract,
@@ -228,6 +229,25 @@ export async function advanceAssessmentTime(
   if (response.operation !== "advance_assessment_time") {
     throw new ExperienceApiError(
       "Changing simulated time returned the wrong result.",
+      "unexpected_operation",
+      false,
+    );
+  }
+  return response;
+}
+
+export async function deleteExperienceSession(
+  sessionId: string,
+): Promise<SessionDeletedResponseContract> {
+  const response = await postExperience({
+    schema_version: EXPERIENCE_INSPECT_CONTRACT_VERSION,
+    operation: "delete_session",
+    request_id: requestId(),
+    session_id: sessionId,
+  });
+  if (response.operation !== "delete_session") {
+    throw new ExperienceApiError(
+      "Deleting this session returned the wrong result.",
       "unexpected_operation",
       false,
     );

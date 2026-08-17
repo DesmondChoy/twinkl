@@ -35,6 +35,8 @@ from src.demo.contracts import (
     ScenarioWeek,
     SessionCreatedResponse,
     SessionCreateRequest,
+    SessionDeletedResponse,
+    SessionDeleteRequest,
     SessionSelection,
     TraceReadRequest,
     WeeklyDriftReviewerDecisionContract,
@@ -779,6 +781,11 @@ def build_canonical_fixture() -> ContractFixtureSet:
             expected_revision=3,
             action="next_day",
         ),
+        SessionDeleteRequest(
+            operation="delete_session",
+            request_id="request-delete",
+            session_id=SESSION_ID,
+        ),
     ]
     responses = [
         SessionCreatedResponse(
@@ -814,6 +821,13 @@ def build_canonical_fixture() -> ContractFixtureSet:
                 }
             ),
             event_ids=["event-15"],
+        ),
+        SessionDeletedResponse(
+            operation="delete_session",
+            request_id="request-delete",
+            status="ok",
+            session_id=SESSION_ID,
+            deleted=True,
         ),
     ]
     return ContractFixtureSet.model_validate(

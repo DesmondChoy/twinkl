@@ -19,6 +19,7 @@ from src.demo.contracts import (
     JournalEntrySubmitRequest,
     ScenarioLoadRequest,
     SessionCreateRequest,
+    SessionDeleteRequest,
     SessionResumeState,
     TraceReadRequest,
 )
@@ -362,6 +363,54 @@ async def test_submission_is_idempotent_and_stops_before_weekly_review() -> None
     assert decision.model_contract is not None
     assert decision.model_contract.model == "gpt-5.6-luna"
     assert decision.model_contract.reasoning_effort == "none"
+
+
+@pytest.mark.asyncio
+async def test_delete_session_removes_state_and_request_receipts() -> None:
+    service, _, _ = _service([_receipt()])
+    create_request = await _create(service)
+    submit_request = _submit_request(create_request, index=0, expected_revision=0)
+    submitted = await service.submit_journal_entry(submit_request)
+    assert submitted.operation == "submit_journal_entry"
+
+    request = SessionDeleteRequest(
+        operation="delete_session",
+        request_id="delete-1",
+        session_id=create_request.profile.session_id,
+    )
+    deleted = await service.delete_session(request)
+    trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-after-delete",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    repeated_submit = await service.submit_journal_entry(
+        submit_request.model_copy(update={"request_id": "submit-after-delete"})
+    )
+    repeated_delete = await service.delete_session(
+        request.model_copy(update={"request_id": "delete-2"})
+    )
+    recreated = await service.create_session(
+        create_request.model_copy(update={"request_id": "create-after-delete"})
+    )
+    recreated_trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-after-recreate",
+            session_id=create_request.profile.session_id,
+        )
+    )
+
+    assert deleted.deleted is True
+    assert trace.operation == "error"
+    assert trace.error.code == "session_not_found"
+    assert repeated_submit.operation == "error"
+    assert repeated_submit.error.code == "session_not_found"
+    assert repeated_delete.deleted is False
+    assert recreated.operation == "create_session"
+    assert recreated_trace.operation == "read_trace"
 
 
 @pytest.mark.asyncio
@@ -1456,6 +1505,22 @@ def test_http_adapter_validates_and_serves_contract_responses() -> None:
                 session_id=profile.session_id,
             ).model_dump(mode="json"),
         )
+        deleted = client.post(
+            "/api/experience",
+            json=SessionDeleteRequest(
+                operation="delete_session",
+                request_id="delete-http",
+                session_id=profile.session_id,
+            ).model_dump(mode="json"),
+        )
+        traced_after_delete = client.post(
+            "/api/experience",
+            json=TraceReadRequest(
+                operation="read_trace",
+                request_id="trace-http-after-delete",
+                session_id=profile.session_id,
+            ).model_dump(mode="json"),
+        )
 
     assert health.json() == {"status": "ok"}
     assert created.status_code == 200
@@ -1472,6 +1537,10 @@ def test_http_adapter_validates_and_serves_contract_responses() -> None:
         "nudge_suppression_checked",
         "nudge_decided",
     ]
+    assert deleted.status_code == 200
+    assert deleted.json()["deleted"] is True
+    assert traced_after_delete.status_code == 404
+    assert traced_after_delete.json()["error"]["code"] == "session_not_found"
 
 
 def test_http_adapter_serves_the_built_experience_and_public_health(

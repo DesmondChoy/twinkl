@@ -26,6 +26,12 @@ describe("Experience and Inspect v1 contract", () => {
         .filter((event) => fixture.session.trace_event_ids.includes(event.event_id))
         .every((event) => event.input_refs.length > 0 || event.result_refs.length > 0),
     ).toBe(true);
+    expect(
+      fixture.requests.some((request) => request.operation === "delete_session"),
+    ).toBe(true);
+    expect(
+      fixture.responses.some((response) => response.operation === "delete_session"),
+    ).toBe(true);
   });
 
   it("ships the generated versioned JSON Schema", () => {

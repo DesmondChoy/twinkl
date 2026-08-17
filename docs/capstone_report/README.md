@@ -29,8 +29,8 @@ a submitted milestone file.
 
 - Add final figures and tables.
 - Complete the Coach Digest Validations and Coach Digest Evals reports.
-- Complete or move to future work the tracked pilot privacy, Coach Digest
-  feedback, and longitudinal Core Value history additions.
+- Complete or move to future work the tracked Coach Digest feedback and
+  longitudinal Core Value history additions.
 - Complete the citation-to-claim audit.
 - Add exact reproduction commands, environment versions, configurations, seeds,
   input versions, and output paths.

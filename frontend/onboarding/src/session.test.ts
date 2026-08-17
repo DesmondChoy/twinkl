@@ -53,11 +53,12 @@ describe("onboarding session", () => {
   it("randomizes set order and every prescribed card order once, then round-trips", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
-    expect(session.schema_version).toBe(9);
+    expect(session.schema_version).toBe(10);
     expect(session.stage).toBe("name");
     expect(session.preferred_name).toBe("");
     expect(session.experience).toMatchObject({
       active_view: "experience",
+      data_notice_acknowledged: false,
       journal_started: false,
       selected_event_id: null,
       run_state: "idle",
@@ -100,7 +101,7 @@ describe("onboarding session", () => {
     delete legacy.preferred_name;
     delete legacy.experience;
     const migrated = parseSession(JSON.stringify(legacy));
-    expect(migrated?.schema_version).toBe(9);
+    expect(migrated?.schema_version).toBe(10);
     expect(migrated?.preferred_name).toBe("Friend");
     expect(migrated?.experience.active_view).toBe("experience");
     expect(migrated?.responses).toEqual(legacy.responses);
@@ -117,7 +118,7 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(9);
+    expect(migrated?.schema_version).toBe(10);
     expect(migrated?.experience.journal_draft).toBe("A draft worth keeping.");
     expect(migrated?.experience.trace_event_ids).toEqual([]);
     expect(migrated?.experience.trace_events).toEqual([]);
@@ -152,7 +153,7 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(9);
+    expect(migrated?.schema_version).toBe(10);
     expect(migrated?.confirmed_profile?.schema_version).toBe(4);
     expect(migrated?.confirmed_profile).not.toHaveProperty("goal_category");
   });
@@ -244,7 +245,7 @@ describe("onboarding session", () => {
     const migrated = parseSession(JSON.stringify(legacy));
 
     expect(migrated).toMatchObject({
-      schema_version: 9,
+      schema_version: 10,
       session_id: `${legacy.session_id}:core-values-v2`,
       stage: "summary",
       selected_top_values: [],
@@ -276,8 +277,19 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(9);
+    expect(migrated?.schema_version).toBe(10);
     expect(migrated?.experience.assessment_clock).toBeNull();
+  });
+
+  it("requires a new data notice acknowledgement after version 9 migration", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.schema_version = 9;
+    delete legacy.experience.data_notice_acknowledged;
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.schema_version).toBe(10);
+    expect(migrated?.experience.data_notice_acknowledged).toBe(false);
   });
 
   it("preserves a legacy Profile without a stored preferred name", () => {

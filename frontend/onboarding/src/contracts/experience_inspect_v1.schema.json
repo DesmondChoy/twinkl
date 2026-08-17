@@ -20,6 +20,7 @@
             "create_session",
             "submit_journal_entry",
             "advance_assessment_time",
+            "delete_session",
             "load_scenario",
             "read_trace"
           ],
@@ -3554,6 +3555,79 @@
       "title": "SessionCreatedResponse",
       "type": "object"
     },
+    "SessionDeleteRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "const": "delete_session",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "session_id"
+      ],
+      "title": "SessionDeleteRequest",
+      "type": "object"
+    },
+    "SessionDeletedResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "deleted": {
+          "title": "Deleted",
+          "type": "boolean"
+        },
+        "operation": {
+          "const": "delete_session",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "status": {
+          "const": "ok",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "status",
+        "session_id",
+        "deleted"
+      ],
+      "title": "SessionDeletedResponse",
+      "type": "object"
+    },
     "SessionResumeState": {
       "additionalProperties": false,
       "description": "Browser-held state used to restore the in-memory Experience boundary.",
@@ -5362,6 +5436,7 @@
           "mapping": {
             "advance_assessment_time": "#/$defs/AssessmentTimeAdvanceRequest",
             "create_session": "#/$defs/SessionCreateRequest",
+            "delete_session": "#/$defs/SessionDeleteRequest",
             "load_scenario": "#/$defs/ScenarioLoadRequest",
             "read_trace": "#/$defs/TraceReadRequest",
             "submit_journal_entry": "#/$defs/JournalEntrySubmitRequest"
@@ -5377,6 +5452,9 @@
           },
           {
             "$ref": "#/$defs/AssessmentTimeAdvanceRequest"
+          },
+          {
+            "$ref": "#/$defs/SessionDeleteRequest"
           },
           {
             "$ref": "#/$defs/ScenarioLoadRequest"
@@ -5395,6 +5473,7 @@
           "mapping": {
             "advance_assessment_time": "#/$defs/AssessmentTimeAdvancedResponse",
             "create_session": "#/$defs/SessionCreatedResponse",
+            "delete_session": "#/$defs/SessionDeletedResponse",
             "error": "#/$defs/ApiErrorResponse",
             "load_scenario": "#/$defs/ScenarioLoadedResponse",
             "read_trace": "#/$defs/TraceReadResponse",
@@ -5411,6 +5490,9 @@
           },
           {
             "$ref": "#/$defs/AssessmentTimeAdvancedResponse"
+          },
+          {
+            "$ref": "#/$defs/SessionDeletedResponse"
           },
           {
             "$ref": "#/$defs/ScenarioLoadedResponse"

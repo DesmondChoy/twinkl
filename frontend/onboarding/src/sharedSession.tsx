@@ -26,7 +26,7 @@ interface SharedSessionValue {
   updateExperience: (patch: Partial<ExperienceState>) => void;
   showView: (view: DemoView) => void;
   inspectRun: (eventId: string) => void;
-  restart: () => void;
+  restart: () => boolean;
 }
 
 const SharedSessionContext = createContext<SharedSessionValue | null>(null);
@@ -62,8 +62,9 @@ export function SharedSessionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const restart = useCallback(() => {
-    clearSession();
+    if (!clearSession()) return false;
     setSession(createSession());
+    return true;
   }, []);
 
   const value = useMemo(

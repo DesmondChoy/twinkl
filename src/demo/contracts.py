@@ -63,6 +63,7 @@ Operation = Literal[
     "create_session",
     "submit_journal_entry",
     "advance_assessment_time",
+    "delete_session",
     "load_scenario",
     "read_trace",
 ]
@@ -874,6 +875,13 @@ class AssessmentTimeAdvanceRequest(ContractModel):
     action: Literal["next_day", "close_week"]
 
 
+class SessionDeleteRequest(ContractModel):
+    schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
+    operation: Literal["delete_session"]
+    request_id: str
+    session_id: str
+
+
 class ScenarioLoadRequest(ContractModel):
     schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
     operation: Literal["load_scenario"]
@@ -893,6 +901,7 @@ ApiRequest = Annotated[
     SessionCreateRequest
     | JournalEntrySubmitRequest
     | AssessmentTimeAdvanceRequest
+    | SessionDeleteRequest
     | ScenarioLoadRequest
     | TraceReadRequest,
     Field(discriminator="operation"),
@@ -923,6 +932,15 @@ class AssessmentTimeAdvancedResponse(ContractModel):
     status: Literal["ok"]
     session: ExperienceSession
     event_ids: list[str] = Field(min_length=1)
+
+
+class SessionDeletedResponse(ContractModel):
+    schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
+    operation: Literal["delete_session"]
+    request_id: str
+    status: Literal["ok"]
+    session_id: str
+    deleted: bool
 
 
 class ScenarioLoadedResponse(ContractModel):
@@ -957,6 +975,7 @@ ApiResponse = Annotated[
     SessionCreatedResponse
     | JournalEntrySubmittedResponse
     | AssessmentTimeAdvancedResponse
+    | SessionDeletedResponse
     | ScenarioLoadedResponse
     | TraceReadResponse
     | ApiErrorResponse,

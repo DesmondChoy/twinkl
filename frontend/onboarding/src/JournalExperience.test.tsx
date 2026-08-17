@@ -111,12 +111,17 @@ function Harness({
   initial = createExperienceState(),
   inspectRun = vi.fn(),
   mode = "manual",
+  acknowledgeNotice = true,
 }: {
   initial?: ExperienceState;
   inspectRun?: (eventId: string) => void;
   mode?: "manual" | "saved_replay";
+  acknowledgeNotice?: boolean;
 }) {
-  const [experience, setExperience] = useState(initial);
+  const [experience, setExperience] = useState({
+    ...initial,
+    data_notice_acknowledged: acknowledgeNotice,
+  });
   return (
     <JournalExperience
       profile={profile}
@@ -155,6 +160,39 @@ beforeEach(() => {
 });
 
 describe("manual Journal Entry Experience", () => {
+  it("requires the data notice before manual writing", async () => {
+    const user = userEvent.setup();
+    render(<Harness acknowledgeNotice={false} />);
+
+    expect(
+      screen.getByRole("heading", { name: "Know where your text goes." }),
+    ).toBeTruthy();
+    expect(
+      screen.queryByRole("textbox", { name: "First Journal Entry" }),
+    ).toBeNull();
+    expect(
+      screen.getByText(
+        "Delete session removes browser and Python service data. Twinkl does not request deletion from the AI provider.",
+      ),
+    ).toBeTruthy();
+
+    await user.click(
+      screen.getByRole("button", { name: "Continue with manual demo" }),
+    );
+
+    expect(
+      screen.getByRole("textbox", { name: "First Journal Entry" }),
+    ).toBeTruthy();
+  });
+
+  it("does not put the manual data notice in saved Persona replay", () => {
+    render(<Harness mode="saved_replay" acknowledgeNotice={false} />);
+
+    expect(
+      screen.queryByRole("heading", { name: "Know where your text goes." }),
+    ).toBeNull();
+  });
+
   it("holds the Journal Entry, shows one nudge, and saves a reply", async () => {
     const savedEntry = entry();
     let submittedId = "";

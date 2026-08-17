@@ -47,6 +47,7 @@ const OPERATIONS = new Set([
   "create_session",
   "submit_journal_entry",
   "advance_assessment_time",
+  "delete_session",
   "load_scenario",
   "read_trace",
 ]);
@@ -209,6 +210,15 @@ export interface AssessmentTimeAdvancedResponseContract extends JsonObject {
   event_ids: string[];
 }
 
+export interface SessionDeletedResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "delete_session";
+  request_id: string;
+  status: "ok";
+  session_id: string;
+  deleted: boolean;
+}
+
 export interface TraceReadResponseContract extends JsonObject {
   schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
   operation: "read_trace";
@@ -233,6 +243,7 @@ export type ExperienceApiResponseContract =
   | SessionCreatedResponseContract
   | JournalEntrySubmittedResponseContract
   | AssessmentTimeAdvancedResponseContract
+  | SessionDeletedResponseContract
   | ScenarioLoadedResponseContract
   | TraceReadResponseContract;
 
@@ -1027,6 +1038,7 @@ function validateRequest(value: unknown, name: string): JsonObject {
       "expected_revision",
       "action",
     ],
+    delete_session: ["schema_version", "operation", "request_id", "session_id"],
     load_scenario: ["schema_version", "operation", "request_id", "scenario_id"],
     read_trace: ["schema_version", "operation", "request_id", "session_id", "after_event_id"],
   };
@@ -1068,6 +1080,9 @@ function validateRequest(value: unknown, name: string): JsonObject {
       throw new Error(`${name}.action is incompatible`);
     }
   }
+  if (request.operation === "delete_session") {
+    string(request.session_id, `${name}.session_id`);
+  }
   return request;
 }
 
@@ -1108,6 +1123,14 @@ function validateResponse(value: unknown, name: string): JsonObject {
       "session",
       "event_ids",
     ],
+    delete_session: [
+      "schema_version",
+      "operation",
+      "request_id",
+      "status",
+      "session_id",
+      "deleted",
+    ],
     load_scenario: [
       "schema_version",
       "operation",
@@ -1141,6 +1164,12 @@ function validateResponse(value: unknown, name: string): JsonObject {
     array(response.events, `${name}.events`).forEach((event, index) =>
       validateTraceEvent(event, `${name}.events[${index}]`),
     );
+  }
+  if (response.operation === "delete_session") {
+    string(response.session_id, `${name}.session_id`);
+    if (typeof response.deleted !== "boolean") {
+      throw new Error(`${name}.deleted is incompatible`);
+    }
   }
   return response;
 }

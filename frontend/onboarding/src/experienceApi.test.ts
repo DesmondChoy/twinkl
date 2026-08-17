@@ -4,6 +4,7 @@ import {
   advanceAssessmentTime,
   buildProfileReselectionResumeState,
   createExperienceSession,
+  deleteExperienceSession,
   ExperienceApiError,
   readExperienceTrace,
   submitJournalEntry,
@@ -122,6 +123,33 @@ describe("Experience API client", () => {
       action: "next_day",
     });
     expect(request.idempotency_key).toMatch(/^[0-9a-f]{64}$/);
+  });
+
+  it("deletes one Experience session", async () => {
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse({
+        schema_version: "experience-inspect-v1",
+        operation: "delete_session",
+        request_id: "delete-response",
+        status: "ok",
+        session_id: profile.session_id,
+        deleted: true,
+      }),
+    );
+
+    const response = await deleteExperienceSession(profile.session_id);
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const request = JSON.parse(String(init.body));
+
+    expect(response).toMatchObject({
+      operation: "delete_session",
+      session_id: profile.session_id,
+      deleted: true,
+    });
+    expect(request).toMatchObject({
+      operation: "delete_session",
+      session_id: profile.session_id,
+    });
   });
 
   it("maps safe API errors without exposing an invalid success response", async () => {

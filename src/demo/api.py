@@ -73,6 +73,7 @@ def _validation_error(payload: Any) -> JSONResponse:
         "create_session",
         "submit_journal_entry",
         "advance_assessment_time",
+        "delete_session",
         "load_scenario",
         "read_trace",
     }:

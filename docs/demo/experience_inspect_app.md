@@ -17,8 +17,8 @@ The five deterministic persona replays now load into the shared React session
 with manual next-step replay, previous-week navigation, optional automatic
 replay and pause, restart, Jump to key moment, reduced-motion behavior,
 no-future-data projection, and browser-side scenario hash verification. The
-release quality gate is implemented. Current capstone work is pilot privacy,
-current Coach Digest evaluation results, Coach Digest feedback capture,
+release quality gate is implemented. Current capstone work is current Coach
+Digest evaluation results, Coach Digest feedback capture,
 longitudinal Core Value history, and the final professor walkthrough. The
 optional live rerun does not block the final walkthrough. The versioned
 React-Python boundary, JSON Schema, and
@@ -39,8 +39,10 @@ Core Value contracts.
 - **Access:** The assessment URL allows anonymous browser access.
 - **Provider boundary:** Provider credentials remain on the server.
 - **Provider cost:** Live Journal Entry work can make paid provider calls.
-- **Reset behavior:** Restart clears the saved browser session and starts a new
-  session.
+- **Deletion behavior:** After Profile confirmation, Delete session removes the
+  matching in-memory Python session and request receipts before React clears
+  browser storage. Before Profile confirmation, Start over clears browser-only
+  progress.
 - **Scope:** The deployment is for capstone assessment only. It is not
   deployment approval.
 - **Excluded production controls:** Production authentication, multi-tenant
@@ -632,9 +634,18 @@ unavailable provider fields null; they do not invent a receipt.
 - Inspect is a capstone and developer view, not a normal user destination.
 - The default Persona replay uses synthetic personas. Manual Journal Entries
   are stored in browser storage for resume and in the matching in-memory Python
-  session. Live work can send that text to the configured provider. Explicit
-  pilot consent, session export, and complete browser-and-service deletion are
-  tracked under `twinkl-rklc.26`.
+  session. Live work can send that text to the configured provider. Before the
+  first manual Journal Entry, Experience requires acknowledgement of this data
+  flow, the assessment-only scope, and the non-therapy boundary. Saved Persona
+  replay does not require acknowledgement.
+- Delete session removes the matching Python session, Inspect events, and
+  request receipts before React clears browser storage. If Python deletion
+  fails, React keeps the browser session and states that deletion was not
+  confirmed. If browser removal fails after Python deletion, React keeps the
+  current view and states that only the Python session was deleted.
+- Delete session does not request deletion from the configured AI provider.
+- The capstone POC does not add data export, production authentication,
+  encryption infrastructure, or multi-user storage.
 - Never display API keys, authorization headers, hidden environment values, or
   unrelated logs.
 - Preserve the banned-term and value-leakage protections in generation and
@@ -732,7 +743,7 @@ capstone scope before the professor walkthrough starts.
 | `twinkl-rklc.7` | P0 | Event-linked Inspect view | `.1`, `.3` |
 | `twinkl-rklc.8` | P1 | Optional live rerun and visible reuse | `.5`, `.7` |
 | `twinkl-rklc.9` | P0 | End-to-end demo quality gate | `.4`, `.5`, `.6`, `.7` |
-| `twinkl-rklc.26` | P0 | Pilot privacy controls for manual journaling | — |
+| `twinkl-rklc.26` | P0 | Minimum privacy controls for manual journaling (complete) | — |
 | `twinkl-rklc.27` | P0 | Current Coach Digest Validations and Coach Digest Evals results | — |
 | `twinkl-rklc.28` | P1 | Coach Digest feedback and perceived accuracy | — |
 | `twinkl-rklc.30` | P1 | Longitudinal Core Value history | — |

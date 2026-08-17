@@ -29,6 +29,7 @@ import ExperienceSectionMap, {
 import {
   buildProfileReselectionResumeState,
   createExperienceSession,
+  deleteExperienceSession,
   ExperienceApiError,
   readExperienceTrace,
 } from "./experienceApi";
@@ -376,6 +377,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const [scenarioLoadError, setScenarioLoadError] = useState<string | null>(
     null,
   );
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deletingSession, setDeletingSession] = useState(false);
   const [scenarioLoadAttempt, setScenarioLoadAttempt] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mostDropRef = useRef<HTMLElement>(null);
@@ -587,15 +590,54 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const showAssessmentInspect =
     !selectedPersonaId && scores !== null && !hasJournalEntryWork;
 
-  const restart = () => {
-    if (!window.confirm("Start over and clear this progress?")) return;
+  const resetLocalSession = (): boolean => {
+    if (!restartSession()) {
+      setDeleteError(
+        "Browser data could not be cleared. Use your browser controls to clear this site's data.",
+      );
+      return false;
+    }
     profileSyncGenerationRef.current += 1;
     profileSyncInFlightRef.current = null;
     choicesCompletedAtRef.current = null;
     setPersonaPickerOpen(false);
     setLoadedScenario(null);
     setScenarioLoadError(null);
-    restartSession();
+    setDeleteError(null);
+    return true;
+  };
+
+  const restart = async () => {
+    const hasPythonSession =
+      session.confirmed_profile !== null
+      || selectedPersonaId !== null
+      || session.experience.trace_event_ids.length > 0;
+    const confirmed = window.confirm(
+      hasPythonSession
+        ? "Delete this browser and Python session? This cannot be undone."
+        : "Start over and clear this browser progress?",
+    );
+    if (!confirmed) return;
+    if (!hasPythonSession) {
+      resetLocalSession();
+      return;
+    }
+    setDeletingSession(true);
+    setDeleteError(null);
+    try {
+      await deleteExperienceSession(session.session_id);
+      if (!resetLocalSession()) {
+        setDeleteError(
+          "The Python session was deleted, but browser data could not be cleared. Use your browser controls to clear this site's data.",
+        );
+      }
+    } catch {
+      setDeleteError(
+        "Deletion was not confirmed. Your browser session is still here so you can try again.",
+      );
+    } finally {
+      setDeletingSession(false);
+    }
   };
 
   const applyScenarioWeek = (
@@ -948,6 +990,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             <button
               className="restart"
               type="button"
+              disabled={deletingSession}
               onClick={() => {
                 setPersonaPickerOpen(true);
                 showView("experience");
@@ -956,8 +999,17 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               {selectedPersonaId ? "Change Persona" : "Try demo"}
             </button>
           ) : null}
-          <button className="restart" type="button" onClick={restart}>
-            Start over
+          <button
+            className="restart"
+            type="button"
+            disabled={deletingSession}
+            onClick={() => void restart()}
+          >
+            {deletingSession
+              ? "Deleting…"
+              : session.confirmed_profile
+                ? "Delete session"
+                : "Start over"}
           </button>
         </div>
       </header>
@@ -968,10 +1020,17 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           you continue.
         </p>
       ) : null}
+      {deleteError ? (
+        <p className="storage-warning" role="alert">
+          {deleteError}
+        </p>
+      ) : null}
 
       {activeView === "experience" ? (
         <main
           id="main"
+          aria-busy={deletingSession}
+          inert={deletingSession ? true : undefined}
           className={`layout${
             experienceSectionView ? " layout--section-rail" : ""
           }`}

@@ -61,6 +61,8 @@ from src.demo.contracts import (
     ScenarioLoadRequest,
     SessionCreatedResponse,
     SessionCreateRequest,
+    SessionDeletedResponse,
+    SessionDeleteRequest,
     SessionResumeState,
     SessionSelection,
     TraceEvent,
@@ -102,6 +104,7 @@ Operation = Literal[
     "create_session",
     "submit_journal_entry",
     "advance_assessment_time",
+    "delete_session",
     "load_scenario",
     "read_trace",
 ]
@@ -1832,12 +1835,36 @@ class InMemoryExperienceService:
                 events=events,
             )
 
+    async def delete_session(
+        self,
+        request: SessionDeleteRequest,
+    ) -> SessionDeletedResponse:
+        """Delete one in-memory session and its request receipts."""
+        async with self._lock:
+            session_removed = self._sessions.pop(request.session_id, None) is not None
+            events_removed = self._events.pop(request.session_id, None) is not None
+            receipt_keys = [
+                key
+                for key, result in self._idempotency.items()
+                if result.response.session.session_id == request.session_id
+            ]
+            for key in receipt_keys:
+                del self._idempotency[key]
+            return SessionDeletedResponse(
+                operation="delete_session",
+                request_id=request.request_id,
+                status="ok",
+                session_id=request.session_id,
+                deleted=session_removed or events_removed or bool(receipt_keys),
+            )
+
     async def handle(
         self,
         request: (
             SessionCreateRequest
             | JournalEntrySubmitRequest
             | AssessmentTimeAdvanceRequest
+            | SessionDeleteRequest
             | TraceReadRequest
         ),
     ) -> ApiResponse:
@@ -1847,4 +1874,6 @@ class InMemoryExperienceService:
             return await self.submit_journal_entry(request)
         if isinstance(request, AssessmentTimeAdvanceRequest):
             return await self.advance_assessment_time(request)
+        if isinstance(request, SessionDeleteRequest):
+            return await self.delete_session(request)
         return await self.read_trace(request)

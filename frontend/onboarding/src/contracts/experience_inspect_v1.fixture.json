@@ -1623,6 +1623,12 @@
       "session_id": "session-demo",
       "expected_revision": 3,
       "action": "next_day"
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "operation": "delete_session",
+      "request_id": "request-delete",
+      "session_id": "session-demo"
     }
   ],
   "responses": [
@@ -2841,6 +2847,14 @@
       "event_ids": [
         "event-15"
       ]
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "operation": "delete_session",
+      "request_id": "request-delete",
+      "status": "ok",
+      "session_id": "session-demo",
+      "deleted": true
     }
   ],
   "trace_events": [

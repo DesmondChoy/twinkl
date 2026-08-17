@@ -72,9 +72,11 @@
 - **Assessment-only deployment:** public Experience and Inspect demo on Railway
 - **Implemented structural control:** live model instructions are separate from
   user-controlled JSON data
-- **In progress:** pilot privacy controls, current Coach Digest evaluation
-  results, Coach Digest feedback capture, longitudinal Core Value history, and
-  professor walkthrough evidence
+- **Implemented minimum privacy boundary:** first-use data notice and confirmed
+  browser-and-Python session deletion for manual Journal Entries
+- **In progress:** current Coach Digest evaluation results, Coach Digest
+  feedback capture, longitudinal Core Value history, and professor walkthrough
+  evidence
 - No fresh final test or deployment approval
 - User-facing Drift path separated from offline VIF Critic research
 
@@ -391,8 +393,12 @@
 ### 6.3 Safety, Privacy, and Ethics
 
 - Sensitive Journal Entry data
-- Consent, retention, access, export, and deletion
-- Non-therapy boundary
+- First-use notice for browser storage, temporary Python memory, provider use,
+  assessment-only scope, and the non-therapy boundary
+- Confirmed deletion of browser state, the matching Python session, Inspect
+  events, and request receipts
+- No data export, provider-side deletion request, production authentication,
+  encryption infrastructure, or multi-user storage in the capstone POC
 - Non-prescriptive and non-judgmental Coach Digest language
 - Fail-closed Abstain behavior
 - Higher-priority Twinkl instructions separated from user-controlled JSON data
@@ -418,7 +424,7 @@
 
 - Fresh final test excluded from model and prompt development
 - Future human calibration of the Coach Digest AI review
-- Real-user pilot after the current minimum privacy controls
+- Future real-user pilot using the current minimum privacy controls
 - Automatic Profile evolution and decay-aware Profile updates
 - Displayed nudge response rate, later-Journal-Entry rate, and perceived
   relevance in the real-user pilot
