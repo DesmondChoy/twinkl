@@ -213,12 +213,16 @@ def score_mlp_cases(
             )
         )
 
-    state_tensor = torch.from_numpy(np.stack(states).astype(np.float32)).to(device)
+    device_obj = torch.device(device)
+    state_tensor = torch.from_numpy(np.stack(states).astype(np.float32)).to(device_obj)
     fork_devices = []
-    if device.type == "cuda":
-        fork_devices.append(
-            device.index if device.index is not None else torch.cuda.current_device()
+    if device_obj.type == "cuda":
+        cuda_index = (
+            device_obj.index
+            if device_obj.index is not None
+            else torch.cuda.current_device()
         )
+        fork_devices.append(cuda_index)
     with torch.random.fork_rng(devices=fork_devices):
         if mc_seed is not None:
             torch.manual_seed(mc_seed)
