@@ -25,6 +25,12 @@ CoachDigestPolicy = Literal[
     "no_current_drift",
     "more_reflection_needed",
 ]
+CoachDigestFailureStage = Literal[
+    "no_response",
+    "json_parse",
+    "schema_validation",
+    "coach_validation",
+]
 CoreValueDriftState = Literal[
     "active_drift",
     "no_active_drift",
@@ -172,6 +178,44 @@ class DigestValidation(BaseModel):
         }
         observed = {check.name for check in self.checks}
         return required <= observed and all(check.passed for check in self.checks)
+
+
+class LLMCallMetrics(BaseModel):
+    """Usage and timing for one provider model call."""
+
+    schema_version: Literal["1.0.0"] = "1.0.0"
+    call_label: str | None = None
+    provider: str
+    model: str
+    reasoning_effort: str | None = None
+    service_tier: str | None = None
+    response_id: str | None = None
+    status: str | None = None
+    latency_seconds: float = Field(ge=0)
+    input_tokens: int | None = Field(default=None, ge=0)
+    cached_input_tokens: int | None = Field(default=None, ge=0)
+    cache_write_input_tokens: int | None = Field(default=None, ge=0)
+    output_tokens: int | None = Field(default=None, ge=0)
+    reasoning_output_tokens: int | None = Field(default=None, ge=0)
+    total_tokens: int | None = Field(default=None, ge=0)
+    calculated_cost_usd: float | None = Field(default=None, ge=0)
+    error_type: str | None = None
+
+
+class CoachDigestDiagnostic(BaseModel):
+    """Diagnostic record for one Coach Digest generation attempt."""
+
+    schema_version: Literal["1.0.0"] = "1.0.0"
+    persona_id: str
+    week_start: str
+    week_end: str
+    accepted: bool
+    failure_stage: CoachDigestFailureStage | None = None
+    failure_details: list[str] = Field(default_factory=list)
+    raw_output: str | None = None
+    narrative: CoachNarrative | None = None
+    validation: DigestValidation | None = None
+    llm_call: LLMCallMetrics | None = None
 
 
 class DriftDetectionResult(BaseModel):

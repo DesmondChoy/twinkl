@@ -7,7 +7,7 @@ import asyncio
 import json
 from collections import defaultdict
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -16,11 +16,10 @@ from src.coach.weekly_digest import (
     _default_output_stem,
     attach_coach_artifacts,
     build_weekly_drift_reviewer_digest,
-    generate_weekly_digest_coach,
+    generate_weekly_digest_coach_diagnostic,
     persist_weekly_digest_record,
     render_digest_markdown,
     render_digest_prompt,
-    validate_weekly_digest_narrative,
 )
 from src.drift_detector import detect_drift
 from src.models.judge import SCHWARTZ_VALUE_ORDER
@@ -315,18 +314,22 @@ async def run_weekly_drift_coach_cycle(
             }
         )
 
+    coach_diagnostic = None
     if coach_llm_complete is not None:
-        narrative, _prompt = await generate_weekly_digest_coach(
+        coach_diagnostic, _prompt = await generate_weekly_digest_coach_diagnostic(
             digest,
             coach_llm_complete,
         )
-        validation = (
-            validate_weekly_digest_narrative(digest, narrative)
-            if narrative is not None
-            else None
-        )
-        if narrative is not None and validation is not None and validation.all_passed:
-            digest = attach_coach_artifacts(digest, narrative, validation)
+        if (
+            coach_diagnostic.accepted
+            and coach_diagnostic.narrative is not None
+            and coach_diagnostic.validation is not None
+        ):
+            digest = attach_coach_artifacts(
+                digest,
+                coach_diagnostic.narrative,
+                coach_diagnostic.validation,
+            )
 
     output_path.mkdir(parents=True, exist_ok=True)
     stem = _default_output_stem(digest)
@@ -334,12 +337,20 @@ async def run_weekly_drift_coach_cycle(
     digest_path = output_path / f"{stem}.json"
     markdown_path = output_path / f"{stem}.md"
     prompt_path = output_path / f"{stem}.prompt.txt"
+    diagnostic_stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
+    coach_diagnostic_path = output_path / (
+        f"{stem}.{diagnostic_stamp}.coach_diagnostic.json"
+    )
     drift_path.write_text(
         json.dumps(drift_result.model_dump(mode="json"), indent=2) + "\n"
     )
     digest_path.write_text(json.dumps(digest.model_dump(mode="json"), indent=2) + "\n")
     markdown_path.write_text(render_digest_markdown(digest))
     prompt_path.write_text(render_digest_prompt(digest))
+    if coach_diagnostic is not None:
+        coach_diagnostic_path.write_text(
+            json.dumps(coach_diagnostic.model_dump(mode="json"), indent=2) + "\n"
+        )
     persist_weekly_digest_record(digest, Path(parquet_path))
 
     artifacts = {
@@ -349,6 +360,8 @@ async def run_weekly_drift_coach_cycle(
         "prompt_path": str(prompt_path),
         "parquet_path": str(parquet_path),
     }
+    if coach_diagnostic is not None:
+        artifacts["coach_diagnostic_path"] = str(coach_diagnostic_path)
     for index, receipt_path in enumerate(receipt_paths, start=1):
         artifacts[f"review_receipt_{index}_path"] = str(receipt_path)
     return digest, artifacts

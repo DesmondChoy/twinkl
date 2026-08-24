@@ -291,7 +291,11 @@ def test_build_llm_complete_selects_provider_by_env(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_openai_sends_instructions_separately(monkeypatch):
-    from src.coach.llm_client import build_llm_complete
+    from src.coach.llm_client import (
+        DEFAULT_OPENAI_MODEL,
+        DEFAULT_OPENAI_REASONING_EFFORT,
+        build_llm_complete,
+    )
 
     captured = {}
 
@@ -305,13 +309,18 @@ async def test_openai_sends_instructions_separately(monkeypatch):
             self.responses = Responses()
 
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.delenv("TWINKL_COACH_MODEL", raising=False)
     monkeypatch.setattr("openai.AsyncOpenAI", Client)
-    llm_complete = build_llm_complete(provider="openai", model="test-model")
+    llm_complete = build_llm_complete(provider="openai")
     assert llm_complete is not None
 
     result = await llm_complete('{"journal_entry":"untrusted"}', None, "trusted")
 
     assert result == '{"ok":true}'
+    assert captured["model"] == DEFAULT_OPENAI_MODEL
+    assert captured["reasoning"] == {
+        "effort": DEFAULT_OPENAI_REASONING_EFFORT
+    }
     assert captured["instructions"] == "trusted"
     assert captured["input"] == '{"journal_entry":"untrusted"}'
 
