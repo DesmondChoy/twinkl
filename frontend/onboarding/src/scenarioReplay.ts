@@ -151,7 +151,7 @@ export function validateScenarioCatalog(value: unknown): ScenarioCatalog {
 }
 
 async function fetchResponse(path: string): Promise<Response> {
-  const response = await fetch(path);
+  const response = await fetch(path, { cache: "no-store" });
   if (!response.ok) {
     throw new Error("The saved persona replay could not be loaded.");
   }

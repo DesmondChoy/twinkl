@@ -5,12 +5,17 @@ import stableReplayJson from "../public/scenarios/stable-meera.json";
 import twoValuesReplayJson from "../public/scenarios/two-values-lukas.json";
 import uncertainReplayJson from "../public/scenarios/uncertain-noor.json";
 import judgeSampleManifest from "../../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { validateExperienceInspectFixture } from "./demoContracts";
 import {
+  loadScenarioCatalog,
   projectScenarioWeek,
   validateScenarioCatalog,
 } from "./scenarioReplay";
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 describe("saved persona replay", () => {
   const fixture = validateExperienceInspectFixture(activeReplayJson);
@@ -29,6 +34,19 @@ describe("saved persona replay", () => {
         "two_core_values",
       ]),
     );
+  });
+
+  it("does not reuse cached scenario files", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify(scenarioCatalogJson), { status: 200 }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await loadScenarioCatalog();
+
+    expect(fetchMock).toHaveBeenCalledWith("/scenarios/index.json", {
+      cache: "no-store",
+    });
   });
 
   it("projects only information available through the selected week", () => {
