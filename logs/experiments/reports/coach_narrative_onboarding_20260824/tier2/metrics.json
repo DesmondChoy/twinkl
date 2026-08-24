@@ -1,0 +1,32 @@
+{
+  "eval": "coach_digest_evals",
+  "source": "ai_review",
+  "note": "AI evaluation scores, NOT human validation. Future human calibration of the AI review is required before treating these as ground truth.",
+  "judge_model": "openai:gpt-5.4-mini",
+  "generator_model": "gemini:gemini-3.5-flash",
+  "self_evaluation": false,
+  "self_evaluation_note": null,
+  "n_scored": 5,
+  "n_failed": 0,
+  "means": {
+    "correctness": 3.4,
+    "specificity": 4.4,
+    "non_prescriptive_tone": 4.6,
+    "tension_honesty": 2.4
+  },
+  "mean_target": 3.5,
+  "meets_mean_target": {
+    "correctness": false,
+    "specificity": true,
+    "non_prescriptive_tone": true,
+    "tension_honesty": false
+  },
+  "pct_ge_4": {
+    "correctness": 0.4,
+    "specificity": 1.0,
+    "non_prescriptive_tone": 0.8,
+    "tension_honesty": 0.2
+  },
+  "question_open_rate": 1.0,
+  "n_flagged_for_review": 4
+}

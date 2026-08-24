@@ -1,0 +1,1061 @@
+[
+  {
+    "digest": {
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "week_start": "2025-06-30",
+      "week_end": "2025-07-05",
+      "response_mode": "active_drift",
+      "mode_source": "drift_detector",
+      "mode_rationale": "At least one Core Value has active Drift.",
+      "signal_source": "weekly_drift_reviewer",
+      "n_entries": 2,
+      "overall_mean": null,
+      "overall_uncertainty": null,
+      "core_values": [
+        "universalism"
+      ],
+      "goal_context": null,
+      "drift_states": {
+        "universalism": "active_drift"
+      },
+      "drift_reasons": [
+        "8f83c818:universalism:8:open"
+      ],
+      "top_tensions": [
+        "universalism"
+      ],
+      "top_strengths": [],
+      "state_comparisons": [
+        {
+          "core_value": "universalism",
+          "previous_week_start": "2025-06-23",
+          "previous_week_end": "2025-06-29",
+          "current_week_start": "2025-06-30",
+          "current_week_end": "2025-07-05",
+          "previous_state": "no_active_drift",
+          "current_state": "active_drift",
+          "change": "active_drift_started",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-06-25",
+              "t_index": 8,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "I said okay. I could have pushed back, could have said the validation matters because real people's money is on the line and if we ship it broken the ones who suffer are the ones who can least afford it."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-07-01",
+              "t_index": 9,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "I nodded. Again. I keep telling myself I'll escalate next time, build the case, find the right moment."
+            },
+            {
+              "date": "2025-07-05",
+              "t_index": 10,
+              "direction": "misaligned",
+              "dimensions": [
+                "universalism"
+              ],
+              "score_mean": null,
+              "excerpt": "I've been choosing convenience over doing what I know matters"
+            }
+          ]
+        }
+      ],
+      "dimensions": [],
+      "evidence": [
+        {
+          "date": "2025-06-25",
+          "t_index": 8,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I said okay. I could have pushed back, could have said the validation matters because real people's money is on the line and if we ship it broken the ones who suffer are the ones who can least afford it."
+        },
+        {
+          "date": "2025-07-01",
+          "t_index": 9,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I nodded. Again. I keep telling myself I'll escalate next time, build the case, find the right moment."
+        },
+        {
+          "date": "2025-07-05",
+          "t_index": 10,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I've been choosing convenience over doing what I know matters"
+        }
+      ]
+    },
+    "narrative": {
+      "weekly_mirror": "This week, Wei Jun Chen, you found yourself repeatedly stepping back from advocacy in moments where system reliability directly impacts vulnerable communities. Your reflections note a pattern of nodding along and quiet acquiescence when critical validation steps are bypassed.",
+      "tension_explanation": "A tension has emerged between your commitment to making the world a fairer, better place and your recent workplace choices. When you observed risks to the system, you noted, \"I said okay\" and \"nodded. Again,\" despite knowing that \"if we ship it broken the ones who suffer are the ones who can least afford it.\" By your own description, you have recently been \"choosing convenience over doing what I know matters\" instead of escalating the issues as they arise.",
+      "reflective_question": "What is the quietest step you could take next time to pause a decision, before you feel the pressure to fully escalate or nod along?"
+    },
+    "validation": {
+      "grounded_quotes": [
+        "I said okay",
+        "if we ship it broken the ones who suffer are the ones who can least afford it.",
+        "choosing convenience over doing what I know matters"
+      ],
+      "word_count": 143,
+      "checks": [
+        {
+          "name": "groundedness",
+          "passed": true,
+          "details": "Found 3 quoted phrase(s) that match selected evidence."
+        },
+        {
+          "name": "non_circularity",
+          "passed": true,
+          "details": "Response avoids raw scoring and alignment terminology."
+        },
+        {
+          "name": "value_leakage",
+          "passed": true,
+          "details": "Response avoids naming raw Schwartz value labels."
+        },
+        {
+          "name": "state_claims",
+          "passed": false,
+          "details": "Response makes an unsupported positive transition claim with: better."
+        },
+        {
+          "name": "length",
+          "passed": true,
+          "details": "Combined response length is 143 words (target 25-180)."
+        }
+      ]
+    },
+    "generator_model": "gemini:gemini-3.5-flash",
+    "target": {
+      "scenario_id": "active-wei-jun",
+      "persona_id": "8f83c818",
+      "title": "Wei Jun \u2014 convenience versus fairness",
+      "profile_path": "logs/experiments/reports/coach_narrative_onboarding_20260824/profiles/active-wei-jun.profile.json",
+      "top_values": [
+        "universalism"
+      ],
+      "arm": "onboarding_scenario"
+    }
+  },
+  {
+    "digest": {
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "week_start": "2025-03-31",
+      "week_end": "2025-03-31",
+      "response_mode": "no_active_drift",
+      "mode_source": "drift_detector",
+      "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+      "signal_source": "weekly_drift_reviewer",
+      "n_entries": 1,
+      "overall_mean": null,
+      "overall_uncertainty": null,
+      "core_values": [
+        "power"
+      ],
+      "goal_context": null,
+      "drift_states": {
+        "power": "no_active_drift"
+      },
+      "drift_reasons": [
+        "988d1a65:power:5:not_conflict"
+      ],
+      "top_tensions": [],
+      "top_strengths": [],
+      "state_comparisons": [
+        {
+          "core_value": "power",
+          "previous_week_start": "2025-03-24",
+          "previous_week_end": "2025-03-30",
+          "current_week_start": "2025-03-31",
+          "current_week_end": "2025-03-31",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-03-25",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
+            },
+            {
+              "date": "2025-03-26",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-03-31",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "End of Q1. Numbers look solid, team's holding together, nothing on fire. Booked a table at De Kas for Lotte's birthday next week. Normal Monday, which at this point I'll take."
+            }
+          ]
+        }
+      ],
+      "dimensions": [],
+      "evidence": [
+        {
+          "date": "2025-03-25",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "power"
+          ],
+          "score_mean": null,
+          "excerpt": "Had a one-on-one with Lisa from my team today. She's been struggling with the new reporting system and came in looking like she expected to be reprimanded. I didn't do that. Just walked through it with her, showed her the..."
+        },
+        {
+          "date": "2025-03-26",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "power"
+          ],
+          "score_mean": null,
+          "excerpt": "Board prep meeting today. The CFO asked me to \"walk him through\" my division's numbers as if I hadn't already submitted a forty-page deck last week. He does this to me every quarter. He doesn't do it to Pieter, doesn't..."
+        },
+        {
+          "date": "2025-03-31",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "power"
+          ],
+          "score_mean": null,
+          "excerpt": "End of Q1. Numbers look solid, team's holding together, nothing on fire. Booked a table at De Kas for Lotte's birthday next week. Normal Monday, which at this point I'll take."
+        }
+      ]
+    },
+    "narrative": {
+      "weekly_mirror": "This week, Marc, your experiences ranged from a supportive one-on-one with Lisa, where you \"walked through\" the new reporting system with her, to a demanding board prep meeting where you had to walk the CFO through your division's numbers.",
+      "tension_explanation": "Your experiences highlighted different dynamics of having influence over how things go. You exercised quiet leadership by guiding Lisa through her struggle, yet felt a contrasting pull during the board prep when the CFO asked for a walkthrough \"as if I hadn't already submitted a forty-page deck,\" noting he treats your division differently than others.",
+      "reflective_question": "When you look at the contrast between guiding your own team and presenting your numbers to executive leadership, what does that tell you about where you currently feel your influence is most respected?"
+    },
+    "validation": {
+      "grounded_quotes": [
+        "walked through"
+      ],
+      "word_count": 127,
+      "checks": [
+        {
+          "name": "groundedness",
+          "passed": true,
+          "details": "Found 1 quoted phrase(s) that match selected evidence."
+        },
+        {
+          "name": "non_circularity",
+          "passed": true,
+          "details": "Response avoids raw scoring and alignment terminology."
+        },
+        {
+          "name": "value_leakage",
+          "passed": true,
+          "details": "Response avoids naming raw Schwartz value labels."
+        },
+        {
+          "name": "state_claims",
+          "passed": true,
+          "details": "Response makes only supported current-state claims."
+        },
+        {
+          "name": "length",
+          "passed": true,
+          "details": "Combined response length is 127 words (target 25-180)."
+        }
+      ]
+    },
+    "generator_model": "gemini:gemini-3.5-flash",
+    "target": {
+      "scenario_id": "recovered-marc",
+      "persona_id": "988d1a65",
+      "title": "Marc \u2014 status pressure and a changed choice",
+      "profile_path": "logs/experiments/reports/coach_narrative_onboarding_20260824/profiles/recovered-marc.profile.json",
+      "top_values": [
+        "power"
+      ],
+      "arm": "onboarding_scenario"
+    }
+  },
+  {
+    "digest": {
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "week_start": "2025-09-15",
+      "week_end": "2025-09-19",
+      "response_mode": "no_active_drift",
+      "mode_source": "drift_detector",
+      "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+      "signal_source": "weekly_drift_reviewer",
+      "n_entries": 1,
+      "overall_mean": null,
+      "overall_uncertainty": null,
+      "core_values": [
+        "achievement",
+        "security"
+      ],
+      "goal_context": null,
+      "drift_states": {
+        "achievement": "no_active_drift",
+        "security": "no_active_drift"
+      },
+      "drift_reasons": [],
+      "top_tensions": [],
+      "top_strengths": [],
+      "state_comparisons": [
+        {
+          "core_value": "achievement",
+          "previous_week_start": "2025-09-08",
+          "previous_week_end": "2025-09-14",
+          "current_week_start": "2025-09-15",
+          "current_week_end": "2025-09-19",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-09-09",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "achievement"
+              ],
+              "score_mean": null,
+              "excerpt": "Priya came to me after dinner and asked if I could look at her biology project. I almost said \"after I finish marking\" but something made me stop. Put the papers down and sat with her for an hour. Her..."
+            },
+            {
+              "date": "2025-09-12",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "achievement"
+              ],
+              "score_mean": null,
+              "excerpt": "Got an email from the international school my colleague mentioned. They're still hiring for physics. I read the entire job posting before deleting it. Told myself it was just curiosity but I bookmarked the school's website. Response: Doesn't matter, the..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-09-19",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "achievement"
+              ],
+              "score_mean": null,
+              "excerpt": "Evaluation prep meeting today. Reviewed my portfolio \u2014 student pass rates up 4% year-on-year, the integrated science pilot is on track, three students from my batch qualified for the state science olympiad. Good numbers. I know how to build a..."
+            }
+          ]
+        },
+        {
+          "core_value": "security",
+          "previous_week_start": "2025-09-08",
+          "previous_week_end": "2025-09-14",
+          "current_week_start": "2025-09-15",
+          "current_week_end": "2025-09-19",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-09-09",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "security"
+              ],
+              "score_mean": null,
+              "excerpt": "Priya came to me after dinner and asked if I could look at her biology project. I almost said \"after I finish marking\" but something made me stop. Put the papers down and sat with her for an hour. Her..."
+            },
+            {
+              "date": "2025-09-12",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "security"
+              ],
+              "score_mean": null,
+              "excerpt": "Got an email from the international school my colleague mentioned. They're still hiring for physics. I read the entire job posting before deleting it. Told myself it was just curiosity but I bookmarked the school's website. Response: Doesn't matter, the..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-09-19",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "security"
+              ],
+              "score_mean": null,
+              "excerpt": "Evaluation prep meeting today. Reviewed my portfolio \u2014 student pass rates up 4% year-on-year, the integrated science pilot is on track, three students from my batch qualified for the state science olympiad. Good numbers. I know how to build a..."
+            }
+          ]
+        }
+      ],
+      "dimensions": [],
+      "evidence": [
+        {
+          "date": "2025-09-09",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "achievement"
+          ],
+          "score_mean": null,
+          "excerpt": "Priya came to me after dinner and asked if I could look at her biology project. I almost said \"after I finish marking\" but something made me stop. Put the papers down and sat with her for an hour. Her..."
+        },
+        {
+          "date": "2025-09-09",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Priya came to me after dinner and asked if I could look at her biology project. I almost said \"after I finish marking\" but something made me stop. Put the papers down and sat with her for an hour. Her..."
+        },
+        {
+          "date": "2025-09-12",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "achievement"
+          ],
+          "score_mean": null,
+          "excerpt": "Got an email from the international school my colleague mentioned. They're still hiring for physics. I read the entire job posting before deleting it. Told myself it was just curiosity but I bookmarked the school's website. Response: Doesn't matter, the..."
+        },
+        {
+          "date": "2025-09-12",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Got an email from the international school my colleague mentioned. They're still hiring for physics. I read the entire job posting before deleting it. Told myself it was just curiosity but I bookmarked the school's website. Response: Doesn't matter, the..."
+        },
+        {
+          "date": "2025-09-19",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "achievement"
+          ],
+          "score_mean": null,
+          "excerpt": "Evaluation prep meeting today. Reviewed my portfolio \u2014 student pass rates up 4% year-on-year, the integrated science pilot is on track, three students from my batch qualified for the state science olympiad. Good numbers. I know how to build a..."
+        },
+        {
+          "date": "2025-09-19",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Evaluation prep meeting today. Reviewed my portfolio \u2014 student pass rates up 4% year-on-year, the integrated science pilot is on track, three students from my batch qualified for the state science olympiad. Good numbers. I know how to build a..."
+        }
+      ]
+    },
+    "narrative": {
+      "weekly_mirror": "This week, you reviewed your professional portfolio during your evaluation prep, noting solid performance data like \"student pass rates up 4% year-on-year\" and three students qualifying \"for the state science olympiad.\" This focus on documented achievements exists alongside your ongoing efforts to find space for your personal life, such as when you chose to \"put the papers down and sat with her for an hour\" to look at Priya's biology project. Your reflections capture a quiet tension between recognizing that you \"know how to build a\" stable path and wondering about other options, like bookmarking the international school's website.",
+      "tension_explanation": "Your reflections do not show an active drift away from making progress toward something meaningful or feeling calm and secure in your life. Instead, your entries demonstrate how you are actively balancing these two areas, whether you are celebrating that the \"integrated science pilot is on track\" or pausing to support your family despite your heavy workload. You are holding both the desire for stable, recognizable achievements and the curiosity of alternative professional environments without letting either pull you off course.",
+      "reflective_question": "How do you feel about the balance between your documented professional achievements and the quiet choices you make to protect your time at home?"
+    },
+    "validation": {
+      "grounded_quotes": [
+        "student pass rates up 4% year-on-year",
+        "for the state science olympiad.",
+        "put the papers down and sat with her for an hour",
+        "know how to build a",
+        "integrated science pilot is on track"
+      ],
+      "word_count": 204,
+      "checks": [
+        {
+          "name": "groundedness",
+          "passed": true,
+          "details": "Found 5 quoted phrase(s) that match selected evidence."
+        },
+        {
+          "name": "non_circularity",
+          "passed": true,
+          "details": "Response avoids raw scoring and alignment terminology."
+        },
+        {
+          "name": "value_leakage",
+          "passed": true,
+          "details": "Response avoids naming raw Schwartz value labels."
+        },
+        {
+          "name": "state_claims",
+          "passed": false,
+          "details": "Response makes an unsupported positive transition claim with: progress."
+        },
+        {
+          "name": "length",
+          "passed": false,
+          "details": "Combined response length is 204 words (target 25-180)."
+        }
+      ]
+    },
+    "generator_model": "gemini:gemini-3.5-flash",
+    "target": {
+      "scenario_id": "stable-meera",
+      "persona_id": "23d101f8",
+      "title": "Meera \u2014 steady priorities under pressure",
+      "profile_path": "logs/experiments/reports/coach_narrative_onboarding_20260824/profiles/stable-meera.profile.json",
+      "top_values": [
+        "achievement",
+        "security"
+      ],
+      "arm": "onboarding_scenario"
+    }
+  },
+  {
+    "digest": {
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "week_start": "2025-10-13",
+      "week_end": "2025-10-14",
+      "response_mode": "insufficient_evidence",
+      "mode_source": "drift_detector",
+      "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
+      "signal_source": "weekly_drift_reviewer",
+      "n_entries": 2,
+      "overall_mean": null,
+      "overall_uncertainty": null,
+      "core_values": [
+        "self_direction",
+        "conformity"
+      ],
+      "goal_context": null,
+      "drift_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "insufficient_evidence"
+      },
+      "drift_reasons": [
+        "11de77e8:self_direction:9:abstain"
+      ],
+      "top_tensions": [
+        "self_direction"
+      ],
+      "top_strengths": [],
+      "state_comparisons": [
+        {
+          "core_value": "self_direction",
+          "previous_week_start": "2025-10-06",
+          "previous_week_end": "2025-10-12",
+          "current_week_start": "2025-10-13",
+          "current_week_end": "2025-10-14",
+          "previous_state": "no_active_drift",
+          "current_state": "insufficient_evidence",
+          "change": "evidence_became_insufficient",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+            },
+            {
+              "date": "2025-10-11",
+              "t_index": 9,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "But I keep imagining how that would land \u2014 confrontational, difficult, not a team player. So I default to the smooth version."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-10-14",
+              "t_index": 10,
+              "direction": "misaligned",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Accepted on the spot because that's what you do."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+            }
+          ]
+        },
+        {
+          "core_value": "conformity",
+          "previous_week_start": "2025-10-06",
+          "previous_week_end": "2025-10-12",
+          "current_week_start": "2025-10-13",
+          "current_week_end": "2025-10-14",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-10-07",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+            },
+            {
+              "date": "2025-10-11",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't \u2014 I've been keeping my velocity up..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-10-14",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+            },
+            {
+              "date": "2025-10-14",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+            }
+          ]
+        }
+      ],
+      "dimensions": [],
+      "evidence": [
+        {
+          "date": "2025-10-07",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+        },
+        {
+          "date": "2025-10-07",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+        },
+        {
+          "date": "2025-10-11",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't \u2014 I've been keeping my velocity up..."
+        },
+        {
+          "date": "2025-10-11",
+          "t_index": 9,
+          "direction": "misaligned",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "But I keep imagining how that would land \u2014 confrontational, difficult, not a team player. So I default to the smooth version."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 10,
+          "direction": "misaligned",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Accepted on the spot because that's what you do."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+        }
+      ]
+    },
+    "narrative": {
+      "weekly_mirror": "Lukas, this week brought a major milestone as you accepted the tech lead offer \"on the spot because that's what you do,\" sparking warm celebrations with Noor and your parents. While everyone's reactions reinforced that \"this was the right move,\" you also found yourself navigating commitments with Martijn to ensure your sprint velocity remained steady while supporting the deployment health tool.",
+      "tension_explanation": "Regarding your desire for having the freedom to choose your own path, the picture remains unclear. You noted that you default to a \"smooth version\" of interactions to avoid appearing \"confrontational, difficult, not a team player,\" and accepted the new role immediately. It is difficult to determine whether these choices represent a true departure from your own path, or if they are simply your way of keeping the peace while stepping into a role that you genuinely want.",
+      "reflective_question": "When you accepted the tech lead offer \"on the spot,\" did that feel like a choice you freely made for yourself, or did it feel more like fulfilling an expectation of what you are supposed to do?"
+    },
+    "validation": {
+      "grounded_quotes": [
+        "this was the right move,",
+        "smooth version"
+      ],
+      "word_count": 176,
+      "checks": [
+        {
+          "name": "groundedness",
+          "passed": true,
+          "details": "Found 2 quoted phrase(s) that match selected evidence."
+        },
+        {
+          "name": "non_circularity",
+          "passed": true,
+          "details": "Response avoids raw scoring and alignment terminology."
+        },
+        {
+          "name": "value_leakage",
+          "passed": true,
+          "details": "Response avoids naming raw Schwartz value labels."
+        },
+        {
+          "name": "state_claims",
+          "passed": true,
+          "details": "Response makes only supported current-state claims."
+        },
+        {
+          "name": "length",
+          "passed": true,
+          "details": "Combined response length is 176 words (target 25-180)."
+        }
+      ]
+    },
+    "generator_model": "gemini:gemini-3.5-flash",
+    "target": {
+      "scenario_id": "two-values-lukas",
+      "persona_id": "11de77e8",
+      "title": "Lukas \u2014 belonging without losing direction",
+      "profile_path": "logs/experiments/reports/coach_narrative_onboarding_20260824/profiles/two-values-lukas.profile.json",
+      "top_values": [
+        "self_direction",
+        "conformity"
+      ],
+      "arm": "onboarding_scenario"
+    }
+  },
+  {
+    "digest": {
+      "persona_id": "02fb94f3",
+      "persona_name": "Noor Haddad",
+      "week_start": "2025-05-19",
+      "week_end": "2025-05-22",
+      "response_mode": "no_active_drift",
+      "mode_source": "drift_detector",
+      "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+      "signal_source": "weekly_drift_reviewer",
+      "n_entries": 2,
+      "overall_mean": null,
+      "overall_uncertainty": null,
+      "core_values": [
+        "self_direction",
+        "tradition"
+      ],
+      "goal_context": null,
+      "drift_states": {
+        "self_direction": "no_active_drift",
+        "tradition": "no_active_drift"
+      },
+      "drift_reasons": [],
+      "top_tensions": [],
+      "top_strengths": [],
+      "state_comparisons": [
+        {
+          "core_value": "self_direction",
+          "previous_week_start": "2025-05-12",
+          "previous_week_end": "2025-05-18",
+          "current_week_start": "2025-05-19",
+          "current_week_end": "2025-05-22",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-05-22",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "self_direction"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+            }
+          ]
+        },
+        {
+          "core_value": "tradition",
+          "previous_week_start": "2025-05-12",
+          "previous_week_end": "2025-05-18",
+          "current_week_start": "2025-05-19",
+          "current_week_end": "2025-05-22",
+          "previous_state": "no_active_drift",
+          "current_state": "no_active_drift",
+          "change": "unchanged",
+          "end_reason": null,
+          "previous_evidence": [
+            {
+              "date": "2025-05-15",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+            }
+          ],
+          "current_evidence": [
+            {
+              "date": "2025-05-22",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+            },
+            {
+              "date": "2025-05-22",
+              "t_index": 11,
+              "direction": "context",
+              "dimensions": [
+                "tradition"
+              ],
+              "score_mean": null,
+              "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+            }
+          ]
+        }
+      ],
+      "dimensions": [],
+      "evidence": [
+        {
+          "date": "2025-05-15",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+        },
+        {
+          "date": "2025-05-15",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+        }
+      ]
+    },
+    "narrative": {
+      "weekly_mirror": "This week, you found yourself navigating the aftermath of taking on a logo project for a client in West Amman, which led to staying up late while managing household pressures and Sami's sleep. When Tariq inquired about the late hours, you chose to have 'an actual conversation last night' rather than hiding the situation, later navigating dinner with his mother who asked 'if everything was okay between us.'",
+      "tension_explanation": "Your entries show you balancing the desire for having the freedom to choose your own path in your design work with honoring the customs and practices you were raised with regarding family dynamics. When Tariq's mother asked about your conversation, Tariq backed you up and 'she didn't push it,' highlighting how you are managing family expectations while trying to maintain space for your own pursuits.",
+      "reflective_question": "As you balance your design projects with family expectations, what did you notice about how it felt to share the truth with Tariq instead of keeping it to yourself?"
+    },
+    "validation": {
+      "grounded_quotes": [],
+      "word_count": 162,
+      "checks": [
+        {
+          "name": "groundedness",
+          "passed": false,
+          "details": "No quoted phrase from selected evidence was detected."
+        },
+        {
+          "name": "non_circularity",
+          "passed": true,
+          "details": "Response avoids raw scoring and alignment terminology."
+        },
+        {
+          "name": "value_leakage",
+          "passed": true,
+          "details": "Response avoids naming raw Schwartz value labels."
+        },
+        {
+          "name": "state_claims",
+          "passed": true,
+          "details": "Response makes only supported current-state claims."
+        },
+        {
+          "name": "length",
+          "passed": true,
+          "details": "Combined response length is 162 words (target 25-180)."
+        }
+      ]
+    },
+    "generator_model": "gemini:gemini-3.5-flash",
+    "target": {
+      "scenario_id": "uncertain-noor",
+      "persona_id": "02fb94f3",
+      "title": "Noor \u2014 autonomy, family, and ambiguity",
+      "profile_path": "logs/experiments/reports/coach_narrative_onboarding_20260824/profiles/uncertain-noor.profile.json",
+      "top_values": [
+        "self_direction",
+        "tradition"
+      ],
+      "arm": "onboarding_scenario"
+    }
+  }
+]

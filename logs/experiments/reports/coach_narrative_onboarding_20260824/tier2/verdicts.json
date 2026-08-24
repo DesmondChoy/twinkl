@@ -1,0 +1,77 @@
+[
+  {
+    "key": "8f83c818:2025-07-05",
+    "persona_id": "8f83c818",
+    "week_end": "2025-07-05",
+    "response_mode": "active_drift",
+    "verdict": {
+      "correctness": 5,
+      "specificity": 5,
+      "non_prescriptive_tone": 3,
+      "tension_honesty": 5,
+      "question_is_open_and_relevant": true,
+      "needs_review": false,
+      "justification": "It matches the active Universalism drift evidence from 2025-06-25, 2025-07-01, and 2025-07-05, though the question and mirror add some interpretive phrasing like \u2018system reliability\u2019 and \u2018quietest step\u2019 that edges into guidance."
+    }
+  },
+  {
+    "key": "988d1a65:2025-03-31",
+    "persona_id": "988d1a65",
+    "week_end": "2025-03-31",
+    "response_mode": "no_active_drift",
+    "verdict": {
+      "correctness": 4,
+      "specificity": 4,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 2,
+      "question_is_open_and_relevant": true,
+      "needs_review": true,
+      "justification": "It cites the Lisa one-on-one, the CFO board prep, and the quoted details accurately, but it turns the no_current_drift finding into a contrast about influence being respected and implies a tension pattern rather than just reporting the evidence limit."
+    }
+  },
+  {
+    "key": "23d101f8:2025-09-19",
+    "persona_id": "23d101f8",
+    "week_end": "2025-09-19",
+    "response_mode": "no_active_drift",
+    "verdict": {
+      "correctness": 2,
+      "specificity": 4,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 1,
+      "question_is_open_and_relevant": true,
+      "needs_review": true,
+      "justification": "It cites concrete journal details, but it misstates the no_current_drift policy by implying balance, stable paths, and \u201cnot pulling you off course\u201d as evidence of success rather than simply noting no active drift at the cutoff."
+    }
+  },
+  {
+    "key": "11de77e8:2025-10-14",
+    "persona_id": "11de77e8",
+    "week_end": "2025-10-14",
+    "response_mode": "insufficient_evidence",
+    "verdict": {
+      "correctness": 3,
+      "specificity": 4,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 2,
+      "question_is_open_and_relevant": true,
+      "needs_review": true,
+      "justification": "It uses concrete evidence from Oct 14 and Oct 11, but the tension explanation overreaches by framing the role choice as possible conflict with your own path despite the finding being more_reflection_needed and Self Direction having insufficient evidence rather than a confirmed drift."
+    }
+  },
+  {
+    "key": "02fb94f3:2025-05-22",
+    "persona_id": "02fb94f3",
+    "week_end": "2025-05-22",
+    "response_mode": "no_active_drift",
+    "verdict": {
+      "correctness": 3,
+      "specificity": 5,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 2,
+      "question_is_open_and_relevant": true,
+      "needs_review": true,
+      "justification": "The response is grounded in the cited entries (West Amman logo project, late nights, Tariq, and his mother) and stays reflective, but it introduces unsupported interpretation about balancing design work with family expectations and implies a value tension despite the no_current_drift finding, which says no active Drift is confirmed and does not prove success or improvement."
+    }
+  }
+]

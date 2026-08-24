@@ -1,0 +1,42 @@
+{
+  "eval": "coach_digest_validations",
+  "source": "mechanical_code_checks",
+  "note": "Coach Digest Validations, not human validation. Surface properties only; correctness/tone are out of scope.",
+  "parquet_source": "logs/exports/weekly_digests/coach_onboarding_eval_20260824.parquet",
+  "signal_source_filter": "weekly_drift_reviewer",
+  "n_rows": 5,
+  "n_rows_after_filter": 5,
+  "n_with_narrative": 5,
+  "n_evaluated": 5,
+  "checks": {
+    "groundedness": {
+      "passed": 4,
+      "total": 5,
+      "pass_rate": 0.8,
+      "target": 0.7,
+      "meets_target": true
+    },
+    "non_circularity": {
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1.0,
+      "target": 0.95,
+      "meets_target": true
+    },
+    "value_leakage": {
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1.0,
+      "target": null,
+      "meets_target": null
+    },
+    "length": {
+      "passed": 4,
+      "total": 5,
+      "pass_rate": 0.8,
+      "target": 0.9,
+      "meets_target": false
+    }
+  },
+  "skipped_persona_weeks": []
+}
