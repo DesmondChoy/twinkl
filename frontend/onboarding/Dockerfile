@@ -6,6 +6,8 @@ COPY frontend/onboarding/package.json frontend/onboarding/package-lock.json ./
 RUN npm ci
 
 COPY frontend/onboarding/ ./
+COPY logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json \
+    /app/logs/experiments/reports/coach_digest_sample_20260824/
 RUN npm run build
 
 FROM python:3.12-slim
