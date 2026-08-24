@@ -12,6 +12,7 @@ import pytest
 
 from scripts.coach.generate_approved_judge_sample import (
     _build_parser,
+    _extract_scenario_key_week_digests,
     _find_stored_digest_path,
     _generate_reusing_weekly_drift,
 )
@@ -68,6 +69,29 @@ def _valid_response() -> str:
 def test_sample_generator_requires_explicit_personas():
     with pytest.raises(SystemExit):
         _build_parser().parse_args([])
+
+
+def test_extracts_only_deployed_key_week_digests(tmp_path: Path):
+    personas = ["11de77e8", "23d101f8", "8f83c818", "988d1a65", "02fb94f3"]
+
+    sources = _extract_scenario_key_week_digests(personas, tmp_path)
+
+    assert {
+        persona_id: (source["scenario_id"], source["week_start"])
+        for persona_id, source in sources.items()
+    } == {
+        "11de77e8": ("two-values-lukas", "2025-10-13"),
+        "23d101f8": ("stable-meera", "2025-09-15"),
+        "8f83c818": ("active-wei-jun", "2025-06-30"),
+        "988d1a65": ("recovered-marc", "2025-03-17"),
+        "02fb94f3": ("uncertain-noor", "2025-04-14"),
+    }
+    for persona_id in personas:
+        paths = list(tmp_path.glob(f"{persona_id}_*.json"))
+        assert len(paths) == 1
+        digest = WeeklyDigest.model_validate_json(paths[0].read_text())
+        assert digest.coach_narrative is None
+        assert digest.validation is None
 
 
 def test_find_stored_digest_requires_exactly_one_output(tmp_path: Path):

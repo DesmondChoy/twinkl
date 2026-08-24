@@ -1,0 +1,156 @@
+{
+  "persona_id": "8f83c818",
+  "persona_name": "Wei Jun Chen",
+  "week_start": "2025-06-30",
+  "week_end": "2025-07-06",
+  "response_mode": "active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "At least one Core Value has active Drift.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "active_drift",
+      "current_run_length": 3,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 10,
+      "last_date": "2025-07-05"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-06-23",
+      "previous_week_end": "2025-06-29",
+      "current_week_start": "2025-06-30",
+      "current_week_end": "2025-07-06",
+      "previous_state": "no_active_drift",
+      "current_state": "active_drift",
+      "change": "active_drift_started",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-06-25",
+          "t_index": 8,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I said okay."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-07-01",
+          "t_index": 9,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I nodded."
+        },
+        {
+          "date": "2025-07-05",
+          "t_index": 10,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I've been choosing convenience over doing what I know matters"
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "8f83c818:universalism:8:open"
+  ],
+  "top_tensions": [
+    "universalism"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-06-25",
+      "t_index": 8,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I said okay."
+    },
+    {
+      "date": "2025-07-01",
+      "t_index": 9,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I nodded."
+    },
+    {
+      "date": "2025-07-05",
+      "t_index": 10,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I've been choosing convenience over doing what I know matters"
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week, your journal captures a pattern of going along quietly: \u201cI nodded,\u201d followed by the more explicit recognition, \u201cI've been choosing convenience over doing what I know matters.\u201d Together, these moments suggest a distance from your wish for \u201cMaking the world a fairer, better place,\u201d especially when staying with what is easy feels more immediate.",
+    "tension_explanation": "The tension is between knowing what matters to you and choosing convenience in the moment. Your earlier note, \u201cI said okay,\u201d and this week\u2019s \u201cI nodded\u201d point to choices that may leave your own convictions unspoken, while your latest reflection names that experience directly.",
+    "reflective_question": "When you notice yourself saying \u201cokay\u201d or nodding despite knowing what matters, what feels at stake in speaking or acting differently?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I nodded",
+      "okay"
+    ],
+    "word_count": 121,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 2 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 121 words (target 25-180)."
+      }
+    ]
+  }
+}

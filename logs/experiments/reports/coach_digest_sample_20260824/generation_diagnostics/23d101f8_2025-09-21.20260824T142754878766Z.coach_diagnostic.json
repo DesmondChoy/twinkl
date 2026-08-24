@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "23d101f8",
+  "week_start": "2025-09-15",
+  "week_end": "2025-09-21",
+  "accepted": false,
+  "failure_stage": "coach_validation",
+  "failure_details": [
+    "state_claims: Response makes an unsupported positive transition claim with: progress."
+  ],
+  "raw_output": "{\"weekly_mirror\":\"This week, your work gave you concrete evidence of making progress toward something meaningful: you noted that \u201cstudent pass rates [were] up 4% year-on-year,\u201d the integrated science pilot was on track, and three students qualified for the state science olympiad. You also recognised your capability directly: \u201cI know how to build a...\u201d\",\"tension_explanation\":\"The week holds both visible professional results and an emerging question about what comes next. After reading the physics job posting, you bookmarked the school\u2019s website despite telling yourself, \u201cDoesn\u2019t matter,\u201d leaving the significance of that curiosity open.\",\"reflective_question\":\"When you hold the concrete results of your current work alongside bookmarking that school\u2019s website, what feels most important for you to notice?\"}",
+  "narrative": {
+    "weekly_mirror": "This week, your work gave you concrete evidence of making progress toward something meaningful: you noted that \u201cstudent pass rates [were] up 4% year-on-year,\u201d the integrated science pilot was on track, and three students qualified for the state science olympiad. You also recognised your capability directly: \u201cI know how to build a...\u201d",
+    "tension_explanation": "The week holds both visible professional results and an emerging question about what comes next. After reading the physics job posting, you bookmarked the school\u2019s website despite telling yourself, \u201cDoesn\u2019t matter,\u201d leaving the significance of that curiosity open.",
+    "reflective_question": "When you hold the concrete results of your current work alongside bookmarking that school\u2019s website, what feels most important for you to notice?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I know how to build a..."
+    ],
+    "word_count": 113,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": false,
+        "details": "Response makes an unsupported positive transition claim with: progress."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 113 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:23d101f8:2025-09-21:attempt_1",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_0ff5bc888422a062016a8c54e8516087d0aeda786c4f8b10f4",
+    "status": "completed",
+    "latency_seconds": 2.8500426670070738,
+    "input_tokens": 1691,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1688,
+    "output_tokens": 168,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 1859,
+    "calculated_cost_usd": 0.0006242,
+    "error_type": null
+  }
+}

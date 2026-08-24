@@ -5,13 +5,14 @@ Runs the approved Weekly Drift Reviewer + Drift Detector cycle
 Coach Digest Evals score responses as the product's approved path
 actually produces them — not leftover ``vif_runtime`` demo-tool outputs.
 
-For each persona this:
-  1. runs the Weekly Drift Reviewer over every week of wrangled history
-     (paid OpenAI calls, one per week),
-  2. detects Drift and builds the approved Weekly Drift Detection output,
-  3. generates the Coach Digest response via the configured provider
-     (paid call; provider from ``TWINKL_COACH_PROVIDER``, defaults to openai),
-  4. upserts the output and response into the consolidated parquet.
+For the deployed-Persona replacement this:
+  1. reads the stored Weekly Drift Detection output from the exact key week's
+     ``weekly_digest_built`` event in each public scenario bundle,
+  2. makes no Weekly Drift Reviewer calls,
+  3. generates one Coach Digest response per Persona with validation-guided retry,
+  4. writes the accepted responses to the checked-in scenario response fixture,
+  5. rebuilds the public scenario bundles, and
+  6. builds the judge manifest from those rebuilt public bundles.
 
 Then it rebuilds the judge sample manifest from the freshly written narratives.
 
@@ -20,7 +21,8 @@ makes no calls.
 
 Run:
     .venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-        --personas 11de77e8 --execute
+        --personas 11de77e8 23d101f8 8f83c818 988d1a65 02fb94f3 \
+        --reuse-scenario-key-weeks --execute
 """
 
 from __future__ import annotations
@@ -50,8 +52,13 @@ from src.coach.llm_client import (  # noqa: E402
     DEFAULT_OPENAI_SERVICE_TIER,
     OPENAI_LUNA_PRICING_SOURCE,
     build_llm_complete,
+    summarize_llm_call_metrics,
 )
-from src.coach.schemas import LLMCallMetrics, WeeklyDigest  # noqa: E402
+from src.coach.schemas import (  # noqa: E402
+    CoachNarrative,
+    LLMCallMetrics,
+    WeeklyDigest,
+)
 from src.coach.weekly_digest import (  # noqa: E402
     LLMCompleteFn,
     attach_coach_artifacts,
@@ -60,6 +67,14 @@ from src.coach.weekly_digest import (  # noqa: E402
     render_digest_markdown,
 )
 from src.coach.weekly_drift_runtime import run_weekly_drift_coach_cycle  # noqa: E402
+from src.demo.contracts import ContractFixtureSet  # noqa: E402
+from src.demo.scenarios import (  # noqa: E402
+    CATALOG_PATH,
+    COACH_RESPONSES_PATH,
+    SCENARIO_DIRECTORY,
+    SELECTIONS,
+    export_scenarios,
+)
 
 DEFAULT_PARQUET = Path("logs/exports/weekly_digests/weekly_digests.parquet")
 DEFAULT_WEEKLY_DRIFT_OUTPUT_DIR = Path("logs/exports/weekly_drift_coach")
@@ -67,6 +82,7 @@ DEFAULT_MANIFEST = Path(
     "logs/experiments/reports/coach_digest_sample_20260824/"
     "judge_sample_manifest.json"
 )
+DEFAULT_RESPONSE_FIXTURE = COACH_RESPONSES_PATH
 
 
 def _digest_to_manifest_entry(
@@ -133,6 +149,372 @@ def _model_contract() -> dict[str, str]:
     return contract
 
 
+def _canonical_sha256(value: object) -> str:
+    payload = json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _selection_for_persona(persona_id: str):
+    try:
+        return next(
+            selection for selection in SELECTIONS if selection.persona_id == persona_id
+        )
+    except StopIteration as error:
+        raise ValueError(
+            f"Persona is not in the deployed roster: {persona_id}"
+        ) from error
+
+
+def _extract_scenario_key_week_digests(
+    personas: list[str],
+    output_dir: Path,
+    *,
+    root: Path = _REPO_ROOT,
+) -> dict[str, dict[str, object]]:
+    """Write the exact key-week Weekly Drift Detection inputs from public bundles."""
+    if len(set(personas)) != len(personas):
+        raise ValueError("Persona IDs must be unique.")
+    catalog = json.loads((root / CATALOG_PATH).read_text(encoding="utf-8"))
+    catalog_by_scenario = {
+        str(item["scenario_id"]): item for item in catalog["scenarios"]
+    }
+    output_dir.mkdir(parents=True, exist_ok=True)
+    provenance: dict[str, dict[str, object]] = {}
+
+    for persona_id in personas:
+        selection = _selection_for_persona(persona_id)
+        item = catalog_by_scenario.get(selection.scenario_id)
+        if item is None or item.get("persona_id") != persona_id:
+            raise ValueError(f"Scenario catalog identity mismatch: {persona_id}")
+        bundle_path = root / SCENARIO_DIRECTORY / str(item["file"])
+        bundle_bytes = bundle_path.read_bytes()
+        bundle_hash = hashlib.sha256(bundle_bytes).hexdigest()
+        if bundle_hash != item.get("content_sha256"):
+            raise ValueError(f"Scenario catalog hash mismatch: {selection.scenario_id}")
+        fixture = ContractFixtureSet.model_validate_json(bundle_bytes)
+        key_week = next(
+            (
+                week
+                for week in fixture.scenario.weeks
+                if week.week_start == selection.coach_week_start
+            ),
+            None,
+        )
+        if key_week is None:
+            raise ValueError(f"Scenario key week is missing: {selection.scenario_id}")
+        digest_event = next(
+            (
+                event
+                for event in fixture.trace_events
+                if event.event_id in key_week.event_ids
+                and event.event_type == "weekly_digest_built"
+            ),
+            None,
+        )
+        if digest_event is None:
+            raise ValueError(
+                f"Scenario key week has no weekly_digest_built event: "
+                f"{selection.scenario_id}"
+            )
+        digest = digest_event.details.digest.model_copy(
+            update={"coach_narrative": None, "validation": None}
+        )
+        if (
+            digest.persona_id != persona_id
+            or digest.week_start != selection.coach_week_start
+            or digest.week_end != key_week.week_end
+        ):
+            raise ValueError(f"Scenario key-week digest mismatch: {persona_id}")
+        digest_path = output_dir / f"{persona_id}_{digest.week_end}.json"
+        digest_path.write_text(digest.model_dump_json(indent=2) + "\n")
+        provenance[persona_id] = {
+            "scenario_id": selection.scenario_id,
+            "source_bundle_path": str(bundle_path.relative_to(root)),
+            "source_bundle_content_sha256": bundle_hash,
+            "weekly_digest_event_id": digest_event.event_id,
+            "week_start": digest.week_start,
+            "week_end": digest.week_end,
+        }
+    return provenance
+
+
+def _write_scenario_response_fixture(
+    generated_manifest: list[dict],
+    output_path: Path,
+) -> None:
+    """Write accepted responses in the fixture consumed by scenario export."""
+    responses: dict[str, object] = {}
+    for item in generated_manifest:
+        digest = WeeklyDigest.model_validate(item["digest"])
+        narrative = CoachNarrative.model_validate(item["narrative"])
+        provenance = dict(item["provenance"])
+        selection = _selection_for_persona(digest.persona_id)
+        source = dict(provenance["scenario_source"])
+        if digest.week_start != selection.coach_week_start:
+            raise ValueError(
+                f"Generated response is not for the key week: {digest.persona_id}"
+            )
+        key = f"{selection.scenario_id}::{digest.week_start}"
+        responses[key] = {
+            "scenario_id": selection.scenario_id,
+            "persona_id": digest.persona_id,
+            "week_start": digest.week_start,
+            "week_end": digest.week_end,
+            "narrative": narrative.model_dump(mode="json"),
+            "generation": {
+                "model_contract": {
+                    "provider": provenance["coach_provider"],
+                    "model": provenance["coach_model"],
+                    "reasoning_effort": provenance["coach_reasoning_effort"],
+                },
+                "service_tier": provenance["coach_service_tier"],
+                "prompt_name": provenance["coach_prompt_name"],
+                "prompt_version": provenance["coach_prompt_version"],
+                "prompt_sha256": provenance["coach_prompt_sha256"],
+                "prompt": provenance["coach_prompt"],
+                "raw_output": provenance["coach_raw_output"],
+                "response_sha256": provenance["coach_response_sha256"],
+                "attempt_count": provenance["coach_attempt_count"],
+                "diagnostic_paths": provenance["coach_diagnostic_paths"],
+                "call_metrics": provenance["coach_call_metrics"],
+                "weekly_drift_input_sha256": provenance[
+                    "weekly_drift_input_sha256"
+                ],
+                "generated_response_path": provenance[
+                    "weekly_drift_output_path"
+                ],
+                "source_bundle_path": source["source_bundle_path"],
+                "source_bundle_content_sha256": source[
+                    "source_bundle_content_sha256"
+                ],
+                "weekly_digest_event_id": source["weekly_digest_event_id"],
+            },
+        }
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "coach-digest-scenario-fixture-v1",
+                "responses": responses,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
+def _manifest_from_public_scenarios(
+    personas: list[str],
+    *,
+    root: Path = _REPO_ROOT,
+    response_fixture_path: Path = DEFAULT_RESPONSE_FIXTURE,
+) -> list[dict]:
+    """Build the evaluation manifest from exact rebuilt public responses."""
+    catalog = json.loads((root / CATALOG_PATH).read_text(encoding="utf-8"))
+    catalog_by_scenario = {
+        str(item["scenario_id"]): item for item in catalog["scenarios"]
+    }
+    saved = json.loads((root / response_fixture_path).read_text(encoding="utf-8"))
+    manifest: list[dict] = []
+
+    for persona_id in personas:
+        selection = _selection_for_persona(persona_id)
+        catalog_item = catalog_by_scenario[selection.scenario_id]
+        bundle_path = root / SCENARIO_DIRECTORY / str(catalog_item["file"])
+        bundle_bytes = bundle_path.read_bytes()
+        bundle_hash = hashlib.sha256(bundle_bytes).hexdigest()
+        if bundle_hash != catalog_item["content_sha256"]:
+            raise ValueError(f"Rebuilt scenario hash mismatch: {selection.scenario_id}")
+        fixture = ContractFixtureSet.model_validate_json(bundle_bytes)
+        key_week = next(
+            week
+            for week in fixture.scenario.weeks
+            if week.week_start == selection.coach_week_start
+        )
+        digest_event = next(
+            event
+            for event in fixture.trace_events
+            if event.event_id in key_week.event_ids
+            and event.event_type == "weekly_digest_built"
+        )
+        digest = digest_event.details.digest
+        if digest.coach_narrative is None or digest.validation is None:
+            raise ValueError(f"Rebuilt scenario response is missing: {persona_id}")
+        if not digest.validation.all_passed:
+            raise ValueError(f"Rebuilt scenario response is rejected: {persona_id}")
+        key = f"{selection.scenario_id}::{digest.week_start}"
+        saved_response = saved["responses"][key]
+        narrative = digest.coach_narrative
+        if narrative.model_dump(mode="json") != saved_response["narrative"]:
+            raise ValueError(f"Displayed response differs from fixture: {persona_id}")
+        generation = saved_response["generation"]
+        response_hash = _canonical_sha256(narrative.model_dump(mode="json"))
+        source_digest_hash = _canonical_sha256(
+            digest.model_dump(
+                mode="json",
+                exclude={"coach_narrative", "validation"},
+            )
+        )
+        if response_hash != generation["response_sha256"]:
+            raise ValueError(f"Displayed response hash mismatch: {persona_id}")
+        if source_digest_hash != generation["weekly_drift_input_sha256"]:
+            raise ValueError(f"Displayed source hash mismatch: {persona_id}")
+        entry = _digest_to_manifest_entry(
+            digest,
+            provenance={
+                "scenario_id": selection.scenario_id,
+                "scenario_bundle_path": str(bundle_path.relative_to(root)),
+                "scenario_bundle_content_sha256": bundle_hash,
+                "weekly_digest_event_id": digest_event.event_id,
+                "weekly_drift_input_sha256": source_digest_hash,
+                "coach_response_sha256": response_hash,
+                "display_source": "rebuilt_public_scenario_bundle",
+                "generation": generation,
+            },
+        )
+        if entry is None:
+            raise ValueError(f"Rebuilt scenario response is missing: {persona_id}")
+        manifest.append(entry)
+    return manifest
+
+
+def _write_generation_report(
+    manifest: list[dict],
+    output_dir: Path,
+    *,
+    command: str,
+) -> None:
+    """Write generation call, failure, identity, and location evidence."""
+    call_metrics: list[LLMCallMetrics] = []
+    failed_attempts: list[dict[str, object]] = []
+    responses: list[dict[str, object]] = []
+    for item in manifest:
+        digest = item["digest"]
+        provenance = item["provenance"]
+        generation = provenance["generation"]
+        metrics = [
+            LLMCallMetrics.model_validate(metric)
+            for metric in generation["call_metrics"]
+        ]
+        call_metrics.extend(metrics)
+        for diagnostic_path in generation["diagnostic_paths"]:
+            diagnostic = json.loads(Path(diagnostic_path).read_text(encoding="utf-8"))
+            if not diagnostic["accepted"]:
+                failed_attempts.append(
+                    {
+                        "persona_id": digest["persona_id"],
+                        "diagnostic_path": diagnostic_path,
+                        "failure_stage": diagnostic.get("failure_stage"),
+                        "failure_details": diagnostic.get("failure_details", []),
+                        "raw_output_preserved": (
+                            diagnostic.get("raw_output") is not None
+                        ),
+                    }
+                )
+        responses.append(
+            {
+                "scenario_id": provenance["scenario_id"],
+                "persona_id": digest["persona_id"],
+                "week_start": digest["week_start"],
+                "week_end": digest["week_end"],
+                "generated_response_path": generation["generated_response_path"],
+                "public_scenario_path": provenance["scenario_bundle_path"],
+                "weekly_digest_event_id": provenance["weekly_digest_event_id"],
+                "scenario_bundle_content_sha256": provenance[
+                    "scenario_bundle_content_sha256"
+                ],
+                "weekly_drift_input_sha256": provenance[
+                    "weekly_drift_input_sha256"
+                ],
+                "coach_response_sha256": provenance["coach_response_sha256"],
+                "attempt_count": generation["attempt_count"],
+                "diagnostic_paths": generation["diagnostic_paths"],
+            }
+        )
+    usage = summarize_llm_call_metrics(call_metrics)
+    report = {
+        "run": "coach_digest_sample_20260824",
+        "command": command,
+        "coach_prompt_version": "4.1",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "none",
+        "weekly_drift_reviewer_calls": 0,
+        "accepted_responses": len(responses),
+        "generation_api_usage": usage,
+        "retry_count": max(len(call_metrics) - len(responses), 0),
+        "failed_attempts": failed_attempts,
+        "responses": responses,
+    }
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "generation_metrics.json").write_text(
+        json.dumps(report, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    cost = usage["calculated_cost_usd"]
+    lines = [
+        "# Deployed Persona Coach Digest Sample",
+        "",
+        "- Source: each public scenario bundle's stored `weekly_digest_built` output",
+        "- Weekly Drift Reviewer calls: 0",
+        "- Coach Digest prompt: `weekly_digest_coach` v4.1",
+        "- Model: `gpt-5.6-luna`",
+        "- Reasoning effort: `none`",
+        f"- Accepted responses: {len(responses)}",
+        f"- Paid generation calls: {usage['n_calls']}",
+        f"- Validation-guided retries: {report['retry_count']}",
+        f"- Input tokens: {usage['input_tokens']}",
+        f"- Cached input tokens: {usage['cached_input_tokens']}",
+        f"- Output tokens: {usage['output_tokens']}",
+        (
+            f"- Calculated published-rate cost: `${float(cost):.8f}`"
+            if cost is not None
+            else "- Calculated published-rate cost: unavailable"
+        ),
+        f"- Total request latency: {float(usage['total_latency_seconds'] or 0):.3f}s",
+        "- Cost basis: response token usage and published standard-tier Luna "
+        "rates; not a billing export",
+        "- Prompt tuning after final scores: none",
+        "",
+        "## Command",
+        "",
+        f"`{command}`",
+        "",
+        "## Responses",
+        "",
+        "| Scenario | Persona | Week | Attempts | Response hash | "
+        "Generated response | Public bundle |",
+        "| --- | --- | --- | ---: | --- | --- | --- |",
+    ]
+    for response in responses:
+        lines.append(
+            f"| {response['scenario_id']} | {response['persona_id']} | "
+            f"{response['week_start']} to {response['week_end']} | "
+            f"{response['attempt_count']} | `{response['coach_response_sha256']}` | "
+            f"`{response['generated_response_path']}` | "
+            f"`{response['public_scenario_path']}` |"
+        )
+    lines += ["", "## Failed Attempts and Review"]
+    if failed_attempts:
+        for failure in failed_attempts:
+            lines.append(
+                f"- `{failure['persona_id']}`: {failure['failure_stage']}; "
+                f"raw output preserved at `{failure['diagnostic_path']}`."
+            )
+    else:
+        lines.append("- No failed generation attempts.")
+    (output_dir / "report.md").write_text(
+        "\n".join(lines) + "\n",
+        encoding="utf-8",
+    )
+
+
 async def _generate_reusing_weekly_drift(
     personas: list[str],
     parquet_path: Path,
@@ -140,6 +522,8 @@ async def _generate_reusing_weekly_drift(
     *,
     llm_complete: LLMCompleteFn | None = None,
     call_metrics: list[LLMCallMetrics] | None = None,
+    diagnostic_output_dir: Path | None = None,
+    source_provenance_by_persona: dict[str, dict[str, object]] | None = None,
 ) -> list[dict]:
     """Generate Coach Digest responses from stored Weekly Drift Detection output."""
     collected_metrics = call_metrics if call_metrics is not None else []
@@ -153,6 +537,8 @@ async def _generate_reusing_weekly_drift(
         )
 
     prompt_metadata = get_prompt_metadata("weekly_digest_coach")
+    diagnostics_dir = diagnostic_output_dir or output_dir
+    diagnostics_dir.mkdir(parents=True, exist_ok=True)
     pending: list[tuple[WeeklyDigest, Path, str, dict[str, object]]] = []
     failures: list[str] = []
     for persona_id in personas:
@@ -196,7 +582,7 @@ async def _generate_reusing_weekly_drift(
                     update={"llm_call": call_metric}
                 )
             diagnostic_path = _write_diagnostic(
-                output_dir,
+                diagnostics_dir,
                 digest_path.stem,
                 diagnostic.model_dump(mode="json"),
             )
@@ -232,11 +618,10 @@ async def _generate_reusing_weekly_drift(
             diagnostic.narrative,
             diagnostic.validation,
         )
-        response_bytes = json.dumps(
-            diagnostic.narrative.model_dump(mode="json"),
-            sort_keys=True,
-        ).encode()
-        provenance = {
+        response_hash = _canonical_sha256(
+            diagnostic.narrative.model_dump(mode="json")
+        )
+        provenance: dict[str, object] = {
             "weekly_drift_output_path": str(digest_path),
             "weekly_drift_input_sha256": hashlib.sha256(input_bytes).hexdigest(),
             "coach_prompt_name": str(prompt_metadata["name"]),
@@ -244,7 +629,9 @@ async def _generate_reusing_weekly_drift(
             "coach_prompt_sha256": hashlib.sha256(
                 accepted_prompt.encode()
             ).hexdigest(),
-            "coach_response_sha256": hashlib.sha256(response_bytes).hexdigest(),
+            "coach_response_sha256": response_hash,
+            "coach_prompt": accepted_prompt,
+            "coach_raw_output": diagnostic.raw_output,
             "coach_attempt_count": len(diagnostic_paths),
             "coach_diagnostic_paths": [str(path) for path in diagnostic_paths],
             "coach_call_metrics": [
@@ -252,6 +639,10 @@ async def _generate_reusing_weekly_drift(
             ],
             **_model_contract(),
         }
+        if source_provenance_by_persona is not None:
+            provenance["scenario_source"] = source_provenance_by_persona[
+                persona_id
+            ]
         pending.append((enriched, digest_path, accepted_prompt, provenance))
         print(f"[accepted] {persona_id} diagnostic={diagnostic_path}", flush=True)
 
@@ -340,13 +731,28 @@ def _build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=DEFAULT_WEEKLY_DRIFT_OUTPUT_DIR,
     )
-    parser.add_argument(
+    reuse_group = parser.add_mutually_exclusive_group()
+    reuse_group.add_argument(
         "--reuse-weekly-drift-output",
         action="store_true",
         help=(
             "Generate only Coach Digest responses from stored Weekly Drift "
             "Detection output. Do not call the Weekly Drift Reviewer."
         ),
+    )
+    reuse_group.add_argument(
+        "--reuse-scenario-key-weeks",
+        action="store_true",
+        help=(
+            "Generate from the exact key-week weekly_digest_built output in each "
+            "public scenario bundle, rebuild the bundles, and build the manifest "
+            "from the displayed responses. Make no Weekly Drift Reviewer calls."
+        ),
+    )
+    parser.add_argument(
+        "--response-fixture-out",
+        type=Path,
+        default=DEFAULT_RESPONSE_FIXTURE,
     )
     parser.add_argument(
         "--execute",
@@ -361,6 +767,15 @@ def main() -> int:
     args = _build_parser().parse_args()
 
     if not args.execute:
+        if args.reuse_scenario_key_weeks:
+            print(
+                "[dry run] Would generate one Coach Digest response for each of "
+                f"{len(args.personas)} deployed Persona key weeks. This reads "
+                "stored public scenario Weekly Drift Detection outputs and makes "
+                "no Weekly Drift Reviewer calls. Re-run with --execute to make "
+                "the paid Coach Digest calls."
+            )
+            return 0
         if args.reuse_weekly_drift_output:
             print(
                 "[dry run] Would generate one Coach Digest response for each of "
@@ -381,7 +796,38 @@ def main() -> int:
         )
         return 0
 
-    if args.reuse_weekly_drift_output:
+    if args.reuse_scenario_key_weeks:
+        required_personas = {selection.persona_id for selection in SELECTIONS}
+        if set(args.personas) != required_personas or len(args.personas) != 5:
+            raise SystemExit(
+                "--reuse-scenario-key-weeks requires the five deployed Persona IDs."
+            )
+        sample_directory = args.manifest_out.parent
+        response_directory = sample_directory / "generated_responses"
+        diagnostic_directory = sample_directory / "generation_diagnostics"
+        source_provenance = _extract_scenario_key_week_digests(
+            args.personas,
+            response_directory,
+        )
+        generated_manifest = asyncio.run(
+            _generate_reusing_weekly_drift(
+                args.personas,
+                args.parquet_path,
+                response_directory,
+                diagnostic_output_dir=diagnostic_directory,
+                source_provenance_by_persona=source_provenance,
+            )
+        )
+        _write_scenario_response_fixture(
+            generated_manifest,
+            _REPO_ROOT / args.response_fixture_out,
+        )
+        export_scenarios(_REPO_ROOT)
+        manifest = _manifest_from_public_scenarios(
+            args.personas,
+            response_fixture_path=args.response_fixture_out,
+        )
+    elif args.reuse_weekly_drift_output:
         manifest = asyncio.run(
             _generate_reusing_weekly_drift(
                 args.personas,
@@ -393,6 +839,17 @@ def main() -> int:
         manifest = asyncio.run(_generate(args.personas, args.parquet_path))
     args.manifest_out.parent.mkdir(parents=True, exist_ok=True)
     args.manifest_out.write_text(json.dumps(manifest, indent=2) + "\n")
+    if args.reuse_scenario_key_weeks:
+        command = (
+            ".venv/bin/python scripts/coach/generate_approved_judge_sample.py "
+            f"--personas {' '.join(args.personas)} "
+            "--reuse-scenario-key-weeks --execute"
+        )
+        _write_generation_report(
+            manifest,
+            args.manifest_out.parent,
+            command=command,
+        )
     print(
         f"\nWrote {len(manifest)} approved-path narrative(s) to "
         f"{args.manifest_out}"

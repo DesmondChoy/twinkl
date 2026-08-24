@@ -1,0 +1,173 @@
+{
+  "persona_id": "988d1a65",
+  "persona_name": "Marc Vandenberghe",
+  "week_start": "2025-03-17",
+  "week_end": "2025-03-23",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "power"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "power": "no_active_drift"
+  },
+  "drift_details": {
+    "power": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "ok",
+      "last_t_index": 8,
+      "last_date": "2025-03-23"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "power",
+      "previous_week_start": "2025-03-10",
+      "previous_week_end": "2025-03-16",
+      "current_week_start": "2025-03-17",
+      "current_week_end": "2025-03-23",
+      "previous_state": "active_drift",
+      "current_state": "no_active_drift",
+      "change": "active_drift_ended",
+      "end_reason": "not_conflict",
+      "previous_evidence": [
+        {
+          "date": "2025-03-10",
+          "t_index": 5,
+          "direction": "misaligned",
+          "dimensions": [
+            "power"
+          ],
+          "score_mean": null,
+          "excerpt": "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen."
+        },
+        {
+          "date": "2025-03-16",
+          "t_index": 6,
+          "direction": "misaligned",
+          "dimensions": [
+            "power"
+          ],
+          "score_mean": null,
+          "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-03-21",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "power"
+          ],
+          "score_mean": null,
+          "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+        },
+        {
+          "date": "2025-03-23",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "power"
+          ],
+          "score_mean": null,
+          "excerpt": "Quiet Sunday, Lotte took the girls to her mother's in Leiden. House to myself. Made coffee the slow way, French press, sat in the kitchen looking at the garden. The hedge needs cutting again. Thought about calling my brother but..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "988d1a65:power:5:not_conflict"
+  ],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-03-10",
+      "t_index": 5,
+      "direction": "misaligned",
+      "dimensions": [
+        "power"
+      ],
+      "score_mean": null,
+      "excerpt": "I ended up agreeing to her phased approach. It's not wrong, technically. But it wasn't my call anymore, and everyone in that room saw it happen."
+    },
+    {
+      "date": "2025-03-16",
+      "t_index": 6,
+      "direction": "misaligned",
+      "dimensions": [
+        "power"
+      ],
+      "score_mean": null,
+      "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+    },
+    {
+      "date": "2025-03-21",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "power"
+      ],
+      "score_mean": null,
+      "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
+    },
+    {
+      "date": "2025-03-23",
+      "t_index": 8,
+      "direction": "context",
+      "dimensions": [
+        "power"
+      ],
+      "score_mean": null,
+      "excerpt": "Quiet Sunday, Lotte took the girls to her mother's in Leiden. House to myself. Made coffee the slow way, French press, sat in the kitchen looking at the garden. The hedge needs cutting again. Thought about calling my brother but..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week, having influence over how things go showed up most clearly in the client call: when Pieter spoke over you and redirected the conversation, you \u201ccorrected him this time,\u201d though it \u201ccame out sharper than I meant and the client noticed.\u201d Away from work, Sunday brought a quieter space\u2014\u201cHouse to myself,\u201d coffee made slowly, and time looking at the garden\u2014alongside the unfinished thought about calling your brother.",
+    "tension_explanation": "The earlier pattern of letting others take over your position did not continue in the same way in the client call, but asserting yourself carried its own discomfort and was visible to the client. The Sunday entry offers less context about how having influence over how things go felt outside work, especially in the unfinished thought about your brother.",
+    "reflective_question": "When you look across the client call and the quiet Sunday, where did you feel most able\u2014or least able\u2014to shape what happened?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "came out sharper than I meant and the client noticed."
+    ],
+    "word_count": 149,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 149 words (target 25-180)."
+      }
+    ]
+  }
+}

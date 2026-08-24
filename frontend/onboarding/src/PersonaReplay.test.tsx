@@ -16,6 +16,7 @@ import scenarioCatalogJson from "../public/scenarios/index.json";
 import stableReplayJson from "../public/scenarios/stable-meera.json";
 import twoValuesReplayJson from "../public/scenarios/two-values-lukas.json";
 import uncertainReplayJson from "../public/scenarios/uncertain-noor.json";
+import judgeSampleManifest from "../../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json";
 import App from "./App";
 import styles from "./styles.css?raw";
 import {
@@ -85,18 +86,28 @@ function experienceForWeek(
   };
 }
 
-function ReplayHarness() {
+function ScenarioReplayHarness({
+  scenarioJson = activeReplayJson,
+}: {
+  scenarioJson?: unknown;
+}) {
+  const scenarioFixture = validateExperienceInspectFixture(scenarioJson);
+  const item = catalog.scenarios.find(
+    (candidate) => candidate.scenario_id === scenarioFixture.scenario.scenario_id,
+  )!;
   const [weekIndex, setWeekIndex] = useState(0);
-  const [experience, setExperience] = useState(() => experienceForWeek(0));
+  const [experience, setExperience] = useState(() =>
+    experienceForWeek(0, scenarioFixture, item)
+  );
   const changeWeek = (nextWeek: number) => {
     setWeekIndex(nextWeek);
-    setExperience(experienceForWeek(nextWeek));
+    setExperience(experienceForWeek(nextWeek, scenarioFixture, item));
   };
   return (
     <PersonaReplayExperience
-      loaded={loaded}
+      loaded={{ catalogItem: item, fixture: scenarioFixture }}
       weekIndex={weekIndex}
-      profile={fixture.scenario.profile}
+      profile={scenarioFixture.scenario.profile}
       experience={experience}
       updateExperience={(patch) =>
         setExperience((current) => ({ ...current, ...patch }))
@@ -106,6 +117,10 @@ function ReplayHarness() {
       onWeekChange={changeWeek}
     />
   );
+}
+
+function ReplayHarness() {
+  return <ScenarioReplayHarness />;
 }
 
 function matchMedia(matches: boolean) {
@@ -432,6 +447,35 @@ describe("persona replay", () => {
     })).toBeTruthy();
   });
 
+  it.each([
+    ["two-values-lukas", twoValuesReplayJson],
+    ["stable-meera", stableReplayJson],
+    ["active-wei-jun", activeReplayJson],
+    ["recovered-marc", recoveredReplayJson],
+    ["uncertain-noor", uncertainReplayJson],
+  ])(
+    "shows the evaluated %s response after Jump to key moment",
+    async (scenarioId, scenarioJson) => {
+      matchMedia(false);
+      const user = userEvent.setup();
+      const manifestEntry = judgeSampleManifest.find(
+        (entry) => entry.provenance.scenario_id === scenarioId,
+      )!;
+
+      render(<ScenarioReplayHarness scenarioJson={scenarioJson} />);
+      expect(screen.queryByText(manifestEntry.narrative.weekly_mirror)).toBeNull();
+      await user.click(screen.getByRole("button", {
+        name: "Jump to key moment",
+      }));
+
+      expect(screen.getByText(manifestEntry.narrative.weekly_mirror)).toBeTruthy();
+      expect(screen.getByText(manifestEntry.narrative.tension_explanation))
+        .toBeTruthy();
+      expect(screen.getByText(manifestEntry.narrative.reflective_question))
+        .toBeTruthy();
+    },
+  );
+
   it("clamps an out-of-range restored week to the final week", () => {
     matchMedia(false);
     render(
@@ -602,8 +646,11 @@ describe("persona replay", () => {
     const result = screen.getByRole("article", {
       name: "Insufficient evidence",
     });
+    const lukasResponse = judgeSampleManifest.find(
+      (entry) => entry.provenance.scenario_id === "two-values-lukas",
+    )!;
     const coachHeading = screen.getByRole("heading", {
-      name: /You wrote that you "Accepted on the spot/,
+      name: lukasResponse.narrative.weekly_mirror,
     });
     const coachCard = coachHeading.closest(".coach-digest--replay");
     const resultScroll = result.closest(".replay-column__scroll--result");

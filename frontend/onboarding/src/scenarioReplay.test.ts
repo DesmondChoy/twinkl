@@ -4,6 +4,7 @@ import scenarioCatalogJson from "../public/scenarios/index.json";
 import stableReplayJson from "../public/scenarios/stable-meera.json";
 import twoValuesReplayJson from "../public/scenarios/two-values-lukas.json";
 import uncertainReplayJson from "../public/scenarios/uncertain-noor.json";
+import judgeSampleManifest from "../../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json";
 import { describe, expect, it } from "vitest";
 import { validateExperienceInspectFixture } from "./demoContracts";
 import {
@@ -71,32 +72,46 @@ describe("saved persona replay", () => {
     ).toThrow("Unknown saved replay week");
   });
 
-  it("reveals the saved Coach Digest only in the Lukas key week", () => {
-    const lukas = validateExperienceInspectFixture(twoValuesReplayJson);
-    const beforeKeyWeek = projectScenarioWeek(
-      lukas,
-      lukas.scenario.weeks.length - 2,
-    );
-    const keyWeek = projectScenarioWeek(
-      lukas,
-      lukas.scenario.weeks.length - 1,
-    );
+  it.each([
+    ["two-values-lukas", twoValuesReplayJson, "2025-10-13"],
+    ["stable-meera", stableReplayJson, "2025-09-15"],
+    ["active-wei-jun", activeReplayJson, "2025-06-30"],
+    ["recovered-marc", recoveredReplayJson, "2025-03-17"],
+    ["uncertain-noor", uncertainReplayJson, "2025-04-14"],
+  ])(
+    "reveals the evaluated Coach Digest only in the %s key week",
+    (scenarioId, scenarioJson, weekStart) => {
+      const scenarioFixture = validateExperienceInspectFixture(scenarioJson);
+      const keyWeekIndex = scenarioFixture.scenario.weeks.findIndex(
+        (week) => week.week_start === weekStart,
+      );
+      const manifestEntry = judgeSampleManifest.find(
+        (entry) => entry.provenance.scenario_id === scenarioId,
+      );
 
-    expect(beforeKeyWeek.session.weekly_digest?.coach_narrative).toBeNull();
-    expect(keyWeek.session.weekly_digest?.coach_narrative).toEqual({
-      weekly_mirror:
-        'You wrote that you "Accepted on the spot because that\'s what you do", then noticed that relief came before excitement.',
-      tension_explanation:
-        "Your reason for accepting the new role still feels unclear because relief and expectation both shaped the choice.",
-      reflective_question:
-        "When you separate relief from expectation, what do you want this new role to mean for you?",
-    });
-    expect(
-      keyWeek.events.filter(
+      expect(keyWeekIndex).toBeGreaterThanOrEqual(0);
+      expect(manifestEntry).toBeTruthy();
+      for (let index = 0; index < keyWeekIndex; index += 1) {
+        const earlier = projectScenarioWeek(scenarioFixture, index);
+        expect(earlier.session.weekly_digest?.coach_narrative).toBeNull();
+        expect(JSON.stringify(earlier)).not.toContain(
+          manifestEntry!.narrative.weekly_mirror,
+        );
+      }
+
+      const keyWeek = projectScenarioWeek(scenarioFixture, keyWeekIndex);
+      expect(keyWeek.session.weekly_digest?.coach_narrative).toEqual(
+        manifestEntry!.narrative,
+      );
+      const coachEvents = keyWeek.events.filter(
         (event) => event.event_type === "weekly_coach_generated",
-      ),
-    ).toHaveLength(1);
-  });
+      );
+      expect(coachEvents).toHaveLength(1);
+      expect(coachEvents[0].details.narrative).toEqual(
+        manifestEntry!.narrative,
+      );
+    },
+  );
 
   it.each([
     activeReplayJson,

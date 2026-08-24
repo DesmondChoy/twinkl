@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "02fb94f3",
+  "week_start": "2025-04-14",
+  "week_end": "2025-04-20",
+  "accepted": true,
+  "failure_stage": null,
+  "failure_details": [],
+  "raw_output": "{\"weekly_mirror\":\"This week, decisions around Sami\u2019s care seem to have left you feeling sidelined. You wrote, \u201cI just didn't say anything,\u201d and described your mother-in-law changing \u201cSami's entire nap schedule without asking me\u201d; later, even help at 5am felt like \u201cbeing dismissed.\u201d\",\"tension_explanation\":\"The available entries show a real tension between wanting a say in your own path and navigating family customs and involvement, but the record is too limited to determine a clear ongoing pattern this week.\",\"reflective_question\":\"When you think back over these moments, what made it hardest to express what you wanted or felt?\"}",
+  "narrative": {
+    "weekly_mirror": "This week, decisions around Sami\u2019s care seem to have left you feeling sidelined. You wrote, \u201cI just didn't say anything,\u201d and described your mother-in-law changing \u201cSami's entire nap schedule without asking me\u201d; later, even help at 5am felt like \u201cbeing dismissed.\u201d",
+    "tension_explanation": "The available entries show a real tension between wanting a say in your own path and navigating family customs and involvement, but the record is too limited to determine a clear ongoing pattern this week.",
+    "reflective_question": "When you think back over these moments, what made it hardest to express what you wanted or felt?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "Sami's entire nap schedule without asking me",
+      "being dismissed."
+    ],
+    "word_count": 94,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 2 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 94 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:02fb94f3:2025-04-20:attempt_2",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_0628adfaea289018016a8c54f82acc87d0b82cd554ea7165bf",
+    "status": "completed",
+    "latency_seconds": 2.496404540957883,
+    "input_tokens": 1129,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1126,
+    "output_tokens": 143,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 1272,
+    "calculated_cost_usd": 0.0004537,
+    "error_type": null
+  }
+}

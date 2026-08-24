@@ -12,7 +12,7 @@ from typing import Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from src.coach.schemas import CoachNarrative
+from src.coach.schemas import CoachNarrative, LLMCallMetrics
 from src.coach.weekly_digest import (
     attach_coach_artifacts,
     build_weekly_drift_reviewer_digest,
@@ -56,28 +56,12 @@ LOW_MANIFEST_PATH = Path(
 )
 BASE_CONFIG_PATH = Path("config/evals/twinkl_52zz_model_comparison_v1.yaml")
 LOW_CONFIG_PATH = Path("config/evals/twinkl_52zz_luna_low_v1.yaml")
+COACH_RESPONSES_PATH = Path("src/demo/coach_digest_responses.json")
 
 LUNA_LOW = ModelContract(
     provider="openai",
     model="gpt-5.6-luna",
     reasoning_effort="low",
-)
-
-SAVED_COACH_SCENARIO_ID = "two-values-lukas"
-SAVED_COACH_WEEK_START = "2025-10-13"
-SAVED_COACH_NARRATIVE = CoachNarrative(
-    weekly_mirror=(
-        'You wrote that you "Accepted on the spot because that\'s what you do", '
-        "then noticed that relief came before excitement."
-    ),
-    tension_explanation=(
-        "Your reason for accepting the new role still feels unclear because relief "
-        "and expectation both shaped the choice."
-    ),
-    reflective_question=(
-        "When you separate relief from expectation, what do you want this new role "
-        "to mean for you?"
-    ),
 )
 
 ScenarioRole = Literal[
@@ -99,6 +83,7 @@ class ScenarioSelection:
     title: str
     description: str
     summary: str
+    coach_week_start: str
     recommended: bool = False
     run: int = 1
 
@@ -114,6 +99,7 @@ SELECTIONS = (
             "Achievement and Security have no active Drift."
         ),
         summary="A calm baseline with meaningful nudges and no confirmed Drift.",
+        coach_week_start="2025-09-15",
     ),
     ScenarioSelection(
         scenario_id="active-wei-jun",
@@ -125,6 +111,7 @@ SELECTIONS = (
             "forming active Universalism Drift."
         ),
         summary="The clearest two-consecutive-Conflict path into active Drift.",
+        coach_week_start="2025-06-30",
     ),
     ScenarioSelection(
         scenario_id="recovered-marc",
@@ -136,6 +123,7 @@ SELECTIONS = (
             "clear later choice that ends the active Power Drift pattern."
         ),
         summary="A compact active-to-no-active Drift progression.",
+        coach_week_start="2025-03-17",
     ),
     ScenarioSelection(
         scenario_id="uncertain-noor",
@@ -147,6 +135,7 @@ SELECTIONS = (
             "Abstain leaves insufficient evidence for one weekly Drift state."
         ),
         summary="A nuanced case where the Weekly Drift Reviewer does not overclaim.",
+        coach_week_start="2025-04-14",
     ),
     ScenarioSelection(
         scenario_id="two-values-lukas",
@@ -158,6 +147,7 @@ SELECTIONS = (
             "insufficient Self-Direction evidence in independent histories."
         ),
         summary="Recommended: the fullest walkthrough and clearest state independence.",
+        coach_week_start="2025-10-13",
         recommended=True,
     ),
 )
@@ -165,6 +155,66 @@ SELECTIONS = (
 
 class CatalogModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
+
+class SavedCoachGeneration(CatalogModel):
+    """Accepted Coach Digest call and source provenance for one saved response."""
+
+    model_contract: ModelContract
+    service_tier: str
+    prompt_name: str
+    prompt_version: Literal["4.1"]
+    prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    prompt: str = Field(min_length=1)
+    raw_output: str = Field(min_length=1)
+    response_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    attempt_count: int = Field(ge=1)
+    diagnostic_paths: list[str] = Field(min_length=1)
+    call_metrics: list[LLMCallMetrics] = Field(min_length=1)
+    weekly_drift_input_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    generated_response_path: str = Field(min_length=1)
+    source_bundle_path: str = Field(min_length=1)
+    source_bundle_content_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    weekly_digest_event_id: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_call_contract(self) -> SavedCoachGeneration:
+        if (
+            self.model_contract.provider != "openai"
+            or self.model_contract.model != "gpt-5.6-luna"
+            or self.model_contract.reasoning_effort != "none"
+        ):
+            raise ValueError("Saved Coach Digest must use OpenAI Luna-none")
+        if len(self.call_metrics) != self.attempt_count:
+            raise ValueError("Saved Coach Digest attempt metrics are incomplete")
+        return self
+
+
+class SavedCoachResponse(CatalogModel):
+    """One accepted response for an exact saved scenario week."""
+
+    scenario_id: str
+    persona_id: str
+    week_start: str
+    week_end: str
+    narrative: CoachNarrative
+    generation: SavedCoachGeneration | None = None
+
+
+class SavedCoachResponseFixture(CatalogModel):
+    """Five Coach Digest responses keyed by Scenario ID and week start."""
+
+    schema_version: Literal["coach-digest-scenario-fixture-v1"] = (
+        "coach-digest-scenario-fixture-v1"
+    )
+    responses: dict[str, SavedCoachResponse]
+
+    @model_validator(mode="after")
+    def validate_response_keys(self) -> SavedCoachResponseFixture:
+        for key, response in self.responses.items():
+            if key != f"{response.scenario_id}::{response.week_start}":
+                raise ValueError("Coach Digest response key does not match its week")
+        return self
 
 
 class ScenarioCatalogItem(CatalogModel):
@@ -227,6 +277,45 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _coach_response_sha256(narrative: CoachNarrative) -> str:
+    return _sha256_json(narrative.model_dump(mode="json"))
+
+
+def _weekly_drift_input_sha256(digest: Any) -> str:
+    payload = digest.model_dump(
+        mode="json",
+        exclude={"coach_narrative", "validation"},
+    )
+    return _sha256_json(payload)
+
+
+def load_saved_coach_responses(root: Path) -> SavedCoachResponseFixture:
+    """Load and validate the checked-in scenario Coach Digest responses."""
+    fixture: SavedCoachResponseFixture = SavedCoachResponseFixture.model_validate_json(
+        (root.resolve() / COACH_RESPONSES_PATH).read_bytes()
+    )
+    expected_keys = {
+        f"{selection.scenario_id}::{selection.coach_week_start}"
+        for selection in SELECTIONS
+    }
+    if set(fixture.responses) != expected_keys:
+        raise ValueError("Coach Digest fixture must contain the deployed roster")
+    for response in fixture.responses.values():
+        selection = _selection_by_scenario_id(response.scenario_id)
+        if (
+            response.persona_id != selection.persona_id
+            or response.week_start != selection.coach_week_start
+        ):
+            raise ValueError("Coach Digest response does not match the curated roster")
+        if response.generation is not None:
+            if (
+                response.generation.response_sha256
+                != _coach_response_sha256(response.narrative)
+            ):
+                raise ValueError("Coach Digest response hash differs from its text")
+    return fixture
+
+
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     with path.open(encoding="utf-8") as handle:
@@ -251,6 +340,7 @@ def _source_files(selection: ScenarioSelection) -> list[Path]:
         LOW_MANIFEST_PATH,
         BASE_CONFIG_PATH,
         LOW_CONFIG_PATH,
+        COACH_RESPONSES_PATH,
     ]
 
 
@@ -542,12 +632,14 @@ def build_scenario_fixture(
     data: ReviewData | None = None,
     prompt_rows: list[dict[str, Any]] | None = None,
     response_rows: list[dict[str, Any]] | None = None,
+    coach_responses: SavedCoachResponseFixture | None = None,
 ) -> ContractFixtureSet:
     """Build one saved replay without provider calls."""
     root = root.resolve()
     review_data = data or load_review_data(root)
     prompts = prompt_rows or _read_jsonl(root / PROMPTS_PATH)
     responses = response_rows or _read_jsonl(root / RESPONSES_PATH)
+    saved_coach_responses = coach_responses or load_saved_coach_responses(root)
 
     wrangled_path = root / f"logs/wrangled/persona_{selection.persona_id}.md"
     raw_path = root / f"logs/synthetic_data/persona_{selection.persona_id}.md"
@@ -867,14 +959,28 @@ def build_scenario_fixture(
             decisions=base_cumulative_decisions,
             drift_result=drift_result,
         )
+        coach_key = f"{selection.scenario_id}::{boundary.week_start}"
+        saved_coach_response = saved_coach_responses.responses.get(coach_key)
         coach_narrative = (
-            SAVED_COACH_NARRATIVE
-            if selection.scenario_id == SAVED_COACH_SCENARIO_ID
-            and boundary.week_start == SAVED_COACH_WEEK_START
+            saved_coach_response.narrative
+            if saved_coach_response is not None
             else None
         )
         coach_validation = None
         if coach_narrative is not None:
+            if (
+                saved_coach_response is None
+                or saved_coach_response.persona_id != selection.persona_id
+                or saved_coach_response.week_end != boundary.week_end
+            ):
+                raise ValueError("Saved Coach Digest response has the wrong identity")
+            if saved_coach_response.generation is not None and (
+                saved_coach_response.generation.weekly_drift_input_sha256
+                != _weekly_drift_input_sha256(digest)
+            ):
+                raise ValueError(
+                    "Saved Coach Digest source hash differs from the key week"
+                )
             coach_validation = validate_weekly_digest_narrative(
                 digest,
                 coach_narrative,
@@ -915,19 +1021,48 @@ def build_scenario_fixture(
             )
         )
         if coach_narrative is not None and coach_validation is not None:
+            coach_generation = (
+                saved_coach_response.generation
+                if saved_coach_response is not None
+                else None
+            )
+            accepted_call = (
+                coach_generation.call_metrics[-1]
+                if coach_generation is not None
+                else None
+            )
             week_event_ids.append(
                 append_event(
                     event_type="weekly_coach_generated",
                     started_at=_simulated_at(
                         str(prompt_row["review_at_date"]), hour=21, sequence=200
                     ),
-                    duration_ms=0,
+                    duration_ms=(
+                        round(accepted_call.latency_seconds * 1000)
+                        if accepted_call is not None
+                        else 0
+                    ),
                     input_refs=[{"kind": "weekly_digest", "id": week_id}],
                     result_refs=[{"kind": "weekly_coach", "id": week_id}],
                     details={
                         "narrative": coach_narrative.model_dump(mode="json"),
                         "validation": coach_validation.model_dump(mode="json"),
                     },
+                    model_contract=(
+                        coach_generation.model_contract.model_dump(mode="json")
+                        if coach_generation is not None
+                        else None
+                    ),
+                    prompt=(
+                        coach_generation.prompt
+                        if coach_generation is not None
+                        else None
+                    ),
+                    raw_response=(
+                        coach_generation.raw_output
+                        if coach_generation is not None
+                        else None
+                    ),
                 )
             )
         week_rows.append(
@@ -1071,6 +1206,31 @@ def _validate_fixture_semantics(
     if scenario.manifest.input_hash != _input_hash(root, selection):
         raise ValueError("Scenario input hash differs from frozen sources")
 
+    coach_responses = load_saved_coach_responses(root)
+    expected_coach_key = f"{selection.scenario_id}::{selection.coach_week_start}"
+    expected_coach = coach_responses.responses.get(expected_coach_key)
+    coach_events = [
+        event
+        for event in fixture.trace_events
+        if event.event_type == "weekly_coach_generated"
+    ]
+    if expected_coach is None:
+        if coach_events:
+            raise ValueError("Scenario has an unexpected Coach Digest response")
+    else:
+        if len(coach_events) != 1:
+            raise ValueError("Scenario must have one key-week Coach Digest response")
+        key_week = next(
+            week
+            for week in scenario.weeks
+            if week.week_start == selection.coach_week_start
+        )
+        coach_event = coach_events[0]
+        if coach_event.event_id not in key_week.event_ids:
+            raise ValueError("Coach Digest response is attached to the wrong week")
+        if coach_event.details.narrative != expected_coach.narrative:
+            raise ValueError("Coach Digest event differs from the saved response")
+
     entries = scenario.journal_entries
     coordinates = [(entry.date, entry.t_index) for entry in entries]
     if coordinates != sorted(coordinates):
@@ -1177,6 +1337,7 @@ def export_scenarios(root: Path) -> ScenarioCatalog:
     data = load_review_data(root)
     prompt_rows = _read_jsonl(root / PROMPTS_PATH)
     response_rows = _read_jsonl(root / RESPONSES_PATH)
+    coach_responses = load_saved_coach_responses(root)
     catalog_items: list[ScenarioCatalogItem] = []
     for selection in SELECTIONS:
         fixture = build_scenario_fixture(
@@ -1185,6 +1346,7 @@ def export_scenarios(root: Path) -> ScenarioCatalog:
             data=data,
             prompt_rows=prompt_rows,
             response_rows=response_rows,
+            coach_responses=coach_responses,
         )
         filename = f"{selection.scenario_id}.json"
         payload = (

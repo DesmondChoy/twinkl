@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "11de77e8",
+  "week_start": "2025-10-13",
+  "week_end": "2025-10-19",
+  "accepted": true,
+  "failure_stage": null,
+  "failure_details": [],
+  "raw_output": "{\"weekly_mirror\":\"This week brought a tech lead offer, and you wrote that you \u201cAccepted on the spot because that's what you do.\u201d Your parents\u2019 and Noor\u2019s reactions felt significant too: \u201cEveryone's reaction confirmed that this was the right move, or at least the...\u201d\",\"tension_explanation\":\"There is not enough clear context to determine how much this choice came from having the freedom to choose your own path versus responding to what seemed expected of you. The earlier note, \u201cSo I default to the smooth version,\u201d adds context, but the available entries do not clarify what you wanted before you accepted.\",\"reflective_question\":\"When you look back at accepting the offer, what part felt most like your own choice, and what part felt shaped by what others expected or celebrated?\"}",
+  "narrative": {
+    "weekly_mirror": "This week brought a tech lead offer, and you wrote that you \u201cAccepted on the spot because that's what you do.\u201d Your parents\u2019 and Noor\u2019s reactions felt significant too: \u201cEveryone's reaction confirmed that this was the right move, or at least the...\u201d",
+    "tension_explanation": "There is not enough clear context to determine how much this choice came from having the freedom to choose your own path versus responding to what seemed expected of you. The earlier note, \u201cSo I default to the smooth version,\u201d adds context, but the available entries do not clarify what you wanted before you accepted.",
+    "reflective_question": "When you look back at accepting the offer, what part felt most like your own choice, and what part felt shaped by what others expected or celebrated?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "Accepted on the spot because that's what you do.",
+      "Everyone's reaction confirmed that this was the right move, or at least the..."
+    ],
+    "word_count": 124,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 2 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 124 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:11de77e8:2025-10-19:attempt_1",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_098188023da35d62016a8c54e526e487d0b551d60638d5bcdd",
+    "status": "completed",
+    "latency_seconds": 4.458965667057782,
+    "input_tokens": 1783,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1780,
+    "output_tokens": 170,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 1953,
+    "calculated_cost_usd": 0.0006496,
+    "error_type": null
+  }
+}

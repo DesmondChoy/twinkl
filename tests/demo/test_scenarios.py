@@ -14,6 +14,7 @@ from src.demo.scenarios import (
     SELECTIONS,
     _read_jsonl,
     build_scenario_fixture,
+    load_saved_coach_responses,
     load_scenario_catalog,
     load_scenario_file,
     project_scenario_week,
@@ -110,10 +111,52 @@ def test_required_drift_progressions_are_preserved(loaded_scenarios) -> None:
     }
 
 
-def test_lukas_key_week_has_one_grounded_saved_coach_digest(
+def test_deployed_persona_roster_and_key_week_rules(loaded_scenarios) -> None:
+    _, fixtures = loaded_scenarios
+    expected = {
+        "two-values-lukas": ("11de77e8", "2025-10-13", "insufficient_evidence"),
+        "stable-meera": ("23d101f8", "2025-09-15", "no_active_drift"),
+        "active-wei-jun": ("8f83c818", "2025-06-30", "active_drift"),
+        "recovered-marc": ("988d1a65", "2025-03-17", "no_active_drift"),
+        "uncertain-noor": ("02fb94f3", "2025-04-14", "insufficient_evidence"),
+    }
+
+    for scenario_id, (persona_id, week_start, state) in expected.items():
+        fixture = fixtures[scenario_id]
+        key_index = next(
+            index
+            for index, week in enumerate(fixture.scenario.weeks)
+            if week.week_start == week_start
+        )
+        assert fixture.scenario.persona_id == persona_id
+        assert fixture.scenario.weeks[key_index].expected_delivery_state == state
+
+    assert fixtures["stable-meera"].scenario.weeks[-1].week_start == "2025-09-15"
+    assert all(
+        week.expected_delivery_state != "active_drift"
+        for week in fixtures["active-wei-jun"].scenario.weeks[:5]
+    )
+    marc_weeks = fixtures["recovered-marc"].scenario.weeks
+    assert marc_weeks[4].expected_delivery_state == "active_drift"
+    assert marc_weeks[5].expected_delivery_state == "no_active_drift"
+    assert fixtures["uncertain-noor"].scenario.weeks[0].week_start == "2025-04-14"
+    assert fixtures["two-values-lukas"].scenario.weeks[-1].week_start == (
+        "2025-10-13"
+    )
+
+
+def test_five_key_weeks_have_the_exact_evaluated_coach_digests(
     loaded_scenarios,
 ) -> None:
     _, fixtures = loaded_scenarios
+    saved_responses = load_saved_coach_responses(ROOT)
+    manifest = json.loads(
+        (
+            ROOT
+            / "logs/experiments/reports/coach_digest_sample_20260824/"
+            "judge_sample_manifest.json"
+        ).read_text(encoding="utf-8")
+    )
     coach_events = [
         event
         for fixture in fixtures.values()
@@ -121,30 +164,63 @@ def test_lukas_key_week_has_one_grounded_saved_coach_digest(
         if event.event_type == "weekly_coach_generated"
     ]
 
-    assert len(coach_events) == 1
-    event = coach_events[0]
-    lukas = fixtures["two-values-lukas"]
-    key_week = lukas.scenario.weeks[-1]
-    narrative = lukas.scenario.weekly_digest.coach_narrative
-    validation = lukas.scenario.weekly_digest.validation
+    assert len(saved_responses.responses) == 5
+    assert len(coach_events) == 5
+    assert len(manifest) == 5
 
-    assert event.event_id in key_week.event_ids
-    assert event.source == "saved_replay"
-    assert event.model_contract is None
-    assert event.prompt is None
-    assert event.raw_response is None
-    assert narrative == event.details.narrative
-    assert validation == event.details.validation
-    assert validation is not None
-    assert all(check.passed for check in validation.checks)
-    assert validation.grounded_quotes == [
-        "Accepted on the spot because that's what you do"
-    ]
-    assert all(
-        fixture.scenario.weekly_digest.coach_narrative is None
-        for scenario_id, fixture in fixtures.items()
-        if scenario_id != "two-values-lukas"
-    )
+    for selection in SELECTIONS:
+        fixture = fixtures[selection.scenario_id]
+        key_week_index = next(
+            index
+            for index, week in enumerate(fixture.scenario.weeks)
+            if week.week_start == selection.coach_week_start
+        )
+        key_week = fixture.scenario.weeks[key_week_index]
+        event = next(
+            event
+            for event in fixture.trace_events
+            if event.event_type == "weekly_coach_generated"
+        )
+        digest_event = next(
+            event
+            for event in fixture.trace_events
+            if event.event_type == "weekly_digest_built"
+            and event.event_id in key_week.event_ids
+        )
+        narrative = digest_event.details.digest.coach_narrative
+        validation = digest_event.details.digest.validation
+        manifest_entry = next(
+            item
+            for item in manifest
+            if item["provenance"]["scenario_id"] == selection.scenario_id
+        )
+
+        assert event.event_id in key_week.event_ids
+        assert event.source == "saved_replay"
+        assert event.model_contract is not None
+        assert event.model_contract.model == "gpt-5.6-luna"
+        assert event.model_contract.reasoning_effort == "none"
+        assert event.prompt is not None
+        assert event.raw_response is not None
+        assert narrative == event.details.narrative
+        assert narrative is not None
+        assert narrative.model_dump(mode="json") == manifest_entry["narrative"]
+        assert validation == event.details.validation
+        assert validation is not None
+        assert all(check.passed for check in validation.checks)
+        assert manifest_entry["provenance"]["scenario_bundle_content_sha256"]
+
+        for earlier_index in range(key_week_index):
+            earlier, earlier_events = project_scenario_week(
+                fixture,
+                fixture.scenario.weeks[earlier_index].week_id,
+            )
+            assert earlier.weekly_digest is not None
+            assert earlier.weekly_digest.coach_narrative is None
+            assert all(
+                prior.event_type != "weekly_coach_generated"
+                for prior in earlier_events
+            )
 
 
 def test_checked_in_scenarios_match_deterministic_builder(

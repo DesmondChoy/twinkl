@@ -1,0 +1,282 @@
+{
+  "persona_id": "11de77e8",
+  "persona_name": "Lukas Vermeer",
+  "week_start": "2025-10-13",
+  "week_end": "2025-10-19",
+  "response_mode": "insufficient_evidence",
+  "mode_source": "drift_detector",
+  "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "self_direction",
+    "conformity"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "conformity": "no_active_drift",
+    "self_direction": "insufficient_evidence"
+  },
+  "drift_details": {
+    "conformity": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "ok",
+      "last_t_index": 11,
+      "last_date": "2025-10-14"
+    },
+    "self_direction": {
+      "state": "insufficient_evidence",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "ok",
+      "last_t_index": 11,
+      "last_date": "2025-10-14"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "self_direction",
+      "previous_week_start": "2025-10-06",
+      "previous_week_end": "2025-10-12",
+      "current_week_start": "2025-10-13",
+      "current_week_end": "2025-10-19",
+      "previous_state": "no_active_drift",
+      "current_state": "insufficient_evidence",
+      "change": "evidence_became_insufficient",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-10-07",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+        },
+        {
+          "date": "2025-10-11",
+          "t_index": 9,
+          "direction": "misaligned",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "So I default to the smooth version."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-10-14",
+          "t_index": 10,
+          "direction": "misaligned",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Accepted on the spot because that's what you do."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+        }
+      ]
+    },
+    {
+      "core_value": "conformity",
+      "previous_week_start": "2025-10-06",
+      "previous_week_end": "2025-10-12",
+      "current_week_start": "2025-10-13",
+      "current_week_end": "2025-10-19",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-10-07",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+        },
+        {
+          "date": "2025-10-11",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't \u2014 I've been keeping my velocity up..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-10-14",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+        },
+        {
+          "date": "2025-10-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "11de77e8:conformity:4:not_conflict",
+    "11de77e8:self_direction:9:abstain"
+  ],
+  "top_tensions": [
+    "self_direction"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-10-07",
+      "t_index": 8,
+      "direction": "context",
+      "dimensions": [
+        "conformity"
+      ],
+      "score_mean": null,
+      "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+    },
+    {
+      "date": "2025-10-07",
+      "t_index": 8,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.\n\nResponse: Some things don't need overthinking."
+    },
+    {
+      "date": "2025-10-11",
+      "t_index": 9,
+      "direction": "context",
+      "dimensions": [
+        "conformity"
+      ],
+      "score_mean": null,
+      "excerpt": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't \u2014 I've been keeping my velocity up..."
+    },
+    {
+      "date": "2025-10-11",
+      "t_index": 9,
+      "direction": "misaligned",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "So I default to the smooth version."
+    },
+    {
+      "date": "2025-10-14",
+      "t_index": 10,
+      "direction": "context",
+      "dimensions": [
+        "conformity"
+      ],
+      "score_mean": null,
+      "excerpt": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+    },
+    {
+      "date": "2025-10-14",
+      "t_index": 10,
+      "direction": "misaligned",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Accepted on the spot because that's what you do."
+    },
+    {
+      "date": "2025-10-14",
+      "t_index": 11,
+      "direction": "context",
+      "dimensions": [
+        "conformity"
+      ],
+      "score_mean": null,
+      "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+    },
+    {
+      "date": "2025-10-14",
+      "t_index": 11,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week brought a tech lead offer, and you wrote that you \u201cAccepted on the spot because that's what you do.\u201d Your parents\u2019 and Noor\u2019s reactions felt significant too: \u201cEveryone's reaction confirmed that this was the right move, or at least the...\u201d",
+    "tension_explanation": "There is not enough clear context to determine how much this choice came from having the freedom to choose your own path versus responding to what seemed expected of you. The earlier note, \u201cSo I default to the smooth version,\u201d adds context, but the available entries do not clarify what you wanted before you accepted.",
+    "reflective_question": "When you look back at accepting the offer, what part felt most like your own choice, and what part felt shaped by what others expected or celebrated?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "Accepted on the spot because that's what you do.",
+      "Everyone's reaction confirmed that this was the right move, or at least the..."
+    ],
+    "word_count": 124,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 2 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 124 words (target 25-180)."
+      }
+    ]
+  }
+}

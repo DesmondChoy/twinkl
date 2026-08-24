@@ -1,0 +1,128 @@
+{
+  "run": "coach_digest_sample_20260824",
+  "command": ".venv/bin/python scripts/coach/generate_approved_judge_sample.py --personas 11de77e8 23d101f8 8f83c818 988d1a65 02fb94f3 --reuse-scenario-key-weeks --execute",
+  "coach_prompt_version": "4.1",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "none",
+  "weekly_drift_reviewer_calls": 0,
+  "accepted_responses": 5,
+  "generation_api_usage": {
+    "n_calls": 7,
+    "n_calls_with_usage": 7,
+    "input_tokens": 9626,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 8682,
+    "output_tokens": 1198,
+    "total_tokens": 10824,
+    "calculated_cost_usd": 0.0037968999999999998,
+    "total_latency_seconds": 22.665342540014535,
+    "mean_latency_seconds": 3.2379060771449337,
+    "median_latency_seconds": 3.036647208034992,
+    "max_latency_seconds": 4.458965667057782
+  },
+  "retry_count": 2,
+  "failed_attempts": [
+    {
+      "persona_id": "23d101f8",
+      "diagnostic_path": "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/23d101f8_2025-09-21.20260824T142754878766Z.coach_diagnostic.json",
+      "failure_stage": "coach_validation",
+      "failure_details": [
+        "state_claims: Response makes an unsupported positive transition claim with: progress."
+      ],
+      "raw_output_preserved": true
+    },
+    {
+      "persona_id": "02fb94f3",
+      "diagnostic_path": "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/02fb94f3_2025-04-20.20260824T142807932310Z.coach_diagnostic.json",
+      "failure_stage": "coach_validation",
+      "failure_details": [
+        "groundedness: No quoted phrase from selected evidence was detected."
+      ],
+      "raw_output_preserved": true
+    }
+  ],
+  "responses": [
+    {
+      "scenario_id": "two-values-lukas",
+      "persona_id": "11de77e8",
+      "week_start": "2025-10-13",
+      "week_end": "2025-10-19",
+      "generated_response_path": "logs/experiments/reports/coach_digest_sample_20260824/generated_responses/11de77e8_2025-10-19.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/two-values-lukas.json",
+      "weekly_digest_event_id": "two-values-lukas:event:079",
+      "scenario_bundle_content_sha256": "147af300e880dd258df5365f37111838a952abd0b1d56578c29dc9297f0a4dad",
+      "weekly_drift_input_sha256": "78eb37ffd9e3d4ffad315cf2c8967d92301a8382698072e397fe758fb3ce1112",
+      "coach_response_sha256": "e1ae4538af5bd7096c2fd339925b0e50ffcf965aceef6c387a5360bbc2e85586",
+      "attempt_count": 1,
+      "diagnostic_paths": [
+        "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/11de77e8_2025-10-19.20260824T142751982877Z.coach_diagnostic.json"
+      ]
+    },
+    {
+      "scenario_id": "stable-meera",
+      "persona_id": "23d101f8",
+      "week_start": "2025-09-15",
+      "week_end": "2025-09-21",
+      "generated_response_path": "logs/experiments/reports/coach_digest_sample_20260824/generated_responses/23d101f8_2025-09-21.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/stable-meera.json",
+      "weekly_digest_event_id": "stable-meera:event:068",
+      "scenario_bundle_content_sha256": "07e8d1f2fb5def74747797b0b559d9a23765983f28ce62fef89c8868bb249d8a",
+      "weekly_drift_input_sha256": "5e286b43935cc00289dbef0e32992c2b666b35f0aa03599cc40208ace27323b0",
+      "coach_response_sha256": "ffdb7c31376af4a51b439206d2b1217ad71ce46d4186dc03aff22d84ed961046",
+      "attempt_count": 2,
+      "diagnostic_paths": [
+        "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/23d101f8_2025-09-21.20260824T142754878766Z.coach_diagnostic.json",
+        "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/23d101f8_2025-09-21.20260824T142758025881Z.coach_diagnostic.json"
+      ]
+    },
+    {
+      "scenario_id": "active-wei-jun",
+      "persona_id": "8f83c818",
+      "week_start": "2025-06-30",
+      "week_end": "2025-07-06",
+      "generated_response_path": "logs/experiments/reports/coach_digest_sample_20260824/generated_responses/8f83c818_2025-07-06.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/active-wei-jun.json",
+      "weekly_digest_event_id": "active-wei-jun:event:064",
+      "scenario_bundle_content_sha256": "4e8143a38f2334d742909575420b9f2e84f75ac6b08fc4437703470f6dff68ab",
+      "weekly_drift_input_sha256": "79146572544d9b56b906c3340cb9fb229a881adc3da520300a3cbb5c587576ae",
+      "coach_response_sha256": "0b7bfcb04e530026944f443f7cb375ea807f58ca5f9e4e3212530096c07e0bec",
+      "attempt_count": 1,
+      "diagnostic_paths": [
+        "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/8f83c818_2025-07-06.20260824T142801111397Z.coach_diagnostic.json"
+      ]
+    },
+    {
+      "scenario_id": "recovered-marc",
+      "persona_id": "988d1a65",
+      "week_start": "2025-03-17",
+      "week_end": "2025-03-23",
+      "generated_response_path": "logs/experiments/reports/coach_digest_sample_20260824/generated_responses/988d1a65_2025-03-23.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/recovered-marc.json",
+      "weekly_digest_event_id": "recovered-marc:event:056",
+      "scenario_bundle_content_sha256": "172dc747a8e6e366c43838028387fa3835e7aecda04f01cfc52d27a85bc72e0d",
+      "weekly_drift_input_sha256": "446a2c9005ba4082c2165f6117836f4e6bd02584ea740d311d95967099c6f581",
+      "coach_response_sha256": "793424db0f1a16075b83861e0f78842f57564662264b7a22dcc979862d3168f3",
+      "attempt_count": 1,
+      "diagnostic_paths": [
+        "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/988d1a65_2025-03-23.20260824T142805126094Z.coach_diagnostic.json"
+      ]
+    },
+    {
+      "scenario_id": "uncertain-noor",
+      "persona_id": "02fb94f3",
+      "week_start": "2025-04-14",
+      "week_end": "2025-04-20",
+      "generated_response_path": "logs/experiments/reports/coach_digest_sample_20260824/generated_responses/02fb94f3_2025-04-20.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/uncertain-noor.json",
+      "weekly_digest_event_id": "uncertain-noor:event:013",
+      "scenario_bundle_content_sha256": "b2a1bbdc976819b30007e233396d2efe56842891affd3a312491b79bc092349b",
+      "weekly_drift_input_sha256": "c01de37c0427c0066dd0539d9b9438363eeff4bab23c1702de08f3732da188bb",
+      "coach_response_sha256": "668686b6542c7479695e4cd99cadfd0f6e7a87ad2ccfc3e7e05a69a3a0a6fe5b",
+      "attempt_count": 2,
+      "diagnostic_paths": [
+        "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/02fb94f3_2025-04-20.20260824T142807932310Z.coach_diagnostic.json",
+        "logs/experiments/reports/coach_digest_sample_20260824/generation_diagnostics/02fb94f3_2025-04-20.20260824T142810471671Z.coach_diagnostic.json"
+      ]
+    }
+  ]
+}

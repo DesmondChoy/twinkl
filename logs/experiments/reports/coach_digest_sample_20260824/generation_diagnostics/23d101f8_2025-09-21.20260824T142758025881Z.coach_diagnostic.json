@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "23d101f8",
+  "week_start": "2025-09-15",
+  "week_end": "2025-09-21",
+  "accepted": true,
+  "failure_stage": null,
+  "failure_details": [],
+  "raw_output": "{\"weekly_mirror\":\"This week, your work gave you concrete evidence of meaningful contribution: \u201cstudent pass rates up 4% year-on-year,\u201d an integrated science pilot \u201con track,\u201d and three students qualifying for the state science olympiad. You also noticed your own capability directly: \u201cI know how to build a...\u201d\",\"tension_explanation\":\"The week holds both visible results in your teaching and an unfinished question about what comes next, after you \u201cread the entire job posting\u201d and bookmarked the international school\u2019s website. There is no confirmed current tension in the record, but the contrast between recognised impact where you are and curiosity about another setting remains present.\",\"reflective_question\":\"When you hold the evidence of what you are building now alongside the possibility you bookmarked, what feels most important to notice?\"}",
+  "narrative": {
+    "weekly_mirror": "This week, your work gave you concrete evidence of meaningful contribution: \u201cstudent pass rates up 4% year-on-year,\u201d an integrated science pilot \u201con track,\u201d and three students qualifying for the state science olympiad. You also noticed your own capability directly: \u201cI know how to build a...\u201d",
+    "tension_explanation": "The week holds both visible results in your teaching and an unfinished question about what comes next, after you \u201cread the entire job posting\u201d and bookmarked the international school\u2019s website. There is no confirmed current tension in the record, but the contrast between recognised impact where you are and curiosity about another setting remains present.",
+    "reflective_question": "When you hold the evidence of what you are building now alongside the possibility you bookmarked, what feels most important to notice?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "student pass rates up 4% year-on-year,",
+      "on track,",
+      "I know how to build a...",
+      "read the entire job posting"
+    ],
+    "word_count": 122,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 4 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 122 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:23d101f8:2025-09-21:attempt_2",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_089b55963e8b035b016a8c54eb24c487d080e80b61b92d2f5b",
+    "status": "completed",
+    "latency_seconds": 3.099086333066225,
+    "input_tokens": 1735,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1732,
+    "output_tokens": 173,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 1908,
+    "calculated_cost_usd": 0.0006412,
+    "error_type": null
+  }
+}
