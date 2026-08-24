@@ -225,8 +225,20 @@ async def run_weekly_drift_coach_cycle(
     end_date: str | None = None,
     reviewer: WeeklyDriftReviewerFn | None = None,
     coach_llm_complete=None,
+    attach_failed_validation: bool = False,
 ) -> tuple[WeeklyDigest, dict[str, str]]:
-    """Run Weekly Drift Detection and optionally produce a Coach Digest response."""
+    """Run Weekly Drift Detection and optionally produce a Coach Digest response.
+
+    By default a Coach Narrative that fails validation is dropped, so the digest
+    keeps no unvalidated text. This matches the product delivery paths in
+    ``src.coach.runtime`` and ``src.demo.experience_service``.
+
+    Set ``attach_failed_validation`` to record the narrative and its validation
+    verdict even when validation fails. This is for offline evaluation only,
+    where the failure rate itself is the measurement. Callers that read the
+    resulting digest must check ``digest.validation.all_passed`` before they
+    treat the narrative as deliverable.
+    """
     wrangled_path = Path(wrangled_dir)
     output_path = Path(output_dir)
     synthetic_profile, entries = _load_runtime_input(
@@ -325,7 +337,11 @@ async def run_weekly_drift_coach_cycle(
             if narrative is not None
             else None
         )
-        if narrative is not None and validation is not None and validation.all_passed:
+        if (
+            narrative is not None
+            and validation is not None
+            and (attach_failed_validation or validation.all_passed)
+        ):
             digest = attach_coach_artifacts(digest, narrative, validation)
 
     output_path.mkdir(parents=True, exist_ok=True)

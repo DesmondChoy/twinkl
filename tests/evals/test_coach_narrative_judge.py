@@ -8,9 +8,12 @@ import json
 import pytest
 
 from prompts import get_prompt_metadata
+from src.coach.llm_client import resolve_coach_model
 from src.coach.schemas import CoachNarrative, EvidenceSnippet, WeeklyDigest
 from src.evals.coach_narrative_judge import (
     JudgeVerdict,
+    _load_generator_model,
+    _verdict_records,
     aggregate_verdicts,
     judge_narrative,
     render_judge_prompt,
@@ -286,3 +289,82 @@ def test_render_markdown_labels_ai_evaluation():
     assert "tension_honesty" in markdown
     assert report.to_dict()["eval"] == "coach_digest_evals"
     assert report.to_dict()["source"] == "ai_review"
+
+
+def _verdict(**overrides) -> JudgeVerdict:
+    payload = {
+        "correctness": 4,
+        "specificity": 4,
+        "non_prescriptive_tone": 4,
+        "tension_honesty": 4,
+        "question_is_open_and_relevant": True,
+        "justification": "ok",
+    }
+    payload.update(overrides)
+    return JudgeVerdict(**payload)
+
+
+def test_resolve_coach_model_reports_provider_and_model(monkeypatch):
+    monkeypatch.delenv("TWINKL_COACH_PROVIDER", raising=False)
+    monkeypatch.delenv("TWINKL_COACH_MODEL", raising=False)
+    assert resolve_coach_model().startswith("openai:")
+
+    monkeypatch.setenv("TWINKL_COACH_PROVIDER", "gemini")
+    monkeypatch.setenv("TWINKL_COACH_MODEL", "gemini-test")
+    assert resolve_coach_model() == "gemini:gemini-test"
+
+    # Explicit arguments win over the environment.
+    assert (
+        resolve_coach_model(provider="openai", model="gpt-test")
+        == "openai:gpt-test"
+    )
+
+
+def test_report_records_judge_model_and_flags_self_evaluation():
+    same = aggregate_verdicts(
+        [_verdict()], judge_model="openai:m1", generator_model="openai:m1"
+    )
+    assert same.self_evaluation is True
+    payload = same.to_dict()
+    assert payload["judge_model"] == "openai:m1"
+    assert payload["generator_model"] == "openai:m1"
+    assert payload["self_evaluation"] is True
+    assert payload["self_evaluation_note"]
+    assert "Self evaluation" in render_markdown(same)
+
+    different = aggregate_verdicts(
+        [_verdict()], judge_model="gemini:m2", generator_model="openai:m1"
+    )
+    assert different.self_evaluation is False
+    assert different.to_dict()["self_evaluation_note"] is None
+    assert "Self evaluation" not in render_markdown(different)
+
+
+def test_load_generator_model_requires_agreement(tmp_path):
+    path = tmp_path / "manifest.json"
+
+    path.write_text(json.dumps([{"generator_model": "openai:m1"}] * 2))
+    assert _load_generator_model(path) == "openai:m1"
+
+    # Disagreeing or missing entries must not claim a model.
+    path.write_text(
+        json.dumps([{"generator_model": "openai:m1"}, {"generator_model": "x:y"}])
+    )
+    assert _load_generator_model(path) is None
+
+    path.write_text(json.dumps([{"digest": {}}]))
+    assert _load_generator_model(path) is None
+
+
+def test_verdict_records_key_each_verdict_to_its_persona_week():
+    digest = _digest()
+    narrative = _narrative()
+    records = _verdict_records(
+        [(digest, narrative), (digest, narrative)],
+        [_verdict(specificity=1), None],
+    )
+
+    assert records[0]["key"] == f"{digest.persona_id}:{digest.week_end}"
+    assert records[0]["verdict"]["specificity"] == 1
+    assert records[0]["verdict"]["justification"] == "ok"
+    assert records[1]["verdict"] is None

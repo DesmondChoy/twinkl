@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
+import polars as pl
 import pytest
 
 from src.coach.weekly_digest import (
@@ -184,6 +185,73 @@ async def test_runtime_does_not_attach_an_invalid_coach_response(tmp_path: Path)
 
     assert digest.coach_narrative is None
     assert digest.validation is None
+
+
+@pytest.mark.asyncio
+async def test_runtime_records_an_invalid_coach_response_for_evaluation(
+    tmp_path: Path,
+):
+    """With attach_failed_validation the narrative and its verdict are kept.
+
+    Offline evaluation measures the validation failure rate, so a failed
+    narrative must stay on the digest instead of being dropped.
+    """
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir()
+    _write_wrangled(wrangled_dir / "persona_deadbeef.md")
+    reviewer = OpenAIWeeklyDriftReviewer(
+        client=SimpleNamespace(responses=_SequencedResponses())
+    )
+
+    async def invalid_coach(
+        _prompt: str,
+        _response_format: dict | None,
+        _instructions: str | None = None,
+    ) -> str:
+        return json.dumps(
+            {
+                "weekly_mirror": (
+                    'You wrote "Called my sister and protected the evening for '
+                    'family," and this proves improvement.'
+                ),
+                "tension_explanation": (
+                    "The latest choice shows that the earlier concern is now fixed."
+                ),
+                "reflective_question": (
+                    "What helped you make that change and keep it going next week?"
+                ),
+            }
+        )
+
+    parquet_path = tmp_path / "weekly_digests.parquet"
+    digest, _paths = await run_weekly_drift_coach_cycle(
+        persona_id="deadbeef",
+        wrangled_dir=wrangled_dir,
+        output_dir=tmp_path / "exports",
+        parquet_path=parquet_path,
+        reviewer=reviewer,
+        coach_llm_complete=invalid_coach,
+        attach_failed_validation=True,
+    )
+
+    assert digest.coach_narrative is not None
+    assert digest.validation is not None
+    assert digest.validation.all_passed is False
+    failed = {
+        check.name for check in digest.validation.checks if not check.passed
+    }
+    assert "state_claims" in failed
+
+    # The failure verdict must survive persistence, otherwise the evaluation
+    # cannot measure it from the Parquet.
+    rows = pl.read_parquet(parquet_path).to_dicts()
+    record = next(row for row in rows if row["persona_id"] == "deadbeef")
+    assert record["validation_json"] is not None
+    persisted = json.loads(record["validation_json"])
+    persisted_failed = {
+        check["name"] for check in persisted["checks"] if not check["passed"]
+    }
+    assert "state_claims" in persisted_failed
 
 
 def _write_onboarding_profile(path: Path, **overrides) -> None:

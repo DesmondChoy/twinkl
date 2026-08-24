@@ -37,6 +37,36 @@ def _unwrap_json_schema(response_format: dict | None) -> dict | None:
     return schema if isinstance(schema, dict) else None
 
 
+_DEFAULT_MODELS = {
+    "openai": DEFAULT_OPENAI_MODEL,
+    "gemini": DEFAULT_GEMINI_MODEL,
+}
+
+
+def _resolve(provider: str | None, model: str | None) -> tuple[str, str]:
+    """Resolve the provider and model ids that a builder would use."""
+    resolved_provider = (
+        (provider or os.environ.get("TWINKL_COACH_PROVIDER", "openai")).strip().lower()
+    )
+    default_model = _DEFAULT_MODELS.get(resolved_provider, DEFAULT_OPENAI_MODEL)
+    resolved_model = model or os.environ.get("TWINKL_COACH_MODEL", default_model)
+    return resolved_provider, resolved_model
+
+
+def resolve_coach_model(
+    *,
+    provider: str | None = None,
+    model: str | None = None,
+) -> str:
+    """Return the ``provider:model`` id that ``build_llm_complete`` would use.
+
+    The bare model id is ambiguous across providers, so evaluation reports
+    record both parts.
+    """
+    resolved_provider, resolved_model = _resolve(provider, model)
+    return f"{resolved_provider}:{resolved_model}"
+
+
 def _build_openai_llm_complete(
     *,
     model: str | None,
@@ -46,7 +76,7 @@ def _build_openai_llm_complete(
     if not os.environ.get("OPENAI_API_KEY"):
         return None
 
-    resolved_model = model or os.environ.get("TWINKL_COACH_MODEL", DEFAULT_OPENAI_MODEL)
+    _, resolved_model = _resolve("openai", model)
 
     async def llm_complete(
         prompt: str,
@@ -94,7 +124,7 @@ def _build_gemini_llm_complete(
     if not api_key:
         return None
 
-    resolved_model = model or os.environ.get("TWINKL_COACH_MODEL", DEFAULT_GEMINI_MODEL)
+    _, resolved_model = _resolve("gemini", model)
 
     def _generate(
         prompt: str,
@@ -169,9 +199,7 @@ def build_llm_complete(
     defaulting to ``openai``. Returns ``None`` when the provider's API key is
     missing or the provider is unrecognised, so the demo stays runnable offline.
     """
-    resolved_provider = (
-        provider or os.environ.get("TWINKL_COACH_PROVIDER", "openai")
-    ).strip().lower()
+    resolved_provider, _ = _resolve(provider, model)
     resolved_timeout = timeout if timeout is not None else DEFAULT_TIMEOUT_SECONDS
     resolved_max_tokens = (
         max_output_tokens

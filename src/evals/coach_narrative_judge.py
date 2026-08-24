@@ -27,7 +27,7 @@ from typing import cast
 from pydantic import BaseModel, Field, ValidationError
 
 from prompts import load_prompt
-from src.coach.llm_client import build_llm_complete
+from src.coach.llm_client import build_llm_complete, resolve_coach_model
 from src.coach.schemas import CoachNarrative, WeeklyDigest
 from src.coach.weekly_digest import (
     LLMCompleteFn,
@@ -135,6 +135,15 @@ class JudgeReport:
     question_open_rate: float = 0.0
     n_flagged: int = 0
     n_failed: int = 0
+    generator_model: str | None = None
+
+    @property
+    def self_evaluation(self) -> bool:
+        """True when the same model wrote and scored the Coach Narratives."""
+        return (
+            self.generator_model is not None
+            and self.generator_model == self.judge_model
+        )
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -146,6 +155,15 @@ class JudgeReport:
                 "these as ground truth."
             ),
             "judge_model": self.judge_model,
+            "generator_model": self.generator_model,
+            "self_evaluation": self.self_evaluation,
+            "self_evaluation_note": (
+                "The same model wrote and scored these Coach Narratives. "
+                "Treat the scores as self evaluation and expect them to be "
+                "too high."
+                if self.self_evaluation
+                else None
+            ),
             "n_scored": self.n_scored,
             "n_failed": self.n_failed,
             "means": {k: round(v, 3) for k, v in self.means.items()},
@@ -161,7 +179,9 @@ class JudgeReport:
 
 
 def aggregate_verdicts(
-    verdicts: list[JudgeVerdict | None], judge_model: str
+    verdicts: list[JudgeVerdict | None],
+    judge_model: str,
+    generator_model: str | None = None,
 ) -> JudgeReport:
     """Aggregate per-narrative verdicts into a report; None verdicts count as failed."""
     scored = [v for v in verdicts if v is not None]
@@ -177,6 +197,7 @@ def aggregate_verdicts(
     )
     return JudgeReport(
         judge_model=judge_model,
+        generator_model=generator_model,
         n_scored=n,
         means=means,
         pct_ge_4=pct_ge_4,
@@ -194,7 +215,17 @@ def render_markdown(report: JudgeReport) -> str:
         "**Source:** AI evaluation scores, NOT human validation. Future human "
         "calibration of the AI review remains separate work.",
         "",
+    ]
+    if report.self_evaluation:
+        lines += [
+            "**Self evaluation:** the same model wrote and scored these Coach "
+            "Narratives. The scores are too high. Do not read them as an "
+            "independent measurement.",
+            "",
+        ]
+    lines += [
         f"- Evaluator model: `{report.judge_model}`",
+        f"- Generator model: `{report.generator_model or 'unrecorded'}`",
         f"- Scored: {report.n_scored}",
         f"- Failed (no valid verdict): {report.n_failed}",
         f"- Flagged for human review (any dimension < {REVIEW_THRESHOLD}): "
@@ -236,6 +267,52 @@ def _load_manifest(manifest_path: Path) -> list[tuple[WeeklyDigest, CoachNarrati
     return pairs
 
 
+def _load_generator_model(manifest_path: Path) -> str | None:
+    """Read the generator model id recorded on the manifest entries.
+
+    The driver script records ``generator_model`` on every entry. Returns
+    ``None`` when the manifest predates that field or the entries disagree,
+    so the report says ``unrecorded`` instead of claiming a wrong model.
+    """
+    raw = json.loads(manifest_path.read_text())
+    recorded = {
+        item.get("generator_model")
+        for item in raw
+        if isinstance(item, dict) and item.get("generator_model")
+    }
+    if len(recorded) != 1:
+        return None
+    return str(next(iter(recorded)))
+
+
+def _verdict_records(
+    pairs: list[tuple[WeeklyDigest, CoachNarrative]],
+    verdicts: list[JudgeVerdict | None],
+) -> list[dict[str, object]]:
+    """Pair each verdict with its Persona and week, for the comparison report."""
+    records: list[dict[str, object]] = []
+    for (digest, _narrative), verdict in zip(pairs, verdicts, strict=True):
+        record: dict[str, object] = {
+            "key": f"{digest.persona_id}:{digest.week_end}",
+            "persona_id": digest.persona_id,
+            "week_end": digest.week_end,
+            "response_mode": digest.response_mode,
+        }
+        if verdict is None:
+            record["verdict"] = None
+        else:
+            record["verdict"] = {
+                **{dim: getattr(verdict, dim) for dim in SCORE_DIMENSIONS},
+                "question_is_open_and_relevant": (
+                    verdict.question_is_open_and_relevant
+                ),
+                "needs_review": verdict.needs_review,
+                "justification": verdict.justification,
+            }
+        records.append(record)
+    return records
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run Coach Digest Evals with an AI evaluator."
@@ -253,10 +330,25 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Authorize paid evaluator LLM calls. Without it, this prints the plan "
         "and makes no calls.",
     )
+    parser.add_argument(
+        "--judge-provider",
+        default=None,
+        help="Evaluator provider (openai or gemini). Defaults to "
+        "TWINKL_COACH_PROVIDER. Set a provider other than the generator's to "
+        "avoid self evaluation.",
+    )
+    parser.add_argument(
+        "--judge-model",
+        default=None,
+        help="Evaluator model id. Defaults to TWINKL_COACH_MODEL.",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
+    from dotenv import load_dotenv
+
+    load_dotenv()
     args = _build_parser().parse_args(argv)
     pairs = _load_manifest(args.manifest)
 
@@ -268,14 +360,25 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
 
-    llm_complete = build_llm_complete()
+    llm_complete = build_llm_complete(
+        provider=args.judge_provider,
+        model=args.judge_model,
+    )
     if llm_complete is None:
         print("No evaluator provider available (missing API key). Aborting.")
         return 1
 
-    judge_model = "unknown"  # provider resolves its own model internally
+    judge_model = resolve_coach_model(
+        provider=args.judge_provider,
+        model=args.judge_model,
+    )
+    generator_model = _load_generator_model(args.manifest)
     verdicts = asyncio.run(_run_sample(pairs, llm_complete))
-    report = aggregate_verdicts(verdicts, judge_model=judge_model)
+    report = aggregate_verdicts(
+        verdicts,
+        judge_model=judge_model,
+        generator_model=generator_model,
+    )
 
     if args.out is not None:
         args.out.mkdir(parents=True, exist_ok=True)
@@ -283,6 +386,9 @@ def main(argv: list[str] | None = None) -> int:
             json.dumps(report.to_dict(), indent=2) + "\n"
         )
         (args.out / "report.md").write_text(render_markdown(report))
+        (args.out / "verdicts.json").write_text(
+            json.dumps(_verdict_records(pairs, verdicts), indent=2) + "\n"
+        )
 
     print(render_markdown(report))
     return 0
