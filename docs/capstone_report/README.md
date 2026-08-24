@@ -28,8 +28,10 @@ a submitted milestone file.
 ## Pre-submission checklist
 
 - Add final figures and tables.
-- Add the completed replacement Coach Digest Validations and Coach Digest Evals
-  reports for the five deployed Persona replays.
+- Cite the completed [Coach Digest sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md),
+  [Coach Digest Validations](../../logs/experiments/reports/coach_digest_validations_20260824/report.md),
+  and [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
+  for the five deployed Persona replays.
 - Complete or move to future work the tracked Coach Digest feedback and
   longitudinal Core Value history additions.
 - Complete the citation-to-claim audit.

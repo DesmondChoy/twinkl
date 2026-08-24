@@ -472,19 +472,20 @@ learned routing policies.
 
 ## Current Coach Digest Batch Status
 
-Coach Digest Validations and Coach Digest Evals are implemented. The previous
-five-response development result was removed because its persona roster did not
-match the five deployed Persona replays. A replacement key-week evaluation for
-those five Personas is pending. Coach Digest Evals are AI review, not human
-validation or a fresh final test.
+The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
+uses one key week for each deployed Persona replay. The same five accepted
+responses appear in the public scenario bundles and evaluation manifest. All
+five passed every Coach Digest Validation. Coach Digest Evals scored mean
+correctness `4.80`, specificity `5.00`, non-prescriptive tone `5.00`, and
+tension honesty `4.60`; all reflective questions passed, with no failed
+verdicts or review flags. Luna-none generated and evaluated the responses.
+These scores are same-model AI review, not human validation or a fresh final
+test.
 
 ## Remaining Work
 
-1. Generate and evaluate one key-week Coach Digest response for each deployed
-   Persona replay.
-2. Show the same five evaluated responses in the React app.
-3. Complete future human calibration of the AI review.
-4. Capture the user's perceived-accuracy rating and make it queryable.
+1. Complete future human calibration of the AI review.
+2. Capture the user's perceived-accuracy rating and make it queryable.
 
 Persisting full VIF Critic Predictions and adding independent disagreement
 review are not planned for the time-boxed capstone. A fresh final test and

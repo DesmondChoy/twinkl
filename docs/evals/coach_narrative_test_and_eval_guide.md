@@ -73,17 +73,17 @@ uv run mypy src/evals            # when type behavior changed
 
 ## 2. Automated batch evaluation (no API calls)
 
-Runs `validate_weekly_digest_narrative()` over every Coach Digest response in a persisted
-Weekly Drift Detection output parquet and reports per-check pass rates against the targets in
+Runs `validate_weekly_digest_narrative()` over the exact responses in the public
+scenario sample manifest and reports per-check pass rates against the targets in
 [`explanation_quality_eval.md`](./explanation_quality_eval.md).
 
 ```sh
 uv run python -m src.evals.coach_digest_validations \
-  --parquet logs/exports/weekly_digests/weekly_digests.parquet \
+  --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json \
   --out logs/experiments/reports/coach_digest_validations_20260824
 ```
 
-- `--parquet` defaults to `logs/exports/weekly_digests/weekly_digests.parquet`.
+- Use `--parquet` only for a separate persisted-output batch.
 - `--out` writes `metrics.json` and `report.md`; omit it to only print the
   summary.
 - Rows with no response are skipped; unparseable responses are reported under
@@ -111,41 +111,33 @@ It does not use the legacy
 
 ### 3a. Build the sample (approved path)
 
-The evaluator should score responses as the approved path actually produces them,
-not leftover demo-tool outputs. Regenerate an explicit Persona roster through
-`run_weekly_drift_coach_cycle` and rebuild the manifest:
+The evaluator must score the same responses that the React app shows. Read the
+stored Weekly Drift Detection output from each scenario key week, generate the
+five responses, rebuild the public bundles, and then build the manifest from
+those bundles:
 
 ```sh
 # Dry run — prints the plan, makes no calls:
 .venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-  --personas 11de77e8
-# OR
-uv run python scripts/coach/generate_approved_judge_sample.py \
-  --personas 11de77e8
+  --personas 11de77e8 23d101f8 8f83c818 988d1a65 02fb94f3 \
+  --reuse-scenario-key-weeks
 
-# Real run — paid Weekly Drift Reviewer calls (one per week of history per
-# persona) plus one Coach Digest response call per persona; overwrites their
-# rows in the Weekly Drift Detection output parquet, then rebuilds the evaluation manifest:
+# Real run — one paid Coach Digest call per Persona plus validation-guided
+# retries. This command makes zero Weekly Drift Reviewer calls:
 .venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-  --personas 11de77e8 --execute
-
-# Smoke-test one persona first:
-.venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-  --personas 11de77e8 --execute
-
-# Rebuild only Coach Digest responses from stored Weekly Drift Detection output:
-.venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-  --personas 11de77e8 --reuse-weekly-drift-output --execute
+  --personas 11de77e8 23d101f8 8f83c818 988d1a65 02fb94f3 \
+  --reuse-scenario-key-weeks --execute
 ```
 
 The runner requires an explicit Persona roster. It has no default roster.
 
 Each Coach Digest call writes a separate timestamped
-`*.coach_diagnostic.json` file beside the Weekly Drift Detection output. A new
-attempt creates a new file. The file keeps raw rejected output and names the
-failed parse, schema, or Coach Digest Validation stage. For OpenAI calls, it
-also keeps token usage, calculated published-rate cost, and request latency.
-Rejected output does not enter the evaluation manifest.
+`*.coach_diagnostic.json` file under the sample report directory. A new attempt
+creates a new file. The file keeps raw rejected output and names the failed
+parse, schema, or Coach Digest Validation stage. For OpenAI calls, it also
+keeps token usage, calculated published-rate cost, request latency, and the
+response ID. Rejected output does not enter the React fixtures or evaluation
+manifest.
 
 The Coach Digest provider comes from `TWINKL_COACH_PROVIDER` (`openai` or
 `gemini`; default `openai`). Set the matching API key in `.env`
@@ -177,13 +169,12 @@ request latency.
 
 ## Provenance and honesty notes
 
-- Record the parquet source, sample manifest, evaluator provider/model, and row/
+- Record the public bundle source, sample manifest, evaluator provider/model, and row/
   sample counts with every committed report.
 - Do not treat AI evaluation scores as human validation. State the source
   wherever it affects the conclusion.
-- The Weekly Drift Detection output parquet under `logs/exports/weekly_digests/` is a local,
-  gitignored artifact; regenerate it via the approved path rather than assuming
-  its rows reflect current behavior.
+- Build the deployed-Persona manifest from the rebuilt public scenario bundles.
+  Do not evaluate a separate response copy.
 
 ---
 

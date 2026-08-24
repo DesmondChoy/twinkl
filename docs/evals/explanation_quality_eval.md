@@ -36,8 +36,9 @@ This evaluation validates that explanations feel accurate and actionable to user
   [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
 - Coach Digest Validations batch reporting: A batch runner
   ([`src/evals/coach_digest_validations.py`](../../src/evals/coach_digest_validations.py))
-  runs `validate_weekly_digest_narrative()` over the persisted Weekly Drift Detection output
-  parquet and reports per-check pass rates against targets.
+  runs `validate_weekly_digest_narrative()` over the exact public-scenario
+  sample manifest or the persisted Weekly Drift Detection output parquet and
+  reports per-check pass rates against targets.
 - Coach Digest Evals: An AI evaluator
   ([`src/evals/coach_narrative_judge.py`](../../src/evals/coach_narrative_judge.py),
   prompt [`prompts/coach_narrative_judge.yaml`](../../prompts/coach_narrative_judge.yaml))
@@ -50,11 +51,21 @@ This evaluation validates that explanations feel accurate and actionable to user
 
 ### Current Result Status
 
-The previous five-response development result was removed because its persona
-roster did not match the five deployed Persona replays. A replacement result is
-pending. It will use one key week for each deployed Persona. It will apply Coach
-Digest Validations and Coach Digest Evals to the same responses that the React
-app shows. Coach Digest Evals are AI review, not human validation.
+The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
+contains one key-week response for each deployed Persona. The evaluation
+manifest reads the exact responses from the rebuilt public scenario bundles.
+All five responses passed groundedness, non-circularity, raw value leakage,
+current-state claims, and length checks. The [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
+scored mean correctness `4.80`, specificity `5.00`, non-prescriptive tone
+`5.00`, and tension honesty `4.60`. All reflective questions passed. No
+evaluator call failed, and no response had a review flag.
+
+Generation used seven Luna-none calls because Meera and Noor each needed one
+validation-guided retry. The rejected raw outputs and API diagnostics are
+preserved. The final AI review used five Luna-none calls. Across generation and
+evaluation, the 12 calls used 16,547 input tokens and 1,696 output tokens. The
+calculated published-rate cost was `$0.00607555`, and total request latency was
+`33.707` seconds. This cost is not a billing export.
 
 ### What's Missing
 
@@ -63,11 +74,11 @@ app shows. Coach Digest Evals are AI review, not human validation.
 - **Human calibration:** No protocol or κ calculation for either explanation type
 
 ### Blocking Dependencies
-Coach Digest Validations, Coach Digest Evals, and approved-path evidence
-provenance are implemented. The replacement result for the five deployed
-Persona replays is pending. It will not establish product usefulness. Deeper
-end-to-end explanation evaluation still requires future human calibration. VIF
-Critic outputs belong to offline review and retraining.
+Coach Digest Validations, Coach Digest Evals, the five-response replacement,
+and approved-path evidence provenance are complete. This synthetic sample does
+not establish product usefulness. Deeper end-to-end explanation evaluation
+still requires future human calibration. VIF Critic outputs belong to offline
+review and retraining.
 
 ### Implementation Scope
 
@@ -117,8 +128,8 @@ different from the plan you had in mind?"
 - Avoids prescriptive or judgmental language
 
 The approved path lives in `src/coach/weekly_drift_runtime.py` and
-`src/coach/weekly_digest.py`. Automated checks and AI review are implemented.
-The replacement Persona result and user-study calibration remain pending.
+`src/coach/weekly_digest.py`. Automated checks, AI review, and the replacement
+Persona result are complete. User-study calibration remains pending.
 
 ---
 
@@ -295,11 +306,10 @@ LLM-Judge produces rationales for N Journal Entries
 1. **Subjectivity**: "Felt accurate" is inherently subjective
 2. **Small sample**: 5-10 users limits statistical power
 3. **Hawthorne effect**: Users may rate higher knowing researchers will see
-4. **Same-model review**: The replacement will use Luna-none for both response
-   generation and Coach Digest Evals. Correlated errors can make the scores too
-   favorable.
-5. **Synthetic sample**: The replacement will cover five selected synthetic
-   responses. It will not be a fresh final test or evidence of user usefulness.
+4. **Same-model review**: Luna-none generated and evaluated the responses.
+   Correlated errors can make the scores too favorable.
+5. **Synthetic sample**: The replacement covers five selected synthetic
+   responses. It is not a fresh final test or evidence of user usefulness.
 
 **Mitigations:**
 - Use consistent Likert anchors with behavioral definitions

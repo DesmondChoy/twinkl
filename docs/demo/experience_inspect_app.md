@@ -17,9 +17,12 @@ The five deterministic persona replays now load into the shared React session
 with manual next-step replay, previous-week navigation, optional automatic
 replay and pause, restart, Jump to key moment, reduced-motion behavior,
 no-future-data projection, and browser-side scenario hash verification. The
-release quality gate is implemented. Current capstone work is current Coach
-Digest evaluation results, Coach Digest feedback capture,
-longitudinal Core Value history, and the final professor walkthrough. The
+release quality gate is implemented. The five Persona key-week Coach Digest
+responses now match the [current evaluation
+manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json).
+Current capstone work is
+Coach Digest feedback capture, longitudinal Core Value history, and the final
+professor walkthrough. The
 optional live rerun does not block the final walkthrough. The versioned
 React-Python boundary, JSON Schema, and
 canonical fixtures are implemented in
