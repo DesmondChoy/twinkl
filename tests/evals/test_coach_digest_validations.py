@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 from src.evals.coach_digest_validations import (
+    evaluate_manifest,
     evaluate_rows,
     render_markdown,
 )
@@ -85,7 +86,7 @@ def test_evaluate_rows_aggregates_pass_rates():
         _row(persona_id="cccc", week_end="2025-01-07", narrative=None),
     ]
 
-    report = evaluate_rows(rows, parquet_source="in-memory")
+    report = evaluate_rows(rows, input_source="in-memory")
 
     assert report.n_rows == 3
     assert report.n_with_narrative == 2
@@ -109,7 +110,7 @@ def test_evaluate_rows_skips_unparseable_narrative():
         bad,
     ]
 
-    report = evaluate_rows(rows, parquet_source="in-memory")
+    report = evaluate_rows(rows, input_source="in-memory")
 
     assert report.n_with_narrative == 2
     assert report.n_evaluated == 1
@@ -118,7 +119,7 @@ def test_evaluate_rows_skips_unparseable_narrative():
 
 def test_render_markdown_contains_source_disclaimer():
     rows = [_row(persona_id="aaaa", week_end="2025-01-07", narrative=_CLEAN)]
-    report = evaluate_rows(rows, parquet_source="in-memory")
+    report = evaluate_rows(rows, input_source="in-memory")
 
     markdown = render_markdown(report)
 
@@ -139,7 +140,7 @@ def test_evaluate_rows_defaults_to_approved_path_only():
         ),
     ]
 
-    report = evaluate_rows(rows, parquet_source="in-memory")
+    report = evaluate_rows(rows, input_source="in-memory")
 
     # Default filter keeps only the approved weekly_drift_reviewer row.
     assert report.n_rows == 2
@@ -162,7 +163,7 @@ def test_evaluate_rows_all_sources_includes_vif_runtime():
         ),
     ]
 
-    report = evaluate_rows(rows, parquet_source="in-memory", signal_source=None)
+    report = evaluate_rows(rows, input_source="in-memory", signal_source=None)
 
     assert report.n_rows_after_filter == 2
     assert report.signal_source_filter is None
@@ -171,8 +172,54 @@ def test_evaluate_rows_all_sources_includes_vif_runtime():
 
 def test_render_markdown_reports_filter_line():
     rows = [_row(persona_id="aaaa", week_end="2025-01-07", narrative=_CLEAN)]
-    report = evaluate_rows(rows, parquet_source="in-memory")
+    report = evaluate_rows(rows, input_source="in-memory")
 
     markdown = render_markdown(report)
 
     assert "Signal source filter: `weekly_drift_reviewer`" in markdown
+
+
+def test_evaluate_manifest_uses_exact_digest_response_pairs(tmp_path):
+    digest = {
+        "persona_id": "aaaa",
+        "persona_name": "Casey",
+        "week_start": "2025-01-01",
+        "week_end": "2025-01-07",
+        "response_mode": "no_active_drift",
+        "mode_source": "drift_detector",
+        "mode_rationale": "No active Drift is confirmed.",
+        "signal_source": "weekly_drift_reviewer",
+        "n_entries": 1,
+        "overall_mean": None,
+        "overall_uncertainty": None,
+        "core_values": ["benevolence"],
+        "goal_context": None,
+        "drift_states": {"benevolence": "no_active_drift"},
+        "drift_details": {},
+        "state_comparisons": [],
+        "drift_reasons": [],
+        "top_tensions": [],
+        "top_strengths": [],
+        "dimensions": [],
+        "evidence": [
+            {
+                "date": "2025-01-03",
+                "t_index": 1,
+                "direction": "context",
+                "dimensions": ["benevolence"],
+                "excerpt": "called my mom and helped a colleague debug",
+                "score_mean": None,
+            }
+        ],
+    }
+    manifest_path = tmp_path / "judge_sample_manifest.json"
+    manifest_path.write_text(
+        json.dumps([{"digest": digest, "narrative": _CLEAN}]),
+        encoding="utf-8",
+    )
+
+    report = evaluate_manifest(manifest_path)
+
+    assert report.input_kind == "public_scenario_manifest"
+    assert report.n_evaluated == 1
+    assert report.checks["groundedness"].passed == 1

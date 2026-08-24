@@ -32,6 +32,7 @@ from prompts import load_prompt
 from src.coach.llm_client import (
     DEFAULT_GEMINI_MODEL,
     DEFAULT_OPENAI_MODEL,
+    DEFAULT_OPENAI_REASONING_EFFORT,
     OPENAI_LUNA_PRICING_SOURCE,
     build_llm_complete,
     summarize_llm_call_metrics,
@@ -138,6 +139,7 @@ class JudgeReport:
 
     judge_model: str
     n_scored: int
+    judge_reasoning_effort: str = DEFAULT_OPENAI_REASONING_EFFORT
     means: dict[str, float] = field(default_factory=dict)
     pct_ge_4: dict[str, float] = field(default_factory=dict)
     question_open_rate: float = 0.0
@@ -156,6 +158,11 @@ class JudgeReport:
                 "these as ground truth."
             ),
             "judge_model": self.judge_model,
+            "judge_reasoning_effort": self.judge_reasoning_effort,
+            "same_model_review_limitation": (
+                "Luna-none generated and evaluated these responses. Correlated "
+                "errors can make the AI review too favorable."
+            ),
             "n_scored": self.n_scored,
             "n_failed": self.n_failed,
             "means": {k: round(v, 3) for k, v in self.means.items()},
@@ -196,6 +203,7 @@ def aggregate_verdicts(
     judge_model: str,
     call_metrics: list[LLMCallMetrics] | None = None,
     sample_labels: list[str] | None = None,
+    judge_reasoning_effort: str = DEFAULT_OPENAI_REASONING_EFFORT,
 ) -> JudgeReport:
     """Aggregate per-narrative verdicts into a report; None verdicts count as failed."""
     scored = [v for v in verdicts if v is not None]
@@ -214,11 +222,20 @@ def aggregate_verdicts(
     ]
     if len(labels) != len(verdicts):
         raise ValueError("Sample labels must match the number of verdicts.")
+    metrics = list(call_metrics or [])
     sample_results: list[dict[str, object]] = []
-    for label, verdict in zip(labels, verdicts, strict=True):
+    for index, (label, verdict) in enumerate(zip(labels, verdicts, strict=True)):
+        api_call = (
+            metrics[index].model_dump(mode="json") if index < len(metrics) else None
+        )
         if verdict is None:
             sample_results.append(
-                {"sample_id": label, "status": "failed", "needs_review": True}
+                {
+                    "sample_id": label,
+                    "status": "failed",
+                    "needs_review": True,
+                    "api_call": api_call,
+                }
             )
             continue
         sample_results.append(
@@ -227,17 +244,19 @@ def aggregate_verdicts(
                 "status": "scored",
                 **verdict.model_dump(mode="json"),
                 "needs_review": verdict.needs_review,
+                "api_call": api_call,
             }
         )
     return JudgeReport(
         judge_model=judge_model,
         n_scored=n,
+        judge_reasoning_effort=judge_reasoning_effort,
         means=means,
         pct_ge_4=pct_ge_4,
         question_open_rate=question_open_rate,
         n_flagged=sum(1 for v in scored if v.needs_review),
         n_failed=sum(1 for v in verdicts if v is None),
-        call_metrics=list(call_metrics or []),
+        call_metrics=metrics,
         sample_results=sample_results,
     )
 
@@ -253,6 +272,9 @@ def render_markdown(report: JudgeReport) -> str:
         "calibration of the AI review remains separate work.",
         "",
         f"- Evaluator model: `{report.judge_model}`",
+        f"- Evaluator reasoning effort: `{report.judge_reasoning_effort}`",
+        "- Same-model-review limitation: Luna-none generated and evaluated the "
+        "responses. Correlated errors can make this AI review too favorable.",
         f"- Scored: {report.n_scored}",
         f"- Failed (no valid verdict): {report.n_failed}",
         f"- Flagged for human review (any dimension < {REVIEW_THRESHOLD}): "
@@ -430,6 +452,7 @@ def main(argv: list[str] | None = None) -> int:
         judge_model=judge_model,
         call_metrics=call_metrics,
         sample_labels=sample_labels,
+        judge_reasoning_effort=DEFAULT_OPENAI_REASONING_EFFORT,
     )
 
     if args.out is not None:

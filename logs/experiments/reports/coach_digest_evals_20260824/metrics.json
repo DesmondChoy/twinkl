@@ -1,0 +1,231 @@
+{
+  "eval": "coach_digest_evals",
+  "source": "ai_review",
+  "note": "AI evaluation scores, NOT human validation. Future human calibration of the AI review is required before treating these as ground truth.",
+  "judge_model": "gpt-5.6-luna",
+  "judge_reasoning_effort": "none",
+  "same_model_review_limitation": "Luna-none generated and evaluated these responses. Correlated errors can make the AI review too favorable.",
+  "n_scored": 5,
+  "n_failed": 0,
+  "means": {
+    "correctness": 4.8,
+    "specificity": 5.0,
+    "non_prescriptive_tone": 5.0,
+    "tension_honesty": 4.6
+  },
+  "mean_target": 3.5,
+  "meets_mean_target": {
+    "correctness": true,
+    "specificity": true,
+    "non_prescriptive_tone": true,
+    "tension_honesty": true
+  },
+  "pct_ge_4": {
+    "correctness": 1.0,
+    "specificity": 1.0,
+    "non_prescriptive_tone": 1.0,
+    "tension_honesty": 0.8
+  },
+  "question_open_rate": 1.0,
+  "n_flagged_for_review": 0,
+  "score_distributions": {
+    "correctness": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 1,
+      "5": 4
+    },
+    "specificity": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 5
+    },
+    "non_prescriptive_tone": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 5
+    },
+    "tension_honesty": {
+      "1": 0,
+      "2": 0,
+      "3": 1,
+      "4": 0,
+      "5": 4
+    }
+  },
+  "sample_results": [
+    {
+      "sample_id": "11de77e8:2025-10-19",
+      "status": "scored",
+      "correctness": 5,
+      "specificity": 5,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 5,
+      "question_is_open_and_relevant": true,
+      "justification": "The response accurately cites the tech lead offer, the quoted acceptance rationale, and others\u2019 reactions, while correctly preserving the insufficient-evidence limit and asking an open, relevant question without prescribing action.",
+      "needs_review": false
+    },
+    {
+      "sample_id": "23d101f8:2025-09-21",
+      "status": "scored",
+      "correctness": 4,
+      "specificity": 5,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 3,
+      "question_is_open_and_relevant": true,
+      "justification": "The response accurately cites the 2025-09-19 teaching results and the 2025-09-12 job-posting evidence, remains reflective, and explicitly says no current tension is confirmed, but its claim that an unfinished question or contrast remains present risks implying a current tension despite both values being classified no_active_drift.",
+      "needs_review": false
+    },
+    {
+      "sample_id": "8f83c818:2025-07-06",
+      "status": "scored",
+      "correctness": 5,
+      "specificity": 5,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 5,
+      "question_is_open_and_relevant": true,
+      "justification": "The response accurately reflects the active Universalism drift, cites the July 1 and July 5 entries while appropriately connecting the June 25 \u201cI said okay,\u201d and offers a specific, non-directive question without claiming unsupported events or resolution.",
+      "needs_review": false
+    },
+    {
+      "sample_id": "988d1a65:2025-03-23",
+      "status": "scored",
+      "correctness": 5,
+      "specificity": 5,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 5,
+      "question_is_open_and_relevant": true,
+      "justification": "It accurately cites the client-call correction, sharper delivery, client noticing, and quiet Sunday details; appropriately describes active drift as ended with the documented not_conflict reason without claiming success, and asks an open, relevant question.",
+      "needs_review": false
+    },
+    {
+      "sample_id": "02fb94f3:2025-04-20",
+      "status": "scored",
+      "correctness": 5,
+      "specificity": 5,
+      "non_prescriptive_tone": 5,
+      "tension_honesty": 5,
+      "question_is_open_and_relevant": true,
+      "justification": "The response accurately quotes the journal entries, reflects the documented Self Direction and Tradition context, explicitly acknowledges the limited evidence under more_reflection_needed without claiming Drift, and asks an open, relevant question without prescribing action.",
+      "needs_review": false
+    }
+  ],
+  "api_usage": {
+    "n_calls": 5,
+    "n_calls_with_usage": 5,
+    "input_tokens": 6921,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 5937,
+    "output_tokens": 498,
+    "total_tokens": 7419,
+    "calculated_cost_usd": 0.00227865,
+    "total_latency_seconds": 11.041602207813412,
+    "mean_latency_seconds": 2.2083204415626825,
+    "median_latency_seconds": 2.213038207963109,
+    "max_latency_seconds": 2.4290158750955015
+  },
+  "api_calls": [
+    {
+      "schema_version": "1.0.0",
+      "call_label": "coach_eval:11de77e8:2025-10-19",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "service_tier": "default",
+      "response_id": "resp_09db8b3209f97a87016a8c5541d01087d08afcb50013ce00e1",
+      "status": "completed",
+      "latency_seconds": 2.213038207963109,
+      "input_tokens": 1801,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 1798,
+      "output_tokens": 90,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 1891,
+      "calculated_cost_usd": 0.0005581,
+      "error_type": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "call_label": "coach_eval:23d101f8:2025-09-21",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "service_tier": "default",
+      "response_id": "resp_058b27f0eeefdd0a016a8c5543a15c87d08173b51c27335a30",
+      "status": "completed",
+      "latency_seconds": 1.9871263750828803,
+      "input_tokens": 1711,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 1708,
+      "output_tokens": 118,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 1829,
+      "calculated_cost_usd": 0.0005692,
+      "error_type": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "call_label": "coach_eval:8f83c818:2025-07-06",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "service_tier": "default",
+      "response_id": "resp_0f044201d50bc516016a8c5545b09887d099276ed0876054cb",
+      "status": "completed",
+      "latency_seconds": 2.4290158750955015,
+      "input_tokens": 972,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 100,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 1072,
+      "calculated_cost_usd": 0.0003144,
+      "error_type": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "call_label": "coach_eval:988d1a65:2025-03-23",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "service_tier": "default",
+      "response_id": "resp_097a46c9c0d1d06e016a8c55481b5087d0889a687cb3ca17af",
+      "status": "completed",
+      "latency_seconds": 2.0908712497912347,
+      "input_tokens": 1337,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 1334,
+      "output_tokens": 96,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 1433,
+      "calculated_cost_usd": 0.0004493,
+      "error_type": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "call_label": "coach_eval:02fb94f3:2025-04-20",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "none",
+      "service_tier": "default",
+      "response_id": "resp_029ad9f837fc76e9016a8c554a3edc87d0a87405a0f8e36769",
+      "status": "completed",
+      "latency_seconds": 2.3215504998806864,
+      "input_tokens": 1100,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 1097,
+      "output_tokens": 94,
+      "reasoning_output_tokens": 0,
+      "total_tokens": 1194,
+      "calculated_cost_usd": 0.00038765,
+      "error_type": null
+    }
+  ],
+  "pricing_source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+  "cost_note": "Calculated from response token usage and published standard-tier rates. This is not an OpenAI billing export."
+}

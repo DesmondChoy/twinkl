@@ -1,0 +1,132 @@
+{
+  "eval": "coach_digest_validations",
+  "source": "mechanical_code_checks",
+  "note": "Coach Digest Validations, not human validation. Surface properties only; correctness/tone are out of scope.",
+  "input_source": "logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json",
+  "input_kind": "public_scenario_manifest",
+  "signal_source_filter": "weekly_drift_reviewer",
+  "n_rows": 5,
+  "n_rows_after_filter": 5,
+  "n_with_narrative": 5,
+  "n_evaluated": 5,
+  "checks": {
+    "groundedness": {
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1.0,
+      "target": 0.7,
+      "meets_target": true
+    },
+    "non_circularity": {
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1.0,
+      "target": 0.95,
+      "meets_target": true
+    },
+    "value_leakage": {
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1.0,
+      "target": null,
+      "meets_target": null
+    },
+    "state_claims": {
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1.0,
+      "target": null,
+      "meets_target": null
+    },
+    "length": {
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1.0,
+      "target": 0.9,
+      "meets_target": true
+    }
+  },
+  "skipped_persona_weeks": [],
+  "sample_results": [
+    {
+      "sample_id": "11de77e8:2025-10-19",
+      "scenario_id": "two-values-lukas",
+      "status": "evaluated",
+      "weekly_drift_input_sha256": "78eb37ffd9e3d4ffad315cf2c8967d92301a8382698072e397fe758fb3ce1112",
+      "coach_response_sha256": "e1ae4538af5bd7096c2fd339925b0e50ffcf965aceef6c387a5360bbc2e85586",
+      "checks": {
+        "groundedness": true,
+        "non_circularity": true,
+        "value_leakage": true,
+        "state_claims": true,
+        "length": true
+      },
+      "failed_checks": []
+    },
+    {
+      "sample_id": "23d101f8:2025-09-21",
+      "scenario_id": "stable-meera",
+      "status": "evaluated",
+      "weekly_drift_input_sha256": "5e286b43935cc00289dbef0e32992c2b666b35f0aa03599cc40208ace27323b0",
+      "coach_response_sha256": "ffdb7c31376af4a51b439206d2b1217ad71ce46d4186dc03aff22d84ed961046",
+      "checks": {
+        "groundedness": true,
+        "non_circularity": true,
+        "value_leakage": true,
+        "state_claims": true,
+        "length": true
+      },
+      "failed_checks": []
+    },
+    {
+      "sample_id": "8f83c818:2025-07-06",
+      "scenario_id": "active-wei-jun",
+      "status": "evaluated",
+      "weekly_drift_input_sha256": "79146572544d9b56b906c3340cb9fb229a881adc3da520300a3cbb5c587576ae",
+      "coach_response_sha256": "0b7bfcb04e530026944f443f7cb375ea807f58ca5f9e4e3212530096c07e0bec",
+      "checks": {
+        "groundedness": true,
+        "non_circularity": true,
+        "value_leakage": true,
+        "state_claims": true,
+        "length": true
+      },
+      "failed_checks": []
+    },
+    {
+      "sample_id": "988d1a65:2025-03-23",
+      "scenario_id": "recovered-marc",
+      "status": "evaluated",
+      "weekly_drift_input_sha256": "446a2c9005ba4082c2165f6117836f4e6bd02584ea740d311d95967099c6f581",
+      "coach_response_sha256": "793424db0f1a16075b83861e0f78842f57564662264b7a22dcc979862d3168f3",
+      "checks": {
+        "groundedness": true,
+        "non_circularity": true,
+        "value_leakage": true,
+        "state_claims": true,
+        "length": true
+      },
+      "failed_checks": []
+    },
+    {
+      "sample_id": "02fb94f3:2025-04-20",
+      "scenario_id": "uncertain-noor",
+      "status": "evaluated",
+      "weekly_drift_input_sha256": "c01de37c0427c0066dd0539d9b9438363eeff4bab23c1702de08f3732da188bb",
+      "coach_response_sha256": "668686b6542c7479695e4cd99cadfd0f6e7a87ad2ccfc3e7e05a69a3a0a6fe5b",
+      "checks": {
+        "groundedness": true,
+        "non_circularity": true,
+        "value_leakage": true,
+        "state_claims": true,
+        "length": true
+      },
+      "failed_checks": []
+    }
+  ],
+  "api_usage": {
+    "n_calls": 0,
+    "calculated_cost_usd": 0.0,
+    "total_latency_seconds": 0.0
+  }
+}

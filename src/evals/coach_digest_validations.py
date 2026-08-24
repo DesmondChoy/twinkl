@@ -78,7 +78,8 @@ class CheckSummary:
 class CoachDigestValidationReport:
     """Coach Digest Validations report for a Weekly Drift Detection output set."""
 
-    parquet_source: str
+    input_source: str
+    input_kind: str
     n_rows: int
     n_with_narrative: int
     n_evaluated: int
@@ -86,6 +87,7 @@ class CoachDigestValidationReport:
     n_rows_after_filter: int = 0
     checks: dict[str, CheckSummary] = field(default_factory=dict)
     skipped: list[str] = field(default_factory=list)
+    sample_results: list[dict[str, object]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -95,7 +97,8 @@ class CoachDigestValidationReport:
                 "Coach Digest Validations, not human validation. Surface "
                 "properties only; correctness/tone are out of scope."
             ),
-            "parquet_source": self.parquet_source,
+            "input_source": self.input_source,
+            "input_kind": self.input_kind,
             "signal_source_filter": self.signal_source_filter,
             "n_rows": self.n_rows,
             "n_rows_after_filter": self.n_rows_after_filter,
@@ -105,6 +108,7 @@ class CoachDigestValidationReport:
                 name: summary.to_dict() for name, summary in self.checks.items()
             },
             "skipped_persona_weeks": self.skipped,
+            "sample_results": self.sample_results,
             "api_usage": {
                 "n_calls": 0,
                 "calculated_cost_usd": 0.0,
@@ -151,7 +155,7 @@ def _reconstruct_digest(row: dict[str, object]) -> WeeklyDigest:
 
 def evaluate_rows(
     rows: list[dict[str, object]],
-    parquet_source: str,
+    input_source: str,
     signal_source: str | None = APPROVED_SIGNAL_SOURCE,
 ) -> CoachDigestValidationReport:
     """Run Coach Digest Validations over parquet-shaped digest rows.
@@ -164,6 +168,7 @@ def evaluate_rows(
     n_with_narrative = 0
     n_evaluated = 0
     skipped: list[str] = []
+    sample_results: list[dict[str, object]] = []
 
     total_rows = len(rows)
     if signal_source is not None:
@@ -180,6 +185,7 @@ def evaluate_rows(
             digest = _reconstruct_digest(row)
         except Exception:
             skipped.append(label)
+            sample_results.append({"sample_id": label, "status": "skipped"})
             continue
 
         validation = validate_weekly_digest_narrative(digest, narrative)
@@ -189,6 +195,18 @@ def evaluate_rows(
                 counts[check.name][1] += 1
                 if check.passed:
                     counts[check.name][0] += 1
+        sample_results.append(
+            {
+                "sample_id": label,
+                "status": "evaluated",
+                "checks": {
+                    check.name: check.passed for check in validation.checks
+                },
+                "failed_checks": [
+                    check.name for check in validation.checks if not check.passed
+                ],
+            }
+        )
 
     checks = {
         name: CheckSummary(
@@ -200,7 +218,8 @@ def evaluate_rows(
         for name in CHECK_TARGETS
     }
     return CoachDigestValidationReport(
-        parquet_source=parquet_source,
+        input_source=input_source,
+        input_kind="parquet",
         n_rows=total_rows,
         n_rows_after_filter=len(rows),
         signal_source_filter=signal_source,
@@ -208,6 +227,7 @@ def evaluate_rows(
         n_evaluated=n_evaluated,
         checks=checks,
         skipped=skipped,
+        sample_results=sample_results,
     )
 
 
@@ -219,7 +239,83 @@ def evaluate_parquet(
     frame = pl.read_parquet(parquet_path)
     rows = frame.to_dicts()
     return evaluate_rows(
-        rows, parquet_source=str(parquet_path), signal_source=signal_source
+        rows, input_source=str(parquet_path), signal_source=signal_source
+    )
+
+
+def evaluate_manifest(
+    manifest_path: Path,
+    signal_source: str | None = APPROVED_SIGNAL_SOURCE,
+) -> CoachDigestValidationReport:
+    """Run Coach Digest Validations on exact manifest digest-response pairs."""
+    items = json.loads(manifest_path.read_text(encoding="utf-8"))
+    counts: dict[str, list[int]] = {name: [0, 0] for name in CHECK_TARGETS}
+    skipped: list[str] = []
+    sample_results: list[dict[str, object]] = []
+    filtered_items = [
+        item
+        for item in items
+        if signal_source is None
+        or item.get("digest", {}).get("signal_source") == signal_source
+    ]
+    n_evaluated = 0
+    for item in filtered_items:
+        digest_data = item.get("digest", {})
+        label = f"{digest_data.get('persona_id')}:{digest_data.get('week_end')}"
+        try:
+            digest = WeeklyDigest.model_validate(digest_data)
+            narrative = CoachNarrative.model_validate(item["narrative"])
+        except Exception:
+            skipped.append(label)
+            sample_results.append({"sample_id": label, "status": "skipped"})
+            continue
+        validation = validate_weekly_digest_narrative(digest, narrative)
+        n_evaluated += 1
+        for check in validation.checks:
+            if check.name in counts:
+                counts[check.name][1] += 1
+                if check.passed:
+                    counts[check.name][0] += 1
+        provenance = item.get("provenance", {})
+        sample_results.append(
+            {
+                "sample_id": label,
+                "scenario_id": provenance.get("scenario_id"),
+                "status": "evaluated",
+                "weekly_drift_input_sha256": provenance.get(
+                    "weekly_drift_input_sha256"
+                ),
+                "coach_response_sha256": provenance.get(
+                    "coach_response_sha256"
+                ),
+                "checks": {
+                    check.name: check.passed for check in validation.checks
+                },
+                "failed_checks": [
+                    check.name for check in validation.checks if not check.passed
+                ],
+            }
+        )
+    checks = {
+        name: CheckSummary(
+            name=name,
+            passed=counts[name][0],
+            total=counts[name][1],
+            target=CHECK_TARGETS[name],
+        )
+        for name in CHECK_TARGETS
+    }
+    return CoachDigestValidationReport(
+        input_source=str(manifest_path),
+        input_kind="public_scenario_manifest",
+        n_rows=len(items),
+        n_rows_after_filter=len(filtered_items),
+        signal_source_filter=signal_source,
+        n_with_narrative=len(filtered_items),
+        n_evaluated=n_evaluated,
+        checks=checks,
+        skipped=skipped,
+        sample_results=sample_results,
     )
 
 
@@ -231,7 +327,8 @@ def render_markdown(report: CoachDigestValidationReport) -> str:
         "**Source:** mechanical code checks (not human validation). Surface "
         "properties only.",
         "",
-        f"- Parquet: `{report.parquet_source}`",
+        f"- Input: `{report.input_source}`",
+        f"- Input kind: `{report.input_kind}`",
         (
             f"- Signal source filter: `{report.signal_source_filter}` "
             f"({report.n_rows_after_filter} of {report.n_rows} rows)"
@@ -262,6 +359,25 @@ def render_markdown(report: CoachDigestValidationReport) -> str:
             f"| {name} | {summary.passed} | {summary.total} | "
             f"{summary.pass_rate:.0%} | {target} | {meets} |"
         )
+    if report.sample_results:
+        lines += [
+            "",
+            "## Per-Response Results",
+            "",
+            "| Response | Scenario | Result | Failed checks |",
+            "| --- | --- | --- | --- |",
+        ]
+        for result in report.sample_results:
+            failed_checks_value = result.get("failed_checks")
+            failed_checks = (
+                [str(check) for check in failed_checks_value]
+                if isinstance(failed_checks_value, list)
+                else []
+            )
+            lines.append(
+                f"| {result['sample_id']} | {result.get('scenario_id') or '—'} | "
+                f"{result['status']} | {', '.join(failed_checks) or 'none'} |"
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -269,7 +385,14 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run Coach Digest Validations over Coach Digest responses."
     )
-    parser.add_argument("--parquet", type=Path, default=DEFAULT_PARQUET)
+    source_group = parser.add_mutually_exclusive_group()
+    source_group.add_argument("--parquet", type=Path, default=None)
+    source_group.add_argument(
+        "--manifest",
+        type=Path,
+        default=None,
+        help="Evaluate exact digest-response pairs from a judge sample manifest.",
+    )
     parser.add_argument(
         "--out",
         type=Path,
@@ -295,7 +418,14 @@ def _build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
     signal_source = None if args.all_sources else args.signal_source
-    report = evaluate_parquet(args.parquet, signal_source=signal_source)
+    report = (
+        evaluate_manifest(args.manifest, signal_source=signal_source)
+        if args.manifest is not None
+        else evaluate_parquet(
+            args.parquet or DEFAULT_PARQUET,
+            signal_source=signal_source,
+        )
+    )
 
     if args.out is not None:
         args.out.mkdir(parents=True, exist_ok=True)

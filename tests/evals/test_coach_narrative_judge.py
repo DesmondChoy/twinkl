@@ -276,6 +276,7 @@ def test_aggregate_verdicts_computes_means_and_flags():
         "sample_id": "third",
         "status": "failed",
         "needs_review": True,
+        "api_call": None,
     }
     assert report.to_dict()["score_distributions"]["correctness"] == {
         "1": 0,
