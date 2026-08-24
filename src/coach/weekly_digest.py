@@ -28,6 +28,7 @@ from src.coach.mode_logic import (
 )
 from src.coach.schemas import (
     WEEKLY_DIGEST_COACH_RESPONSE_FORMAT,
+    CoachDigestDiagnostic,
     CoachDigestPolicy,
     CoachNarrative,
     CoachResponseMode,
@@ -870,7 +871,7 @@ def build_weekly_drift_reviewer_digest_from_entries(
     decisions: Sequence[WeeklyDriftReviewerDecision],
     drift_result: DriftDetectorResult,
 ) -> WeeklyDigest:
-    """Build a Weekly Digest from displayed Journal Entries in memory."""
+    """Build Weekly Drift Detection output from displayed Journal Entries."""
     resolved_start = _parse_iso_date(week_start)
     resolved_end = _parse_iso_date(week_end)
     if resolved_start > resolved_end:
@@ -880,7 +881,9 @@ def build_weekly_drift_reviewer_digest_from_entries(
 
     history = sorted(entries, key=lambda entry: entry.t_index)
     if any(_parse_iso_date(entry.date) > resolved_end for entry in history):
-        raise ValueError("Weekly Digest entries cannot extend beyond week_end")
+        raise ValueError(
+            "Weekly Drift Detection entries cannot extend beyond week_end"
+        )
     window_entries = [
         entry
         for entry in history
@@ -1089,7 +1092,7 @@ def build_weekly_drift_reviewer_digest(
     decisions: list[WeeklyDriftReviewerDecision],
     drift_result: DriftDetectorResult,
 ) -> WeeklyDigest:
-    """Build the approved Weekly Digest without VIF Critic or LLM-Judge signals."""
+    """Build approved Weekly Drift Detection output from Reviewer decisions."""
     resolved_end = _parse_iso_date(week_end)
     profile, history, entry_texts = _load_persona_context(
         persona_id,
@@ -1275,21 +1278,35 @@ def render_digest_markdown(digest: WeeklyDigest) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-def _safe_load_json_object(raw_json: str) -> dict | None:
-    """Parse a JSON object safely, returning None on malformed payloads."""
-    try:
-        data = json.loads(raw_json)
-    except (TypeError, json.JSONDecodeError):
-        return None
-    return data if isinstance(data, dict) else None
-
-
 async def generate_weekly_digest_coach(
     digest: WeeklyDigest,
     llm_complete: LLMCompleteFn,
 ) -> tuple[CoachNarrative | None, str]:
     """Generate a Coach Digest response from Weekly Drift Detection output."""
+    diagnostic, prompt = await generate_weekly_digest_coach_diagnostic(
+        digest,
+        llm_complete,
+    )
+    return diagnostic.narrative, prompt
+
+
+async def generate_weekly_digest_coach_diagnostic(
+    digest: WeeklyDigest,
+    llm_complete: LLMCompleteFn,
+    *,
+    repair_requirements: Sequence[str] | None = None,
+) -> tuple[CoachDigestDiagnostic, str]:
+    """Generate and diagnose one Coach Digest response."""
     instructions, input_data = render_digest_messages(digest)
+    if repair_requirements:
+        requirements = "\n".join(
+            f"- {requirement}" for requirement in repair_requirements
+        )
+        instructions += (
+            "\n\nA prior response failed Coach Digest Validations. Generate a "
+            "new response. Correct each failure below. Do not discuss the "
+            f"failures in the response.\n{requirements}"
+        )
     prompt = render_live_prompt_receipt(
         instructions=instructions,
         input_data=input_data,
@@ -1300,23 +1317,95 @@ async def generate_weekly_digest_coach(
         instructions,
     )
     if not raw_json:
-        return None, prompt
+        return (
+            CoachDigestDiagnostic(
+                persona_id=digest.persona_id,
+                week_start=digest.week_start,
+                week_end=digest.week_end,
+                accepted=False,
+                failure_stage="no_response",
+                failure_details=[
+                    "The provider adapter returned no response text."
+                ],
+            ),
+            prompt,
+        )
 
-    payload = _safe_load_json_object(raw_json)
-    if payload is None:
-        return None, prompt
+    try:
+        payload = json.loads(raw_json)
+    except (TypeError, json.JSONDecodeError) as exc:
+        return (
+            CoachDigestDiagnostic(
+                persona_id=digest.persona_id,
+                week_start=digest.week_start,
+                week_end=digest.week_end,
+                accepted=False,
+                failure_stage="json_parse",
+                failure_details=[str(exc)],
+                raw_output=raw_json,
+            ),
+            prompt,
+        )
+    if not isinstance(payload, dict):
+        return (
+            CoachDigestDiagnostic(
+                persona_id=digest.persona_id,
+                week_start=digest.week_start,
+                week_end=digest.week_end,
+                accepted=False,
+                failure_stage="json_parse",
+                failure_details=["The JSON response was not an object."],
+                raw_output=raw_json,
+            ),
+            prompt,
+        )
 
     try:
         narrative = CoachNarrative.model_validate(payload)
-    except Exception:
-        return None, prompt
+    except Exception as exc:
+        return (
+            CoachDigestDiagnostic(
+                persona_id=digest.persona_id,
+                week_start=digest.week_start,
+                week_end=digest.week_end,
+                accepted=False,
+                failure_stage="schema_validation",
+                failure_details=[str(exc)],
+                raw_output=raw_json,
+            ),
+            prompt,
+        )
 
-    return narrative, prompt
+    validation = validate_weekly_digest_narrative(digest, narrative)
+    failed_checks = [
+        f"{check.name}: {check.details}"
+        for check in validation.checks
+        if not check.passed
+    ]
+    accepted = validation.all_passed
+    return (
+        CoachDigestDiagnostic(
+            persona_id=digest.persona_id,
+            week_start=digest.week_start,
+            week_end=digest.week_end,
+            accepted=accepted,
+            failure_stage=None if accepted else "coach_validation",
+            failure_details=failed_checks,
+            raw_output=raw_json,
+            narrative=narrative,
+            validation=validation,
+        ),
+        prompt,
+    )
 
 
 def _extract_quoted_phrases(text: str) -> list[str]:
-    """Extract straight-quoted snippets for groundedness checks."""
-    return [match.strip() for match in re.findall(r'"([^"]+)"', text) if match.strip()]
+    """Extract straight or typographic quotes for groundedness checks."""
+    return [
+        match.strip()
+        for match in re.findall(r'["“]([^"”]+)["”]', text)
+        if match.strip()
+    ]
 
 
 def _detect_value_label_leakage(
@@ -1344,7 +1433,7 @@ def validate_weekly_digest_narrative(
     max_words: int = 180,
     config_path: Path = SCHWARTZ_CONFIG_PATH,
 ) -> DigestValidation:
-    """Run automated checks on a Coach Digest response."""
+    """Run Coach Digest Validations on one response."""
     combined_text = " ".join(
         [
             narrative.weekly_mirror.strip(),
@@ -1378,7 +1467,11 @@ def validate_weekly_digest_narrative(
     value_leakage_passed = not leaked_values
 
     positive_transition_patterns = {
-        "better": r"\bbetter\b",
+        "better": (
+            r"\b(?:are|became|become|becoming|feel|feels|felt|get|gets|getting|"
+            r"got|is|look|looks|seem|seems|was|were)\s+(?:\w+\s+){0,2}better\b|"
+            r"\bbetter\s+(?:now|than before|this week)\b"
+        ),
         "improve": r"\bimprov\w*\b",
         "progress": r"\bprogress\w*\b",
         "recover": r"\brecover\w*\b",

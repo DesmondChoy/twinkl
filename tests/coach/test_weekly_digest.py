@@ -21,6 +21,7 @@ from src.coach.weekly_digest import (
     build_coach_digest_prompt_inputs,
     build_weekly_digest,
     generate_weekly_digest_coach,
+    generate_weekly_digest_coach_diagnostic,
     persist_weekly_digest_record,
     render_digest_markdown,
     render_digest_messages,
@@ -257,6 +258,26 @@ def test_generate_validate_and_persist_weekly_digest(tmp_path: Path):
         "This week"
     )
     assert json.loads(df["drift_reasons_json"][0]) == []
+
+
+def test_generation_diagnostic_keeps_malformed_raw_output():
+    digest = _minimal_digest()
+
+    async def malformed_response(
+        _prompt: str,
+        _response_format: dict | None,
+        _instructions: str | None = None,
+    ) -> str:
+        return "not-json"
+
+    diagnostic, _prompt = asyncio.run(
+        generate_weekly_digest_coach_diagnostic(digest, malformed_response)
+    )
+
+    assert diagnostic.accepted is False
+    assert diagnostic.failure_stage == "json_parse"
+    assert diagnostic.raw_output == "not-json"
+    assert diagnostic.narrative is None
 
 
 def test_build_weekly_digest_truncates_future_history_and_handles_acute_distress(
@@ -691,6 +712,43 @@ def test_validation_rejects_unsupported_improvement_claim():
     assert "improve" in state_check.details
 
 
+def test_validation_does_not_treat_better_place_as_a_transition_claim():
+    digest = _digest_with_evidence()
+    narrative = CoachNarrative(
+        weekly_mirror=(
+            'You wrote that you "helped a colleague debug" while trying to make '
+            "the workplace a fairer, better place."
+        ),
+        tension_explanation=(
+            "The note describes why the choice mattered. It does not claim that "
+            "your current state changed."
+        ),
+        reflective_question="What mattered most to you in that choice?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, narrative)
+
+    state_check = next(c for c in validation.checks if c.name == "state_claims")
+    assert state_check.passed
+
+
+def test_validation_rejects_better_as_a_current_state_claim():
+    digest = _digest_with_evidence()
+    narrative = CoachNarrative(
+        weekly_mirror=(
+            'You wrote that you "helped a colleague debug," and things are better.'
+        ),
+        tension_explanation="That claims a positive change without evidence.",
+        reflective_question="What mattered most to you in that choice?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, narrative)
+
+    state_check = next(c for c in validation.checks if c.name == "state_claims")
+    assert not state_check.passed
+    assert "better" in state_check.details
+
+
 def test_validation_gate_requires_every_required_check():
     validation = DigestValidation(
         grounded_quotes=["helped a colleague debug"],
@@ -844,6 +902,26 @@ def test_validation_passes_grounded_quotes():
         weekly_mirror=(
             'A steady week of showing up for people, like when you "helped a '
             'colleague debug" without being asked.'
+        ),
+        tension_explanation=(
+            "Nothing pulled against what matters to you; the steady pattern held "
+            "across the week and felt unforced."
+        ),
+        reflective_question="What let you keep showing up with intention?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, grounded)
+
+    assert validation.groundedness_passed
+    assert "helped a colleague debug" in validation.grounded_quotes
+
+
+def test_validation_passes_typographic_grounded_quotes():
+    digest = _digest_with_evidence()
+    grounded = CoachNarrative(
+        weekly_mirror=(
+            "A steady week of showing up for people, like when you “helped a "
+            "colleague debug” without being asked."
         ),
         tension_explanation=(
             "Nothing pulled against what matters to you; the steady pattern held "

@@ -276,7 +276,6 @@ No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
 
-- Current batch results for Coach Digest Validations and Coach Digest Evals
 - Coach Digest feedback and perceived-accuracy capture for a future pilot
 
 The user-facing runtime can import Core Values from a confirmed onboarding

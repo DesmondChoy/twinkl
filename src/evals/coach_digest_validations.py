@@ -1,9 +1,9 @@
 """Batch report for Coach Digest Validations.
 
 Runs the existing ``validate_weekly_digest_narrative`` checks
-(groundedness, non_circularity, value_leakage, length) over a set of persisted
-Weekly Drift Detection output records and reports per-check pass rates against
-the targets in ``docs/evals/explanation_quality_eval.md``.
+(groundedness, non_circularity, value_leakage, state_claims, and length) over a
+set of persisted Weekly Drift Detection output records. It reports per-check
+pass rates against the targets in ``docs/evals/explanation_quality_eval.md``.
 
 These are mechanical code checks, not human validation. They verify surface
 properties (quotes trace to evidence, no raw scoring or Schwartz-label
@@ -40,6 +40,7 @@ CHECK_TARGETS: dict[str, float | None] = {
     "groundedness": 0.70,
     "non_circularity": 0.95,
     "value_leakage": None,
+    "state_claims": None,
     "length": 0.90,
 }
 
@@ -104,6 +105,11 @@ class CoachDigestValidationReport:
                 name: summary.to_dict() for name, summary in self.checks.items()
             },
             "skipped_persona_weeks": self.skipped,
+            "api_usage": {
+                "n_calls": 0,
+                "calculated_cost_usd": 0.0,
+                "total_latency_seconds": 0.0,
+            },
         }
 
 
@@ -234,6 +240,9 @@ def render_markdown(report: CoachDigestValidationReport) -> str:
         ),
         f"- With narrative: {report.n_with_narrative}",
         f"- Evaluated: {report.n_evaluated}",
+        "- API calls: 0",
+        "- Provider cost: $0.00",
+        "- Provider request latency: not applicable",
     ]
     if report.skipped:
         lines.append(f"- Skipped (unparseable): {', '.join(report.skipped)}")

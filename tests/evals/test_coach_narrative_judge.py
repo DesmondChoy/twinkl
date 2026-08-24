@@ -9,7 +9,12 @@ import pytest
 
 from prompts import get_prompt_metadata
 from src.coach.llm_client import resolve_coach_model
-from src.coach.schemas import CoachNarrative, EvidenceSnippet, WeeklyDigest
+from src.coach.schemas import (
+    CoachNarrative,
+    EvidenceSnippet,
+    LLMCallMetrics,
+    WeeklyDigest,
+)
 from src.evals.coach_narrative_judge import (
     JudgeVerdict,
     _load_generator_model,
@@ -256,7 +261,11 @@ def test_aggregate_verdicts_computes_means_and_flags():
         None,  # a failed/skipped verdict
     ]
 
-    report = aggregate_verdicts(verdicts, judge_model="test-model")
+    report = aggregate_verdicts(
+        verdicts,
+        judge_model="test-model",
+        sample_labels=["first", "second", "third"],
+    )
 
     assert report.n_scored == 2
     assert report.n_failed == 1
@@ -265,6 +274,19 @@ def test_aggregate_verdicts_computes_means_and_flags():
     # Second verdict has specificity=1 and tension_honesty=2 (< 3) -> flagged.
     assert report.n_flagged == 1
     assert report.question_open_rate == 0.5
+    assert report.sample_results[0]["sample_id"] == "first"
+    assert report.sample_results[2] == {
+        "sample_id": "third",
+        "status": "failed",
+        "needs_review": True,
+    }
+    assert report.to_dict()["score_distributions"]["correctness"] == {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 1,
+    }
 
 
 def test_render_markdown_labels_ai_evaluation():
@@ -368,3 +390,56 @@ def test_verdict_records_key_each_verdict_to_its_persona_week():
     assert records[0]["verdict"]["specificity"] == 1
     assert records[0]["verdict"]["justification"] == "ok"
     assert records[1]["verdict"] is None
+def test_report_includes_api_usage_cost_and_latency():
+    metric = LLMCallMetrics(
+        call_label="coach_eval:deadbeef:2025-01-07",
+        provider="openai",
+        model="gpt-5.6-luna",
+        reasoning_effort="none",
+        service_tier="default",
+        latency_seconds=2.5,
+        input_tokens=1_000,
+        cached_input_tokens=100,
+        cache_write_input_tokens=0,
+        output_tokens=200,
+        total_tokens=1_200,
+        calculated_cost_usd=0.000422,
+    )
+    report = aggregate_verdicts(
+        [],
+        judge_model="gpt-5.6-luna",
+        call_metrics=[metric],
+    )
+
+    payload = report.to_dict()
+    markdown = render_markdown(report)
+
+    assert payload["api_usage"]["n_calls"] == 1
+    assert payload["api_usage"]["calculated_cost_usd"] == pytest.approx(
+        0.000422
+    )
+    assert "Calculated published-rate cost: `$0.00042200`" in markdown
+    assert "2.500s" in markdown
+
+
+def test_report_renders_per_response_scores_and_justifications():
+    verdict = JudgeVerdict(
+        correctness=4,
+        specificity=5,
+        non_prescriptive_tone=5,
+        tension_honesty=4,
+        question_is_open_and_relevant=True,
+        justification="Grounded, specific, and honest about the tension.",
+    )
+    report = aggregate_verdicts(
+        [verdict],
+        judge_model="test-model",
+        sample_labels=["deadbeef:2025-01-07"],
+    )
+
+    markdown = render_markdown(report)
+
+    assert "## Per-Response Scores" in markdown
+    assert "deadbeef:2025-01-07 | 4 | 5 | 5 | 4 | pass | no" in markdown
+    assert "## Evaluator Justifications" in markdown
+    assert "Grounded, specific, and honest about the tension." in markdown

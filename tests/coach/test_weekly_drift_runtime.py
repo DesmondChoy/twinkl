@@ -174,7 +174,8 @@ async def test_runtime_does_not_attach_an_invalid_coach_response(tmp_path: Path)
             }
         )
 
-    digest, _paths = await run_weekly_drift_coach_cycle(
+    raw_output = await invalid_coach("", None)
+    digest, paths = await run_weekly_drift_coach_cycle(
         persona_id="deadbeef",
         wrangled_dir=wrangled_dir,
         output_dir=tmp_path / "exports",
@@ -185,6 +186,18 @@ async def test_runtime_does_not_attach_an_invalid_coach_response(tmp_path: Path)
 
     assert digest.coach_narrative is None
     assert digest.validation is None
+    diagnostic = json.loads(Path(paths["coach_diagnostic_path"]).read_text())
+    assert diagnostic["accepted"] is False
+    assert diagnostic["failure_stage"] == "coach_validation"
+    assert diagnostic["raw_output"] == raw_output
+    assert diagnostic["narrative"] is not None
+    assert diagnostic["validation"] is not None
+    assert any(
+        detail.startswith("state_claims:")
+        for detail in diagnostic["failure_details"]
+    )
+    stored_digest = json.loads(Path(paths["digest_json_path"]).read_text())
+    assert "coach_diagnostic" not in stored_digest
 
 
 @pytest.mark.asyncio

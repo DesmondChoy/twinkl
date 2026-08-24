@@ -98,6 +98,7 @@ def test_evaluate_rows_aggregates_pass_rates():
     assert report.checks["non_circularity"].meets_target is False
     # value_leakage has no target -> meets_target is None (informational).
     assert report.checks["value_leakage"].meets_target is None
+    assert report.checks["state_claims"].meets_target is None
 
 
 def test_evaluate_rows_skips_unparseable_narrative():

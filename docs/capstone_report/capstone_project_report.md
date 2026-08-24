@@ -74,9 +74,8 @@
   user-controlled JSON data
 - **Implemented minimum privacy boundary:** first-use data notice and confirmed
   browser-and-Python session deletion for manual Journal Entries
-- **In progress:** current Coach Digest evaluation results, Coach Digest
-  feedback capture, longitudinal Core Value history, and professor walkthrough
-  evidence
+- **In progress:** Coach Digest feedback capture, longitudinal Core Value
+  history, and professor walkthrough evidence
 - No fresh final test or deployment approval
 - User-facing Drift path separated from offline VIF Critic research
 
@@ -331,9 +330,13 @@
 - Weekly Drift Detection output schema and cited Journal Entry evidence
 - Active Drift, No Active Drift, and Insufficient Evidence examples
 - Historical Drift Records that remain after current Conflict runs end
-- Coach Digest Validations for groundedness, jargon, and length
-- No current Coach Digest Validations or Coach Digest Evals results
-- No Coach Digest usefulness claim without batch results and human validation
+- Pending replacement evaluation of one key-week Coach Digest response for each
+  deployed Persona replay
+- Planned `gpt-5.6-luna` response generation and AI review, both with reasoning
+  effort `none`
+- Same-model synthetic sample limit: AI review, not human validation or a fresh
+  final test
+- No Coach Digest usefulness claim without human validation
 - Brief Experience and Inspect example of end-to-end POC behavior
 - Evaluation boundary in [Explanation Quality Evaluation](../evals/explanation_quality_eval.md)
 

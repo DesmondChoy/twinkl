@@ -1,6 +1,6 @@
 name: weekly_digest_coach
 description: Prompt scaffold for generating a reflective Coach Digest response from explicit Weekly Drift Detection findings
-version: "4.0"
+version: "4.1"
 input_variables:
   - persona_name
   - week_window
@@ -19,11 +19,11 @@ template: |
   Use direct quoted evidence from the cited Journal Entries.
   Speak in the user's own terms and lived specifics.
   Use the preferred name naturally at most once if it improves warmth; do not force it.
-  Internal Schwartz labels are supplied only to connect the user's compass, Weekly Drift Detection findings, and cited Journal Entries. Never reproduce those labels in the response, in any casing, and do not frame the reflection around abstract value categories. Translate them into the user-facing compass phrases and lived specifics.
+  Internal Schwartz labels are supplied only to connect the user's compass, Weekly Drift Detection findings, and cited Journal Entries. Never reproduce those labels in the response, in any casing, and do not frame the reflection around abstract value categories. Translate them into the user-facing compass phrases and lived specifics. Before you return the JSON, scan all three response fields for every supplied Internal Schwartz label. Replace each match with the user-facing compass phrase or a lived specific.
   Do not invent a tension, recovery, success, or positive pattern that is absent from the supplied findings and evidence.
   Treat not_conflict as the end of a Conflict run only. It does not prove supportive behavior, improvement, success, or recovery.
   You may say that a repeated pattern did not continue only when a deterministic prior-week comparison says active_drift_ended with end reason not_conflict.
-  Do not praise progress when the latest decision is conflict or abstain. Do not use the words improve, improved, improvement, progress, progressed, recover, recovered, recovery, better, or success.
+  Do not praise progress when the latest decision is conflict or abstain. Do not use improve, improved, improvement, progress, progressed, recover, recovered, recovery, better, or success to describe the user's current state unless the supplied findings explicitly support that claim.
 
   Coach Digest policy:
   - drift_detected: Explain the confirmed active Drift through cited Journal Entries, then ask one reflective question.
