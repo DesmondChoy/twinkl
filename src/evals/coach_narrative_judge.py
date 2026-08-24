@@ -20,15 +20,23 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import cast
 
+from dotenv import load_dotenv
 from pydantic import BaseModel, Field, ValidationError
 
 from prompts import load_prompt
-from src.coach.llm_client import build_llm_complete
-from src.coach.schemas import CoachNarrative, WeeklyDigest
+from src.coach.llm_client import (
+    DEFAULT_GEMINI_MODEL,
+    DEFAULT_OPENAI_MODEL,
+    OPENAI_LUNA_PRICING_SOURCE,
+    build_llm_complete,
+    summarize_llm_call_metrics,
+)
+from src.coach.schemas import CoachNarrative, LLMCallMetrics, WeeklyDigest
 from src.coach.weekly_digest import (
     LLMCompleteFn,
     build_coach_digest_prompt_inputs,
@@ -135,6 +143,8 @@ class JudgeReport:
     question_open_rate: float = 0.0
     n_flagged: int = 0
     n_failed: int = 0
+    call_metrics: list[LLMCallMetrics] = field(default_factory=list)
+    sample_results: list[dict[str, object]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -157,11 +167,35 @@ class JudgeReport:
             "pct_ge_4": {k: round(v, 3) for k, v in self.pct_ge_4.items()},
             "question_open_rate": round(self.question_open_rate, 3),
             "n_flagged_for_review": self.n_flagged,
+            "score_distributions": {
+                dim: {
+                    str(score): sum(
+                        result.get(dim) == score
+                        for result in self.sample_results
+                        if result.get("status") == "scored"
+                    )
+                    for score in range(1, 6)
+                }
+                for dim in SCORE_DIMENSIONS
+            },
+            "sample_results": self.sample_results,
+            "api_usage": summarize_llm_call_metrics(self.call_metrics),
+            "api_calls": [
+                metric.model_dump(mode="json") for metric in self.call_metrics
+            ],
+            "pricing_source": OPENAI_LUNA_PRICING_SOURCE,
+            "cost_note": (
+                "Calculated from response token usage and published standard-tier "
+                "rates. This is not an OpenAI billing export."
+            ),
         }
 
 
 def aggregate_verdicts(
-    verdicts: list[JudgeVerdict | None], judge_model: str
+    verdicts: list[JudgeVerdict | None],
+    judge_model: str,
+    call_metrics: list[LLMCallMetrics] | None = None,
+    sample_labels: list[str] | None = None,
 ) -> JudgeReport:
     """Aggregate per-narrative verdicts into a report; None verdicts count as failed."""
     scored = [v for v in verdicts if v is not None]
@@ -175,6 +209,26 @@ def aggregate_verdicts(
     question_open_rate = (
         sum(1 for v in scored if v.question_is_open_and_relevant) / n if n else 0.0
     )
+    labels = sample_labels or [
+        f"sample_{index}" for index in range(1, len(verdicts) + 1)
+    ]
+    if len(labels) != len(verdicts):
+        raise ValueError("Sample labels must match the number of verdicts.")
+    sample_results: list[dict[str, object]] = []
+    for label, verdict in zip(labels, verdicts, strict=True):
+        if verdict is None:
+            sample_results.append(
+                {"sample_id": label, "status": "failed", "needs_review": True}
+            )
+            continue
+        sample_results.append(
+            {
+                "sample_id": label,
+                "status": "scored",
+                **verdict.model_dump(mode="json"),
+                "needs_review": verdict.needs_review,
+            }
+        )
     return JudgeReport(
         judge_model=judge_model,
         n_scored=n,
@@ -183,11 +237,15 @@ def aggregate_verdicts(
         question_open_rate=question_open_rate,
         n_flagged=sum(1 for v in scored if v.needs_review),
         n_failed=sum(1 for v in verdicts if v is None),
+        call_metrics=list(call_metrics or []),
+        sample_results=sample_results,
     )
 
 
 def render_markdown(report: JudgeReport) -> str:
     """Render a short markdown summary of an AI evaluation report."""
+    usage = summarize_llm_call_metrics(report.call_metrics)
+    cost = usage["calculated_cost_usd"]
     lines = [
         "# Coach Digest Evals Report",
         "",
@@ -200,6 +258,25 @@ def render_markdown(report: JudgeReport) -> str:
         f"- Flagged for human review (any dimension < {REVIEW_THRESHOLD}): "
         f"{report.n_flagged}",
         f"- Reflective question open & relevant: {report.question_open_rate:.0%}",
+        f"- Paid API calls recorded: {usage['n_calls']}",
+        f"- Input tokens: {usage['input_tokens']}",
+        f"- Cached input tokens: {usage['cached_input_tokens']}",
+        f"- Output tokens: {usage['output_tokens']}",
+        (
+            f"- Calculated published-rate cost: `${float(cost):.8f}`"
+            if cost is not None
+            else "- Calculated published-rate cost: unavailable"
+        ),
+        f"- Total request latency: "
+        f"{float(usage['total_latency_seconds'] or 0):.3f}s",
+        (
+            "- Mean / median / maximum request latency: "
+            f"{float(usage['mean_latency_seconds'] or 0):.3f}s / "
+            f"{float(usage['median_latency_seconds'] or 0):.3f}s / "
+            f"{float(usage['max_latency_seconds'] or 0):.3f}s"
+        ),
+        "- Cost basis: response token usage and published standard-tier Luna "
+        f"rates ([source]({OPENAI_LUNA_PRICING_SOURCE})); not a billing export",
         "",
         "| Dimension | Mean | Target | Meets | % ≥ 4 |",
         "| --- | --- | --- | --- | --- |",
@@ -211,14 +288,78 @@ def render_markdown(report: JudgeReport) -> str:
             f"| {dim} | {mean:.2f} | ≥ {MEAN_TARGET} | {meets} | "
             f"{report.pct_ge_4.get(dim, 0.0):.0%} |"
         )
+    if report.sample_results:
+        lines += [
+            "",
+            "## Per-Response Scores",
+            "",
+            "| Response | Correctness | Specificity | Non-prescriptive tone | "
+            "Tension honesty | Question | Review flag |",
+            "| --- | ---: | ---: | ---: | ---: | --- | --- |",
+        ]
+        for result in report.sample_results:
+            if result.get("status") != "scored":
+                lines.append(
+                    f"| {result['sample_id']} | — | — | — | — | failed | yes |"
+                )
+                continue
+            question = (
+                "pass" if result["question_is_open_and_relevant"] else "fail"
+            )
+            review = "yes" if result["needs_review"] else "no"
+            lines.append(
+                f"| {result['sample_id']} | {result['correctness']} | "
+                f"{result['specificity']} | "
+                f"{result['non_prescriptive_tone']} | "
+                f"{result['tension_honesty']} | {question} | {review} |"
+            )
+
+        lines += ["", "## Evaluator Justifications"]
+        for result in report.sample_results:
+            lines += [
+                "",
+                f"### {result['sample_id']}",
+                "",
+                str(result.get("justification") or "No valid verdict was returned."),
+            ]
+    if report.call_metrics:
+        lines += [
+            "",
+            "## Per-Call API Metrics",
+            "",
+            "| Call | Input | Cached | Output | Latency | Cost |",
+            "| --- | ---: | ---: | ---: | ---: | ---: |",
+        ]
+        for metric in report.call_metrics:
+            metric_cost = (
+                f"${metric.calculated_cost_usd:.8f}"
+                if metric.calculated_cost_usd is not None
+                else "—"
+            )
+            lines.append(
+                f"| {metric.call_label or 'unlabeled'} | "
+                f"{metric.input_tokens or 0} | "
+                f"{metric.cached_input_tokens or 0} | "
+                f"{metric.output_tokens or 0} | "
+                f"{metric.latency_seconds:.3f}s | {metric_cost} |"
+            )
     return "\n".join(lines) + "\n"
 
 
 async def _run_sample(
     pairs: list[tuple[WeeklyDigest, CoachNarrative]],
     llm_complete: LLMCompleteFn,
+    call_metrics: list[LLMCallMetrics] | None = None,
 ) -> list[JudgeVerdict | None]:
-    return [await judge_narrative(d, n, llm_complete) for d, n in pairs]
+    verdicts: list[JudgeVerdict | None] = []
+    for digest, narrative in pairs:
+        metrics_before_call = len(call_metrics or [])
+        verdicts.append(await judge_narrative(digest, narrative, llm_complete))
+        if call_metrics is not None and len(call_metrics) > metrics_before_call:
+            call_metrics[-1].call_label = (
+                f"coach_eval:{digest.persona_id}:{digest.week_end}"
+            )
+    return verdicts
 
 
 def _load_manifest(manifest_path: Path) -> list[tuple[WeeklyDigest, CoachNarrative]]:
@@ -268,14 +409,28 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
 
-    llm_complete = build_llm_complete()
+    load_dotenv()
+    call_metrics: list[LLMCallMetrics] = []
+    llm_complete = build_llm_complete(call_metrics=call_metrics)
     if llm_complete is None:
         print("No evaluator provider available (missing API key). Aborting.")
         return 1
 
-    judge_model = "unknown"  # provider resolves its own model internally
-    verdicts = asyncio.run(_run_sample(pairs, llm_complete))
-    report = aggregate_verdicts(verdicts, judge_model=judge_model)
+    provider = os.environ.get("TWINKL_COACH_PROVIDER", "openai").strip().lower()
+    default_model = (
+        DEFAULT_GEMINI_MODEL if provider == "gemini" else DEFAULT_OPENAI_MODEL
+    )
+    judge_model = os.environ.get("TWINKL_COACH_MODEL", default_model)
+    verdicts = asyncio.run(_run_sample(pairs, llm_complete, call_metrics))
+    sample_labels = [
+        f"{digest.persona_id}:{digest.week_end}" for digest, _narrative in pairs
+    ]
+    report = aggregate_verdicts(
+        verdicts,
+        judge_model=judge_model,
+        call_metrics=call_metrics,
+        sample_labels=sample_labels,
+    )
 
     if args.out is not None:
         args.out.mkdir(parents=True, exist_ok=True)
