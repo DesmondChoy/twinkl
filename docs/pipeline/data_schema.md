@@ -180,6 +180,8 @@ consolidated parquet:
 - `*.json`
 - `*.md`
 - `*.prompt.txt`
+- `*.coach_diagnostic.json` when a Coach Digest model call runs; this file keeps
+  raw accepted or rejected output and does not enter the user-facing response
 
 `src/vif/weekly_schema.py` defines the ordered weekly signal-frame columns and
 the required producer/consumer boundary used by `src/vif/runtime.py` and the

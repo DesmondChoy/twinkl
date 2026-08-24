@@ -6,7 +6,7 @@
 > |---|---|
 > | Stage 0 (Offline Training) | ✅ Complete for the capstone POC — synthetic generation, LLM-Judge labeling, and VIF Critic training are implemented; known model limits remain documented |
 > | Stage 1 (Onboarding) | 🧪 Experimental — the standalone React POC implements the complete local, user-facing flow and internal Profile; automatic browser-to-service storage remains outside the capstone |
-> | Stages 2–4 (Journaling + weekly workflows) | ✅ Complete for the core capstone POC — the React Experience, displayed nudges, Weekly Drift Detection, Coach Digest generation, saved Persona replay, and linked Inspect events are implemented; current Coach Digest evaluation results and final capstone evidence remain open |
+> | Stages 2–4 (Journaling + weekly workflows) | 🧪 Experimental — the React Experience, displayed nudges, Weekly Drift Detection, Coach Digest generation, saved Persona replay, and linked Inspect events are implemented; the replacement five-Persona Coach Digest evaluation, future human calibration, and final capstone evidence remain open |
 > | Stage 5 (Insufficient Evidence) | ✅ Complete for the capstone POC — Weekly Drift Detection fails closed to Abstain and can store Insufficient Evidence; no deployment approval is claimed |
 >
 > See the [Implementation Status](../prd.md#implementation-status) table in prd.md for the full breakdown.

@@ -30,12 +30,14 @@ This evaluation validates that explanations feel accurate and actionable to user
 - The approved Weekly Drift Reviewer and Drift Detector runtime selects cited
   Journal Entry evidence for the Weekly Drift Detection output in
   [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py)
-- Coach Digest Validations are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
+- Coach Digest Validations are implemented: groundedness via quoted substring
+  matches, non-circularity via score-jargon avoidance, raw Schwartz value
+  leakage, unsupported current-state claims, and length bounds via
+  [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
 - Coach Digest Validations batch reporting: A batch runner
   ([`src/evals/coach_digest_validations.py`](../../src/evals/coach_digest_validations.py))
   runs `validate_weekly_digest_narrative()` over the persisted Weekly Drift Detection output
-  parquet and reports per-check pass rates against targets. No current batch
-  result is committed.
+  parquet and reports per-check pass rates against targets.
 - Coach Digest Evals: An AI evaluator
   ([`src/evals/coach_narrative_judge.py`](../../src/evals/coach_narrative_judge.py),
   prompt [`prompts/coach_narrative_judge.yaml`](../../prompts/coach_narrative_judge.yaml))
@@ -46,32 +48,38 @@ This evaluation validates that explanations feel accurate and actionable to user
   Scores are **AI evaluation, not human validation**. Future human calibration
   of the AI review remains separate work.
 
+### Current Result Status
+
+The previous five-response development result was removed because its persona
+roster did not match the five deployed Persona replays. A replacement result is
+pending. It will use one key week for each deployed Persona. It will apply Coach
+Digest Validations and Coach Digest Evals to the same responses that the React
+app shows. Coach Digest Evals are AI review, not human validation.
+
 ### What's Missing
-- **Coach Digest batch results:** No current Coach Digest Validations or Coach
-  Digest Evals result is committed
+
 - **Automated checks for LLM-Judge rationales:** No batch checker or report yet in `src/judge/`
 - **AI review of LLM-Judge rationales:** No rationale-review evaluation
 - **Human calibration:** No protocol or κ calculation for either explanation type
 
 ### Blocking Dependencies
-Coach Digest Validations and approved-path evidence provenance are
-implemented. Deeper end-to-end explanation evaluation still requires a fresh
-final test and committed batch results. VIF Critic outputs belong to offline
-review and retraining.
+Coach Digest Validations, Coach Digest Evals, and approved-path evidence
+provenance are implemented. The replacement result for the five deployed
+Persona replays is pending. It will not establish product usefulness. Deeper
+end-to-end explanation evaluation still requires future human calibration. VIF
+Critic outputs belong to offline review and retraining.
 
 ### Implementation Scope
 
 The implemented slice covers Weekly Drift Detection output storage, Coach
-Digest prompt rendering, programmatic response generation with an injected
-callable, and automated response validation. The analogous batch checker for
-LLM-Judge rationales remains planned. AI review of rationales and human
-calibration are later validation phases.
+Digest prompt rendering, programmatic response generation, automated response
+validation, batch reporting, and Coach Digest Evals. The analogous batch
+checker for LLM-Judge rationales remains planned. AI review of rationales and
+human calibration are later validation phases.
 
 ### Next Steps
 1. Add an automated batch checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
-2. Run Coach Digest Validations over a batch and record the pass rates
-3. Run Coach Digest Evals and identify the scores as AI evaluation
-4. Complete future human calibration of the AI review with 20-30 responses
+2. Complete future human calibration of the AI review with 20-30 responses
 
 ---
 
@@ -109,9 +117,8 @@ different from the plan you had in mind?"
 - Avoids prescriptive or judgmental language
 
 The approved path lives in `src/coach/weekly_drift_runtime.py` and
-`src/coach/weekly_digest.py`. The evaluation layer remains incomplete. Automated
-checks are implemented, while benchmark pass-rate reporting and user-study
-calibration are pending.
+`src/coach/weekly_digest.py`. Automated checks and AI review are implemented.
+The replacement Persona result and user-study calibration remain pending.
 
 ---
 
@@ -153,6 +160,8 @@ Fast, objective checks that don't require LLM calls:
 |-------|-------------|--------|
 | **Groundedness** | % of rationales with verifiable quotes (substring match in Journal Entry) | > 70% |
 | **Non-circularity** | % that don't contain the value name itself | > 95% |
+| **Raw value leakage** | Response does not expose raw Schwartz value labels | Reported |
+| **Current-state claims** | Response does not make an unsupported positive-change claim | Reported |
 | **Length** | Flag too-short (<25 words) or too-long (>180 words) | 90% in range |
 
 **Current code status:**
@@ -286,6 +295,11 @@ LLM-Judge produces rationales for N Journal Entries
 1. **Subjectivity**: "Felt accurate" is inherently subjective
 2. **Small sample**: 5-10 users limits statistical power
 3. **Hawthorne effect**: Users may rate higher knowing researchers will see
+4. **Same-model review**: The replacement will use Luna-none for both response
+   generation and Coach Digest Evals. Correlated errors can make the scores too
+   favorable.
+5. **Synthetic sample**: The replacement will cover five selected synthetic
+   responses. It will not be a fresh final test or evidence of user usefulness.
 
 **Mitigations:**
 - Use consistent Likert anchors with behavioral definitions

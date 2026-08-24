@@ -286,11 +286,12 @@ Open `http://127.0.0.1:8001` when running the file directly.
 callable that `src/demo_tool/runtime_bridge.py` injects into
 `run_weekly_coach_cycle`. `TWINKL_COACH_PROVIDER` selects `openai` (default) or
 `gemini`; `TWINKL_COACH_MODEL` overrides the per-provider default model
-(`gpt-5.4-mini` or `gemini-2.5-flash`). When the selected provider's API key is
-absent, the provider is unrecognised, or the request fails, the app keeps its
-structured output without a response. The app stays runnable offline. The
-`src.coach.runtime` and `src.coach.weekly_digest` CLIs do not call a live Coach
-Digest LLM. They render and persist the prompt only.
+(`gpt-5.6-luna` or `gemini-3.5-flash`). OpenAI calls use reasoning effort
+`none`. When the selected provider's API key is absent, the provider is
+unrecognised, or the request fails, the app keeps its structured output without
+a response. The app stays runnable offline. The `src.coach.runtime` and
+`src.coach.weekly_digest` CLIs do not call a live Coach Digest LLM. They render
+and persist the prompt only.
 
 **Generated files:** The app writes persona/checkpoint-specific runtime bundles under `logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/`.
 
@@ -352,7 +353,7 @@ opening.
 | Capability | Status | Note |
 |---|---|---|
 | Onboarding (SVBWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and a versioned Profile. The approved runtime can import its Core Values from saved Profile JSON; automated browser-to-service storage remains outside the capstone. |
-| Coach Digest validation depth | ⚠️ Partial | Coach Digest Validations and Coach Digest Evals are implemented. No current batch result or future human calibration of the AI review is complete. |
+| Coach Digest validation depth | ⚠️ Partial | Coach Digest Validations and Coach Digest Evals are implemented. The previous five-response development result was removed because its persona roster did not match the five deployed Persona replays. A replacement key-week evaluation for those five Personas is pending. Coach Digest Evals are AI review, not human validation. Future human calibration remains incomplete. |
 | Displayed nudge pilot evidence | ✅ Complete implementation | A future external pilot can measure response rate, continued journaling, and perceived relevance. These user measures are not a capstone implementation blocker. |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |
 | Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. The evidence is AI-reviewed synthetic development evidence; no fresh final test was run, so no deployment approval is claimed. |

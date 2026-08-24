@@ -175,6 +175,14 @@ logs/exports/weekly_coach/
 
 It also upserts the consolidated parquet at `--parquet-path`.
 
+When a programmatic caller supplies a Coach Digest model, the approved runtime
+also writes a timestamped
+`<persona_id>_<week_end>.<timestamp>.coach_diagnostic.json` file. This separate
+file stores the raw response, parse and schema status, Coach Digest Validations,
+and the exact failure stage. A new attempt creates a new file. A rejected
+response does not enter the user-facing Coach Digest or the consolidated
+parquet.
+
 All three CLIs render and persist the Coach Digest prompt. They do not call a
 live Coach Digest LLM. Programmatic callers can inject an asynchronous callable
 into `run_weekly_drift_coach_cycle()`, the deprecated
@@ -462,11 +470,21 @@ learned routing policies.
 
 ---
 
+## Current Coach Digest Batch Status
+
+Coach Digest Validations and Coach Digest Evals are implemented. The previous
+five-response development result was removed because its persona roster did not
+match the five deployed Persona replays. A replacement key-week evaluation for
+those five Personas is pending. Coach Digest Evals are AI review, not human
+validation or a fresh final test.
+
 ## Remaining Work
 
-1. Report Coach Digest Validations and Coach Digest Evals over a batch. Future
-   human calibration of the AI review remains separate work.
-2. Capture the user's perceived-accuracy rating and make it queryable.
+1. Generate and evaluate one key-week Coach Digest response for each deployed
+   Persona replay.
+2. Show the same five evaluated responses in the React app.
+3. Complete future human calibration of the AI review.
+4. Capture the user's perceived-accuracy rating and make it queryable.
 
 Persisting full VIF Critic Predictions and adding independent disagreement
 review are not planned for the time-boxed capstone. A fresh final test and
