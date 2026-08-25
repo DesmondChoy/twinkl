@@ -8,10 +8,13 @@ import pytest
 from openai.types.responses.response_usage import ResponseUsage
 
 from src.coach.llm_client import (
+    DEFAULT_GEMINI_MODEL,
+    DEFAULT_OPENAI_MODEL,
     DEFAULT_OPENAI_REASONING_EFFORT,
     DEFAULT_OPENAI_SERVICE_TIER,
     build_llm_complete,
     calculate_openai_cost_usd,
+    resolve_coach_model,
     summarize_llm_call_metrics,
 )
 from src.coach.schemas import LLMCallMetrics
@@ -28,6 +31,31 @@ def test_calculate_openai_cost_includes_cache_reads_and_writes():
     )
 
     assert cost == pytest.approx(0.000432)
+
+
+def test_explicit_provider_uses_provider_default_model(monkeypatch):
+    monkeypatch.setenv("TWINKL_COACH_PROVIDER", "gemini")
+    monkeypatch.setenv("TWINKL_COACH_MODEL", "gemini-custom")
+
+    assert resolve_coach_model() == ("gemini", "gemini-custom")
+    assert resolve_coach_model(provider="openai") == (
+        "openai",
+        DEFAULT_OPENAI_MODEL,
+    )
+    assert resolve_coach_model(provider="gemini") == (
+        "gemini",
+        "gemini-custom",
+    )
+    assert resolve_coach_model(provider="openai", model="openai-custom") == (
+        "openai",
+        "openai-custom",
+    )
+
+    monkeypatch.delenv("TWINKL_COACH_MODEL")
+    assert resolve_coach_model(provider="gemini") == (
+        "gemini",
+        DEFAULT_GEMINI_MODEL,
+    )
 
 
 @pytest.mark.asyncio

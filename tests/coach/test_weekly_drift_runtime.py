@@ -199,6 +199,53 @@ async def test_runtime_does_not_attach_an_invalid_coach_response(tmp_path: Path)
     assert "coach_diagnostic" not in stored_digest
 
 
+@pytest.mark.asyncio
+async def test_offline_evaluation_can_attach_a_failed_coach_response(tmp_path: Path):
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir()
+    _write_wrangled(wrangled_dir / "persona_deadbeef.md")
+    reviewer = OpenAIWeeklyDriftReviewer(
+        client=SimpleNamespace(responses=_SequencedResponses())
+    )
+
+    async def invalid_coach(
+        _prompt: str,
+        _response_format: dict | None,
+        _instructions: str | None = None,
+    ) -> str:
+        return json.dumps(
+            {
+                "weekly_mirror": (
+                    'You wrote "Called my sister and protected the evening for '
+                    'family," and this proves improvement.'
+                ),
+                "tension_explanation": (
+                    "The latest choice shows that the earlier concern is now fixed."
+                ),
+                "reflective_question": (
+                    "What helped you make that change and keep it going next week?"
+                ),
+            }
+        )
+
+    digest, paths = await run_weekly_drift_coach_cycle(
+        persona_id="deadbeef",
+        wrangled_dir=wrangled_dir,
+        output_dir=tmp_path / "exports",
+        parquet_path=tmp_path / "weekly_digests.parquet",
+        reviewer=reviewer,
+        coach_llm_complete=invalid_coach,
+        attach_failed_validation=True,
+    )
+
+    assert digest.coach_narrative is not None
+    assert digest.validation is not None
+    assert digest.validation.all_passed is False
+    stored_digest = json.loads(Path(paths["digest_json_path"]).read_text())
+    assert stored_digest["coach_narrative"] is not None
+    assert stored_digest["validation"] is not None
+
+
 def _write_onboarding_profile(path: Path, **overrides) -> None:
     payload = {
         "schema_version": 4,

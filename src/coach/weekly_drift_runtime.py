@@ -224,8 +224,15 @@ async def run_weekly_drift_coach_cycle(
     end_date: str | None = None,
     reviewer: WeeklyDriftReviewerFn | None = None,
     coach_llm_complete=None,
+    attach_failed_validation: bool = False,
 ) -> tuple[WeeklyDigest, dict[str, str]]:
-    """Run Weekly Drift Detection and optionally produce a Coach Digest response."""
+    """Run Weekly Drift Detection and optionally produce a Coach Digest response.
+
+    Product callers drop a response that fails Coach Digest Validations. An
+    offline evaluation can set ``attach_failed_validation`` to measure those
+    failures. Evaluation callers must check ``digest.validation.all_passed``
+    before they use the response as a valid Coach Digest response.
+    """
     wrangled_path = Path(wrangled_dir)
     output_path = Path(output_dir)
     synthetic_profile, entries = _load_runtime_input(
@@ -321,7 +328,7 @@ async def run_weekly_drift_coach_cycle(
             coach_llm_complete,
         )
         if (
-            coach_diagnostic.accepted
+            (coach_diagnostic.accepted or attach_failed_validation)
             and coach_diagnostic.narrative is not None
             and coach_diagnostic.validation is not None
         ):
