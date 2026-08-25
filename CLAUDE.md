@@ -151,13 +151,21 @@ decisions change. Do not perform a generic documentation sweep by default.
 
 - All Claude prose on every surface, including Claude Code responses, plans,
   Beads issue text, reviews, handoffs, and maintained documentation, must
-  strictly follow ASD-STE100 Simplified Technical English and
-  `docs/canonical_nouns.md`.
+  strictly follow `docs/canonical_nouns.md`.
 - Use approved words only, and use each word only with its approved meaning.
   Treat the canonical nouns as approved project technical terms.
 - Use one term for one meaning. Do not use a different term only for variety.
-- Use short sentences, active voice, and one main idea per sentence. Keep one
-  topic in each paragraph.
+- Outside academic papers and research reports, prefer short sentences, active
+  voice, and one main idea per sentence. Keep one topic in each paragraph.
+- For academic papers and research reports, use connected academic prose with
+  varied sentence length and paragraphs that develop an argument. Do not apply
+  ASD-STE100 Simplified Technical English or force each sentence to carry only
+  one idea.
+- In academic prose, avoid staccato sentence chains and repeated disclaimer
+  formulas. Keep a necessary evidence limit beside the relevant claim, then
+  consolidate detailed limitations in the limitations section.
+- The academic-prose exception does not relax canonical nouns, factual
+  precision, source disclosure, or evidence boundaries.
 - Define a necessary technical term in plain English when it first occurs.
 - Do not invent synonyms for canonical product terms. This prose rule does not
   require renaming code identifiers, data fields, file paths, or historical
