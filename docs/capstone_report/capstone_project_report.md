@@ -1,12 +1,44 @@
-# Twinkl: An Inner Compass for Longitudinal Alignment Between Behaviour and Core Values
-
-**Choy Yong Yi Desmond [A0315402W]**<br>
-**Leong Kay Mei [A0188702Y]**<br>
-**Loke Yuen Ying, Jodie [A0310555M]**
-
-Master of Technology in Intelligent Systems<br>
-Institute of Systems Science, National University of Singapore<br>
-Phase 2 Technical Paper, August 2026
+---
+title: "Twinkl: An Inner Compass for Longitudinal Alignment Between Behaviour and Core Values"
+author:
+  - "Choy Yong Yi Desmond [A0315402W]"
+  - "Leong Kay Mei [A0188702Y]"
+  - "Loke Yuen Ying, Jodie [A0310555M]"
+subtitle: "Master of Technology in Intelligent Systems - Institute of Systems Science, National University of Singapore - Phase 2 Technical Paper"
+date: "August 2026"
+date-format: "MMMM YYYY"
+format:
+  pdf:
+    pdf-engine: xelatex
+    toc: true
+    toc-depth: 3
+    number-sections: false
+    colorlinks: true
+    linkcolor: "blue!40!black"
+    urlcolor: "blue!40!black"
+    toccolor: black
+    geometry:
+      - margin=1in
+      - headheight=15pt
+    fontsize: 10pt
+    linestretch: 1.2
+    highlight-style: github
+    fig-pos: "H"
+    include-in-header:
+      text: |
+        \usepackage{microtype}
+        \usepackage{fancyhdr}
+        \pagestyle{fancy}
+        \fancyhf{}
+        \fancyhead[L]{\leftmark}
+        \fancyfoot[C]{\thepage}
+        \renewcommand{\headrulewidth}{0.4pt}
+mainfont: "Charter"
+sansfont: "Helvetica Neue"
+monofont: "Menlo"
+monofontoptions:
+  - Scale=0.88
+---
 
 ## Abstract
 
@@ -128,13 +160,13 @@ The April 2026 proposal positioned what is now the VIF Critic (Offline) as the r
 
 The Profile uses 11 value objects because Universalism has two facets before the final ten-value merge. Across 11 sets of six objects, every object appears six times and every pair appears together three times; the user selects one Most and one Least item in each set.
 
-For item \(i\), the raw Best-Worst Scaling score is
+For item $i$, the raw Best-Worst Scaling score is
 
-\[
+$$
 s_i = \frac{B_i-W_i}{6}, \qquad -1 \leq s_i \leq 1,
-\]
+$$
 
-where \(B_i\) and \(W_i\) are the Most and Least counts. Twinkl takes the mean of the two Universalism facet scores. It then shifts every score by the minimum plus one and normalises the ten shifted scores to sum to one. The highest scores identify the values shown for confirmation. If more than two values tie at the top, the user must select exactly two. A confirmed Profile therefore has at most two Core Values.
+where $B_i$ and $W_i$ are the Most and Least counts. Twinkl takes the mean of the two Universalism facet scores. It then shifts every score by the minimum plus one and normalises the ten shifted scores to sum to one. The highest scores identify the values shown for confirmation. If more than two values tie at the top, the user must select exactly two. A confirmed Profile therefore has at most two Core Values.
 
 Inspect exposes the complete choice-to-Profile calculation. An assessor can follow the 22 recorded Most and Least selections through object counts, the Universalism merge, the ten normalised weights, the confirmed Core Values, and the Python validation result. Figure 2 shows this deterministic path before any model-assisted interpretation of Journal Entries occurs.
 
@@ -187,7 +219,7 @@ Before the Luna-low contract was adopted, the hand-off study tested three `gpt-5
 - Weekly Drift Reviewer with raw VIF Critic Predictions;
 - VIF-Critic-triggered early Weekly Drift Reviewer calls plus Weekly Drift Detection.
 
-All setups used no reasoning effort and three repeats. Only the VIF Critic input or schedule changed. The early trigger required two consecutive Journal Entries with mean \(P(-1) \geq 0.8\) and maximum uncertainty no greater than 1.010153. This experiment tested whether the VIF Critic (Offline) improved downstream Weekly Drift Detection under those gpt-5.4-mini conditions. It did not test whether the VIF Critic (Offline) alone could replace Weekly Drift Detection, and it did not test VIF Critic input under the later Luna-low contract.
+All setups used no reasoning effort and three repeats. Only the VIF Critic input or schedule changed. The early trigger required two consecutive Journal Entries with mean $P(-1) \geq 0.8$ and maximum uncertainty no greater than 1.010153. This experiment tested whether the VIF Critic (Offline) improved downstream Weekly Drift Detection under those gpt-5.4-mini conditions. It did not test whether the VIF Critic (Offline) alone could replace Weekly Drift Detection, and it did not test VIF Critic input under the later Luna-low contract.
 
 ### 3.8 Coach Digest and application evidence
 
