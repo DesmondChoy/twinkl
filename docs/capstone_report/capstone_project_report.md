@@ -10,11 +10,16 @@ Phase 2 Technical Paper, August 2026
 
 ## Abstract
 
-People can state what matters to them, yet daily behaviour can move away from those priorities without a clear point of recognition. Twinkl is a time-boxed academic proof of concept that compares longitudinal Journal Entries with the Core Values in a confirmed Profile. We studied four questions: whether LLM-created labels are sufficiently reliable for model development, whether a compact VIF Critic (Offline) can identify value alignment, whether those predictions improve user-facing Drift detection, and whether a working application can present the result with inspectable evidence.
+People can state what matters to them, but their daily behaviour can move away from those priorities without a clear point of recognition. Twinkl is a time-boxed academic proof of concept. It compares longitudinal Journal Entries with the Core Values in a confirmed Profile. We studied four questions.
 
-The study used 1,651 synthetic Journal Entries from 204 personas. Three human annotators also labelled a shared benchmark of 115 Journal Entries from 19 personas. Mean pairwise Cohen's kappa was 0.66, and Fleiss' kappa was 0.56. The offline research archive contains 69 VIF Critic Runs and 133 persisted Run configurations. On a corrected persona-level split, the selected small-model comparison reached a quadratic weighted kappa of 0.378 and Conflict recall of 0.342. A human-context large language model reached 0.450 and 0.302 on the same measures. Raw VIF Critic Predictions did not improve Drift recall in the tested Weekly Drift Reviewer input ablation.
+1. Whether LLM-created labels give adequate development evidence
+2. Whether a compact Value Identity Function (VIF) Critic can identify value alignment
+3. Whether VIF Critic Predictions improve Drift detection
+4. Whether a working application can present the result with inspectable evidence.
 
-We therefore retained the VIF Critic (Offline) as a research contribution and removed it from the user-facing Drift path. The adopted Weekly Drift Reviewer uses cumulative Journal Entry history. A deterministic Drift Detector identifies Drift after two consecutive Conflicts for the same Core Value. Across three complete development Runs, the fixed Luna-low setup had median Drift recall of 0.548, four false Drift alerts, and coverage of 0.637. A React proof of concept implements Onboarding, Journal Entry capture, a displayed nudge, Weekly Drift Detection, Coach Digest display, and Inspect provenance. The application executes the adopted path with saved Persona replays. The evidence does not include a fresh final test, human validation of the Coach Digest, or deployment approval.
+The study used 1,651 synthetic Journal Entries from 204 personas. Three human annotators labelled a shared benchmark of 115 Journal Entries from 19 personas. Human-human Fleiss' kappa was 0.56. Mean LLM-Judge-human Cohen's kappa was 0.66. On a corrected persona-level split, a three-seed BalancedSoftmax VIF Critic reference had median quadratic weighted kappa (QWK) of 0.362 and median Conflict recall of 0.313. Raw VIF Critic input did not improve Drift recall in the downstream input ablation. Twinkl therefore keeps the VIF Critic (Offline) as a research result and excludes it from the user-facing Drift path.
+
+The implemented path uses a fixed `gpt-5.6-luna` Weekly Drift Reviewer at low reasoning effort. A deterministic Drift Detector identifies Drift after two consecutive Conflicts for the same Core Value. On AI-reviewed synthetic development data, this setup had median Drift recall of 0.548, four false Drift alerts, and coverage of 0.637 across three repeats. A React application implements Onboarding, Journal Entry capture, a displayed nudge, Weekly Drift Detection, Coach Digest display, and Inspect evidence. These results show a complete and inspectable proof of concept. They do not show real-user usefulness, human validation of Coach Digest content, a fresh final-test result, or deployment approval.
 
 **Keywords:** Core Values; Journal Entries; ordinal classification; Drift detection; LLM evaluation; reflective technology
 
@@ -22,13 +27,13 @@ We therefore retained the VIF Critic (Offline) as a research contribution and re
 
 ### 1.1 Problem and objective
 
-Journaling applications commonly help users record thoughts, moods, or events. This record can support reflection, but a record alone does not compare behaviour with a declared direction. Twinkl addresses this gap. It keeps a confirmed Profile of Core Values and compares later Journal Entries with those Core Values over time.
+Personal informatics applications help people collect and reflect on personal data [13], [14]. Reflection also requires more than a record. It can start when an application helps a person notice a breakdown, ask a question, and reconsider an earlier assumption [15]. Twinkl applies this idea to daily journaling. It keeps a confirmed Profile of Core Values and compares later Journal Entries with those Core Values over time.
 
-The product objective is to give the user an evidence-grounded weekly reflection. Twinkl must identify specific Conflict evidence, apply a stable rule for Drift, cite the relevant Journal Entries, and use non-prescriptive language. A displayed nudge can also ask one contextual question after an eligible Journal Entry. This immediate interaction is separate from the weekly analysis.
+The product objective is to give the user an evidence-grounded weekly reflection. Twinkl must identify specific Conflict evidence, apply a stable Drift rule, cite the relevant Journal Entries, and use non-prescriptive language. A displayed nudge can ask one contextual question after an eligible Journal Entry. This immediate interaction is separate from Weekly Drift Detection.
 
-The capstone objective is broader than a single predictive score. The professor requirements ask for an intelligent application, at least one intelligent-systems problem-solving technique, a working implementation, verification and validation, technical depth, appropriate references, and a demonstration that can be inspected. The [Product Requirements Document](../prd.md) defines the current product scope. The [capstone requirements](../is_capstone_slides.pdf) define the assessment boundary.
+Twinkl is not a clinical or therapeutic application. Research on conversational agents shows promise but also shows limited evidence, mixed study quality, and unclear benefit outside tested settings [16]. The proof of concept therefore uses explicit assessment-only language, fail-closed model validation, evidence citations, and a separate Inspect view.
 
-### 1.2 Research questions and contributions
+### 1.2 Research questions
 
 This paper addresses four research questions.
 
@@ -38,271 +43,244 @@ This paper addresses four research questions.
 
 **RQ3:** Do VIF Critic Predictions improve longitudinal Drift detection, or does direct review of Journal Entry history give a better operating point?
 
-**RQ4:** Can Twinkl present Weekly Drift Detection, Coach Digest content, and model provenance in one working and inspectable application?
+**RQ4:** Can Twinkl present Weekly Drift Detection, Coach Digest content, and model evidence in one working and inspectable application?
 
-The work makes four contributions. First, it provides a longitudinal synthetic corpus with versioned labels, rationales, and provenance. Second, it records a bounded small-model research programme with successful, negative, and inconclusive results. Third, it defines a fixed Weekly Drift Reviewer contract and a deterministic Drift Detector. Fourth, it integrates the research path into a React Experience and Inspect application with saved persona replays and provider-boundary receipts.
+The contributions are the evidence that answers these questions. Twinkl provides a longitudinal synthetic corpus with human-overlap checks. It records a repeatable ordinal-modelling study. It uses a downstream ablation to decide where the VIF Critic must and must not have authority. It also implements the adopted path in one application with saved replay evidence.
 
-### 1.3 Scope and current status
+### 1.3 Scope
 
-Table 1 separates implemented work from experimental work and open evidence gaps. An implemented component can still lack evidence from real users.
+Table 1 separates completed work from claims that need more evidence.
 
-| Area | Current status | Evidence boundary |
+| Component | Capstone status | Claim limit |
 |---|---|---|
-| Synthetic data and LLM-Judge VIF Labels | Complete for the capstone corpus | Synthetic data can contain model bias and does not represent real-user behaviour. |
-| Human label benchmark | Complete but limited | Three annotators labelled 115 shared Journal Entries. |
-| VIF Critic (Offline) | Complete offline research | It is not part of the user-facing Drift path. |
-| Weekly Drift Reviewer and Drift Detector | Complete capstone POC | Reported results are development evidence. There is no fresh final test. |
-| Displayed nudge | Complete Experience interaction | Its product role does not depend on a VIF Critic or Weekly Drift Detection metric gain. |
-| Coach Digest | Experimental | The five deployed Persona key-week responses passed all Coach Digest Validations. Same-model Coach Digest Evals are complete. Human calibration is not complete. |
-| Onboarding | Experimental pilot instrument | The current SVBWS interaction is not a validated psychometric instrument. |
-| Experience and Inspect | Most POC functions are implemented | Coach Digest feedback, longitudinal Core Value history, and the final professor walkthrough remain open. |
-| Public deployment | Assessment-only | The deployment is not approved for production or clinical use. |
+| Profile construction | Experimental React proof of concept | The Best-Worst Scaling design is research-grounded but is not a validated Twinkl instrument. |
+| Synthetic Journal Entries and LLM-Judge VIF Labels | Complete development corpus | Synthetic text and labels can preserve generator and judge bias. |
+| VIF Critic (Offline) | Complete research programme | Results support an offline research contribution, not user-facing Drift authority. |
+| Weekly Drift Detection | Development-only proof of concept | Results use AI-reviewed synthetic development data, not a fresh final test. |
+| Coach Digest | Experimental | Five saved responses passed mechanical checks and same-model AI review. Human calibration is not complete. |
+| Experience and Inspect | Working local application | Saved replays show implemented behaviour. No real-user study is complete. |
 
 ## 2. Related Work
 
-### 2.1 Human values and Best-Worst Scaling
+### 2.1 Human values and Profile construction
 
-Schwartz describes human values as trans-situational goals that differ in importance and guide judgement and action [1]. Later work refined this framework while preserving ten broad value dimensions [2]. Twinkl uses these ten dimensions as a stable vocabulary for Profile construction and label analysis. The dimensions do not diagnose a person and do not imply that one Core Value is better than another.
+Schwartz's Theory of Basic Human Values defines ten broad values and their motivational relations [1], [2]. Twinkl uses the ten-value model as a stable vocabulary. It does not treat a Profile as a diagnosis or fixed identity.
 
-The Schwartz Values Best-Worst Survey asks a respondent to choose the most and least important items from repeated sets [3]. Best-Worst Scaling can reduce some scale-use differences that occur in rating questions [4]. Twinkl adapts this interaction into 11 groups of six items. The calculation presents at most two confirmed Core Values. The adaptation is an Onboarding POC, so this paper does not claim psychometric equivalence with a published survey.
+Best-Worst Scaling asks a person to select the most and least important items from small sets [3], [4]. It avoids a long list of independent rating scales and produces a relative score. Twinkl uses a balanced design so that item exposure and pair exposure are controlled. The resulting Profile is a declared reference for later reflection. It is not an observed-behaviour ground truth.
 
-### 2.2 Ordinal learning, class imbalance, and uncertainty
+### 2.2 Reflection and longitudinal personal data
 
-Each VIF Critic head predicts `-1`, `0`, or `+1` for one value dimension. The order of these labels matters. Ordinal methods such as CORAL encode rank consistency instead of treating the labels as unrelated classes [5]. Twinkl also tested loss and sampling changes for rare classes. This need follows from the corpus distribution: neutral labels dominate, while explicit Conflict evidence is uncommon. Long-tailed learning methods show why a classifier can achieve a useful aggregate score while still missing rare classes [6].
+Personal informatics research describes preparation, collection, integration, reflection, and action as connected stages [13]. Later work shows that self-tracking is not one linear sequence and must account for changing goals and lapses over time [14]. This supports Twinkl's longitudinal design and its explicit Insufficient Evidence state.
 
-Model uncertainty is also material because Journal Entries can be short or ambiguous. Monte Carlo dropout provides one practical approximation of predictive uncertainty [7]. Twinkl used uncertainty measures as diagnostics. The final Drift path instead gives the Weekly Drift Reviewer an explicit Abstain option and applies fail-closed validation.
+Reflective informatics identifies breakdown, inquiry, and transformation as useful dimensions for reflection [15]. Twinkl implements the first two dimensions in a limited form. Weekly Drift Detection can identify a repeated Conflict pattern. Coach Digest can then ask an open question. Twinkl does not claim that this interaction causes transformation or behaviour change.
 
-### 2.3 Synthetic data and LLM-created labels
+### 2.3 Ordinal learning and long-tail labels
 
-Generative models can produce training examples and labels, but their output can reproduce the generator's assumptions [8]. LLM-as-judge research also identifies position, verbosity, and self-enhancement biases [9]. Twinkl therefore stores label provenance, uses structured rationales, measures repeated-label consistency, and compares a subset with human annotations. These controls measure some failure modes. They do not make synthetic Journal Entries equivalent to real-user data.
+Each LLM-Judge VIF Label is ordinal: `-1` for conflict, `0` for neutral, and `+1` for alignment. The distance between the classes matters. QWK measures chance-corrected ordinal agreement and penalises distant errors more than adjacent errors. Ordinal methods such as CORAL model ordered classes directly [5]. Long-tail methods such as Balanced Meta-Softmax adjust learning when frequent classes dominate rare classes [6]. Monte Carlo Dropout gives an approximate uncertainty measure through repeated stochastic predictions [7].
 
-### 2.4 Reflective feedback and human oversight
+These methods are relevant because neutral labels dominate most value dimensions. Accuracy alone can therefore look strong while Conflict recall remains poor.
 
-Twinkl's intended output is reflection, not therapy or behavioural instruction. The Coach Digest cites evidence and asks one question. This design keeps the user as the decision-maker. It also follows the risk-management principle that a project must document intended use, limits, measurement, and human oversight [10]. The current Coach Digest Evals are AI review. Future human calibration of AI review is required before a usefulness claim.
+### 2.4 Synthetic data, LLM review, and oversight
 
-## 3. System Design and Methods
+Synthetic text can increase data volume, but it can also reproduce the assumptions of its generator [8]. LLM-as-judge methods add scale, but they can have position, verbosity, and self-preference bias [9]. Twinkl therefore stores rationales, compares a shared subset with human labels, repeats selected LLM studies, and states the review source with each result.
 
-### 3.1 End-to-end architecture
+The NIST AI Risk Management Framework treats validity, transparency, privacy, and accountability as connected concerns [10]. Twinkl applies a narrow version of these controls. Stable provider instructions remain separate from user-controlled JSON. Invalid responses fail closed. Inspect records the model, reasoning effort, and saved justification. These controls reduce avoidable ambiguity. They do not grant deployment approval.
 
-Figure 1 shows the adopted architecture. Onboarding creates a confirmed Profile. Each eligible Journal Entry can receive a displayed nudge. Closed Monday-to-Sunday weeks then enter Weekly Drift Detection. The Weekly Drift Reviewer produces decisions for each Core Value, and the Drift Detector applies deterministic sequence rules. The Coach Digest consumes the resulting state and cited evidence. Inspect exposes events, request metadata, and receipts for assessment.
+## 3. Method
 
-![Twinkl end-to-end architecture](../architecture/e2e_architecture.png)
+### 3.1 Study design and evidence boundaries
 
-*Figure 1. End-to-end architecture. The VIF Critic (Offline) remains an offline research path. The user-facing path sends Journal Entry history directly to the Weekly Drift Reviewer and then applies the deterministic Drift Detector.*
+The study has four evidence layers.
 
-Stable Twinkl rules and user-controlled data have separate provider fields. OpenAI calls use `instructions`, and Gemini calls use `system_instruction`. Journal Entries, displayed-nudge responses, preferred names, and current-focus text remain JSON data. The `live-prompt-boundary-v1` receipt records this structure. It verifies message construction; it does not prove behavioural resistance to prompt injection.
+1. RQ1 uses a shared human-annotation benchmark to assess LLM-Judge VIF Labels.
+2. RQ2 uses persona-level train, validation, and test splits to assess the VIF Critic (Offline).
+3. RQ3 uses frozen AI-reviewed synthetic development references to assess Weekly Drift Detection.
+4. RQ4 uses saved application replays, mechanical checks, AI review, and regression tests to assess the proof of concept.
 
-### 3.2 Profile construction
+These layers answer different questions. Human agreement on individual Journal Entries does not validate longitudinal Drift. AI-reviewed development references do not measure real-user usefulness. A working replay does not replace a user study.
 
-The Onboarding flow shows one six-item group at a time. The user selects the most and least important items. The application records the answer and updates a normalised score for each value dimension. At the end of the flow, the user confirms a Profile with at most two Core Values.
+### 3.2 Architecture
 
-![Onboarding calculation in Inspect](images/onboarding-inspect.png)
+Figure 1 shows the adopted architecture. Onboarding creates the Profile. The application records Journal Entries and optional displayed-nudge responses. The Weekly Drift Reviewer reviews cumulative Journal Entry history for each Core Value. The deterministic Drift Detector converts consecutive Conflict decisions into Active Drift, No Active Drift, or Insufficient Evidence. Coach Digest cites the saved evidence and asks one non-prescriptive question. Inspect shows the calculation and model receipts.
 
-*Figure 2. Current Onboarding Inspect view captured from the local React application on 24 August 2026. The view exposes group progress, selections, score changes, and the calculation receipt.*
+The VIF Critic uses the same offline corpus, but it does not control Weekly Drift Detection. This boundary follows the RQ3 result.
 
-The calculation is deterministic and inspectable. This supports demonstration and error analysis. It does not establish test-retest reliability, construct validity, or population norms. These questions require a separate study with real participants.
+![End-to-end Twinkl architecture](../architecture/e2e_architecture.png)
 
-### 3.3 Synthetic Journal Entries and labels
+*Figure 1. Adopted Twinkl architecture. Solid links show the implemented user path. The VIF Critic (Offline) remains a separate research component.*
 
-The corpus contains 204 personas and 1,651 Journal Entries. Persona generation runs in parallel between personas and sequentially within each persona. The sequential constraint preserves a coherent personal history. Prompts include banned-term and value-leakage controls. Logic that represents production behaviour does not receive hidden generation metadata or reference labels.
+### 3.3 Profile construction
 
-The LLM-Judge assigns ten ternary LLM-Judge VIF Labels and a rationale to each Journal Entry. The corpus also contains LLM-Judge Conflict Labels for the student-visible Drift target. Versioned schemas, source identifiers, model metadata, and label receipts support reconstruction. The [Synthetic Data Pipeline](../pipeline/pipeline_specs.md) gives the complete data contract.
+The Profile uses 11 value objects. Universalism has two facets before the final ten-value merge. The user completes 11 sets of six objects. Every object appears six times, and every pair appears together three times. The user must select one Most and one Least item in each set.
 
-Three human annotators provided 380 saved annotations. The main agreement benchmark uses the 115 Journal Entries that all three annotators labelled, drawn from 19 personas. We report mean pairwise Cohen's kappa and multi-rater Fleiss' kappa because the two statistics answer different agreement questions [11], [12]. The remaining saved annotations support workflow records and do not enlarge the fully shared benchmark.
-
-### 3.4 VIF Critic (Offline)
-
-The VIF Critic uses a frozen text embedding, the normalised ten-value Profile, and a 23,454-parameter multilayer perceptron head. It predicts one ternary ordinal label for each value dimension. The research programme started with the smallest plausible model because local execution, low marginal inference cost, repeatability, and reduced provider dependence would be useful if accuracy were sufficient.
-
-The experiment archive contains 69 Run identifiers and 133 persisted Run configurations. The difference occurs because some Run identifiers contain more than one configuration. The work tested persona-level split repair, rare-class weighting, BalancedSoftmax, targeted synthetic data, alternative encoders, consensus labels, soft labels, uncertainty, and recall-first checkpoint selection. Every result in this paper comes from a named report or persisted Run record.
-
-### 3.5 Weekly Drift Review and deterministic detection
-
-The Weekly Drift Reviewer receives cumulative student-visible Journal Entry history for each Core Value. The fixed contract uses `gpt-5.6-luna` with reasoning effort `low`. For each Journal Entry and Core Value pair, it returns Conflict, Not Conflict, or Abstain, together with cited evidence and a rationale. Schema checks, evidence checks, bounded retry, and fail-closed handling prevent invalid output from becoming a decision.
-
-The Drift Detector applies the following rule to an ordered sequence of decisions for Core Value \(v\):
+For item \(i\), the raw Best-Worst Scaling score is
 
 \[
-D_{v,t}=1 \quad \text{if and only if} \quad C_{v,t-1}=1 \land C_{v,t}=1,
+s_i = \frac{B_i-W_i}{6}, \qquad -1 \leq s_i \leq 1,
 \]
 
-where \(C_{v,t}=1\) means that Journal Entry \(t\) is a Conflict for Core Value \(v\). The two Conflicts must be consecutive in that Core Value sequence. The rule can cross a week boundary. Longer Conflict runs produce one continuous Drift interval, not duplicate records.
+where \(B_i\) and \(W_i\) are the Most and Least counts. Twinkl takes the mean of the two Universalism facet scores. It then shifts every score by the minimum plus one and normalises the ten shifted scores to sum to one. The highest scores identify the values shown for confirmation. If more than two values tie at the top, the user must select exactly two. A confirmed Profile therefore has at most two Core Values.
 
-![Weekly review structure](../drift/figures/fig1_structure.png)
+![Three-step Profile construction](images/profile-construction.png)
 
-*Figure 3. Weekly Drift Detection structure. Weekly review classifies evidence; deterministic state logic identifies and maintains Drift.*
+*Figure 2. Profile construction. The calculation is deterministic after the user completes the 11 Best-Worst Scaling choices.*
 
-The current result is Active Drift, No Active Drift, or Insufficient Evidence. Historical Drift Records retain the start, evidence, end, and end reason after a current Conflict run ends. A full-history recompute makes the output reproducible and avoids hidden incremental state during the capstone POC.
+### 3.4 Synthetic corpus and LLM-Judge VIF Labels
 
-![Development Drift trajectories](../drift/figures/fig2_trajectories.png)
+The corpus contains 204 personas and 1,651 Journal Entries. Persona generation ran in parallel between personas and sequentially within each persona. Sequential generation preserved narrative continuity. The configuration sampled age range, profession, culture, tone, verbosity, and reflection mode. Prompt-level banned terms reduced direct Core Value leakage. Logic that represents production behaviour did not receive generation metadata or reference labels.
 
-*Figure 4. Examples from the development Drift trajectories. The figure shows why an isolated Conflict is not sufficient and why sequence order matters.*
+Claude Code subagents created the original personas, Journal Entries, and LLM-Judge VIF Labels. The committed persona, Journal Entry, and label prompt templates are version `1.0.0`. The original run files do not retain a stable Claude model identifier or model snapshot. This missing provenance is a study limit. Later LLM-Judge studies have complete model and prompt receipts, but they do not replace the original persisted labels used in the corrected-split VIF Critic reference.
 
-### 3.6 Displayed nudge, Coach Digest, and Inspect
+For each Journal Entry, the LLM-Judge assigned ten ternary LLM-Judge VIF Labels and a short rationale for each non-zero label. The current parquet file contains 1,651 labelled Journal Entries; 1,594 rows contain rationale JSON. Three human annotators independently labelled the same 115 Journal Entries from 19 personas. Fleiss' kappa measures agreement among the three humans [12]. Cohen's kappa measures agreement between one human and the LLM-Judge [11]. We report the mean of the three LLM-Judge-human Cohen values.
 
-The displayed nudge is an immediate Experience interaction. A deterministic anti-annoyance check first decides whether a Journal Entry is eligible. The user can reply, skip, or retry after a safe failure. The displayed nudge is a product design choice; its role does not depend on a gain in VIF Critic or Weekly Drift Detection metrics.
+### 3.5 VIF Critic (Offline)
 
-The Coach Digest consumes Weekly Drift Detection output. The input includes the Core Value, current state, cited Journal Entries, date window, and Historical Drift Records when applicable. The generator returns a short response and one reflective question. Coach Digest Validations check structure, length, jargon, evidence references, and non-prescriptive language. Coach Digest Evals provide AI review and are not human validation. The current five-response sample uses the exact key-week responses stored in the public Persona replay fixtures.
+The VIF Critic is a compact multilayer perceptron with 23,454 parameters. It receives a 256-dimensional frozen `nomic-ai/nomic-embed-text-v1.5` embedding and the ten normalised Profile weights. The historical corrected-split reference uses one Journal Entry at a time, two 64-unit hidden layers, dropout of 0.3, and 30 output logits. The logits represent three ordered classes for each of ten value dimensions.
 
-The Experience and Inspect application provides five deterministic Persona replays for assessment. Figure 5 shows the entry point. The saved replays make demonstrations repeatable and avoid a live provider dependency.
+The split is by persona. The frozen training table for this reference contains 1,022 training Journal Entries, 217 validation Journal Entries, and 221 test Journal Entries. The split seed is 2025. The three training seeds are 11, 22, and 33. The BalancedSoftmax reference uses a learning rate of 0.015522, weight decay of 0.01, batch size 16, at most 100 epochs, and early stopping patience 20. Fifty Monte Carlo Dropout samples provide the uncertainty diagnostic.
 
-![Persona replay picker](images/persona-picker.png)
+QWK is the main ordinal-agreement measure. Conflict recall is the proportion of reference `-1` labels that the VIF Critic predicts as `-1`. We also inspect calibration, class-specific recall, and neutral prediction rate because a high QWK can hide weak Conflict detection.
 
-*Figure 5. Current Persona replay picker captured from the local React application on 24 August 2026. Each replay states the Profile and the key week used for the assessment path.*
+### 3.6 Weekly Drift Detection
 
-![Lukas key-week Experience](images/lukas-key-week-experience.png)
+The Weekly Drift Reviewer receives cumulative student-visible Journal Entry history for one Persona and Core Value. It returns Conflict, Not Conflict, or Abstain for current-week Journal Entries. The fixed development contract uses `gpt-5.6-luna` at low reasoning effort, structured output, a 2,000-output-token limit, `store: false`, and fail-closed validation.
 
-*Figure 6. Lukas key-week Experience view. The screenshot shows a completed week, Weekly Drift Detection status, evidence-linked entries, and the surrounding journal timeline.*
+The Drift Detector owns the sequence rule. It identifies one Drift for each maximal run of at least two consecutive Conflicts for the same Core Value. A one-Conflict rule was too sensitive in the historical consensus-label analysis: it flagged 102 of 204 personas. Two consecutive Conflicts flagged 40, while three and four flagged 20 and 5. This analysis supported the two-Conflict design. It did not validate live detection.
 
-![Coach Digest](images/lukas-key-week-coach-digest.png)
+The complete development review contains 292 resolved cases. A resolved case is one Persona/Core Value history with a final Drift reference outcome and no open review decision. These cases contain 2,377 Journal Entry/Core Value combinations, 42 Drifts, and 36 Drift trajectories. Two isolated `gpt-5.6-sol` review lanes at xhigh reasoning effort reviewed the previously open complement. They agreed on 95.2% of 1,483 decisions. A disagreement-only review resolved the remaining 71 decisions. The earlier frozen set used the same review approach; four prior Uncertain decisions were later reviewed with `claude-opus-4-8`. These are AI-reviewed LLM-Judge Conflict Labels, not human validation.
 
-*Figure 7. Saved Coach Digest for the Lukas key week. The displayed response is one of the five responses in the current evaluation manifest.*
+Each Weekly Drift Reviewer setup used 951 Persona-week prompts and three repeats. Coverage is the proportion of requested decisions that return a valid Conflict or Not Conflict result instead of Abstain or an invalid response. Paired intervals use 10,000 trajectory-level bootstrap resamples with seed 5,256,000. The resampling unit keeps decisions from the same Drift trajectory together.
 
-![Weekly Drift Reviewer AI review detail](images/lukas-key-week-ai-review.png)
+### 3.7 VIF hand-off ablation
 
-*Figure 8. Weekly Drift Reviewer AI review detail for one cited decision. The view names the model, reasoning effort, decision, and recorded justification. It is saved AI evidence, not human validation.*
+The hand-off study tested three setups on a frozen development union with 33 known Drifts across 106 cases:
 
-![Weekly Drift Reviewer Inspect event](images/lukas-key-week-inspect.png)
+- Weekly Drift Reviewer without VIF Critic input;
+- Weekly Drift Reviewer with raw VIF Critic Predictions;
+- VIF-Critic-triggered early Weekly Drift Reviewer calls plus Weekly Drift Detection.
 
-*Figure 9. Expanded Inspect event for the same key week. The event records four Weekly Drift Reviewer Decisions, one Conflict, event timing, parentage, session identity, and an input hash. The saved replay is not evidence of a live provider call.*
+All setups used `gpt-5.4-mini-2026-03-17` at no reasoning effort and three repeats. Only the VIF Critic input or schedule changed. The early trigger required two consecutive Journal Entries with mean \(P(-1) \geq 0.8\) and maximum uncertainty no greater than 1.010153. This study tested whether the VIF Critic (Offline) improved downstream Drift detection. It did not test whether the VIF Critic (Offline) alone could replace Weekly Drift Detection.
 
-## 4. VIF Critic Experiments and Architecture Decision
+### 3.8 Coach Digest and application evidence
 
-### 4.1 Experiment progression
+Coach Digest uses saved Weekly Drift Reviewer evidence. It must cite relevant Journal Entry text, avoid prescriptive instructions, state uncertainty, and ask one open question. Mechanical Coach Digest Validations check groundedness, non-circularity, value leakage, state claims, and length.
 
-The first 18 Runs established baselines and exposed a split error. The corrected design splits by persona, not by individual Journal Entry. This change prevents one persona's writing style from appearing in both training and test data. Runs 19 to 36 studied imbalance, targeted data, regularization, and weighting. Runs 37 to 56 studied encoder and model changes, consensus labels, and checkpoint diagnostics. Runs 57 to 69 studied Security target repair, soft labels, and compact history.
+Coach Digest Evals use four five-point scores: correctness, evidence specificity, non-prescriptive tone, and tension honesty. The target mean is at least 3.5 for each score. The evaluator also checks whether the question is open and relevant. The same `gpt-5.6-luna` model at no reasoning effort generated and evaluated the five saved responses. This same-model design can make the AI review too favourable.
 
-Table 2 records the main changes. It reports only results that affected a later decision. The [VIF Experiment Index](../../logs/experiments/index.md) contains the complete chronology.
+RQ4 also uses saved React replays and repository tests. The prompt-boundary regression set had 166 passing tests on 3 August 2026. It checked provider-field separation, structured validation, evidence validation, retry behaviour, and fail-closed paths. This is point-in-time code evidence, not a provider-level attack study.
 
-| Run family | Intervention | Result | Decision |
-|---|---|---|---|
-| Runs 1–18 | Baseline design and split audit | Entry-level splitting gave misleading model rankings. | Adopt persona-level splits and repeat earlier comparisons. |
-| Runs 19–36 | BalancedSoftmax, weighting, targeted data, and regularization | Conflict recall improved, but neutral hedging and seed variation remained. | Keep rare-class metrics beside aggregate QWK. |
-| Runs 37–56 | Encoder changes, consensus labels, and checkpoint diagnostics | Some local gains did not transfer across values or seeds. | Reject broad model replacement without repeated evidence. |
-| Runs 57–69 | Security repair, soft labels, and compact history | Security repair helped its active target. Soft labels and compact history did not pass the adoption gate. | Nominate a recall-first offline checkpoint and stop further MLP intervention work. |
+## 4. Results
 
-### 4.2 VIF Critic results
+### 4.1 RQ1: LLM-Judge-human agreement is adequate but uneven
 
-The corrected-split Runs 19 to 21 had median QWK of 0.362, median Conflict recall of 0.313, median minority recall of 0.448, median neutral hedging of 0.621, and median calibration score of 0.713. Within that family, `run_020` reached QWK 0.378 and Conflict recall 0.342. A human-context `gpt-5.4-mini` comparison on 221 rows reached QWK 0.450, Conflict recall 0.302, minority recall 0.534, and neutral hedging 0.707.
+Human-human Fleiss' kappa was 0.56 on the shared benchmark. Mean LLM-Judge-human Cohen's kappa was 0.66. These are different measures. The 0.66 value is not pairwise human agreement.
 
-The compact model and the language model had different strengths. The compact model found slightly more Conflict cases in the named comparison. The language model had better ordinal agreement and minority recall. The comparison also used richer human-context input, so it measures the combined effect of model capacity and available context.
+Figure 3 shows the per-dimension result. Mean LLM-Judge-human agreement was higher than human-human agreement for nine of ten dimensions. Power was the only exception, with 0.60 against 0.61. Universalism had the highest agreement. Conformity, Self-Direction, and Security had lower human-human agreement and need more careful interpretation.
 
-The compact-history experiment `run_069` did not pass its gate. Its QWK was 0.342 compared with 0.363 for its baseline, and its minority recall was 0.400 compared with 0.446. Security QWK also fell from 0.339 to 0.267. This negative result helped close a line of work that increased input complexity without sufficient evidence.
+![Per-dimension human and LLM-Judge agreement](images/label-agreement.png)
 
-### 4.3 Drift input and scheduling ablations
+*Figure 3. Chance-corrected agreement on the shared 115-Journal-Entry benchmark. Grey points show human-human Fleiss' kappa. Green points show mean LLM-Judge-human Cohen's kappa.*
 
-The architecture decision depended on the downstream Drift result as well as per-entry labels. In the 33-Drift reassessment union, the Weekly Drift Reviewer without raw VIF Critic input found 9 of 33 Drifts. With raw VIF Critic input, it found 7 of 33. The paired recall difference was -0.061, with a 95% bootstrap interval from -0.158 to 0.033. Coverage fell from 0.670 to 0.594, and false Drift alerts increased from zero to three.
+Later audits narrow this result. A five-pass LLM-Judge study had per-dimension repeated-call Fleiss' kappa from 0.775 to 0.890, but the consensus labels changed the frozen holdout and did not become the active VIF Critic target. The agreement evidence supports use of the persisted labels for bounded development. It does not show that every dimension has equal label quality or that the labels are human ground truth.
 
-An early-review schedule and weekly review both found 9 of 33 Drifts. Early review reduced median detection delay from five days to one day, but it added one false Drift alert and 57 reviewer calls. The delay benefit did not remain in the nontraining subgroup. Direct use of VIF Critic Predictions gave Drift recall from 0.530 to 0.607, but precision was only 0.262 to 0.327. These results did not support a user-facing role for the VIF Critic Predictions.
+**Answer to RQ1:** The LLM-Judge VIF Labels have moderate-to-substantial human-overlap evidence at aggregate level. The evidence is adequate for proof-of-concept model development, with explicit limits for hard dimensions and missing original model provenance.
 
-### 4.4 Adopted architecture
+### 4.2 RQ2: the compact VIF Critic finds some Conflict signal but is not reliable enough for user-facing authority
 
-We retained the VIF Critic (Offline) because it demonstrates ordinal modelling, class-imbalance methods, uncertainty diagnostics, and a disciplined experiment process. We did not give it authority over user-facing Drift. The Weekly Drift Reviewer receives Journal Entry history directly, and the deterministic Drift Detector owns the sequence rule.
+Table 2 reports the three corrected-split BalancedSoftmax seeds. The family median was 0.362 QWK and 0.313 Conflict recall. Seed 22 had the highest QWK and Conflict recall, but the spread across seeds shows that one best Run would overstate stability.
 
-A future cheaper model can replace or assist the Weekly Drift Reviewer only if it improves the fixed Drift metrics on a fresh test set while meeting cost, latency, privacy, and evidence-citation requirements. The [VIF Capstone Decision](../vif/05_capstone_scope_decision.md) records the adopted boundary.
+| Training seed | Test QWK | Conflict recall | Calibration | Neutral prediction rate |
+|---:|---:|---:|---:|---:|
+| 11 | 0.362 | 0.277 | 0.727 | 0.642 |
+| 22 | 0.378 | 0.342 | 0.713 | 0.621 |
+| 33 | 0.358 | 0.313 | 0.655 | 0.565 |
+| **Median** | **0.362** | **0.313** | **0.713** | **0.621** |
 
-Figure 10 summarises the research path from per-Journal-Entry VIF Critic experiments to the adopted Weekly Drift Detection design. The [interactive research path](vif-to-weekly-drift-research-path.html), first published in Git commit `5c7057e4`, provides candidate-level details and series controls.
+The result is technically useful. BalancedSoftmax moved the VIF Critic away from an all-neutral failure mode and recovered some rare Conflict labels. The result is not strong enough for a user-facing claim. It still misses about two thirds of reference Conflicts at the family median. Performance also varies by value dimension. Hard-set and target-repair studies found material limits for Security and Hedonism.
 
-![VIF Critic to Weekly Drift Detection research path](images/vif-to-weekly-drift-research-path.png)
+The research programme included corrected splitting, loss comparisons, encoder comparisons, targeted synthetic data, consensus labels, soft labels, uncertainty checks, and checkpoint selection. Negative results were important. They showed that more model variants did not remove the label, context, and long-tail limits.
 
-*Figure 10. Research transition from the VIF Critic (Offline) to Weekly Drift Detection. The upper panel reports per-Journal-Entry Conflict recall across 133 candidate evaluations. The lower panel reports Drift recall for the VIF hand-off ablation and the model-and-reasoning comparison. The metrics and cohorts differ and must not be read as one series. In the lower panel, green and orange points identify the selected Luna-low contract and the highest-recall Luna-`xhigh` setting. Results use AI-reviewed synthetic development data.*
+**Answer to RQ2:** The compact VIF Critic captures some ordinal and Conflict signal. Its median QWK and Conflict recall support an offline research contribution. They do not support direct authority over user-facing Drift.
 
-## 5. Evaluation and Results
+### 4.3 RQ3: VIF Critic Predictions do not improve the tested Drift path
 
-### 5.1 Label validation
+Figure 4 shows the hand-off ablation. The Weekly Drift Reviewer without VIF Critic input found a median 9 of 33 Drifts. The Weekly Drift Reviewer with raw VIF Critic Predictions found 7 of 33 and added three median false Drift alerts. VIF-Critic-triggered early calls plus Weekly Drift Detection found the same 9 of 33 Drifts and added one median false Drift alert.
 
-Table 3 summarises the label evidence. The LLM-Judge corpus contains 1,651 labelled Journal Entries, and 1,594 include rationales. Five-pass self-consistency ranged from Fleiss' kappa 0.775 for Security to 0.890 for Universalism. On the shared human benchmark, mean pairwise Cohen's kappa was 0.66 and Fleiss' kappa was 0.56.
+![VIF Critic hand-off ablation](images/vif-handoff-ablation.png)
 
-| Evidence | Sample | Result | Interpretation |
-|---|---:|---:|---|
-| LLM-Judge corpus | 1,651 Journal Entries | 1,594 rationales present | Rationale coverage is high but incomplete. |
-| Five-pass LLM-Judge repeatability | Full evaluation by value | Fleiss' kappa 0.775–0.890 | The judge is repeatable under the tested prompt and model settings. |
-| Pairwise human agreement | 115 shared Journal Entries | Mean Cohen's kappa 0.66 | Human annotators have substantial but imperfect agreement. |
-| Multi-rater human agreement | 115 shared Journal Entries | Fleiss' kappa 0.56 | Ambiguity remains when all three annotators are considered together. |
+*Figure 4. VIF Critic hand-off ablation on the 33-Drift development union. VIF Critic Predictions lowered median Drift recall in the input setup. Early scheduling changed delay but did not increase Drift hits.*
 
-The human result supports use of the labels for bounded development. It does not establish a ground truth for personal values. Missing rationale automation and any future rubric change require a new quality check or reannotation.
+The paired raw-input Drift-recall difference was -0.061 with a 95% interval from -0.158 to 0.033. The interval includes zero, so the recall loss is inconclusive. Coverage fell by 0.094 with a 95% interval from -0.170 to -0.019. VIF-Critic-triggered early calls reduced median delay from five days to one day, but the recall difference was exactly zero. The observed delay result came from development cases with historical training provenance and did not transfer to the non-training subgroup.
 
-### 5.2 Weekly Drift Detection
+The later reasoning-effort study assessed direct Weekly Drift Reviewer operating points on all 42 known Drifts. Figure 5 shows the trade-off. Low reasoning effort had 0.548 median Drift recall, four false Drift alerts, and 0.637 coverage. Medium had no clear recall gain over low. Xhigh reached 0.667 recall but had nine false Drift alerts. Against low, the xhigh paired Drift-recall difference was +0.095 with a 95% interval from +0.023 to +0.186, and the false-alert difference was +5 with a 95% interval from +1 to +9. Xhigh is therefore a more aggressive operating point, not a clean improvement.
 
-The complete development review contains 292 resolved cases, 2,377 Journal Entry and Core Value combinations, 42 known Drifts, and 36 Drift trajectories. Each model and reasoning-effort setup had three complete Runs. Selection used Drift recall first, false Drift alerts second, and coverage as a diagnostic.
+![Weekly Drift Reviewer reasoning-effort trade-off](images/weekly-drift-tradeoff.png)
 
-For the fixed Luna-low setup, the three Drift recalls were 0.571, 0.548, and 0.548. The corresponding false Drift alert counts were five, four, and four among 256 non-Drift Core Value trajectories. Median coverage was 0.637, and the median detected count was 23 of 42 known Drifts. The user-facing state remains Active Drift, No Active Drift, or Insufficient Evidence.
+*Figure 5. Weekly Drift Reviewer operating points on AI-reviewed synthetic development data. Bubble area shows coverage. Twinkl retains low reasoning effort as the fixed capstone contract.*
 
-A later Luna-`xhigh` comparison reached median Drift recall of 0.667 and nine false Drift alerts. This was a more aggressive operating point. The project retained Luna-low because the gain came with more than twice the median false Drift alerts and a higher current-rate cost calculation.
+Low reasoning effort remains the fixed capstone contract because it gives the best accepted balance for the proof of concept. This is a design decision, not a deployment threshold. A fresh final test can change the selection.
 
-The earlier synthetic-corpus analysis also tested the persistence requirement. A one-Conflict rule flagged 102 of 204 personas. The adopted two-Conflict rule flagged 40. Thresholds of three and four consecutive Conflicts reduced the counts to 20 and 5. This analysis used LLM-Judge consensus labels. It supports the rule design but does not validate live detection.
+**Answer to RQ3:** VIF Critic Predictions did not improve Drift recall in the tested input or scheduling ablations. Direct review of cumulative Journal Entry history gives the adopted proof-of-concept path. The VIF Critic remains offline.
 
-![Persistence threshold sensitivity](../drift/figures/fig4_persona_cliff.png)
+### 4.4 RQ4: the application presents one inspectable path, but user validation is open
 
-*Figure 11. Persistence sensitivity in the synthetic corpus. Requiring two consecutive LLM-Judge consensus Conflicts reduced the flagged population from 102 to 40 personas. Higher thresholds left too few personas for the capstone benchmark.*
+The React application connects the confirmed Profile, Journal Entry capture, displayed-nudge response, Weekly Drift Detection, Coach Digest, and Inspect evidence. Saved replays let a reviewer move through the same Persona history and inspect the final decision. Figure 6 combines the user result, Coach Digest, and saved AI evidence for one key week.
 
-The Luna-low report records median request latency of 2.81 seconds and a cache-aware token-cost calculation of USD 6.96 for 2,853 development calls. The amount is a calculation from recorded usage, not a provider billing export. It is not a per-user or production cost benchmark.
+![Lukas saved replay case study](images/lukas-case-study.png)
 
-### 5.3 Functional verification and traceability
+*Figure 6. One saved replay. Panel A shows the Experience result and cited Journal Entries. Panel B shows Coach Digest. Panel C shows the saved Weekly Drift Reviewer model, reasoning effort, output, and justification. The Persona is synthetic.*
 
-The Experience and Inspect POC connects the main components through one session. Closed-week review prevents future Journal Entries from entering an earlier result. The Drift Detector handles week boundaries, longer Conflict runs, Abstain decisions, deduplication, and Historical Drift Records. Saved Persona replays exercise Active Drift, No Active Drift, and Insufficient Evidence cases.
+The five deployed Persona key-week responses passed every Coach Digest Validation. The same-model Coach Digest Evals had mean scores of 4.80 for correctness, 5.00 for specificity, 5.00 for non-prescriptive tone, and 4.60 for tension honesty. All five questions passed. Generation used seven calls because two responses required validation-guided retry. Generation and evaluation together used 12 calls, 16,547 input tokens, 1,696 output tokens, about 33.7 seconds of request latency, and a published-rate calculation of less than one cent. This is a token calculation, not a billing record.
 
-The live prompt-boundary review recorded 166 relevant tests passing on 3 August 2026. The tests covered data separation, schema validation, evidence validation, retries, and fail-closed paths. That result is point-in-time repository evidence. It does not substitute for a provider-level prompt-injection study.
+The application also separates stable provider instructions from user-controlled JSON and saves a prompt-boundary receipt. Confirmed deletion clears browser state and the matching temporary Python session. The application does not claim deletion from the AI provider.
 
-Appendix B maps the main implemented claims to closed Beads work and Git commits. This cross-reference ties prose to accepted work rather than to planning text. Current implementation status still follows the live code, tests, reports, and Beads record.
+**Answer to RQ4:** Twinkl presents the adopted path in one working and inspectable application. Saved replays, validation checks, AI review, and regression tests support functionality. They do not establish user usefulness, customer satisfaction, or longitudinal behaviour change.
 
-### 5.4 Coach Digest results
+## 5. Discussion
 
-The [current sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md) uses one key week from each of the five deployed Persona replays. The evaluation manifest reads the exact responses from the rebuilt public scenario bundles. All five responses passed groundedness, non-circularity, raw value leakage, current-state claims, and length checks. These are mechanical code checks. [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md) scored mean correctness of 4.80, specificity of 5.00, non-prescriptive tone of 5.00, and tension honesty of 4.60. All reflective questions passed. No evaluator call failed, and no response had a review flag.
+### 5.1 Main findings
 
-Generation needed seven paid Luna-none calls because two first attempts failed Coach Digest Validations. The five AI reviews needed five more calls. The 12 calls used 16,547 input tokens and 1,696 output tokens. Their calculated published-rate cost was USD 0.00607555, and total request latency was 33.707 seconds. The cost is a calculation from recorded usage, not a provider billing export.
+The four research questions lead to one architecture decision. The LLM-Judge gives usable but imperfect supervision. The compact VIF Critic learns some Conflict signal, but its result is not strong enough for user-facing authority. More important, VIF Critic Predictions do not improve the tested downstream Drift path. Twinkl therefore keeps the VIF Critic (Offline) as a research contribution and gives direct Journal Entry review to the Weekly Drift Reviewer. The deterministic Drift Detector keeps the longitudinal rule explicit.
 
-Luna-none generated and evaluated the responses. This same-model review can make the scores too favourable because generator and evaluator errors can correlate. The screenshots record how the POC displays the evaluated responses and AI review detail. They do not show that real users find a response accurate, useful, or appropriately timed. The planned study uses five to ten users for one to two weeks, an accuracy rating after each Coach Digest, and an exit interview. Until that study occurs, Coach Digest Evals remain AI review and not human validation.
+This is a useful negative result. A more complex architecture would not be a better capstone result if the extra component did not improve the final task. The hand-off ablation makes the ownership boundary evidence-based.
 
-## 6. Discussion
+The selected Weekly Drift Reviewer is also not a universal optimum. Low reasoning effort reduces false Drift alerts compared with no reasoning effort, but it abstains more. Higher reasoning effort raises recall and false Drift alerts together. The proof of concept therefore exposes Insufficient Evidence instead of forcing a decision.
 
-### 6.1 Main findings
+### 5.2 Validity limits
 
-The label study shows that longitudinal value analysis is feasible, but it also shows that the target is partly interpretive. Human agreement is useful rather than perfect. This result supports an Abstain path and evidence display. It argues against presenting a Conflict as an objective fact about the user.
+The largest limit is the synthetic corpus. Demographic and narrative controls improve coverage, but they can also preserve prompt assumptions and stereotypes. The original Claude Code generation and label files do not retain a stable model identifier. Generator and LLM-Judge errors can also correlate because both used Claude Code subagents.
 
-The VIF Critic programme answered a real architecture question. The compact model had useful Conflict recall and offered local-execution advantages, but it did not provide enough ordinal agreement or downstream Drift benefit. The negative ablations were therefore part of the contribution. They prevented an offline research component from becoming an unsupported user-facing authority.
+The human benchmark is small. It contains 115 Journal Entries from 19 personas. Stimulation has only two Core Value personas in the shared sample. Kappa is also sensitive to label prevalence. The agreement result must therefore stay paired with the per-dimension view.
 
-The adopted architecture separates three decisions. The Weekly Drift Reviewer interprets Journal Entry evidence. The Drift Detector applies the sequence rule. The Coach Digest presents a reflection. This separation makes each output easier to test and inspect. It also keeps a fluent Coach Digest from silently changing Drift state.
+The Weekly Drift Detection references are AI-reviewed synthetic development evidence. Some cases have historical training provenance. The 42-Drift study is not a fresh final test. Reusing it to select the model and then reporting the same data as final performance would be data leakage.
 
-Luna-low and Luna-`xhigh` represent different error trade-offs. Higher reasoning effort found more known Drifts, but it also produced more false Drift alerts. For a reflective product, a false alert can make a normal week appear inconsistent with a Core Value. The project therefore selected the less aggressive development operating point.
+The Coach Digest result has only five saved responses. The same model generated and evaluated them. Mechanical checks can detect broken evidence links or prohibited claims, but they cannot measure whether a person finds the response helpful, respectful, or well timed.
 
-### 6.2 Validity limits
+### 5.3 Safety, privacy, and ethics
 
-The main limit is the synthetic development corpus. Persona controls improve coverage, but they can also preserve prompt assumptions and stereotypes. Some Drift development cases have historical training provenance. The complete review is therefore not a fresh final test.
+Journal Entries can contain sensitive personal information. The proof of concept gives a first-use notice for browser storage, temporary Python memory, provider use, assessment-only scope, and the non-therapy boundary. Invalid model output fails closed. Inspect shows saved model evidence. These controls support informed inspection, but they do not replace a privacy review or security assessment.
 
-The human benchmark is also small. It covers 115 shared Journal Entries from 19 personas and three annotators. It measures agreement under one rubric. It does not measure how users interpret their own Core Values, and it does not validate the Onboarding Profile.
+The application must avoid moralising a person's values. A Conflict is a behaviour-level decision against one declared Core Value in the available text. It is not a judgement of character. Drift requires repeated Conflict evidence. Coach Digest uses open questions and does not prescribe action.
 
-The VIF Critic errors are not evenly distributed. Hedonism, Security, Stimulation, and Power produced difficult cases at different stages. Quiet pleasure, defended rest, and stability language were frequent sources of ambiguity. Aggregate QWK can hide these weak dimensions, while Conflict recall can hide poor precision. Both views are necessary.
+Conversational agents can create an impression of understanding that exceeds their evidence [16]. Twinkl counters this risk with cited Journal Entries, Insufficient Evidence, and explicit AI-review labels. A real-user pilot must still test whether this language works in practice.
 
-Weekly Drift Detection misses some known Drifts and produces some false Drift alerts. Sparse Journal Entries can also cause Insufficient Evidence. The POC uses full-history recompute and saved replays, so this paper does not provide multi-user load, long-term storage, or production latency evidence.
+## 6. Conclusion and Next Work
 
-The project has no completed user study. It therefore cannot claim customer satisfaction, continued journaling, nudge response rate, Coach Digest usefulness, or behaviour change. The five-response Coach Digest result is synthetic same-model AI review and does not close this gap. The missing user study leaves the professor's customer-feedback criterion unmet.
+Twinkl demonstrates an end-to-end method for comparing longitudinal Journal Entries with declared Core Values. The project created a 1,651-entry synthetic corpus, measured human-overlap agreement, trained a compact ordinal VIF Critic, tested the VIF Critic at the downstream hand-off, and implemented the selected architecture in a React application.
 
-### 6.3 Safety, privacy, and ethics
+The evidence answers the four research questions with bounded claims. LLM-Judge VIF Labels have adequate aggregate development evidence, but hard dimensions remain. The VIF Critic captures some Conflict signal, but it is not reliable enough for user-facing authority. VIF Critic Predictions did not improve the tested Drift path. The working application presents Weekly Drift Detection, Coach Digest, and saved AI evidence in one replay.
 
-Journal Entries can contain sensitive personal information. The POC gives a first-use notice for browser storage, temporary Python memory, provider use, assessment-only scope, and the non-therapy boundary. Confirmed deletion clears browser state and the matching Python session, including Inspect events and request receipts.
+The next technical step is a frozen final test that excludes model and prompt development data. After that test, future human calibration of the AI review and a five-to-ten-user pilot remain necessary. The pilot should measure perceived Coach Digest accuracy, relevance, timing, displayed-nudge response, and continued journaling for one to two weeks. Provider attack testing, privacy review, and controlled latency measurement remain separate work. Until these steps are complete, Twinkl is a development proof of concept and not a deployment-approved application.
 
-The POC does not provide data export, provider-side deletion requests, production authentication, encryption infrastructure, or multi-user storage. These limits make it unsuitable for real-user deployment beyond a controlled pilot. No real Journal Entry is used automatically for training.
+## Author Contributions
 
-Stable provider instructions are separate from user-controlled JSON data, and invalid model output fails closed. This boundary reduces accidental instruction confusion. It does not eliminate prompt injection or provider risk. A live attack study with fixed test text is still required.
-
-Coach Digest language is non-prescriptive and non-judgmental. Twinkl does not diagnose, treat, or direct the user. The user can skip a displayed nudge and can inspect the evidence behind a weekly result. These controls preserve user choice within the limited POC.
-
-## 7. Conclusion and Future Work
-
-Twinkl demonstrates an end-to-end method for comparing Journal Entries with declared Core Values. The project created a longitudinal synthetic corpus, measured label agreement, completed 69 VIF Critic Runs, and used downstream evidence to make an architecture decision. The VIF Critic (Offline) remains a technical research result. It does not control user-facing Drift.
-
-The implemented capstone POC uses a fixed Luna-low Weekly Drift Reviewer and a deterministic Drift Detector. The development study found median Drift recall of 0.548 with four false Drift alerts and coverage of 0.637. Five deployed-Persona Coach Digests passed every mechanical validation, and same-model Coach Digest Evals met their score targets. The React application connects Onboarding, Journal Entry capture, the displayed nudge, Weekly Drift Detection, Coach Digest display, and Inspect provenance. Together, these components provide the working POC required for technical implementation and demonstration.
-
-The evidence does not support a production or usefulness claim. The next priority is a frozen final test that excludes model and prompt development data. After that test, Future human calibration of the AI review and a small real-user pilot remain necessary. The pilot should use the current privacy controls and measure Coach Digest accuracy, perceived relevance, displayed-nudge response, and continued journaling. Provider attack testing, runtime cost measurement, longitudinal Core Value history, and a final professor walkthrough should follow. A cheaper local model should return to the user-facing path only if it passes the same fixed Drift and evidence requirements.
-
-## Author Contributions and Evidence Provenance
-
-This technical paper reports the team output. The Git and Beads cross-reference in Appendix B records implementation provenance for the claims in this paper. It does not infer individual contribution from Git authorship because pair work and shared accounts can make that inference invalid. The required Individual Accomplishment Reports remain the authoritative records of each student's contribution.
+This paper reports the team output. The required Individual Accomplishment Reports record each student's contribution. Git authorship alone is not used to infer individual work because pair work and shared development sessions can make that inference invalid.
 
 ## AI Tool Declaration
 
-We used OpenAI Codex to inspect repository evidence, capture local application screenshots, and help draft and edit this technical paper. We checked numerical claims against the cited evaluation reports, current code, Git history, and Beads records. The authors remain responsible for the study design, interpretation, source verification, and submitted text. The project also used language models for synthetic Journal Entry generation, LLM-Judge VIF Labels, LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, Coach Digest generation, and Coach Digest Evals. Each use is identified in the relevant method or result section.
+We used OpenAI Codex to inspect repository evidence, create report figures from committed data, capture local application screenshots, and help draft and edit this paper. We checked numerical claims against the named evaluation reports, current code, and stored run records. The authors remain responsible for study design, interpretation, source verification, and submitted text.
+
+The project also used language models for synthetic Journal Entry generation, LLM-Judge VIF Labels, LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, Coach Digest generation, and Coach Digest Evals. Each use and its evidence limit are stated in the relevant method or result section.
 
 ## References
 
@@ -330,69 +308,38 @@ We used OpenAI Codex to inspect repository evidence, capture local application s
 
 [12] J. L. Fleiss, “Measuring nominal scale agreement among many raters,” *Psychological Bulletin*, vol. 76, no. 5, pp. 378–382, 1971. [https://doi.org/10.1037/h0031619](https://doi.org/10.1037/h0031619)
 
+[13] I. Li, A. K. Dey, and J. Forlizzi, “A stage-based model of personal informatics systems,” in *Proceedings of the SIGCHI Conference on Human Factors in Computing Systems*, pp. 557–566, 2010. [https://doi.org/10.1145/1753326.1753409](https://doi.org/10.1145/1753326.1753409)
+
+[14] D. A. Epstein, A. Ping, J. Fogarty, and S. A. Munson, “A lived informatics model of personal informatics,” in *Proceedings of the 2015 ACM International Joint Conference on Pervasive and Ubiquitous Computing*, pp. 731–742, 2015. [https://doi.org/10.1145/2750858.2804250](https://doi.org/10.1145/2750858.2804250)
+
+[15] E. P. S. Baumer, “Reflective informatics: Conceptual dimensions for designing technologies of reflection,” in *Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems*, pp. 585–594, 2015. [https://doi.org/10.1145/2702123.2702234](https://doi.org/10.1145/2702123.2702234)
+
+[16] H. Gaffney, W. Mansell, and S. Tai, “Conversational agents in the treatment of mental health problems: Mixed-method systematic review,” *JMIR Mental Health*, vol. 6, no. 10, e14166, 2019. [https://doi.org/10.2196/14166](https://doi.org/10.2196/14166)
+
 ## Appendix A. Reproduction and Evidence Map
 
-Table A1 links each major claim to the current project record. These files are part of the repository and provide more detail than the technical paper can include.
+The evidence snapshot used for this paper is commit [`9c4cc6e9`](https://github.com/DesmondChoy/twinkl/tree/9c4cc6e9). Table A1 links each main claim to a stable file in that snapshot.
 
-| Claim area | Primary evidence | Main implementation |
-|---|---|---|
-| Product intent and status | [Product Requirements Document](../prd.md) | [Experience service](../../src/demo/experience_service.py) |
-| Data generation and labels | [Synthetic Data Pipeline](../pipeline/pipeline_specs.md) | [Synthetic generation](../../src/synthetic/generation.py), [LLM-Judge labeling](../../src/judge/labeling.py) |
-| Human agreement | [Judge Validation Evaluation](../evals/judge_validation_eval.md) | [Agreement report](../../logs/exports/agreement_report_20260318_130642.md) |
-| VIF Critic experiments | [Value Modeling Evaluation](../evals/value_modeling_eval.md), [Experiment Index](../../logs/experiments/index.md), [interactive research path](vif-to-weekly-drift-research-path.html) | [Ordinal critic](../../src/vif/critic_ordinal.py), [training](../../src/vif/train.py) |
-| VIF input decision | [Raw-Input and Scheduling Reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md) | [Reassessment script](../../scripts/experiments/reassess_twinkl_752_5.py) |
-| Weekly Drift Detection | [Drift Detection Evaluation](../evals/drift_detection_eval.md), [Complete Development Review](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md) | [Weekly Drift Reviewer](../../src/weekly_drift_reviewer.py), [Drift Detector](../../src/drift_detector.py) |
-| Higher reasoning comparison | [Luna Higher-Reasoning Comparison](../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md) | [Model comparison script](../../scripts/experiments/compare_twinkl_52zz_models.py) |
-| Coach Digest | [Explanation Quality Evaluation](../evals/explanation_quality_eval.md), [five-Persona sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md), [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md) | [Coach Digest generation](../../src/coach/weekly_digest.py), [runtime client](../../src/coach/llm_client.py) |
-| Prompt boundary | [Live Prompt Boundary Verification](../evals/live_prompt_boundary_verification.md) | [Prompt boundary](../../src/prompt_boundary.py) |
-| Experience and Inspect | [Experience and Inspect Specification](../demo/experience_inspect_app.md) | [Experience service](../../src/demo/experience_service.py) |
+| Claim | Stable evidence |
+|---|---|
+| Product intent and scope | [`docs/prd.md`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/docs/prd.md) |
+| Profile construction | [`docs/onboarding/onboarding_spec.md`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/docs/onboarding/onboarding_spec.md) |
+| Human and LLM-Judge agreement | [`docs/evals/judge_validation_summary.md`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/docs/evals/judge_validation_summary.md) |
+| VIF Critic evaluation | [`docs/evals/value_modeling_eval.md`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/docs/evals/value_modeling_eval.md) |
+| VIF hand-off ablation | [`twinkl-752.5 reassessment`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md) |
+| Complete Drift references | [`twinkl-qtwz review`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md) |
+| Fixed low-reasoning comparison | [`twinkl-52zz review`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md) |
+| Higher-reasoning comparison | [`twinkl-ck3w review`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md) |
+| Coach Digest sample and review | [`docs/evals/overview.md`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/docs/evals/overview.md) |
+| Prompt-boundary verification | [`docs/evals/live_prompt_boundary_verification.md`](https://github.com/DesmondChoy/twinkl/blob/9c4cc6e9/docs/evals/live_prompt_boundary_verification.md) |
 
-## Appendix B. Closed Beads and Git Cross-Reference
+The following commands reproduce stored metrics without paid model calls:
 
-Table B1 cross-references representative closed Beads work with the Git commit that supplied the accepted implementation or documentation. Some tasks span more than one commit. The table lists the commit that most directly supports the report claim.
+```sh
+uv run python -c "from src.annotation_tool.agreement_metrics import generate_agreement_report; print(generate_agreement_report())"
+uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning score
+uv run python -m scripts.experiments.compare_twinkl_ck3w_luna_higher_reasoning score
+MPLCONFIGDIR=/tmp/twinkl-matplotlib uv run python scripts/capstone/generate_report_figures.py
+```
 
-| Closed Beads task | Accepted result | Primary Git commit |
-|---|---|---|
-| `twinkl-sq92` | Adopted the published SVBWS Onboarding design and verified the React flow. | `b7a98e62` |
-| `twinkl-560n` | Aligned the VIF Critic scope and recorded the offline boundary. | `3647f96a` |
-| `twinkl-52zz` | Selected the fixed Luna-low Weekly Drift Reviewer operating point. | `aadccd36` |
-| `twinkl-a2w` | Implemented the approved Weekly Drift Reviewer and Drift Detector. | `d1e136f3` |
-| `twinkl-4o2c` | Completed deterministic Drift state logic and Historical Drift Records. | `3fbb1fe8` |
-| `twinkl-ck3w` | Compared higher reasoning effort and retained Luna-low. | `8c6fe360` |
-| `twinkl-3owt` | Implemented and verified the live prompt trust boundary. | `e8330239` |
-| `twinkl-rklc.26` | Added the first-use privacy notice and confirmed session deletion. | `24424b36` |
-| `twinkl-rklc.1` | Added Experience and Inspect contracts. | `dfac280b` |
-| `twinkl-rklc.2` | Added deterministic Persona replay scenarios. | `02e6f6c1` |
-| `twinkl-rklc.3` | Added the React Experience and Inspect shell. | `bfb864e2` |
-| `twinkl-rklc.4` | Integrated Journal Entry capture and the displayed nudge. | `6173cd36` |
-| `twinkl-rklc.5` | Integrated Weekly Drift Detection into the React application. | `0ddc08e7` |
-| `twinkl-rklc.7` | Added the Inspect view and provenance display. | `7657d18e` |
-| `twinkl-rklc.9` | Hardened the deterministic assessment walkthrough. | `47091ea7` |
-| `twinkl-rklc.11` | Added the assessment deployment boundary. | `11308468` |
-| `twinkl-rklc.12` | Added saved Coach Digest content to the replay path. | `24d3a58f` |
-| `twinkl-rklc.15` | Added simulated time for deterministic weekly review. | `06ade895` |
-| `twinkl-rklc.16` | Added saved displayed-nudge responses to Persona replays. | `4c8f627d` |
-| `twinkl-1h96` | Enforced closed-week review behaviour. | `7eeeb820` |
-| `twinkl-7ho6` | Applied current product terminology across the maintained Experience. | `afc8b1df` |
-| `twinkl-rklc.29` | Recorded the displayed nudge as a separate product interaction. | `5f2a626f` |
-| `twinkl-hkw9` | Added Weekly Drift Detection output tracking and validation. | `10ce0e45` |
-| `twinkl-6nnr` | Added the first public assessment deployment path. | `af0d8ffa` |
-
-The Coach Digest replacement evaluation is not in Table B1 because `twinkl-rklc.27` remains in progress and the replacement reports have no accepted result commit. The working tree contains the five-Persona result described in Section 5.4. The earlier commits `3a2f3693`, `dcbe4b0c`, and `2c05f8bf` support generation, evaluation tooling, and removal of an invalid-roster result. They do not publish the current result.
-
-## Appendix C. Professor Requirement Cross-Reference
-
-Table C1 maps the Phase 2 technical-paper and final-application criteria to this paper. It also makes the remaining assessment gaps explicit.
-
-| Professor criterion | Evidence in this paper | Current limit |
-|---|---|---|
-| Publishable technical paper with clear flow and grammar | Abstract and Sections 1–7 | Final publication formatting must follow the selected submission template. |
-| Substantial depth and technical achievement | Sections 3–5 and Appendices A–B | Reported model results remain development evidence. |
-| Appropriate literature review and references | Section 2 and References | The literature review is scoped to the implemented methods. |
-| Intelligent-systems problem-solving technique | Ordinal learning, uncertainty analysis, LLM evaluation, and deterministic sequence detection in Sections 3–4 | No single method is presented as sufficient on its own. |
-| Complexity, novelty, and programming | End-to-end architecture, 69 VIF Critic Runs, Weekly Drift Detection, and React integration in Sections 3–5 | Novelty is an engineering and evaluation contribution, not a claim of a new learning theory. |
-| Verification and validation | Label agreement, repeated development Runs, fail-closed checks, tests, and provenance in Section 5 | There is no fresh final test or completed real-user pilot. |
-| Functionality and demonstration | Figures 1–11 and the Experience and Inspect walkthrough in Sections 3 and 5 | The public deployment is assessment-only. |
-| Customer satisfaction or feedback | The planned pilot in Sections 5.4 and 7 | No customer feedback result exists. |
-| Sponsor value | The working POC and reproducible evidence package can support assessment and future pilot decisions. | The current repository contains no sponsor acceptance result, so this paper makes no sponsor-satisfaction claim. |
-| Separate Phase 2 deliverables | The Author Contributions section points to the Individual Accomplishment Reports. | The team presentation and Individual Accomplishment Reports remain separate submissions. |
+Paid model execution is not required to inspect the stored responses, reference labels, metrics, or report figures.
