@@ -6,7 +6,6 @@ import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -19,9 +18,6 @@ BLUE = "#4F6FE8"
 GOLD = "#D8A62A"
 CORAL = "#C05A40"
 PAPER = "#FBFAF6"
-PALE_TEAL = "#E7F3F0"
-PALE_BLUE = "#EAF0FF"
-PALE_GOLD = "#FBF2D8"
 GRID = "#D8DDE5"
 
 
@@ -74,92 +70,6 @@ def markdown_rows(path: Path, header_start: str) -> list[list[str]]:
     return rows
 
 
-def draw_profile_construction() -> None:
-    """Explain the deterministic Profile construction in three steps."""
-    fig, ax = plt.subplots(figsize=(11.4, 4.25))
-    ax.set_xlim(0, 11.4)
-    ax.set_ylim(0, 4.25)
-    ax.axis("off")
-
-    cards = [
-        (
-            0.15,
-            PALE_BLUE,
-            "1  Complete 11 sets",
-            (
-                "Choose the Most and Least\nimportant item in each set of six.\n"
-                "Each item appears six times."
-            ),
-            "11 sets × 6 items",
-        ),
-        (
-            3.98,
-            PALE_TEAL,
-            "2  Calculate scores",
-            (
-                "Raw score = (Most − Least) ÷ 6.\nMerge the two Universalism\n"
-                "facets. Shift and normalize\nall ten scores."
-            ),
-            "Ten Profile weights",
-        ),
-        (
-            7.81,
-            PALE_GOLD,
-            "3  Confirm Core Values",
-            (
-                "Show the highest scores.\nIf more than two values tie,\n"
-                "ask the user to select\nexactly two."
-            ),
-            "At most two Core Values",
-        ),
-    ]
-    for x, fill, title, body, result in cards:
-        ax.add_patch(
-            FancyBboxPatch(
-                (x, 0.48),
-                3.42,
-                3.25,
-                boxstyle="round,pad=0.03,rounding_size=0.12",
-                facecolor=fill,
-                edgecolor=INK,
-                linewidth=1.0,
-            )
-        )
-        ax.text(x + 0.2, 3.42, title, fontsize=15, weight="bold", va="top")
-        ax.text(x + 0.2, 2.77, body, fontsize=10.7, linespacing=1.38, va="top")
-        ax.text(
-            x + 1.71,
-            0.81,
-            result,
-            fontsize=11.2,
-            weight="bold",
-            ha="center",
-            va="center",
-            color=INK,
-        )
-
-    for x in (3.67, 7.50):
-        ax.add_patch(
-            FancyArrowPatch(
-                (x - 0.03, 2.1),
-                (x + 0.26, 2.1),
-                arrowstyle="-|>",
-                mutation_scale=15,
-                color=MUTED,
-                linewidth=1.3,
-            )
-        )
-
-    ax.set_title(
-        "Profile construction is deterministic after the user's choices",
-        loc="left",
-        fontsize=18,
-        weight="bold",
-        pad=8,
-    )
-    save_figure(fig, "profile-construction.png")
-
-
 def draw_label_agreement() -> None:
     """Compare human-human and LLM-Judge-human agreement by dimension."""
     source = ROOT / "docs" / "evals" / "judge_validation_summary.md"
@@ -170,23 +80,46 @@ def draw_label_agreement() -> None:
 
     fig, ax = plt.subplots(figsize=(9.8, 6.4))
     y = list(range(len(dimensions)))
-    for index in y:
-        ax.plot(
-            [human[index], judge[index]],
-            [index, index],
-            color=GRID,
-            linewidth=2.2,
-            zorder=1,
-        )
-    ax.scatter(human, y, s=70, color=MUTED, label="Human-human Fleiss' κ", zorder=2)
+    human_y = [index - 0.14 for index in y]
+    judge_y = [index + 0.14 for index in y]
+    ax.scatter(
+        human,
+        human_y,
+        s=70,
+        color=MUTED,
+        label="Human-human Fleiss' κ",
+        zorder=2,
+    )
     ax.scatter(
         judge,
-        y,
+        judge_y,
         s=76,
         color=TEAL,
         label="Mean LLM-Judge-human Cohen's κ",
         zorder=3,
     )
+    for value, position in zip(human, human_y, strict=True):
+        ax.annotate(
+            f"{value:.2f}",
+            (value, position),
+            xytext=(-7, -1),
+            textcoords="offset points",
+            ha="right",
+            va="center",
+            fontsize=8.3,
+            color=MUTED,
+        )
+    for value, position in zip(judge, judge_y, strict=True):
+        ax.annotate(
+            f"{value:.2f}",
+            (value, position),
+            xytext=(7, -1),
+            textcoords="offset points",
+            ha="left",
+            va="center",
+            fontsize=8.3,
+            color=TEAL,
+        )
     ax.set_yticks(y, dimensions)
     ax.invert_yaxis()
     ax.set_xlim(0.25, 0.9)
@@ -204,25 +137,7 @@ def draw_label_agreement() -> None:
         fontsize=9.5,
         borderaxespad=0,
     )
-    fig.suptitle(
-        "Agreement varies by value dimension",
-        x=0.14,
-        y=0.985,
-        ha="left",
-        fontsize=18,
-        weight="bold",
-    )
-    fig.text(
-        0.14,
-        0.902,
-        (
-            "Shared benchmark: 115 Journal Entries from 19 personas and three "
-            "human annotators"
-        ),
-        color=MUTED,
-        fontsize=10.5,
-    )
-    fig.subplots_adjust(top=0.81)
+    fig.subplots_adjust(top=0.91)
     save_figure(fig, "label-agreement.png")
 
 
@@ -250,15 +165,11 @@ def draw_vif_handoff() -> None:
     axes[0].bar(x, recall, color=colors, width=0.62)
     axes[0].set_ylim(0, 0.34)
     axes[0].set_ylabel("Median Drift recall")
-    axes[0].set_title("No Drift-recall gain", fontsize=14, weight="bold")
+    axes[0].set_title("(a) Drift recall", fontsize=13, weight="bold")
     axes[1].bar(x, false_alerts, color=colors, width=0.62)
     axes[1].set_ylim(0, 4)
     axes[1].set_ylabel("Median false Drift alerts")
-    axes[1].set_title(
-        "VIF Critic Predictions added false Drift alerts",
-        fontsize=14,
-        weight="bold",
-    )
+    axes[1].set_title("(b) False Drift alerts", fontsize=13, weight="bold")
 
     for ax, values, decimals in ((axes[0], recall, 3), (axes[1], false_alerts, 0)):
         ax.set_xticks(x, labels)
@@ -278,25 +189,17 @@ def draw_vif_handoff() -> None:
                 weight="bold",
             )
 
-    fig.suptitle(
-        "VIF Critic Predictions did not improve Weekly Drift Detection",
-        x=0.06,
-        y=0.99,
-        ha="left",
-        fontsize=18,
-        weight="bold",
-    )
     fig.text(
         0.06,
         0.01,
         (
-            "Development union: 33 known Drifts across 106 cases; medians across "
-            "three repeats."
+            "gpt-5.4-mini-2026-03-17 at reasoning none; 33 known Drifts across "
+            "106 cases; medians across three repeats."
         ),
         color=MUTED,
         fontsize=10.5,
     )
-    fig.subplots_adjust(top=0.80, bottom=0.22)
+    fig.subplots_adjust(top=0.91, bottom=0.22)
     save_figure(fig, "vif-handoff-ablation.png")
 
 
@@ -316,28 +219,27 @@ def draw_weekly_drift_tradeoff() -> None:
     coverage = [parse_float(row[5]) for row in rows]
 
     fig, ax = plt.subplots(figsize=(9.5, 5.8))
-    sizes = [330 * value for value in coverage]
     colors = [MUTED, TEAL, BLUE, GOLD, CORAL]
     for index, label in enumerate(effort):
         ax.scatter(
             false_alerts[index],
             recall[index],
-            s=sizes[index],
+            s=230,
             color=colors[index],
             edgecolor="white",
             linewidth=1.3,
             zorder=3,
         )
         offset = {
-            "none": (7, -18),
-            "low": (10, -31),
-            "medium": (10, 10),
-            "high": (8, -18),
-            "xhigh": (8, 8),
+            "none": (-76, -31),
+            "low": (-108, -40),
+            "medium": (13, 10),
+            "high": (13, -18),
+            "xhigh": (13, 8),
         }[label]
         suffix = " · selected" if label == "low" else ""
         ax.annotate(
-            f"{label}{suffix}",
+            f"{label}{suffix}\ncoverage {coverage[index]:.3f}",
             (false_alerts[index], recall[index]),
             xytext=offset,
             textcoords="offset points",
@@ -355,22 +257,7 @@ def draw_weekly_drift_tradeoff() -> None:
         ax.spines[spine].set_visible(False)
     ax.spines["left"].set_color(GRID)
     ax.spines["bottom"].set_color(GRID)
-    fig.suptitle(
-        "Reasoning effort changes the operating point",
-        x=0.095,
-        y=0.985,
-        ha="left",
-        fontsize=18,
-        weight="bold",
-    )
-    fig.text(
-        0.095,
-        0.90,
-        "Bubble area represents coverage. Results are medians across three repeats.",
-        color=MUTED,
-        fontsize=10.5,
-    )
-    fig.subplots_adjust(top=0.81)
+    fig.subplots_adjust(top=0.95)
     save_figure(fig, "weekly-drift-tradeoff.png")
 
 
@@ -393,13 +280,6 @@ def load_font(size: int, *, bold: bool = False) -> ImageFont.FreeTypeFont:
     return ImageFont.load_default()
 
 
-def fit_inside(image: Image.Image, width: int, height: int) -> Image.Image:
-    """Resize one image to fit inside a box without distortion."""
-    copy = image.copy()
-    copy.thumbnail((width, height), Image.Resampling.LANCZOS)
-    return copy
-
-
 def resize_to_fit(image: Image.Image, width: int, height: int) -> Image.Image:
     """Resize one image up or down to fit inside a box."""
     scale = min(width / image.width, height / image.height)
@@ -414,27 +294,21 @@ def draw_case_study() -> None:
     digest = Image.open(source_dir / "lukas-key-week-coach-digest.png").convert("RGB")
     review = Image.open(source_dir / "lukas-key-week-ai-review.png").convert("RGB")
 
-    canvas = Image.new("RGB", (2200, 1830), PAPER)
+    canvas = Image.new("RGB", (2200, 2160), PAPER)
     draw = ImageDraw.Draw(canvas)
-    title_font = load_font(46, bold=True)
     panel_font = load_font(30, bold=True)
     note_font = load_font(25)
-    draw.text(
-        (80, 48),
-        "One saved replay connects the result, response, and evidence",
-        fill=INK,
-        font=title_font,
-    )
 
-    top = fit_inside(experience, 2040, 1050)
-    canvas.paste(top, ((2200 - top.width) // 2, 130))
-    draw.rounded_rectangle((60, 112, 2140, 1220), radius=18, outline=GRID, width=3)
-    draw.text((86, 139), "A  Experience", fill=INK, font=panel_font)
+    experience_crop = experience.crop((370, 290, 1550, 925))
+    top = resize_to_fit(experience_crop, 2040, 1050)
+    canvas.paste(top, ((2200 - top.width) // 2, 58))
+    draw.rounded_rectangle((60, 40, 2140, 1168), radius=18, outline=GRID, width=3)
+    draw.text((86, 67), "A  Experience", fill=INK, font=panel_font)
 
-    digest_scaled = resize_to_fit(digest, 600, 455)
-    review_scaled = resize_to_fit(review, 660, 455)
-    left_box = (260, 1250, 1000, 1770)
-    right_box = (1160, 1250, 1980, 1770)
+    digest_scaled = resize_to_fit(digest, 860, 690)
+    review_scaled = resize_to_fit(review, 860, 690)
+    left_box = (100, 1198, 1030, 1968)
+    right_box = (1170, 1198, 2100, 1968)
     for box in (left_box, right_box):
         draw.rounded_rectangle(box, radius=18, fill="white", outline=GRID, width=3)
 
@@ -465,7 +339,7 @@ def draw_case_study() -> None:
         font=panel_font,
     )
     draw.text(
-        (120, 1772),
+        (120, 2010),
         (
             "The replay is synthetic evidence for the proof of concept. "
             "It is not a user study."
@@ -479,7 +353,6 @@ def draw_case_study() -> None:
 def main() -> None:
     """Generate all static figures used by the capstone paper."""
     configure_matplotlib()
-    draw_profile_construction()
     draw_label_agreement()
     draw_vif_handoff()
     draw_weekly_drift_tradeoff()
