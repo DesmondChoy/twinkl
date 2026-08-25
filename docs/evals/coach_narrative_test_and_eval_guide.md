@@ -24,6 +24,7 @@ source .venv/bin/activate        # Bash/Zsh
 | Coach Digest Validations (groundedness, non-circularity, raw value leakage, current-state claims, length) | Unit tests | No | `tests/coach/test_weekly_digest.py` |
 | Coach Digest Validations batch report over a real Weekly Drift Detection output set | Eval | No | `src/evals/coach_digest_validations.py` |
 | Coach Digest Evals (correctness, specificity, non-prescriptive tone, tension honesty) | Eval | **Yes (paid)** | `src/evals/coach_narrative_judge.py` |
+| Coach Digest Drift/control comparison | Study | **Yes (paid generation and AI review)** | `scripts/experiments/run_coach_drift_control_eval.py`, `src/evals/coach_drift_control_report.py` |
 
 Coach Digest Validations are mechanical code checks, not human validation.
 Coach Digest Evals produce **AI evaluation, not human validation**. Future
@@ -59,7 +60,9 @@ mocked calls:
 
 ```sh
 uv run pytest tests/evals/test_coach_digest_validations.py \
-              tests/evals/test_coach_narrative_judge.py
+              tests/evals/test_coach_narrative_judge.py \
+              tests/evals/test_coach_drift_control_report.py \
+              tests/experiments/test_run_coach_drift_control_eval.py
 ```
 
 Lint and type-check touched code when you change it:
@@ -159,6 +162,24 @@ uv run python -m src.evals.coach_narrative_judge \
   --execute
 ```
 
+Use `--judge-provider openai` or `--judge-provider gemini` to select the
+evaluator provider. Use `--judge-model` to select a model for that provider.
+When the selected provider differs from `TWINKL_COACH_PROVIDER`, it uses its
+provider default if `--judge-model` is absent. For example, this command
+evaluates OpenAI-generated responses with Gemini:
+
+```sh
+uv run python -m src.evals.coach_narrative_judge \
+  --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json \
+  --judge-provider gemini \
+  --out logs/experiments/reports/coach_digest_evals_cross_provider \
+  --execute
+```
+
+The output records both the generator model and evaluator model when the
+manifest records the generator. It reports the same-model limit only when both
+models match.
+
 Targets: mean > 3.5/5 per dimension. Any response scoring below 3 on any
 dimension is flagged for human review. Report and doc lines label these scores
 as AI evaluation, not human validation. The report keeps each response score,
@@ -167,10 +188,67 @@ request latency.
 
 ---
 
+## 4. Drift/control study
+
+This study compares Coach Digest responses for known Drift records with matched
+control targets. A control target comes from a Persona with no known Drift in
+the complete development results. The match uses the historical split, Journal
+Entry count, and reviewed week count.
+
+First, build the deterministic target catalog. This command makes no provider
+calls:
+
+```sh
+uv run python scripts/experiments/run_coach_drift_control_eval.py
+```
+
+Review `logs/experiments/reports/coach_digest_drift_control/targets.json`.
+Then generate the missing Weekly Drift Detection and Coach Digest responses.
+This command makes paid provider calls:
+
+```sh
+uv run python scripts/experiments/run_coach_drift_control_eval.py \
+  --resume --execute
+```
+
+`--resume` keeps completed target IDs and does not repeat their paid calls. The
+runner stops if generated outputs exist but the matching manifest is absent.
+It also stops if a resumed run selects a different Coach Digest generator
+model.
+
+Run Coach Digest Evals with an independent provider:
+
+```sh
+uv run python -m src.evals.coach_narrative_judge \
+  --manifest logs/experiments/reports/coach_digest_drift_control/judge_sample_manifest.json \
+  --judge-provider gemini \
+  --out logs/experiments/reports/coach_digest_drift_control/evals \
+  --execute
+```
+
+Build the comparison report. This command makes no provider calls:
+
+```sh
+uv run python -m src.evals.coach_drift_control_report \
+  --manifest logs/experiments/reports/coach_digest_drift_control/judge_sample_manifest.json \
+  --eval-metrics logs/experiments/reports/coach_digest_drift_control/evals/metrics.json \
+  --out logs/experiments/reports/coach_digest_drift_control/comparison
+```
+
+The report compares Coach Digest Validation pass rates and Coach Digest Eval
+means for Drift and control targets. It also reports the known Drift delivery
+state and the input history for each target type. The known Drift records are
+AI-reviewed synthetic development data. They are not human ground truth.
+
+---
+
 ## Provenance and honesty notes
 
 - Record the public bundle source, sample manifest, evaluator provider/model, and row/
   sample counts with every committed report.
+- Record the Drift episode Parquet, case outcome Parquet, wrangled Journal Entry
+  directory, source hashes, target seed, and target catalog for the
+  Drift/control study.
 - Do not treat AI evaluation scores as human validation. State the source
   wherever it affects the conclusion.
 - Build the deployed-Persona manifest from the rebuilt public scenario bundles.

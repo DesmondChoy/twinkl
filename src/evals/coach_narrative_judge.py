@@ -20,7 +20,6 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
-import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import cast
@@ -30,11 +29,11 @@ from pydantic import BaseModel, Field, ValidationError
 
 from prompts import load_prompt
 from src.coach.llm_client import (
-    DEFAULT_GEMINI_MODEL,
     DEFAULT_OPENAI_MODEL,
     DEFAULT_OPENAI_REASONING_EFFORT,
     OPENAI_LUNA_PRICING_SOURCE,
     build_llm_complete,
+    resolve_coach_model,
     summarize_llm_call_metrics,
 )
 from src.coach.schemas import CoachNarrative, LLMCallMetrics, WeeklyDigest
@@ -140,6 +139,7 @@ class JudgeReport:
     judge_model: str
     n_scored: int
     judge_reasoning_effort: str = DEFAULT_OPENAI_REASONING_EFFORT
+    generator_model: str | None = None
     means: dict[str, float] = field(default_factory=dict)
     pct_ge_4: dict[str, float] = field(default_factory=dict)
     question_open_rate: float = 0.0
@@ -147,6 +147,14 @@ class JudgeReport:
     n_failed: int = 0
     call_metrics: list[LLMCallMetrics] = field(default_factory=list)
     sample_results: list[dict[str, object]] = field(default_factory=list)
+
+    @property
+    def self_evaluation(self) -> bool:
+        """Return whether one provider model generated and evaluated the response."""
+        return (
+            self.generator_model is not None
+            and self.generator_model == self.judge_model
+        )
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -159,9 +167,13 @@ class JudgeReport:
             ),
             "judge_model": self.judge_model,
             "judge_reasoning_effort": self.judge_reasoning_effort,
+            "generator_model": self.generator_model,
+            "self_evaluation": self.self_evaluation,
             "same_model_review_limitation": (
-                "Luna-none generated and evaluated these responses. Correlated "
-                "errors can make the AI review too favorable."
+                "One provider model generated and evaluated these responses. "
+                "Correlated errors can make the AI review too favorable."
+                if self.self_evaluation
+                else None
             ),
             "n_scored": self.n_scored,
             "n_failed": self.n_failed,
@@ -190,7 +202,12 @@ class JudgeReport:
             "api_calls": [
                 metric.model_dump(mode="json") for metric in self.call_metrics
             ],
-            "pricing_source": OPENAI_LUNA_PRICING_SOURCE,
+            "pricing_source": (
+                OPENAI_LUNA_PRICING_SOURCE
+                if self.judge_model
+                in {DEFAULT_OPENAI_MODEL, f"openai:{DEFAULT_OPENAI_MODEL}"}
+                else None
+            ),
             "cost_note": (
                 "Calculated from response token usage and published standard-tier "
                 "rates. This is not an OpenAI billing export."
@@ -204,6 +221,7 @@ def aggregate_verdicts(
     call_metrics: list[LLMCallMetrics] | None = None,
     sample_labels: list[str] | None = None,
     judge_reasoning_effort: str = DEFAULT_OPENAI_REASONING_EFFORT,
+    generator_model: str | None = None,
 ) -> JudgeReport:
     """Aggregate per-narrative verdicts into a report; None verdicts count as failed."""
     scored = [v for v in verdicts if v is not None]
@@ -251,6 +269,7 @@ def aggregate_verdicts(
         judge_model=judge_model,
         n_scored=n,
         judge_reasoning_effort=judge_reasoning_effort,
+        generator_model=generator_model,
         means=means,
         pct_ge_4=pct_ge_4,
         question_open_rate=question_open_rate,
@@ -273,8 +292,15 @@ def render_markdown(report: JudgeReport) -> str:
         "",
         f"- Evaluator model: `{report.judge_model}`",
         f"- Evaluator reasoning effort: `{report.judge_reasoning_effort}`",
-        "- Same-model-review limitation: Luna-none generated and evaluated the "
-        "responses. Correlated errors can make this AI review too favorable.",
+        f"- Generator model: `{report.generator_model or 'unrecorded'}`",
+    ]
+    if report.self_evaluation:
+        lines += [
+            "- Same-model-review limitation: one provider model generated and "
+            "evaluated the responses. Correlated errors can make this AI review "
+            "too favorable.",
+        ]
+    lines += [
         f"- Scored: {report.n_scored}",
         f"- Failed (no valid verdict): {report.n_failed}",
         f"- Flagged for human review (any dimension < {REVIEW_THRESHOLD}): "
@@ -297,8 +323,18 @@ def render_markdown(report: JudgeReport) -> str:
             f"{float(usage['median_latency_seconds'] or 0):.3f}s / "
             f"{float(usage['max_latency_seconds'] or 0):.3f}s"
         ),
-        "- Cost basis: response token usage and published standard-tier Luna "
-        f"rates ([source]({OPENAI_LUNA_PRICING_SOURCE})); not a billing export",
+    ]
+    if report.judge_model in {
+        DEFAULT_OPENAI_MODEL,
+        f"openai:{DEFAULT_OPENAI_MODEL}",
+    }:
+        lines += [
+            "- Cost basis: response token usage and published standard-tier Luna "
+            f"rates ([source]({OPENAI_LUNA_PRICING_SOURCE})); not a billing export",
+        ]
+    else:
+        lines += ["- Cost basis: unavailable for the selected evaluator model"]
+    lines += [
         "",
         "| Dimension | Mean | Target | Meets | % ≥ 4 |",
         "| --- | --- | --- | --- | --- |",
@@ -399,6 +435,42 @@ def _load_manifest(manifest_path: Path) -> list[tuple[WeeklyDigest, CoachNarrati
     return pairs
 
 
+def _load_generator_model(manifest_path: Path) -> str | None:
+    """Return one recorded generator model, or ``None`` when records disagree."""
+    items = json.loads(manifest_path.read_text())
+    recorded: set[str] = set()
+    for item in items:
+        model = item.get("generator_model")
+        provenance = item.get("provenance") or {}
+        generation = provenance.get("generation") or {}
+        contract = generation.get("model_contract") or {}
+        if not model and contract.get("provider") and contract.get("model"):
+            model = f"{contract['provider']}:{contract['model']}"
+        if not model and provenance.get("coach_provider") and provenance.get(
+            "coach_model"
+        ):
+            model = f"{provenance['coach_provider']}:{provenance['coach_model']}"
+        if model:
+            recorded.add(str(model))
+    return next(iter(recorded)) if len(recorded) == 1 else None
+
+
+def _load_sample_labels(manifest_path: Path) -> list[str]:
+    """Load stable target labels with a Persona-week compatibility fallback."""
+    items = json.loads(manifest_path.read_text())
+    labels: list[str] = []
+    for item in items:
+        digest = item["digest"]
+        target = item.get("target") or {}
+        labels.append(
+            str(
+                target.get("target_id")
+                or f"{digest['persona_id']}:{digest['week_end']}"
+            )
+        )
+    return labels
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run Coach Digest Evals with an AI evaluator."
@@ -411,6 +483,20 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--out", type=Path, default=None)
     parser.add_argument(
+        "--judge-provider",
+        choices=["openai", "gemini"],
+        default=None,
+        help=(
+            "Evaluator provider. A provider that differs from the configured "
+            "provider uses its own default model."
+        ),
+    )
+    parser.add_argument(
+        "--judge-model",
+        default=None,
+        help="Evaluator model. This overrides the selected provider's default.",
+    )
+    parser.add_argument(
         "--execute",
         action="store_true",
         help="Authorize paid evaluator LLM calls. Without it, this prints the plan "
@@ -420,39 +506,41 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    load_dotenv()
     args = _build_parser().parse_args(argv)
     pairs = _load_manifest(args.manifest)
+    judge_provider, judge_model_name = resolve_coach_model(
+        provider=args.judge_provider,
+        model=args.judge_model,
+    )
+    judge_model = f"{judge_provider}:{judge_model_name}"
 
     if not args.execute:
         print(
             f"[dry run] Would evaluate {len(pairs)} Coach Digest response(s) "
-            "with the "
-            "configured provider. Re-run with --execute to make paid calls."
+            f"with {judge_model}. Re-run with --execute to make paid calls."
         )
         return 0
 
-    load_dotenv()
     call_metrics: list[LLMCallMetrics] = []
-    llm_complete = build_llm_complete(call_metrics=call_metrics)
+    llm_complete = build_llm_complete(
+        provider=args.judge_provider,
+        model=args.judge_model,
+        call_metrics=call_metrics,
+    )
     if llm_complete is None:
         print("No evaluator provider available (missing API key). Aborting.")
         return 1
 
-    provider = os.environ.get("TWINKL_COACH_PROVIDER", "openai").strip().lower()
-    default_model = (
-        DEFAULT_GEMINI_MODEL if provider == "gemini" else DEFAULT_OPENAI_MODEL
-    )
-    judge_model = os.environ.get("TWINKL_COACH_MODEL", default_model)
     verdicts = asyncio.run(_run_sample(pairs, llm_complete, call_metrics))
-    sample_labels = [
-        f"{digest.persona_id}:{digest.week_end}" for digest, _narrative in pairs
-    ]
+    sample_labels = _load_sample_labels(args.manifest)
     report = aggregate_verdicts(
         verdicts,
         judge_model=judge_model,
         call_metrics=call_metrics,
         sample_labels=sample_labels,
         judge_reasoning_effort=DEFAULT_OPENAI_REASONING_EFFORT,
+        generator_model=_load_generator_model(args.manifest),
     )
 
     if args.out is not None:

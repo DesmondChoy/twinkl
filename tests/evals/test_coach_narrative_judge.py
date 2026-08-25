@@ -16,8 +16,11 @@ from src.coach.schemas import (
 )
 from src.evals.coach_narrative_judge import (
     JudgeVerdict,
+    _load_generator_model,
+    _load_sample_labels,
     aggregate_verdicts,
     judge_narrative,
+    main,
     render_judge_prompt,
     render_markdown,
 )
@@ -364,3 +367,77 @@ def test_report_renders_per_response_scores_and_justifications():
     assert "deadbeef:2025-01-07 | 4 | 5 | 5 | 4 | pass | no" in markdown
     assert "## Evaluator Justifications" in markdown
     assert "Grounded, specific, and honest about the tension." in markdown
+
+
+def test_report_marks_same_model_review_only_when_models_match():
+    same = aggregate_verdicts(
+        [],
+        judge_model="openai:gpt-test",
+        generator_model="openai:gpt-test",
+    )
+    independent = aggregate_verdicts(
+        [],
+        judge_model="gemini:gemini-test",
+        generator_model="openai:gpt-test",
+    )
+
+    assert same.self_evaluation is True
+    assert same.to_dict()["same_model_review_limitation"] is not None
+    assert "Same-model-review limitation" in render_markdown(same)
+    assert independent.self_evaluation is False
+    assert independent.to_dict()["same_model_review_limitation"] is None
+    assert "Same-model-review limitation" not in render_markdown(independent)
+
+
+def test_manifest_provenance_supplies_generator_model_and_target_label(tmp_path):
+    path = tmp_path / "manifest.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "digest": _digest().model_dump(mode="json"),
+                    "narrative": _narrative().model_dump(mode="json"),
+                    "target": {"target_id": "drift-target-1"},
+                    "provenance": {
+                        "generation": {
+                            "model_contract": {
+                                "provider": "openai",
+                                "model": "gpt-test",
+                            }
+                        }
+                    },
+                }
+            ]
+        )
+    )
+
+    assert _load_generator_model(path) == "openai:gpt-test"
+    assert _load_sample_labels(path) == ["drift-target-1"]
+
+
+def test_main_dry_run_reports_explicit_cross_provider_model(tmp_path, capsys):
+    path = tmp_path / "manifest.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "digest": _digest().model_dump(mode="json"),
+                    "narrative": _narrative().model_dump(mode="json"),
+                }
+            ]
+        )
+    )
+
+    result = main(
+        [
+            "--manifest",
+            str(path),
+            "--judge-provider",
+            "gemini",
+            "--judge-model",
+            "gemini-test",
+        ]
+    )
+
+    assert result == 0
+    assert "gemini:gemini-test" in capsys.readouterr().out

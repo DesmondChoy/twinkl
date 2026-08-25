@@ -30,6 +30,10 @@ DEFAULT_OPENAI_SERVICE_TIER = "default"
 DEFAULT_GEMINI_MODEL = "gemini-3.5-flash"
 DEFAULT_TIMEOUT_SECONDS = 60.0
 DEFAULT_MAX_OUTPUT_TOKENS = 2048
+DEFAULT_MODELS = {
+    "openai": DEFAULT_OPENAI_MODEL,
+    "gemini": DEFAULT_GEMINI_MODEL,
+}
 OPENAI_LUNA_PRICING_SOURCE = (
     "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
 )
@@ -173,6 +177,30 @@ def _unwrap_json_schema(response_format: dict | None) -> dict | None:
     return schema if isinstance(schema, dict) else None
 
 
+def resolve_coach_model(
+    *,
+    provider: str | None = None,
+    model: str | None = None,
+) -> tuple[str, str]:
+    """Return the provider and model that ``build_llm_complete`` will use.
+
+    If the selected provider differs from ``TWINKL_COACH_PROVIDER``, it does not
+    reuse ``TWINKL_COACH_MODEL``. It uses the selected provider's default model.
+    An explicit ``model`` overrides that default.
+    """
+    configured_provider = os.environ.get("TWINKL_COACH_PROVIDER", "openai")
+    configured_provider = configured_provider.strip().lower()
+    resolved_provider = (provider or configured_provider).strip().lower()
+    default_model = DEFAULT_MODELS.get(resolved_provider, DEFAULT_OPENAI_MODEL)
+    if model is not None:
+        resolved_model = model
+    elif provider is None or resolved_provider == configured_provider:
+        resolved_model = os.environ.get("TWINKL_COACH_MODEL", default_model)
+    else:
+        resolved_model = default_model
+    return resolved_provider, resolved_model
+
+
 def _build_openai_llm_complete(
     *,
     model: str | None,
@@ -183,7 +211,7 @@ def _build_openai_llm_complete(
     if not os.environ.get("OPENAI_API_KEY"):
         return None
 
-    resolved_model = model or os.environ.get("TWINKL_COACH_MODEL", DEFAULT_OPENAI_MODEL)
+    resolved_model = model or DEFAULT_OPENAI_MODEL
 
     async def llm_complete(
         prompt: str,
@@ -251,7 +279,7 @@ def _build_gemini_llm_complete(
     if not api_key:
         return None
 
-    resolved_model = model or os.environ.get("TWINKL_COACH_MODEL", DEFAULT_GEMINI_MODEL)
+    resolved_model = model or DEFAULT_GEMINI_MODEL
 
     def _generate(
         prompt: str,
@@ -350,9 +378,10 @@ def build_llm_complete(
     defaulting to ``openai``. Returns ``None`` when the provider's API key is
     missing or the provider is unrecognised, so the demo stays runnable offline.
     """
-    resolved_provider = (
-        provider or os.environ.get("TWINKL_COACH_PROVIDER", "openai")
-    ).strip().lower()
+    resolved_provider, resolved_model = resolve_coach_model(
+        provider=provider,
+        model=model,
+    )
     resolved_timeout = timeout if timeout is not None else DEFAULT_TIMEOUT_SECONDS
     resolved_max_tokens = (
         max_output_tokens
@@ -369,7 +398,7 @@ def build_llm_complete(
         return None
 
     return builder(
-        model=model,
+        model=resolved_model,
         timeout=resolved_timeout,
         max_output_tokens=resolved_max_tokens,
         call_metrics=call_metrics,
