@@ -2,7 +2,10 @@
 
 ## What We're Evaluating
 
-The LLM-Judge produces training labels for the VIF Critic. This evaluation validates that the LLM-Judge's alignment scores are consistent, accurate, and agree with human intuition.
+The LLM-Judge produces LLM-Judge VIF Labels for the VIF Critic (Offline). This evaluation
+measures repeated-call consistency and overlap with a shared project-team
+annotation subset. The subset is not independent human ground truth, so the
+evaluation does not establish label accuracy by itself.
 
 ---
 
@@ -19,12 +22,12 @@ The LLM-Judge produces training labels for the VIF Critic. This evaluation valid
 - 3 annotators × 115 shared Journal Entries across 19 personas (des, jl, km) in [`logs/annotations/`](../../logs/annotations/)
 - Cohen's κ and Fleiss' κ calculation ([`src/annotation_tool/agreement_metrics.py`](../../src/annotation_tool/agreement_metrics.py))
 - Agreement report: avg Cohen's κ 0.66, Fleiss' κ 0.56 ([report](../../logs/exports/agreement_report_20260318_130642.md))
-- Historical reachability audit completed for hard dimensions with a diagnostic recommendation to change the target regime for `security` and use targeted relabeling for `hedonism` / `stimulation` ([report](../../logs/exports/twinkl_747/reachability_audit_report.md)); its legacy experiment setups did not exactly match the active VIF Critic input and did not create a repaired target
+- Historical reachability audit completed for hard dimensions with a diagnostic recommendation to change the target regime for `security` and use targeted relabeling for `hedonism` / `stimulation` ([report](../../logs/exports/twinkl_747/reachability_audit_report.md)); its legacy experiment setups did not exactly match the active VIF Critic (Offline) input and did not create a repaired target
 - Repeated-call self-consistency and full-corpus stability analysis completed via the 5-pass `twinkl-754` rerun ([report](../../logs/exports/twinkl_754/consensus_rejudging_report.md))
 - Receipt-bound exact-state Security review and the
   `security_active_critic_state_v1` target completed under `twinkl-a30f`
 - Matched Hedonism hard-set review completed under `twinkl-748`; the result did
-  not establish a stronger VIF Critic operating point
+  not establish a stronger VIF Critic (Offline) operating point
 
 ### What's Missing
 - Automated quality checks (all-zero rate, sparsity, distribution)
@@ -35,7 +38,7 @@ The LLM-Judge produces training labels for the VIF Critic. This evaluation valid
 2. Re-annotate a subset only if a future rubric or target change requires a new
    agreement measure
 
-No further VIF Critic target work is planned for the time-boxed capstone.
+No further VIF Critic (Offline) target work is planned for the time-boxed capstone.
 
 ---
 
@@ -52,7 +55,7 @@ The LLM-Judge uses a strict categorical protocol to reduce subjective noise:
 **Why categorical?**
 - Clear decision boundaries improve consistency
 - Avoids arbitrary distinctions (4.5 vs 4.2)
-- Maps cleanly to training targets for the VIF Critic
+- Maps cleanly to training targets for the VIF Critic (Offline)
 
 ---
 
@@ -60,7 +63,7 @@ The LLM-Judge uses a strict categorical protocol to reduce subjective noise:
 
 ### 1. Agreement Metrics (Cohen's κ and Fleiss' κ)
 
-We use two complementary kappa metrics to validate LLM-Judge labels:
+Two complementary kappa metrics describe agreement on the shared subset:
 
 #### Understanding the Two Metrics
 
@@ -83,18 +86,21 @@ We use two complementary kappa metrics to validate LLM-Judge labels:
 
 | Metric | What It Measures | Question It Answers |
 |--------|------------------|---------------------|
-| **Cohen's κ** | Agreement between ONE human and the LLM-Judge | "Does this annotator agree with the LLM-Judge's labels?" |
-| **Fleiss' κ** | Agreement among ALL humans (independent of LLM-Judge) | "Do humans agree with each other on what's correct?" |
+| **Cohen's κ** | Agreement between one project-team annotator and the LLM-Judge | "How closely do this annotator's labels overlap with the LLM-Judge VIF Labels?" |
+| **Fleiss' κ** | Agreement among all three project-team annotators | "How consistently do the annotators apply the rubric on this subset?" |
 
 #### Why Both Metrics Matter
 
 | Scenario | Fleiss' κ | Cohen's κ | Interpretation |
 |----------|-----------|-----------|----------------|
-| Humans agree with each other AND with LLM-Judge | High | High | ✅ LLM-Judge is well-calibrated |
-| Humans agree with each other BUT NOT with LLM-Judge | High | Low | ⚠️ LLM-Judge has systematic bias — fix LLM-Judge prompt |
-| Humans DON'T agree with each other | Low | Varies | ⚠️ Rubric is ambiguous — fix definitions first |
+| Project-team annotators agree with each other and with LLM-Judge | High | High | Both agreement views are strong on the sampled data |
+| Project-team annotators agree with each other but not with LLM-Judge | High | Low | Inspect LLM-Judge errors, prompt behavior, and label provenance |
+| Project-team annotators show weak agreement | Low | Varies | Inspect rubric ambiguity, class prevalence, sample coverage, and annotator differences |
 
-**Critical insight:** If Fleiss' κ is low, humans can't agree on what "correct" means. In this case, low Cohen's κ may reflect rubric ambiguity rather than LLM-Judge error. **Always check Fleiss' κ first** — if humans disagree, clarify the rubric before blaming the LLM-Judge.
+The two coefficients use different rater structures and are not a direct model
+comparison. A low value can reflect rubric ambiguity, class prevalence, sample
+composition, annotator differences, or LLM-Judge behavior. Interpret the
+aggregate values with per-value coefficients and case-level disagreements.
 
 #### Interpretation Scale (Landis & Koch, 1977)
 
@@ -114,7 +120,7 @@ We use two complementary kappa metrics to validate LLM-Judge labels:
 
 ```bash
 # Generate agreement report
-shiny run src/annotation_tool/app.py
+uv run shiny run src/annotation_tool/app.py
 # → Navigate to Analysis section → Export Agreement Report
 ```
 
@@ -124,10 +130,10 @@ Reports are saved to `logs/exports/agreement_report_<timestamp>.md`.
 
 Check that the LLM-Judge produces consistent scores when the same workflow is rerun:
 
-- **Repeated-call reruns**: `twinkl-754` reran the profile-only LLM-Judge workflow 5 times over all 1,651 Journal Entries and measured per-dimension Fleiss' κ from **0.775** (`security`) to **0.890** (`universalism`). This is now the main consistency benchmark in the repo.
+- **Repeated-call reruns**: `twinkl-754` reran the profile-only LLM-Judge workflow 5 times over all 1,651 Journal Entries and measured per-dimension Fleiss' κ from **0.775** (`security`) to **0.890** (`universalism`). This is the main repeated-call consistency benchmark in the repository.
 - **Semantically similar Journal Entries**: Paraphrased versions of same content should get same scores.
 
-### 3. Calibration Checks
+### 3. Distribution Checks
 
 Verify the LLM-Judge doesn't systematically over- or under-predict:
 
@@ -170,7 +176,7 @@ For each Journal Entry, the human reviewer asks:
 
 **Entry**: "Stayed late again to finish the deck. Told myself I'd leave by 6..."
 
-**LLM-Judge scores**: Achievement: +1, Hedonism: -1, all others: 0
+**LLM-Judge VIF Labels**: Achievement: +1, Hedonism: -1, all others: 0
 
 **Reviewer assessment**:
 - [x] Achievement +1: Agree — clearly prioritizing work performance
@@ -189,17 +195,18 @@ If validation reveals quality issues:
 
 ### Step 0: Diagnose the Root Cause
 
-**Check Fleiss' κ first** to determine whether the problem is rubric ambiguity or LLM-Judge error:
+Inspect Fleiss' κ, Cohen's κ, class prevalence, sample coverage, and exact
+disagreements together before assigning a cause:
 
 | Fleiss' κ | Cohen's κ | Diagnosis | Action |
 |-----------|-----------|-----------|--------|
-| Low | Low | Rubric is unclear | → Go to Step 1 (fix rubric) |
-| High | Low | LLM-Judge has systematic bias | → Go to Step 2 (fix LLM-Judge prompt) |
-| High | High | No issues | ✅ Done |
+| Low | Low | Rubric, prevalence, sample, annotator, or LLM-Judge issue | Review cases before choosing Step 1 or Step 2 |
+| High | Low | Possible LLM-Judge divergence | Review cases, provenance, and prompt behavior before Step 2 |
+| High | High | Strong sampled agreement | Retain provenance and per-value monitoring |
 
 ### Step 1: Refine Rubrics (if Fleiss' κ is low)
 
-Humans can't agree — the definitions need clarification:
+When case-level review supports rubric ambiguity, clarify the definitions:
 
 1. **Identify problem values**: Look at per-value Fleiss' κ breakdown
 2. **Update `config/schwartz_values.yaml`** with:
@@ -211,7 +218,8 @@ Humans can't agree — the definitions need clarification:
 
 ### Step 2: Fix the LLM-Judge (if Cohen's κ is low but Fleiss' κ is high)
 
-Humans agree, but the LLM-Judge diverges — the LLM-Judge prompt needs adjustment:
+When case-level review supports LLM-Judge divergence, adjust the LLM-Judge
+prompt and verify the affected cases:
 
 1. **Identify pattern**: What type of Journal Entries does the LLM-Judge struggle with?
    - Value conflation (Achievement ↔ Power)
@@ -222,9 +230,10 @@ Humans agree, but the LLM-Judge diverges — the LLM-Judge prompt needs adjustme
 
 ---
 
-## Automated Quality Checks
+## Planned Automated Quality Checks
 
-Run these checks automatically on every LLM-Judge labeling run:
+The post-labeling validation does not yet run these checks automatically. The
+intended checks are:
 
 ```python
 def validate_judge_output(labels_df):
@@ -253,17 +262,19 @@ def validate_judge_output(labels_df):
 
 ---
 
-## Success Criteria
+## Interpretation Thresholds
 
 | Metric | Target | Rationale |
 |--------|--------|-----------|
-| Fleiss' κ (human vs human) | > 0.60 | Humans must agree before evaluating LLM-Judge |
-| Cohen's κ (human vs LLM-Judge) | > 0.60 | Substantial agreement with human intuition |
+| Fleiss' κ (project-team annotators) | > 0.60 | Descriptive substantial-agreement threshold for a future shared subset |
+| Cohen's κ (project-team annotator vs LLM-Judge) | > 0.60 | Descriptive substantial-agreement threshold for each pair |
 | Repeated-call self-consistency | Fleiss' κ > 0.75 | The same LLM-Judge workflow should remain strongly stable when rerun on the same data |
 | All-zero rate | < 30% | Most Journal Entries have signal |
 | Per-persona sparsity | < 20% with >80% zeros | Personas should show patterns |
 
-**Evaluation order:** Check Fleiss' κ first. If humans don't agree (κ < 0.60), improve the rubric before evaluating Cohen's κ.
+Interpret Fleiss' κ, each Cohen's κ, prevalence, sample coverage, and exact
+disagreements together. Neither coefficient establishes label accuracy or a
+ceiling for the other.
 
 ---
 

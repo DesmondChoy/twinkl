@@ -1,10 +1,12 @@
-# Twinkl onboarding
+# Twinkl React app
 
-Standalone React proof of concept for the published Schwartz Values Best-Worst
-Survey (SVBWS) onboarding flow. This is a research-grounded pilot instrument,
-not a psychometrically validated Twinkl instrument. It produces a confirmed,
-versioned Profile. A host can persist the Profile exposed by the handoff, and
-the approved runtime imports its Core Values from saved JSON.
+Shared React app for the Schwartz Values Best-Worst Survey (SVBWS) onboarding,
+Experience, and Inspect. The onboarding phase is a research-grounded pilot
+instrument, not a psychometrically validated Twinkl instrument. It produces a
+confirmed, versioned Profile and synchronizes the Profile and browser-held
+Experience state with the in-memory Python boundary. A separate host can also
+persist the Profile exposed by the handoff, and the batch runtime imports its
+Core Values from saved JSON.
 
 The flow first asks what Twinkl should call the user, then presents 11
 randomized groups of six neutral cards from the published balanced design.
@@ -16,7 +18,7 @@ stores the preferred name and keeps raw
 no midpoint result or confidence proxy. The 11th group advances directly to
 the label-free Core Value summary. A Profile has at most two Core Values. If
 more than two values share the highest score, the user selects exactly two and
-the Profile retains the full tied candidate list. The final action opens the
+the Profile retains every tied value. The final action opens the
 manual Journal Entry flow. The React Experience passes the confirmed Profile and
 ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
@@ -26,7 +28,7 @@ from the browser timezone. After the newest Journal Entry is final, the user
 can move to the next day or close the week. Closing the week moves to the next
 Monday. It runs the fixed Weekly Drift Reviewer and applies the Drift Detector.
 Coach Digest then runs for every Weekly Drift Detection result, including No
-Drift. If Coach Digest cannot return a valid response, the Weekly Drift
+Active Drift. If Coach Digest cannot return a valid response, the Weekly Drift
 Detection result remains available. The first partial week follows the same
 rule. Inspect reads the live trace events. Profile confirmation starts this
 trace when the Python boundary is available. Without it, Experience stays
@@ -68,6 +70,8 @@ npm run dev
 
 ```sh
 npm test
+npm run test:watch
+npm run typecheck
 npm run build
 ```
 
@@ -85,15 +89,19 @@ files, the public `/health` route, and same-origin `/api/experience` requests
 from one Railway process. The Docker build context excludes `.env`, Git data,
 development caches, and unrelated experiment outputs.
 
+The frontend build imports the exact Coach Digest evaluation manifest used by
+the five saved Persona key weeks, so the Dockerfile copies that manifest before
+`npm run build`. The browser requests the scenario catalog and bundles with
+`cache: no-store`, then verifies each bundle against its catalogued SHA-256
+hash.
+
 Set `OPENAI_API_KEY` to enable live provider-backed Journal Entry work.
-Onboarding and saved persona replay remain available without it; manual
+Onboarding and saved Persona replay remain available without it; manual
 provider work fails safely and retains the Journal Entry for editing or retry.
-Remove the obsolete `TWINKL_DEMO_USERNAME` and `TWINKL_DEMO_PASSWORD`
-variables; the deployment no longer reads them.
+`TWINKL_DEMO_USERNAME` and `TWINKL_DEMO_PASSWORD` are unused.
 The public Railway URL has no username or password gate, so anyone with the URL
-can trigger paid provider calls. Keep the deployment URL private when it is not
-being demonstrated, and use provider-side usage limits appropriate for a
-time-boxed capstone POC.
+can trigger paid provider calls. Use provider-side usage limits appropriate for
+a time-boxed capstone POC, and remove live keys when paid calls are not needed.
 
 Build the same image locally from the repository root:
 

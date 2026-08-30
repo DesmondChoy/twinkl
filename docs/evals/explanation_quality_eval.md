@@ -3,11 +3,12 @@
 ## What We're Evaluating
 
 Twinkl generates explanations at two levels:
-1. **LLM-Judge rationales**: Per-Journal-Entry explanations for alignment scores
+1. **LLM-Judge rationales**: Per-Journal-Entry explanations for LLM-Judge VIF Labels
 2. **Coach Digest responses**: User-facing responses based on structured Weekly
    Drift Detection output
 
-This evaluation validates that explanations feel accurate and actionable to users.
+This evaluation defines the evidence, language, AI-review, and future
+user-perceived-accuracy checks for those two outputs.
 
 > **Runbook:** for the exact commands to run every Coach Digest response and
 > Weekly Drift Detection output test and eval, see
@@ -46,8 +47,22 @@ This evaluation validates that explanations feel accurate and actionable to user
   against the same selected Coach Digest policy, Core Value phrases, goal
   context, Weekly Drift Detection findings, and cited Journal Entries used for
   Coach Digest generation.
-  Scores are **AI evaluation, not human validation**. Future human calibration
+  Scores are **AI review, not human validation**. Future human calibration
   of the AI review remains separate work.
+- Coach Digest Evals can select an OpenAI or Gemini evaluator independently
+  from the Coach Digest generator through `--judge-provider` and
+  `--judge-model`. Reports record both model identities and apply the
+  same-model-review limitation only when they match.
+- The deterministic Drift/control runner selects one target for each known
+  development Drift and one matched control. The comparison report includes
+  pass rates from Coach Digest Validations with Wilson intervals, means from
+  Coach Digest Evals,
+  known Drift state, input-history summaries, response modes, and match quality.
+- Product callers discard responses that fail Coach Digest Validations. The
+  Drift/control runner uses the evaluation-only
+  `attach_failed_validation=True` option so the study can count those failures;
+  evaluation code must check `digest.validation.all_passed` before treating an
+  attached response as valid.
 
 ### Current Result Status
 
@@ -67,30 +82,44 @@ evaluation, the 12 calls used 16,547 input tokens and 1,696 output tokens. The
 calculated published-rate cost was `$0.00607555`, and total request latency was
 `33.707` seconds. This cost is not a billing export.
 
+This committed result uses Luna-none for both generation and AI review. The
+independent-provider options and Drift/control workflow have no committed paid
+result.
+
 ### What's Missing
 
 - **Automated checks for LLM-Judge rationales:** No batch checker or report yet in `src/judge/`
 - **AI review of LLM-Judge rationales:** No rationale-review evaluation
+- **Independent Coach Digest study result:** No committed cross-provider
+  Drift/control generation, Coach Digest Evals report, or comparison report
 - **Human calibration:** No protocol or κ calculation for either explanation type
 
 ### Blocking Dependencies
 Coach Digest Validations, Coach Digest Evals, the five-response replacement,
-and approved-path evidence provenance are complete. This synthetic sample does
-not establish product usefulness. Deeper end-to-end explanation evaluation
-still requires future human calibration. VIF Critic outputs belong to offline
-review and retraining.
+and approved-path evidence provenance are complete. The cross-provider and
+Drift/control commands are available, but their paid result is not part of the
+committed evidence. The five-response synthetic sample does not establish
+product usefulness. Deeper end-to-end explanation evaluation still requires
+future human calibration. VIF Critic Predictions belong to offline research.
 
 ### Implementation Scope
 
 The implemented slice covers Weekly Drift Detection output storage, Coach
 Digest prompt rendering, programmatic response generation, automated response
 validation, batch reporting, and Coach Digest Evals. The analogous batch
-checker for LLM-Judge rationales remains planned. AI review of rationales and
-human calibration are later validation phases.
+checker for LLM-Judge rationales remains planned. Coach Digest Evals support
+provider separation, and the Drift/control workflow supports deterministic
+selection, safe resume, evaluation-only failure measurement, and grouped
+reporting. AI review of rationales and human calibration are later validation
+phases.
 
 ### Next Steps
 1. Add an automated batch checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
-2. Complete future human calibration of the AI review with 20-30 responses
+2. Run the paid Drift/control study with an evaluator provider that differs
+   from the Coach Digest generator, then publish the provider identities,
+   target catalog, validation rates, means from Coach Digest Evals, and
+   limitations
+3. Complete future human calibration of the AI review with 20-30 responses
 
 ---
 
@@ -98,7 +127,7 @@ human calibration are later validation phases.
 
 ### LLM-Judge Rationales
 
-For each alignment score, the LLM-Judge provides a rationale:
+For each LLM-Judge VIF Label, the LLM-Judge provides a rationale:
 
 ```json
 {
@@ -128,14 +157,16 @@ different from the plan you had in mind?"
 - Avoids prescriptive or judgmental language
 
 The approved path lives in `src/coach/weekly_drift_runtime.py` and
-`src/coach/weekly_digest.py`. Automated checks, AI review, and the replacement
-Persona result are complete. User-study calibration remains pending.
+`src/coach/weekly_digest.py`. The five saved Persona responses have completed
+Coach Digest Validations and same-model Coach Digest Evals. Provider-separated
+AI review and Drift/control comparison are supported but have no committed
+paid result. User-study calibration remains pending.
 
 ---
 
 ## Evaluation Approach
 
-### Primary: Likert Ratings (from PRD)
+### Future User Study: Likert Ratings
 
 Show users their Coach Digest response and ask: **"Did this feel accurate?"**
 
@@ -147,15 +178,34 @@ Show users their Coach Digest response and ask: **"Did this feel accurate?"**
 | 2 | Mostly inaccurate — misses important context |
 | 1 | Completely inaccurate — doesn't reflect my week |
 
-### Secondary: Criteria-Based Scoring
+### Coach Digest Evals
 
-For deeper analysis, rate explanations on three dimensions:
+Coach Digest Evals use the exact structured Weekly Drift Detection output and
+response to score four dimensions. The evaluator also decides whether the
+reflective question is open and relevant.
 
 | Criterion | Question | Scale |
 |-----------|----------|-------|
 | **Correctness** | Does the explanation accurately reflect what happened? | 1-5 |
 | **Specificity** | Does it reference concrete details, not vague generalities? | 1-5 |
-| **Actionability** | Could the user take action based on this insight? | 1-5 |
+| **Non-prescriptive tone** | Does the response avoid commands, moral judgment, and diagnosis? | 1-5 |
+| **Tension honesty** | Does the response preserve ambiguity and avoid unsupported progress claims? | 1-5 |
+
+The target is a mean above `3.5` for each dimension. Any score below `3` is a
+review flag. These scores are AI review, not human validation.
+
+### Provider Separation and Drift/Control Comparison
+
+`src.evals.coach_narrative_judge` accepts `--judge-provider {openai,gemini}`
+and `--judge-model`. When the evaluator provider differs from the generator
+provider, the report records that separation. Provider separation reduces one
+known correlated-review risk, but it does not create human validation.
+
+`scripts/experiments/run_coach_drift_control_eval.py` builds a deterministic
+catalog of 42 known development Drifts and 42 matched controls from the current
+committed inputs. A control has no known Drift for its Persona. It is not human
+ground truth. The runner's default mode writes only the target catalog. Paid
+Weekly Drift Detection and Coach Digest generation require `--execute`.
 
 ---
 
@@ -169,11 +219,11 @@ Fast, objective checks that don't require LLM calls:
 
 | Check | Description | Target |
 |-------|-------------|--------|
-| **Groundedness** | % of rationales with verifiable quotes (substring match in Journal Entry) | > 70% |
-| **Non-circularity** | % that don't contain the value name itself | > 95% |
+| **Groundedness** | % of Coach Digest responses with a selected evidence quote present in the cited Journal Entry | > 70% |
+| **Non-circularity** | % of Coach Digest responses that avoid score and alignment jargon | > 95% |
 | **Raw value leakage** | Response does not expose raw Schwartz value labels | Reported |
 | **Current-state claims** | Response does not make an unsupported positive-change claim | Reported |
-| **Length** | Flag too-short (<25 words) or too-long (>180 words) | 90% in range |
+| **Length** | Coach Digest response remains within 25-180 words | > 90% |
 
 **Current code status:**
 - Coach Digest responses: validated by `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
@@ -209,7 +259,7 @@ For rationales that pass the automated code checks, evaluate them with an LLM:
 
 #### Human Calibration (Small Sample)
 
-> **Implementation phase:** Future — designed for production validation.
+> **Implementation phase:** Future human calibration of the AI review.
 
 Validate the rationale-review LLM against human judgment:
 
@@ -240,7 +290,11 @@ Day 14:      Second Coach Digest response + rating
 
 ---
 
-## Evaluation Flow
+## Planned LLM-Judge Rationale Evaluation Flow
+
+The flow below applies only to the unimplemented LLM-Judge rationale review. It
+does not describe the implemented Coach Digest Validations or Coach Digest
+Evals.
 
 ```
 LLM-Judge produces rationales for N Journal Entries
@@ -290,9 +344,11 @@ LLM-Judge produces rationales for N Journal Entries
 
 | Metric | Target | Method | Phase | Rationale |
 |--------|--------|--------|-------|-----------|
-| Groundedness (code) | > 70% | Automated check | **Initial** | Rationales should quote or reference Journal Entry content |
-| Non-circularity (code) | > 95% | Automated check | **Initial** | Rationales shouldn't just restate value name |
-| Length compliance | > 90% | Automated check | **Initial** | Most narratives should be 25-180 words |
+| Groundedness (code) | > 70% | Coach Digest Validations | **Current** | Responses should use quoted evidence from cited Journal Entries |
+| Non-circularity (code) | > 95% | Coach Digest Validations | **Current** | Responses should avoid score and alignment jargon |
+| Length compliance | > 90% | Coach Digest Validations | **Current** | Most responses should be 25-180 words |
+| Correctness, specificity, non-prescriptive tone, and tension honesty | Mean > 3.5/5 for each dimension | Coach Digest Evals | **Current** | Measures the response contract; remains AI review rather than human validation |
+| Coach Digest Evals review flag | Any dimension < 3 | Coach Digest Evals | **Current** | Sends a low-scoring response to human review |
 | Correctness (rationale-review LLM) | Mean > 3.5/5 | AI review | Future | Rationales should be factually accurate |
 | Specificity (rationale-review LLM) | Mean > 3.5/5 | AI review | Future | Rationales should cite concrete details |
 | Human-LLM agreement | κ > 0.6 | Human calibration | Future | The rationale-review LLM should align with human judgment |
@@ -306,10 +362,14 @@ LLM-Judge produces rationales for N Journal Entries
 1. **Subjectivity**: "Felt accurate" is inherently subjective
 2. **Small sample**: 5-10 users limits statistical power
 3. **Hawthorne effect**: Users may rate higher knowing researchers will see
-4. **Same-model review**: Luna-none generated and evaluated the responses.
-   Correlated errors can make the scores too favorable.
+4. **Same-model committed result**: Luna-none generated and evaluated the five
+   saved responses. Correlated errors can make those scores too favorable. The
+   evaluator supports provider separation, but no paid cross-provider result is
+   committed.
 5. **Synthetic sample**: The replacement covers five selected synthetic
    responses. It is not a fresh final test or evidence of user usefulness.
+6. **Drift/control reference source**: Known Drifts and no-known-Drift controls
+   come from AI-reviewed synthetic development evidence, not human ground truth.
 
 **Mitigations:**
 - Use consistent Likert anchors with behavioral definitions

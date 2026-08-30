@@ -27,7 +27,7 @@ source .venv/bin/activate        # Bash/Zsh
 | Coach Digest Drift/control comparison | Study | **Yes (paid generation and AI review)** | `scripts/experiments/run_coach_drift_control_eval.py`, `src/evals/coach_drift_control_report.py` |
 
 Coach Digest Validations are mechanical code checks, not human validation.
-Coach Digest Evals produce **AI evaluation, not human validation**. Future
+Coach Digest Evals produce **AI review, not human validation**. Future
 human calibration of the AI review can use Cohen's κ.
 
 ---
@@ -68,9 +68,25 @@ uv run pytest tests/evals/test_coach_digest_validations.py \
 Lint and type-check touched code when you change it:
 
 ```sh
-uv run ruff check src/evals src/coach tests/coach tests/evals
-uv run mypy src/evals            # when type behavior changed
+uv run ruff check \
+  src/evals/coach_narrative_judge.py \
+  src/evals/coach_drift_control_report.py \
+  src/coach/llm_client.py src/coach/weekly_drift_runtime.py \
+  scripts/experiments/run_coach_drift_control_eval.py \
+  tests/coach/test_llm_client.py tests/coach/test_weekly_drift_runtime.py \
+  tests/evals/test_coach_narrative_judge.py \
+  tests/evals/test_coach_drift_control_report.py \
+  tests/experiments/test_run_coach_drift_control_eval.py
+uv run --with 'mypy==2.3.0' mypy --follow-imports=skip \
+  src/evals/coach_narrative_judge.py \
+  src/evals/coach_drift_control_report.py \
+  src/coach/llm_client.py src/coach/weekly_drift_runtime.py \
+  scripts/experiments/run_coach_drift_control_eval.py  # when type behavior changed
 ```
+
+The import-isolated MyPy command supplies MyPy ephemerally and keeps this
+focused check separate from known type errors in unrelated repository
+dependencies.
 
 ---
 
@@ -137,14 +153,15 @@ The runner requires an explicit Persona roster. It has no default roster.
 Each Coach Digest call writes a separate timestamped
 `*.coach_diagnostic.json` file under the sample report directory. A new attempt
 creates a new file. The file keeps raw rejected output and names the failed
-parse, schema, or Coach Digest Validation stage. For OpenAI calls, it also
+parse, schema, or Coach Digest Validations stage. For OpenAI calls, it also
 keeps token usage, calculated published-rate cost, request latency, and the
 response ID. Rejected output does not enter the React fixtures or evaluation
 manifest.
 
 The Coach Digest provider comes from `TWINKL_COACH_PROVIDER` (`openai` or
 `gemini`; default `openai`). Set the matching API key in `.env`
-(`OPENAI_API_KEY` and/or `GEMINI_API_KEY`). OpenAI Coach Digest calls use
+(`OPENAI_API_KEY` and/or `GEMINI_API_KEY`; Gemini also accepts
+`GOOGLE_API_KEY`). OpenAI Coach Digest calls use
 `gpt-5.6-luna` at reasoning effort `none` by default. The Weekly Drift Reviewer
 uses `gpt-5.6-luna` at reasoning effort `low`.
 
@@ -182,7 +199,7 @@ models match.
 
 Targets: mean > 3.5/5 per dimension. Any response scoring below 3 on any
 dimension is flagged for human review. Report and doc lines label these scores
-as AI evaluation, not human validation. The report keeps each response score,
+as AI review, not human validation. The report keeps each response score,
 evaluator justification, token usage, calculated published-rate cost, and
 request latency.
 
@@ -192,8 +209,12 @@ request latency.
 
 This study compares Coach Digest responses for known Drift records with matched
 control targets. A control target comes from a Persona with no known Drift in
-the complete development results. The match uses the historical split, Journal
-Entry count, and reviewed week count.
+the complete development results. Matching first uses the same historical split
+and Journal Entry count bucket (`<=6`, `7-9`, or `10-12`) and prefers the same
+Core Value. If that pool is empty, the runner relaxes the historical split or
+count bucket and records the result in `match_quality`. It selects the control
+cutoff with the closest reviewed-week count. A control remains AI-reviewed
+synthetic development evidence, not human ground truth.
 
 First, build the deterministic target catalog. This command makes no provider
 calls:
@@ -216,7 +237,32 @@ runner stops if generated outputs exist but the matching manifest is absent.
 It also stops if a resumed run selects a different Coach Digest generator
 model.
 
-Run Coach Digest Evals with an independent provider:
+Product callers discard a response that fails Coach Digest Validations. The
+study retains such a response through the evaluation-only
+`attach_failed_validation=True` option so the comparison can measure the
+failure. Evaluation code must check `digest.validation.all_passed` before it
+treats the attached response as a valid Coach Digest response.
+
+### Drift/control runner options
+
+| Option | Default / behavior |
+|---|---|
+| `--episodes-parquet` | `logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_drift_episodes.parquet` |
+| `--case-outcomes-parquet` | `logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_case_outcomes.parquet` |
+| `--wrangled-dir` | `logs/wrangled` |
+| `--parquet-path` | `logs/exports/weekly_digests/coach_digest_drift_control.parquet` |
+| `--output-dir` | `logs/exports/weekly_drift_coach/drift_control` |
+| `--manifest-out` | `logs/experiments/reports/coach_digest_drift_control/judge_sample_manifest.json` |
+| `--targets-out` | `logs/experiments/reports/coach_digest_drift_control/targets.json` |
+| `--group {drift,control,both}` | `both` |
+| `--limit` | Unset; when present, limits the ordered Drift targets and their matched controls |
+| `--seed` | `20260823` |
+| `--resume` | Off; preserves compatible target and response records when enabled |
+| `--execute` | Off; the default writes the deterministic target catalog without provider calls |
+
+Run Coach Digest Evals with a provider that differs from the generator recorded
+in the manifest. Use Gemini for OpenAI-generated responses, as shown below; use
+OpenAI for Gemini-generated responses.
 
 ```sh
 uv run python -m src.evals.coach_narrative_judge \
@@ -235,8 +281,8 @@ uv run python -m src.evals.coach_drift_control_report \
   --out logs/experiments/reports/coach_digest_drift_control/comparison
 ```
 
-The report compares Coach Digest Validation pass rates and Coach Digest Eval
-means for Drift and control targets. It also reports the known Drift delivery
+The report compares pass rates from Coach Digest Validations and means from
+Coach Digest Evals for Drift and control targets. It also reports the known Drift delivery
 state and the input history for each target type. The known Drift records are
 AI-reviewed synthetic development data. They are not human ground truth.
 
@@ -249,7 +295,7 @@ AI-reviewed synthetic development data. They are not human ground truth.
 - Record the Drift episode Parquet, case outcome Parquet, wrangled Journal Entry
   directory, source hashes, target seed, and target catalog for the
   Drift/control study.
-- Do not treat AI evaluation scores as human validation. State the source
+- Do not treat AI review scores as human validation. State the source
   wherever it affects the conclusion.
 - Build the deployed-Persona manifest from the rebuilt public scenario bundles.
   Do not evaluate a separate response copy.
@@ -260,8 +306,8 @@ AI-reviewed synthetic development data. They are not human ground truth.
 
 - [`explanation_quality_eval.md`](./explanation_quality_eval.md) — evaluation
   design and status
-- [`overview.md`](./overview.md) — where explanation quality sits in the VIF
-  evaluation flow
+- [`overview.md`](./overview.md) — the user-facing evaluation path and separate
+  VIF Critic (Offline) research path
 - `src/coach/weekly_digest.py` — Weekly Drift Detection output builders,
   `validate_weekly_digest_narrative()`, and Coach Digest response generation
 - `src/coach/weekly_drift_runtime.py` — Weekly Drift Detection and Coach Digest

@@ -13,12 +13,12 @@ Monday-through-Sunday week closes. A valid Coach Digest response appears when
 available. A missing or invalid response does not remove the Weekly Drift
 Detection result.
 
-The five deterministic persona replays now load into the shared React session
+The five deterministic Persona replays load into the shared React session
 with manual next-step replay, previous-week navigation, optional automatic
 replay and pause, restart, Jump to key moment, reduced-motion behavior,
 no-future-data projection, and browser-side scenario hash verification. The
 release quality gate is implemented. The five Persona key-week Coach Digest
-responses now match the [current evaluation
+responses match the [current evaluation
 manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json).
 Current capstone work is
 Coach Digest feedback capture, longitudinal Core Value history, and the final
@@ -42,6 +42,9 @@ Core Value contracts.
 - **Access:** The assessment URL allows anonymous browser access.
 - **Provider boundary:** Provider credentials remain on the server.
 - **Provider cost:** Live Journal Entry work can make paid provider calls.
+- **Replay build boundary:** The frontend build imports the exact Coach Digest
+  evaluation manifest for the saved Persona replay checks before Vite produces
+  the deployable assets.
 - **Deletion behavior:** After Profile confirmation, Delete session removes the
   matching in-memory Python session and request receipts before React clears
   browser storage. Before Profile confirmation, Start over clears browser-only
@@ -86,7 +89,7 @@ information hierarchy, interaction order, or acceptance of the mobile flow.
 - Saving a Journal Entry never reviews its open calendar week. Review cadence
   is Monday through Sunday, and the first partial week becomes eligible after
   its first Sunday.
-- The VIF Critic remains offline research. Inspect may link to separate
+- The VIF Critic (Offline) remains offline research. Inspect may link to separate
   research reports, but it must not imply that VIF Critic Predictions produce
   user-facing Drift.
 - Persona replay uses saved Weekly Drift Reviewer Decisions by default. It must
@@ -355,31 +358,38 @@ Inspect represents these events when applicable:
 
 1. `profile_confirmed`
    - Profile validation, Core Values, and Profile provenance.
-2. `journal_entry_submitted`
+2. `assessment_time_advanced`
+   - next-day or close-week action, previous and current Simulated time, input
+     hash, and validation.
+3. `journal_entry_submitted`
    - Journal Entry date, text reference, ordering validation, and session ID.
-3. `nudge_suppression_checked`
+4. `nudge_suppression_checked`
    - previous-three-entry window and whether the anti-annoyance rule suppressed
      a nudge.
-4. `nudge_decided`
+5. `nudge_decided`
    - sanitized inputs, exact prompt, model, category, reason, response,
      validation, and latency.
-5. `nudge_generated`
+6. `nudge_generated`
    - exact prompt, generated question, word-count validation, attempts, and
      latency.
-6. `weekly_review_requested`
+7. `weekly_review_requested`
    - week boundaries, cumulative displayed Journal Entry history, Core Values,
      prompt, fixed model contract, and input hash.
-7. `weekly_review_completed`
+8. `weekly_review_completed`
    - raw provider response, validation result, effective Weekly Drift Reviewer
      Decisions, response ID when available, attempts, and latency.
-8. `drift_detected`
+9. `drift_detected`
    - the ordered Weekly Drift Reviewer Decisions considered, the deterministic
      rule steps, and resulting Drift state.
-9. `weekly_digest_built`
+10. `weekly_digest_built`
    - structured Weekly Drift Detection output fields, cited Journal Entries, and source Drift
      state.
-10. `weekly_coach_generated`
+11. `weekly_coach_generated`
     - exact prompt, model, response, narrative validation, and latency.
+
+A `weekly_coach_generated` event with `complete` or `reused` status presents the
+Coach Digest response as available. A `refused`, `invalid`, or `failed` status
+presents it as unavailable without removing the Weekly Drift Detection result.
 
 The Inspect copy must use the canonical component names above. In particular,
 Weekly Drift Reviewer Decisions are not called predictions.
@@ -443,13 +453,14 @@ Provider keys and unredacted provider configuration stay on the Python side.
 
 ### 7.1 Version 1 contract
 
-`experience-inspect-v1` defines five framework-neutral operations:
+`experience-inspect-v1` defines six framework-neutral operations:
 
 | Operation | Purpose |
 |---|---|
 | `create_session` | Validate a confirmed Profile, establish or resume in-memory shared session state, and synchronize one browser-held interaction or removal |
 | `submit_journal_entry` | Append one ordered Journal Entry using an expected session revision |
 | `advance_assessment_time` | Move an assessment-only clock forward by one day or to the next Monday |
+| `delete_session` | Remove one matching in-memory Python session, trace, and request receipts before browser state is cleared |
 | `load_scenario` | Load one deterministic saved persona scenario |
 | `read_trace` | Retrieve typed trace events, optionally after a known event |
 
@@ -627,6 +638,11 @@ remains distinct. Generation metadata is retained only for Inspect nudge
 provenance and is never supplied to the Weekly Drift Reviewer, Drift Detector,
 Weekly Drift Detection, or Coach Digest.
 
+The browser requests the scenario catalog and each bundle with
+`cache: no-store`, then verifies the bundle against the catalogued SHA-256 hash
+before it displays any saved Persona data. This keeps a deployment from reusing
+an older browser-cached scenario while preserving the content-integrity check.
+
 The historical persona files preserve each displayed nudge's category, trigger,
 text, and response, but not the original nudge provider prompt or raw response.
 Saved nudge trace events therefore retain the available fields and leave the
@@ -687,7 +703,7 @@ unavailable provider fields null; they do not invent a receipt.
 - Making the current Shiny Runtime Demo Review App the mobile-first product.
 - Adding VIF Critic Predictions to the Weekly Drift Reviewer or user-facing
   Drift path.
-- Presenting LLM-Judge labels as production decisions.
+- Presenting LLM-Judge VIF Labels as production decisions.
 - Claiming human validation, a fresh final test, or deployment approval.
 - Building production authentication, multi-tenant storage, notifications, or
   native mobile packaging in the first capstone demo slice.

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "twinkl"
 version = "0.1.0"
-description = "Voice-first alignment journaling capstone project."
+description = "Evidence-grounded journaling capstone for comparing behavior with Core Values."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

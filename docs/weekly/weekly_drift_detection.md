@@ -14,7 +14,7 @@ available. It does not decide whether Drift exists.
 
 Code and stored data still use `WeeklyDigest` and `weekly_digest`. These are
 compatibility identifiers. The executable prototype can also build this
-structured output from VIF Critic Predictions or LLM-Judge Labels. That path is
+structured output from VIF Critic Predictions or LLM-Judge VIF Labels. That path is
 not the approved user-facing architecture.
 
 Read this document with:
@@ -26,7 +26,9 @@ Read this document with:
   the evaluation contract;
 - [`docs/vif/example.md`](../vif/example.md) for target Coach Digest tone; and
 - [`docs/evals/explanation_quality_eval.md`](../evals/explanation_quality_eval.md)
-  for Coach Digest response checks.
+  for Coach Digest response checks; and
+- [`docs/evals/coach_narrative_test_and_eval_guide.md`](../evals/coach_narrative_test_and_eval_guide.md)
+  for the exact offline, paid, cross-provider, and Drift/control commands.
 
 ---
 
@@ -69,7 +71,7 @@ compatibility path.
 
 ### Standalone Compatibility Output CLI
 
-The standalone command defaults to persisted single-pass LLM-Judge labels:
+The standalone command defaults to persisted single-pass LLM-Judge VIF Labels:
 
 ```sh
 uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c
@@ -85,7 +87,7 @@ uv run python -m src.coach.weekly_digest \
   --end-date 2025-12-09
 ```
 
-Use a saved VIF Critic timeline instead of LLM-Judge labels with `--signals-path`:
+Use a saved VIF Critic (Offline) timeline instead of LLM-Judge VIF Labels with `--signals-path`:
 
 ```sh
 uv run python -m src.coach.weekly_digest \
@@ -130,9 +132,9 @@ output.
 | `--output-dir` | `logs/exports/weekly_digests` |
 | `--parquet-path` | `logs/exports/weekly_digests/weekly_digests.parquet` |
 
-### Deprecated VIF Critic Compatibility Runtime
+### Deprecated VIF Critic (Offline) Compatibility Runtime
 
-`src.coach.runtime` predicts a VIF Critic timeline, aggregates weekly signals,
+`src.coach.runtime` predicts a VIF Critic (Offline) timeline, aggregates weekly signals,
 runs the crash/rut/evolution router, and builds structured output. It is explicitly
 deprecated and retained only for historical reproduction and the existing
 Runtime Demo Review App:
@@ -183,6 +185,13 @@ and the exact failure stage. A new attempt creates a new file. A rejected
 response does not enter the user-facing Coach Digest or the consolidated
 parquet.
 
+The Drift/control study can call `run_weekly_drift_coach_cycle()` with
+`attach_failed_validation=True`. This evaluation-only option retains a parsed
+response that failed Coach Digest Validations so the study can measure the
+failure. Product callers keep the default `False` behavior and discard that
+response. Evaluation callers must inspect `digest.validation.all_passed` before
+they treat an attached response as valid.
+
 All three CLIs render and persist the Coach Digest prompt. They do not call a
 live Coach Digest LLM. Programmatic callers can inject an asynchronous callable
 into `run_weekly_drift_coach_cycle()`, the deprecated
@@ -197,7 +206,7 @@ into `run_weekly_drift_coach_cycle()`, the deprecated
 uv run shiny run src/demo_tool/app.py
 ```
 
-The Shiny app uses the deprecated VIF Critic compatibility path, reuses cached
+The Shiny app uses the deprecated VIF Critic (Offline) compatibility path, reuses cached
 persona/checkpoint bundles, and exposes structured output and its prompt. It is
 not the Weekly Drift Detection runtime. See
 [`docs/demo/review_app.md`](../demo/review_app.md).
@@ -222,12 +231,12 @@ not the Weekly Drift Detection runtime. See
 6. Record Active Drift, No Active Drift, or Insufficient Evidence per Core
    Value. Keep Historical Drift Records separate from the current state.
 7. Store Weekly Drift Detection output from cited Journal Entry evidence in
-   Weekly Drift Reviewer Decisions. Do not include VIF Critic or LLM-Judge
-   numeric summaries.
+   Weekly Drift Reviewer Decisions. Do not include VIF Critic Predictions or
+   LLM-Judge VIF Label numeric summaries.
 
 ### Standalone Path
 
-1. Load persisted LLM-Judge labels, or a saved VIF Critic timeline from
+1. Load persisted LLM-Judge VIF Labels, or a saved VIF Critic (Offline) timeline from
    `--signals-path`.
 2. Resolve the requested seven-day or explicit date window.
 3. Read an upstream Drift result when supplied.
@@ -238,14 +247,14 @@ not the Weekly Drift Detection runtime. See
    available.
 8. Render and persist JSON, markdown, prompt, and consolidated parquet output.
 
-### Deprecated VIF Critic Compatibility Path
+### Deprecated VIF Critic (Offline) Compatibility Path
 
 1. Reconstruct student-visible states from the wrangled timeline.
-2. Run the frozen VIF Critic checkpoint with MC Dropout.
+2. Run the frozen VIF Critic (Offline) checkpoint with MC Dropout.
 3. Persist per-Journal-Entry means and uncertainties.
 4. Aggregate the timeline into a validated weekly frame.
 5. Run the deprecated weekly crash/rut/evolution compatibility router.
-6. Pass the live VIF Critic predictions and structured routing result into the
+6. Pass the live VIF Critic Predictions and structured routing result into the
    compatibility output builder.
 7. Render and persist the runtime bundle.
 
@@ -338,7 +347,7 @@ Drift is two consecutive Conflicts on the same Core Value:
   or choice against the same Core Value;
 - approved user-facing input: decisions from `gpt-5.6-luna` at reasoning effort
   `low`, the fixed Weekly Drift Reviewer model contract, made without VIF Critic
-  predictions; and
+  Predictions; and
 - stored output: Weekly Drift Detection cites the supporting Journal Entries.
 
 Each Core Value is evaluated independently. An aligned label for another Core
@@ -347,22 +356,23 @@ value-specific records. The six-detector comparison's detector-vote count is
 not the five-pass LLM-Judge reference.
 
 The approved runtime persists Weekly Drift Reviewer Decisions and never places
-VIF Critic predictions in the prompt or Drift decision. The deprecated runtime
-persists VIF Critic alignment means and uncertainties. The
+VIF Critic Predictions in the prompt or Drift decision. The deprecated runtime
+persists VIF Critic Prediction means and uncertainties. The
 [`twinkl-752.5`
 reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md)
 used the 33-Drift known-development union and found no reliable benefit from
-showing raw VIF Critic scores to the Weekly Drift Reviewer. VIF-Critic-triggered
+showing raw VIF Critic Predictions to the Weekly Drift Reviewer. VIF-Critic-triggered
 early-plus-weekly review changed median delay but did not add Drift hits; its
-timing benefit disappeared on the non-training subgroup. The offline VIF
-Critic triggers targeted Drift-relevant opportunities better than random, but
+timing benefit disappeared on the non-training subgroup. The VIF Critic
+(Offline) triggers targeted Drift-relevant opportunities better than random, but
 that diagnostic made no reviewer calls and does not show that early review
 works. No fresh final test exists.
 The completed VIF Critic Predictions remain available for offline
-reproduction. Independent review, retraining, and VIF Critic candidate
-confirmation are not planned for the time-boxed capstone. The Weekly Drift
-Reviewer model choice is fixed, and the Drift Detector is complete and wired
-for the capstone POC, but neither has deployment approval.
+reproduction. Independent review, retraining, and Weekly Drift Reviewer
+confirmation of cases nominated by VIF Critic Predictions are not planned for
+the time-boxed capstone. The Weekly Drift Reviewer model choice is fixed, and
+the Drift Detector is complete and wired for the capstone POC, but neither has
+deployment approval.
 The former consensus-derived frozen benchmark is retired historical evidence.
 The crash/rut/evolution output modes are explicitly deprecated compatibility
 values, not the accepted v1 definition.
@@ -402,7 +412,7 @@ conservative local heuristics for offline development:
   among the main tensions; and
 - `stable`: none of the preceding conditions apply.
 
-These heuristics do not implement calibrated VIF Critic uncertainty or the
+These heuristics do not implement calibrated VIF Critic (Offline) uncertainty or the
 selected Drift Detector. They keep prompt and structured-output work usable
 when upstream results are absent.
 
@@ -475,17 +485,38 @@ learned routing policies.
 The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
 uses one key week for each deployed Persona replay. The same five accepted
 responses appear in the public scenario bundles and evaluation manifest. All
-five passed every Coach Digest Validation. Coach Digest Evals scored mean
+five passed all Coach Digest Validations. Coach Digest Evals scored mean
 correctness `4.80`, specificity `5.00`, non-prescriptive tone `5.00`, and
 tension honesty `4.60`; all reflective questions passed, with no failed
 verdicts or review flags. Luna-none generated and evaluated the responses.
 These scores are same-model AI review, not human validation or a fresh final
 test.
 
+### Coach Digest Evals and Drift/control Tools
+
+Coach Digest Evals accept `--judge-provider {openai,gemini}` and
+`--judge-model`. The report records the generator and evaluator identities and
+states the same-model limitation only when they match.
+
+The deterministic Drift/control runner selects one target for each of the 42
+known development Drifts and 42 matched controls under the current committed
+inputs. Its default mode writes the target catalog without provider calls.
+`--execute` authorizes Weekly Drift Reviewer and Coach Digest calls, while
+`--resume` preserves completed target IDs. The comparison report summarizes
+pass rates from Coach Digest Validations with Wilson intervals, means from
+Coach Digest Evals,
+known Drift state, input history, response mode, and control match quality.
+
+No paid cross-provider or Drift/control result is committed. These commands are
+available evaluation tooling, not additional evidence for the current Coach
+Digest result.
+
 ## Remaining Work
 
-1. Complete future human calibration of the AI review.
-2. Capture the user's perceived-accuracy rating and make it queryable.
+1. Run the paid Drift/control study with an evaluator provider that differs
+   from the Coach Digest generator and publish the bounded result.
+2. Complete future human calibration of the AI review.
+3. Capture the user's perceived-accuracy rating and make it queryable.
 
 Persisting full VIF Critic Predictions and adding independent disagreement
 review are not planned for the time-boxed capstone. A fresh final test and
@@ -501,9 +532,12 @@ deployment approval are also outside its scope.
 | `src/drift_detector.py` | Deterministic two-Conflict Drift Detector, current states, and Historical Drift Records |
 | `src/coach/weekly_drift_runtime.py` | Approved Weekly Drift Detection and Coach Digest orchestration |
 | `src/coach/weekly_digest.py` | Compatibility output construction, fallback routing, prompt rendering, validation, and persistence |
-| `src/coach/runtime.py` | Deprecated VIF Critic checkpoint-to-digest compatibility orchestration |
+| `src/coach/runtime.py` | Deprecated VIF Critic (Offline) checkpoint-to-digest compatibility orchestration |
 | `src/coach/mode_logic.py` | Standalone fallback response-mode logic |
 | `src/coach/schemas.py` | Drift, digest, narrative, and validation schemas |
+| `src/evals/coach_narrative_judge.py` | Coach Digest Evals with evaluator provider/model selection and provenance |
+| `scripts/experiments/run_coach_drift_control_eval.py` | Deterministic Drift/control selection, paid generation, safe resume, and manifest persistence |
+| `src/evals/coach_drift_control_report.py` | Grouped Coach Digest Validations and Coach Digest Evals comparison report |
 | `src/vif/runtime.py` | Per-Journal-Entry inference and weekly aggregation |
 | `src/vif/weekly_schema.py` | Weekly frame column contract and validation |
 | `src/vif/drift.py` | Deprecated weekly crash/rut/evolution compatibility router |
@@ -517,10 +551,15 @@ Targeted checks:
 
 ```sh
 uv run pytest tests/test_weekly_drift_reviewer.py tests/test_drift_detector.py \
-  tests/coach/test_weekly_drift_runtime.py tests/coach/test_weekly_digest.py -q
+  tests/coach/test_weekly_drift_runtime.py tests/coach/test_weekly_digest.py \
+  tests/evals/test_coach_narrative_judge.py \
+  tests/evals/test_coach_drift_control_report.py \
+  tests/experiments/test_run_coach_drift_control_eval.py -q
 ```
 
 The tests cover structured-output construction, future-Journal-Entry isolation,
 upstream/manual mode handling, safety fallbacks, prompt rendering, structured
 generation with a fake LLM, persistence, weekly schema validation, and
-deprecated compatibility router behavior.
+deprecated compatibility router behavior. They also cover independent evaluator
+selection, deterministic Drift/control matching, safe resume, evaluation-only
+failed-validation retention, and grouped comparison reporting.

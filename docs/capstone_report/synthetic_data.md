@@ -6,6 +6,30 @@ After extensive web research across 15+ searches covering frontier lab publicati
 
 ---
 
+## Current Project Outcome
+
+This research note records design corroboration and risk hypotheses. Current
+implementation status and empirical conclusions come from the maintained
+[Phase 2 Technical Paper](capstone_project_report.md).
+
+Twinkl contains 204 synthetic personas and 1,651 longitudinal Journal Entries.
+Generation runs in parallel between personas and sequentially within each
+persona, with configured demographic and writing variation, banned-term checks,
+and no generation metadata in production-like decisions. The persisted
+LLM-Judge VIF Labels have a shared 115-Journal-Entry project-team annotation
+benchmark and a separate five-pass repeated-call study. These results support
+bounded model development; they do not establish population realism, objective
+labels, or independent human validation.
+
+Two accepted train-only data batches targeted Power/Security and
+Hedonism/Security while retaining the frozen validation and test personas. The
+held-out effects were mixed: individual value metrics improved in places, but
+neither batch produced a clean family-wide replacement for the historical
+corrected-split VIF Critic (Offline) reference. The recommendations below remain
+research context, not uncompleted implementation status.
+
+---
+
 ## 1. SYNTHETIC DATA GENERATION WORKFLOW
 
 ### ✅ Aligned: Persona-Based Generation with Demographic Anchoring
@@ -63,7 +87,7 @@ After extensive web research across 15+ searches covering frontier lab publicati
 
 ### ✅ Aligned: Structured Output with Validation
 
-**Our approach:** Strict markdown format with 14-point validation checklist; Pydantic models for LLM-Judge output.
+**Our approach:** Strict markdown format with 14-point validation checklist; Pydantic models for LLM-Judge VIF Labels and rationales.
 
 **Research support:**
 - Pydantic is the industry-standard tool for LLM output validation. The official Pydantic documentation (pydantic.dev) states: "Without validation, these inconsistencies cause runtime errors that are difficult to debug."
@@ -133,7 +157,7 @@ After extensive web research across 15+ searches covering frontier lab publicati
 
 ### ⚠️ CONCERN 1: Same Model Family for Generation and LLM-Judge Labeling (Self-Preference Bias)
 
-**Our approach:** Claude Code subagents generate synthetic data, and Claude Code subagents create the LLM-Judge labels.
+**Our approach:** Claude Code subagents generate synthetic data, and Claude Code subagents create the LLM-Judge VIF Labels.
 
 **Research findings:**
 - [*Self-Preference Bias in LLM-as-a-Judge*](https://arxiv.org/abs/2410.21819) (arXiv 2024): GPT-4 exhibited self-preference bias of 0.520 — substantially favoring its own outputs. The cause: "LLMs assign disproportionately higher evaluations to outputs with lower perplexity," and models inherently produce lower-perplexity outputs aligned with their own training.
@@ -141,33 +165,36 @@ After extensive web research across 15+ searches covering frontier lab publicati
 - *Towards Understanding Bias in Synthetic Data for Evaluation* (arXiv 2025): "LLM-based systems receive disproportionately favorable evaluations when assessed using [same-model] judgments."
 - [*Beyond Consensus: Mitigating Agreeableness Bias*](https://arxiv.org/abs/2510.11822) (NUS AICET 2025): LLM judges exhibit "agreeableness bias" — giving favorable ratings regardless of quality, requiring regression-based calibration.
 
-**Risk for Twinkl:** Claude generating Journal Entries will produce text with Claude-typical patterns. Claude creating LLM-Judge labels for those Journal Entries may assign systematically inflated alignment scores because the text "feels natural" (low perplexity) to it. This could manifest as:
-- Overestimating alignment where values are subtly but not strongly present
-- Under-detecting misalignment because Claude-generated text tends toward coherent, balanced narratives
+**Risk for Twinkl:** Claude generating Journal Entries will produce text with Claude-typical patterns. Claude creating LLM-Judge VIF Labels for those Journal Entries may systematically overuse `+1` because the text "feels natural" (low perplexity) to it. This could manifest as:
+- Overusing `+1` where values are subtly but not strongly present
+- Underusing `-1` because Claude-generated text tends toward coherent, balanced narratives
 
 #### DEEP-DIVE: Mitigation Strategies (Ranked by Practicality)
 
-**Strategy 1: Human Calibration Sample (RECOMMENDED — Highest ROI)**
-- Create a "gold standard" by having 1-2 human raters score a sample of ~50-100 Journal Entries
-- Measure inter-rater agreement between humans and the Claude LLM-Judge using Cohen's Kappa
-- Research target: κ ≥ 0.75 (substantial agreement) — Google researchers achieved κ = 0.75 with human-refined rubrics
-- Use disagreements to iteratively refine the LLM-Judge prompt (rubric calibration)
-- This also produces an academic validation report for the capstone project
-- **Cost:** Low (one-time manual effort on ~50-100 Journal Entries)
-- **Source:** [*Towards a Human-in-the-Loop Framework for Reliable Patch Evaluation*](https://arxiv.org/abs/2511.10865) (arXiv 2025): human-refined rubrics yielded Cohen's kappa 0.75, recall 0.94, precision 0.80
+**Strategy 1: Project-Team Agreement Benchmark (COMPLETED)**
+- Three project-team annotators scored a shared 115-Journal-Entry subset before
+  seeing the LLM-Judge VIF Labels.
+- Human-human Fleiss' κ and three LLM-Judge-human Cohen's κ comparisons describe
+  agreement on that bounded subset.
+- Per-value results, class prevalence, sample composition, and exact
+  disagreements remain necessary for interpretation.
+- This benchmark is not a gold standard, objective labels, independent human
+  validation, or a human-consistency ceiling.
+- A future rubric or target change requires a fresh agreement measurement; a
+  stronger external claim requires independent reviewers.
 
 **Strategy 2: Cross-Model LLM-Judge Validation**
 - Run a subset (20-30%) of personas through a second LLM-Judge model family (GPT-4o or Gemini)
-- Compare score distributions between the Claude LLM-Judge and cross-model LLM-Judge
+- Compare LLM-Judge VIF Label distributions between the Claude LLM-Judge and cross-model LLM-Judge
 - [*Replacing Judges with Juries (PoLL)*](https://arxiv.org/abs/2404.18796) (arXiv 2024): "a PoLL composed of smaller diverse models outperforms a single large judge, exhibits less intra-model bias, and is over 7x less expensive"
 - If distributions diverge significantly → indicates self-preference bias; adjust accordingly
 - **Cost:** Moderate (API costs for 20-30% of Journal Entries × alternative model)
 - **Source:** Verga et al., *Replacing Judges with Juries* (arXiv 2404.18796)
 
 **Strategy 3: Statistical Debiasing (Post-Hoc Calibration)**
-- After scoring, analyze score distributions for systematic skew
-- Chi-square test: compare observed alignment score distribution against expected (null: uniform -1/0/+1)
-- Exact binomial test: for each Schwartz dimension, test whether +1 scores significantly exceed chance
+- After labeling, analyze LLM-Judge VIF Label distributions for systematic skew
+- Chi-square test: compare the observed `-1`/`0`/`+1` LLM-Judge VIF Label distribution against the expected distribution (null: uniform `-1`/`0`/`+1`)
+- Exact binomial test: for each Schwartz dimension, test whether `+1` LLM-Judge VIF Labels significantly exceed chance
 - If systematic inflation detected → apply regression-based score calibration
 - **Cost:** Low (pure analysis on existing data)
 - **Source:** [*Beyond Consensus*](https://arxiv.org/abs/2510.11822) (NUS AICET 2025): regression-based calibration successfully reduces agreeableness bias
@@ -188,14 +215,14 @@ After extensive web research across 15+ searches covering frontier lab publicati
 - **Cost:** High (3x LLM-Judge labeling cost)
 - **Source:** Verga et al. (2024); [*Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge*](https://arxiv.org/abs/2410.02736) (arXiv 2024)
 
-**Recommended Approach for Twinkl (Pragmatic):**
-Combine Strategies 1 + 3 + 4:
-1. Add adversarial debiasing instructions to the LLM-Judge prompt (free)
-2. Run the LLM-Judge labeling workflow with the revised prompt
-3. Human-score a calibration sample of ~50 Journal Entries
-4. Measure Cohen's Kappa between Claude and human
-5. Analyze score distributions for systematic skew
-6. Document findings as academic validation
+**Current Pragmatic Boundary for Twinkl:**
+1. Retain the persisted LLM-Judge VIF Labels for bounded model development.
+2. Report the 115-Journal-Entry project-team agreement benchmark alongside the
+   separate five-pass repeated-call study.
+3. Inspect exact disagreements and hard-dimension reachability before changing
+   a rubric or target.
+4. Use independent reviewers in future work only when the intended claim
+   requires evidence beyond project-team agreement.
 
 ### ⚠️ CONCERN 2: LLM Value Biases in Generation
 
@@ -213,22 +240,22 @@ Combine Strategies 1 + 3 + 4:
 #### DEEP-DIVE: Detection & Correction Strategies
 
 **Detection Strategy 1: Score Distribution Analysis (Chi-Square Test)**
-After LLM-Judge labeling, analyze the distribution of +1 scores across all 10 Schwartz dimensions:
+After LLM-Judge labeling, analyze the distribution of `+1` LLM-Judge VIF Labels across all 10 Schwartz dimensions:
 ```
 For each dimension d ∈ {self_direction, stimulation, ..., universalism}:
   count_positive = sum(scores[d] == +1 across all entries)
   count_negative = sum(scores[d] == -1 across all entries)
   count_neutral  = sum(scores[d] == 0 across all entries)
 ```
-If universalism and self-direction have significantly more +1 scores than power and security (beyond what persona assignment would explain), this indicates LLM value bias in generation.
+If universalism and self-direction have significantly more `+1` LLM-Judge VIF Labels than power and security (beyond what persona assignment would explain), this indicates LLM value bias in generation.
 - **Statistical test:** Chi-square goodness-of-fit comparing observed value expression frequencies to expected frequencies based on persona assignments
 - **Source:** *Bias Detection in LLM Outputs: Statistical Approaches* (MachineLearningMastery.com)
 
 **Detection Strategy 2: Persona-Conditional Analysis**
 For personas explicitly assigned "Power" or "Security" as Core Values:
-- Count how many Journal Entries receive +1 alignment scores on those dimensions
+- Count how many Journal Entries receive `+1` LLM-Judge VIF Labels on those dimensions
 - Compare against personas assigned "Universalism" or "Self-Direction"
-- If Power/Security personas show lower alignment rates on their own declared values, this confirms steerability asymmetry
+- If Power/Security personas receive `+1` LLM-Judge VIF Labels for their own declared values less often, this confirms steerability asymmetry
 - **Statistical test:** Exact binomial test per dimension, conditioned on persona assignment
 - **Source:** [*Unmasking Implicit Bias: Evaluating Persona-Prompted LLM Responses in Power-Disparate Social Scenarios*](https://arxiv.org/abs/2503.01532) (NAACL 2025)
 
@@ -264,7 +291,7 @@ Build an automated audit that runs after generation to flag potential value bias
 **Recommended Approach for Twinkl (Pragmatic):**
 Combine Correction Strategy 1 (Value Anchoring) + Detection Strategy 1 (Score Distribution Analysis):
 1. Add Value Anchoring language to generation prompts for ALL Schwartz dimensions (free)
-2. After generation + labeling, run chi-square test on score distributions by dimension
+2. After generation + labeling, run a chi-square test on LLM-Judge VIF Label distributions by dimension
 3. Run persona-conditional analysis to check steerability asymmetry
 4. Document findings as part of capstone evaluation
 5. If significant skew detected, consider targeted regeneration with stronger anchoring for underrepresented values
@@ -286,7 +313,7 @@ The parquet-based persona registry with file locking for concurrent writes is a 
 
 ## 5. SUMMARY SCORECARD
 
-| Aspect | Alignment | Notes |
+| Aspect | Assessment | Notes |
 |--------|-----------|-------|
 | Persona-based generation | ✅ Strong | Anchored in structured demographics |
 | Schwartz value framework | ✅ Strong | Standard in computational value modeling |

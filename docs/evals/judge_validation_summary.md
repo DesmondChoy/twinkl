@@ -1,8 +1,13 @@
 # LLM-Judge Validation Summary
 
-**Last Updated:** 2026-04-04
+**Last Verified:** 2026-08-31
 
-**Purpose:** This document summarizes inter-rater reliability findings for the shared human-annotation subset. The results support using the LLM-Judge as a scalable supervision source for the POC, while the later `twinkl-747` reachability audit and `twinkl-754` consensus rerun add important caveats for the hardest dimensions and for VIF Critic label reachability.
+**Purpose:** This document summarizes inter-rater reliability findings for the
+shared project-team annotation subset. The results support bounded development
+use of the persisted LLM-Judge VIF Labels. They do not establish independent
+human validation, objective labels, or a human-consistency ceiling. The
+`twinkl-747` reachability audit and `twinkl-754` consensus rerun add further
+caveats for the hardest dimensions and for LLM-Judge VIF Label reachability.
 
 **Analysis Source:** `src/annotation_tool/agreement_metrics.py`
 **Full Report:** `logs/exports/agreement_report_20260318_130642.md`
@@ -21,19 +26,26 @@
 | **Human-Human Agreement** (Fleiss' κ) | 0.56 | Moderate |
 | **LLM-Judge-Human Agreement** (Avg Cohen's κ) | 0.66 | Substantial |
 
-**Conclusion:** On the shared 115-Journal-Entry subset, the LLM-Judge exceeds human-human consistency across 9 of 10 Schwartz value dimensions. This supports using automated labeling as a scalable supervision source for the POC, while later audits show that aggregate agreement alone does not guarantee that every hard-dimension label is a clean distillation target for the current VIF Critic.
+**Conclusion:** On the shared 115-Journal-Entry subset, mean LLM-Judge-human
+Cohen's κ is numerically larger than human-human Fleiss' κ for 9 of 10 Schwartz
+values. The coefficients use different rater structures, so this numerical
+pattern does not rank the LLM-Judge against the annotators. It supports bounded
+POC supervision when paired with the per-value results, label provenance, and
+later reachability evidence.
 
 #### Why This Matters
 
-The key insight is that **Fleiss' κ (0.56) establishes the ceiling of human consistency**---it measures how much humans agree with *each other*. This represents the inherent subjectivity in the labeling task; even trained annotators interpret the same Journal Entry differently.
+Fleiss' κ measures agreement among the three project-team annotators. Mean
+Cohen's κ summarizes three separate LLM-Judge-to-annotator comparisons. These
+statistics answer complementary questions, but their numerical difference is
+not a paired performance advantage. Kappa is also sensitive to class prevalence
+and sample composition.
 
-**Cohen's κ (0.66) measures LLM-Judge-Human alignment**, averaged across all three annotators. Since the LLM-Judge achieves *higher* agreement with individual humans than humans achieve with each other, this implies:
-
-1. **The LLM-Judge is not an outlier**---it sits "within the distribution" of human judgments, not outside it
-2. **The LLM-Judge may capture consensus**---its labels likely approximate what a majority of humans would agree on, even when individual humans disagree
-3. **Automated labels are defensible**---if we trust human-labeled data for training, we can trust LLM-Judge-labeled data at least as much, since the LLM-Judge is more consistent with humans than they are with themselves
-
-In practical terms: the LLM-Judge is strong enough to replace large-scale manual labeling for most dimensions in the current POC, and it may even *reduce* some inter-annotator noise. However, the later `twinkl-747` reachability audit and `twinkl-754` consensus re-judging work show that a few hard dimensions, especially `Security`, still require tighter target design and follow-up analysis.
+The 115 Journal Entries cover 19 synthetic personas, and the annotators are
+project team members rather than an independent external panel. The result
+therefore supports development-scale use and focused error analysis. It does
+not show that the LLM-Judge captures a human majority, can replace manual
+labeling without review, or is more reliable than people.
 
 #### Diagnostic Framework
 
@@ -41,15 +53,20 @@ The evaluation spec ([`judge_validation_eval.md`](judge_validation_eval.md)) def
 
 | Fleiss' κ | Cohen's κ | Diagnosis |
 |-----------|-----------|-----------|
-| High | High | LLM-Judge is well-calibrated |
-| High | Low | LLM-Judge has systematic bias --- fix LLM-Judge prompt |
-| Low | Varies | Rubric is ambiguous --- fix definitions first |
+| High | High | Both agreement views are strong on the sampled data |
+| High | Low | Inspect exact disagreements, label provenance, and LLM-Judge prompt behavior |
+| Low | Varies | Inspect rubric ambiguity, class prevalence, sample coverage, and annotator differences |
 
-**Observed pattern:** Moderate Fleiss' κ with higher Cohen's κ. This indicates the LLM-Judge is well-calibrated relative to the level of human consensus achievable for this task. Where individual annotators show low Cohen's κ (e.g., Des on Conformity: 0.30), Fleiss' κ for those dimensions is also low (0.43), suggesting rubric ambiguity rather than LLM-Judge error.
+**Observed pattern:** Human-human Fleiss' κ is moderate and mean
+LLM-Judge-human Cohen's κ is substantial under the conventional interpretation
+bands. Per-value coefficients identify weaker agreement for focused review.
+They do not determine whether a difference comes from the rubric, prevalence,
+the sampled personas, one annotator, or the LLM-Judge without case-level
+analysis.
 
 ### Per-Dimension Breakdown
 
-| Value Dimension | Fleiss' κ (Human-Human) | Avg Cohen's κ (LLM-Judge-Human) | LLM-Judge > Human? |
+| Value Dimension | Fleiss' κ (Human-Human) | Avg Cohen's κ (LLM-Judge-Human) | Cohen value numerically larger? |
 |-----------------|-------------------------|------------------------------|----------------|
 | Self-Direction | 0.44 | 0.64 | Yes |
 | Stimulation | 0.58 | 0.67 | Yes |
@@ -84,22 +101,29 @@ All values below are computed on the shared 115-Journal-Entry subset for consist
 | Universalism | 0.74 | 0.96 | 0.78 |
 | **Aggregate** | **0.50** | **0.80** | **0.69** |
 
-JL shows the highest alignment with the LLM-Judge (0.80, Substantial), followed by KM (0.69, Substantial) and Des (0.50, Moderate). Variation across annotators is expected and reflects individual differences in rubric interpretation.
+JL has the highest observed overlap with the LLM-Judge (0.80, Substantial),
+followed by KM (0.69, Substantial) and Des (0.50, Moderate). These differences
+require case-level analysis; the aggregate coefficients do not identify their
+cause.
 
-### Subsequent Audit Caveats
+### Additional Audit Caveats
 
-The human-overlap benchmark above is still the right summary of shared-subset agreement, but two later audits materially changed how the project interprets those numbers:
+The human-overlap benchmark and two additional audits describe distinct parts
+of the current evidence:
 
-1. **Reachability is the main hard-dimension caveat.** The `twinkl-747` audit sampled 50 cases and found that aggregate LLM-Judge-human agreement did not guarantee that every hard-dimension label was a clean VIF Critic target. Its recommendation grid was:
+1. **Reachability is the main hard-dimension caveat.** The `twinkl-747` audit sampled 50 cases and found that aggregate LLM-Judge-human agreement did not guarantee that every hard-dimension label was a clean VIF Critic (Offline) target. Its recommendation grid was:
    - `security` → `change_distillation_target`
    - `hedonism` → `targeted_relabeling`
    - `stimulation` → `targeted_relabeling`
    This was a historical diagnostic recommendation. The legacy reduced-context
-   prompts did not exactly represent the active session-plus-profile VIF Critic
-   state, so the audit did not create or validate a repaired target labels.
+   prompts did not exactly represent the active session-plus-profile VIF Critic (Offline)
+   state, so the audit did not create or validate repaired labels.
 2. **Consensus improved stability, not the active frontier target.** The `twinkl-754` five-pass profile-only rerun showed strong repeated-call self-consistency (per-dimension Fleiss' κ `0.775` to `0.890`) and passed the full-corpus stability gate for `security`, `hedonism`, and `stimulation`. But it did **not** become the default supervision source for frontier claims, because the consensus branch changed labels on the frozen holdout and did not improve the advisory human-overlap benchmark enough to replace persisted labels cleanly.
 
-Practical takeaway: the shared-subset agreement results still justify using LLM-Judge labels at POC scale, but later work narrowed that claim. They are strongest as broad supervision evidence, not as proof that every hard-dimension label is equally reachable or equally suitable as training targets for the current VIF Critic.
+Practical takeaway: the shared-subset agreement supports bounded use of the
+persisted LLM-Judge VIF Labels for POC development. It does not show that every
+hard-dimension label is equally reachable or equally suitable as a target for
+the VIF Critic (Offline).
 
 ---
 
@@ -124,7 +148,11 @@ Three annotators (Des, JL, KM) independently labeled all Journal Entries for 19 
 | Benevolence | 3 | Adequate |
 | Universalism | 4 | Adequate |
 
-**Target of >= 3 personas per dimension has been met for 9 of 10 dimensions.** Stimulation has 2 core personas; the original persona selection targeted 3 (via annotation order 21, which was not annotated). Despite the shortfall, Stimulation shows Moderate Fleiss' κ (0.58) and the highest avg Cohen's κ among the below-target dimensions (0.67), suggesting the available signal is still informative.
+**Target of >= 3 personas per dimension has been met for 9 of 10 dimensions.**
+Stimulation has 2 Core Value personas; the original persona selection targeted
+3 through annotation order 21, which was not annotated. Its Fleiss' κ is 0.58
+and its mean Cohen's κ is 0.67, but the below-target coverage remains a sample
+limitation.
 
 ### Why Core Persona Values Drive Reliable Signal
 
@@ -152,15 +180,21 @@ All 204 personas have been labeled by the LLM-Judge. Labels stored in `logs/judg
 
 Agreement report generated: `logs/exports/agreement_report_20260318_130642.md`
 
-**Success criteria evaluation:**
-- All 10 dimensions have >= 3 personas with that Core Value in the annotated sample --- **MET for 9/10 dimensions** (Stimulation has 2 core personas; annotation order 21 was not completed)
-- LLM-Judge-Human kappa >= Fleiss' kappa for all dimensions --- **MET for 9/10 dimensions** (Power is the sole exception with a marginal gap of 0.01)
+**Recorded coverage and agreement results:**
+
+- The target of at least 3 personas with each Core Value is met for 9 of 10
+  values. Stimulation has 2 Core Value personas because annotation order 21 was
+  not completed.
+- Mean LLM-Judge-human Cohen's κ is numerically larger than human-human Fleiss'
+  κ for 9 of 10 values. Power is the exception by 0.01. This pattern is
+  descriptive because the coefficients use different rater structures.
 
 ---
 
 ## Dimensions That May Benefit from Rubric Clarification
 
-The following dimensions show the lowest Fleiss' kappa (human-human agreement), suggesting annotators find them hardest to judge consistently:
+The following values have the lowest human-human Fleiss' κ and are priorities
+for case-level review:
 
 | Dimension | Fleiss' κ | Possible Source of Ambiguity |
 |-----------|-----------|------------------------------|
@@ -168,7 +202,10 @@ The following dimensions show the lowest Fleiss' kappa (human-human agreement), 
 | Self-Direction | 0.44 | Broad scope---autonomy, creativity, and curiosity all qualify |
 | Achievement | 0.47 | Overlap with Power (both involve competence/success) |
 
-Per the evaluation spec, low Fleiss' kappa indicates rubric ambiguity rather than LLM-Judge error. Improving rubric definitions for these dimensions would be expected to raise both human-human and LLM-Judge-human agreement.
+Low Fleiss' κ can reflect rubric ambiguity, class prevalence, sample coverage,
+or annotator differences. A rubric change is appropriate only when case-level
+review identifies ambiguity; the changed rubric then requires fresh agreement
+measurement.
 
 ---
 

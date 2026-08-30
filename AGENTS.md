@@ -3,9 +3,9 @@
 ## Project Intent
 
 Twinkl is an academic capstone and time-boxed proof of concept. It helps users
-compare daily behavior with their declared priorities through an evolving
-self-model, the VIF Critic research component, Weekly Drift Detection, and
-Coach Digest responses.
+compare daily behavior with a confirmed Profile and Core Values through the
+Experience, Weekly Drift Detection, and Coach Digest. The VIF Critic (Offline)
+remains a research component. Profile evolution is future work.
 
 For product, architecture, or evaluation decisions:
 
@@ -34,7 +34,7 @@ rewrite or speculative architecture.
 
 - `docs/prd.md` — product intent and current scope
 - `docs/canonical_nouns.md` — required product terminology for maintained prose
-- `src/vif/` — VIF Critic models, encoders, training, metrics, and run logging
+- `src/vif/` — VIF Critic (Offline) models, encoders, training, metrics, and run logging
 - `src/{synthetic,judge,wrangling,registry}/` — data generation and labeling
 - `src/{coach,nudge,evals}/` — downstream reasoning and evaluation components
 - `scripts/{experiments,journalling,drift}/` — executable research workflows
@@ -69,7 +69,7 @@ Common checks:
 ```sh
 uv run pytest <target>
 uv run ruff check <target>
-uv run mypy <target>             # When type behavior changed
+uv run --with 'mypy==2.3.0' mypy <target>  # When type behavior changed
 ```
 
 Follow `pyproject.toml` for machine-enforced style. Keep comments concise and

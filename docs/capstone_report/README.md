@@ -1,55 +1,71 @@
 # Capstone Report Materials
 
-This directory is for current capstone-report work that has not been frozen as
-a submitted milestone file.
+This directory contains the maintained Phase 2 Technical Paper and its
+supporting capstone report materials. Submitted milestone files remain under
+`docs/archive/capstone/`.
 
-## Current report
+## Current Report
 
-- [`capstone_project_report.md`](capstone_project_report.md) - Phase 2 Capstone
-  Project Report scaffold, including the VIF Critic experiment program and the
-  architecture decision.
+- [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
+  the Phase 2 Technical Paper
+- [`capstone_project_report.pdf`](capstone_project_report.pdf) — rendered PDF
+- [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
+  briefing and requirements
+- [`images/`](images/) — report figures, interface captures, and evaluation
+  charts
+- [`../../scripts/capstone/generate_report_figures.py`](../../scripts/capstone/generate_report_figures.py)
+  — deterministic figure generation from committed evidence
 
-## Draft controls
+## Report Controls
 
-- **Document status:** Capstone Project Report scaffold
+- **Document status:** Maintained Phase 2 Technical Paper source and rendered PDF
 - **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
 - **Product source:** [`../prd.md`](../prd.md)
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
-- **Status date:** 2026-08-24
+- **Evidence date:** 2026-08-31
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
 - Identify human annotation as human annotation.
 - Do not claim a fresh final test or deployment approval.
-- Keep the user-facing Drift path separate from offline VIF Critic research.
+- Keep the user-facing Drift path separate from VIF Critic (Offline) research.
 
-## Pre-submission checklist
+## Reproduce the Report
 
-- Add final figures and tables.
-- Cite the completed [Coach Digest sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md),
-  [Coach Digest Validations](../../logs/experiments/reports/coach_digest_validations_20260824/report.md),
-  and [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
-  for the five deployed Persona replays.
-- Complete or move to future work the tracked Coach Digest feedback and
-  longitudinal Core Value history additions.
-- Complete the citation-to-claim audit.
-- Add exact reproduction commands, environment versions, configurations, seeds,
-  input versions, and output paths.
-- Replace repository-relative links with a repository URL, commit hash, and
-  durable file links.
-- Complete the professor walkthrough evidence for the separate demo assessment.
-- Record the [public Railway assessment
-  URL](https://onboarding-production-1dd2.up.railway.app/), browser-session reset
-  behavior, possible provider cost, and assessment-only scope.
-- Include the completed saved Coach Digest replay in Section 5.4 and verify that
-  its screenshots match the final interface.
-- Confirm the final paper format and page limit with the advisor.
-- Confirm whether the advisor requires a short team-contribution statement in
-  the paper.
+Run the following commands from the repository root:
 
-## Submitted material
+```sh
+MPLCONFIGDIR=/tmp/twinkl-matplotlib \
+  uv run python scripts/capstone/generate_report_figures.py
+quarto render docs/capstone_report/capstone_project_report.md --to pdf
+```
+
+The figure script reads committed configuration, Parquet data, JSON metrics,
+and Markdown reports. It writes two architecture diagrams and five evaluation
+charts under
+[`images/`](images/). The Quarto front matter selects XeLaTeX and records the
+fonts, page geometry, table of contents, and PDF presentation settings.
+
+The rendered report cites the committed
+[Coach Digest sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md),
+[Coach Digest Validations](../../logs/experiments/reports/coach_digest_validations_20260824/report.md),
+and [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
+for the five saved Persona key weeks. This result is same-model AI review. The
+independent-provider and Drift/control tooling has no committed paid result and
+does not change the report's evidence claim.
+
+## Submission Checks
+
+- Confirm the required paper format and page limit with the advisor.
+- Confirm whether the advisor requires a short team-contribution statement.
+- Render the PDF after any source or figure change and inspect every page for
+  clipped content, stale figures, broken links, and inconsistent references.
+- Keep the repository commit and durable evidence links pinned to the evidence
+  snapshot used by the paper.
+
+## Submitted Material
 
 The April 2026 proposal has already been submitted and is preserved unchanged
 under [`../archive/capstone/2026-04-proposal-submission/`](../archive/capstone/2026-04-proposal-submission/).

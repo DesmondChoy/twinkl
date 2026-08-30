@@ -1,4 +1,4 @@
-# VIF Critic Role in Drift Detection
+# VIF Critic (Offline) Role in Drift Detection
 
 **Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2` and wired
 as a capstone POC under `twinkl-a2w`. The Weekly Drift Reviewer model contract
@@ -7,7 +7,7 @@ versioned Weekly Drift Reviewer Decisions, applies the internal Drift Detector,
 and stores structured Weekly Drift Detection output. The time-boxed capstone
 stops without a fresh final test or deployment approval.
 
-This document records the completed VIF Critic's offline research role without
+This document records the completed VIF Critic (Offline) research role without
 giving it user-facing authority that the evidence does not support. The
 [PRD](../prd.md) remains authoritative for product intent. The adopted scope and
 metric hierarchy live in the
@@ -19,7 +19,7 @@ Twinkl has two user-facing workflows and one completed offline research path:
 
 1. **Weekly Drift Detection.** The internal Weekly Drift Reviewer is fixed at
    `gpt-5.6-luna` with reasoning effort `low`. It reads Journal Entries and Core
-   Values without VIF Critic predictions and decides Conflict, Not Conflict, or
+   Values without VIF Critic Predictions and decides Conflict, Not Conflict, or
    Abstain for each relevant Journal Entry. The internal Drift Detector applies the
    deterministic rule: two consecutive Conflicts for the same Core Value form
    one Drift. The workflow stores Core Values, cited Journal Entries, and Drift
@@ -27,7 +27,7 @@ Twinkl has two user-facing workflows and one completed offline research path:
 2. **Coach Digest.** This workflow supplies the structured Weekly Drift
    Detection output to a prompt. It then produces the user response. It does
    not decide whether Drift exists.
-3. **Completed VIF Critic research path.** Existing code can predict `-1`, `0`,
+3. **Completed VIF Critic (Offline) research path.** Existing code can predict `-1`, `0`,
    or `+1` plus uncertainty for Journal Entries and values, export raw outputs,
    and train checkpoints. A generalized review-and-retrain loop is not
    implemented or planned for the time-boxed capstone. This research is not
@@ -50,9 +50,9 @@ flowchart TB
     PROMPT --> RESPONSE["User response"]
   end
 
-  subgraph LEARN["Completed VIF Critic research"]
+  subgraph LEARN["Completed VIF Critic (Offline) research"]
     direction LR
-    PROFILE["Ten-value profile"] --> VIF["VIF Critic<br/>predictions + uncertainty"]
+    PROFILE["Ten-value profile"] --> VIF["VIF Critic (Offline)<br/>Predictions + uncertainty"]
     VIF --> STORE["Stored predictions<br/>and checkpoint provenance"]
     STORE --> REPORTS["Experiment reports<br/>and diagnostics"]
   end
@@ -67,12 +67,12 @@ any future fresh final test.
 
 ## Evidence Behind the Boundary
 
-The VIF Critic has useful Conflict-screening behavior, but it has not earned
+The VIF Critic (Offline) has useful Conflict-screening behavior, but it has not earned
 direct authority over Drift:
 
 - On the matched `twinkl-752.1` Journal Entries, the `run_019`-`run_021` family
   reached macro `recall_-1` of `0.530` to `0.607`, but `-1` precision was only
-  `0.262` to `0.327`. This is useful candidate-recovery behavior, not a safe
+  `0.262` to `0.327`. This is useful Conflict-case recovery behavior, not a safe
   standalone product rule.
 - `twinkl-752.5` found a median 9/33 Drifts with the Weekly Drift Reviewer
   without VIF Critic input and 7/33 with raw VIF Critic input. The recall
@@ -82,14 +82,14 @@ direct authority over Drift:
   one median false Drift alert, and required 57 extra Weekly Drift Reviewer
   calls. Its apparent timing benefit disappeared outside training-seen Journal
   Entries.
-- The same study found 7/19 VIF Critic triggers at Drift-relevant review
+- The same study found 7/19 VIF Critic (Offline) triggers at Drift-relevant review
   opportunities, versus a random median of 1/19. This supports continued
-  candidate-mining research on the development set. It does not show that early
+  development-case selection research. It does not show that early
   review improves Drift detection. This remains historical evidence rather
   than planned follow-up work.
 - The complete `twinkl-qtwz` review contains 292 resolved cases and 42 Drifts.
   On that frozen development data, `twinkl-52zz` selected `gpt-5.6-luna` at
-  reasoning effort `low`; that is now the fixed Weekly Drift Reviewer model
+  reasoning effort `low`; that is the fixed Weekly Drift Reviewer model
   contract. Across three Runs it found a median 23/42 known Drifts, produced 4
   false Drift alerts, and had `0.637` coverage. This evidence leaves the
   component boundary intact and does not provide final-test validation or
@@ -98,25 +98,25 @@ direct authority over Drift:
 The complete development data is synthetic, 185/292 cases have historical
 training provenance, and no fresh final test exists. The capstone therefore
 makes no deployment-approval claim. These limits are why the completed VIF
-Critic remains offline-only while its user-facing role stays outside the
+Critic (Offline) remains offline-only while its user-facing role stays outside the
 capstone scope.
 
 ## Unplanned Review-and-Retrain Idea
 
 If this unplanned idea is ever revisited, a bounded loop should be auditable:
 
-1. Run the frozen VIF Critic on Journal Entries and store full class
+1. Run the frozen VIF Critic (Offline) on Journal Entries and store full class
    probabilities, uncertainty, checkpoint identity, input-contract version, and
    Core Values.
-2. Compare those predictions with Weekly Drift Reviewer Decisions without
-   exposing VIF Critic predictions to that reviewer.
-3. Select disagreement, high-uncertainty, and candidate adjacent-Conflict cases
+2. Compare those VIF Critic Predictions with Weekly Drift Reviewer Decisions without
+   exposing VIF Critic Predictions to that reviewer.
+3. Select disagreement, high-uncertainty, and adjacent-Conflict cases
    for independent LLM-Judge or human review. Include model-blind controls so
-   candidate mining does not create a self-confirming development set.
+   VIF-guided case selection does not create a self-confirming development set.
 4. Add only independently reviewed cases to development or training data, with
    provenance and dataset versions.
-5. Retrain the VIF Critic and evaluate it on held-out development data.
-6. If deployment evaluation resumes, freeze the VIF Critic checkpoint and
+5. Retrain the VIF Critic (Offline) and evaluate it on held-out development data.
+6. If deployment evaluation resumes, freeze the VIF Critic (Offline) checkpoint and
    reviewed training-data version before opening a fresh final test for the
    separate user-facing path.
 
@@ -125,19 +125,20 @@ live-data loop would require explicit consent, access controls, retention
 rules, and de-identification. No review-and-retrain demonstration is planned
 for the time-boxed capstone.
 
-## Deferred Candidate-Confirmation Idea
+## Deferred Weekly Drift Reviewer Confirmation of Cases Nominated by VIF Critic Predictions
 
-VIF Critic candidate confirmation is outside the remaining capstone scope. The
-development evidence remains useful historical context, but no candidate rule,
-runtime branch, or deployment gate will be implemented in the current work.
-Revisiting the idea requires a new scope decision and fresh evaluation. The
-fixed Weekly Drift Reviewer still sees Journal Entry text and Core Values, not
-VIF Critic predictions.
+Weekly Drift Reviewer confirmation of cases nominated by VIF Critic Predictions
+is outside the remaining capstone scope. The development evidence remains
+useful historical context, but no nomination rule, runtime branch, or
+deployment gate will be implemented in the current work. Revisiting the idea
+requires a new scope decision and fresh evaluation. The fixed Weekly Drift
+Reviewer still sees Journal Entry text and Core Values, not VIF Critic
+Predictions.
 
 ## Explicitly Rejected or Unapproved
 
-- No raw VIF Critic predictions in the Weekly Drift Reviewer prompt.
-- No VIF Critic veto, confirmation, or direct Drift decision.
+- No raw VIF Critic Predictions in the Weekly Drift Reviewer prompt.
+- No VIF Critic (Offline) veto, confirmation, or direct Drift decision.
 - No class gate, confidence-only fallback, or per-value router.
 - No early-plus-weekly review scheduler. It added calls and false Drift alerts
   without adding Drift hits.
@@ -159,23 +160,24 @@ uncertainty, and per-Core-Value state. Mixed is derived only in the stored
 structured output.
 
 `src.coach.runtime` and `src.vif.drift` are explicitly deprecated. They retain
-the former VIF Critic crash/rut/evolution behavior only for historical
+the former VIF Critic (Offline) crash/rut/evolution behavior only for historical
 reproduction and the existing Runtime Demo Review App.
 
-The runtime accepts a confirmed onboarding Profile JSON and uses its
-`top_values` as Core Values. When no Profile is supplied, synthetic personas
-retain their explicit `core_values` compatibility path. Automated
-browser-to-service storage is outside the time-boxed capstone. The fresh final
-test (`twinkl-pv6s`) and deployment decision (`twinkl-ixq4`) were closed as not
-planned.
+The shared React app synchronizes the confirmed Profile and browser-held
+Experience state with the in-memory Python boundary. The batch runtime accepts
+a confirmed onboarding Profile JSON and uses its `top_values` as Core Values.
+When no Profile is supplied, synthetic personas retain their explicit
+`core_values` compatibility path. Durable multi-user storage is outside the
+time-boxed capstone. The fresh final test (`twinkl-pv6s`) and deployment
+decision (`twinkl-ixq4`) were closed as not planned.
 
 `twinkl-60l5` was closed as not planned. The time-boxed capstone does not add a
-VIF Critic review-and-retrain demonstration.
+VIF Critic (Offline) review-and-retrain demonstration.
 
 ## Related Records
 
 - [VIF Capstone Scope and Evaluation Decision](../vif/05_capstone_scope_decision.md)
-- [Alignment and Drift Detection Evaluation](../evals/drift_detection_eval.md) — Drift contract, metric hierarchy, and the "why not the VIF Critic directly" rationale that cites this document's Evidence Behind the Boundary precision figures
+- [Drift Detection Evaluation](../evals/drift_detection_eval.md) — Drift contract, metric hierarchy, and the rationale for keeping VIF Critic Predictions outside Weekly Drift Detection, supported by this document's precision results
 - [`twinkl-752.1` Weekly Drift Reviewer input ablation](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md)
 - [`twinkl-752.3` prompt-alignment study](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md)
 - [`twinkl-752.4` reviewed development cohort](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)

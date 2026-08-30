@@ -235,9 +235,11 @@ Journal Entry prompt and exposes the confirmed Profile through:
 - the `onStartJournal` callback; and
 - the `twinkl:start-first-journal` browser event.
 
-The standalone React POC stores its resumable session and confirmed Profile in
-browser `localStorage`. This implementation boundary is documented here and in
-the onboarding README; it is not presented as task guidance in the user flow.
+The shared React app stores its resumable session and confirmed Profile in
+browser `localStorage`, then synchronizes the confirmed Profile and browser-held
+Experience state with the in-memory Python boundary. Durable multi-user storage
+is outside the capstone. This implementation boundary is documented here and
+in the React app README; it is not presented as task guidance in the user flow.
 
 The initial wide-screen editor keeps its prompt, Core Values, composer, and
 primary action together; later Journal Entry history scrolls normally as it
@@ -288,10 +290,11 @@ probabilities, ratio-scale measurements, or preference shares. A two-to-one
 weight ratio has no psychometric interpretation.
 
 `value_profile.top_values` contains every value tied for the highest
-transformed score in canonical order. This candidate list is never truncated.
-The Profile root `top_values` contains the confirmed Core Values in canonical
-order. It matches the candidate list when that list contains one or two values.
-When the candidate list contains more than two values, root `top_values`
+transformed score in canonical order. This tied-highest-value list is never
+truncated. The Profile root `top_values` contains the confirmed Core Values in
+canonical order. It matches the tied-highest-value list when that list contains
+one or two values. When the tied-highest-value list contains more than two
+values, root `top_values`
 contains exactly the two values that the user selected.
 
 ### 5.3 No confidence field
@@ -365,10 +368,10 @@ integer response time, and explicit summary confirmation. Validation rebuilds
 the Profile deterministically. It rejects more than two confirmed Core Values,
 an invalid tie selection, or any other mismatch.
 
-The resumable browser session uses schema version `9` and storage key
-`twinkl.onboarding.session.v9`. It stores the randomized group order, each
+The resumable browser session uses schema version `10` and storage key
+`twinkl.onboarding.session.v10`. It stores the randomized group order, each
 canonical group's randomized card order, the tie selection, and the shared
-Experience and Inspect view state. Versions `4` through `8` migrate when a
+Experience and Inspect view state. Versions `4` through `9` migrate when a
 confirmed legacy Profile contains at most two Core Values. A version `6` goal
 stage resumes at the Core Value summary. Confirmed version `2` and `3` Profiles
 with at most two Core Values migrate to version `4` without `goal_category`.
@@ -386,18 +389,17 @@ the required user choice.
 
 - The React POC creates and validates the Profile locally.
 - A host can persist the Profile exposed by the callback or browser event.
-- The shared Experience and Inspect app synchronizes the confirmed Profile with
-  the in-memory Python boundary and reads its live trace. If that boundary is
-  unavailable, Experience remains usable and Inspect shows no fabricated
-  events. Inspect offers a retry action when the failure is retryable.
-- Persistent automatic browser-to-service Profile storage remains outside the
-  capstone.
+- The shared React app synchronizes the confirmed Profile and browser-held
+  Experience state with the in-memory Python boundary and reads its live trace.
+  If that boundary is unavailable, Experience remains usable and Inspect shows
+  no fabricated events. Inspect offers a retry action when the failure is
+  retryable. Durable multi-user Profile storage remains outside the capstone.
 - The approved runtime validates saved Profile JSON and supplies `top_values`
   as Core Values to the Weekly Drift Reviewer and Drift Detector.
 - The first Journal Entry starts a partial Monday-through-Sunday calendar week.
   Saving it does not run the Weekly Drift Reviewer; the partial week becomes
   eligible after Sunday according to the Experience scheduling contract.
-- `value_profile.weights` is not yet supplied to the VIF Critic.
+- `value_profile.weights` is not supplied to the VIF Critic (Offline).
 
 When no onboarding Profile is supplied, current synthetic personas retain
 their explicit `core_values` compatibility path.

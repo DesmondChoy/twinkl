@@ -6,9 +6,9 @@ only Gemini-specific interface wording should differ.
 ## Project Intent
 
 Twinkl is an academic capstone and time-boxed proof of concept. It helps users
-compare daily behavior with their declared priorities through an evolving
-self-model, the VIF Critic research component, Weekly Drift Detection, and
-Coach Digest responses.
+compare daily behavior with a confirmed Profile and Core Values through the
+Experience, Weekly Drift Detection, and Coach Digest. The VIF Critic (Offline)
+remains a research component. Profile evolution is future work.
 
 For product, architecture, or evaluation decisions:
 
@@ -37,7 +37,7 @@ rewrite or speculative architecture.
 
 - `docs/prd.md` — product intent and current scope
 - `docs/canonical_nouns.md` — required product terminology for maintained prose
-- `src/vif/` — VIF Critic models, encoders, training, metrics, and run logging
+- `src/vif/` — VIF Critic (Offline) models, encoders, training, metrics, and run logging
 - `src/{synthetic,judge,wrangling,registry}/` — data generation and labeling
 - `src/{coach,nudge,evals}/` — downstream reasoning and evaluation components
 - `scripts/{experiments,journalling,drift}/` — executable research workflows
@@ -72,7 +72,7 @@ Common checks:
 ```sh
 uv run pytest <target>
 uv run ruff check <target>
-uv run mypy <target>             # When type behavior changed
+uv run --with 'mypy==2.3.0' mypy <target>  # When type behavior changed
 ```
 
 Follow `pyproject.toml` for machine-enforced style. Keep comments concise and
@@ -153,8 +153,21 @@ decisions change. Do not perform a generic documentation sweep by default.
 - All Gemini prose on every surface, including interactive responses, plans,
   Beads issue text, reviews, handoffs, and maintained documentation, must
   strictly follow `docs/canonical_nouns.md`.
-- Write in plain English for immediate understanding. Use technical jargon only
-  when a real distinction requires it, and define it on first use.
+- Use approved words only, and use each word only with its approved meaning.
+  Treat the canonical nouns as approved project technical terms.
+- Use one term for one meaning. Do not use a different term only for variety.
+- Outside academic papers and research reports, prefer short sentences, active
+  voice, and one main idea per sentence. Keep one topic in each paragraph.
+- For academic papers and research reports, use connected academic prose with
+  varied sentence length and paragraphs that develop an argument. Do not apply
+  ASD-STE100 Simplified Technical English or force each sentence to carry only
+  one idea.
+- In academic prose, avoid staccato sentence chains and repeated disclaimer
+  formulas. Keep a necessary evidence limit beside the relevant claim, then
+  consolidate detailed limitations in the limitations section.
+- The academic-prose exception does not relax canonical nouns, factual
+  precision, source disclosure, or evidence boundaries.
+- Define a necessary technical term in plain English when it first occurs.
 - Do not invent synonyms for canonical product terms. This prose rule does not
   require renaming code identifiers, data fields, file paths, or historical
   records.
