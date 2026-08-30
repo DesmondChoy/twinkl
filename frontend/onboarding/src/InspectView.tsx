@@ -266,7 +266,7 @@ function eventSummary(
         : "Weekly Drift Detection output ready";
     }
     case "weekly_coach_generated":
-      return event.status === "complete"
+      return ["complete", "reused"].includes(event.status)
         ? "Coach Digest response and question ready"
         : "Coach Digest response unavailable";
     case "assessment_time_advanced": {

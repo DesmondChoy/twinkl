@@ -127,6 +127,28 @@ describe("Inspect view", () => {
     );
   });
 
+  it("shows a reused Coach Digest response as available", () => {
+    const coachEvent = events.find(
+      (event) => event.event_type === "weekly_coach_generated",
+    )!;
+    const reusedCoachEvent = { ...coachEvent, status: "reused" as const };
+
+    render(
+      <InspectView
+        events={[reusedCoachEvent]}
+        currentWeekEventIds={[reusedCoachEvent.event_id]}
+        selectedEventId={reusedCoachEvent.event_id}
+        traceLabel="Saved Persona replay"
+        onReturn={() => undefined}
+      />,
+    );
+
+    expect(
+      screen.getAllByText("Coach Digest response and question ready").length,
+    ).toBeGreaterThan(0);
+    expect(screen.queryByText("Coach Digest response unavailable")).toBeNull();
+  });
+
   it("filters the current week by component", async () => {
     const user = userEvent.setup();
     render(
