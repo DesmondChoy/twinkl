@@ -11,6 +11,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 import polars as pl
 import yaml
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = ROOT / "docs" / "capstone_report" / "images"
@@ -23,6 +24,10 @@ GOLD = "#D8A62A"
 CORAL = "#C05A40"
 PAPER = "#FBFAF6"
 GRID = "#D8DDE5"
+TEAL_LIGHT = "#E6F3F1"
+BLUE_LIGHT = "#E9EDFC"
+GOLD_LIGHT = "#FAF3DD"
+CORAL_LIGHT = "#F8EAE6"
 
 
 def configure_matplotlib() -> None:
@@ -48,6 +53,399 @@ def save_figure(fig: plt.Figure, filename: str) -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUTPUT_DIR / filename, dpi=300, bbox_inches="tight", pad_inches=0.16)
     plt.close(fig)
+
+
+def add_box(
+    ax: plt.Axes,
+    *,
+    x: float,
+    y: float,
+    width: float,
+    height: float,
+    text: str,
+    facecolor: str,
+    edgecolor: str,
+    fontsize: float = 10,
+    text_color: str = INK,
+    linewidth: float = 1.4,
+) -> None:
+    """Add one consistently styled rounded box to a diagram."""
+    ax.add_patch(
+        FancyBboxPatch(
+            (x, y),
+            width,
+            height,
+            boxstyle="round,pad=0.03,rounding_size=0.11",
+            facecolor=facecolor,
+            edgecolor=edgecolor,
+            linewidth=linewidth,
+        )
+    )
+    ax.text(
+        x + width / 2,
+        y + height / 2,
+        text,
+        ha="center",
+        va="center",
+        fontsize=fontsize,
+        color=text_color,
+        linespacing=1.25,
+    )
+
+
+def add_arrow(
+    ax: plt.Axes,
+    start: tuple[float, float],
+    end: tuple[float, float],
+    *,
+    color: str = INK,
+    rad: float = 0,
+    linestyle: str = "solid",
+    linewidth: float = 1.6,
+) -> None:
+    """Add one arrow with optional curvature to a diagram."""
+    ax.add_patch(
+        FancyArrowPatch(
+            start,
+            end,
+            arrowstyle="-|>",
+            mutation_scale=12,
+            connectionstyle=f"arc3,rad={rad}",
+            color=color,
+            linestyle=linestyle,
+            linewidth=linewidth,
+            shrinkA=2,
+            shrinkB=2,
+        )
+    )
+
+
+def draw_adopted_architecture() -> None:
+    """Show the implemented core path and separate offline research path."""
+    fig, ax = plt.subplots(figsize=(12.2, 6.2))
+    ax.set_xlim(0, 12.2)
+    ax.set_ylim(0, 6.2)
+    ax.axis("off")
+
+    ax.add_patch(
+        FancyBboxPatch(
+            (0.12, 2.42),
+            11.96,
+            3.58,
+            boxstyle="round,pad=0.02,rounding_size=0.16",
+            facecolor="#F3F5F8",
+            edgecolor=GRID,
+            linewidth=1.2,
+        )
+    )
+    ax.text(
+        0.42,
+        5.73,
+        "IMPLEMENTED CORE ASSESSMENT PATH",
+        color=MUTED,
+        fontsize=10,
+        weight="bold",
+    )
+
+    core_nodes = [
+        (0.45, 4.38, 1.35, "Profile"),
+        (2.15, 4.38, 2.05, "Journal Entries\n+ displayed-nudge response"),
+        (4.58, 4.38, 2.12, "Weekly Drift Reviewer\ncumulative history · Luna-low"),
+        (7.08, 4.38, 1.72, "Drift Detector\ndeterministic rule"),
+        (9.18, 4.38, 2.42, "Weekly Drift Detection output\nstate + cited evidence"),
+    ]
+    for x, y, width, label in core_nodes:
+        add_box(
+            ax,
+            x=x,
+            y=y,
+            width=width,
+            height=0.82,
+            text=label,
+            facecolor="white",
+            edgecolor=TEAL,
+            fontsize=9.6,
+        )
+    for left, right in zip(core_nodes, core_nodes[1:], strict=False):
+        add_arrow(
+            ax,
+            (left[0] + left[2], left[1] + 0.41),
+            (right[0], right[1] + 0.41),
+            color=TEAL,
+        )
+    add_arrow(
+        ax,
+        (1.42, 5.2),
+        (5.64, 5.2),
+        color=TEAL,
+        rad=-0.22,
+        linewidth=1.4,
+    )
+    ax.text(
+        3.55,
+        5.48,
+        "Core Value input",
+        ha="center",
+        fontsize=8.8,
+        color=TEAL,
+    )
+
+    add_box(
+        ax,
+        x=0.46,
+        y=2.92,
+        width=1.9,
+        height=0.74,
+        text="React Experience\ninput + display",
+        facecolor=TEAL_LIGHT,
+        edgecolor=TEAL,
+        fontsize=9.5,
+    )
+    add_box(
+        ax,
+        x=4.32,
+        y=2.92,
+        width=2.65,
+        height=0.74,
+        text="Inspect\nshared session + trace events",
+        facecolor=GOLD_LIGHT,
+        edgecolor=GOLD,
+        fontsize=9.5,
+    )
+    add_box(
+        ax,
+        x=9.45,
+        y=2.92,
+        width=1.9,
+        height=0.74,
+        text="Coach Digest\ncited reflection",
+        facecolor=TEAL_LIGHT,
+        edgecolor=TEAL,
+        fontsize=9.5,
+    )
+    add_arrow(ax, (1.42, 3.66), (1.12, 4.38), color=TEAL)
+    add_arrow(ax, (1.67, 3.66), (2.7, 4.38), color=TEAL)
+    add_arrow(ax, (10.4, 4.38), (10.4, 3.66), color=TEAL)
+    add_arrow(
+        ax,
+        (3.18, 4.38),
+        (5.2, 3.66),
+        color=GOLD,
+        linestyle="dashed",
+    )
+    add_arrow(
+        ax,
+        (10.4, 4.38),
+        (6.2, 3.66),
+        color=GOLD,
+        linestyle="dashed",
+    )
+
+    ax.add_patch(
+        FancyBboxPatch(
+            (0.12, 0.16),
+            11.96,
+            1.88,
+            boxstyle="round,pad=0.02,rounding_size=0.16",
+            facecolor=BLUE_LIGHT,
+            edgecolor=BLUE,
+            linewidth=1.2,
+        )
+    )
+    ax.text(
+        0.42,
+        1.76,
+        "SEPARATE OFFLINE RESEARCH PATH · NO USER-FACING DRIFT AUTHORITY",
+        color=BLUE,
+        fontsize=10,
+        weight="bold",
+    )
+    offline_nodes = [
+        (0.5, 0.56, 2.0, "Synthetic Journal Entries"),
+        (3.03, 0.56, 2.12, "LLM-Judge VIF Labels"),
+        (5.68, 0.56, 2.0, "VIF Critic (Offline)"),
+        (8.22, 0.56, 3.12, "VIF Critic Predictions\n+ experiment reports"),
+    ]
+    for x, y, width, label in offline_nodes:
+        add_box(
+            ax,
+            x=x,
+            y=y,
+            width=width,
+            height=0.72,
+            text=label,
+            facecolor="white",
+            edgecolor=BLUE,
+            fontsize=9.6,
+        )
+    for left, right in zip(offline_nodes, offline_nodes[1:], strict=False):
+        add_arrow(
+            ax,
+            (left[0] + left[2], left[1] + 0.36),
+            (right[0], right[1] + 0.36),
+            color=BLUE,
+        )
+
+    fig.text(
+        0.5,
+        0.01,
+        (
+            "Solid arrows show processing; dashed arrows show Inspect access "
+            "to the shared trace."
+        ),
+        ha="center",
+        color=MUTED,
+        fontsize=9.7,
+    )
+    fig.subplots_adjust(left=0.015, right=0.985, top=0.99, bottom=0.07)
+    save_figure(fig, "adopted-architecture.png")
+
+
+def draw_drift_detector_transitions() -> None:
+    """Render the exact state and substate path in the Drift Detector."""
+    fig, ax = plt.subplots(figsize=(12.2, 6.2))
+    ax.set_xlim(0, 12.2)
+    ax.set_ylim(0, 6.2)
+    ax.axis("off")
+
+    nodes = {
+        "n0": (0.45, 4.05, 2.05, "No Active Drift\nrun length 0"),
+        "n1": (3.25, 4.05, 2.05, "No Active Drift\nrun length 1 · first Conflict"),
+        "active": (8.95, 4.05, 2.45, "Active Drift\nrun length ≥ 2"),
+        "i0": (1.85, 1.55, 2.45, "Insufficient Evidence\nrun length 0 · unresolved"),
+        "i1": (5.45, 1.55, 2.45, "Insufficient Evidence\nrun length 1 · unresolved"),
+    }
+    styles = {
+        "n0": (TEAL_LIGHT, TEAL),
+        "n1": (TEAL_LIGHT, TEAL),
+        "active": (GOLD_LIGHT, GOLD),
+        "i0": (CORAL_LIGHT, CORAL),
+        "i1": (CORAL_LIGHT, CORAL),
+    }
+    for key, (x, y, width, label) in nodes.items():
+        facecolor, edgecolor = styles[key]
+        add_box(
+            ax,
+            x=x,
+            y=y,
+            width=width,
+            height=0.9,
+            text=label,
+            facecolor=facecolor,
+            edgecolor=edgecolor,
+            fontsize=10.2,
+            linewidth=1.6,
+        )
+
+    add_arrow(ax, (2.5, 4.5), (3.25, 4.5), color=TEAL)
+    ax.text(2.87, 4.72, "valid Conflict", ha="center", fontsize=9.1)
+    add_arrow(ax, (5.3, 4.5), (8.95, 4.5), color=GOLD)
+    ax.text(
+        7.12,
+        4.72,
+        "adjacent valid Conflict",
+        ha="center",
+        fontsize=9.1,
+    )
+    add_arrow(ax, (4.3, 2.0), (5.45, 2.0), color=CORAL)
+    ax.text(4.87, 2.22, "valid Conflict", ha="center", fontsize=9.1)
+    add_arrow(ax, (7.9, 2.0), (9.55, 4.05), color=GOLD, rad=-0.13)
+    ax.text(
+        8.68,
+        2.9,
+        "adjacent valid Conflict",
+        ha="center",
+        fontsize=9.1,
+        rotation=47,
+    )
+
+    add_arrow(ax, (0.78, 4.95), (2.18, 4.95), color=TEAL, rad=-0.55)
+    ax.text(
+        1.48,
+        5.72,
+        "valid Not Conflict or\nstandalone valid Abstain",
+        ha="center",
+        fontsize=8.9,
+    )
+    add_arrow(ax, (9.35, 4.95), (11.0, 4.95), color=GOLD, rad=-0.55)
+    ax.text(
+        10.18,
+        5.72,
+        "adjacent valid Conflict\nextends the run",
+        ha="center",
+        fontsize=8.9,
+    )
+
+    add_arrow(ax, (1.5, 4.05), (2.55, 2.45), color=CORAL, rad=0.08)
+    ax.text(1.55, 3.05, "failed review", fontsize=8.8, rotation=-47)
+    add_arrow(ax, (4.25, 4.05), (3.55, 2.45), color=CORAL, rad=-0.05)
+    ax.text(
+        4.25,
+        3.03,
+        "valid Abstain\nor failed review",
+        ha="center",
+        fontsize=8.8,
+    )
+    add_arrow(ax, (9.15, 4.05), (4.3, 2.18), color=CORAL, rad=-0.1)
+    ax.text(
+        6.85,
+        3.05,
+        "valid Abstain or failed review",
+        ha="center",
+        fontsize=8.8,
+        rotation=18,
+    )
+    add_arrow(ax, (1.85, 1.72), (1.85, 2.25), color=CORAL, rad=-1.2)
+    ax.text(
+        0.3,
+        1.75,
+        "valid Abstain\nor failed review",
+        ha="left",
+        fontsize=8.7,
+    )
+    add_arrow(ax, (5.45, 1.78), (4.3, 1.78), color=CORAL)
+    ax.text(
+        4.88,
+        1.25,
+        "valid Abstain\nor failed review",
+        ha="center",
+        fontsize=8.7,
+    )
+
+    ax.text(
+        0.5,
+        0.66,
+        (
+            "GLOBAL RESET · A valid Not Conflict returns any node to No Active "
+            "Drift, run length 0."
+        ),
+        fontsize=9.3,
+        color=INK,
+        weight="bold",
+    )
+    ax.text(
+        0.5,
+        0.34,
+        (
+            "GAP RULE · A Journal Entry gap breaks adjacency. After recent Conflict "
+            "or unresolved evidence, a next Conflict enters the unresolved "
+            "run-length-1 node."
+        ),
+        fontsize=9.1,
+        color=MUTED,
+    )
+    ax.text(
+        0.5,
+        0.07,
+        (
+            "HISTORY · Historical Drift Records remain stored after the current "
+            "state changes."
+        ),
+        fontsize=9.1,
+        color=MUTED,
+    )
+    fig.subplots_adjust(left=0.015, right=0.985, top=0.99, bottom=0.04)
+    save_figure(fig, "drift-detector-transitions.png")
 
 
 def parse_float(value: str) -> float:
@@ -599,6 +997,8 @@ def draw_weekly_drift_tradeoff() -> None:
 def main() -> None:
     """Generate all static figures used by the capstone paper."""
     configure_matplotlib()
+    draw_adopted_architecture()
+    draw_drift_detector_transitions()
     draw_synthetic_data_lifts()
     draw_label_agreement()
     draw_per_value_conflict_recall()
