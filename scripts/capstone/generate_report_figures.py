@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
+from statistics import median
+from typing import Any
 
 import matplotlib.pyplot as plt
-from PIL import Image, ImageDraw, ImageFont
+import polars as pl
+import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = ROOT / "docs" / "capstone_report" / "images"
@@ -68,6 +72,332 @@ def markdown_rows(path: Path, header_start: str) -> list[list[str]]:
             break
         rows.append([cell.strip() for cell in line.strip("|").split("|")])
     return rows
+
+
+def load_yaml(path: Path) -> dict[str, Any]:
+    """Load one committed YAML evidence file."""
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise TypeError(f"Expected a mapping in {path}")
+    return data
+
+
+def draw_synthetic_data_lifts() -> None:
+    """Show corpus growth and the bounded effects of two targeted data lifts."""
+    first_snapshot = load_yaml(
+        ROOT / "config" / "experiments" / "vif" / "twinkl_681_5_baseline_snapshot.yaml"
+    )
+    second_snapshot = load_yaml(
+        ROOT / "config" / "experiments" / "vif" / "twinkl_691_2_baseline_snapshot.yaml"
+    )
+    second_config = load_yaml(
+        ROOT / "config" / "experiments" / "vif" / "twinkl_691_2.yaml"
+    )
+    reference_run = load_yaml(
+        ROOT / "logs" / "experiments" / "runs" / "run_019_BalancedSoftmax.yaml"
+    )
+    first_report = (
+        ROOT
+        / "logs"
+        / "experiments"
+        / "reports"
+        / "experiment_review_2026-03-08_twinkl_681_5.md"
+    )
+    second_report = (
+        ROOT
+        / "logs"
+        / "experiments"
+        / "reports"
+        / "experiment_review_2026-03-09_twinkl_691_3.md"
+    )
+
+    baseline_entries = sum(reference_run["data"].values())
+    first_text = first_report.read_text(encoding="utf-8")
+    first_added_match = re.search(r"(\d+) new entries", first_text)
+    if first_added_match is None:
+        raise ValueError("Could not read the first targeted-batch entry count")
+    first_added_entries = int(first_added_match.group(1))
+    final_entries = pl.read_parquet(
+        ROOT / "logs" / "judge_labels" / "judge_labels.parquet"
+    ).height
+
+    personas = [
+        int(first_snapshot["registry_persona_count"]),
+        int(second_snapshot["registry_persona_count"]),
+        int(second_snapshot["registry_persona_count"])
+        + int(second_config["generation"]["num_personas"]),
+    ]
+    entries = [baseline_entries, baseline_entries + first_added_entries, final_entries]
+    stages = [
+        "Corrected-split\nbaseline",
+        "Power/Security\nlift",
+        "Hedonism/Security\nlift",
+    ]
+
+    first_rows = markdown_rows(first_report, "| Dimension | Baseline QWK")
+    first_by_dimension = {row[0].replace("`", ""): row for row in first_rows}
+    second_rows = markdown_rows(second_report, "| Family | `hedonism qwk`")
+    second_by_family = {row[0]: row for row in second_rows}
+
+    effect_labels = [
+        "Power/Security batch\nPower Conflict recall",
+        "Power/Security batch\nSecurity Conflict recall",
+        "Hedonism/Security batch\nHedonism QWK",
+        "Hedonism/Security batch\nSecurity QWK",
+    ]
+    before = [
+        parse_float(first_by_dimension["power"][4]),
+        parse_float(first_by_dimension["security"][4]),
+        parse_float(second_by_family["Current default BalancedSoftmax"][1]),
+        parse_float(second_by_family["Current default BalancedSoftmax"][4]),
+    ]
+    after = [
+        parse_float(first_by_dimension["power"][5]),
+        parse_float(first_by_dimension["security"][5]),
+        parse_float(second_by_family["New BalancedSoftmax"][1]),
+        parse_float(second_by_family["New BalancedSoftmax"][4]),
+    ]
+
+    fig, axes = plt.subplots(1, 2, figsize=(12.2, 5.8), gridspec_kw={"wspace": 0.34})
+    x = list(range(3))
+    axes[0].plot(x, entries, color=TEAL, linewidth=2.5, zorder=2)
+    axes[0].scatter(x, entries, s=100, color=TEAL, zorder=3)
+    annotation_layout = [(18, "left"), (0, "center"), (-10, "right")]
+    for index, (entry_count, persona_count) in enumerate(
+        zip(entries, personas, strict=True)
+    ):
+        horizontal_offset, alignment = annotation_layout[index]
+        axes[0].annotate(
+            f"{entry_count:,} entries\n{persona_count} personas",
+            (index, entry_count),
+            xytext=(horizontal_offset, 14),
+            textcoords="offset points",
+            ha=alignment,
+            weight="bold",
+        )
+    axes[0].set_xticks(x, stages)
+    axes[0].set_ylim(1390, 1725)
+    axes[0].set_ylabel("Persisted Journal Entries")
+    axes[0].set_title("(a) Train-only corpus growth", fontsize=13, weight="bold")
+    axes[0].yaxis.grid(True, color=GRID, linewidth=0.8)
+    axes[0].set_axisbelow(True)
+
+    y = list(range(len(effect_labels)))
+    for index, (start, end) in enumerate(zip(before, after, strict=True)):
+        end_color = TEAL if end >= start else CORAL
+        axes[1].plot([start, end], [index, index], color=GRID, linewidth=2.2, zorder=1)
+        axes[1].scatter(start, index, s=66, color=MUTED, marker="o", zorder=2)
+        axes[1].scatter(end, index, s=78, color=end_color, marker="D", zorder=3)
+        if start == end:
+            axes[1].annotate(
+                f"{end:.3f} unchanged",
+                (end, index),
+                xytext=(8, 8),
+                textcoords="offset points",
+                ha="left",
+                fontsize=8.5,
+                color=end_color,
+                weight="bold",
+            )
+            continue
+        axes[1].annotate(
+            f"{start:.3f}",
+            (start, index),
+            xytext=(-7, -14),
+            textcoords="offset points",
+            ha="right",
+            fontsize=8.5,
+            color=MUTED,
+        )
+        axes[1].annotate(
+            f"{end:.3f}",
+            (end, index),
+            xytext=(7, 8),
+            textcoords="offset points",
+            ha="left",
+            fontsize=8.5,
+            color=end_color,
+            weight="bold",
+        )
+    axes[1].set_yticks(y, effect_labels)
+    axes[1].invert_yaxis()
+    axes[1].set_xlim(0, 0.66)
+    axes[1].set_xlabel("Held-out metric value")
+    axes[1].set_title(
+        "(b) Selected target-dimension effects", fontsize=13, weight="bold"
+    )
+    axes[1].xaxis.grid(True, color=GRID, linewidth=0.8)
+    axes[1].set_axisbelow(True)
+
+    for ax in axes:
+        for spine in ("top", "right", "left"):
+            ax.spines[spine].set_visible(False)
+        ax.spines["bottom"].set_color(GRID)
+    fig.text(
+        0.56,
+        0.012,
+        (
+            "Circles show the pre-lift reference; diamonds show the post-lift "
+            "result. Compare each row only within its named metric."
+        ),
+        color=MUTED,
+        fontsize=9.7,
+    )
+    fig.subplots_adjust(bottom=0.20, top=0.90)
+    save_figure(fig, "synthetic-data-lifts.png")
+
+
+def vif_conflict_recall() -> tuple[list[str], list[float], list[int]]:
+    """Compute per-value median Conflict recall across the three VIF seeds."""
+    run_paths = [
+        ROOT / "logs" / "experiments" / "runs" / f"run_{run}_BalancedSoftmax.yaml"
+        for run in ("019", "020", "021")
+    ]
+    per_run: list[dict[str, float]] = []
+    support_by_dimension: dict[str, int] = {}
+    for run_path in run_paths:
+        run = load_yaml(run_path)
+        outputs = pl.read_parquet(ROOT / run["artifacts"]["test_outputs"])
+        run_recalls: dict[str, float] = {}
+        for dimension in outputs.get_column("dimension").unique().sort().to_list():
+            rows = outputs.filter(pl.col("dimension") == dimension)
+            support = rows.filter(pl.col("target") == -1).height
+            true_positives = rows.filter(
+                (pl.col("target") == -1) & (pl.col("predicted_class") == -1)
+            ).height
+            run_recalls[dimension] = true_positives / support
+            support_by_dimension[dimension] = support
+        per_run.append(run_recalls)
+
+    dimensions = [
+        "self_direction",
+        "stimulation",
+        "hedonism",
+        "achievement",
+        "power",
+        "security",
+        "conformity",
+        "tradition",
+        "benevolence",
+        "universalism",
+    ]
+    median_recalls = [
+        median(run[dimension] for run in per_run) for dimension in dimensions
+    ]
+    supports = [support_by_dimension[dimension] for dimension in dimensions]
+    return dimensions, median_recalls, supports
+
+
+def weekly_reviewer_conflict_recall() -> tuple[list[str], list[float], list[int]]:
+    """Read per-value Luna-low entry Conflict recall from saved metrics."""
+    source = (
+        ROOT
+        / "logs"
+        / "experiments"
+        / "artifacts"
+        / "twinkl_52zz_luna_low_20260714"
+        / "metrics.json"
+    )
+    metrics = json.loads(source.read_text(encoding="utf-8"))
+    results = metrics["models"]["luna_low"]["results"]
+    dimensions = [
+        "self_direction",
+        "stimulation",
+        "hedonism",
+        "achievement",
+        "power",
+        "security",
+        "conformity",
+        "tradition",
+        "benevolence",
+        "universalism",
+    ]
+    recalls = [
+        median(
+            result["entry"]["per_dimension"][dimension]["recall"]
+            for result in results
+        )
+        for dimension in dimensions
+    ]
+    supports = [
+        int(results[0]["entry"]["per_dimension"][dimension]["negative_support"])
+        for dimension in dimensions
+    ]
+    return dimensions, recalls, supports
+
+
+def draw_per_value_conflict_recall() -> None:
+    """Contrast per-value difficulty without implying a direct model comparison."""
+    vif_dimensions, vif_recall, vif_support = vif_conflict_recall()
+    weekly_dimensions, weekly_recall, weekly_support = weekly_reviewer_conflict_recall()
+    if vif_dimensions != weekly_dimensions:
+        raise ValueError("Per-value evidence uses inconsistent value order")
+
+    labels = [dimension.replace("_", " ").title() for dimension in vif_dimensions]
+    labels[0] = "Self-Direction"
+    fig, axes = plt.subplots(
+        1,
+        2,
+        figsize=(12.2, 7.0),
+        sharey=True,
+        gridspec_kw={"wspace": 0.26},
+    )
+    y = list(range(len(labels)))
+    panels = (
+        (
+            axes[0],
+            vif_recall,
+            vif_support,
+            "(a) VIF Critic (Offline)",
+            "LLM-Judge VIF Labels · frozen 221-entry test set",
+            TEAL,
+        ),
+        (
+            axes[1],
+            weekly_recall,
+            weekly_support,
+            "(b) Weekly Drift Reviewer · Luna-low",
+            "LLM-Judge Conflict Labels · complete development data",
+            BLUE,
+        ),
+    )
+    for ax, values, supports, title, subtitle, color in panels:
+        ax.hlines(y, 0, values, color=GRID, linewidth=2.0, zorder=1)
+        ax.scatter(values, y, s=82, color=color, zorder=3)
+        for index, (value, support) in enumerate(zip(values, supports, strict=True)):
+            ax.annotate(
+                f"{value:.3f} · n={support}",
+                (value, index),
+                xytext=(7, -1),
+                textcoords="offset points",
+                va="center",
+                fontsize=8.5,
+                color=color,
+                weight="bold",
+            )
+        ax.set_xlim(0, 0.92)
+        ax.set_xlabel("Median entry-level Conflict recall")
+        ax.set_title(f"{title}\n{subtitle}", fontsize=11.5, weight="bold")
+        ax.xaxis.grid(True, color=GRID, linewidth=0.8)
+        ax.set_axisbelow(True)
+        for spine in ("top", "right", "left"):
+            ax.spines[spine].set_visible(False)
+        ax.spines["bottom"].set_color(GRID)
+    axes[0].set_yticks(y, labels)
+    axes[0].invert_yaxis()
+    fig.text(
+        0.5,
+        0.018,
+        (
+            "The panels use different data, label rubrics, and model inputs. "
+            "Compare value patterns within each panel, not scores across panels."
+        ),
+        ha="center",
+        color=MUTED,
+        fontsize=10,
+    )
+    fig.subplots_adjust(bottom=0.13, top=0.88)
+    save_figure(fig, "per-value-conflict-recall.png")
 
 
 def draw_label_agreement() -> None:
@@ -232,7 +562,7 @@ def draw_weekly_drift_tradeoff() -> None:
         )
         offset = {
             "none": (-76, -31),
-            "low": (-108, -40),
+            "low": (13, -38),
             "medium": (13, 10),
             "high": (13, -18),
             "xhigh": (13, 8),
@@ -245,6 +575,11 @@ def draw_weekly_drift_tradeoff() -> None:
             textcoords="offset points",
             fontsize=10.5,
             weight="bold" if label == "low" else "normal",
+            arrowprops=(
+                {"arrowstyle": "-", "color": TEAL, "linewidth": 0.8}
+                if label == "low"
+                else None
+            ),
         )
 
     ax.set_xlim(2, 14.5)
@@ -261,102 +596,14 @@ def draw_weekly_drift_tradeoff() -> None:
     save_figure(fig, "weekly-drift-tradeoff.png")
 
 
-def load_font(size: int, *, bold: bool = False) -> ImageFont.FreeTypeFont:
-    """Load a font that is available on macOS and common Linux images."""
-    candidates = (
-        [
-            "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-        ]
-        if bold
-        else [
-            "/System/Library/Fonts/Supplemental/Arial.ttf",
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        ]
-    )
-    for candidate in candidates:
-        if Path(candidate).exists():
-            return ImageFont.truetype(candidate, size=size)
-    return ImageFont.load_default()
-
-
-def resize_to_fit(image: Image.Image, width: int, height: int) -> Image.Image:
-    """Resize one image up or down to fit inside a box."""
-    scale = min(width / image.width, height / image.height)
-    size = (round(image.width * scale), round(image.height * scale))
-    return image.resize(size, Image.Resampling.LANCZOS)
-
-
-def draw_case_study() -> None:
-    """Combine the Experience, Coach Digest, and saved AI review evidence."""
-    source_dir = OUTPUT_DIR
-    experience = Image.open(source_dir / "lukas-key-week-experience.png").convert("RGB")
-    digest = Image.open(source_dir / "lukas-key-week-coach-digest.png").convert("RGB")
-    review = Image.open(source_dir / "lukas-key-week-ai-review.png").convert("RGB")
-
-    canvas = Image.new("RGB", (2200, 2160), PAPER)
-    draw = ImageDraw.Draw(canvas)
-    panel_font = load_font(30, bold=True)
-    note_font = load_font(25)
-
-    experience_crop = experience.crop((370, 290, 1550, 925))
-    top = resize_to_fit(experience_crop, 2040, 1050)
-    canvas.paste(top, ((2200 - top.width) // 2, 58))
-    draw.rounded_rectangle((60, 40, 2140, 1168), radius=18, outline=GRID, width=3)
-    draw.text((86, 67), "A  Experience", fill=INK, font=panel_font)
-
-    digest_scaled = resize_to_fit(digest, 860, 690)
-    review_scaled = resize_to_fit(review, 860, 690)
-    left_box = (100, 1198, 1030, 1968)
-    right_box = (1170, 1198, 2100, 1968)
-    for box in (left_box, right_box):
-        draw.rounded_rectangle(box, radius=18, fill="white", outline=GRID, width=3)
-
-    canvas.paste(
-        digest_scaled,
-        (
-            left_box[0] + (left_box[2] - left_box[0] - digest_scaled.width) // 2,
-            left_box[1] + 55,
-        ),
-    )
-    canvas.paste(
-        review_scaled,
-        (
-            right_box[0] + (right_box[2] - right_box[0] - review_scaled.width) // 2,
-            right_box[1] + 55,
-        ),
-    )
-    draw.text(
-        (left_box[0] + 22, left_box[1] + 16),
-        "B  Coach Digest",
-        fill=INK,
-        font=panel_font,
-    )
-    draw.text(
-        (right_box[0] + 22, right_box[1] + 16),
-        "C  Saved AI evidence",
-        fill=INK,
-        font=panel_font,
-    )
-    draw.text(
-        (120, 2010),
-        (
-            "The replay is synthetic evidence for the proof of concept. "
-            "It is not a user study."
-        ),
-        fill=MUTED,
-        font=note_font,
-    )
-    canvas.save(OUTPUT_DIR / "lukas-case-study.png", dpi=(300, 300))
-
-
 def main() -> None:
     """Generate all static figures used by the capstone paper."""
     configure_matplotlib()
+    draw_synthetic_data_lifts()
     draw_label_agreement()
+    draw_per_value_conflict_recall()
     draw_vif_handoff()
     draw_weekly_drift_tradeoff()
-    draw_case_study()
 
 
 if __name__ == "__main__":
