@@ -169,8 +169,8 @@ The heading reads `What matters most as you find your way?` The introduction
 says there are no right answers and that more than one principle can matter.
 The first instruction explains that the user will see 11 groups, that each
 choice concerns what matters Most and Least as a guide for the user's life, and
-that some cards return. Later groups use a shorter version of the same
-instruction.
+that some cards return. It also states that choosing Least advances after one
+second. Later groups use a shorter version of the same instruction.
 
 ### 4.2 Card interaction
 
@@ -215,11 +215,21 @@ which two should guide you first?” The user must select exactly two of the tie
 descriptions before confirmation. Unselected descriptions become unavailable
 after the second selection until the user clears one choice.
 
-The summary explains that the result reflects the Most and Least choices made
-across all 11 groups. It also says that the result gives Twinkl a direction to
-remember and that later Journal Entries can show where the user's days follow
-that direction. The confirmed Core Value descriptions remain visible through
-the first Journal Entry handoff and manual editor.
+The summary explains whether one or two values have the highest result from
+the Most and Least choices across all 11 groups. It does not describe the
+choices as a measure of consistency. The confirmed reminder uses the singular
+Core Value when only one is confirmed. The summary also says that the result
+gives Twinkl a direction to remember and that later Journal Entries can show
+where the user's days follow that direction. The confirmed Core Value
+descriptions remain visible through the first Journal Entry handoff and manual
+editor.
+
+After a manual Journal Entry is submitted, Inspect defaults to recorded events.
+**View Profile calculation** reopens the same assessment explanation and section
+map; **View recorded events** returns to the event list. The calculation shows
+the confirmed Core Values separately from all values tied for the highest score.
+Saved Persona Profiles are synthetic projections, not records of a Persona
+completing the assessment, so they do not expose this manual calculation control.
 
 On wide screens, the summary and Profile confirmation handoff compact their
 spacing so the primary action remains in view for typical results. Longer
@@ -371,7 +381,10 @@ an invalid tie selection, or any other mismatch.
 The resumable browser session uses schema version `10` and storage key
 `twinkl.onboarding.session.v10`. It stores the randomized group order, each
 canonical group's randomized card order, the tie selection, and the shared
-Experience and Inspect view state. Versions `4` through `9` migrate when a
+Experience and Inspect view state. An additive `replay_progress` field stores
+the selected scenario, week, revealed step, and furthest completed week. Older
+version `10` sessions without this field remain readable; their exact partial
+replay progress cannot be recovered. Versions `4` through `9` migrate when a
 confirmed legacy Profile contains at most two Core Values. A version `6` goal
 stage resumes at the Core Value summary. Confirmed version `2` and `3` Profiles
 with at most two Core Values migrate to version `4` without `goal_category`.

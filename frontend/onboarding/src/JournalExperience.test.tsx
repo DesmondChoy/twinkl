@@ -947,7 +947,7 @@ describe("manual Journal Entry Experience", () => {
       "still in this editor",
     );
     expect(
-      screen.getByRole("region", { name: "Your Core Values" }),
+      screen.getByRole("region", { name: "Your Core Value" }),
     ).toBeTruthy();
 
     await user.click(

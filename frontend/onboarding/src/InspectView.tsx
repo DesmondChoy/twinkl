@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import type { TraceEventContract } from "./demoContracts";
-import type { BwsResponse, ScoreBundle } from "./domain";
+import type { BwsResponse, ScoreBundle, ValueKey } from "./domain";
 import OnboardingScoreInspection from "./OnboardingScoreInspection";
 
 type JsonRecord = Record<string, unknown>;
@@ -23,12 +23,14 @@ interface InspectViewProps {
   emptyActionLabel?: string;
   emptyMessage?: string;
   onboarding?: {
-    confirmed: boolean;
+    confirmedValues: ValueKey[] | null;
     responses: BwsResponse[];
     scores: ScoreBundle;
     setOrder: number[];
   };
   onEmptyAction?: () => void;
+  onToggleCalculation?: () => void;
+  syntheticProfile?: boolean;
   selectedEventId: string | null;
   traceLabel: string;
   onReturn: () => void;
@@ -432,6 +434,8 @@ export default function InspectView({
   emptyMessage = "No backend work has been recorded for this Experience yet.",
   onboarding,
   onEmptyAction,
+  onToggleCalculation,
+  syntheticProfile = false,
   selectedEventId,
   traceLabel,
   onReturn,
@@ -610,6 +614,17 @@ export default function InspectView({
                 ? "The focused result comes first. The complete event history follows."
                 : "Each row is one recorded step. Open Technical details for exact inputs, prompts, and validation."}
           </p>
+          {onToggleCalculation ? (
+            <button className="inspect-run-link" type="button" onClick={onToggleCalculation}>
+              {onboarding ? "View recorded events" : "View Profile calculation"}
+            </button>
+          ) : null}
+          {syntheticProfile ? (
+            <p>
+              This Persona Profile is a synthetic projection. It does not
+              represent a completed SVBWS assessment.
+            </p>
+          ) : null}
         </div>
         <button className="button button--quiet" type="button" onClick={onReturn}>
           Return to Experience
@@ -627,7 +642,7 @@ export default function InspectView({
             <span>
               {events.length > 0
                 ? "Python validation recorded"
-                : onboarding.confirmed
+                : onboarding.confirmedValues !== null
                   ? "Python validation unavailable"
                   : "Python validation follows confirmation"}
             </span>
@@ -729,7 +744,7 @@ export default function InspectView({
 
       {onboarding ? (
         <OnboardingScoreInspection
-          confirmed={onboarding.confirmed}
+          confirmedValues={onboarding.confirmedValues}
           responses={onboarding.responses}
           scores={onboarding.scores}
           setOrder={onboarding.setOrder}

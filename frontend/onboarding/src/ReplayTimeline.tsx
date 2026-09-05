@@ -53,7 +53,7 @@ function replayStateLabel(state: string): string {
     case "active_drift":
       return "Active Drift";
     case "insufficient_evidence":
-      return "Insufficient evidence";
+      return "Insufficient Evidence";
     default:
       return "No Active Drift";
   }
@@ -400,6 +400,12 @@ export default function ReplayTimeline({
                     <h3 id="replay-result-title">{replayStateLabel(state)}</h3>
                   </header>
                   <p>{stateExplanation(state)}</p>
+                  {profile.top_values.length > 1 ? (
+                    <p>
+                      This overall result combines {profile.top_values.length} Core Values.
+                      Each has its own state below; they can differ.
+                    </p>
+                  ) : null}
                   <section
                     className="replay-result__details"
                     aria-labelledby="state-change-title"

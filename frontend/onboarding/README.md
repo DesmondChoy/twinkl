@@ -38,13 +38,23 @@ personas into the same
 React session and replays Journal Entries, displayed nudges and responses,
 Drift, Coach Digest responses, and Inspect events one week at a time. **Next step** is
 the default. **Previous** returns to an earlier week. **Auto replay** and
-**Pause replay** provide optional automatic replay. **Restart** and **Jump to
-key moment** provide quick navigation. These controls preserve the selected
-week across Experience and Inspect. Reduced-motion preferences disable Auto
-replay. The browser verifies each scenario against the catalogued SHA-256 hash
+**Pause replay** provide optional automatic replay. **Restart** and named jumps
+such as **Show Active Drift — week 6** provide quick navigation. The Persona
+picker includes a collapsed professor guide mapping saved weeks to Drift
+states. Each Core Value explanation names its own state. These controls preserve
+the selected week, revealed step, and previously revealed weeks across Experience
+and Inspect and after reload. Automatic replay pauses when Experience closes.
+Reduced-motion preferences disable Auto replay. The browser verifies each
+scenario against the catalogued SHA-256 hash
 before displaying it. The Profile remains available through the
 `onStartJournal` callback and
 `twinkl:start-first-journal` browser event.
+
+After manual Journal Entries begin, Inspect retains **View Profile calculation**
+and **View recorded events** controls. The calculation uses the original 22
+choices. Saved Persona Profiles are labelled as synthetic projections and do
+not offer a fabricated completed assessment. The manual summary explains why
+one or two Core Values are shown; the one-or-two scoring contract is unchanged.
 
 [`docs/onboarding/onboarding_spec.md`](../../docs/onboarding/onboarding_spec.md)
 is the canonical workflow and evidence-boundary documentation. Background

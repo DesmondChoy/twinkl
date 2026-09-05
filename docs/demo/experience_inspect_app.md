@@ -15,7 +15,7 @@ Detection result.
 
 The five deterministic Persona replays load into the shared React session
 with manual next-step replay, previous-week navigation, optional automatic
-replay and pause, restart, Jump to key moment, reduced-motion behavior,
+replay and pause, restart, named jumps to key weeks, reduced-motion behavior,
 no-future-data projection, and browser-side scenario hash verification. The
 release quality gate is implemented. The five Persona key-week Coach Digest
 responses match the [current evaluation
@@ -222,8 +222,18 @@ Advancing a week reveals only the Journal Entries and results available by that
 week. This preserves the temporal meaning of Drift and lets the professor see
 the user experience change between Active Drift, No Active Drift, and
 Insufficient Evidence. Historical Drift Records remain available after the
-current state changes. Future weeks remain disabled. A separate **Jump to key moment** action
+current state changes. Future weeks remain disabled. A named jump to a key week
 provides explicit fast navigation without making future results look available.
+The button names its destination and week, such as **Show Active Drift — week 6**
+or **Show independent Core Value states — week 9**. The Persona picker includes
+a collapsed **Professor guide: states by week**, derived from the saved catalog.
+It maps each Persona to the states shown by its weeks.
+
+The shared browser session preserves the revealed step and furthest completed
+week across Experience and Inspect and after reload. Returning to an earlier
+week does not lock weeks that were already revealed. Restart clears replay
+progress. Automatic replay pauses when Experience closes and does not resume
+automatically after reload.
 
 Manual next-step movement and automatic replay use the same sequence. Journal
 Entries appear one at a time as compact excerpts. The Weekly Drift Detection
@@ -250,6 +260,10 @@ stays visible above that control. The active week stays centered in the week
 rail.
 
 Profile details remain collapsed by default and include a short Persona context.
+Each Core Value explanation names its state beside the Core Value. When a
+Profile has two Core Values, the overall result explains that their states can
+differ. A No Active Drift explanation for one Core Value does not contradict
+Active Drift or Insufficient Evidence for the other Core Value.
 The Persona header always names the selected Schwartz Core Values. State-change
 evidence appears with the Weekly Drift Detection result. The first two Conflicts
 show where Drift started. Later Conflicts show that Drift continued. No Active
@@ -348,6 +362,10 @@ section rail.
 
 This calculation is labelled **Calculation method** and **Deterministic · no
 model**.
+After manual Journal Entries begin, **View Profile calculation** reopens it
+from Inspect, and **View recorded events** returns to the event list. Saved
+Persona Inspect explains the synthetic Profile projection and does not offer
+this manual assessment control.
 It is not fabricated as a Python trace event. Profile confirmation remains the
 first Python event, preserving the React ownership of onboarding scoring and
 the Python ownership of confirmed Profile validation.

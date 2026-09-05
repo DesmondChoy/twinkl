@@ -86,6 +86,22 @@ describe("onboarding session", () => {
     expect(clearChoice(leastMovedToFirst, "least").draft_worst).toBeNull();
   });
 
+  it("round-trips replay progress and accepts older version 10 sessions without it", () => {
+    const session = createSession();
+    session.experience.replay_progress = {
+      scenario_id: "two-values-lukas",
+      week_index: 4,
+      reveal_stage: 2,
+      furthest_completed_week: 8,
+    };
+    expect(parseSession(JSON.stringify(session))).toEqual(session);
+    const older = JSON.parse(JSON.stringify(session));
+    delete older.experience.replay_progress;
+    expect(parseSession(JSON.stringify(older))?.experience.replay_progress).toBeNull();
+    session.experience.replay_progress.reveal_stage = -1;
+    expect(parseSession(JSON.stringify(session))).toBeNull();
+  });
+
   it("rejects corrupted stored state", () => {
     expect(parseSession("not-json")).toBeNull();
     expect(parseSession(JSON.stringify({ schema_version: 3 }))).toBeNull();

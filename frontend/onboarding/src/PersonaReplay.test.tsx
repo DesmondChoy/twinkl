@@ -15,6 +15,7 @@ import recoveredReplayJson from "../public/scenarios/recovered-marc.json";
 import scenarioCatalogJson from "../public/scenarios/index.json";
 import stableReplayJson from "../public/scenarios/stable-meera.json";
 import twoValuesReplayJson from "../public/scenarios/two-values-lukas.json";
+import twoValuesReplayRaw from "../public/scenarios/two-values-lukas.json?raw";
 import uncertainReplayJson from "../public/scenarios/uncertain-noor.json";
 import judgeSampleManifest from "../../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json";
 import App from "./App";
@@ -145,12 +146,97 @@ function personaCard(name: string): HTMLElement {
   return card;
 }
 
+async function startLukasReplay() {
+  matchMedia(false);
+  vi.stubGlobal("fetch", vi.fn().mockImplementation((input: string) => {
+    if (input === "/scenarios/index.json") {
+      return Promise.resolve({ ok: true, json: async () => scenarioCatalogJson });
+    }
+    return Promise.resolve(input === "/scenarios/two-values-lukas.json"
+      ? scenarioResponse(twoValuesReplayRaw)
+      : { ok: false });
+  }));
+  const user = userEvent.setup();
+  const view = render(<App />);
+  await user.click(screen.getByRole("button", { name: "Try demo" }));
+  await screen.findByText("Lukas Vermeer");
+  await user.click(within(personaCard("Lukas Vermeer")).getByRole("button", {
+    name: "Start at week 1",
+  }));
+  await screen.findByRole("heading", { name: "Lukas Vermeer", level: 1 });
+  return { user, view };
+}
+
 afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
 });
 
 describe("persona replay", () => {
+  it("keeps revealed later weeks after returning from Inspect and reloading an earlier week", async () => {
+    const { user, view } = await startLukasReplay();
+    await user.click(screen.getByRole("button", {
+      name: "Show independent Core Value states — week 9",
+    }));
+    await user.click(screen.getByRole("button", { name: "Show week 5: active drift" }));
+    await user.click(screen.getByRole("button", { name: "Inspect" }));
+    expect(screen.queryByRole("button", { name: "View Profile calculation" })).toBeNull();
+    expect(screen.getByText(/This Persona Profile is a synthetic projection/)).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Return to Experience" }));
+    expect(screen.getByText("Week 5 of 9")).toBeTruthy();
+    expect((screen.getByRole("button", {
+      name: "Show week 9: insufficient evidence",
+    }) as HTMLButtonElement).disabled).toBe(false);
+    const states = document.querySelectorAll(".state-change > header");
+    expect(Array.from(states, (header) => header.textContent)).toEqual([
+      "Self-DirectionNo Active Drift", "ConformityActive Drift",
+    ]);
+
+    view.unmount();
+    render(<App />);
+    await screen.findByText("Week 5 of 9");
+    expect((screen.getByRole("button", {
+      name: "Show week 9: insufficient evidence",
+    }) as HTMLButtonElement).disabled).toBe(false);
+    await user.click(screen.getByRole("button", { name: "Show week 9: insufficient evidence" }));
+    expect(Array.from(document.querySelectorAll(".state-change > header"),
+      (header) => header.textContent)).toEqual([
+      "Self-DirectionInsufficient Evidence", "ConformityNo Active Drift",
+    ]);
+  });
+
+  it("preserves partial first-week and later-week steps across Inspect and reload", async () => {
+    const { user, view } = await startLukasReplay();
+    await user.click(screen.getByRole("button", { name: "Next step" }));
+    await user.click(screen.getByRole("button", { name: "Inspect" }));
+    await user.click(screen.getByRole("button", { name: "Return to Experience" }));
+    expect(screen.getByRole("button", { name: /Open Journal Entry 1/ })).toBeTruthy();
+    expect(document.querySelector(".replay-result")).toBeNull();
+
+    view.unmount();
+    const restored = render(<App />);
+    await screen.findByRole("button", { name: /Open Journal Entry 1/ });
+    expect(document.querySelector(".replay-result")).toBeNull();
+    for (let step = 0; step < 3 && !document.querySelector(".replay-result"); step += 1) {
+      await user.click(screen.getByRole("button", { name: "Next step" }));
+    }
+    expect(document.querySelector(".replay-result")).not.toBeNull();
+    await user.click(screen.getByRole("button", { name: "Next step" }));
+    expect(screen.getByText("Week 2 of 9")).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Inspect" }));
+    await user.click(screen.getByRole("button", { name: "Return to Experience" }));
+    expect(screen.queryByRole("button", { name: /Open Journal Entry/ })).toBeNull();
+    expect(document.querySelector(".replay-result")).toBeNull();
+
+    restored.unmount();
+    render(<App />);
+    await screen.findByText("Week 2 of 9");
+    expect(screen.queryByRole("button", { name: /Open Journal Entry/ })).toBeNull();
+    expect(document.querySelector(".replay-result")).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Next step" }));
+    expect(screen.getByRole("button", { name: /Open Journal Entry 1/ })).toBeTruthy();
+  });
+
   it("loads a selected persona from the saved catalog", async () => {
     const onLoad = vi.fn<(loaded: LoadedScenario) => boolean>(() => true);
     const activeCatalog = {
@@ -421,7 +507,7 @@ describe("persona replay", () => {
     }) as HTMLButtonElement;
     expect(futureWeek.disabled).toBe(true);
     await user.click(screen.getByRole("button", {
-      name: "Jump to key moment",
+      name: "Show Active Drift — week 6",
     }));
     expect(screen.getByText("Week 6 of 6")).toBeTruthy();
     await user.click(
@@ -454,7 +540,7 @@ describe("persona replay", () => {
     ["recovered-marc", recoveredReplayJson],
     ["uncertain-noor", uncertainReplayJson],
   ])(
-    "shows the evaluated %s response after Jump to key moment",
+    "shows the evaluated %s response after the named key-week jump",
     async (scenarioId, scenarioJson) => {
       matchMedia(false);
       const user = userEvent.setup();
@@ -465,7 +551,7 @@ describe("persona replay", () => {
       render(<ScenarioReplayHarness scenarioJson={scenarioJson} />);
       expect(screen.queryByText(manifestEntry.narrative.weekly_mirror)).toBeNull();
       await user.click(screen.getByRole("button", {
-        name: "Jump to key moment",
+        name: /^Show .+ — week \d+$/,
       }));
 
       expect(screen.getByText(manifestEntry.narrative.weekly_mirror)).toBeTruthy();
@@ -500,7 +586,7 @@ describe("persona replay", () => {
     ["active-wei-jun", activeReplayJson, "Active Drift"],
     ["recovered-marc", recoveredReplayJson, "No Active Drift"],
     ["uncertain-noor", uncertainReplayJson, "No Active Drift"],
-    ["two-values-lukas", twoValuesReplayJson, "Insufficient evidence"],
+    ["two-values-lukas", twoValuesReplayJson, "Insufficient Evidence"],
   ])("renders the final %s progression", (scenarioId, scenarioJson, label) => {
     matchMedia(false);
     const scenarioFixture = validateExperienceInspectFixture(scenarioJson);
@@ -644,7 +730,7 @@ describe("persona replay", () => {
     );
 
     const result = screen.getByRole("article", {
-      name: "Insufficient evidence",
+      name: "Insufficient Evidence",
     });
     const lukasResponse = judgeSampleManifest.find(
       (entry) => entry.provenance.scenario_id === "two-values-lukas",
@@ -670,7 +756,7 @@ describe("persona replay", () => {
     expect(inspectRun).toHaveBeenCalledWith(coachEvent?.event_id);
   });
 
-  it("shows one result state and keeps AI review evidence beside each decision", async () => {
+  it("labels the Core Value state and keeps AI review evidence beside each decision", async () => {
     matchMedia(false);
     const user = userEvent.setup();
     const weekIndex = fixture.scenario.weeks.length - 1;
@@ -689,7 +775,9 @@ describe("persona replay", () => {
     );
 
     const result = screen.getByRole("article", { name: "Active Drift" });
-    expect(within(result).getAllByText("Active Drift")).toHaveLength(1);
+    expect(within(result).getByRole("heading", { name: "Active Drift" })).toBeTruthy();
+    expect(result.querySelector(".state-change > header")?.textContent)
+      .toBe("UniversalismActive Drift");
     expect(within(result).queryByText(
       "Making the world a fairer, better place",
     )).toBeNull();
@@ -943,7 +1031,7 @@ describe("persona replay", () => {
     expect(document.documentElement.scrollTop).toBe(0);
     expect(document.body.scrollTop).toBe(0);
     await user.click(screen.getByRole("button", {
-      name: "Jump to key moment",
+      name: "Show Active Drift — week 6",
     }));
     expect(screen.getByText("Week 6 of 6")).toBeTruthy();
     const selectedEntryId =

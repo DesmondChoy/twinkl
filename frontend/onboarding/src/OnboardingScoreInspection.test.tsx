@@ -15,7 +15,7 @@ describe("onboarding score inspection", () => {
   it("explains the complete browser calculation without leading with JSON", () => {
     render(
       <OnboardingScoreInspection
-        confirmed={false}
+        confirmedValues={null}
         responses={profile.bws_responses}
         scores={scores}
         setOrder={setOrder}
@@ -98,7 +98,7 @@ describe("onboarding score inspection", () => {
   it("distinguishes highest-scoring values from confirmed Core Values", () => {
     const { rerender } = render(
       <OnboardingScoreInspection
-        confirmed={false}
+        confirmedValues={null}
         responses={profile.bws_responses}
         scores={scores}
         setOrder={setOrder}
@@ -111,7 +111,7 @@ describe("onboarding score inspection", () => {
 
     rerender(
       <OnboardingScoreInspection
-        confirmed
+        confirmedValues={profile.top_values}
         responses={profile.bws_responses}
         scores={scores}
         setOrder={setOrder}

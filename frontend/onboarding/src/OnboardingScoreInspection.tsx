@@ -12,7 +12,7 @@ import {
 import { ASSESSMENT_SECTIONS } from "./AssessmentSectionMap";
 
 interface OnboardingScoreInspectionProps {
-  confirmed: boolean;
+  confirmedValues: ValueKey[] | null;
   responses: BwsResponse[];
   scores: ScoreBundle;
   setOrder: number[];
@@ -66,12 +66,14 @@ function exampleEquation(value: ValueKey, scores: ScoreBundle): string {
 }
 
 export default function OnboardingScoreInspection({
-  confirmed,
+  confirmedValues,
   responses,
   scores,
   setOrder,
 }: OnboardingScoreInspectionProps) {
   const highestValues = scores.profile.top_values;
+  const confirmed = confirmedValues !== null;
+  const displayedValues = confirmedValues ?? highestValues;
   const leadValue = highestValues[0];
   const responseBySet = new Map(
     responses.map((response) => [response.set_number, response]),
@@ -132,21 +134,28 @@ export default function OnboardingScoreInspection({
         <div>
           <small>
             {confirmed
-              ? highestValues.length === 1
+              ? displayedValues.length === 1
                 ? "Confirmed Core Value"
                 : "Confirmed Core Values"
               : highestValues.length === 1
                 ? "Highest-scoring value"
                 : "Highest-scoring values"}
           </small>
-          <h3>{joinNames(highestValues)}</h3>
+          <h3>{joinNames(displayedValues)}</h3>
         </div>
         <div className="score-result__phrases">
-          {highestValues.map((value) => (
+          {displayedValues.map((value) => (
             <p key={value}>{VALUES[value].phrase}</p>
           ))}
         </div>
       </div>
+
+      {confirmed && highestValues.length > 2 ? (
+        <p>
+          {highestValues.length} values shared the highest score. You confirmed
+          two as Core Values. The calculation retains every tied value below.
+        </p>
+      ) : null}
 
       <ol className="calculation-path" aria-label="SVBWS calculation steps">
         <li>
@@ -401,7 +410,7 @@ export default function OnboardingScoreInspection({
                     >
                       {isHighest ? (
                         <span className="highest-chip">
-                          {confirmed ? "Core Value" : "Highest"}
+                          {confirmedValues?.includes(value) ? "Core Value" : "Highest"}
                         </span>
                       ) : (
                         <span aria-label="Not highest">—</span>

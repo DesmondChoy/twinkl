@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -55,7 +56,7 @@ function replayStateLabel(state: string): string {
     case "active_drift":
       return "Active Drift";
     case "insufficient_evidence":
-      return "Insufficient evidence";
+      return "Insufficient Evidence";
     default:
       return "No Active Drift";
   }
@@ -130,6 +131,27 @@ function keyMomentIndexFor(
     : weeks.findIndex(
         (week) => week.expected_delivery_state === preferredState,
       );
+}
+
+function keyMomentLabel(role: ScenarioCatalogItem["role"], weekIndex: number): string {
+  const purpose = role === "two_core_values"
+    ? "independent Core Value states"
+    : role === "drift_ended"
+      ? "Drift ending"
+      : replayStateLabel(keyMomentState(role) ?? "no_active_drift");
+  return `Show ${purpose} — week ${weekIndex + 1}`;
+}
+
+function progressionGuide(item: ScenarioCatalogItem): string {
+  const groups: { state: string; first: number; last: number }[] = [];
+  item.progression.forEach((state, index) => {
+    const previous = groups.at(-1);
+    if (previous?.state === state) previous.last = index + 1;
+    else groups.push({ state, first: index + 1, last: index + 1 });
+  });
+  return groups.map(({ state, first, last }) =>
+    `${first === last ? `Week ${first}` : `Weeks ${first}–${last}`}: ${replayStateLabel(state)}`
+  ).join("; ");
 }
 
 function usePrefersReducedMotion(): boolean {
@@ -273,6 +295,24 @@ export function PersonaReplayPicker({
         ) : null}
       </div>
 
+      {catalog ? (
+        <details className="inspect-technical">
+          <summary>Professor guide: states by week</summary>
+          <p>These are saved results. Each Core Value is assessed independently.</p>
+          <ul>
+            {catalog.scenarios.map((item) => (
+              <li key={item.scenario_id}>
+                <strong>{item.persona_name}.</strong> {progressionGuide(item)}.
+              </li>
+            ))}
+          </ul>
+          <p>
+            Start with Lukas for independent Core Value states, Wei Jun for
+            Active Drift, or Marc for a Historical Drift Record that ends.
+          </p>
+        </details>
+      ) : null}
+
       <p className="persona-picker__source" id="experience-persona-source">
         Saved replay · AI-reviewed synthetic development evidence · not human
         validation
@@ -346,12 +386,28 @@ export function PersonaReplayExperience({
     [allNudgeEntryIds, currentWeek.journal_entry_ids],
   );
   const completedStage = replaySteps.length;
-  const [revealStage, setRevealStage] = useState(() =>
-    safeWeekIndex === 0 ? 0 : completedStage
+  const progress = experience.replay_progress?.scenario_id === loaded.catalogItem.scenario_id
+    ? experience.replay_progress
+    : null;
+  const revealStage = progress?.week_index === safeWeekIndex
+    ? Math.min(progress.reveal_stage, completedStage)
+    : safeWeekIndex === 0 ? 0 : completedStage;
+  const furthestCompletedWeek = Math.min(
+    progress?.furthest_completed_week ?? (safeWeekIndex === 0 ? -1 : safeWeekIndex),
+    weeks.length - 1,
   );
-  const [furthestCompletedWeek, setFurthestCompletedWeek] = useState(
-    safeWeekIndex === 0 ? -1 : safeWeekIndex,
-  );
+  const recordProgress = useCallback((
+    stage: number,
+    week = safeWeekIndex,
+    furthest = furthestCompletedWeek,
+  ) => {
+    updateExperience({ replay_progress: {
+      scenario_id: loaded.catalogItem.scenario_id,
+      week_index: week,
+      reveal_stage: stage,
+      furthest_completed_week: furthest,
+    } });
+  }, [furthestCompletedWeek, loaded.catalogItem.scenario_id, safeWeekIndex, updateExperience]);
   const revealedSteps = replaySteps.slice(0, revealStage);
   const visibleEntryCount = revealedSteps.filter(
     (step) => step.kind === "entry",
@@ -386,22 +442,16 @@ export function PersonaReplayExperience({
     ?? null;
 
   useEffect(() => {
-    const restored = safeWeekIndex > 0;
     setPlaying(false);
-    setRevealStage(restored ? completedStage : 0);
-    setFurthestCompletedWeek(restored ? safeWeekIndex : -1);
   }, [loaded.catalogItem.scenario_id]);
 
   useEffect(() => {
     if (nextReplayStep?.kind !== "nudge") return;
-    const expectedStage = revealStage;
     const timer = window.setTimeout(() => {
-      setRevealStage((current) =>
-        current === expectedStage ? Math.min(current + 1, completedStage) : current
-      );
+      recordProgress(Math.min(revealStage + 1, completedStage));
     }, NUDGE_REVEAL_DELAY_MS);
     return () => window.clearTimeout(timer);
-  }, [completedStage, nextReplayStep, revealStage]);
+  }, [completedStage, nextReplayStep, recordProgress, revealStage]);
 
   useEffect(() => {
     const activeWeek = weekRailRef.current?.querySelector<HTMLButtonElement>(
@@ -434,31 +484,30 @@ export function PersonaReplayExperience({
     }
     let delay = NEXT_WEEK_DELAY_MS;
     let advance = () => {
-      setRevealStage(0);
       onWeekChange(safeWeekIndex + 1);
+      recordProgress(0, safeWeekIndex + 1);
     };
     if (nextReplayStep?.kind === "nudge") return;
     if (nextReplayStep?.kind === "entry") {
       delay = ENTRY_REVEAL_DELAY_MS;
-      advance = () => setRevealStage((current) => current + 1);
+      advance = () => recordProgress(revealStage + 1);
     } else if (nextReplayStep?.kind === "result") {
       delay = RESULT_REVEAL_DELAY_MS;
       advance = () => {
-        setRevealStage(completedStage);
-        setFurthestCompletedWeek((current) =>
-          Math.max(current, safeWeekIndex)
-        );
+        recordProgress(completedStage, safeWeekIndex, Math.max(furthestCompletedWeek, safeWeekIndex));
       };
     }
     const timer = window.setTimeout(advance, delay);
     return () => window.clearTimeout(timer);
   }, [
     completedStage,
+    furthestCompletedWeek,
     isLast,
     nextReplayStep,
     onWeekChange,
     playing,
     reducedMotion,
+    recordProgress,
     resultVisible,
     revealStage,
     safeWeekIndex,
@@ -471,25 +520,26 @@ export function PersonaReplayExperience({
   const showCompletedWeek = (index: number) => {
     if (index < 0 || index >= weeks.length) return;
     setPlaying(false);
-    setRevealStage(
-      replayStepsFor(weeks[index].journal_entry_ids, allNudgeEntryIds).length,
-    );
-    setFurthestCompletedWeek((current) => Math.max(current, index));
     onWeekChange(index);
+    recordProgress(
+      replayStepsFor(weeks[index].journal_entry_ids, allNudgeEntryIds).length,
+      index,
+      Math.max(furthestCompletedWeek, index),
+    );
   };
 
   const advanceOneStep = () => {
     setPlaying(false);
     if (revealStage < completedStage) {
-      setRevealStage((current) => current + 1);
-      if (nextReplayStep?.kind === "result") {
-        setFurthestCompletedWeek((current) => Math.max(current, safeWeekIndex));
-      }
+      recordProgress(revealStage + 1, safeWeekIndex,
+        nextReplayStep?.kind === "result"
+          ? Math.max(furthestCompletedWeek, safeWeekIndex)
+          : furthestCompletedWeek);
       return;
     }
     if (!isLast) {
-      setRevealStage(0);
       onWeekChange(safeWeekIndex + 1);
+      recordProgress(0, safeWeekIndex + 1);
     }
   };
 
@@ -530,6 +580,10 @@ export function PersonaReplayExperience({
             <span>Synthetic demo · saved replay</span>
             <span>AI-reviewed development evidence · not human validation</span>
           </div>
+          <p>
+            This Persona Profile is a synthetic projection. It does not
+            represent a completed SVBWS assessment.
+          </p>
           <button
             className="inspect-run-link"
             type="button"
@@ -632,16 +686,18 @@ export function PersonaReplayExperience({
           })}
         </ol>
 
-        <div className="replay-controls__buttons">
+        <div
+          className="replay-controls__buttons"
+          style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}
+        >
           <button
             className="button button--quiet"
             type="button"
             disabled={isFirst && furthestCompletedWeek < 0 && revealStage === 0}
             onClick={() => {
               setPlaying(false);
-              setFurthestCompletedWeek(-1);
-              setRevealStage(0);
               onWeekChange(0);
+              recordProgress(0, 0, -1);
             }}
           >
             Restart
@@ -675,11 +731,12 @@ export function PersonaReplayExperience({
           </button>
           <button
             className="button button--quiet replay-controls__jump"
+            style={{ gridColumn: "1 / -1", fontSize: "0.75rem" }}
             type="button"
             disabled={safeWeekIndex === keyMomentIndex && resultVisible}
             onClick={() => showCompletedWeek(keyMomentIndex)}
           >
-            Jump to key moment
+            {keyMomentLabel(loaded.catalogItem.role, keyMomentIndex)}
           </button>
         </div>
 

@@ -371,6 +371,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   } = useSharedSession();
   const [activeDrop, setActiveDrop] = useState<DropTarget>(null);
   const [personaPickerOpen, setPersonaPickerOpen] = useState(false);
+  const [inspectCalculation, setInspectCalculation] = useState(false);
   const [loadedScenario, setLoadedScenario] = useState<LoadedScenario | null>(
     null,
   );
@@ -435,6 +436,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const showProfileCompass = !selectedPersonaId
     && !journalStarted
     && (session.stage === "summary" || session.stage === "complete");
+
+  useEffect(() => {
+    if (activeView === "experience") setInspectCalculation(false);
+  }, [activeView]);
 
   const update = (patch: Partial<OnboardingSession>) => {
     updateSession(patch);
@@ -588,7 +593,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       (event) => event.event_type === "journal_entry_submitted",
     );
   const showAssessmentInspect =
-    !selectedPersonaId && scores !== null && !hasJournalEntryWork;
+    !selectedPersonaId && scores !== null && (!hasJournalEntryWork || inspectCalculation);
 
   const resetLocalSession = (): boolean => {
     if (!restartSession()) {
@@ -734,6 +739,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     setScenarioLoadError(null);
     setPersonaPickerOpen(false);
     applyScenarioWeek(loaded, 0);
+    updateExperience({ replay_progress: null });
     return true;
   };
 
@@ -940,7 +946,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     ? "Choices set. Take a moment to review them—we’ll continue automatically."
     : !session.draft_best
       ? session.set_index === 0
-        ? "Start with Most. Across 11 groups, tap what matters most, then least, as a guide for your life. Some cards will return."
+        ? "Across 11 groups, choose Most, then Least, as a guide for your life. Choosing Least advances after one second. Some cards return."
         : "Start with Most. Tap the principle that matters most to you in this group."
       : "Now choose Least. Tap the principle that matters least to you in this group.";
 
@@ -1345,7 +1351,9 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               <p className="summary-explainer">
                 {requiresTopValueChoice
                   ? "These values share the highest result from your Most and Least choices."
-                  : "This result reflects the Most and Least choices you made most consistently across all 11 groups."}
+                  : topValueCandidates.length === 1
+                    ? "One value has the highest result from your Most and Least choices across all 11 groups. Confirm it as your Core Value."
+                    : "Two values share the highest result from your Most and Least choices across all 11 groups. Confirm them as your Core Values."}
               </p>
               <p className="summary-purpose">
                 This is the direction you want Twinkl to remember. Your Journal
@@ -1450,11 +1458,15 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                   : undefined
               }
               onboarding={showAssessmentInspect && scores ? {
-                confirmed: session.confirmed_profile !== null,
+                confirmedValues: session.confirmed_profile?.top_values ?? null,
                 responses: session.responses,
                 scores,
                 setOrder: session.set_order,
               } : undefined}
+              onToggleCalculation={!selectedPersonaId && scores && hasJournalEntryWork
+                ? () => setInspectCalculation((current) => !current)
+                : undefined}
+              syntheticProfile={Boolean(selectedPersonaId)}
               selectedEventId={session.experience.selected_event_id}
               traceLabel={
                 loadedScenario

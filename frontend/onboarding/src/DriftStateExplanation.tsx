@@ -473,6 +473,11 @@ export default function DriftStateExplanation({
             >
               <header>
                 <span>{VALUES[coreValue as ValueKey]?.name ?? coreValue}</span>
+                <strong>
+                  {state === "active_drift" ? "Active Drift"
+                    : state === "insufficient_evidence" ? "Insufficient Evidence"
+                      : "No Active Drift"}
+                </strong>
               </header>
 
               {state === "no_active_drift" ? (

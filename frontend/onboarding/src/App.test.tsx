@@ -525,6 +525,14 @@ describe("onboarding app", () => {
     const stored = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)!);
     expect(stored.confirmed_profile.top_values).toEqual(VALUE_ORDER.slice(0, 2));
     expect(stored.confirmed_profile.value_profile.top_values).toEqual(VALUE_ORDER);
+    fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
+    expect(screen.getByRole("heading", { name: "Self-Direction and Stimulation" }))
+      .toBeTruthy();
+    const mapping = screen.getByRole("region", {
+      name: "Ten-value Profile scores and Experience mapping",
+    });
+    expect(within(mapping).getAllByText("Core Value")).toHaveLength(2);
+    expect(within(mapping).getAllByText("Highest")).toHaveLength(8);
   });
 
   it("resumes preserved Journal Entries after legacy Core Value reselection", async () => {
@@ -624,7 +632,7 @@ describe("onboarding app", () => {
     ).toBeNull();
     expect(
       screen.getByText(
-        "This result reflects the Most and Least choices you made most consistently across all 11 groups.",
+        "Two values share the highest result from your Most and Least choices across all 11 groups. Confirm them as your Core Values.",
       ),
     ).toBeTruthy();
     expect(
@@ -938,6 +946,22 @@ describe("onboarding app", () => {
       "Weekly Drift Detection output stored",
       "Coach Digest response generated",
     ].forEach((label) => expect(screen.queryByText(label)).toBeNull());
+
+    await user.click(screen.getByRole("button", { name: "View Profile calculation" }));
+    expect(screen.getByText("Calculation method")).toBeTruthy();
+    expect(screen.getByText("22 recorded selections")).toBeTruthy();
+    expect(screen.getByRole("navigation", { name: "Assessment sections" })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "View recorded events" }));
+    expect(screen.queryByText("Calculation method")).toBeNull();
+    expect(within(screen.getByRole("list", { name: "Recorded events" }))
+      .getAllByRole("listitem")).toHaveLength(4);
+    await user.click(screen.getByRole("button", { name: "View Profile calculation" }));
+    await user.click(screen.getByRole("button", { name: "Experience" }));
+    await user.click(screen.getByRole("button", { name: "Inspect" }));
+    expect(screen.queryByText("Calculation method")).toBeNull();
+    expect(screen.getByRole("list", { name: "Recorded events" })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Return to Experience" }));
+    expect(screen.getByText(content)).toBeTruthy();
   });
 
   it("never substitutes fixture events when Profile trace loading fails", async () => {

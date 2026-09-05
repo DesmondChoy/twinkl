@@ -51,6 +51,13 @@ export interface PendingJournalSubmission {
   idempotency_key: string;
 }
 
+export interface ReplayProgress {
+  scenario_id: string;
+  week_index: number;
+  reveal_stage: number;
+  furthest_completed_week: number;
+}
+
 export interface ExperienceState {
   active_view: DemoView;
   data_notice_acknowledged: boolean;
@@ -64,6 +71,7 @@ export interface ExperienceState {
   error_message: string | null;
   selected_persona_id: string | null;
   selected_week: number | null;
+  replay_progress: ReplayProgress | null;
   selected_entry_id: string | null;
   selected_event_id: string | null;
   weekly_reviewer_decisions: WeeklyDriftReviewerDecisionContract[];
@@ -112,6 +120,7 @@ export function createExperienceState(): ExperienceState {
     error_message: null,
     selected_persona_id: null,
     selected_week: null,
+    replay_progress: null,
     selected_entry_id: null,
     selected_event_id: null,
     weekly_reviewer_decisions: [],
@@ -243,6 +252,16 @@ function isExperienceState(value: unknown): value is ExperienceState {
     isNullableString(value.error_message) &&
     isNullableString(value.selected_persona_id) &&
     (value.selected_week === null || (Number.isInteger(value.selected_week) && Number(value.selected_week) >= 0)) &&
+    (value.replay_progress === null || (
+      isSessionRecord(value.replay_progress) &&
+      typeof value.replay_progress.scenario_id === "string" &&
+      Number.isInteger(value.replay_progress.week_index) &&
+      Number(value.replay_progress.week_index) >= 0 &&
+      Number.isInteger(value.replay_progress.reveal_stage) &&
+      Number(value.replay_progress.reveal_stage) >= 0 &&
+      Number.isInteger(value.replay_progress.furthest_completed_week) &&
+      Number(value.replay_progress.furthest_completed_week) >= -1
+    )) &&
     isNullableString(value.selected_entry_id) &&
     Array.isArray(value.weekly_reviewer_decisions) &&
     value.weekly_reviewer_decisions.every(isSessionRecord) &&
@@ -378,6 +397,10 @@ export function parseSession(raw: string | null): OnboardingSession | null {
         confirmed_profile: confirmedProfile,
         experience,
       };
+    }
+    // Replay progress is additive to version 10; older sessions did not store it.
+    if (isSessionRecord(session.experience) && session.experience.replay_progress === undefined) {
+      session.experience = { ...session.experience, replay_progress: null };
     }
     if (
       session.schema_version !== 10 ||
