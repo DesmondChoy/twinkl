@@ -15,6 +15,8 @@ supporting capstone report materials. Submitted milestone files remain under
   charts
 - [`../../scripts/capstone/generate_report_figures.py`](../../scripts/capstone/generate_report_figures.py)
   — deterministic figure generation from committed evidence
+- [`../../scripts/capstone/generate_north_star_figure.py`](../../scripts/capstone/generate_north_star_figure.py)
+  — NSM feasibility figure and source-hash manifest from preserved run outputs
 
 ## Report Controls
 
@@ -24,7 +26,7 @@ supporting capstone report materials. Submitted milestone files remain under
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
-- **Evidence date:** 2026-08-31
+- **Evidence date:** Core paper 2026-08-31; NSM supplement 2026-09-05
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -37,8 +39,12 @@ supporting capstone report materials. Submitted milestone files remain under
 Run the following commands from the repository root:
 
 ```sh
+source .venv/bin/activate
+export UV_CACHE_DIR=/tmp/twinkl-uv-cache
 MPLCONFIGDIR=/tmp/twinkl-matplotlib \
   uv run python scripts/capstone/generate_report_figures.py
+MPLCONFIGDIR=/tmp/twinkl-matplotlib \
+  uv run python scripts/capstone/generate_north_star_figure.py
 quarto render docs/capstone_report/capstone_project_report.md --to pdf
 ```
 
@@ -53,8 +59,26 @@ The rendered report cites the committed
 [Coach Digest Validations](../../logs/experiments/reports/coach_digest_validations_20260824/report.md),
 and [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
 for the five saved Persona key weeks. This result is same-model AI review. The
-independent-provider and Drift/control tooling has no committed paid result and
+independent-provider Coach Digest and Drift/control tooling has no committed paid result and
 does not change the report's evidence claim.
+
+The September NSM supplement is separate from Coach Digest Evals. Its
+[Phase 0A retrieval gate](../../logs/experiments/reports/north_star_phase0_20260905/README.md)
+passed, but [Phase 0B](../../logs/experiments/reports/north_star_phase0b_20260905/README.md)
+failed: independent AI reference review accepted 12/19 selected quotations,
+correct omission was 5/9, and two of 29 OpenAI attempts were contract-invalid.
+The 61 attempts cost US$0.2062 at frozen rates. The paper adds the experimental
+architecture, measured results, limitations, and an offline evidence walkthrough;
+it does not claim NSM application integration or browser QC. The supplement is
+backed by frozen code and raw evidence in
+[`f3030c8d`](https://github.com/DesmondChoy/twinkl/tree/f3030c8deb9400685185e7c620bda53a6f58e8aa),
+with input and code hashes linked from Appendix A. The older evidence links still support
+only the earlier studies.
+
+The regenerated 37-page PDF was visually inspected on every page. The
+[verification record](../../logs/experiments/reports/north_star_phase0b_20260905/validation.json)
+includes the report hashes, validation scope, and saved PDF QC captures;
+those captures are distinct from the blocked NSM browser QC.
 
 ## Submission Checks
 

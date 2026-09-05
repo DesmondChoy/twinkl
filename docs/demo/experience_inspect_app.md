@@ -2,6 +2,12 @@
 
 ## Status
 
+North Star Moment is absent from both application paths. Its 5 September 2026
+[development feasibility gate](../../logs/experiments/reports/north_star_phase0b_20260905/README.md)
+failed, so the specification requires retaining the existing Coach Digest
+behavior. The offline review prototype has no React card or NSM Inspect events;
+the requested NSM browser walkthrough remains blocked by that gate.
+
 This document specifies the capstone assessment experience. The shared React
 Experience and Inspect shell, resumable client session, view selector, and
 focused Inspect navigation are implemented. Manual Journal Entry processing,

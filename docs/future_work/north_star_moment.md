@@ -1,6 +1,19 @@
 # North Star Moment
 
-**Status:** Design specification.
+**Status:** Blocked at the Phase 0B feasibility gate under `twinkl-fz34`. The
+[Phase 0A retrieval gate](../../logs/experiments/reports/north_star_phase0_20260905/retrieval.json)
+passed: top-3 found an earlier positive-label Journal Entry in 21 of 22 eligible
+development histories (95.5%), so k is frozen at 3. The user approved a small
+separate benchmark and the paid-work limits below on 5 September 2026.
+[Phase 0B](../../logs/experiments/reports/north_star_phase0b_20260905/README.md)
+failed: independent AI reference review accepted 12 of 19 selected quotations
+(63.2%), correct omission was 5 of 9 nonempty histories with no valid example
+(55.6%), and 2 of 29 OpenAI attempts failed the response contract (6.9%).
+The 61 paid attempts cost US$0.2062 at the frozen rates. Per the stop rule,
+dependent implementation and final evaluation have not proceeded. The offline
+retrieval/review prototype and reproducible evidence are implemented; the
+Experience, Inspect, saved Persona bundles, and Coach Digest remain unchanged.
+NSM browser QC, screenshots, and fresh onboarding integration are blocked.
 
 **First version:** Both frontend paths: the demo with all five saved Personas
 and onboarding from scratch with the user's own writing. Each reviewed week
@@ -216,13 +229,13 @@ card, without imposing a minimum percentage. Report counts alongside rates.
 Report deliberately injected failures separately from unexpected provider
 failures.
 
-**Decision 11 remains open: which histories should be reserved for evaluation?**
+**Decision 11 adopted on 5 September 2026: reserve a small, separate benchmark.**
 Development histories are examples used to adjust the prompt or retrieval.
 Final evaluation histories are examples examined after those choices are
 finished. Adjusting a prompt after seeing its test answers can make the
 reported result look better than performance on unseen writing.
 
-The options are:
+The considered options were:
 
 1. **Recommended:** Reserve a small, separate benchmark covering the required
    cases. Keep its histories out of North Star Moment prompt development.
@@ -231,8 +244,18 @@ The options are:
 3. Use development histories only and report feasibility evidence. Defer final
    evaluation.
 
-This decision must be recorded before assigning histories or requesting
-task-specific reference decisions.
+The user approved option 1 before history assignment. Eight entire non-demo
+Persona histories were reserved using seed 20260905 and SHA-256 identifier
+ordering; the other 27 Personas supply 33 development Drift episodes. The
+[frozen cohort](../../logs/experiments/reports/north_star_phase0_20260905/cohort.json)
+records identifiers, source hash, selection method, and approval. Saved Persona
+demos and onboarding QC are separate from final evaluation.
+
+The approved paid envelope is US$20 total, US$0.25 per attempt, and at most one
+retry per request, including offline/live review, reference decisions, browser
+validation calls, and evaluation. SDK retries are disabled. The frozen
+[policy](../../config/evals/north_star_moment_v1.json) records the runtime and
+reference models, token/timeout limits, rates, and local hosting choice.
 
 ## 7. Work plan and completion
 
@@ -483,9 +506,9 @@ report the development denominator separately from the full baseline. Group
 related replay cutoffs and Core Values from the same Persona to avoid reuse
 of the same writing across both groups.
 
-Decision 11 must be resolved before assigning these histories. If the
-development-only option is adopted, report the development results and list
-final evaluation as outstanding work.
+Decision 11 is resolved as the small separate benchmark. Reserved Persona
+histories must remain excluded from retrieval tuning and prompt development;
+final evaluation stays outstanding until the frozen implementation is evaluated.
 
 #### Benchmark cases and reference decisions
 

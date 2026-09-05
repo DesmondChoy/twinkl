@@ -1,0 +1,9 @@
+{
+  "generator": "scripts/capstone/generate_north_star_figure.py",
+  "inputs": {
+    "logs/experiments/reports/north_star_phase0_20260905/retrieval.json": "e394dbfe823011b718cad28da078054114ca7c910ceb6daa51f075e8fd9dfb5c",
+    "logs/experiments/reports/north_star_phase0b_20260905/report.json": "5849cb816cc2a44ca39f7a1455d8cfb8f81fdbd4a519cbe947d76ad3c2bb08ec"
+  },
+  "output": "docs/capstone_report/images/north-star-feasibility.png",
+  "scope": "AI-reviewed synthetic development evidence; Phase 0B failed"
+}

@@ -1,5 +1,14 @@
 # VIF Experiment Index
 
+The separate [North Star Moment feasibility study
+(2026-09-05)](reports/north_star_phase0b_20260905/README.md) does not change the
+VIF Critic (Offline) frontier. Its local retrieval proxy gate passed at k=3
+(21/22), but independent AI reference review accepted only 12/19 selected
+quotations and correct omission was 5/9. Phase 0B failed, stopping application
+integration and leaving the NSM-reserved histories unevaluated. The report
+records the frozen protocol, 61 paid attempts costing US$0.2062, failure audit,
+and the boundary between offline evidence and unimplemented browser behavior.
+
 ## Historical Corrected-Split Frontier (Post-d937094 Split)
 
 This table preserves the QWK-led policy used to select the historical frontier.

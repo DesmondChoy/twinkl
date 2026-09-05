@@ -1,0 +1,88 @@
+{
+  "branch": "codex/north-star-moment",
+  "date": "2026-09-05",
+  "hashes": {
+    "docs/capstone_report/capstone_project_report.md": "01906c1a4df22705845147b79af6872f300b861e709a0911422b1d09dc5d00dc",
+    "docs/capstone_report/capstone_project_report.pdf": "1c1a5a3d3d0361d4e0b5fc21895aaadb906f90fad8b17c23073fb95e71573b7e",
+    "docs/capstone_report/images/north-star-feasibility.png": "e546d624794878f1b2122da624e63fdd19efc86da672d5ced86c4a3ad8632608",
+    "logs/experiments/reports/north_star_phase0b_20260905/report.json": "5849cb816cc2a44ca39f7a1455d8cfb8f81fdbd4a519cbe947d76ad3c2bb08ec"
+  },
+  "implementation_status": "blocked_at_phase0b",
+  "mypy": {
+    "flags": [
+      "--explicit-package-bases",
+      "--follow-imports=silent"
+    ],
+    "limitation": "Full-import Phase0A check retains five pre-existing wrangling/registry errors",
+    "source_files": 7,
+    "status": "passed"
+  },
+  "not_run": [
+    "Full repository pytest suite",
+    "Frontend tests/build",
+    "Frontend/backend launch for NSM",
+    "Narrow/wide browser QC on five Personas and fresh onboarding",
+    "NSM source-change invalidation and browser interaction checks",
+    "Reserved final evaluation"
+  ],
+  "pdf_qc": {
+    "fixes": [
+      "Separated chart gate label from counts",
+      "Kept Table2 caption on table page",
+      "Reduced existing screenshot display width to keep Table7 caption on table page"
+    ],
+    "method": "Poppler PNG render; visual inspection of every page, enlarged checks of changed figure and table/caption pages",
+    "not_browser_qc": true,
+    "pages": 37,
+    "publication_recheck": {
+      "changed_pages": [
+        32,
+        34,
+        35,
+        36,
+        37
+      ],
+      "method": "Rendered all 37 pages with identical Poppler settings; 32 pages are pixel-identical to the previously inspected PDF. Visually inspected all five changed pages and refreshed saved captures.",
+      "unchanged_pages": 32
+    },
+    "saved_page_images": [
+      "report_qc/pdf-page-17.png",
+      "report_qc/pdf-page-28.png",
+      "report_qc/pdf-page-37.png"
+    ],
+    "status": "passed"
+  },
+  "publishing": {
+    "branch": "codex/north-star-moment",
+    "evidence_commit": "f3030c8deb9400685185e7c620bda53a6f58e8aa",
+    "scope": "User authorized grouped commits and push after the failed-gate checkpoint; final publication outcome recorded in Beads twinkl-fz34."
+  },
+  "pytest": {
+    "focused_nsm_passed": 110,
+    "passed": 249,
+    "targets": [
+      "tests/north_star",
+      "tests/evals/test_north_star_phase0.py",
+      "tests/evals/test_north_star_phase0b.py",
+      "tests/demo",
+      "tests/coach",
+      "tests/test_drift_detector.py",
+      "tests/test_weekly_drift_reviewer.py"
+    ],
+    "warnings": "Existing deprecated Coach runtime calls only; no failures"
+  },
+  "quality_review": {
+    "evidence_integrity": "All frozen source, chronology and execution checks pass; 61 ledger attempts reproduce saved summary",
+    "findings": [
+      "Preparation does not reject source edits against frozen retrieval hashes",
+      "Replaying an exhausted failure attempts another retry and raises BudgetError"
+    ],
+    "followup": "twinkl-fz34.9",
+    "status": "completed_with_tracked_findings",
+    "verification_reuse": "No experimental code or test changes since the passing 249-test, Ruff and isolated MyPy checkpoint; fresh review used synthetic temporary reproductions only."
+  },
+  "ruff": {
+    "scope": "New NSM modules, experiment scripts, tests, and figure generator",
+    "status": "passed"
+  }
+}
