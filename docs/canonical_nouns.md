@@ -7,6 +7,10 @@ for product behavior; this document standardizes how that behavior is named.
 These rules govern prose. They do not require renaming code identifiers, data
 fields, file paths, or historical records.
 
+These are naming rules for defined Twinkl concepts, not a general vocabulary
+restriction. Use natural, precise language for other subjects and explain
+unfamiliar technical terms when needed.
+
 ## How to Use This Glossary
 
 - Use the canonical noun whenever its definition applies.

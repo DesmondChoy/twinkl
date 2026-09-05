@@ -27,15 +27,25 @@ The VIF Critic (Offline) research stack includes ordinal MLP heads with MC Dropo
 
 The experiment log tracks VIF Critic (Offline) training runs. The canonical frontier driver, `scripts/experiments/critic_training_v4_review.py`, writes metadata, configurations, model capacity, selection traces, alternate checkpoints, and evaluation metrics to `logs/experiments/`.
 
-An AI **experiment-review skill** acts as an autonomous data science partner to process these runs. Rather than mechanically tuning hyperparameters, it synthesizes results to provide research-backed insights and hypotheses.
+The **experiment-review skill** compares VIF Critic (Offline) runs relevant to
+the requested question. It uses the PRD and delegated specifications for current
+scope and decisions, then checks run records and saved results for evidence.
 
-**To trigger it:** Point any capable LLM at `.claude/skills/experiment-review/SKILL.md` and ask it to read the skill and run it via the instructions.
+**To use it:** Ask the assistant to read the
+[experiment-review skill](../../.claude/skills/experiment-review/SKILL.md) and
+review the specified runs or research question.
 
 **What it does:**
-- **Intelligent Backfilling**: Reads `git` logs and configuration diffs to reconstruct the rationale for past runs, automatically backfilling missing provenance and observations.
-- **Data Science Partner**: Synthesizes interacting variables (e.g., encoder choice vs model capacity) to form hypotheses about the model's fundamental understanding of the task.
-- **Research Colleague**: Actively browses the web for state-of-the-art literature to validate its recommendations for next-step experiments.
-- **Reporting**: Produces a structured analysis of metric trade-offs (e.g., hedging vs minority recall), logs compact circumplex summaries, and maintains a leaderboard of the best models.
+
+- Compares compatible data splits, labels, inputs, and metric definitions,
+  with summaries across model seeds when available.
+- Explains metric trade-offs and checks for confounding changes before making
+  causal claims. Keeps inferred explanations separate from recorded rationale.
+- Investigates relevant saved results and consults primary research when
+  recommendations depend on current methods.
+- Reports findings, uncertainty, and next steps appropriate to current capstone
+  scope. A review leaves run records and the experiment index unchanged;
+  saving a report or updating documentation follows the authorized task scope.
 
 ### LLM Context Baseline
 

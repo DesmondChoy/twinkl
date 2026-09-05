@@ -18,6 +18,11 @@ For product, architecture, or evaluation decisions:
 Keep work practical: prefer the smallest complete, testable change over a broad
 rewrite or speculative architecture.
 
+Explore alternative approaches when they could materially improve the result.
+Challenge existing assumptions with evidence. Make routine implementation
+decisions autonomously within the authorized scope, and identify proposals
+that require a new product or research decision.
+
 ## Product and Data Invariants
 
 - Async persona generation is parallel between personas and sequential within
@@ -123,7 +128,8 @@ Use `bd` for implementation, durable research, and documentation work. Run
 
 Verify in proportion to risk before describing work as complete:
 
-1. Read the complete changed files, not only the diff.
+1. Read the changed logic, relevant surrounding context, and affected callers.
+   Read the complete file when behavior or structure spans the file.
 2. Run targeted tests and Ruff checks for touched code; run broader checks when
    shared contracts or critical paths changed.
 3. Run MyPy when type behavior or typed interfaces changed.
@@ -146,14 +152,13 @@ decisions change. Do not perform a generic documentation sweep by default.
 
 ## Communication
 
-- All Codex prose on every surface, including Codex app commentary, plans,
-  Beads issue text, reviews, handoffs, and maintained documentation, must
-  strictly follow `docs/canonical_nouns.md`.
-- Use approved words only, and use each word only with its approved meaning.
-  Treat the canonical nouns as approved project technical terms.
-- Use one term for one meaning. Do not use a different term only for variety.
-- Outside academic papers and research reports, prefer short sentences, active
-  voice, and one main idea per sentence. Keep one topic in each paragraph.
+- Use canonical product names from `docs/canonical_nouns.md` whenever their
+  definitions apply. Otherwise, use natural, precise language suited to the
+  audience. Explain unfamiliar technical terms when needed.
+- Keep terminology consistent for each defined product concept.
+- Outside academic papers and research reports, prefer concise prose, active
+  voice, and paragraphs that develop one topic. Vary sentence structure when
+  it makes an explanation clearer.
 - For academic papers and research reports, use connected academic prose with
   varied sentence length and paragraphs that develop an argument. Do not apply
   ASD-STE100 Simplified Technical English or force each sentence to carry only
@@ -163,12 +168,11 @@ decisions change. Do not perform a generic documentation sweep by default.
   consolidate detailed limitations in the limitations section.
 - The academic-prose exception does not relax canonical nouns, factual
   precision, source disclosure, or evidence boundaries.
-- Define a necessary technical term in plain English when it first occurs.
 - Do not invent synonyms for canonical product terms. This prose rule does not
   require renaming code identifiers, data fields, file paths, or historical
   records.
-- Name the exact component, data, experiment setup, or output instead of vague
-  words such as “system,” “surface,” “condition,” or “artifact.”
+- Name the exact component, data, experiment setup, or output when a general
+  term would be ambiguous.
 - In non-trivial handoffs, summarize material assumptions, the chosen approach,
   verification performed, and remaining risks.
 

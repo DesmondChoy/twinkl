@@ -1,84 +1,73 @@
 ---
 name: quality
-description: Review recent code changes with "fresh eyes" and fix any issues found. Use before commits to catch bugs that accumulate during implementation.
-allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(git show:*), Read, Edit, Glob, Grep
+description: Review scoped code or documentation changes for correctness, integration, and relevant verification. Use when a quality review is requested or before an authorized commit; fix findings only within an authorized implementation task.
 ---
 
-Review all code changes with "fresh eyes" before committing. This catches bugs that accumulate during implementation when focus is on making things work.
+# Quality Review
 
-## Why This Matters
+Review the requested changes with a fresh examination of their assumptions,
+affected behavior, and evidence. Follow the user's scope and the repository's
+[AGENTS.md](../../../AGENTS.md).
 
-During implementation, we focus on "does it work?" and can miss:
-- Logic errors that compile but behave incorrectly
-- Missing error handling for edge cases
-- Type mismatches or implicit conversions
-- Dead code or unused imports
-- Integration issues between components
+## Choose the Mode from Existing Authorization
 
-## Process
+- **Review-only:** For a review or inspection request, report actionable
+  findings without editing files or changing issue state. An explicit
+  read-only instruction takes precedence over earlier implementation authority.
+- **Review and fix:** During authorized implementation, or when the user asks
+  for fixes, correct relevant findings within that scope. Explain findings
+  that need a new design decision or changes outside the authorized scope.
 
-### 1. Identify Changed Files
+A standalone `/quality` request defaults to review-only unless fixes are
+already authorized by the task. Do not ask again for permission already given.
+Neither mode authorizes staging, committing, or publishing by itself.
 
-```bash
-git status
-git diff HEAD --name-only
-```
+## Establish the Changes Under Review
 
-### 2. Read ENTIRE Files (Not Just Diffs)
+Use the requested files, commit, or comparison as the scope. For current local
+work, inspect `git status --short`, `git diff`, and `git diff --cached` to
+understand staged, unstaged, and untracked files. Review relevant untracked
+files explicitly; they do not appear in ordinary diffs.
 
-For each changed file, read the **complete file** to understand full context. Diffs show what changed but hide the surrounding code that may be affected.
+Keep unrelated working-tree changes outside the repair scope. When reviewing
+for an authorized commit, distinguish the intended changes from other local
+work. Read changed logic, relevant surrounding context, affected callers, and
+tests. Read entire files when their behavior or structure requires it.
 
-### 3. Review Checklist
+## Review Relevant Risks
 
-For each file, check:
+Use the checks that apply to the changes:
 
-**Logic & Correctness**
-- [ ] Does the logic match the intended behavior?
-- [ ] Are edge cases handled (null, empty, boundary values)?
-- [ ] Are error conditions caught and handled appropriately?
+- **Correctness:** Does the behavior match the request and current contracts?
+  Check boundaries, empty inputs, error handling, and failure recovery.
+- **Types and integration:** Trace changed interfaces through their callers.
+  Check request and response shapes, state transitions, and persistence.
+- **Project invariants:** Check the relevant product scope, input visibility,
+  value-leakage protections, label provenance, and AI-review evidence limits.
+- **Maintainability:** Identify dead code, unused imports, accidental debug
+  remnants, or misleading names introduced or made obsolete by the change.
+  Preserve intentional logging and avoid unrelated cleanup.
+- **Documentation:** Verify affected claims, commands, links, and canonical
+  product names against current behavior and source reports.
 
-**Type Safety**
-- [ ] Are types consistent throughout the call chain?
-- [ ] Are there implicit type conversions that could fail?
+Report reproducible defects or specific contract risks. Separate them from
+optional design preferences, and distinguish pre-existing issues from
+regressions in the reviewed changes.
 
-**Integration**
-- [ ] Do function signatures match their call sites?
-- [ ] Are API contracts (request/response shapes) consistent?
-- [ ] Do state updates flow correctly between components?
+## Verify and Report
 
-**Code Hygiene**
-- [ ] Remove dead code, unused imports, commented-out code
-- [ ] Remove debug statements (console.log, print, etc.)
-- [ ] Are variable names clear and consistent?
+In review-and-fix mode, make the smallest complete correction and recheck the
+affected behavior. Use targeted tests and Ruff for touched code, MyPy when type
+behavior changes, and broader checks when shared contracts or critical paths
+warrant them. For documentation-only changes, check references, consistency,
+and claims. Existing relevant verification can be reused if the reviewed
+changes have not invalidated it.
 
-### 4. Fix Issues Immediately
+Once relevant checks pass, broaden or repeat them only when a new change,
+failure, or unresolved risk warrants it. State unavailable checks explicitly.
+Inspect the final scoped diff and Git status after fixes.
 
-When you find an issue:
-1. Fix it using the Edit tool
-2. Document what you fixed in the summary
-
-Do NOT just flag issues—fix them. Only flag issues that require human judgment (design decisions, unclear requirements).
-
-### 5. Report Summary
-
-After reviewing all files, provide:
-
-```
-## Quality Review Summary
-
-**Files Reviewed:** <list>
-
-**Issues Fixed:**
-- <file>: <what was fixed and why>
-
-**Issues for Human Review:** (if any)
-- <file>: <issue that requires human decision>
-
-**Confidence:** <High/Medium/Low> - <brief explanation>
-```
-
-## When to Run
-
-- Before any `git commit`
-- When requested with `/quality`
-- After completing a significant implementation task
+Report the scope and mode, actionable findings or fixes, verification results,
+and remaining limitations. Link findings to the relevant file and location and
+explain the trigger and consequence. If no actionable findings remain, say so
+without claiming broader correctness than the review established.
