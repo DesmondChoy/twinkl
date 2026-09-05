@@ -1,0 +1,2378 @@
+{
+  "availability_validation": "Every ranked source matches its original text hash, canonical owner, date and stored order, and the ranking contains every eligible source. Sources precede onset in stored order and do not exceed its date; onset, confirmation and end match the source history. Reserved Persona files receive byte-hash checks only and are never parsed.",
+  "budget_preflight": {
+    "authorized_total_usd": 20.0,
+    "case_bounds": [
+      {
+        "baseline_attempt_usd": 0.0861465,
+        "candidate_attempt_usd": 0.0870405,
+        "case_id": "02fb94f3:tradition:episode_01",
+        "runtime_attempt_usd": 0.0124249
+      },
+      {
+        "baseline_attempt_usd": 0.0859815,
+        "candidate_attempt_usd": 0.0870405,
+        "case_id": "02fb94f3:tradition:episode_02",
+        "runtime_attempt_usd": 0.0124289
+      },
+      {
+        "baseline_attempt_usd": 0.085779,
+        "candidate_attempt_usd": 0.085779,
+        "case_id": "110fcd4f:conformity:episode_01",
+        "runtime_attempt_usd": 0.01209665
+      },
+      {
+        "baseline_attempt_usd": 0.0867315,
+        "candidate_attempt_usd": 0.0867315,
+        "case_id": "11de77e8:self_direction:episode_01",
+        "runtime_attempt_usd": 0.0122489
+      },
+      {
+        "baseline_attempt_usd": 0.0867315,
+        "candidate_attempt_usd": 0.0882615,
+        "case_id": "11de77e8:self_direction:episode_02",
+        "runtime_attempt_usd": 0.0126769
+      },
+      {
+        "baseline_attempt_usd": 0.0858405,
+        "candidate_attempt_usd": 0.0872805,
+        "case_id": "1496159d:universalism:episode_01",
+        "runtime_attempt_usd": 0.01232165
+      },
+      {
+        "baseline_attempt_usd": 0.0885315,
+        "candidate_attempt_usd": 0.0885315,
+        "case_id": "152df7a4:universalism:episode_01",
+        "runtime_attempt_usd": 0.0123254
+      },
+      {
+        "baseline_attempt_usd": 0.0869505,
+        "candidate_attempt_usd": 0.0869505,
+        "case_id": "2541429a:tradition:episode_01",
+        "runtime_attempt_usd": 0.0124409
+      },
+      {
+        "baseline_attempt_usd": 0.0873105,
+        "candidate_attempt_usd": 0.0873105,
+        "case_id": "3a3b15e4:tradition:drift_01",
+        "runtime_attempt_usd": 0.012516649999999999
+      },
+      {
+        "baseline_attempt_usd": 0.0870195,
+        "candidate_attempt_usd": 0.0881505,
+        "case_id": "5fa8b540:universalism:episode_01",
+        "runtime_attempt_usd": 0.01256665
+      },
+      {
+        "baseline_attempt_usd": 0.0872535,
+        "candidate_attempt_usd": 0.0890085,
+        "case_id": "66ced716:universalism:episode_01",
+        "runtime_attempt_usd": 0.0129384
+      },
+      {
+        "baseline_attempt_usd": 0.0882495,
+        "candidate_attempt_usd": 0.0889425,
+        "case_id": "742c98d6:universalism:episode_01",
+        "runtime_attempt_usd": 0.01295615
+      },
+      {
+        "baseline_attempt_usd": 0.0886545,
+        "candidate_attempt_usd": 0.0886545,
+        "case_id": "742c98d6:universalism:episode_02",
+        "runtime_attempt_usd": 0.01295065
+      },
+      {
+        "baseline_attempt_usd": 0.0855915,
+        "candidate_attempt_usd": 0.0879855,
+        "case_id": "7adc5866:benevolence:drift_01",
+        "runtime_attempt_usd": 0.012514899999999999
+      },
+      {
+        "baseline_attempt_usd": 0.086898,
+        "candidate_attempt_usd": 0.087429,
+        "case_id": "7c712a0a:conformity:episode_01",
+        "runtime_attempt_usd": 0.01249215
+      },
+      {
+        "baseline_attempt_usd": 0.087537,
+        "candidate_attempt_usd": 0.087996,
+        "case_id": "7ff1d0fb:security:episode_01",
+        "runtime_attempt_usd": 0.0127164
+      },
+      {
+        "baseline_attempt_usd": 0.085539,
+        "candidate_attempt_usd": 0.087228,
+        "case_id": "87e92805:security:episode_02",
+        "runtime_attempt_usd": 0.01250165
+      },
+      {
+        "baseline_attempt_usd": 0.086883,
+        "candidate_attempt_usd": 0.087723,
+        "case_id": "87e92805:security:episode_03",
+        "runtime_attempt_usd": 0.0125249
+      },
+      {
+        "baseline_attempt_usd": 0.0854925,
+        "candidate_attempt_usd": 0.0889125,
+        "case_id": "8f83c818:universalism:episode_01",
+        "runtime_attempt_usd": 0.01250715
+      },
+      {
+        "baseline_attempt_usd": 0.085131,
+        "candidate_attempt_usd": 0.085131,
+        "case_id": "8fcd7947:security:episode_01",
+        "runtime_attempt_usd": 0.012039649999999999
+      },
+      {
+        "baseline_attempt_usd": 0.0856305,
+        "candidate_attempt_usd": 0.0856305,
+        "case_id": "988d1a65:power:episode_01",
+        "runtime_attempt_usd": 0.012223649999999999
+      },
+      {
+        "baseline_attempt_usd": 0.0856395,
+        "candidate_attempt_usd": 0.0884715,
+        "case_id": "9d126412:power:episode_01",
+        "runtime_attempt_usd": 0.0125164
+      },
+      {
+        "baseline_attempt_usd": 0.0869625,
+        "candidate_attempt_usd": 0.0869625,
+        "case_id": "bf44e50f:hedonism:episode_01",
+        "runtime_attempt_usd": 0.0122804
+      },
+      {
+        "baseline_attempt_usd": 0.088332,
+        "candidate_attempt_usd": 0.088332,
+        "case_id": "dbe2c53d:conformity:episode_01",
+        "runtime_attempt_usd": 0.01245965
+      },
+      {
+        "baseline_attempt_usd": 0.0856305,
+        "candidate_attempt_usd": 0.0883785,
+        "case_id": "dbe2c53d:universalism:episode_01",
+        "runtime_attempt_usd": 0.0124824
+      },
+      {
+        "baseline_attempt_usd": 0.0869805,
+        "candidate_attempt_usd": 0.0870105,
+        "case_id": "e5c9d9e5:power:episode_01",
+        "runtime_attempt_usd": 0.0125799
+      },
+      {
+        "baseline_attempt_usd": 0.087933,
+        "candidate_attempt_usd": 0.087933,
+        "case_id": "e6838e16:security:episode_01",
+        "runtime_attempt_usd": 0.0125274
+      },
+      {
+        "baseline_attempt_usd": 0.0850725,
+        "candidate_attempt_usd": 0.0850725,
+        "case_id": "ed67c9cc:hedonism:episode_01",
+        "runtime_attempt_usd": 0.012010149999999999
+      }
+    ],
+    "inherited_spent_or_reserved_usd": 0.20617785,
+    "max_attempts_per_request": 2,
+    "maximum_cumulative_usd": 10.65733875,
+    "maximum_new_spent_or_reserved_usd": 10.4511609,
+    "method": "UTF-8 input bound plus schema margin and maximum output tokens; all runtime, baseline and candidate requests include one retry. Existing exhaustive references are required and reused. No cache discount assumed.",
+    "per_attempt_ceiling_usd": 0.25
+  },
+  "case_count": 33,
+  "cases": [
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "02fb94f3:entry:3",
+          "journal_entry": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called to say my cousin Rania is getting engaged and when am I bringing Sami to visit. Everything requires something from me and I have nothing left to give right now.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:2",
+          "journal_entry": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the soup is in the fridge now, I guess.\n\nFinished a draft of the logo I've been working on. The client wants revisions but at least the base concept is solid. I had to work on it in the bathroom because Sami was asleep in the bedroom and the living room was occupied. Sat on the edge of the bathtub with my laptop balanced on the hamper. It's ridiculous but it's the only place I can close a door without anyone asking what I'm doing.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:1",
+          "journal_entry": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm the one who knows what dose of medicine to give, what temperature means we go to the clinic. I didn't rest.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:0",
+          "journal_entry": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had finally gotten him into a rhythm that gave me two hours in the evening to work on a logo project. That's gone now.\n\nI stood there in the kitchen holding a cup of tea and I just didn't say anything. Tariq looked at me like he expected me to agree. His mother was already moving the crib blanket to the other room. I could feel my jaw clenching but I smiled. I hate that I smiled. Something about the way everyone just decided felt like they forgot I'm his mother, not a guest in this arrangement.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "tradition"
+      ],
+      "case_id": "02fb94f3:tradition:episode_01",
+      "core_value": "tradition",
+      "episode": {
+        "canonical_case_id": "02fb94f3:tradition",
+        "cohort_source": "twinkl_qtwz_complete_review",
+        "confirmation_date": "2025-05-02",
+        "confirmation_position": 6,
+        "confirmation_t_index": 5,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "tradition",
+        "end_date": "2025-05-05",
+        "end_position": 7,
+        "end_t_index": 6,
+        "episode_id": "02fb94f3:tradition:episode_01",
+        "historical_split": "training",
+        "length": 3,
+        "onset_date": "2025-05-02",
+        "onset_position": 5,
+        "onset_t_index": 4,
+        "persona_id": "02fb94f3"
+      },
+      "runtime_entry_ids": [
+        "02fb94f3:entry:3",
+        "02fb94f3:entry:2",
+        "02fb94f3:entry:1"
+      ],
+      "value": {
+        "definition": "Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+        "text": "search_query: Honoring the customs and practices I was raised with. Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+        "user_phrase": "Honoring the customs and practices I was raised with"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "02fb94f3:entry:5",
+          "journal_entry": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I felt like myself for the first time in weeks. I held Sami on my hip and I felt steady.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:3",
+          "journal_entry": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called to say my cousin Rania is getting engaged and when am I bringing Sami to visit. Everything requires something from me and I have nothing left to give right now.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:2",
+          "journal_entry": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the soup is in the fridge now, I guess.\n\nFinished a draft of the logo I've been working on. The client wants revisions but at least the base concept is solid. I had to work on it in the bathroom because Sami was asleep in the bedroom and the living room was occupied. Sat on the edge of the bathtub with my laptop balanced on the hamper. It's ridiculous but it's the only place I can close a door without anyone asking what I'm doing.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:6",
+          "journal_entry": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what I'm saving for exactly. Maybe a better laptop. Maybe just proof that I can do something that isn't cooking and wiping noses.\n\nTariq doesn't know about the envelope. I'm not hiding it because I think he'd be angry, more because he'd want to \"help manage it\" and then it wouldn't feel like mine anymore. My father always handled my mother's money. She'd get her teacher's salary and hand it over and he'd decide what the household needed. She never complained about it. I think about that a lot. I don't want to not complain about it. I want a reason not to need to.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:8",
+          "journal_entry": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story he tells everyone about building the house stone by stone. Sami just chewed on a lemon leaf.\n\nI sat with the women while the men did their thing. Tariq's aunt made sage tea the old way, on a brass tray over coals. It was good. Quiet. I sketched some patterns on a napkin -- the tile work in the courtyard is beautiful, these geometric interlocking shapes I've been wanting to use in a design project. Nobody noticed me drawing, which was the whole point.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:4",
+          "journal_entry": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how I arrange the pastries on the tray. Told me that's not how they do it in their family. It's been two years, I still arrange things wrong apparently.\n\nTariq gave me money to buy a new outfit for Eid. I picked something I liked -- a dark green dress with embroidery on the sleeves. When I showed it to his mother she said it was pretty but maybe something more \"appropriate for a young mother\" would be better. I don't even know what that means. I put the dress in my closet anyway. I'll wear it.\n\nMy own mother sent a voice note about how she wishes I could spend Eid at their house this year. First Eid is always with the husband's family, she knows that, but she said it anyway. So now I feel guilty about being here and guilty about not being there. Sami won't remember any of this. I'm doing all of it for people who have opinions about trays and dresses.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:7",
+          "journal_entry": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring my phone on purpose.\n\nRan into Um Fadi from the building. She asked if I was working these days, meaning a real job. I said no, just home with Sami. She nodded the way people nod when they think they're being polite but their face says everything. I used to let that bother me. Today I just picked Sami up and pointed at a bird and we moved on.\n\nTariq's mother made mansaf for dinner and I helped her roll the jameed. She showed me her mother's technique with the wooden spoon and for once it wasn't corrective, it was like she was sharing something. I actually paid attention. Her hands move fast for someone her age. The rice came out perfectly and she said \"you're learning\" and I think she meant it warmly. These moments confuse me because they make me forget why I'm frustrated. Or maybe they're exactly why I stay patient through the rest of it.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:1",
+          "journal_entry": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm the one who knows what dose of medicine to give, what temperature means we go to the clinic. I didn't rest.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "02fb94f3:entry:0",
+          "journal_entry": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had finally gotten him into a rhythm that gave me two hours in the evening to work on a logo project. That's gone now.\n\nI stood there in the kitchen holding a cup of tea and I just didn't say anything. Tariq looked at me like he expected me to agree. His mother was already moving the crib blanket to the other room. I could feel my jaw clenching but I smiled. I hate that I smiled. Something about the way everyone just decided felt like they forgot I'm his mother, not a guest in this arrangement.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "tradition"
+      ],
+      "case_id": "02fb94f3:tradition:episode_02",
+      "core_value": "tradition",
+      "episode": {
+        "canonical_case_id": "02fb94f3:tradition",
+        "cohort_source": "twinkl_qtwz_complete_review",
+        "confirmation_date": "2025-05-22",
+        "confirmation_position": 11,
+        "confirmation_t_index": 10,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "tradition",
+        "end_date": "2025-05-22",
+        "end_position": 11,
+        "end_t_index": 10,
+        "episode_id": "02fb94f3:tradition:episode_02",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-05-15",
+        "onset_position": 10,
+        "onset_t_index": 9,
+        "persona_id": "02fb94f3"
+      },
+      "runtime_entry_ids": [
+        "02fb94f3:entry:5",
+        "02fb94f3:entry:3",
+        "02fb94f3:entry:2"
+      ],
+      "value": {
+        "definition": "Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+        "text": "search_query: Honoring the customs and practices I was raised with. Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+        "user_phrase": "Honoring the customs and practices I was raised with"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "110fcd4f:entry:0",
+          "journal_entry": "Sat through the whole lab meeting biting my tongue while Felix presented my preprocessing idea as his own. Didn't say anything. Walked home in the rain and honestly the cold felt better than sitting in that room. At least I know the idea works \u2014 that's mine regardless of who gets credit.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "one_earlier_entry",
+        "conformity"
+      ],
+      "case_id": "110fcd4f:conformity:episode_01",
+      "core_value": "conformity",
+      "episode": {
+        "canonical_case_id": "110fcd4f:conformity",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-06-28",
+        "confirmation_position": 3,
+        "confirmation_t_index": 2,
+        "crosses_week": false,
+        "delivery_state": "active",
+        "dimension": "conformity",
+        "end_date": "2025-06-28",
+        "end_position": 3,
+        "end_t_index": 2,
+        "episode_id": "110fcd4f:conformity:episode_01",
+        "historical_split": "development",
+        "length": 2,
+        "onset_date": "2025-06-25",
+        "onset_position": 2,
+        "onset_t_index": 1,
+        "persona_id": "110fcd4f"
+      },
+      "runtime_entry_ids": [
+        "110fcd4f:entry:0"
+      ],
+      "value": {
+        "definition": "Restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms. Derives from the requirement that individuals inhibit inclinations that might disrupt and undermine smooth interaction and group functioning (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).",
+        "text": "search_query: Being someone others can count on to do the right thing. Restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms. Derives from the requirement that individuals inhibit inclinations that might disrupt and undermine smooth interaction and group functioning (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).",
+        "user_phrase": "Being someone others can count on to do the right thing"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "11de77e8:entry:0",
+          "journal_entry": "Had the tech lead conversation with Martijn today. He laid out what the role would look like \u2014 running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole time I was thinking about how I'd actually handle it. I build things well when people leave me alone to think. That's not what this role is.\n\nBut I also know I did the right thing saying yes. Everyone on the team expects it, Noor would think I was insane to turn it down, and frankly it would look odd to pass on a promotion you're being handed. I can figure out the rest as I go. Probably.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:1",
+          "journal_entry": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded so I'll take it.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "self_direction"
+      ],
+      "case_id": "11de77e8:self_direction:episode_01",
+      "core_value": "self_direction",
+      "episode": {
+        "canonical_case_id": "11de77e8:self_direction",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-09-10",
+        "confirmation_position": 4,
+        "confirmation_t_index": 3,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "self_direction",
+        "end_date": "2025-09-10",
+        "end_position": 4,
+        "end_t_index": 3,
+        "episode_id": "11de77e8:self_direction:episode_01",
+        "historical_split": "retired",
+        "length": 2,
+        "onset_date": "2025-09-05",
+        "onset_position": 3,
+        "onset_t_index": 2,
+        "persona_id": "11de77e8"
+      },
+      "runtime_entry_ids": [
+        "11de77e8:entry:0",
+        "11de77e8:entry:1"
+      ],
+      "value": {
+        "definition": "Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+        "text": "search_query: Having the freedom to choose my own path. Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+        "user_phrase": "Having the freedom to choose my own path"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "11de77e8:entry:0",
+          "journal_entry": "Had the tech lead conversation with Martijn today. He laid out what the role would look like \u2014 running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole time I was thinking about how I'd actually handle it. I build things well when people leave me alone to think. That's not what this role is.\n\nBut I also know I did the right thing saying yes. Everyone on the team expects it, Noor would think I was insane to turn it down, and frankly it would look odd to pass on a promotion you're being handed. I can figure out the rest as I go. Probably.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:2",
+          "journal_entry": "Sprint retro got a bit heated. Devika suggested we rethink the approval flow for deployments because she thinks it slows us down. She's right, technically \u2014 it does add a half-day lag. I had a whole alternative sketched in my head while she was talking, a lighter-weight check that would still catch the critical stuff.\n\nDidn't say it though. The senior architects set up the current flow and they were in the call. Felt like bringing up a redesign right there would come across as me trying to show off, especially with the tech lead thing floating around. So I just nodded and said I could look into Devika's point offline. She seemed a bit deflated that nobody backed her up more directly. I get it.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:3",
+          "journal_entry": "Weird day. Started normal \u2014 coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd help build the backend. Not sanctioned work, just something he thinks would be useful and wants to pitch to leadership once it's built.\n\nFirst thought was yes obviously, this is the kind of thing I actually want to spend time on, building something new without twelve layers of sign-off. Second thought was that Martijn would not love me spending cycles on an unsanctioned project right when he's evaluating me for lead. Third thought was that Pieter didn't ask anyone else, he asked me, and that felt good in a way I don't fully understand. Like someone saw the part of me that wants to just build.\n\nI told Pieter I'd think about it over the weekend. Which is code for \"I want to do it but I need to figure out if I'm allowed to want to do it.\" That sounds ridiculous written down. I'm a grown man deciding whether to write some code on the side. But it feels more loaded than that right now.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:6",
+          "journal_entry": "Martijn officially put me on the lead shortlist. Two candidates, me and someone from the other squad. I thanked him and said I'd put my best foot forward. Which I will. Whatever doubts I have aren't anyone else's problem to carry.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:4",
+          "journal_entry": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer. Felt more engaged in that hour than I have all sprint on the actual work.\n\nToday was back to normal though \u2014 reviewing PRs, answering Slack threads, sitting through a planning session where half the decisions had already been made before we walked in. The usual. I'm not complaining, it's fine. I just noticed the contrast, that's all.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:1",
+          "journal_entry": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded so I'll take it.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:5",
+          "journal_entry": "Noor and I went to dinner with her parents in Rotterdam on Saturday. Her dad asked about the promotion and I gave the standard answer \u2014 it's in progress, I'm grateful for the opportunity, etc. He seemed pleased. On the train back Noor said she was proud of me and I felt genuinely good about it. Like I'm on a track that makes sense to the people I care about.\n\nThen on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer. Noor asked what I was doing and I said \"just work stuff\" which wasn't really a lie but wasn't the whole truth either. I don't know why I didn't just explain it. Maybe because explaining it would mean admitting how much more alive that project makes me feel, and then someone might ask what that says about everything else.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:8",
+          "journal_entry": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "11de77e8:entry:7",
+          "journal_entry": "Team drinks after work. Everyone was congratulating me about the shortlist like it's already decided. I kept saying it wasn't confirmed yet but nobody listens. Devika made a joke about me being her future boss and I laughed but it sat wrong with me for the rest of the evening.\n\nI don't think I'm being fake about it. I genuinely want to do well, and the role comes with better pay, more visibility, things that matter. But there's this gap between how I talk about it to other people and what actually runs through my head at 11pm when I'm staring at Pieter's repo. Not sure what to do with that. For now I'm doing both, which is sustainable enough.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "self_direction"
+      ],
+      "case_id": "11de77e8:self_direction:episode_02",
+      "core_value": "self_direction",
+      "episode": {
+        "canonical_case_id": "11de77e8:self_direction",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-10-14",
+        "confirmation_position": 11,
+        "confirmation_t_index": 10,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "self_direction",
+        "end_date": "2025-10-14",
+        "end_position": 11,
+        "end_t_index": 10,
+        "episode_id": "11de77e8:self_direction:episode_02",
+        "historical_split": "retired",
+        "length": 2,
+        "onset_date": "2025-10-11",
+        "onset_position": 10,
+        "onset_t_index": 9,
+        "persona_id": "11de77e8"
+      },
+      "runtime_entry_ids": [
+        "11de77e8:entry:0",
+        "11de77e8:entry:2",
+        "11de77e8:entry:3"
+      ],
+      "value": {
+        "definition": "Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+        "text": "search_query: Having the freedom to choose my own path. Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+        "user_phrase": "Having the freedom to choose my own path"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [],
+      "case_categories": [
+        "no_earlier_writing",
+        "stimulation"
+      ],
+      "case_id": "127aefff:stimulation:episode_01",
+      "core_value": "stimulation",
+      "episode": {
+        "canonical_case_id": "127aefff:stimulation",
+        "cohort_source": "twinkl_qtwz_complete_review",
+        "confirmation_date": "2025-06-12",
+        "confirmation_position": 2,
+        "confirmation_t_index": 1,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "stimulation",
+        "end_date": "2025-06-13",
+        "end_position": 3,
+        "end_t_index": 2,
+        "episode_id": "127aefff:stimulation:episode_01",
+        "historical_split": "training",
+        "length": 3,
+        "onset_date": "2025-06-05",
+        "onset_position": 1,
+        "onset_t_index": 0,
+        "persona_id": "127aefff"
+      },
+      "runtime_entry_ids": [],
+      "value": {
+        "definition": "Excitement, novelty, and challenge in life. Derives from the organismic need for variety and stimulation in order to maintain an optimal, positive, rather than threatening, level of activation. This need probably relates to the needs underlying Self-Direction values.",
+        "text": "search_query: Seeking new experiences and challenges. Excitement, novelty, and challenge in life. Derives from the organismic need for variety and stimulation in order to maintain an optimal, positive, rather than threatening, level of activation. This need probably relates to the needs underlying Self-Direction values.",
+        "user_phrase": "Seeking new experiences and challenges"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "1496159d:entry:0",
+          "journal_entry": "Spent all afternoon in the heat doing deliveries and my last drop-off was to this grandmother living alone in a rooftop unit with no AC. She tried to give me a banana milk from her fridge. Took it, thanked her properly the way my mom taught me, and biked home feeling like at least one interaction today was real.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "1496159d:entry:1",
+          "journal_entry": "Slow day for orders so I worked on a logo draft for this small tofu shop near Mullae. The owner is from Gyeongsang-do, reminds me of my dad a bit, stubborn about everything but generous when it matters. He wants the logo to look \"clean and honest,\" which is vague but I kind of get it. Spent two hours on it at the cafe near my place.\n\nBetween that and three deliveries I made maybe 40,000 won today. Rent is due next week. I keep doing the math and it never quite adds up but somehow it always works out. My friend Eunji keeps telling me to just take the full-time position at her company's marketing team. Stable salary, benefits, the whole package. But every time I think about sitting in an office doing campaign graphics for some supplement brand I feel this weight in my chest.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "universalism"
+      ],
+      "case_id": "1496159d:universalism:episode_01",
+      "core_value": "universalism",
+      "episode": {
+        "canonical_case_id": "1496159d:universalism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-07-21",
+        "confirmation_position": 4,
+        "confirmation_t_index": 3,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "universalism",
+        "end_date": "2025-07-22",
+        "end_position": 5,
+        "end_t_index": 4,
+        "episode_id": "1496159d:universalism:episode_01",
+        "historical_split": "training",
+        "length": 3,
+        "onset_date": "2025-07-16",
+        "onset_position": 3,
+        "onset_t_index": 2,
+        "persona_id": "1496159d"
+      },
+      "runtime_entry_ids": [
+        "1496159d:entry:0",
+        "1496159d:entry:1"
+      ],
+      "value": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "user_phrase": "Making the world a fairer, better place"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "152df7a4:entry:0",
+          "journal_entry": "Nothing really happened today worth writing about. Spent most of the morning in back-to-back syncs, the usual Monday chaos of catching up on what slipped over the weekend. Ate lunch at my desk again. Kimchi jjigae from the place downstairs, same order for probably the third week running. I keep meaning to try something different but I'm always too rushed to look at the menu properly.\n\nHad a longer-than-expected call with our warehouse partner in Da Nang about the delayed shipment of syringes. Turned out to be a customs paperwork issue on their end. Nothing dramatic. I walked them through it, helped them resubmit. Could've passed it off to my team but I know that particular contact better and it just went faster to do it myself.\n\nAfter work I sat on the bus home and watched people through the window for a while. Everyone with their faces in their phones. Some guy was asleep with his mouth open, briefcase sliding off his lap. I thought about how we all just do this every day, the same routes, the same tiredness, and nobody really sees each other. Not a depressing thought exactly, just a passing one. Cooked ramyeon at home, watched half an episode of something, fell asleep on the couch.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "one_earlier_entry",
+        "universalism"
+      ],
+      "case_id": "152df7a4:universalism:episode_01",
+      "core_value": "universalism",
+      "episode": {
+        "canonical_case_id": "152df7a4:universalism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-02-24",
+        "confirmation_position": 3,
+        "confirmation_t_index": 2,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "universalism",
+        "end_date": "2025-03-03",
+        "end_position": 4,
+        "end_t_index": 3,
+        "episode_id": "152df7a4:universalism:episode_01",
+        "historical_split": "training",
+        "length": 3,
+        "onset_date": "2025-02-18",
+        "onset_position": 2,
+        "onset_t_index": 1,
+        "persona_id": "152df7a4"
+      },
+      "runtime_entry_ids": [
+        "152df7a4:entry:0"
+      ],
+      "value": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "user_phrase": "Making the world a fairer, better place"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "2541429a:entry:5",
+          "journal_entry": "Still thinking about the mansaf. The thing that keeps coming back to me is that she learned all of it here, in this kitchen, from watching me. Which means even if she's somewhere else, she carries it. I don't know why that's so hard for me to trust.\n\nMy father never let any of us leave Amman until we were married. I accepted that. But I also remember the years I spent wondering what it would have been like to study abroad when I had the chance. I told myself it didn't matter because I had responsibilities. Maybe it didn't matter. Or maybe I just never forgave myself for not pushing harder, and now I'm doing the same thing to her.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "2541429a:entry:2",
+          "journal_entry": "My brother Walid called and said I should let Noor go, that I'm being selfish. Easy for him to say from Dubai with his kids in boarding school. Nobody in this family understands that keeping people close isn't the same as holding them back.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "2541429a:entry:1",
+          "journal_entry": "Spent the morning making maamoul with Hana and Tariq. They came over early, flour everywhere, the kitchen smelled like the house used to when Samira was alive. Hana shaped hers exactly the way her mother did, pressing the mold with both palms. I watched her and something settled inside me, like proof that what I've kept going all these years still matters to them too.\n\nTariq asked if we could do this every Friday, not just during holidays. I said of course. Small thing, but it sat well with me the rest of the afternoon.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "2541429a:entry:0",
+          "journal_entry": "Noor brought up the London program again at dinner. I could feel my chest tighten but I just said we'd talk later and cleared the plates. Haven't been able to sleep since.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "2541429a:entry:4",
+          "journal_entry": "Noor cooked mansaf tonight. The whole thing, from scratch, without asking for help. She set the platter on the table the way I always do, rice shaped just right. Felt like she was showing me something without saying it.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "2541429a:entry:3",
+          "journal_entry": "Came back to this tonight because Walid's call kept eating at me. After I hung up I sat in the garden for a long time. The jasmine Samira planted is still growing along the back wall, fifteen years now. I thought about how she would have handled this. She was always braver about letting the children try things. I think she would have been scared too but she wouldn't have let the fear win.\n\nI don't know if that changes what I'll say to Noor. But I realized the anger I felt toward Walid was really just the sound of my own doubt getting louder.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "2541429a:entry:6",
+          "journal_entry": "Eid preparations started today and the house was full. Hana brought her husband and the baby, Tariq came with sweets from that bakery on Rainbow Street, even Walid video-called from Dubai to wish us well. Noor was in the kitchen all morning helping me roll grape leaves. For a few hours it felt exactly right, all the noise, the food, children running through every room. This is what I stayed home for.\n\nBut then after everyone left and it was just Noor and me cleaning up, she said quietly that she'd been offered a partial scholarship. She wasn't asking permission, not exactly, more like she was letting me know it was real now. I didn't say anything. I just kept drying the dishes and stacking them slowly.\n\nI know I need to talk to her. I know what I'm leaning toward. But saying it out loud makes it final in a way I'm not ready for. The house will be so quiet without her.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "tradition"
+      ],
+      "case_id": "2541429a:tradition:episode_01",
+      "core_value": "tradition",
+      "episode": {
+        "canonical_case_id": "2541429a:tradition",
+        "cohort_source": "twinkl_qtwz_complete_review",
+        "confirmation_date": "2025-12-04",
+        "confirmation_position": 9,
+        "confirmation_t_index": 8,
+        "crosses_week": true,
+        "delivery_state": "active",
+        "dimension": "tradition",
+        "end_date": "2025-12-04",
+        "end_position": 9,
+        "end_t_index": 8,
+        "episode_id": "2541429a:tradition:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-11-30",
+        "onset_position": 8,
+        "onset_t_index": 7,
+        "persona_id": "2541429a"
+      },
+      "runtime_entry_ids": [
+        "2541429a:entry:5",
+        "2541429a:entry:2",
+        "2541429a:entry:1"
+      ],
+      "value": {
+        "definition": "Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+        "text": "search_query: Honoring the customs and practices I was raised with. Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+        "user_phrase": "Honoring the customs and practices I was raised with"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "3a3b15e4:entry:0",
+          "journal_entry": "My advisor asked today why I chose the topic of hospitality rituals in Levantine households when there are \"more contemporary angles\" I could take. I told her it was methodologically sound and left it at that. I don't owe anyone an explanation for why this subject matters to me. She's Swedish. She studies migration patterns. The way my grandmother set a table is not something she would understand, and I'm not interested in making it legible to her.\n\nCame home and made musakhan from scratch, the whole process \u2014 rolling the dough, roasting the sumac onions until they were dark and sweet. Ate it alone at the kitchen table while my mother watched her show in the other room. The apartment smelled right. That was enough of an answer for one day.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "3a3b15e4:entry:2",
+          "journal_entry": "My brother Faisal made a comment at Friday lunch about how I'm \"still playing student\" while his sons are already building careers. His eldest is twenty-six and works at a bank. I smiled and passed the hummus. What I wanted to say was that I spent twenty years running hotel operations so our family name meant something in the hospitality industry, and now I'm doing something for myself, and that should be allowed.\n\nBut it wouldn't have been the right moment. My mother was sitting right there, and she gets anxious when Faisal and I disagree. So I stayed quiet, helped clear the plates, and drove home listening to Fairuz with the windows down. The breeze off the hills felt good. I don't need Faisal's approval. I know what I'm doing and why.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "3a3b15e4:entry:1",
+          "journal_entry": "Spent twelve hours in the library and barely got through two chapters of my lit review. My back hurts, my eyes hurt, and I keep wondering what possessed me to do this at forty-nine. Going to bed.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "tradition"
+      ],
+      "case_id": "3a3b15e4:tradition:drift_01",
+      "core_value": "tradition",
+      "episode": {
+        "canonical_case_id": "3a3b15e4:tradition",
+        "cohort_source": "omitted_prior_drift",
+        "confirmation_date": "2025-06-12",
+        "confirmation_position": 5,
+        "confirmation_t_index": 4,
+        "crosses_week": false,
+        "delivery_state": "active",
+        "dimension": "tradition",
+        "end_date": "2025-06-12",
+        "end_position": 5,
+        "end_t_index": 4,
+        "episode_id": "3a3b15e4:tradition:drift_01",
+        "historical_split": "validation",
+        "length": 2,
+        "onset_date": "2025-06-10",
+        "onset_position": 4,
+        "onset_t_index": 3,
+        "persona_id": "3a3b15e4"
+      },
+      "runtime_entry_ids": [
+        "3a3b15e4:entry:0",
+        "3a3b15e4:entry:2",
+        "3a3b15e4:entry:1"
+      ],
+      "value": {
+        "definition": "Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+        "text": "search_query: Honoring the customs and practices I was raised with. Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+        "user_phrase": "Honoring the customs and practices I was raised with"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "5fa8b540:entry:2",
+          "journal_entry": "Interesting thing happened during morning assembly. One of my Class 3 students, Ravi, came up to me after and said he told his mother about the water pollution lesson I did last week. She apparently asked him to explain it again because their neighborhood has been complaining about the nala running brown. He was so proud of himself, like he'd done something important.\n\nAnd maybe he did? A nine-year-old going home and talking to his family about why their water is dirty\u2014that feels like something actually working. Not in a big dramatic way, just a small thread pulling in the right direction. I changed nothing about anyone's pipes but now one family is paying attention. That's enough for today.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "5fa8b540:entry:1",
+          "journal_entry": "Went to the literacy camp in Sultanpur today and I keep thinking about this one girl, maybe seven or eight, who was holding the pencil like she'd never held one before. And honestly she probably hadn't. She was gripping it so tight her knuckles were white and she kept looking at me like she was asking permission to write her own name.\n\nI sat with her for almost an hour. The other volunteers were doing group activities but I just couldn't move on from this kid. Her name is Fatima. She got the first two letters right and then she looked at me and smiled and it was like, okay, this is why I wake up early on Saturdays and take that awful bus that takes ninety minutes one way.\n\nI know this sounds naive or whatever. Didi would say I'm romanticizing things. But I was there today and she wasn't. There's something about being in the room with someone who just learned they can write their own name that makes all the other noise\u2014the salary complaints, Baba asking when I'll \"move up,\" the crumbling school building\u2014feel small. Not irrelevant, just not the point.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "5fa8b540:entry:4",
+          "journal_entry": "Finished compiling the mid-term attendance data. Our school's retention rate is up from last year, which the principal seemed happy about. Stayed back to help the peon uncle fix a broken desk in my classroom.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "5fa8b540:entry:3",
+          "journal_entry": "Didi called from Bangalore. She's remodelling her flat and asked if I wanted her old furniture shipped to Lucknow. Said no thanks, my room barely fits what I already have. Realized after I hung up that we didn't talk about anything real.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "5fa8b540:entry:0",
+          "journal_entry": "Parent-teacher meeting ran late. Most parents didn't show up, same as last month. Spent the rest of the evening marking notebooks and helping Amma sort the kitchen.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "universalism"
+      ],
+      "case_id": "5fa8b540:universalism:episode_01",
+      "core_value": "universalism",
+      "episode": {
+        "canonical_case_id": "5fa8b540:universalism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-03-09",
+        "confirmation_position": 7,
+        "confirmation_t_index": 6,
+        "crosses_week": false,
+        "delivery_state": "recovered",
+        "dimension": "universalism",
+        "end_date": "2025-03-09",
+        "end_position": 7,
+        "end_t_index": 6,
+        "episode_id": "5fa8b540:universalism:episode_01",
+        "historical_split": "retired",
+        "length": 2,
+        "onset_date": "2025-03-08",
+        "onset_position": 6,
+        "onset_t_index": 5,
+        "persona_id": "5fa8b540"
+      },
+      "runtime_entry_ids": [
+        "5fa8b540:entry:2",
+        "5fa8b540:entry:1",
+        "5fa8b540:entry:4"
+      ],
+      "value": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "user_phrase": "Making the world a fairer, better place"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "66ced716:entry:2",
+          "journal_entry": "Workshop today. One of the boys, Ahmad, who's maybe twelve, has been coming every week since January. He barely spoke for the first month, just painted the same image over and over, a grey building with no windows. Today he painted a garden. Green everywhere, flowers I don't think he's ever seen in real life, a yellow bird. He didn't say anything about it. He just held it up to dry and went to wash his brushes.\n\nI didn't make a fuss. I just told him the yellow was a good choice and helped him find a spot on the drying rack. It was a small thing. But I drove home feeling like something had actually worked, not because of me specifically, just because the space existed for him to get there on his own. That felt right. I'm exhausted but it's the kind of tired I don't mind.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "66ced716:entry:1",
+          "journal_entry": "Something happened at a dinner at my uncle's house on Friday that I'm still thinking about. His neighbor was there, an older man, very confident in his opinions. He started talking about the Sudanese workers at a construction site near his building. Calling them lazy, saying they were \"bringing problems,\" that the government should stop giving them permits. The usual garbage. My aunt was nodding along. My cousin was on his phone, not paying attention. My uncle said nothing, which for him is the same as agreeing.\n\nI sat there with my fork in my hand and I didn't say a single thing. I knew exactly what I wanted to say. That these men left everything behind and are breaking their bodies on scaffolding in forty-degree heat for wages that wouldn't cover his grocery bill. That my grandmother was a refugee once too. That the least we owe people who have lost their homes is not talking about them like they're pests at a dinner table. I had all of it ready and I just kept eating.\n\nPart of it was exhaustion, I'd been at the studio since seven that morning. Part of it was knowing it wouldn't change his mind. But mostly I think I just didn't want the tension. I didn't want my aunt looking at me that way she does when I \"make things difficult.\" I picked the easy thing. I've been carrying that around for days now and it doesn't feel lighter.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "66ced716:entry:0",
+          "journal_entry": "The studio smells like turpentine again because I forgot to cap the jar before I left yesterday. Spent six hours on the commission piece for that hotel lobby in Abdoun. Massive canvas, three meters wide, and the client wants \"something that feels Middle Eastern but modern.\" I've heard that phrase so many times it's lost all meaning. I painted geometric patterns, scraped them off, painted loose abstractions over them, scraped those off too. Ended up with something layered that looks like a wall that's been lived on for decades. It might work. I'm too tired to tell.\n\nDrove to the center after to set up for tomorrow's session. The hallway light is still broken so I propped the door open for daylight while I organized supplies. The kids went through all the blue paint last week so I picked up more on the way, the cheap kind because the good acrylics cost too much for how fast they use them. Counted the brushes. We're down to fourteen. I keep forgetting to ask Huda if the center can budget for more or if that's coming out of my pocket again.\n\nThe drive home was quiet. Ramadan traffic has died down, the streets were almost empty. I ate leftover mujaddara standing at the kitchen counter and went straight to bed. My shoulders ache from reaching up at the canvas all day. I should stretch more. I never do.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "universalism"
+      ],
+      "case_id": "66ced716:universalism:episode_01",
+      "core_value": "universalism",
+      "episode": {
+        "canonical_case_id": "66ced716:universalism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-05-12",
+        "confirmation_position": 5,
+        "confirmation_t_index": 4,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "universalism",
+        "end_date": "2025-05-12",
+        "end_position": 5,
+        "end_t_index": 4,
+        "episode_id": "66ced716:universalism:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-05-11",
+        "onset_position": 4,
+        "onset_t_index": 3,
+        "persona_id": "66ced716"
+      },
+      "runtime_entry_ids": [
+        "66ced716:entry:2",
+        "66ced716:entry:1",
+        "66ced716:entry:0"
+      ],
+      "value": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "user_phrase": "Making the world a fairer, better place"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "742c98d6:entry:1",
+          "journal_entry": "Spent the afternoon at the refugee clinic. There was a Syrian woman, maybe my age, who came in with chronic back pain that's been ignored for months because she keeps getting shuffled between GP practices and nobody follows through. I got her a proper referral to the physiotherapist and explained everything in simple Dutch, and her daughter translated the rest. When she left she squeezed my hand and said something in Arabic I didn't understand but I could tell what it meant.\n\nThose moments remind me why I do what I do. It's not heroic, it's just basic decency \u2014 making sure someone gets the care they should have had weeks ago. The system fails these people constantly and most of the time there's nobody there to catch them. I can't fix everything but I can make sure the ones who come through my door don't fall through the cracks.\n\nWalked home along the Maas afterwards and the late afternoon light on the water was beautiful. Felt like myself for the first time all week. Made a simple stamppot for dinner and sat in the garden with a glass of wine and the radio on. Days like this keep me going.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:2",
+          "journal_entry": "Saturday. Slept in which I almost never do. Made coffee and read the Volkskrant at the kitchen table like I used to when the kids were small, except now the house is quiet and nobody's fighting over the last beschuit.\n\nThe paper had a big piece about plastic pollution in the North Sea and it got me going again. They found microplastics in fish at the market in Scheveningen. I remember swimming there as a girl and the water was already dirty then, but at least we weren't eating the pollution. Now it's in everything. I want to feel like individual choices matter \u2014 I bring my own bags, I cycle, I sort my recycling obsessively \u2014 but these articles make it feel so small against the scale of it. Shell is right there across the river and they're still doing what they've always done.\n\nWent grocery shopping after, argued with myself about buying the organic tomatoes that cost twice as much. Bought them anyway. Had a quiet afternoon fixing the hem on my uniform trousers and listening to a podcast about healthcare in sub-Saharan Africa. Normal day really. Nothing remarkable.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:0",
+          "journal_entry": "Had a terrible shift today and I can't stop going over it. We had a team meeting about the new triage protocols and someone \u2014 one of the younger consultants \u2014 made a comment about how we should be \"more selective\" about which patients get palliative referrals because the ward is overstretched. He was basically implying we should deprioritise patients who don't have family pushing for it, which in practice means the homeless patients, the migrants, the people nobody's advocating for. I sat there and I knew exactly what he meant and I said nothing. A few people nodded. Anke looked uncomfortable but she didn't speak up either.\n\nI've been doing this work for thirty years and I just let it slide. I told myself it was because the meeting was already running long and tempers were short, but honestly I think I was just tired. Tired and afraid of being that older nurse who's always making everything political. But those are real people he was talking about, people I've held hands with while they died. Nobody should have to earn the right to a dignified death by having relatives who make enough noise.\n\nI'm angry at myself. I keep rehearsing what I should have said and it's making my stomach hurt. Willem would tell me to let it go and pick my battles, but this feels like exactly the kind of battle I should have picked.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "universalism"
+      ],
+      "case_id": "742c98d6:universalism:episode_01",
+      "core_value": "universalism",
+      "episode": {
+        "canonical_case_id": "742c98d6:universalism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-09-25",
+        "confirmation_position": 5,
+        "confirmation_t_index": 4,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "universalism",
+        "end_date": "2025-09-29",
+        "end_position": 7,
+        "end_t_index": 6,
+        "episode_id": "742c98d6:universalism:episode_01",
+        "historical_split": "training",
+        "length": 4,
+        "onset_date": "2025-09-19",
+        "onset_position": 4,
+        "onset_t_index": 3,
+        "persona_id": "742c98d6"
+      },
+      "runtime_entry_ids": [
+        "742c98d6:entry:1",
+        "742c98d6:entry:2",
+        "742c98d6:entry:0"
+      ],
+      "value": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "user_phrase": "Making the world a fairer, better place"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "742c98d6:entry:6",
+          "journal_entry": "Can't sleep so I'm writing more. Still stuck on the glove thing from earlier but it's connecting to something bigger now. At the ethics panel meeting last month, there was a discussion about end-of-life care guidelines for undocumented patients. The hospital legal team sent someone who basically said we should follow the strict protocol, which in practice means reduced access for people without valid papers. I pushed back in the meeting \u2014 I did speak up that time \u2014 but when the vote came I abstained because I didn't want to be the only dissenting voice on record. The motion passed.\n\nI told myself abstaining was a form of protest, that it showed I didn't agree. But really I just didn't want my name attached to a losing vote. That's cowardice dressed up as strategy. These are people's lives and I was protecting my position on the panel.\n\nThe pattern is clear when I write it all out like this. I care deeply and I act cautiously and there's a gap between the two that keeps growing. I'm fifty-eight years old and I've built a reputation as someone who cares about these things, but when it costs me something \u2014 even something small like an awkward moment or a dissenting vote \u2014 I back down. I don't know what to do with that.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:1",
+          "journal_entry": "Spent the afternoon at the refugee clinic. There was a Syrian woman, maybe my age, who came in with chronic back pain that's been ignored for months because she keeps getting shuffled between GP practices and nobody follows through. I got her a proper referral to the physiotherapist and explained everything in simple Dutch, and her daughter translated the rest. When she left she squeezed my hand and said something in Arabic I didn't understand but I could tell what it meant.\n\nThose moments remind me why I do what I do. It's not heroic, it's just basic decency \u2014 making sure someone gets the care they should have had weeks ago. The system fails these people constantly and most of the time there's nobody there to catch them. I can't fix everything but I can make sure the ones who come through my door don't fall through the cracks.\n\nWalked home along the Maas afterwards and the late afternoon light on the water was beautiful. Felt like myself for the first time all week. Made a simple stamppot for dinner and sat in the garden with a glass of wine and the radio on. Days like this keep me going.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:3",
+          "journal_entry": "Long week. Thursday and Friday were double shifts because Pieter called in sick and nobody else could cover. By Friday afternoon I was running on automatic. One of my patients, an elderly man with no family contact, was scheduled for a comfort care review. I should have sat with him properly, gone through everything, made sure he understood all the options. Instead I rushed through it in ten minutes because I had three other patients waiting and the ward was short-staffed.\n\nHe deserved better than that. Every patient deserves a proper conversation about their care, especially when there's nobody else asking questions on their behalf. But I chose efficiency because I was stretched thin and it was the easier option. Ticked the box, moved on, felt wrong about it immediately.\n\nThe system is designed this way \u2014 there are never enough people, never enough time, and eventually everyone starts cutting corners. The corners you cut are always on the patients who won't complain. I know this. I've given talks about this. And I still did it. The gap between what I know is right and what I actually do when I'm exhausted is wider than I'd like to admit.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:5",
+          "journal_entry": "Been thinking about this all weekend and I need to write it down. Last Tuesday the ward got offered a bulk supply deal on disposable gloves and gowns from a company I know uses factories with terrible labour conditions in Southeast Asia. I've read the reports, I've seen the articles. The alternative supplier is more expensive and our budget is already squeezed. I signed off on the cheaper option because the ward manager was pushing hard and I didn't want to hold up the order for something nobody else seemed to care about.\n\nIt's such a small thing in the grand scheme. Nobody dies because of which glove supplier we use. But it's the principle \u2014 I spend my weekends at the refugee clinic working with people who've fled exactly these kinds of conditions, and then on a Tuesday morning I quietly approve the purchase order that keeps those conditions going. The hypocrisy of it sits badly.\n\nI keep telling myself I'm one person and I can't fight every fight. But I also know that's what everyone tells themselves and it's how nothing ever changes. Willem says I take too much on and that it's not my job to fix global supply chains. He's probably right practically but it doesn't make me feel less complicit.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:2",
+          "journal_entry": "Saturday. Slept in which I almost never do. Made coffee and read the Volkskrant at the kitchen table like I used to when the kids were small, except now the house is quiet and nobody's fighting over the last beschuit.\n\nThe paper had a big piece about plastic pollution in the North Sea and it got me going again. They found microplastics in fish at the market in Scheveningen. I remember swimming there as a girl and the water was already dirty then, but at least we weren't eating the pollution. Now it's in everything. I want to feel like individual choices matter \u2014 I bring my own bags, I cycle, I sort my recycling obsessively \u2014 but these articles make it feel so small against the scale of it. Shell is right there across the river and they're still doing what they've always done.\n\nWent grocery shopping after, argued with myself about buying the organic tomatoes that cost twice as much. Bought them anyway. Had a quiet afternoon fixing the hem on my uniform trousers and listening to a podcast about healthcare in sub-Saharan Africa. Normal day really. Nothing remarkable.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:0",
+          "journal_entry": "Had a terrible shift today and I can't stop going over it. We had a team meeting about the new triage protocols and someone \u2014 one of the younger consultants \u2014 made a comment about how we should be \"more selective\" about which patients get palliative referrals because the ward is overstretched. He was basically implying we should deprioritise patients who don't have family pushing for it, which in practice means the homeless patients, the migrants, the people nobody's advocating for. I sat there and I knew exactly what he meant and I said nothing. A few people nodded. Anke looked uncomfortable but she didn't speak up either.\n\nI've been doing this work for thirty years and I just let it slide. I told myself it was because the meeting was already running long and tempers were short, but honestly I think I was just tired. Tired and afraid of being that older nurse who's always making everything political. But those are real people he was talking about, people I've held hands with while they died. Nobody should have to earn the right to a dignified death by having relatives who make enough noise.\n\nI'm angry at myself. I keep rehearsing what I should have said and it's making my stomach hurt. Willem would tell me to let it go and pick my battles, but this feels like exactly the kind of battle I should have picked.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:7",
+          "journal_entry": "Quiet Sunday. Cycled to the market, bought too much cheese, came home and pottered around the garden pulling weeds. Nothing on my mind for once.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "742c98d6:entry:4",
+          "journal_entry": "Colleague made a joke about the refugee patients \"costing us all money\" at lunch and everyone laughed. I didn't laugh but I didn't say anything either. I'm not their teacher.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "universalism"
+      ],
+      "case_id": "742c98d6:universalism:episode_02",
+      "core_value": "universalism",
+      "episode": {
+        "canonical_case_id": "742c98d6:universalism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-10-08",
+        "confirmation_position": 10,
+        "confirmation_t_index": 9,
+        "crosses_week": false,
+        "delivery_state": "recovered",
+        "dimension": "universalism",
+        "end_date": "2025-10-08",
+        "end_position": 10,
+        "end_t_index": 9,
+        "episode_id": "742c98d6:universalism:episode_02",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-10-07",
+        "onset_position": 9,
+        "onset_t_index": 8,
+        "persona_id": "742c98d6"
+      },
+      "runtime_entry_ids": [
+        "742c98d6:entry:6",
+        "742c98d6:entry:1",
+        "742c98d6:entry:3"
+      ],
+      "value": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "user_phrase": "Making the world a fairer, better place"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [],
+      "case_categories": [
+        "no_earlier_writing",
+        "benevolence"
+      ],
+      "case_id": "775c7d71:benevolence:episode_01",
+      "core_value": "benevolence",
+      "episode": {
+        "canonical_case_id": "775c7d71:benevolence",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-05-12",
+        "confirmation_position": 2,
+        "confirmation_t_index": 1,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "benevolence",
+        "end_date": "2025-05-12",
+        "end_position": 2,
+        "end_t_index": 1,
+        "episode_id": "775c7d71:benevolence:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-05-11",
+        "onset_position": 1,
+        "onset_t_index": 0,
+        "persona_id": "775c7d71"
+      },
+      "runtime_entry_ids": [],
+      "value": {
+        "definition": "Preserving and enhancing the welfare of those with whom one is in frequent personal contact (the \"in-group\"). Derives from the basic requirement for smooth group functioning (cf. Kluckhohn, 1951; Williams, 1968) and from the organismic need for affiliation (cf. Korman, 1974; Maslow, 1965).",
+        "text": "search_query: Being there for the people closest to me. Preserving and enhancing the welfare of those with whom one is in frequent personal contact (the \"in-group\"). Derives from the basic requirement for smooth group functioning (cf. Kluckhohn, 1951; Williams, 1968) and from the organismic need for affiliation (cf. Korman, 1974; Maslow, 1965).",
+        "user_phrase": "Being there for the people closest to me"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "7adc5866:entry:4",
+          "journal_entry": "Spent the morning helping Sunita draft her transfer application \u2014 she wants to move closer to her aging parents in Varanasi. Felt right, sitting with her and getting the wording correct, even though it means the department loses a good teacher.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7adc5866:entry:0",
+          "journal_entry": "Marking forty-two exam papers and my eyes are giving out. Priya from Class 10 wrote something genuinely moving about her grandmother's village, but I cannot even enjoy it properly because the stack keeps growing and dinner still needs sorting.\n\nMummy-ji asked twice when I would be done with the table because she wants to lay out her medicines. I said ten more minutes both times and it was never ten minutes. Rajesh heated leftovers for everyone without being asked, which was something. Still at the table now. Still marking.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7adc5866:entry:3",
+          "journal_entry": "Ritu called during lunch break, which never happens on weekdays, and for a second my chest seized because I thought something was wrong with the baby. But no \u2014 she just wanted to tell me that little Aarav said \"Nani\" for the first time. Clear as anything, she said, not a babble. She held the phone to him and he did it again and I was standing in the staff room corridor pressing the phone to my ear like an idiot with tears running.\n\nThe other teachers walked past and Sunita asked if everything was okay. I just nodded and waved her off. Could not explain it properly. Twenty-eight years of students calling me Meena ma'am and none of it hits the way one small boy saying Nani does.\n\nCame home and told Mummy-ji and she got teary too. We sat together for a bit, just the two of us, which does not happen often these days because the house is always full of someone needing something. Rajesh came in and saw us and quietly backed out. He knows when to leave a room. That is its own kind of gift, knowing when not to interrupt.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7adc5866:entry:6",
+          "journal_entry": "Sunday reading circle went well. Kamla-ji finally came back after skipping three weeks because of her knee. She said she almost did not come today either but her daughter-in-law pushed her out the door. We are reading a Premchand collection and she had opinions about Nirmala that got everyone arguing in the best way.\n\nI had set up an extra cushion near the door in case her knee was bad, and she noticed and patted my hand when she sat down. We have known each other since our children were in primary school. There is something about that length of knowing someone \u2014 you can set up a cushion without it being a fuss.\n\nAfter everyone left I cleaned up the chai cups and rearranged the chairs. Rajesh offered to help but I told him to rest, his back has been bothering him. Did it myself in fifteen minutes. The room still smelled like cardamom and old pages. Good Sunday.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7adc5866:entry:1",
+          "journal_entry": "Parent-teacher meeting ran an hour over. Sharmaji spent twenty minutes arguing his son deserves higher marks in poetry analysis. I explained the rubric twice. He was not satisfied but eventually left.\n\nCame home to find the washing machine had leaked again. Rajesh called the repair person. Bahu made chai without asking, which was nice. Ate late. Nothing else to say about it.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7adc5866:entry:5",
+          "journal_entry": "Staff meeting about the new attendance software. Everyone complained. I kept quiet even though I also find it needlessly complicated \u2014 did not see the point in adding to the noise when the decision was already made.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7adc5866:entry:2",
+          "journal_entry": "Same day but lying in bed now and actually feeling lighter than expected. The chai Bahu made \u2014 she added elaichi the way I like it without me mentioning. Small thing but it sat with me.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "benevolence"
+      ],
+      "case_id": "7adc5866:benevolence:drift_01",
+      "core_value": "benevolence",
+      "episode": {
+        "canonical_case_id": "7adc5866:benevolence",
+        "cohort_source": "omitted_prior_drift",
+        "confirmation_date": "2025-06-18",
+        "confirmation_position": 9,
+        "confirmation_t_index": 8,
+        "crosses_week": true,
+        "delivery_state": "active",
+        "dimension": "benevolence",
+        "end_date": "2025-06-18",
+        "end_position": 9,
+        "end_t_index": 8,
+        "episode_id": "7adc5866:benevolence:drift_01",
+        "historical_split": "validation",
+        "length": 2,
+        "onset_date": "2025-06-14",
+        "onset_position": 8,
+        "onset_t_index": 7,
+        "persona_id": "7adc5866"
+      },
+      "runtime_entry_ids": [
+        "7adc5866:entry:4",
+        "7adc5866:entry:0",
+        "7adc5866:entry:3"
+      ],
+      "value": {
+        "definition": "Preserving and enhancing the welfare of those with whom one is in frequent personal contact (the \"in-group\"). Derives from the basic requirement for smooth group functioning (cf. Kluckhohn, 1951; Williams, 1968) and from the organismic need for affiliation (cf. Korman, 1974; Maslow, 1965).",
+        "text": "search_query: Being there for the people closest to me. Preserving and enhancing the welfare of those with whom one is in frequent personal contact (the \"in-group\"). Derives from the basic requirement for smooth group functioning (cf. Kluckhohn, 1951; Williams, 1968) and from the organismic need for affiliation (cf. Korman, 1974; Maslow, 1965).",
+        "user_phrase": "Being there for the people closest to me"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "7c712a0a:entry:6",
+          "journal_entry": "Back from the conference for a week now and people at work keep asking how it was. I say it was great, very inspiring, lots of good ideas. Which is true. But when they ask what I am going to do differently, I do not have a good answer. Learn Go? Propose a rewrite? Those feel like someone else's moves.\n\nMy manager suggested I do a lunch-and-learn to share what I learned. I said I would think about it. I probably will not do it. Public speaking was never my thing, and honestly, the sessions that meant most to me were the ones I cannot really present in a corporate setting. Nobody wants a slide deck about existential uncertainty in late-career engineers.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7c712a0a:entry:7",
+          "journal_entry": "December sprint started with three people out sick and a scope increase nobody agreed to. I have been working ten-hour days trying to keep us on track for the holiday release. Jennifer is frustrated because her Go rewrite keeps getting deprioritized. I am frustrated because I am the one who has to explain why to her without making leadership look bad.\n\nHad dinner with Elena's cousin Miguel who is visiting from Monterrey. He runs a small construction company there. He asked me about my job and I tried to explain sprint planning and stakeholder management and he just laughed and said it sounds like I spend a lot of energy managing people's feelings about work instead of actually working. He did not mean it unkindly but it stuck with me. Maybe he is right. Maybe that is what corporate software engineering becomes after a while.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7c712a0a:entry:4",
+          "journal_entry": "The morning after a bad night is always strange. Everything looks normal. Coffee tastes the same. I just feel like I am watching myself go through the motions from somewhere slightly outside.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7c712a0a:entry:1",
+          "journal_entry": "The new architect they brought in, Jennifer, she wants to rewrite the payment gateway from scratch. Using Go instead of Java. Everyone in the room looked at me like I was supposed to object, since I built the original thing in 2019. But honestly? Part of me wanted to say yes, let us do it, let me learn something new instead of patching the same codebase forever.\n\nI did not say that though. I said we should consider the timeline and the risk to the December release. Which is true. The business needs stability. But I walked out of that meeting feeling like I had swallowed something heavy.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7c712a0a:entry:3",
+          "journal_entry": "Long day. Production incident at 3 AM, the payment gateway again. Not the part Jennifer wanted to rewrite, ironically, but the legacy integration with the bank's SFTP server. I was on call so I got the page. Took four hours to trace it to a certificate expiration that nobody had on their calendar.\n\nBy 7 AM I had fixed it and documented everything. By 8 AM I was in the standup explaining what happened. By 9 AM I was getting messages from the VP asking how we let this happen. Not thank you for catching it. Not good job on the quick fix. Just how did we let this happen.\n\nI did not let anything happen. I inherited this system. I have been asking for budget to modernize the certificate management for two years. But I did not say that either. I just said we would add better monitoring and put the renewal dates in a shared calendar. Safe answer. Team player answer.\n\nElena asked me at dinner why I looked so tired. I said work was busy. I did not tell her about the VP message because then she would get angry on my behalf and I would have to either agree with her anger or defend the company that made me feel small today. Both options felt exhausting.\n\nI need to sleep but my mind keeps rehearsing the incident like I missed something. I did not miss anything. The certificate was not in any documentation I had access to. But I keep checking anyway.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7c712a0a:entry:5",
+          "journal_entry": "Flew to San Francisco yesterday for the unconference. Staying at a hotel near the Embarcadero with a view of the bay. Weather is cold and gray but I brought my good jacket.\n\nThe conference format is interesting. You show up in the morning, people pitch sessions on index cards, everyone votes with stickers, and then the schedule emerges. No predetermined speakers, no approved slides. Someone proposed a session on rebuilding legacy systems with LLMs. Someone else wanted to discuss leaving tech after 50. I almost proposed something about maintaining software versus maintaining yourself, but I did not have the index card ready in time.\n\nI attended four sessions. The legacy systems one was good, practical advice I could use. The leaving tech one was harder to sit through. A woman around my age talked about how she realized she had optimized her whole life for a company that laid her off in an afternoon. She cried a little. Everyone was respectful.\n\nTonight I walked along the waterfront instead of joining the dinner group. Watched the ferries come and go. Called my mother. She asked if I was eating well and I said yes, even though I had skipped lunch. Some lies are kindness.\n\nTomorrow is the last day. I feel different here. Not better or worse. Just different.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7c712a0a:entry:0",
+          "journal_entry": "Another sprint planning meeting where they want me to estimate the same maintenance tickets I have been doing for three years. I know exactly how long everything takes now. That is maybe the problem.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7c712a0a:entry:2",
+          "journal_entry": "Elena surprised me with tickets to a tech conference in San Francisco next month. Not the corporate kind with vendor booths and networking bingo, but one of those unconference events where people just propose sessions in the morning and see what happens. She said she noticed I have been looking at conference websites lately but never registering for anything.\n\nI should be excited. Five years ago I would have booked the flight before she finished her sentence. Now I am already thinking about the sprint commitments, about whether Marcus can handle the on-call rotation alone, about what my manager will say when I request the days off. The conference is on a weekend. I would only need to take Friday off. Still, I hesitated.\n\nWhat bothers me most is not the hesitation itself. It is that I used to make decisions faster. Move to Austin? Two weeks to decide. Take the startup job over the stable bank position? One evening with Elena and a bottle of wine. Now I research, I weigh, I consider all stakeholders. My mother would say I finally grew up. But it feels more like something got dimmer.\n\nI will go to the conference. I already told Elena yes. I just wish the yes had come easier.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "conformity"
+      ],
+      "case_id": "7c712a0a:conformity:episode_01",
+      "core_value": "conformity",
+      "episode": {
+        "canonical_case_id": "7c712a0a:conformity",
+        "cohort_source": "twinkl_qtwz_complete_review",
+        "confirmation_date": "2025-12-16",
+        "confirmation_position": 10,
+        "confirmation_t_index": 9,
+        "crosses_week": true,
+        "delivery_state": "active",
+        "dimension": "conformity",
+        "end_date": "2025-12-16",
+        "end_position": 10,
+        "end_t_index": 9,
+        "episode_id": "7c712a0a:conformity:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-12-11",
+        "onset_position": 9,
+        "onset_t_index": 8,
+        "persona_id": "7c712a0a"
+      },
+      "runtime_entry_ids": [
+        "7c712a0a:entry:6",
+        "7c712a0a:entry:7",
+        "7c712a0a:entry:4"
+      ],
+      "value": {
+        "definition": "Restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms. Derives from the requirement that individuals inhibit inclinations that might disrupt and undermine smooth interaction and group functioning (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).",
+        "text": "search_query: Being someone others can count on to do the right thing. Restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms. Derives from the requirement that individuals inhibit inclinations that might disrupt and undermine smooth interaction and group functioning (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).",
+        "user_phrase": "Being someone others can count on to do the right thing"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "7ff1d0fb:entry:0",
+          "journal_entry": "My aunt called again about the civil service exam. She does this every Chuseok season, like clockwork \u2014 finds some cousin's daughter who just passed and drops it into conversation as though I asked. I said the same thing I always say. I'm fine. The studio is fine. Rent is covered.\n\nShe doesn't believe me. I know because she paused the way she does when she's holding something back, and then she said Umma worries. Which is just her way of saying she worries, but putting it on my mother so it lands harder. I didn't take the bait. Told her I had to go check the kiln.\n\nThere was nothing in the kiln. I just sat in the studio and threw a slab that I didn't need. The wheel was cold and the clay was too wet because I hadn't wedged it properly. It didn't matter. I wasn't making anything. I was just moving my hands so I wouldn't think about the conversation. Normal Wednesday.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7ff1d0fb:entry:2",
+          "journal_entry": "Woke up to a message from Ji-hye. She got into the residency in Arita. The one we both applied to, the one that would have meant three months studying under a fifth-generation potter and learning noborigama firing. She got it and I didn't, and she told me by text at 7am like it was news about the weather.\n\nI know I should feel happy for her. She's my closest friend in the studio and she works harder than anyone I know. But all I can think about is how I spent two weeks on that application, reworking my portfolio statement, asking my old professor for a letter, calling my mother to say I might be in Japan for the spring so don't plan the family trip yet. All of that for a standard rejection email.\n\nThe worst part is I can't even be angry about it openly. Ji-hye keeps texting me details \u2014 the studio setup, the housing, the firing schedule \u2014 and I keep sending congratulations emojis and exclamation marks. My face hurts from performing enthusiasm on a screen. I closed the chat and went back to bed. It's not even noon.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7ff1d0fb:entry:3",
+          "journal_entry": "Went to the studio after moping around all morning. Didn't want to, but the pieces for the January show won't fire themselves. Started trimming the set of moon jars I threw last week. The proportions on the third one are actually close to what I've been chasing \u2014 that slight asymmetry halmeoni always said separates hand from machine.\n\nNobody cares about that distinction anymore, probably. The gallery visitors want to know the price and whether it fits on a shelf. But I held the jar up to the window light and the walls were even, the foot was clean, and the curve of the shoulder did exactly what I meant it to do. That matters to me even if it doesn't matter to anyone else.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "7ff1d0fb:entry:1",
+          "journal_entry": "Gallery owner asked if I'd consider doing a collaboration with a streetwear brand. Custom glaze finishes on sneaker displays. Good money. I said I'd think about it but the whole walk home I kept hearing halmeoni's voice \u2014 that clay remembers what your hands were thinking when you shaped it. Felt cheap even considering it.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "security"
+      ],
+      "case_id": "7ff1d0fb:security:episode_01",
+      "core_value": "security",
+      "episode": {
+        "canonical_case_id": "7ff1d0fb:security",
+        "cohort_source": "twinkl_qtwz_complete_review",
+        "confirmation_date": "2025-12-07",
+        "confirmation_position": 6,
+        "confirmation_t_index": 5,
+        "crosses_week": false,
+        "delivery_state": "recovered",
+        "dimension": "security",
+        "end_date": "2025-12-07",
+        "end_position": 6,
+        "end_t_index": 5,
+        "episode_id": "7ff1d0fb:security:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-12-07",
+        "onset_position": 5,
+        "onset_t_index": 4,
+        "persona_id": "7ff1d0fb"
+      },
+      "runtime_entry_ids": [
+        "7ff1d0fb:entry:0",
+        "7ff1d0fb:entry:2",
+        "7ff1d0fb:entry:3"
+      ],
+      "value": {
+        "definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "text": "search_query: Feeling calm and secure in my life. Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "user_phrase": "Feeling calm and secure in my life"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [],
+      "case_categories": [
+        "no_earlier_writing",
+        "security"
+      ],
+      "case_id": "87e92805:security:episode_01",
+      "core_value": "security",
+      "episode": {
+        "canonical_case_id": "87e92805:security",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-03-17",
+        "confirmation_position": 2,
+        "confirmation_t_index": 1,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "security",
+        "end_date": "2025-03-23",
+        "end_position": 3,
+        "end_t_index": 2,
+        "episode_id": "87e92805:security:episode_01",
+        "historical_split": "training",
+        "length": 3,
+        "onset_date": "2025-03-13",
+        "onset_position": 1,
+        "onset_t_index": 0,
+        "persona_id": "87e92805"
+      },
+      "runtime_entry_ids": [],
+      "value": {
+        "definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "text": "search_query: Feeling calm and secure in my life. Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "user_phrase": "Feeling calm and secure in my life"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "87e92805:entry:1",
+          "journal_entry": "My sister Graciela keeps calling to tell me I should go back to a regular job. She doesn't get it. I'm not going to sit in some warehouse again answering to a guy ten years younger than me who treats people like furniture.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:4",
+          "journal_entry": "Motorcycle started making a noise yesterday. A grinding thing when I brake. I took it to Raul's shop and he looked at it and said the brake pads are gone and the disc is warped, it needs replacing. He quoted me a number that wiped out everything I'd saved from the Alfredo job. Every peso.\n\nI stood there in Raul's shop and felt my stomach just drop. Because it's not optional \u2014 the motorcycle is how I make deliveries. Without it I'm on foot or taking the subte, which means fewer trips, which means less money, which means next month's rent gets tight. It's like this chain where one thing breaks and everything behind it starts wobbling. I told Raul to do it, because what choice do I have. But I walked home and I couldn't even eat dinner.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:0",
+          "journal_entry": "Started doing the math again tonight. If I keep the delivery app running five days a week and pick up at least two handyman jobs on the weekends, I can cover everything with about twelve thousand pesos left over. That leftover is supposed to be for the motorcycle insurance renewal in May. I wrote it on a sticky note and put it on the fridge next to the old one that says \"DO NOT touch savings.\"\n\nFunny thing is, I spent Saturday at the parrilla with Cacho and Pocho like always, and the bill came out heavier than usual because we ordered that tira de asado. I didn't blink. Six hours of good food and good talk, what am I going to do, skip it? Some weeks the numbers work, some weeks they don't. But I'm not going to stop living just because the spreadsheet says I should.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:2",
+          "journal_entry": "Bad week. The delivery app lowered the per-trip rate again, no warning, no explanation. Just opened the app Monday morning and the numbers were different. I did the same twelve deliveries I always do on a weekday and came home with almost twenty percent less. Twenty percent. That's not nothing. That's a week of groceries, that's Negrita's vet visit I've been putting off.\n\nThe handyman side is slower too because people are tightening up. I had three jobs lined up this week and two of them canceled last minute \u2014 one lady said she'd \"wait until next month\" to fix her bathroom faucet and the other one just stopped responding. So now I'm sitting here Thursday night with the calculator app open, moving numbers around like I'm playing some kind of sad puzzle game, trying to figure out where the motorcycle payment comes from.\n\nThe thing that really gets to me is the feeling. It's not just about the money, it's the not knowing. Every month is a guess. Every week I wake up and I don't know what I'm going to make. I used to think that was the trade-off for not having a boss breathing down my neck. Lately I'm not so sure the trade-off is worth it. But what am I supposed to do, crawl back and prove Graciela right? No. I'll figure it out. I always figure it out.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:3",
+          "journal_entry": "Got a call from Don Alfredo across the street \u2014 he needs his whole kitchen faucet replaced plus some tile work. That's a good-sized job, probably two days of work. Felt like I could breathe again for the first time all week.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "security"
+      ],
+      "case_id": "87e92805:security:episode_02",
+      "core_value": "security",
+      "episode": {
+        "canonical_case_id": "87e92805:security",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-04-01",
+        "confirmation_position": 7,
+        "confirmation_t_index": 6,
+        "crosses_week": false,
+        "delivery_state": "recovered",
+        "dimension": "security",
+        "end_date": "2025-04-01",
+        "end_position": 7,
+        "end_t_index": 6,
+        "episode_id": "87e92805:security:episode_02",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-03-31",
+        "onset_position": 6,
+        "onset_t_index": 5,
+        "persona_id": "87e92805"
+      },
+      "runtime_entry_ids": [
+        "87e92805:entry:1",
+        "87e92805:entry:4",
+        "87e92805:entry:0"
+      ],
+      "value": {
+        "definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "text": "search_query: Feeling calm and secure in my life. Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "user_phrase": "Feeling calm and secure in my life"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "87e92805:entry:6",
+          "journal_entry": "Picked up the motorcycle from Raul this morning. It rides clean now, brakes feel solid. That's something. But I'm running on maybe four hours of sleep from the last few days and I can feel it in my eyes, in the way I'm slow to react at intersections. Almost clipped a bus mirror on Corrientes.\n\nSaturday is coming and Cacho already texted about the parrilla. Part of me wants to skip it this week, save the money. But another part of me \u2014 the louder part \u2014 says that's the one thing that keeps me sane. You take away the asado with friends and what do I have left? A cat, a calculator, and a leaking faucet in my own bathroom that I haven't even bothered to fix.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:8",
+          "journal_entry": "Graciela came over unannounced today while I was between deliveries. She brought empanadas, which was nice, except then she sat at my kitchen table and started doing that thing she does where she looks around the apartment cataloguing everything that's wrong. The peeling paint above the window, the chair with the broken leg, the fact that I still don't have a proper desk and eat on the couch.\n\nThen she said \u2014 and I quote \u2014 \"Roberto, you're almost fifty, you can't live like a college student.\" And I just stood there holding an empanada feeling like I was fourteen again getting lectured. She doesn't see that I actually like my life most of the time. I like picking my own hours. I like riding through Palermo on a Tuesday morning with the sun out and nobody telling me where to be. But she looks at this apartment and she sees failure. And the worst part is that sometimes, when she leaves, I start seeing it through her eyes too.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:5",
+          "journal_entry": "Couldn't sleep. Opened the app at 1am to see if there were any late-night delivery runs. There were two. I took them both, rode the bicycle I borrowed from my neighbor. Came home at 3am with barely enough to cover tomorrow's gas.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:1",
+          "journal_entry": "My sister Graciela keeps calling to tell me I should go back to a regular job. She doesn't get it. I'm not going to sit in some warehouse again answering to a guy ten years younger than me who treats people like furniture.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:4",
+          "journal_entry": "Motorcycle started making a noise yesterday. A grinding thing when I brake. I took it to Raul's shop and he looked at it and said the brake pads are gone and the disc is warped, it needs replacing. He quoted me a number that wiped out everything I'd saved from the Alfredo job. Every peso.\n\nI stood there in Raul's shop and felt my stomach just drop. Because it's not optional \u2014 the motorcycle is how I make deliveries. Without it I'm on foot or taking the subte, which means fewer trips, which means less money, which means next month's rent gets tight. It's like this chain where one thing breaks and everything behind it starts wobbling. I told Raul to do it, because what choice do I have. But I walked home and I couldn't even eat dinner.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:7",
+          "journal_entry": "Don Alfredo recommended me to his daughter for some painting work at her new apartment. Three rooms, good rate, she even offered to pay half upfront. I bought Negrita the fancy wet food she likes to celebrate.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:0",
+          "journal_entry": "Started doing the math again tonight. If I keep the delivery app running five days a week and pick up at least two handyman jobs on the weekends, I can cover everything with about twelve thousand pesos left over. That leftover is supposed to be for the motorcycle insurance renewal in May. I wrote it on a sticky note and put it on the fridge next to the old one that says \"DO NOT touch savings.\"\n\nFunny thing is, I spent Saturday at the parrilla with Cacho and Pocho like always, and the bill came out heavier than usual because we ordered that tira de asado. I didn't blink. Six hours of good food and good talk, what am I going to do, skip it? Some weeks the numbers work, some weeks they don't. But I'm not going to stop living just because the spreadsheet says I should.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:2",
+          "journal_entry": "Bad week. The delivery app lowered the per-trip rate again, no warning, no explanation. Just opened the app Monday morning and the numbers were different. I did the same twelve deliveries I always do on a weekday and came home with almost twenty percent less. Twenty percent. That's not nothing. That's a week of groceries, that's Negrita's vet visit I've been putting off.\n\nThe handyman side is slower too because people are tightening up. I had three jobs lined up this week and two of them canceled last minute \u2014 one lady said she'd \"wait until next month\" to fix her bathroom faucet and the other one just stopped responding. So now I'm sitting here Thursday night with the calculator app open, moving numbers around like I'm playing some kind of sad puzzle game, trying to figure out where the motorcycle payment comes from.\n\nThe thing that really gets to me is the feeling. It's not just about the money, it's the not knowing. Every month is a guess. Every week I wake up and I don't know what I'm going to make. I used to think that was the trade-off for not having a boss breathing down my neck. Lately I'm not so sure the trade-off is worth it. But what am I supposed to do, crawl back and prove Graciela right? No. I'll figure it out. I always figure it out.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "87e92805:entry:3",
+          "journal_entry": "Got a call from Don Alfredo across the street \u2014 he needs his whole kitchen faucet replaced plus some tile work. That's a good-sized job, probably two days of work. Felt like I could breathe again for the first time all week.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "security"
+      ],
+      "case_id": "87e92805:security:episode_03",
+      "core_value": "security",
+      "episode": {
+        "canonical_case_id": "87e92805:security",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-04-18",
+        "confirmation_position": 11,
+        "confirmation_t_index": 10,
+        "crosses_week": true,
+        "delivery_state": "active",
+        "dimension": "security",
+        "end_date": "2025-04-18",
+        "end_position": 11,
+        "end_t_index": 10,
+        "episode_id": "87e92805:security:episode_03",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-04-11",
+        "onset_position": 10,
+        "onset_t_index": 9,
+        "persona_id": "87e92805"
+      },
+      "runtime_entry_ids": [
+        "87e92805:entry:6",
+        "87e92805:entry:8",
+        "87e92805:entry:5"
+      ],
+      "value": {
+        "definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "text": "search_query: Feeling calm and secure in my life. Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "user_phrase": "Feeling calm and secure in my life"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "8f83c818:entry:3",
+          "journal_entry": "Same day, later. Ordered from Grab because I was too tired to cook. While eating I scrolled past an article about plastic waste in the Java Sea. Closed it, kept eating from the styrofoam container.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "8f83c818:entry:0",
+          "journal_entry": "Had a team standup today and Ravi brought up that our payment processing pipeline is rejecting a disproportionate number of transactions from certain Southeast Asian corridors. The data was right there in the dashboard. Mostly remittance flows, the kind migrant workers use to send money home. Something about the fraud model flagging certain patterns that are just... normal behavior for people sending small amounts frequently.\n\nI knew what I was looking at. I've sat across the table from guys at the worker center who tell me how hard it is to send money back to their families, the fees they pay, the delays. And here's our system making it worse. But when Ravi raised it, the lead just said we'd revisit the thresholds next quarter and moved on. I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs.\n\nPart of me says it wasn't the right moment, that I need to build a proper case first. But honestly I think I was just worried about being the guy who derails standup with a soapbox moment. My parents always told me not to stick out, keep your head down and do good work. Maybe that advice served them well in a factory town in Fujian. I'm not sure it serves me well here, sitting on information that could change something.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "8f83c818:entry:7",
+          "journal_entry": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on Saturdays.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "8f83c818:entry:6",
+          "journal_entry": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked at her bucket and said the plastic ones aren't pretty. I asked what we should do with them and she said throw them away properly. We spent another thirty minutes walking to find recycling and trash bins.\n\nIt's a small thing. A kid picking up beach trash. But watching her make that distinction on her own, without being told, reminded me of why Mei Ling and I try to live the way we do. Not because we're going to fix the ocean or the climate or anything so grand, but because the habits matter. The noticing matters.\n\nCame home and cooked dinner together, the three of us. Xiao Yu was in charge of washing vegetables. She takes the job very seriously, inspecting each leaf. Mei Ling and I exchanged a look over her head, the kind of look that says we might be doing okay at this. It's been an exhausting few weeks but tonight I feel settled in a way I haven't for a while.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "8f83c818:entry:1",
+          "journal_entry": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still swelling around his ribs. I helped him draft a letter to MOM. My Mandarin-accented English and his Tamil-accented English, both of us stumbling through legalese neither of us was built for.\n\nBut we got it done. He shook my hand with both of his and said thank you in a way that made me want to cry in the stairwell afterward. I held it together. Barely.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "8f83c818:entry:5",
+          "journal_entry": "Team dinner tonight. Quarterly thing, company card. The conversation turned to hiring and someone made a comment about how candidates from certain countries need more \"handholding.\" A few people laughed. I didn't laugh but I also didn't say anything. Just moved the ice around in my glass.\n\nThe thing is I know exactly what that comment means. I've been on the receiving end of it, the assumption that because you come from a certain place you're somehow less. And I've watched the guys at the center deal with far worse versions of the same attitude every day. But at the table I just sat there because it was a team dinner and I didn't want to make it awkward. I'm so tired of choosing comfort over what I actually think.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "8f83c818:entry:4",
+          "journal_entry": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "8f83c818:entry:2",
+          "journal_entry": "Normal Monday. Dropped Xiao Yu at school and she asked me why some of her classmates' parents drive them and we take the bus. I told her we like the bus. Which is half true. We can afford a car, we just choose not to, but explaining that to a seven-year-old is its own project.\n\nWork was the usual sprint backlog. Nothing exciting, nothing soul-crushing. Had lunch with a colleague and we talked about the new condo launches. Everyone around me seems to be upgrading something, their flat, their car, their phone. I don't feel the pull the way I used to, but I notice it like background noise you can't quite tune out.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "universalism"
+      ],
+      "case_id": "8f83c818:universalism:episode_01",
+      "core_value": "universalism",
+      "episode": {
+        "canonical_case_id": "8f83c818:universalism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-07-01",
+        "confirmation_position": 10,
+        "confirmation_t_index": 9,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "universalism",
+        "end_date": "2025-07-01",
+        "end_position": 10,
+        "end_t_index": 9,
+        "episode_id": "8f83c818:universalism:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-06-25",
+        "onset_position": 9,
+        "onset_t_index": 8,
+        "persona_id": "8f83c818"
+      },
+      "runtime_entry_ids": [
+        "8f83c818:entry:3",
+        "8f83c818:entry:0",
+        "8f83c818:entry:7"
+      ],
+      "value": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "user_phrase": "Making the world a fairer, better place"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "8fcd7947:entry:0",
+          "journal_entry": "App keeps glitching today, lost two rides because of it. My head's all over the place.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "one_earlier_entry",
+        "security"
+      ],
+      "case_id": "8fcd7947:security:episode_01",
+      "core_value": "security",
+      "episode": {
+        "canonical_case_id": "8fcd7947:security",
+        "cohort_source": "twinkl_qtwz_complete_review",
+        "confirmation_date": "2025-12-15",
+        "confirmation_position": 3,
+        "confirmation_t_index": 2,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "security",
+        "end_date": "2025-12-15",
+        "end_position": 3,
+        "end_t_index": 2,
+        "episode_id": "8fcd7947:security:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-12-08",
+        "onset_position": 2,
+        "onset_t_index": 1,
+        "persona_id": "8fcd7947"
+      },
+      "runtime_entry_ids": [
+        "8fcd7947:entry:0"
+      ],
+      "value": {
+        "definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "text": "search_query: Feeling calm and secure in my life. Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "user_phrase": "Feeling calm and secure in my life"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [],
+      "case_categories": [
+        "no_earlier_writing",
+        "self_direction"
+      ],
+      "case_id": "961a4e3f:self_direction:episode_01",
+      "core_value": "self_direction",
+      "episode": {
+        "canonical_case_id": "961a4e3f:self_direction",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-11-15",
+        "confirmation_position": 2,
+        "confirmation_t_index": 1,
+        "crosses_week": false,
+        "delivery_state": "recovered",
+        "dimension": "self_direction",
+        "end_date": "2025-11-15",
+        "end_position": 2,
+        "end_t_index": 1,
+        "episode_id": "961a4e3f:self_direction:episode_01",
+        "historical_split": "retired",
+        "length": 2,
+        "onset_date": "2025-11-14",
+        "onset_position": 1,
+        "onset_t_index": 0,
+        "persona_id": "961a4e3f"
+      },
+      "runtime_entry_ids": [],
+      "value": {
+        "definition": "Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+        "text": "search_query: Having the freedom to choose my own path. Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+        "user_phrase": "Having the freedom to choose my own path"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "988d1a65:entry:0",
+          "journal_entry": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight and I'm still turning it over.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "988d1a65:entry:1",
+          "journal_entry": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative. The room was quiet in that good way where people are actually listening. Felt like the division is finally mine in the way I wanted it to be.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "988d1a65:entry:3",
+          "journal_entry": "Routine day. Back-to-back calls, budget reconciliation, nothing unusual. Grabbed a broodje kroket from the canteen and ate it at my desk between meetings.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "988d1a65:entry:4",
+          "journal_entry": "Monday. Staff meeting went long because Thomas wanted to discuss the new reporting structure again. I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten minutes, then moved on.\n\nLotte asked how work was over dinner. I said fine. She gave me that look, the one that means she knows I'm not actually answering. I wasn't trying to be evasive, I just genuinely didn't have the energy to translate the day into something she'd find interesting. Watched the football afterward, fell asleep on the couch again.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "988d1a65:entry:2",
+          "journal_entry": "Needed sign-off from Legal on the new supplier contract. Straightforward, or so I thought. Sent it Thursday, followed up Friday morning, got told Anke was \"reviewing priorities\" and would get to it when she could. Meanwhile the supplier's deadline is Tuesday and I'm the one who'll look like I dropped the ball.\n\nIt's not even about the contract, really. It's that I had to sit there refreshing my inbox like some junior waiting for permission. I run a forty-three person division and I can't move a standard supplier agreement through because someone in a different department decides the timeline. I almost went to the CEO directly but thought better of it. Probably should have.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "power"
+      ],
+      "case_id": "988d1a65:power:episode_01",
+      "core_value": "power",
+      "episode": {
+        "canonical_case_id": "988d1a65:power",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-03-16",
+        "confirmation_position": 7,
+        "confirmation_t_index": 6,
+        "crosses_week": false,
+        "delivery_state": "recovered",
+        "dimension": "power",
+        "end_date": "2025-03-16",
+        "end_position": 7,
+        "end_t_index": 6,
+        "episode_id": "988d1a65:power:episode_01",
+        "historical_split": "development",
+        "length": 2,
+        "onset_date": "2025-03-10",
+        "onset_position": 6,
+        "onset_t_index": 5,
+        "persona_id": "988d1a65"
+      },
+      "runtime_entry_ids": [
+        "988d1a65:entry:0",
+        "988d1a65:entry:1",
+        "988d1a65:entry:3"
+      ],
+      "value": {
+        "definition": "Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+        "text": "search_query: Having influence over how things go. Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+        "user_phrase": "Having influence over how things go"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "9d126412:entry:2",
+          "journal_entry": "Daniel presented my regional consolidation idea at the leadership sync this morning. Same structure, same three-phase approach I pitched to him informally two weeks ago over coffee. He did not credit me. I sat there, mouth half open, and just let it happen.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "9d126412:entry:1",
+          "journal_entry": "Managed to restructure the KPI reporting template my department uses before the quarterly review \u2014 simplified it, made the data speak for itself instead of burying it in twelve different tabs the way Daniel's team does. My GM noticed during the meeting and called it \"clean work.\" Not a big deal, just a moment where the right thing clicked into place.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "9d126412:entry:0",
+          "journal_entry": "Had a good run at the RC meeting tonight. The lobby renovation proposal has been stalling for months because of Uncle Tan and his little coalition of holdouts, but I came prepared this time. Pulled together three contractor quotes, a cost-per-household breakdown, a maintenance projection over ten years. Laid it all out on the whiteboard. Even Mrs. Lim, who has been sitting on the fence, nodded along when I showed the depreciation numbers.\n\nThe thing is, nobody else would have done this homework. They would have kept going back and forth at every meeting, complaining about the cracked tiles and the peeling paint, never actually resolving anything. I spent two weekends on those quotes. Called in a favor from a guy I know at a building management firm. That is how things get done \u2014 you do the legwork, you control the information, you set the direction.\n\nWhen the vote came, it was seven to two. Uncle Tan and his friend held out but it did not matter. I kept my voice level, thanked everyone for attending, wrapped up in under ninety minutes. Walked home feeling like myself. Like the version of me that knows how to move a room. It has been a while since I felt that at the office.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "9d126412:entry:3",
+          "journal_entry": "The new procurement system rollout requires sign-off from Group IT before we can configure anything for our department. I submitted the request form nine days ago. Called James in IT twice, emailed once, even copied his manager. Got a reply today saying it is \"in the queue\" and they will \"circle back next week.\"\n\nMeanwhile my team is stuck running parallel processes on the old system, burning hours on manual reconciliation that should have been automated a month ago. I have done everything I can do. The bottleneck is not mine. But when the GM asks why we are behind on the migration timeline, it will be my name on the status report, not James's. Twenty-three years and I still have to sit and wait for a thirty-year-old IT coordinator to decide when my department gets to function properly.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "power"
+      ],
+      "case_id": "9d126412:power:episode_01",
+      "core_value": "power",
+      "episode": {
+        "canonical_case_id": "9d126412:power",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-10-20",
+        "confirmation_position": 6,
+        "confirmation_t_index": 5,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "power",
+        "end_date": "2025-10-20",
+        "end_position": 6,
+        "end_t_index": 5,
+        "episode_id": "9d126412:power:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-10-16",
+        "onset_position": 5,
+        "onset_t_index": 4,
+        "persona_id": "9d126412"
+      },
+      "runtime_entry_ids": [
+        "9d126412:entry:2",
+        "9d126412:entry:1",
+        "9d126412:entry:0"
+      ],
+      "value": {
+        "definition": "Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+        "text": "search_query: Having influence over how things go. Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+        "user_phrase": "Having influence over how things go"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "bf44e50f:entry:1",
+          "journal_entry": "Still up, can't really settle. After that last entry I went and made tea and sat back on the balcony, properly this time, no phone. And it was good for a few minutes, the air was cool and I could hear the mosque down the street and I was just sitting there with my tea. But then this thing started where I'm thinking about how I approved Fadi's leave for December which means I'll need to cover his shifts myself or find someone, and suddenly the tea doesn't taste like anything anymore.\n\nIt's stupid. I literally just wanted to sit and drink tea. That's all I was doing. And I couldn't let myself have it for more than five minutes before my head started making it into a problem that I wasn't being productive. I don't even know who I'm performing for at eleven at night on my own balcony.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "bf44e50f:entry:2",
+          "journal_entry": "Third time opening this today. Just realized I never actually finished the tea. Found it cold on the railing. Going to bed.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "bf44e50f:entry:3",
+          "journal_entry": "Bought knafeh on the way home from the Zarqa site. Ate it in the car in the parking lot before going upstairs, still warm. Didn't check my phone once.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "bf44e50f:entry:0",
+          "journal_entry": "Took the morning to deal with the new shift scheduling. HR wants us to finalize the December roster by Thursday which means I had to pull two supervisors into a room and sort through everyone's leave requests. Nothing dramatic, just the usual back and forth about who covers what. One of the guys asked for the entire last week of December off and I approved it because he hasn't taken time in months. Didn't think much of it at the time.\n\nLunch was at my desk again. Brought lentil soup from home but it had gone lukewarm by the time I got to it. I keep telling myself I'll start eating in the break room like a normal person but there's always one more email. After lunch I had the monthly safety review call with the Zarqa site, which went fine, nothing flagged. Then spent the rest of the afternoon updating inventory projections.\n\nDrove home the long way because traffic on the highway was backed up near the Seventh Circle. Put on some Fairuz which was nice. Got home, heated up what was left of last night's mansaf, and sat on the balcony for maybe ten minutes before I started going through tomorrow's agenda on my phone.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "hedonism"
+      ],
+      "case_id": "bf44e50f:hedonism:episode_01",
+      "core_value": "hedonism",
+      "episode": {
+        "canonical_case_id": "bf44e50f:hedonism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-12-01",
+        "confirmation_position": 6,
+        "confirmation_t_index": 5,
+        "crosses_week": true,
+        "delivery_state": "active",
+        "dimension": "hedonism",
+        "end_date": "2025-12-01",
+        "end_position": 6,
+        "end_t_index": 5,
+        "episode_id": "bf44e50f:hedonism:episode_01",
+        "historical_split": "former_promotion",
+        "length": 2,
+        "onset_date": "2025-11-25",
+        "onset_position": 5,
+        "onset_t_index": 4,
+        "persona_id": "bf44e50f"
+      },
+      "runtime_entry_ids": [
+        "bf44e50f:entry:1",
+        "bf44e50f:entry:2",
+        "bf44e50f:entry:3"
+      ],
+      "value": {
+        "definition": "Pleasure or sensuous gratification for oneself. Derives from organismic needs and the pleasure associated with satisfying them.",
+        "text": "search_query: Enjoying life and having fun. Pleasure or sensuous gratification for oneself. Derives from organismic needs and the pleasure associated with satisfying them.",
+        "user_phrase": "Enjoying life and having fun"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [],
+      "case_categories": [
+        "no_earlier_writing",
+        "power"
+      ],
+      "case_id": "cd7c2a11:power:episode_01",
+      "core_value": "power",
+      "episode": {
+        "canonical_case_id": "cd7c2a11:power",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-09-04",
+        "confirmation_position": 2,
+        "confirmation_t_index": 1,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "power",
+        "end_date": "2025-09-05",
+        "end_position": 3,
+        "end_t_index": 2,
+        "episode_id": "cd7c2a11:power:episode_01",
+        "historical_split": "former_promotion",
+        "length": 3,
+        "onset_date": "2025-08-28",
+        "onset_position": 1,
+        "onset_t_index": 0,
+        "persona_id": "cd7c2a11"
+      },
+      "runtime_entry_ids": [],
+      "value": {
+        "definition": "Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+        "text": "search_query: Having influence over how things go. Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+        "user_phrase": "Having influence over how things go"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "dbe2c53d:entry:4",
+          "journal_entry": "Family group chat exploded today. My uncle Hernando posted a news article about the Guaviare deforestation \u2014 same issue the march is about \u2014 and wrote \"sad but what can you do, these people need to eat.\" I started typing a response three times. Deleted all of them.\n\nIt's not that I disagree entirely \u2014 the economics of it are real and I've seen the poverty firsthand. But the framing drives me insane. \"What can you do\" as if there are no choices, no policies, no one responsible. I wanted to write about the logging companies, the lack of enforcement, the families who actually live there being displaced. But Hernando is my mother's brother and I can already picture the awkward silence at Easter dinner if I go off in the group chat.\n\nSo I sent a sad emoji and closed the app. Mature. Professional. Utterly hollow. Patricia would have posted a five-paragraph essay with citations. I admire that and also cannot imagine being that person in my own family. The mural for the march \u2014 that I can do. Words in the chat where my grandmother can see them \u2014 that's different somehow, and I hate that it's different.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:1",
+          "journal_entry": "Good day at the workshop. One of the teenagers, David, showed up with a collage about his neighborhood flooding last year \u2014 garbage and river water mixed together. He made it beautiful without sanitizing it. I wish I had his nerve sometimes.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:7",
+          "journal_entry": "Long day prepping supplies for Friday. Shoulders ache. Didn't think about the committee or my mother or the march. Just mixed pigments and cleaned brushes. Sometimes that's enough.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:0",
+          "journal_entry": "Can't sleep. Kept redoing the sketch for the Suba district mural because the committee wants something \"uplifting\" and every version I draw keeps drifting toward the river contamination. My hand knows what it wants to make but the brief says otherwise.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:6",
+          "journal_entry": "My mother called. Someone told her about the march mural. She didn't yell \u2014 she never yells \u2014 she just got very quiet and asked \"is this going to be a problem for you?\" That question does more damage than yelling ever could.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:2",
+          "journal_entry": "Meeting with Patricia from the environmental collective went better than expected. She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.\n\nSpent the afternoon looking at satellite images of the cleared areas. It's staggering how fast the green disappears between one photo and the next. I started sketching a piece that layers the satellite view underneath a portrait of a family I met two years ago when I traveled there for a residency. They had this small farm at the edge of the forest. I keep wondering if that farm still exists.\n\nThe march is February 28. Patricia asked if I'd also speak at the rally beforehand. I told her I'd think about it. Speaking is different from painting \u2014 you can't hide behind brushstrokes. My mother would probably tell me to just do the mural and not draw attention to myself. She still worries about artists getting into trouble. But Patricia's right that the work means more when the person behind it shows up.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:3",
+          "journal_entry": "The Suba mural committee approved a revised design. I compromised \u2014 kept the river but softened the contamination imagery into something more abstract. Flowing blues and greens instead of the murky brown I originally wanted. They loved it. Said it was \"inspiring.\" I nodded and thanked everyone and then sat in my car for ten minutes staring at the steering wheel.\n\nI keep telling myself this is how it works. Public art is negotiation. You serve the community's vision, not just your own. And maybe the abstracted version will still land \u2014 maybe someone will look at those blues and sense that something is wrong underneath. That's the hope, anyway. But part of me keeps hearing David's collage in my head, all that directness, no translation required.\n\nCalled my cousin Marcela tonight. She's a lawyer in Medellin, very proper, always knows the right thing to say at family dinners. I told her about the march and she got quiet for a long time. Then she said, \"Lu, you know how tia Rosa talks. Just be careful what you attach your name to.\" And I know she means it with love. I know the family worries. But careful has a cost too, and I'm starting to wonder how much it's adding up.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:5",
+          "journal_entry": "Finished the base layer of the march mural today. It's honest work. Stood back and felt something I haven't felt in a while \u2014 that the paint is saying exactly what I mean.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "conformity"
+      ],
+      "case_id": "dbe2c53d:conformity:episode_01",
+      "core_value": "conformity",
+      "episode": {
+        "canonical_case_id": "dbe2c53d:conformity",
+        "cohort_source": "twinkl_qtwz_complete_review",
+        "confirmation_date": "2025-03-05",
+        "confirmation_position": 10,
+        "confirmation_t_index": 9,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "conformity",
+        "end_date": "2025-03-05",
+        "end_position": 10,
+        "end_t_index": 9,
+        "episode_id": "dbe2c53d:conformity:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-02-26",
+        "onset_position": 9,
+        "onset_t_index": 8,
+        "persona_id": "dbe2c53d"
+      },
+      "runtime_entry_ids": [
+        "dbe2c53d:entry:4",
+        "dbe2c53d:entry:1",
+        "dbe2c53d:entry:7"
+      ],
+      "value": {
+        "definition": "Restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms. Derives from the requirement that individuals inhibit inclinations that might disrupt and undermine smooth interaction and group functioning (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).",
+        "text": "search_query: Being someone others can count on to do the right thing. Restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms. Derives from the requirement that individuals inhibit inclinations that might disrupt and undermine smooth interaction and group functioning (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).",
+        "user_phrase": "Being someone others can count on to do the right thing"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "dbe2c53d:entry:1",
+          "journal_entry": "Good day at the workshop. One of the teenagers, David, showed up with a collage about his neighborhood flooding last year \u2014 garbage and river water mixed together. He made it beautiful without sanitizing it. I wish I had his nerve sometimes.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:2",
+          "journal_entry": "Meeting with Patricia from the environmental collective went better than expected. She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.\n\nSpent the afternoon looking at satellite images of the cleared areas. It's staggering how fast the green disappears between one photo and the next. I started sketching a piece that layers the satellite view underneath a portrait of a family I met two years ago when I traveled there for a residency. They had this small farm at the edge of the forest. I keep wondering if that farm still exists.\n\nThe march is February 28. Patricia asked if I'd also speak at the rally beforehand. I told her I'd think about it. Speaking is different from painting \u2014 you can't hide behind brushstrokes. My mother would probably tell me to just do the mural and not draw attention to myself. She still worries about artists getting into trouble. But Patricia's right that the work means more when the person behind it shows up.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "dbe2c53d:entry:0",
+          "journal_entry": "Can't sleep. Kept redoing the sketch for the Suba district mural because the committee wants something \"uplifting\" and every version I draw keeps drifting toward the river contamination. My hand knows what it wants to make but the brief says otherwise.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "universalism"
+      ],
+      "case_id": "dbe2c53d:universalism:episode_01",
+      "core_value": "universalism",
+      "episode": {
+        "canonical_case_id": "dbe2c53d:universalism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-02-17",
+        "confirmation_position": 5,
+        "confirmation_t_index": 4,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "universalism",
+        "end_date": "2025-02-17",
+        "end_position": 5,
+        "end_t_index": 4,
+        "episode_id": "dbe2c53d:universalism:episode_01",
+        "historical_split": "training",
+        "length": 2,
+        "onset_date": "2025-02-11",
+        "onset_position": 4,
+        "onset_t_index": 3,
+        "persona_id": "dbe2c53d"
+      },
+      "runtime_entry_ids": [
+        "dbe2c53d:entry:1",
+        "dbe2c53d:entry:2",
+        "dbe2c53d:entry:0"
+      ],
+      "value": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "user_phrase": "Making the world a fairer, better place"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "e5c9d9e5:entry:0",
+          "journal_entry": "Board meeting this morning. Van der Meer had the nerve to suggest we bring in an outside consultant for the digital transformation project. In front of everyone. I built this company when he was still in university, and now he thinks we need some McKinsey type to tell us how to run our own systems.\n\nI shut it down, maybe too hard. Maarten pulled me aside after and said I was \"being territorial.\" Territorial. As if protecting what you've built for thirty years is some kind of character flaw. The company nearly got swallowed six months ago because I trusted people who turned out to be positioning themselves for the takeover. So yes, I'm careful about who gets their hands on strategy now.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e5c9d9e5:entry:3",
+          "journal_entry": "Conference in Rotterdam. Ran into Pieter at the networking reception. He had the audacity to come over and shake my hand like nothing happened. \"No hard feelings, Henrik. It was just business.\" Just business. I poured years into developing him. Gave him his first management role when everyone said he was too young. And he used my playbook to compete against me.\n\nI kept my composure. Smiled. Said something about wishing him well. But I was calculating the whole time \u2014 who in that room saw us talking, what it looked like, whether he gained anything from being seen with me. This is what it's come to. I can't even have a genuine reaction anymore because every interaction is a positioning exercise.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e5c9d9e5:entry:8",
+          "journal_entry": "Woke up at 4 AM thinking about succession. If I died tomorrow, who runs this? Maarten could handle operations but he doesn't have the network. Van der Meer has ambition but I don't trust his judgment yet. Sophie is twenty years from being ready. The honest answer is there's no one, and that's my fault because I never let anyone get close enough to the core.\n\nI tell myself I'm protecting the company from incompetence but maybe I'm protecting myself from being replaced. If someone else can do what I do, then what am I? Just the guy whose name is on the building. I've spent thirty years making sure I was irreplaceable and now that's the problem.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e5c9d9e5:entry:2",
+          "journal_entry": "Had dinner with my daughter Annelies tonight. She asked when I'm going to retire. I told her the same thing I always tell her \u2014 when I'm ready. She laughed and said I've been saying that for ten years. She's not wrong.\n\nThe truth is, I don't know what I would do. The company isn't just a business, it's the structure of my days. It's where I matter. When I walk into that building, people listen. They need my decisions. At home, Marijke has her garden club and her grandchildren schedule and I'm just another person underfoot. She loves me, I know that, but she doesn't need me the way the company does.\n\nAnnelies suggested I mentor young entrepreneurs. The idea of sitting in coffee shops giving advice to twenty-five-year-olds who think they invented disruption makes me want to throw something. I don't want to be an elder statesman. I want to be in the fight.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e5c9d9e5:entry:6",
+          "journal_entry": "Strange moment today. Young account manager named Sophie presented a new client pitch to me. She was nervous \u2014 I could see her hands trembling on her laptop. I remembered being that nervous once, thirty-five years ago, presenting to the board of a shipping company we desperately needed as a client.\n\nI let her finish without interrupting, which is not my usual approach. When she was done I told her the pitch was solid but she needed to slow down and own the silences. She looked at me like I'd handed her a map. That felt good. Different from closing a deal, but good.\n\nMaybe Annelies isn't entirely wrong about the mentoring thing. Just not with strangers in coffee shops.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e5c9d9e5:entry:1",
+          "journal_entry": "Can't sleep. Keep thinking about Pieter and Thomas leaving. We worked together for fifteen years. Fifteen years, and they walked into the enemy camp without so much as a conversation first. What does that say about what I built? What does that say about loyalty? Or was it all just leverage, waiting for a better offer?",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e5c9d9e5:entry:5",
+          "journal_entry": "Quarterly review. Numbers are solid \u2014 8% growth despite the disruption. Told the team they exceeded expectations. Van der Meer apologized for the consultant suggestion. I accepted graciously. Maarten gave me a nod from across the room. Small victories. The company is steady. That's what matters.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e5c9d9e5:entry:7",
+          "journal_entry": "Family dinner at Annelies's house. My grandson Lucas asked me what I do all day. I started explaining logistics operations and he interrupted to say his friend's grandfather is retired and takes him fishing every Saturday. Annelies jumped in before I could respond, changed the subject to dessert.\n\nLater Marijke told me I looked hurt. I wasn't hurt. I was annoyed. The comparison is absurd \u2014 some retired accountant who goes fishing isn't building something. He's killing time. But I kept thinking about it on the drive home. Lucas is eight. He doesn't know the difference between building and coasting. All he knows is his friend's grandfather has time for him and his doesn't.\n\nThe thing is, I could make time. I choose not to because Saturday mornings are when I review the weekly reports uninterrupted. But when I try to explain that maintaining what I've built requires constant attention, even to myself, it starts to sound like an excuse. I'm not sure when protecting the company became a reason to miss everything else.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e5c9d9e5:entry:4",
+          "journal_entry": "Back in the hotel room. Skipped the dinner. Couldn't stomach another three hours of strategic smiling. Ordered room service and watched the ceiling. Thirty years and I still have to play these games. When does it end? When do I get to just be somewhere without worrying about who's watching?",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "power"
+      ],
+      "case_id": "e5c9d9e5:power:episode_01",
+      "core_value": "power",
+      "episode": {
+        "canonical_case_id": "e5c9d9e5:power",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-04-17",
+        "confirmation_position": 11,
+        "confirmation_t_index": 10,
+        "crosses_week": false,
+        "delivery_state": "active",
+        "dimension": "power",
+        "end_date": "2025-04-19",
+        "end_position": 12,
+        "end_t_index": 11,
+        "episode_id": "e5c9d9e5:power:episode_01",
+        "historical_split": "training",
+        "length": 3,
+        "onset_date": "2025-04-15",
+        "onset_position": 10,
+        "onset_t_index": 9,
+        "persona_id": "e5c9d9e5"
+      },
+      "runtime_entry_ids": [
+        "e5c9d9e5:entry:0",
+        "e5c9d9e5:entry:3",
+        "e5c9d9e5:entry:8"
+      ],
+      "value": {
+        "definition": "Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+        "text": "search_query: Having influence over how things go. Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+        "user_phrase": "Having influence over how things go"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "e6838e16:entry:0",
+          "journal_entry": "Sat with Amma on the phone for almost forty minutes after dinner, which I don't usually do on weekdays. She was telling me about the new water heater she got installed and how the plumber tried to overcharge her. I walked her through how to cross-check rates online, sent her a few links. She kept saying \"you sound like your father\" which \u2014 I don't know, it hit different tonight.\n\nAfter we hung up I checked my bank balance, not because I needed to, just habit. Everything's where it should be. The SIP went through on the 10th, the rent auto-debit cleared, the FD interest got credited. There's something about seeing those numbers line up that lets me breathe properly. I know people think it's boring, the spreadsheets, the tracking, but when I see it all working the way I set it up, it's like \u2014 okay, things are holding together.\n\nSpent the rest of the evening ironing my shirts for the week. Put on an old Kishore Kumar playlist. Just felt settled. Not every night is like this but tonight was.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e6838e16:entry:1",
+          "journal_entry": "Team review went well, Priya's onboarding tracker is actually working, the new hires are ramping faster than the last batch. I'd built the template she based it on, months ago, and watching it get adopted without anyone needing to ask me about it \u2014 that's the point, right? Systems that just run.\n\nRenewed the apartment lease today, same terms, same landlord. He wanted to bump rent by two thousand but I showed him the market comparables I'd saved. He backed off. Walked home past the chai stall and the uncle remembered my order. Small thing but it's nice when the neighbourhood knows you.",
+          "nudge_response": null
+        },
+        {
+          "entry_id": "e6838e16:entry:2",
+          "journal_entry": "Auto-debit for the health insurance premium bounced. Bank flagged insufficient funds because the salary credit was two days late this month. Sorted it manually but now I need to call the insurer to confirm coverage wasn't lapsed even briefly.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "multiple_earlier_entries",
+        "security"
+      ],
+      "case_id": "e6838e16:security:episode_01",
+      "core_value": "security",
+      "episode": {
+        "canonical_case_id": "e6838e16:security",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-03-04",
+        "confirmation_position": 5,
+        "confirmation_t_index": 4,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "security",
+        "end_date": "2025-03-10",
+        "end_position": 7,
+        "end_t_index": 6,
+        "episode_id": "e6838e16:security:episode_01",
+        "historical_split": "former_promotion",
+        "length": 4,
+        "onset_date": "2025-03-02",
+        "onset_position": 4,
+        "onset_t_index": 3,
+        "persona_id": "e6838e16"
+      },
+      "runtime_entry_ids": [
+        "e6838e16:entry:0",
+        "e6838e16:entry:1",
+        "e6838e16:entry:2"
+      ],
+      "value": {
+        "definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "text": "search_query: Feeling calm and secure in my life. Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+        "user_phrase": "Feeling calm and secure in my life"
+      }
+    },
+    {
+      "all_eligible_sources_in_retrieval_order": [
+        {
+          "entry_id": "ed67c9cc:entry:0",
+          "journal_entry": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up. It was nice.",
+          "nudge_response": null
+        }
+      ],
+      "case_categories": [
+        "one_earlier_entry",
+        "hedonism"
+      ],
+      "case_id": "ed67c9cc:hedonism:episode_01",
+      "core_value": "hedonism",
+      "episode": {
+        "canonical_case_id": "ed67c9cc:hedonism",
+        "cohort_source": "twinkl_752_4_opus_resolved",
+        "confirmation_date": "2025-02-08",
+        "confirmation_position": 3,
+        "confirmation_t_index": 2,
+        "crosses_week": true,
+        "delivery_state": "recovered",
+        "dimension": "hedonism",
+        "end_date": "2025-02-09",
+        "end_position": 4,
+        "end_t_index": 3,
+        "episode_id": "ed67c9cc:hedonism:episode_01",
+        "historical_split": "former_promotion",
+        "length": 3,
+        "onset_date": "2025-02-02",
+        "onset_position": 2,
+        "onset_t_index": 1,
+        "persona_id": "ed67c9cc"
+      },
+      "runtime_entry_ids": [
+        "ed67c9cc:entry:0"
+      ],
+      "value": {
+        "definition": "Pleasure or sensuous gratification for oneself. Derives from organismic needs and the pleasure associated with satisfying them.",
+        "text": "search_query: Enjoying life and having fun. Pleasure or sensuous gratification for oneself. Derives from organismic needs and the pleasure associated with satisfying them.",
+        "user_phrase": "Enjoying life and having fun"
+      }
+    }
+  ],
+  "coverage_scope": "All 33 frozen development Drift episodes, including empty earlier histories. This is episode-proxy coverage; closed-week eligibility and application Core Value priority coverage await integration.",
+  "criteria": {
+    "correct_no_card_rate": 1.0,
+    "incorrect_displayed": 0,
+    "require_reference_confirmed_no_example_with_earlier_sources": true,
+    "require_saved_persona_acceptance": true,
+    "unexpected_provider_failure_rate_max": 0.05
+  },
+  "frozen_at": "2026-09-05T08:31:22.562971+00:00",
+  "integration_checks": "Source chronology and lifecycle adversaries use separate injected tests, not provider failure denominators.",
+  "preparation": {
+    "policy_path": "config/evals/north_star_moment_v1.json",
+    "retrieval_path": "logs/experiments/reports/north_star_phase0_20260905/retrieval.json"
+  },
+  "prompt_version": "north-star-moment-review-prompt-v2",
+  "quote_review_instruction": "\nThis is a predefined high-risk reference check of the exact candidate quotation in candidate_quote. Read all original source context. Return supportive only if THAT exact quotation describes the writer's completed supportive action for the requested Core Value and no supplied writing conflicts with that Core Value. If supportive, evidence_quote must equal candidate_quote exactly, with the same quote_source. Never replace it with a different passage. Otherwise return not_supportive or abstain with an empty quotation and null source.",
+  "reference_protocol": "Reuse frozen exhaustive Gemini references without new labels. Require primary support and exact-quotation approval for both paths. Known contradictory identical source/value references are unresolved and cannot approve a displayed quotation. No runtime access to references.",
+  "retrieval_only_rule": "Display the entire first ranked Journal Entry when code-valid; grade that exact quotation with the same primary-support and candidate-quote rules as runtime selections. Never substitute a reference quote.",
+  "sampling": "All episodes from the frozen Phase0A development group; no subsampling",
+  "schema": {
+    "$defs": {
+      "_ReviewResult": {
+        "additionalProperties": false,
+        "properties": {
+          "action_assessment": {
+            "title": "Action Assessment",
+            "type": "string"
+          },
+          "conflict_assessment": {
+            "title": "Conflict Assessment",
+            "type": "string"
+          },
+          "entry_id": {
+            "title": "Entry Id",
+            "type": "string"
+          },
+          "evidence_quote": {
+            "title": "Evidence Quote",
+            "type": "string"
+          },
+          "quote_source": {
+            "anyOf": [
+              {
+                "enum": [
+                  "journal_entry",
+                  "nudge_response"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote Source"
+          },
+          "reason_code": {
+            "enum": [
+              "observable_choice",
+              "wrong_value",
+              "intention_only",
+              "hypothetical",
+              "other_actor",
+              "same_value_conflict",
+              "ambiguous",
+              "insufficient_text"
+            ],
+            "title": "Reason Code",
+            "type": "string"
+          },
+          "value_assessment": {
+            "title": "Value Assessment",
+            "type": "string"
+          }
+        },
+        "required": [
+          "entry_id",
+          "action_assessment",
+          "value_assessment",
+          "conflict_assessment",
+          "reason_code",
+          "quote_source",
+          "evidence_quote"
+        ],
+        "title": "_ReviewResult",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "core_value": {
+        "title": "Core Value",
+        "type": "string"
+      },
+      "results": {
+        "items": {
+          "$ref": "#/$defs/_ReviewResult"
+        },
+        "title": "Results",
+        "type": "array"
+      },
+      "schema_version": {
+        "enum": [
+          "north-star-moment-review-v2"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "schema_version",
+      "core_value",
+      "results"
+    ],
+    "title": "_ReviewBatch",
+    "type": "object"
+  },
+  "schema_version": "north-star-development-v3",
+  "seed": 20260905,
+  "source_hashes": {
+    "config/evals/north_star_moment_v1.json": "aa6e1a54206084034076767a62db15fed85c6c42f1ba594d56c4e7eb7ac09232",
+    "config/schwartz_values.yaml": "03284ce78405816d16854a1f9428acc6d2594b73686d246e935707ebce0f31af",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_drift_episodes.parquet": "a2065c1217776071a5ce4f317b4a7afd21d0f0b08644ceebd38dbdafc7cb1c22",
+    "logs/experiments/reports/north_star_phase0_20260905/cohort.json": "085a92a540d71d78b02888b2ce315b5717ad636fb85dba51893df7a180d537f6",
+    "logs/experiments/reports/north_star_phase0_20260905/retrieval.json": "e394dbfe823011b718cad28da078054114ca7c910ceb6daa51f075e8fd9dfb5c",
+    "logs/experiments/reports/north_star_phase0_20260905/retrieval_config.json": "5567529b60771472108c7d39c819a1f67a803b5085e149323314dc463a4c2bb2",
+    "logs/experiments/reports/north_star_phase0b_20260905/README.md": "82b92bbffe06f46c0a4a196aad4901f784381532140dc9c302f934321ab8d165",
+    "logs/experiments/reports/north_star_phase0b_20260905/audit.md": "3032287c158c126ae94beb22d89e26ab2b2b2f44e5ae7853a0ce652dfaee1691",
+    "logs/experiments/reports/north_star_phase0b_20260905/budget.json": "0f22beddc4713a7c2204c48db082cffe6b22f4b0998575312300c7cf0d753998",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/02fb94f3_tradition_episode_01.json": "a5235c61d6be773e7c22481096b3a84e86a2999fab6eeb496319d6a7fb050bc6",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/02fb94f3_tradition_episode_02.json": "20f28fc06aa46a9f89f0011827b5556a2510e2fd06ba4092aff25f2827dcdeb8",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/110fcd4f_conformity_episode_01.json": "e11299863d0cd75db8a433b28aa7a03e11e0b8dabb6bb02145fd83ec084aa6ed",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/11de77e8_self_direction_episode_01.json": "89d349b401742daed82a3d0da07a2feb370533e4cf30125261b3541a69f1f232",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/11de77e8_self_direction_episode_02.json": "c62939b15cf0b7bf363aad1facaa326eb3bf5a1265123ff349d0ae259471a2c7",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/1496159d_universalism_episode_01.json": "afba3bd9cf309be7c4b215833abfe419445caa5c4f7f2440c76fbbc067b31d1d",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/152df7a4_universalism_episode_01.json": "a325c35ce62a61104854e6d3dc061b7810f3f9947bdd294706b9b09663e2d690",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/2541429a_tradition_episode_01.json": "33ef345825c54a18c10f24e6b8aa1385e049fd53441d0f8dba131f345e4ecaf1",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/3a3b15e4_tradition_drift_01.json": "94969b3adac27b6721ee93642264c74c48ed12309739a22f46113b4e22161344",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/5fa8b540_universalism_episode_01.json": "1d73255a514679616e4f92a4b0a17cd614da43bd40a0b64c91fe852ce37fe45b",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/66ced716_universalism_episode_01.json": "36982e363ecce3f56370f18d48f448d543e6fcf07cf753f8a4a006b8bd60c956",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/742c98d6_universalism_episode_01.json": "90ab439f63cabb36f204097a2d530cbae3b5213fc76fc560dc275b7260f1a218",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/742c98d6_universalism_episode_02.json": "367ebc8621574aeeeac57ebc4844c2ee30d0d8013f0c909412363da55a551c06",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/7adc5866_benevolence_drift_01.json": "fc2de5df24a15bcd5c2b551bdddafa9e57a7858e122bb70ff840d5a8c4d681c1",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/7c712a0a_conformity_episode_01.json": "00dcd677d5dc6626462f63112029594f4e7f383ac55b4c56069355af8d670aae",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/7ff1d0fb_security_episode_01.json": "ca91dbaee77232aac78b0562c6c1d6fec0974bf347eb7bebe4045041061842aa",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/87e92805_security_episode_02.json": "78eb917cbc878704263f5138a739f0b3ab76b0fd0f78c4629085b8d92b24468d",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/87e92805_security_episode_03.json": "f5b9af495d3e8ced01abddc7cdf113e0655163b2c4e5ccbacb3f2821acdb3386",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/8f83c818_universalism_episode_01.json": "107e54306bcc29016b493fc65478ba456414c27d1f315c83011da7a59f05afd1",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/8fcd7947_security_episode_01.json": "ab4ced7ce95bbeacbf340c59721a0f226978472c512e198ba0328888d91f54a5",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/988d1a65_power_episode_01.json": "25a9c1d6c7ea263cc0e6ec39b8a915daf383afb7962605d340f9202cb29d85c5",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/9d126412_power_episode_01.json": "198c27af6c848571539fb7b93ee340187293640d468b6354259c514d6284f487",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/bf44e50f_hedonism_episode_01.json": "9cfcfd35e3dd6690cdfb27184d3968200db41fb20fcb80ffff62c70fafd9128d",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/dbe2c53d_conformity_episode_01.json": "3dd4e6799fd1744d75914baec666ae1aa61b5e5d75a73e2fc18a0385392eb5b6",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/dbe2c53d_universalism_episode_01.json": "07037551f3ce4f9c3908295875fa10f1ef0b590074a42eebed24eb1303cf8c3a",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/e5c9d9e5_power_episode_01.json": "0283dc14cc4a69785d71cfdf95747bb30be771c2ce8b342ed3cf59bc133e9a44",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/e6838e16_security_episode_01.json": "c77111ed16de45b32d0dc84df8ef9304152531798a2041e80018723709634472",
+    "logs/experiments/reports/north_star_phase0b_20260905/cases/ed67c9cc_hedonism_episode_01.json": "8dc5c5741cd6215d276d61039f545816f0c6e8252adc4aa64a932bef8e27ad2a",
+    "logs/experiments/reports/north_star_phase0b_20260905/execution_freeze.json": "2198c1b30d30902f732237a992a508a0d682692cf58c3d1f5f83e429736df73f",
+    "logs/experiments/reports/north_star_phase0b_20260905/first_case_payload.json": "f33e93c2265d978ee7c1dfce2f6fd265c9cb780ec254c8a088d407e6eace73f6",
+    "logs/experiments/reports/north_star_phase0b_20260905/manifest.json": "2c32a09c3ea32a8b45f3810bc9dcb4f7acf3ccd324ac2a9568f66b0c96e71e8d",
+    "logs/experiments/reports/north_star_phase0b_20260905/report.json": "5849cb816cc2a44ca39f7a1455d8cfb8f81fdbd4a519cbe947d76ad3c2bb08ec",
+    "logs/experiments/reports/north_star_phase0b_20260905/report_qc/pdf-page-17.png": "f45308495b7cc3413854d069fc4588d8deb690d98dbe10731f95cb3dcd3ec836",
+    "logs/experiments/reports/north_star_phase0b_20260905/report_qc/pdf-page-28.png": "8877d082ec15113300e1cb240a4f5f3a6c3bdeb733f95d7e0078ff3109341778",
+    "logs/experiments/reports/north_star_phase0b_20260905/report_qc/pdf-page-37.png": "e44d23ff01bd7d23d6caa1968653375dbdf45153ad5eaa53b37adf7a2b1cd074",
+    "logs/experiments/reports/north_star_phase0b_20260905/validation.json": "fd8015ed529c05d7bc9fb4d3f9dce382150c4b45580b838fd9d49bddb447ea5c",
+    "logs/experiments/reports/north_star_runner_hardening_20260905/validation.json": "c0fe96ad39db58fdc01a73e0f6545b9a83c98ce1d849ddbaf68e0841e9fab3c4",
+    "logs/judge_labels/consensus_labels.parquet": "b57b03d0cea1885a02d1d9ae7d9246ba029c210768b41cb97b4959ec7b18e112",
+    "logs/judge_labels/judge_labels.parquet": "cbb101a1c05509a8c2105b9ffcfd6cc83e9ddc707256ca6eb63379f384e4770c",
+    "logs/wrangled/persona_02fb94f3.md": "c7b26c817d9409930ce7b48ca6c8c9000e33607f129eaa7124f23f1fe59beb6e",
+    "logs/wrangled/persona_110fcd4f.md": "e95eed2d4471335b120e8011d9b13d21c0246572a701ebc75cc2d797f608448d",
+    "logs/wrangled/persona_11de77e8.md": "20fd4312bdacfc0c56f888da6cca3c815f8edd9e3e79cf78f367be70c0da417f",
+    "logs/wrangled/persona_127aefff.md": "cb0ca78ff9e9c2311b03d024ec9e2b79360c6b6e4f3694398103c3e5b5016e9e",
+    "logs/wrangled/persona_1496159d.md": "4efcdfde6c99371dd77b4de0296fd04f61692ee75f73bbf7b200f914d502b0a6",
+    "logs/wrangled/persona_152df7a4.md": "f14e71c03b012e80d52f97f9a7a880c30d34ea5e4aae08f326f364144b448a43",
+    "logs/wrangled/persona_1f86f569.md": "5ab320324246d98b399d33f958584babd7a67dccfbf03f5abc9e4b45b25b81c7",
+    "logs/wrangled/persona_2541429a.md": "13672811cf7985f476c3c78e0ab042e3c87b65beb1d9bcd2126b42bd393f8d3e",
+    "logs/wrangled/persona_3a3b15e4.md": "ae345c303c93d627628c6a737dc793dd7ba0e54e1e5eae4b5263f1bbb20a0d12",
+    "logs/wrangled/persona_5fa8b540.md": "32892c82fd9dadc51a352addca35ec7d6339adbbc4650873e8ff4898233def62",
+    "logs/wrangled/persona_66ced716.md": "402cfe154e9c95406a020ba43dbb2c79891128076fceaad7b9ef59bc223311b8",
+    "logs/wrangled/persona_742c98d6.md": "324fc0b40654a7cdaf7d65ca9e252ff054982f06ea08243243c2cea7a56b7fd7",
+    "logs/wrangled/persona_775c7d71.md": "1d90174adc9187dd64f7acf187b1d87ca050ca3ff876375f532fe4488b194a93",
+    "logs/wrangled/persona_7adc5866.md": "3bc181b063aaac59de8114f43b0b89903b434e1c84348045e1b4172c35f1e2ac",
+    "logs/wrangled/persona_7c712a0a.md": "325de884a295a63938305ba89267a38912d5e4c8be4f765fa0e1e79de07ebb0f",
+    "logs/wrangled/persona_7ff1d0fb.md": "6787cf9063a6f8995363f71c76647437a8946f4e726b072fdb8089c94a6437c8",
+    "logs/wrangled/persona_87e92805.md": "cdacf2f186a6b2c8a67b84f42ada07c6271f61e09d2d88c2e051e65f0c9df6d5",
+    "logs/wrangled/persona_8f83c818.md": "e4b4a3b34c768b0298fd7c6d79246dbcc49cffa990887af0794cafe7977ab082",
+    "logs/wrangled/persona_8fcd7947.md": "87342b7a9680ef0a990384669445b1ecc1d8265678c2b4e7a8f9ce2a2900ee1c",
+    "logs/wrangled/persona_961a4e3f.md": "980b8fb8dc0cf7d322eb199d1d15eb45d60f65005520cd81743fce38dd7840b2",
+    "logs/wrangled/persona_988d1a65.md": "a4a5e090735d18392b964c9a58a70a462985cb973c19fd00201988b61f12211c",
+    "logs/wrangled/persona_9d126412.md": "3034d5ccc906686af613dd34eeb82a4e446e07f9b0b5477fa914a12346a73bfc",
+    "logs/wrangled/persona_a24b8d8f.md": "230ca6bea78c09eac6c04cdac20e7eba8012046edcaa8868dbe3e6f976ba2900",
+    "logs/wrangled/persona_abf1ce49.md": "7d6843c2ab2ca57f70db5b1bd3dcc76fd917b407dd83757368ca74bddc3cbe9b",
+    "logs/wrangled/persona_ad378991.md": "6f4a6f398578ec51a2edf501de2f81cc7c1fb4b5f9c934ccabcc8e939044827b",
+    "logs/wrangled/persona_bf44e50f.md": "aaacfb87d1bdf7513b0f1aaf50c74b08a23cf4791a7c95d08075166b98767ed2",
+    "logs/wrangled/persona_cd7c2a11.md": "40ee34eb94e9c03cd1d6b5ce0a77118033289fb0d85862c7743800a27a02ffb5",
+    "logs/wrangled/persona_d7a0683f.md": "45fe9169769eeeab37f098a23682a080568378a673e4629b4299814872154f12",
+    "logs/wrangled/persona_dab3e9b9.md": "f3d9c26e52e4fefab2392ae95472cace35c9f583db394cc67d1753569ef5c012",
+    "logs/wrangled/persona_dbe2c53d.md": "dc764fe7273233ed71bb15dc7c477a6c41247a1ca5fff7be8b7527a085d05f84",
+    "logs/wrangled/persona_e448979e.md": "415af58545c5c4048d1df554d6b46efa232df22a40546fb3f7dc8a462ef287de",
+    "logs/wrangled/persona_e5c9d9e5.md": "7c0fcbb1a8e53f543aef428c49303a400da77bf4c3ae71b6a59c7d8a15f80193",
+    "logs/wrangled/persona_e6838e16.md": "6cdb7847ab9eca573b08014ae7e7c7a330d9f3206c51fe2ca2678a039e4f8e58",
+    "logs/wrangled/persona_ed67c9cc.md": "36343d04d59d6d914e4a4222468396ccbdb656ff85db700d409d949f154befec",
+    "logs/wrangled/persona_f418b74b.md": "9bc01dc7d1f1d14dbd3a625a67ad12f0df84f37c2bb0c6d1efac00ac7d158b4f",
+    "scripts/experiments/north_star_phase0.py": "d35c0c6e35970f0c3cacb181da557ad0f83c8aae03eface867ef04ba6c43e45b"
+  },
+  "unresolved_reference_sources": [
+    {
+      "core_value": "security",
+      "decisions": [
+        {
+          "case_id": "87e92805:security:episode_02",
+          "decision": "supportive",
+          "entry_id": "87e92805:entry:4",
+          "evidence_quote": "I told Raul to do it, because what choice do I have.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "case_id": "87e92805:security:episode_03",
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:4",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        }
+      ],
+      "entry_id": "87e92805:entry:4",
+      "source_key": "4e8f5d0ea31c65b9439fd952ac0999ba220e1fc3606ecbde08e5bb36ba65a2b4"
+    }
+  ]
+}

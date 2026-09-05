@@ -1,0 +1,541 @@
+{
+  "cumulative_cost_usd": 0.30505587,
+  "gate_passed": false,
+  "historical_files_unchanged": 39,
+  "independent_code_checks": {
+    "baseline_quotations": 28,
+    "checks": [
+      {
+        "case_id": "02fb94f3:tradition:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-05-02",
+        "entry_id": "02fb94f3:entry:3",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-04-27"
+      },
+      {
+        "case_id": "02fb94f3:tradition:episode_02",
+        "chronology_valid": true,
+        "drift_start_date": "2025-05-15",
+        "entry_id": "02fb94f3:entry:5",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-05-02"
+      },
+      {
+        "case_id": "110fcd4f:conformity:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-06-25",
+        "entry_id": "110fcd4f:entry:0",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-06-24"
+      },
+      {
+        "case_id": "110fcd4f:conformity:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-06-25",
+        "entry_id": "110fcd4f:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-06-24"
+      },
+      {
+        "case_id": "11de77e8:self_direction:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-09-05",
+        "entry_id": "11de77e8:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-08-23"
+      },
+      {
+        "case_id": "11de77e8:self_direction:episode_02",
+        "chronology_valid": true,
+        "drift_start_date": "2025-10-11",
+        "entry_id": "11de77e8:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-08-23"
+      },
+      {
+        "case_id": "1496159d:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-07-16",
+        "entry_id": "1496159d:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-07-08"
+      },
+      {
+        "case_id": "152df7a4:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-02-18",
+        "entry_id": "152df7a4:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-02-12"
+      },
+      {
+        "case_id": "2541429a:tradition:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-11-30",
+        "entry_id": "2541429a:entry:5",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-11-24"
+      },
+      {
+        "case_id": "2541429a:tradition:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-11-30",
+        "entry_id": "2541429a:entry:5",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-11-24"
+      },
+      {
+        "case_id": "3a3b15e4:tradition:drift_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-06-10",
+        "entry_id": "3a3b15e4:entry:0",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-05-29"
+      },
+      {
+        "case_id": "3a3b15e4:tradition:drift_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-06-10",
+        "entry_id": "3a3b15e4:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-05-29"
+      },
+      {
+        "case_id": "5fa8b540:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-03-08",
+        "entry_id": "5fa8b540:entry:1",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-02-16"
+      },
+      {
+        "case_id": "5fa8b540:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-03-08",
+        "entry_id": "5fa8b540:entry:2",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-02-23"
+      },
+      {
+        "case_id": "66ced716:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-05-11",
+        "entry_id": "66ced716:entry:2",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-05-11"
+      },
+      {
+        "case_id": "66ced716:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-05-11",
+        "entry_id": "66ced716:entry:2",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-05-11"
+      },
+      {
+        "case_id": "742c98d6:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-09-19",
+        "entry_id": "742c98d6:entry:1",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-09-11"
+      },
+      {
+        "case_id": "742c98d6:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-09-19",
+        "entry_id": "742c98d6:entry:1",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-09-11"
+      },
+      {
+        "case_id": "742c98d6:universalism:episode_02",
+        "chronology_valid": true,
+        "drift_start_date": "2025-10-07",
+        "entry_id": "742c98d6:entry:1",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-09-11"
+      },
+      {
+        "case_id": "742c98d6:universalism:episode_02",
+        "chronology_valid": true,
+        "drift_start_date": "2025-10-07",
+        "entry_id": "742c98d6:entry:6",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-09-29"
+      },
+      {
+        "case_id": "7adc5866:benevolence:drift_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-06-14",
+        "entry_id": "7adc5866:entry:4",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-05-31"
+      },
+      {
+        "case_id": "7adc5866:benevolence:drift_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-06-14",
+        "entry_id": "7adc5866:entry:4",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-05-31"
+      },
+      {
+        "case_id": "7c712a0a:conformity:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-12-11",
+        "entry_id": "7c712a0a:entry:7",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-12-04"
+      },
+      {
+        "case_id": "7c712a0a:conformity:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-12-11",
+        "entry_id": "7c712a0a:entry:6",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-11-28"
+      },
+      {
+        "case_id": "7ff1d0fb:security:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-12-07",
+        "entry_id": "7ff1d0fb:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-11-26"
+      },
+      {
+        "case_id": "87e92805:security:episode_02",
+        "chronology_valid": true,
+        "drift_start_date": "2025-03-31",
+        "entry_id": "87e92805:entry:4",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-03-31"
+      },
+      {
+        "case_id": "87e92805:security:episode_02",
+        "chronology_valid": true,
+        "drift_start_date": "2025-03-31",
+        "entry_id": "87e92805:entry:1",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-03-17"
+      },
+      {
+        "case_id": "87e92805:security:episode_03",
+        "chronology_valid": true,
+        "drift_start_date": "2025-04-11",
+        "entry_id": "87e92805:entry:6",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-04-01"
+      },
+      {
+        "case_id": "8f83c818:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-06-25",
+        "entry_id": "8f83c818:entry:7",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-06-22"
+      },
+      {
+        "case_id": "8f83c818:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-06-25",
+        "entry_id": "8f83c818:entry:3",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-06-09"
+      },
+      {
+        "case_id": "8fcd7947:security:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-12-08",
+        "entry_id": "8fcd7947:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-12-01"
+      },
+      {
+        "case_id": "988d1a65:power:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-03-10",
+        "entry_id": "988d1a65:entry:1",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-02-22"
+      },
+      {
+        "case_id": "988d1a65:power:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-03-10",
+        "entry_id": "988d1a65:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-02-16"
+      },
+      {
+        "case_id": "9d126412:power:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-10-16",
+        "entry_id": "9d126412:entry:1",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-09-29"
+      },
+      {
+        "case_id": "9d126412:power:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-10-16",
+        "entry_id": "9d126412:entry:2",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-10-02"
+      },
+      {
+        "case_id": "bf44e50f:hedonism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-11-25",
+        "entry_id": "bf44e50f:entry:1",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-11-20"
+      },
+      {
+        "case_id": "bf44e50f:hedonism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-11-25",
+        "entry_id": "bf44e50f:entry:1",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-11-20"
+      },
+      {
+        "case_id": "dbe2c53d:conformity:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-02-26",
+        "entry_id": "dbe2c53d:entry:4",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-02-17"
+      },
+      {
+        "case_id": "dbe2c53d:conformity:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-02-26",
+        "entry_id": "dbe2c53d:entry:4",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-02-17"
+      },
+      {
+        "case_id": "dbe2c53d:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-02-11",
+        "entry_id": "dbe2c53d:entry:2",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-02-05"
+      },
+      {
+        "case_id": "dbe2c53d:universalism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-02-11",
+        "entry_id": "dbe2c53d:entry:1",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-02-04"
+      },
+      {
+        "case_id": "e5c9d9e5:power:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-04-15",
+        "entry_id": "e5c9d9e5:entry:0",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-03-25"
+      },
+      {
+        "case_id": "e5c9d9e5:power:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-04-15",
+        "entry_id": "e5c9d9e5:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-03-25"
+      },
+      {
+        "case_id": "e6838e16:security:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-03-02",
+        "entry_id": "e6838e16:entry:0",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-02-15"
+      },
+      {
+        "case_id": "e6838e16:security:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-03-02",
+        "entry_id": "e6838e16:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-02-15"
+      },
+      {
+        "case_id": "ed67c9cc:hedonism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-02-02",
+        "entry_id": "ed67c9cc:entry:0",
+        "identity_valid": true,
+        "path": "selected",
+        "quote_exact": true,
+        "source_date": "2025-02-02"
+      },
+      {
+        "case_id": "ed67c9cc:hedonism:episode_01",
+        "chronology_valid": true,
+        "drift_start_date": "2025-02-02",
+        "entry_id": "ed67c9cc:entry:0",
+        "identity_valid": true,
+        "path": "retrieval_only_selected",
+        "quote_exact": true,
+        "source_date": "2025-02-02"
+      }
+    ],
+    "chronology_failures": 0,
+    "identity_failures": 0,
+    "quotation_failures": 0,
+    "runtime_quotations": 19
+  },
+  "new_attempt_purposes": {
+    "development-quote_reference": 12,
+    "development-v3-runtime": 28
+  },
+  "new_attempts_by_provider": {
+    "gemini": {
+      "actual_models": [
+        "gemini-3.5-flash"
+      ],
+      "attempts": 12,
+      "cached_input_tokens": 0,
+      "calculated_cost_usd": 0.0827025,
+      "input_tokens": 12469,
+      "max_latency_seconds": 4.680646417022217,
+      "median_latency_seconds": 3.384911645494867,
+      "output_tokens": 7111,
+      "requested_reasoning": [
+        "low"
+      ]
+    },
+    "openai": {
+      "actual_models": [
+        "gpt-5.6-luna"
+      ],
+      "attempts": 28,
+      "cached_input_tokens": 30456,
+      "calculated_cost_usd": 0.01617552,
+      "input_tokens": 46260,
+      "max_latency_seconds": 7.977794125006767,
+      "median_latency_seconds": 3.8698632294981508,
+      "output_tokens": 9683,
+      "requested_reasoning": [
+        "none"
+      ]
+    }
+  },
+  "new_cost_usd": 0.09887802,
+  "new_retries": 0,
+  "pending_attempts": 0,
+  "recorded_at": "2026-09-05T08:43:30.003367+00:00",
+  "replay": {
+    "cumulative_ledger_unchanged": true,
+    "matches_executed_report_except_mode": true,
+    "new_provider_calls": 0
+  },
+  "reserved_persona_hashes_unchanged": 8,
+  "reserved_writing_parsed": false,
+  "runtime_reference_metadata_absent": true,
+  "source_hashes": {
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/budget.json": "2c33b49a186189c6c37c23ccd9eed3b042d77648c6fb6b1a7eb8525317fcfb48",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/budget_seed.json": "0f22beddc4713a7c2204c48db082cffe6b22f4b0998575312300c7cf0d753998",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/executed_report.json": "bbb81e9548fbfb2ec8ee27755caa38d4ea9860c762316a842a03e9e5a82473b9",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/execution_freeze.json": "f54fc91749a0cf5dc8d92555a000ae2d624bcaee87c3cc13f1793fdd1e529aaa",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/manifest.json": "23191b7c14325046083ba7508003760efcbfb4ebe781e196123a872c08014fb0",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/report.json": "c5bf1b0d252c83628217823da3c180df50d07b0c56e2d758b8aba9d75fffd127"
+  },
+  "unmetered_new_attempts": 0
+}

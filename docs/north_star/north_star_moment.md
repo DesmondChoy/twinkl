@@ -20,8 +20,19 @@ under `twinkl-fz34.9` adds verified preparation and offline recovery of complete
 omitted, interrupted, and exhausted requests. It preserves the original run and
 does not change the failed gate or authorize a revised paid experiment.
 
+Under `twinkl-fz34.1`, a [separate development revision](../../logs/experiments/reports/north_star_phase0b_revision_20260905/README.md)
+now implements explicit action/value/context assessment, code-derived decisions,
+exact-quotation comparison, and visible reference ambiguity. After explicit
+user approval, its frozen 33-case run also failed: 11/19 selections accepted,
+7/9 correct omissions, and zero failures across 28 new OpenAI runtime calls
+and 12 new Gemini quotation checks. New cost was US$0.09887802, bringing
+cumulative cost to US$0.30505587. The revised reference-consistency rule would
+also score the original selections 11/19, so the raw precision change does
+not establish regression. The implementation passes 300 NSM tests, but the
+semantic gate and dependent integration remain blocked.
+
 The [NSM experiment results log](../../logs/experiments/north_star_moment.md)
-records Phase 0A, Phase 0B, and runner-hardening outcomes together.
+records Phase 0A, Phase 0B, runner hardening, and the failed revision together.
 
 **First version:** Both frontend paths: the demo with all five saved Personas
 and onboarding from scratch with the user's own writing. Each reviewed week

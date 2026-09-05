@@ -1,0 +1,693 @@
+{
+  "analyst_interpretations": {
+    "152df7a4:universalism:episode_01": "Explicit paperwork assistance; the Universalism relationship is unclear because the writing emphasizes operational efficiency.",
+    "2541429a:tradition:episode_01": "The quotation reflects on a daughter's learning; a completed supportive action by the writer is inferred rather than clearly described.",
+    "5fa8b540:universalism:episode_01": "The quotation describes an outcome. The full source explicitly mentions a water-pollution lesson the writer delivered, so source-level abstention remains debatable even though the selected quotation is weak.",
+    "66ced716:universalism:episode_01": "Praising a painting and helping place it on a rack establishes action; the broader welfare relationship depends on missing workshop context.",
+    "7ff1d0fb:security:episode_01": "A claim that rent is covered supplies no action that secured it.",
+    "bf44e50f:hedonism:episode_01": "The full source explicitly interrupts the enjoyment in the selected passage; a whole-source Conflict check is needed.",
+    "dbe2c53d:conformity:episode_01": "Deleting confrontational replies and closing a family chat demonstrates restraint. Regret about restraint does not necessarily establish Conflict against Conformity; the frozen reference remains disputed."
+  },
+  "command": "uv run python scripts/experiments/north_star_phase0b_diagnostics.py --output-dir logs/experiments/reports/north_star_phase0b_revision_20260905",
+  "limitations": [
+    "All semantic judgments are AI-derived development references, not human validation; the frozen gate and labels are unchanged.",
+    "No accepted reference example is not proof of absence. Report all-rejected, mixed-abstention, all-abstention, structurally empty and unresolved cases separately.",
+    "Repeated episodes may share identical writing. Episode counts are not independent participants; repeated-source inconsistencies expose reference limits.",
+    "Source-character workloads exclude prompts and provider tokenization; they are not token counts, cost estimates, or observed results at larger k.",
+    "Historical retrieval-only precision grades a source identifier whereas reviewed precision grades a quotation. Their subtraction is not matched quotation-level verification lift or a causal estimate.",
+    "No reserved writing, paid review, embeddings, application integration or browser behavior is evaluated by these diagnostics."
+  ],
+  "mechanically_derived": {
+    "counts": {
+      "development_episodes": 33,
+      "histories_with_reference": 28,
+      "nonempty_histories": 28,
+      "nonempty_histories_without_reference": 0,
+      "reference_positive_histories": 19,
+      "selected_quotations": 19,
+      "structurally_empty_histories": 5
+    },
+    "disagreement_primary_reason_counts": {
+      "ambiguous": 2,
+      "same_value_conflict": 2,
+      "wrong_value": 3
+    },
+    "invalid_runtime_attempts": [
+      {
+        "attempt_number": 1,
+        "case_id": "dbe2c53d:universalism:episode_01",
+        "raw_results": [
+          {
+            "decision": "abstain",
+            "entry_id": "dbe2c53d:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "dbe2c53d:entry:2",
+            "evidence_quote": "She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "dbe2c53d:entry:0",
+            "evidence_quote": "Kept redoing the sketch for the Suba district mural because the committee wants something \"uplifting\" and every version I draw keeps drifting toward the river contamination. My hand knows what it wants to make but the brief says otherwise.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "replayed_validation_error": "malformed_decision:results.0:value_error",
+        "saved_error_type": "review_contract_invalid"
+      },
+      {
+        "attempt_number": 2,
+        "case_id": "dbe2c53d:universalism:episode_01",
+        "raw_results": [
+          {
+            "decision": "abstain",
+            "entry_id": "dbe2c53d:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "dbe2c53d:entry:2",
+            "evidence_quote": "She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "dbe2c53d:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "ambiguous"
+          }
+        ],
+        "replayed_validation_error": "malformed_decision:results.0:value_error",
+        "saved_error_type": "review_contract_invalid"
+      }
+    ],
+    "no_reference_supportive_histories": [
+      {
+        "case_id": "02fb94f3:tradition:episode_01",
+        "decision_counts": {
+          "abstain": 4
+        },
+        "omitted": true,
+        "stratum": "all_abstain"
+      },
+      {
+        "case_id": "11de77e8:self_direction:episode_01",
+        "decision_counts": {
+          "not_supportive": 2
+        },
+        "omitted": true,
+        "stratum": "all_not_supportive"
+      },
+      {
+        "case_id": "1496159d:universalism:episode_01",
+        "decision_counts": {
+          "abstain": 1,
+          "not_supportive": 1
+        },
+        "omitted": true,
+        "stratum": "includes_abstain"
+      },
+      {
+        "case_id": "152df7a4:universalism:episode_01",
+        "decision_counts": {
+          "not_supportive": 1
+        },
+        "omitted": false,
+        "stratum": "all_not_supportive"
+      },
+      {
+        "case_id": "66ced716:universalism:episode_01",
+        "decision_counts": {
+          "abstain": 2,
+          "not_supportive": 1
+        },
+        "omitted": false,
+        "stratum": "includes_abstain"
+      },
+      {
+        "case_id": "7ff1d0fb:security:episode_01",
+        "decision_counts": {
+          "not_supportive": 4
+        },
+        "omitted": false,
+        "stratum": "all_not_supportive"
+      },
+      {
+        "case_id": "87e92805:security:episode_03",
+        "decision_counts": {
+          "abstain": 5,
+          "not_supportive": 4
+        },
+        "omitted": true,
+        "stratum": "includes_abstain"
+      },
+      {
+        "case_id": "8fcd7947:security:episode_01",
+        "decision_counts": {
+          "abstain": 1
+        },
+        "omitted": true,
+        "stratum": "all_abstain"
+      },
+      {
+        "case_id": "dbe2c53d:conformity:episode_01",
+        "decision_counts": {
+          "not_supportive": 8
+        },
+        "omitted": false,
+        "stratum": "all_not_supportive"
+      }
+    ],
+    "no_reference_supportive_strata": {
+      "all_abstain": {
+        "correct_omission": {
+          "denominator": 2,
+          "numerator": 2,
+          "rate": 1.0
+        },
+        "histories": 2
+      },
+      "all_not_supportive": {
+        "correct_omission": {
+          "denominator": 4,
+          "numerator": 1,
+          "rate": 0.25
+        },
+        "histories": 4
+      },
+      "includes_abstain": {
+        "correct_omission": {
+          "denominator": 3,
+          "numerator": 2,
+          "rate": 0.6666666666666666
+        },
+        "histories": 3
+      }
+    },
+    "repeated_identical_source_reference_conflicts": [
+      {
+        "changes_supportive_status": false,
+        "identity": {
+          "approved_definition": "Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+          "core_value": "tradition",
+          "source": {
+            "entry_id": "02fb94f3:entry:0",
+            "journal_entry": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had finally gotten him into a rhythm that gave me two hours in the evening to work on a logo project. That's gone now.\n\nI stood there in the kitchen holding a cup of tea and I just didn't say anything. Tariq looked at me like he expected me to agree. His mother was already moving the crib blanket to the other room. I could feel my jaw clenching but I smiled. I hate that I smiled. Something about the way everyone just decided felt like they forgot I'm his mother, not a guest in this arrangement.",
+            "nudge_response": null
+          },
+          "user_phrase": "Honoring the customs and practices I was raised with"
+        },
+        "observations": [
+          {
+            "case_id": "02fb94f3:tradition:episode_01",
+            "core_value": "tradition",
+            "decision": "abstain",
+            "entry_id": "02fb94f3:entry:0",
+            "reason_code": "insufficient_text",
+            "requested_value_sha256": "97eb253fd937906cadaffb175b0f1b8f32df8d90507374e9b6d55cf1741f1253",
+            "source_sha256": "4b95dc251b8e1099c053edfd42f85753b05b46f42dab90dbedbfbd471ba10c7c"
+          },
+          {
+            "case_id": "02fb94f3:tradition:episode_02",
+            "core_value": "tradition",
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:0",
+            "reason_code": "wrong_value",
+            "requested_value_sha256": "97eb253fd937906cadaffb175b0f1b8f32df8d90507374e9b6d55cf1741f1253",
+            "source_sha256": "4b95dc251b8e1099c053edfd42f85753b05b46f42dab90dbedbfbd471ba10c7c"
+          }
+        ],
+        "source_and_requested_value_sha256": "336a05c3737ce3477ff8bf31e6d5e27dbb2ca5f6b8d77e0d59684708d9fe3138"
+      },
+      {
+        "changes_supportive_status": false,
+        "identity": {
+          "approved_definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+          "core_value": "security",
+          "source": {
+            "entry_id": "87e92805:entry:2",
+            "journal_entry": "Bad week. The delivery app lowered the per-trip rate again, no warning, no explanation. Just opened the app Monday morning and the numbers were different. I did the same twelve deliveries I always do on a weekday and came home with almost twenty percent less. Twenty percent. That's not nothing. That's a week of groceries, that's Negrita's vet visit I've been putting off.\n\nThe handyman side is slower too because people are tightening up. I had three jobs lined up this week and two of them canceled last minute \u2014 one lady said she'd \"wait until next month\" to fix her bathroom faucet and the other one just stopped responding. So now I'm sitting here Thursday night with the calculator app open, moving numbers around like I'm playing some kind of sad puzzle game, trying to figure out where the motorcycle payment comes from.\n\nThe thing that really gets to me is the feeling. It's not just about the money, it's the not knowing. Every month is a guess. Every week I wake up and I don't know what I'm going to make. I used to think that was the trade-off for not having a boss breathing down my neck. Lately I'm not so sure the trade-off is worth it. But what am I supposed to do, crawl back and prove Graciela right? No. I'll figure it out. I always figure it out.",
+            "nudge_response": null
+          },
+          "user_phrase": "Feeling calm and secure in my life"
+        },
+        "observations": [
+          {
+            "case_id": "87e92805:security:episode_02",
+            "core_value": "security",
+            "decision": "abstain",
+            "entry_id": "87e92805:entry:2",
+            "reason_code": "ambiguous",
+            "requested_value_sha256": "2a393ac7fe0ba9de09a03553abf1dbe73bdaeb69fa3495897bdc5a9c002cfaaf",
+            "source_sha256": "c51686e74905ad723c0620768e9766b3f19df4044b7ee7e4ea47c861af3516b6"
+          },
+          {
+            "case_id": "87e92805:security:episode_03",
+            "core_value": "security",
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:2",
+            "reason_code": "same_value_conflict",
+            "requested_value_sha256": "2a393ac7fe0ba9de09a03553abf1dbe73bdaeb69fa3495897bdc5a9c002cfaaf",
+            "source_sha256": "c51686e74905ad723c0620768e9766b3f19df4044b7ee7e4ea47c861af3516b6"
+          }
+        ],
+        "source_and_requested_value_sha256": "34735bb32dee82cc464c0b8a15f03db5c49b0c6cc96a9b1e66a2119dd929b584"
+      },
+      {
+        "changes_supportive_status": true,
+        "identity": {
+          "approved_definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+          "core_value": "security",
+          "source": {
+            "entry_id": "87e92805:entry:4",
+            "journal_entry": "Motorcycle started making a noise yesterday. A grinding thing when I brake. I took it to Raul's shop and he looked at it and said the brake pads are gone and the disc is warped, it needs replacing. He quoted me a number that wiped out everything I'd saved from the Alfredo job. Every peso.\n\nI stood there in Raul's shop and felt my stomach just drop. Because it's not optional \u2014 the motorcycle is how I make deliveries. Without it I'm on foot or taking the subte, which means fewer trips, which means less money, which means next month's rent gets tight. It's like this chain where one thing breaks and everything behind it starts wobbling. I told Raul to do it, because what choice do I have. But I walked home and I couldn't even eat dinner.",
+            "nudge_response": null
+          },
+          "user_phrase": "Feeling calm and secure in my life"
+        },
+        "observations": [
+          {
+            "case_id": "87e92805:security:episode_02",
+            "core_value": "security",
+            "decision": "supportive",
+            "entry_id": "87e92805:entry:4",
+            "reason_code": "observable_choice",
+            "requested_value_sha256": "2a393ac7fe0ba9de09a03553abf1dbe73bdaeb69fa3495897bdc5a9c002cfaaf",
+            "source_sha256": "5842fa4b6a349475c0724da14d5f762d10aaa84fbc878c3bb43dd905f6f6a38f"
+          },
+          {
+            "case_id": "87e92805:security:episode_03",
+            "core_value": "security",
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:4",
+            "reason_code": "same_value_conflict",
+            "requested_value_sha256": "2a393ac7fe0ba9de09a03553abf1dbe73bdaeb69fa3495897bdc5a9c002cfaaf",
+            "source_sha256": "5842fa4b6a349475c0724da14d5f762d10aaa84fbc878c3bb43dd905f6f6a38f"
+          }
+        ],
+        "source_and_requested_value_sha256": "64235f935b224c3bdd9cc1d0688e0bf2689fb56b7f6f31d9a00a18e17ac6079c"
+      },
+      {
+        "changes_supportive_status": false,
+        "identity": {
+          "approved_definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+          "core_value": "security",
+          "source": {
+            "entry_id": "87e92805:entry:1",
+            "journal_entry": "My sister Graciela keeps calling to tell me I should go back to a regular job. She doesn't get it. I'm not going to sit in some warehouse again answering to a guy ten years younger than me who treats people like furniture.",
+            "nudge_response": null
+          },
+          "user_phrase": "Feeling calm and secure in my life"
+        },
+        "observations": [
+          {
+            "case_id": "87e92805:security:episode_02",
+            "core_value": "security",
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:1",
+            "reason_code": "wrong_value",
+            "requested_value_sha256": "2a393ac7fe0ba9de09a03553abf1dbe73bdaeb69fa3495897bdc5a9c002cfaaf",
+            "source_sha256": "17133d8b1bffce2a84ced45daaf093d27cf1b0a879312279667f05e87a23aa21"
+          },
+          {
+            "case_id": "87e92805:security:episode_03",
+            "core_value": "security",
+            "decision": "abstain",
+            "entry_id": "87e92805:entry:1",
+            "reason_code": "ambiguous",
+            "requested_value_sha256": "2a393ac7fe0ba9de09a03553abf1dbe73bdaeb69fa3495897bdc5a9c002cfaaf",
+            "source_sha256": "17133d8b1bffce2a84ced45daaf093d27cf1b0a879312279667f05e87a23aa21"
+          }
+        ],
+        "source_and_requested_value_sha256": "8ea2a8a70f927fa66b27aa5a732f672d046977f4570672b8bcd16c4f8917542f"
+      },
+      {
+        "changes_supportive_status": false,
+        "identity": {
+          "approved_definition": "Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+          "core_value": "tradition",
+          "source": {
+            "entry_id": "02fb94f3:entry:2",
+            "journal_entry": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the soup is in the fridge now, I guess.\n\nFinished a draft of the logo I've been working on. The client wants revisions but at least the base concept is solid. I had to work on it in the bathroom because Sami was asleep in the bedroom and the living room was occupied. Sat on the edge of the bathtub with my laptop balanced on the hamper. It's ridiculous but it's the only place I can close a door without anyone asking what I'm doing.",
+            "nudge_response": null
+          },
+          "user_phrase": "Honoring the customs and practices I was raised with"
+        },
+        "observations": [
+          {
+            "case_id": "02fb94f3:tradition:episode_01",
+            "core_value": "tradition",
+            "decision": "abstain",
+            "entry_id": "02fb94f3:entry:2",
+            "reason_code": "insufficient_text",
+            "requested_value_sha256": "97eb253fd937906cadaffb175b0f1b8f32df8d90507374e9b6d55cf1741f1253",
+            "source_sha256": "e4387088b461e1e2ffd8a70a6b4a817656f7292b29e15a5344d87fd4d30fa042"
+          },
+          {
+            "case_id": "02fb94f3:tradition:episode_02",
+            "core_value": "tradition",
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:2",
+            "reason_code": "wrong_value",
+            "requested_value_sha256": "97eb253fd937906cadaffb175b0f1b8f32df8d90507374e9b6d55cf1741f1253",
+            "source_sha256": "e4387088b461e1e2ffd8a70a6b4a817656f7292b29e15a5344d87fd4d30fa042"
+          }
+        ],
+        "source_and_requested_value_sha256": "a791a9b5dd83c1c7b1a69f88e3a376ca23ae93d4af3995a7456b51118bc8ad31"
+      },
+      {
+        "changes_supportive_status": false,
+        "identity": {
+          "approved_definition": "Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+          "core_value": "self_direction",
+          "source": {
+            "entry_id": "11de77e8:entry:0",
+            "journal_entry": "Had the tech lead conversation with Martijn today. He laid out what the role would look like \u2014 running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole time I was thinking about how I'd actually handle it. I build things well when people leave me alone to think. That's not what this role is.\n\nBut I also know I did the right thing saying yes. Everyone on the team expects it, Noor would think I was insane to turn it down, and frankly it would look odd to pass on a promotion you're being handed. I can figure out the rest as I go. Probably.",
+            "nudge_response": null
+          },
+          "user_phrase": "Having the freedom to choose my own path"
+        },
+        "observations": [
+          {
+            "case_id": "11de77e8:self_direction:episode_01",
+            "core_value": "self_direction",
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:0",
+            "reason_code": "same_value_conflict",
+            "requested_value_sha256": "4feabd84ca6fcf13331a14b0a69fe7e0963acaebebf0de5664f627e8aa4496d9",
+            "source_sha256": "324c649ee542508f73303eb8f7ac59b0b4fa45ec464477eb7418cc400ee3e02a"
+          },
+          {
+            "case_id": "11de77e8:self_direction:episode_02",
+            "core_value": "self_direction",
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:0",
+            "reason_code": "wrong_value",
+            "requested_value_sha256": "4feabd84ca6fcf13331a14b0a69fe7e0963acaebebf0de5664f627e8aa4496d9",
+            "source_sha256": "324c649ee542508f73303eb8f7ac59b0b4fa45ec464477eb7418cc400ee3e02a"
+          }
+        ],
+        "source_and_requested_value_sha256": "aa39be96e486f463930bc3cb586d91a54f42a31f4cb4ef117756564fb8eb0f0d"
+      },
+      {
+        "changes_supportive_status": false,
+        "identity": {
+          "approved_definition": "Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+          "core_value": "tradition",
+          "source": {
+            "entry_id": "02fb94f3:entry:1",
+            "journal_entry": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm the one who knows what dose of medicine to give, what temperature means we go to the clinic. I didn't rest.",
+            "nudge_response": null
+          },
+          "user_phrase": "Honoring the customs and practices I was raised with"
+        },
+        "observations": [
+          {
+            "case_id": "02fb94f3:tradition:episode_01",
+            "core_value": "tradition",
+            "decision": "abstain",
+            "entry_id": "02fb94f3:entry:1",
+            "reason_code": "insufficient_text",
+            "requested_value_sha256": "97eb253fd937906cadaffb175b0f1b8f32df8d90507374e9b6d55cf1741f1253",
+            "source_sha256": "4cfda52cbcad677f43049b697598c539fd5ffa804426b272c3287ea25dcf3ef7"
+          },
+          {
+            "case_id": "02fb94f3:tradition:episode_02",
+            "core_value": "tradition",
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:1",
+            "reason_code": "wrong_value",
+            "requested_value_sha256": "97eb253fd937906cadaffb175b0f1b8f32df8d90507374e9b6d55cf1741f1253",
+            "source_sha256": "4cfda52cbcad677f43049b697598c539fd5ffa804426b272c3287ea25dcf3ef7"
+          }
+        ],
+        "source_and_requested_value_sha256": "c03c490860ea874e65ad0dc39ccdc3f5aed8dc2561466c279f0f0b4098566fe2"
+      },
+      {
+        "changes_supportive_status": false,
+        "identity": {
+          "approved_definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+          "core_value": "security",
+          "source": {
+            "entry_id": "87e92805:entry:3",
+            "journal_entry": "Got a call from Don Alfredo across the street \u2014 he needs his whole kitchen faucet replaced plus some tile work. That's a good-sized job, probably two days of work. Felt like I could breathe again for the first time all week.",
+            "nudge_response": null
+          },
+          "user_phrase": "Feeling calm and secure in my life"
+        },
+        "observations": [
+          {
+            "case_id": "87e92805:security:episode_02",
+            "core_value": "security",
+            "decision": "abstain",
+            "entry_id": "87e92805:entry:3",
+            "reason_code": "insufficient_text",
+            "requested_value_sha256": "2a393ac7fe0ba9de09a03553abf1dbe73bdaeb69fa3495897bdc5a9c002cfaaf",
+            "source_sha256": "6c39d159f04c5fafb33bf483f2f6821022f17d249c1ca7cb05b905e2480b8a68"
+          },
+          {
+            "case_id": "87e92805:security:episode_03",
+            "core_value": "security",
+            "decision": "abstain",
+            "entry_id": "87e92805:entry:3",
+            "reason_code": "ambiguous",
+            "requested_value_sha256": "2a393ac7fe0ba9de09a03553abf1dbe73bdaeb69fa3495897bdc5a9c002cfaaf",
+            "source_sha256": "6c39d159f04c5fafb33bf483f2f6821022f17d249c1ca7cb05b905e2480b8a68"
+          }
+        ],
+        "source_and_requested_value_sha256": "d70cca516499b07ac8c27784fda8504d5fe9f399bc7551bf0da1a8088f6ead98"
+      }
+    ],
+    "retrieval_misses_at_3": [
+      {
+        "case_id": "02fb94f3:tradition:episode_02",
+        "reference_supportive_source_ranks": [
+          {
+            "entry_id": "02fb94f3:entry:7",
+            "rank": 7
+          }
+        ]
+      },
+      {
+        "case_id": "11de77e8:self_direction:episode_02",
+        "reference_supportive_source_ranks": [
+          {
+            "entry_id": "11de77e8:entry:4",
+            "rank": 5
+          },
+          {
+            "entry_id": "11de77e8:entry:5",
+            "rank": 7
+          }
+        ]
+      }
+    ],
+    "retrieval_workloads": [
+      {
+        "k": 1,
+        "reference_supportive_sources_in_pool": 7,
+        "source_characters": 16436,
+        "source_decisions": 28,
+        "task_reference_retrieval_recall": {
+          "denominator": 19,
+          "numerator": 7,
+          "rate": 0.3684210526315789
+        }
+      },
+      {
+        "k": 3,
+        "reference_supportive_sources_in_pool": 19,
+        "source_characters": 46363,
+        "source_decisions": 74,
+        "task_reference_retrieval_recall": {
+          "denominator": 19,
+          "numerator": 17,
+          "rate": 0.8947368421052632
+        }
+      },
+      {
+        "k": 5,
+        "reference_supportive_sources_in_pool": 26,
+        "source_characters": 65163,
+        "source_decisions": 104,
+        "task_reference_retrieval_recall": {
+          "denominator": 19,
+          "numerator": 18,
+          "rate": 0.9473684210526315
+        }
+      },
+      {
+        "k": 7,
+        "reference_supportive_sources_in_pool": 30,
+        "source_characters": 77937,
+        "source_decisions": 124,
+        "task_reference_retrieval_recall": {
+          "denominator": 19,
+          "numerator": 19,
+          "rate": 1.0
+        }
+      }
+    ],
+    "selection_disagreements": [
+      {
+        "basis": "primary_reference_nonacceptance",
+        "case_id": "152df7a4:universalism:episode_01",
+        "core_value": "universalism",
+        "primary_reference": {
+          "decision": "not_supportive",
+          "entry_id": "152df7a4:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        "selected": {
+          "decision": "supportive",
+          "entry_id": "152df7a4:entry:0",
+          "evidence_quote": "Had a longer-than-expected call with our warehouse partner in Da Nang about the delayed shipment of syringes. Turned out to be a customs paperwork issue on their end. Nothing dramatic. I walked them through it, helped them resubmit.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      },
+      {
+        "basis": "primary_reference_nonacceptance",
+        "case_id": "2541429a:tradition:episode_01",
+        "core_value": "tradition",
+        "primary_reference": {
+          "decision": "not_supportive",
+          "entry_id": "2541429a:entry:5",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        "selected": {
+          "decision": "supportive",
+          "entry_id": "2541429a:entry:5",
+          "evidence_quote": "Still thinking about the mansaf. The thing that keeps coming back to me is that she learned all of it here, in this kitchen, from watching me. Which means even if she's somewhere else, she carries it.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      },
+      {
+        "basis": "primary_reference_nonacceptance",
+        "case_id": "5fa8b540:universalism:episode_01",
+        "core_value": "universalism",
+        "primary_reference": {
+          "decision": "abstain",
+          "entry_id": "5fa8b540:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        "selected": {
+          "decision": "supportive",
+          "entry_id": "5fa8b540:entry:2",
+          "evidence_quote": "I changed nothing about anyone's pipes but now one family is paying attention.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      },
+      {
+        "basis": "primary_reference_nonacceptance",
+        "case_id": "66ced716:universalism:episode_01",
+        "core_value": "universalism",
+        "primary_reference": {
+          "decision": "abstain",
+          "entry_id": "66ced716:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        "selected": {
+          "decision": "supportive",
+          "entry_id": "66ced716:entry:2",
+          "evidence_quote": "I just told him the yellow was a good choice and helped him find a spot on the drying rack.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      },
+      {
+        "basis": "primary_reference_nonacceptance",
+        "case_id": "7ff1d0fb:security:episode_01",
+        "core_value": "security",
+        "primary_reference": {
+          "decision": "not_supportive",
+          "entry_id": "7ff1d0fb:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        "selected": {
+          "decision": "supportive",
+          "entry_id": "7ff1d0fb:entry:0",
+          "evidence_quote": "I'm fine. The studio is fine. Rent is covered.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      },
+      {
+        "basis": "primary_reference_nonacceptance",
+        "case_id": "bf44e50f:hedonism:episode_01",
+        "core_value": "hedonism",
+        "primary_reference": {
+          "decision": "not_supportive",
+          "entry_id": "bf44e50f:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        "selected": {
+          "decision": "supportive",
+          "entry_id": "bf44e50f:entry:1",
+          "evidence_quote": "I went and made tea and sat back on the balcony, properly this time, no phone. And it was good for a few minutes, the air was cool and I could hear the mosque down the street and I was just sitting there with my tea.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      },
+      {
+        "basis": "primary_reference_nonacceptance",
+        "case_id": "dbe2c53d:conformity:episode_01",
+        "core_value": "conformity",
+        "primary_reference": {
+          "decision": "not_supportive",
+          "entry_id": "dbe2c53d:entry:4",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        "selected": {
+          "decision": "supportive",
+          "entry_id": "dbe2c53d:entry:4",
+          "evidence_quote": "So I sent a sad emoji and closed the app.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      }
+    ]
+  },
+  "paid_calls": 0,
+  "reserved_writing_loaded": false,
+  "schema_version": "north-star-phase0b-offline-diagnostics-v1",
+  "source_hashes": {
+    "config/evals/north_star_moment_v1.json": "aa6e1a54206084034076767a62db15fed85c6c42f1ba594d56c4e7eb7ac09232",
+    "logs/experiments/reports/north_star_phase0_20260905/retrieval.json": "e394dbfe823011b718cad28da078054114ca7c910ceb6daa51f075e8fd9dfb5c",
+    "logs/experiments/reports/north_star_phase0b_20260905/execution_freeze.json": "2198c1b30d30902f732237a992a508a0d682692cf58c3d1f5f83e429736df73f",
+    "logs/experiments/reports/north_star_phase0b_20260905/manifest.json": "2c32a09c3ea32a8b45f3810bc9dcb4f7acf3ccd324ac2a9568f66b0c96e71e8d",
+    "logs/experiments/reports/north_star_phase0b_20260905/report.json": "5849cb816cc2a44ca39f7a1455d8cfb8f81fdbd4a519cbe947d76ad3c2bb08ec",
+    "logs/experiments/reports/north_star_phase0b_20260905/validation.json": "fd8015ed529c05d7bc9fb4d3f9dce382150c4b45580b838fd9d49bddb447ea5c",
+    "scripts/experiments/north_star_phase0b.py": "2e0585a0720a1216d1dc71fbcfd693c7ec9867ee80e5235d6127175f1764edbf",
+    "scripts/experiments/north_star_phase0b_diagnostics.py": "e47d3b3cbd8062accfd9fcbe1febbfeab5fa9497a6de98021bf1f887fc973483",
+    "src/north_star/provider.py": "03fc8135b377492d8342adb031703d3fd5086aaa480f281afca9b5eccd85e362",
+    "src/north_star/review.py": "b4b0f8bf9418847bafac4aa05ee357e141b016d4b778a4f293bbe371c98dfe9c"
+  }
+}

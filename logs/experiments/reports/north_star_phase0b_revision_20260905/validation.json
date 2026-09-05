@@ -1,0 +1,178 @@
+{
+  "budget_accounting": {
+    "inherited_attempts": 61,
+    "spent_or_reserved_usd": 0.30505587,
+    "total_ledger_attempts": 101
+  },
+  "budget_preflight": {
+    "authorized_total_usd": 20.0,
+    "inherited_spent_or_reserved_usd": 0.20617785,
+    "max_attempts_per_request": 2,
+    "maximum_cumulative_usd": 10.65733875,
+    "maximum_new_spent_or_reserved_usd": 10.4511609,
+    "method": "UTF-8 input bound plus schema margin and maximum output tokens; all runtime, baseline and candidate requests include one retry. Existing exhaustive references are required and reused. No cache discount assumed.",
+    "per_attempt_ceiling_usd": 0.25
+  },
+  "issue": "twinkl-fz34.1",
+  "limitations": [
+    "Revised semantic gate failed despite passing code/provider checks.",
+    "Frozen independent AI references include abstentions and one contradictory supportive source; no human adjudication.",
+    "No reserved final evaluation or application/browser testing.",
+    "Full repository suite not rerun; source hashes match passing scoped checks.",
+    "Existing historical full-import MyPy errors were not repaired; scoped type checks passed."
+  ],
+  "paid_execution": {
+    "approval_history": {
+      "initial_review": "Rejected before process creation; no calls.",
+      "subsequent_user_approval": "Yes approve. User then asked why Gemini was involved; its evaluation-only role was explained before the approved run."
+    },
+    "cumulative_attempts": 101,
+    "cumulative_cost_usd": 0.30505587,
+    "exit_code": 2,
+    "exit_code_meaning": "All cases completed; precision and correct-omission gates failed.",
+    "gate_passed": false,
+    "gemini_exact_quotation_attempts": 12,
+    "new_cost_usd": 0.09887802,
+    "new_provider_attempts": 40,
+    "new_retries": 0,
+    "next_action": "Record failed outcome and keep dependent integration blocked; decide separately how to address remaining quotation/value judgments and disputed references.",
+    "openai_runtime_attempts": 28,
+    "original_approval_review_result": "Rejected: implementation approval was not treated as authorization for sending development-case writing to external OpenAI/Gemini providers and incurring paid calls.",
+    "pending_attempts": 0,
+    "process_started": true,
+    "reused_exact_quotation_attempts": 1,
+    "reused_exhaustive_references": 28,
+    "unmetered_new_attempts": 0
+  },
+  "python": "3.12.11",
+  "recorded_at": "2026-09-05T08:49:04.760063+00:00",
+  "source_hashes": {
+    "docs/north_star/phase0b_revision_20260905.md": "ab6f188fd6bac327a29f88d845cb3a87042f7c96f8912177ec3ed7ff8d42f99c",
+    "logs/experiments/north_star_development_budget_v2.json": "2c33b49a186189c6c37c23ccd9eed3b042d77648c6fb6b1a7eb8525317fcfb48",
+    "logs/experiments/north_star_development_budget_v2.seed.json": "2a27cc579f01586b6e80d06c32e0e1405a4b87db1bdc43f229ff0c3f28b13f02",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/audit.json": "78f7d6db9188643fbb241fa5dc32462f5cf59ed99d56ae6196ece71d5e2205b8",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/diagnostics.json": "ff12d64ac207475e1d272617b44155ef39187ffd92f35957b7a3b81ded71c1cc",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/budget.json": "2c33b49a186189c6c37c23ccd9eed3b042d77648c6fb6b1a7eb8525317fcfb48",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/executed_report.json": "bbb81e9548fbfb2ec8ee27755caa38d4ea9860c762316a842a03e9e5a82473b9",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/execution_freeze.json": "f54fc91749a0cf5dc8d92555a000ae2d624bcaee87c3cc13f1793fdd1e529aaa",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/manifest.json": "23191b7c14325046083ba7508003760efcbfb4ebe781e196123a872c08014fb0",
+    "logs/experiments/reports/north_star_phase0b_revision_20260905/run/report.json": "c5bf1b0d252c83628217823da3c180df50d07b0c56e2d758b8aba9d75fffd127",
+    "scripts/experiments/north_star_phase0b_diagnostics.py": "e47d3b3cbd8062accfd9fcbe1febbfeab5fa9497a6de98021bf1f887fc973483",
+    "scripts/experiments/north_star_phase0b_v3.py": "e1f8cc24af99d77274e0f1ee5c06492b87fba55d05050c2ec91291173ae8385a",
+    "src/north_star/review_v2.py": "599e96be10af1983a31a004546f6e7c4bf5e3898b2890811bf1fe6cb64ec5b05",
+    "tests/evals/test_north_star_phase0b_diagnostics.py": "bed108c925cd49196c838bca2d1343e1f930e6762a313d78fed5f7375dc51dc9",
+    "tests/evals/test_north_star_phase0b_v3.py": "dbc3399cc135fb7652e3c64000d04727bde8a0179d7c9f5f6c239d2eddebad5b",
+    "tests/north_star/test_review_v2.py": "0c3ab316764838479a1b79de176106542c874acadcb7a80d614491a3e02184b6"
+  },
+  "status": "executed_semantic_gate_failed",
+  "summary": {
+    "abstention": {
+      "denominator": 74,
+      "numerator": 10,
+      "rate": 0.13513513513513514
+    },
+    "cases": 33,
+    "correct_no_card": {
+      "denominator": 9,
+      "numerator": 7,
+      "rate": 0.7777777777777778
+    },
+    "coverage": {
+      "denominator": 33,
+      "numerator": 19,
+      "rate": 0.5757575757575758
+    },
+    "displayed_code_checks": {
+      "enforcement": "Selection requires full-batch exact-quotation validation; preparation and execution verification require source owner, date and stored-order agreement. These are construction-enforced checks, not separately measured adversarial failure counts.",
+      "selected_quotations": 19
+    },
+    "evaluated_unique_attempts": 69,
+    "failed_cases": 0,
+    "gate_passed": false,
+    "incorrect_displayed": 8,
+    "new_actual_attempts": 40,
+    "new_calculated_cost_usd": 0.09887802,
+    "new_unmetered_attempts": 0,
+    "no_example_reference_strata": {
+      "all_abstain": 2,
+      "resolved_rejections_only": 4,
+      "with_abstentions": 5
+    },
+    "pending_reservations": 0,
+    "precision": {
+      "denominator": 19,
+      "numerator": 11,
+      "rate": 0.5789473684210527
+    },
+    "quotation_precision_difference": 0.32894736842105265,
+    "retrieval_only_coverage": {
+      "denominator": 33,
+      "numerator": 28,
+      "rate": 0.8484848484848485
+    },
+    "retrieval_only_quotation_precision": {
+      "denominator": 28,
+      "numerator": 7,
+      "rate": 0.25
+    },
+    "saved_persona_accepted": [
+      "8f83c818:universalism:episode_01",
+      "988d1a65:power:episode_01"
+    ],
+    "structurally_empty_cases": 5,
+    "task_retrieval_recall_at_3": {
+      "denominator": 19,
+      "numerator": 17,
+      "rate": 0.8947368421052632
+    },
+    "unexpected_provider_failures": {
+      "gemini": {
+        "denominator": 12,
+        "numerator": 0,
+        "rate": 0.0
+      },
+      "openai": {
+        "denominator": 28,
+        "numerator": 0,
+        "rate": 0.0
+      }
+    },
+    "unresolved_reference_selections": 1,
+    "wrong_value_reference_reasons": {
+      "denominator": 19,
+      "numerator": 4,
+      "rate": 0.21052631578947367
+    }
+  },
+  "verification": {
+    "existing_tests": 193,
+    "final_execution_freeze_verified": true,
+    "git_diff_check": "passed",
+    "historical_files_unchanged": 39,
+    "independent_review": "Fixed inherited invalidation compatibility, exact-candidate wrong-value reporting, historical provenance validation and candidate source-budget bounds; no remaining preflight blocker.",
+    "local_documentation_links_checked": 110,
+    "missing_local_documentation_links": 0,
+    "mypy_status": "passed for all six new Python files using mypy 2.3.0 --explicit-package-bases --follow-imports=silent",
+    "new_tests": 107,
+    "offline_rehearsal": "33 cases reconstructed with BudgetedProvider.complete replaced by a function that raises; zero transport; missing revised runtime work correctly failed the gate.",
+    "post_execution_checks": {
+      "chronology_failures": 0,
+      "earlier_300_test_ruff_mypy_checks_reused": "Executed source hashes unchanged; subsequent changes are reports and maintained documentation only.",
+      "frozen_sources_and_protocol_unchanged": true,
+      "historical_files_unchanged": 39,
+      "identity_failures": 0,
+      "independent_outcome_review": "Raw ledger reconciled; classified all eight nonaccepted selections; verified three original disagreements resolved, four persist, and comparison caveat for the added contradiction rule.",
+      "paid_report_replay": "Exactly reproduced every case, selected quotation, grade, receipt and cost; only report mode differs. Provider completion was explicitly forbidden; cumulative ledger bytes unchanged.",
+      "quotation_failures": 0,
+      "reserved_persona_hashes_unchanged": 8,
+      "retrieval_only_quotations_checked": 28,
+      "runtime_quotations_checked": 19
+    },
+    "pytest_command": "UV_CACHE_DIR=/private/tmp/twinkl-nsm-v3-uv uv run pytest tests/north_star tests/evals/test_north_star*.py",
+    "pytest_failed": 0,
+    "pytest_passed": 300,
+    "reserved_persona_hashes_unchanged": 8,
+    "reserved_writing_parsed": false,
+    "ruff_status": "passed for all six new Python files"
+  }
+}

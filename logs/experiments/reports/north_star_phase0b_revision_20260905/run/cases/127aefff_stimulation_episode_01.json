@@ -1,0 +1,9 @@
+{
+  "attempts": [],
+  "case_id": "127aefff:stimulation:episode_01",
+  "core_value": "stimulation",
+  "eligible_sources": 0,
+  "retrieval_only_selected": null,
+  "selected": null,
+  "status": "no_earlier_writing"
+}
