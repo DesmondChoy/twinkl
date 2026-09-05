@@ -1,865 +1,571 @@
 # North Star Moment
 
-## Future-Work Design Brief
+**Status:** Design specification.
+
+**First version:** One optional card in saved Persona replay. Manual sessions
+and live reruns receive no North Star Moment.
+
+**Documentation:** Original brief: `twinkl-b8w3`; this revision:
+`twinkl-thgx`.
+
+## 1. What this adds
+
+Twinkl compares Journal Entries with the user's confirmed Core Values.
+Weekly Drift Detection identifies repeated Conflict, and the Coach Digest
+explains the finding and asks one reflective question. North Star Moment adds
+an earlier example of behaviour supporting the affected Core Value, quoted
+from the user's own writing.
+
+When Weekly Drift Detection reports Active Drift, Twinkl searches earlier
+Journal Entries and the user's nudge responses. It uses **semantic retrieval**,
+which searches by meaning, to find possible examples. A separate North Star
+Moment AI review checks whether the writing describes a supportive action.
+Code checks confirm that the quotation is exact, belongs to the same Persona,
+and comes from before the Drift began. If no example passes, no card appears.
+
+The first version prepares these results offline and saves them for Persona
+replay. Experience displays the quotation beneath the Coach Digest. Inspect
+shows why it was selected. This adds a personal example to the existing
+reflection without generating advice or a second question.
+
+## 2. Which writing qualifies
+
+North Star Moment runs only after Weekly Drift Detection completes for a
+closed week and reports Active Drift with a known start and supporting Journal
+Entries. The confirmed Profile and Core Values must be the same ones used for
+that Weekly Drift Detection result.
+
+If several Core Values have Active Drift, select the one with the longest
+current Conflict run. Break a tie using the confirmed Profile order. If that
+Core Value has no suitable earlier quotation, show no card; do not move to
+another Core Value.
+
+An earlier example must:
+
+- belong to the same user or Persona;
+- come before the first Conflict in the selected Active Drift and be available
+  at the selected replay point;
+- describe the user's action or choice supporting that Core Value;
+- contain no Conflict against that same Core Value in the writing reviewed;
+- pass AI review and every required code check.
+
+An earlier Journal Entry from the same day can qualify when its stored order
+precedes the first Conflict and its date agrees with that order. A Journal
+Entry written after Drift began stays ineligible for that Drift, even when
+replay later reaches it.
+
+Both the original Journal Entry and the user's nudge response can supply
+evidence. The quotation must come from one identified source. The AI-written
+nudge cannot supply evidence or be quoted as the user's words. A response
+recorded later must not be treated as available when the original Journal
+Entry was written.
+
+Mentioning a Core Value, expressing an intention, or describing someone else's
+action is insufficient. If the writing includes both support and Conflict
+against the requested Core Value, reject it for version one. If its meaning
+depends on missing context, the AI review should abstain.
+
+Generation instructions, biography-only claims, LLM-Judge VIF Labels,
+LLM-Judge Conflict Labels, and VIF Critic Predictions are excluded from
+retrieval and North Star Moment review.
+Not Conflict also does not establish supportive behaviour.
+
+## 3. What appears in Experience and Inspect
+
+Experience shows at most one card containing:
+
+- **A past moment in your own words**;
+- the user-facing Core Value phrase and Journal Entry date;
+- one exact quotation, identified as coming from the Journal Entry or the
+  user's nudge response;
+- an expandable quotation with no fixed word limit;
+- an action to open the complete Journal Entry without losing the current week;
+- the notice: **This earlier writing is a reference point for your Core Value.
+  It does not mean the current Drift has ended.**
+
+Collapsing a long quotation changes its presentation only. Expanding it must
+reveal the complete accepted quotation without paraphrasing or joining
+separate passages. The card must remain usable on a narrow screen and with a
+keyboard or screen reader.
+
+Inspect links the selected Active Drift to the eligible writing, retrieval
+results, AI review, code checks, and selected quotation. A **saved review
+record** contains these inputs and decisions, their versions, and model details.
+It lets teammates inspect why a card appeared or why it was omitted.
+
+Missing, invalid, or failed records produce no card and leave Weekly Drift
+Detection and any valid Coach Digest available. Inspect identifies older
+results as **not evaluated** and manual or live sessions as **unavailable
+outside saved Persona replay**. Changes to source data invalidate an affected
+saved result.
+
+North Star Moment leaves the Profile, Core Values, Weekly Drift Reviewer
+Decisions, Drift Detector result, Historical Drift Records, and Coach Digest
+response unchanged. Advice, action plans, habits, external quotations, Profile
+evolution, model training, production multi-user storage, and background
+scheduling remain outside this version.
 
-**Status:** Proposed stretch goal; not implemented
+## 4. Two examples
 
-**Recommended scope:** A bounded, fail-closed addition to Experience and Inspect
+### An earlier supportive action
 
-**Primary trigger:** Active Drift for one Core Value
+In the saved Wei Jun Persona, Active Drift concerns **Making the world a
+fairer, better place**. The Coach Digest asks:
 
-**Primary user-facing result:** One exact quotation from an earlier Journal Entry in which the user described behaviour supporting that Core Value
+> When you notice yourself saying “okay” or nodding despite knowing what matters,
+> what feels at stake in speaking or acting differently?
 
-**Tracker:** `twinkl-b8w3` documents this design brief only
-
-## 1. Decision Summary
-
-North Star Moment is a proposed extension to the Coach Digest experience. When Weekly Drift Detection reports Active Drift for a Core Value, Twinkl searches the user's earlier Journal Entries for a concrete moment in which the user described behaviour supporting that same Core Value. A separate bounded AI review verifies the earlier Journal Entry. If the Journal Entry passes every eligibility and grounding check, Experience displays its date and an exact quotation in a small card beneath the Coach Digest.
-
-The proposed card does not advise the user what to do. It does not change the Profile, Core Values, Weekly Drift Reviewer Decisions, Drift Detector result, Active Drift, or any Historical Drift Record. It does not claim improvement, recovery, progress, or success. It reminds the user, in their own words, that their present Conflict is not the only evidence in their history.
-
-The idea is intentionally narrower than a habit recommender, action planner, or automatically evolving Profile. It adds the missing directional element in the original Twinkl vision while retaining the project's current evidence-grounded and non-prescriptive design.
-
-The recommended implementation keeps North Star Moment outside the generated Coach Digest response for the first version. Experience renders the verified quotation deterministically beneath the existing Coach Digest, while Inspect exposes how the quotation was retrieved and verified. This boundary avoids changing the Coach Digest's current three-field response and makes the new evidence independently inspectable.
-
-## 2. Product Context
-
-Twinkl's original proposition is to help users notice whether their lived behaviour remains connected to the Core Values they have confirmed. The current capstone proof of concept implements most of that proposition:
-
-1. Onboarding creates a confirmed Profile and Core Values.
-2. The user writes chronological Journal Entries.
-3. Weekly Drift Detection compares closed-week Journal Entries with those Core Values.
-4. The Weekly Drift Reviewer decides Conflict, Not Conflict, or Abstain for each relevant Journal Entry and Core Value.
-5. The Drift Detector creates Drift only when two consecutive Conflicts concern the same Core Value.
-6. The Coach Digest cites the relevant Journal Entries, explains the current finding, and asks a non-prescriptive reflective question.
-7. Inspect exposes the Profile, Journal Entries, Weekly Drift Reviewer Decisions, Drift Detector transitions, Coach Digest response, validations, and provider receipts.
-
-This implementation creates an inspectable path from a confirmed Profile to an Active Drift alert. It is deliberately cautious about what happens next. The Coach Digest avoids advice, action plans, micro-habits, generic praise, and unsupported claims that a user has improved. That design protects the user from an AI-generated prescription, but it also leaves the original product loop incomplete: Twinkl identifies distance from a Core Value without showing any evidence of what movement toward that Core Value has previously looked like for this person.
-
-North Star Moment addresses that gap by using the user's own earlier writing as the directional reference.
-
-## 3. What the Idea Is
-
-### 3.1 Core concept
-
-A North Star Moment is one earlier Journal Entry that meets all of the following conditions:
-
-- It belongs to the same user or Persona as the current Weekly Drift Detection result.
-- It was written before the first Conflict in the current Active Drift.
-- It describes observable behaviour, a choice, or an action that supports the affected Core Value.
-- Its relevance can be established without generation instructions, LLM-Judge VIF Labels, VIF Critic Predictions, biography-only claims, or other information unavailable to the user-facing application.
-- The displayed quotation is an exact substring of the earlier Journal Entry.
-- A separate North Star Moment review accepts the Journal Entry under a fixed structured contract.
-- Every deterministic validation passes.
-
-If no earlier Journal Entry meets these conditions, Twinkl returns no North Star Moment. Absence is an expected result, not an error to be filled with a generic quotation or invented suggestion.
-
-### 3.2 Intended user experience
-
-For an Active Drift result, Experience continues to show the existing Weekly Drift Detection finding and Coach Digest. When a verified earlier Journal Entry exists, Experience adds a compact card with:
-
-- a heading such as **A past moment in your own words**;
-- the user-facing Core Value phrase, never an exposed internal Schwartz label;
-- the date of the earlier Journal Entry;
-- one exact quotation from that Journal Entry;
-- an action that opens the complete Journal Entry or focuses its linked Inspect events;
-- a short evidence boundary such as: **This earlier entry is a reference point, not proof that the current Drift has ended.**
-
-The first version should not ask a second question. The existing Coach Digest reflective question remains the single open question presented for the week. This avoids competing calls to reflection and keeps North Star Moment as evidence rather than a recommendation.
-
-### 3.3 Why "verified" matters
-
-Semantic similarity alone is insufficient. A Journal Entry can mention fairness, freedom, family, achievement, or security without describing behaviour that supports the corresponding Core Value. It may discuss someone else's behaviour, quote a hypothetical action, express an intention without acting, or contain a Conflict against the same Core Value.
-
-The proposal therefore separates retrieval from verification:
-
-1. **Retrieval** finds a small number of earlier Journal Entries that are semantically related to the Core Value.
-2. **North Star Moment review** determines whether one retrieved Journal Entry contains explicit supportive behaviour and identifies the exact quotation.
-3. **Deterministic validation** checks identity, chronology, exact quotation, allowed fields, and absence of future information.
-4. **Selection** chooses at most one verified Journal Entry by a fixed rule.
-
-This staged design uses semantic retrieval for breadth and a narrow structured decision for precision.
-
-## 4. Gap Filled in the Current Proposition
-
-### 4.1 The missing fourth leg
-
-The original Twinkl vision can be described as four connected legs:
-
-1. establish the user's North Star through a confirmed Profile and Core Values;
-2. notice behaviour that conflicts with a Core Value;
-3. detect repeated Conflict and alert the user through an evidence-grounded Coach Digest;
-4. help the user reorient toward the Core Value.
-
-The capstone proof of concept implements the first three legs. The fourth remains intentionally limited to one reflective question. The current Coach Digest can identify the tension and invite reflection, but it cannot show what the affected Core Value has looked like when expressed by this user.
-
-North Star Moment fills that gap without moving into prescriptive coaching. It changes Twinkl from only saying **this is where your recent behaviour appears distant from your Core Value** to also saying **this is an earlier moment, in your own words, when your behaviour expressed that Core Value**.
-
-### 4.2 Current and proposed behaviour
-
-| Product responsibility | Current capstone behaviour | Proposed addition |
-|---|---|---|
-| Establish the reference | Onboarding creates a confirmed Profile and Core Values. | No change. |
-| Review behaviour | The Weekly Drift Reviewer decides Conflict, Not Conflict, or Abstain. | No change. |
-| Decide Drift | The Drift Detector applies the two-consecutive-Conflict rule. | No change. |
-| Explain the result | The Coach Digest cites the current evidence and asks one reflective question. | No change to the first-version Coach Digest response. |
-| Offer direction | The Coach Digest does not provide advice or a behavioural plan. | Experience may show one earlier, verified Journal Entry supporting the affected Core Value. |
-| Preserve contestability | Inspect shows the evidence and stored decisions behind the result. | Inspect also shows retrieval eligibility, North Star Moment review, exact-quotation validation, and selection. |
-| Handle weak evidence | The application can return Insufficient Evidence or omit an invalid Coach Digest. | North Star Moment independently fails closed to no card. Weekly Drift Detection and the Coach Digest remain available. |
-
-### 4.3 Why North Star Moment is preferable to generic advice
-
-A generic recommendation asks an AI model to invent an action that might suit the user. That introduces several difficult questions: whether the advice is practical, whether it respects constraints not present in the Journal Entries, whether it feels intrusive, and whether it changes behaviour. Those questions require user testing that is not feasible in the remaining capstone period.
-
-North Star Moment makes a narrower and more testable claim. It says only that Twinkl found an earlier Journal Entry in which the user described behaviour that supports the same Core Value. The evidence already exists in the user's history, the displayed text is traceable, and incorrect retrieval can be measured on a frozen synthetic benchmark.
-
-## 5. Required Behaviour and Boundaries
-
-### 5.1 Trigger conditions
-
-The first version should attempt North Star Moment retrieval only when all of the following are true:
-
-- Weekly Drift Detection completed successfully for a closed week.
-- At least one Core Value has Active Drift.
-- The Active Drift has a known onset and supporting Journal Entries.
-- At least one earlier Journal Entry exists before that onset.
-- The relevant Profile and Core Value are still the confirmed reference used by Weekly Drift Detection.
-
-No North Star Moment should be requested for No Active Drift or Insufficient Evidence. Those states do not require a counterpoint to a confirmed Active Drift, and extending the first version to them would add policy branches without strengthening the central proposition.
-
-### 5.2 Multiple Active Drifts
-
-If more than one Core Value has Active Drift, the first version should return at most one North Star Moment for each affected Core Value but display no more than one North Star Moment card by default. A deterministic precedence rule should choose which card appears first. Possible rules include:
-
-1. the Active Drift with the longest current Conflict run;
-2. the Active Drift with the most recent second Conflict;
-3. the first affected Core Value in the confirmed Profile order.
-
-The implementation context should choose one rule before evaluation and record it in the versioned contract. It should not let the generation model choose which Core Value receives attention.
-
-### 5.3 Chronology boundary
-
-The North Star Moment must precede the onset of the current Active Drift, not merely the current closed week. This prevents Twinkl from retrieving:
-
-- one of the Journal Entries that formed the current Drift;
-- a later Journal Entry unavailable at the selected Persona replay point;
-- a future Journal Entry accidentally exposed by saved scenario data;
-- a Journal Entry written after the pattern began and then misrepresented as an earlier reference point.
-
-The chronology check must use stored dates and `t_index` ordering. When those disagree, the North Star Moment must be omitted and Inspect should show the validation failure.
-
-### 5.4 Evidence boundary
-
-A North Star Moment may describe one earlier supportive choice. It must not be treated as evidence that:
-
-- the current Active Drift has ended;
-- the user has recovered or improved;
-- the earlier behaviour is typical of the user;
-- the Profile is correct or permanent;
-- the earlier action is appropriate in the current context;
-- repeating the earlier action will produce a desired outcome.
-
-These limits should appear in prompt instructions, deterministic validations, Coach Digest Evals, Inspect, and the Technical Paper.
-
-### 5.5 Separation from existing authority
-
-The proposal must preserve the following ownership boundaries:
-
-- The **Weekly Drift Reviewer** continues to decide only Conflict, Not Conflict, or Abstain for current-week Journal Entries and Core Values.
-- The **Drift Detector** continues to decide whether two consecutive Conflicts form Drift and to maintain Historical Drift Records.
-- The **Coach Digest** continues to use stored Weekly Drift Detection output and does not decide whether Drift exists.
-- The proposed North Star Moment review decides only whether an earlier Journal Entry is suitable to display as a supportive reference for one Core Value.
-- The proposed North Star Moment never becomes a Weekly Drift Reviewer Decision and never changes a Drift Detector result.
-- The **VIF Critic (Offline)** remains an offline research component and does not receive user-facing authority through this feature.
-
-### 5.6 Explicit non-goals
-
-The first version does not include:
-
-- advice, action plans, implementation intentions, habits, or recommendations;
-- a user-authored next-step form;
-- automatic Profile evolution or a request to change Core Values;
-- a new current Drift state such as `returned` or `recovered`;
-- a `supports` verdict added to the Weekly Drift Reviewer;
-- a claim that Not Conflict demonstrates supportive behaviour;
-- external quotations, books, videos, or an inspiration feed;
-- cross-user retrieval;
-- VIF Critic Predictions as retrieval or selection authority;
-- model training or fine-tuning;
-- user testing, usability testing, or a behavioural outcome study;
-- production multi-user storage or background scheduling.
-
-## 6. Before-and-After Examples
-
-The following examples are illustrative. They are not current saved Persona responses and must not be reported as evaluated application evidence.
-
-### 6.1 Example A: a verified earlier Journal Entry exists
-
-#### Before
-
-Weekly Drift Detection reports Active Drift for the Core Value expressed to the user as **making the world a fairer, better place**. Two consecutive Journal Entries include the exact phrases:
-
-> "I said okay."
-
-and
-
-> "I nodded and let the meeting move on."
-
-The current Coach Digest might say:
-
-> Across these two meetings, you noticed something felt unfair and let both moments pass without saying so. What felt at stake in speaking differently?
-
-The response identifies the Conflict and asks an appropriate question, but it offers no personal reference point for the Core Value.
-
-#### After
-
-The Weekly Drift Detection result and Coach Digest remain unchanged. Beneath the Coach Digest, Experience adds:
+The card shows this earlier Journal Entry:
 
 > **A past moment in your own words**
 >
-> 14 May 2026
+> Making the world a fairer, better place
 >
-> "I stayed after the review because the intern had not been given a fair chance to explain."
+> 22 June 2025 · From your Journal Entry
 >
-> This earlier Journal Entry is a reference point for your Core Value. It does not mean the current Drift has ended.
+> “Helped two new guys file their claims.”
+>
+> This earlier writing is a reference point for your Core Value.
+> It does not mean the current Drift has ended.
 
-The user can open the complete earlier Journal Entry. Inspect shows that it predates the current Drift, was retrieved for the same Core Value, passed North Star Moment review, and passed exact-quotation validation.
+The quotation is present at `t_index=7`, before Drift starts at `t_index=8`.
 
-### 6.2 Example B: only a semantic near-match exists
-
-#### Before
-
-The Coach Digest explains Active Drift and asks one reflective question.
-
-#### Proposed retrieval result
+### A related phrase that should be rejected
 
 An earlier Journal Entry says:
 
-> "The promotion process here is never fair."
+> “The promotion process here is never fair.”
 
-The entry contains semantically related language, but it does not describe the user's supportive behaviour or choice. Retrieval may rank it highly, but North Star Moment review must reject it.
+Semantic retrieval might find this phrase because it relates to fairness.
+It does not describe the user's supportive action. North Star Moment review
+rejects it, Experience shows no card, and Inspect records the reason. The
+existing Coach Digest remains available.
 
-#### After
+## 5. Academic purpose
 
-Experience shows the same Weekly Drift Detection result and Coach Digest as before. No North Star Moment card appears. Inspect records that no eligible earlier Journal Entry was verified.
+The research question is:
 
-This is correct fail-closed behaviour. A missing North Star Moment is safer than an impressive but false personal connection.
+> Can semantic retrieval followed by AI review select an earlier Journal Entry
+> or user nudge response that describes behaviour supporting the same Core
+> Value involved in Active Drift, and quote it faithfully?
 
-### 6.3 Example C: an earlier supportive action concerns another value
+Self-affirmation theory motivates the idea of placing a difficult observation
+within a broader account of the person. Steele's foundational account and
+Cohen and Sherman's review provide the theoretical background. North Star
+Moment uses earlier writing to place the current Conflict alongside a past
+supportive action.
 
-#### Before
-
-Active Drift concerns the Core Value expressed as **having the freedom to choose my own path**.
-
-An earlier Journal Entry says:
-
-> "I covered the shift because my teammate had nobody else to ask."
-
-That action may support being dependable toward others, but it is not necessarily evidence of choosing one's own path.
-
-#### After
-
-The North Star Moment review rejects the Journal Entry for the affected Core Value. Experience displays no North Star Moment unless another earlier Journal Entry passes. Inspect shows the Core Value mismatch without exposing an internal Schwartz label in user-facing text.
-
-### 6.4 Example D: a future Journal Entry would be an excellent North Star Moment
-
-#### Before
-
-A saved Persona contains a later Journal Entry that clearly describes the relevant supportive action, but the current replay point occurs before that entry.
-
-#### After
-
-The no-future-data rule excludes the later Journal Entry before semantic retrieval. It cannot appear in Experience, the North Star Moment review request, logs intended to represent the current replay point, or Inspect. North Star Moment is absent until the later Journal Entry becomes chronologically available.
-
-### 6.5 Example E: No Active Drift or Insufficient Evidence
-
-#### Before
-
-Experience displays No Active Drift or Insufficient Evidence and the corresponding Coach Digest policy.
-
-#### After
-
-The first version behaves exactly as it did before. No North Star Moment retrieval runs and no North Star Moment card appears. This keeps the stretch goal focused on the missing guidance step after confirmed Active Drift.
-
-## 7. Relationship to the Academic Requirements
-
-The [Capstone Requirements](../capstone_report/capstone_requirements.pdf) describe Phase 2 as development, coding, testing, validation, implementation, and demonstration. The Phase 2 assessment assigns 20% each to the Technical Paper, Presentation, and System Implementation & Demo, plus 10% to Sponsor/Panel Assessment. The assessment guide distinguishes working application evidence from research evidence and includes complexity, innovativeness, verification and validation, functionality, methodology, and programming among its considerations. It also expects the Technical Paper and reports to show clear writing, substantial depth, technical achievement, and appropriate references.
-
-North Star Moment is attractive as a capstone stretch goal because it contributes to several of these dimensions without requiring the project to make a behavioural-outcome claim.
-
-### 7.1 Intelligent System objective
-
-The feature adds a bounded reasoning capability to an existing Intelligent System. It does not merely add decorative interface content. It must select historical evidence under semantic, chronological, identity, and policy constraints; request a structured AI decision; validate the returned quotation; and make the result inspectable.
-
-### 7.2 Application-oriented assessment
-
-| Assessment consideration | Contribution of the proposed feature | Evidence that can be produced without users |
-|---|---|---|
-| Complexity | Integrates retrieval, structured AI review, deterministic validation, versioned contracts, Experience, Inspect, saved Persona replay, and failure handling. | Architecture description, code, tests, stored receipts, and a complete professor walkthrough. |
-| Innovativeness | Uses the user's own earlier behaviour as the directional reference instead of generic advice or an external quotation. | Before-and-after demonstration across multiple saved Personas and benchmark categories. |
-| Verification and validation | Separates retrieval quality, North Star Moment review, exact quotation, chronology, abstention, and presentation. | Frozen synthetic benchmark, deterministic checks, provider-separated AI review, regression tests, and error analysis. |
-| Functionality | Adds a visible response to the missing guide-back step after Active Drift. | End-to-end Persona replay showing an accepted North Star Moment, no-card result, provider failure, and no-future-data enforcement. |
-| Demonstration | Produces an immediately understandable change in Experience while retaining full traceability in Inspect. | Scripted phone-width and desktop-width walkthrough with linked evidence. |
-| Customer satisfaction or feedback | The feature may be meaningful to users, but the capstone cannot establish that without user testing. | No claim should be made. This assessment consideration remains outside the feature's evidence. |
-
-### 7.3 Research-oriented assessment
-
-The feature can also support a small R&D investigation:
-
-> Can semantic retrieval followed by a bounded, evidence-grounded AI review identify an earlier Journal Entry that demonstrates behaviour supporting the same Core Value involved in a current Active Drift?
-
-That question is narrow enough to evaluate without human participants. It creates a clear methodological comparison between retrieval alone and retrieval followed by verification. The contribution is not a claim that North Star Moments change behaviour. It is a measured account of whether Twinkl can select and faithfully present a valid earlier reference from longitudinal Journal Entries.
-
-### 7.4 Practice-module alignment
-
-| Practice module | Proposed contribution |
+| Capstone contribution | Evidence to produce |
 |---|---|
-| Intelligent Reasoning Systems | Applies semantic retrieval, a bounded North Star Moment decision, deterministic eligibility rules, and fail-closed selection to connect an Active Drift with earlier supportive evidence. |
-| Pattern Recognition Systems | Uses a frozen text encoder to rank earlier Journal Entries by relevance to one Core Value. Retrieval quality is measured separately from the North Star Moment review. |
-| Intelligent Sensing Systems | Treats chronological Journal Entries as a longitudinal behavioural signal while enforcing the exact information available at each weekly cutoff. The feature remains text-only. |
-| Architecting AI Systems | Adds a versioned request, receipt, trace events, deterministic validations, Experience card, Inspect detail, saved Persona fixtures, and safe failure without changing existing Drift authority. |
+| Intelligent Reasoning Systems and Pattern Recognition Systems | Retrieval results and AI review decisions, measured separately. |
+| Intelligent Sensing Systems | Chronological Journal Entries and user responses restricted to what was available at each replay point. |
+| Architecting AI Systems | Shared contracts, saved review records, Experience, Inspect, and failure tests. |
+| Technical Paper and implementation demonstration | Method, results, limitations, and a walkthrough linking the displayed quotation to its source. |
 
-### 7.5 Why assessors may value it
+Evaluation measures selection and quotation accuracy using AI-reviewed
+synthetic histories. User studies and deployment testing are outside its
+scope. The linked Capstone Requirements describe the assessment criteria.
 
-The proposal creates a coherent extension of Twinkl's central argument rather than adding an unrelated late feature. It reuses the confirmed Profile, longitudinal Journal Entries, Active Drift, evidence-grounded explanations, abstention, and Inspect. The demonstration can therefore show both product value and technical discipline in one short sequence.
+## 6. Evaluation decisions
 
-Its claim is also falsifiable. Twinkl either retrieves an eligible earlier Journal Entry and quotes it faithfully, or it does not. Incorrect North Star Moments, chronology violations, wrong-Core-Value retrieval, and unsupported quotations can all be counted and inspected. That is more academically defensible than demonstrating a generated recommendation and assuming it helped.
+First test retrieval locally, using existing LLM-Judge VIF Labels as a rough
+reference. Later evaluation uses North Star Moment-specific reference
+decisions. Compare retrieval of the top 1, 3, and 5 Journal Entries,
+then choose the smallest number reaching **at least 90% proxy retrieval
+recall**: finding an earlier positively labelled Journal Entry in at least
+90% of histories that contain one.
 
-## 8. Complexity and Time Estimate
+For the later task-specific benchmark, the adopted criteria are:
 
-### 8.1 Overall estimate
+- no incorrect displayed North Star Moments;
+- correct omission in every history confirmed to contain no valid example;
+- zero quotation, chronology, and wrong-user failures;
+- no more than 5% unexpected provider failures;
+- at least one accepted saved-Persona demonstration.
 
-The recommended first version is **medium complexity**. A realistic implementation and evaluation estimate is **7–10 working days**, assuming the current Experience and Inspect contracts remain stable and no new paid-model procurement is required.
+Report coverage, the proportion of eligible Active Drift cases receiving a
+card, without imposing a minimum percentage. Report counts alongside rates.
+Report deliberately injected failures separately from unexpected provider
+failures.
 
-This estimate is larger than a prompt-only change because the feature requires a new evidence contract and an evaluation benchmark. It is smaller than Return Detection or Profile evolution because it does not alter Weekly Drift Reviewer Decisions, the Drift Detector, current Drift states, or Historical Drift Records.
+**Decision 11 remains open: which histories should be reserved for evaluation?**
+Development histories are examples used to adjust the prompt or retrieval.
+Final evaluation histories are examples examined after those choices are
+finished. Adjusting a prompt after seeing its test answers can make the
+reported result look better than performance on unseen writing.
 
-### 8.2 Complexity by work area
+The options are:
 
-| Work area | Expected complexity | Reason |
-|---|---|---|
-| Eligibility and chronology | Low | Existing Journal Entry identifiers, dates, `t_index` values, Active Drift onset, and replay cutoffs already exist. The main work is consolidating them into one tested rule. |
-| Semantic retrieval | Low to medium | Existing encoder code can be reused, but the Embedding Explorer's reduced three-dimensional coordinates must not be used as retrieval vectors. The implementation needs full-dimensional embeddings and a small cache or on-demand computation path. |
-| North Star Moment review | Medium | Requires a new prompt, structured response, provider boundary, fail-closed parsing, receipts, and task-specific examples. It must remain separate from the Weekly Drift Reviewer. |
-| Deterministic validation | Medium | Must check exact quotation, chronology, identity, Core Value coordinates, requested identifiers, response completeness, and failure behavior. |
-| Experience | Low to medium | One optional mobile-first card, a link to the complete Journal Entry, loading and unavailable behavior, keyboard access, and narrow-screen tests. |
-| Inspect | Medium | Needs trace events and a readable explanation of retrieval, North Star Moment review, selection, and validation. Hidden provider reasoning must not be exposed. |
-| Saved Persona replay | Medium | Requires at least one accepted-moment fixture, one no-card fixture, and no-future-data verification without invalidating current scenario provenance. |
-| Evaluation | Medium to high | The most important work is creating a frozen task-specific benchmark and preserving the distinction between LLM-Judge VIF Labels and North Star Moment reference decisions. |
-| Technical Paper update | Medium | Requires a method, results, error analysis, limitations, architecture update, and claim boundaries. A feature description alone is insufficient. |
+1. **Recommended:** Reserve a small, separate benchmark covering the required
+   cases. Keep its histories out of North Star Moment prompt development.
+2. Reserve a larger separate benchmark for more detailed results, with more
+   review work and cost.
+3. Use development histories only and report feasibility evidence. Defer final
+   evaluation.
 
-### 8.3 Suggested time allocation
+This decision must be recorded before assigning histories or requesting
+task-specific reference decisions.
 
-| Stage | Indicative effort | Deliverable |
-|---|---:|---|
-| Feasibility and benchmark design | 1–2 days | Fixed North Star Moment definition, benchmark categories, baseline retrieval result, and go/no-go decision. |
-| Contracts, retrieval, and validation | 2–3 days | Versioned request and receipt, full-dimensional retrieval, North Star Moment review, deterministic validations, and focused tests. |
-| Experience, Inspect, and Persona replay | 2–3 days | Optional North Star Moment card, trace view, fixtures, no-future-data behavior, accessibility checks, and integration tests. |
-| Evaluation and Technical Paper evidence | 2–3 days | Frozen report, metrics, error analysis, cost and latency, limitations, and report-ready figures or tables. |
+## 7. Work plan and completion
 
-The implementation context should resist combining this work with Return Prompt, Return Detection, automatic Profile evolution, or longitudinal Core Value history. Each addition weakens the one-month scope boundary.
+The estimate is **7–11 working days**, assuming stable Experience and Inspect
+contracts and an available evaluation provider.
 
-## 9. High-Level Implementation Design
+| Phase | Work and output | Effort |
+|---|---|---:|
+| 0A: local retrieval check | Reproduce the existing baseline; freeze the query and encoder settings; compare retrieval at 1, 3, and 5. Stop if no setting reaches 90%. No paid calls. | 1–2 days for 0A and 0B |
+| 0B: development AI review | After the evaluation choice and paid budget are agreed, build development cases and reference decisions. Test the new prompt against the adopted criteria. | Included above |
+| 1: retrieval and review | Implement request and response contracts, filtering, retrieval, AI review, saved records, and code checks. | 2–3 days |
+| 2: Experience and Inspect | Add the card, source links, saved Persona results, migration, and replay/accessibility tests. | 2–3 days |
+| 3: evaluation and reporting | If a separate benchmark is adopted, evaluate the frozen implementation once, report errors and limitations, and update the Technical Paper and walkthrough. | 2–3 days |
 
-### 9.1 Recommended flow
+The next implementation step is Phase 0A only. Before paid work, present a cost
+estimate and obtain agreed per-attempt and total limits covering review,
+reference decisions, retries, and evaluation.
 
-```text
-Confirmed Profile and Journal Entries
-              |
-              v
-Existing Weekly Drift Detection
-              |
-              +---- No Active Drift or Insufficient Evidence
-              |             |
-              |             +---- No North Star Moment work
-              |
-              +---- Active Drift for a Core Value
-                            |
-                            v
-              Deterministic earlier-entry filter
-                            |
-                            v
-              Full-dimensional semantic retrieval
-                            |
-                            v
-              Structured North Star Moment review
-                            |
-                            v
-              Exact-quotation and chronology checks
-                            |
-                   +--------+--------+
-                   |                 |
-                 Pass              No pass
-                   |                 |
-                   v                 v
-       North Star Moment card          No card
-                   |
-                   v
-          Linked Inspect evidence
-```
+If a phase fails its criteria, stop and keep the existing Coach Digest
+behaviour.
 
-### 9.2 Step 1: derive the retrieval request
+Completion requires a focused implementation issue, an adopted PRD scope,
+passing contract and regression checks, reproducible reports, and saved
+Personas demonstrating acceptance, omission, provider failure, and exclusion
+of future writing. Final evaluation requirements depend on decision 11.
+Prepare reports with their exact source and configuration records.
 
-After Weekly Drift Detection is stored, the orchestration code derives one request for each eligible Active Drift. The request should contain only information needed for the North Star Moment task:
+## Technical appendix
 
-- session or Persona identifier;
-- reviewed week and replay cutoff;
-- affected Core Value;
-- user-facing Core Value phrase;
-- current Active Drift onset and supporting Journal Entry identifiers;
-- earlier Journal Entries eligible at the cutoff;
-- prompt name, version, and hash;
-- model and reasoning-effort request;
-- schema version and creation time.
+### A. Retrieval and AI review
 
-Current Conflict evidence may be supplied to help distinguish a meaningful contrast, but the North Star Moment decision must remain focused on whether the earlier Journal Entry itself describes supportive behaviour. The prompt should not infer that the same action would be appropriate now.
+#### Inputs and eligibility
 
-### 9.3 Step 2: filter the history before retrieval
+The request records the schema version, user or Persona identifier, confirmed
+Profile reference, reviewed week, replay cutoff, selected Core Value and
+user-facing phrase, Active Drift start, supporting Journal Entry identifiers,
+eligible source text, prompt version and hash, model settings, and creation
+time. Each source distinguishes `journal_entry` from `nudge_response`.
 
-Deterministic code should remove ineligible Journal Entries before any embedding or provider call. The filter should enforce:
+Filter before any embedding or provider call. Require a matching identity,
+non-empty user-written text, `t_index < active_drift_start_t_index`, and
+`date <= active_drift_start_date`. Both ordering checks must pass. Exclude
+removed Journal Entries, current Drift evidence, and anything unavailable at
+the replay point. Dates and stored order must agree.
 
-- exact user or Persona match;
-- `t_index` lower than the first Conflict in the current Active Drift;
-- date no later than the Active Drift onset date;
-- availability at the current Persona replay point;
-- non-empty displayed Journal Entry text;
-- absence from the current Active Drift's supporting Journal Entries;
-- no use of removed Journal Entries;
-- no hidden generation, labelling, biography, or VIF Critic data.
+A nudge response needs its own evidence of availability before the first
+Conflict and at the replay point. Use recorded event order or timestamps;
+do not copy the parent Journal Entry's date as proof. If availability cannot
+be established, exclude that response while retaining an otherwise eligible
+original Journal Entry. Preserve source boundaries when composing text for
+retrieval and review. AI-written nudges and hidden generation or labelling
+information are excluded.
 
-Filtering first reduces cost and makes future-data leakage mechanically impossible at the model boundary.
+#### Semantic retrieval
 
-### 9.4 Step 3: rank earlier Journal Entries
+Use the user-facing Core Value phrase plus its approved definition. Freeze
+the exact definition and its source before Phase 0A. Use only the value
+definition; do not import Persona-generation examples, instructions, biography,
+labels, or current Conflict text into the query.
 
-The retrieval implementation should encode:
+The fixed encoder is `nomic-ai/nomic-embed-text-v1.5`, using:
 
-1. a query derived from the affected Core Value's internal rubric and user-facing phrase; and
-2. each eligible earlier Journal Entry.
+- a recorded model revision and 256-dimensional Matryoshka representation;
+- `search_query: ` for the query and `search_document: ` for eligible writing;
+- the encoder's normalization sequence: layer normalization, truncation to
+  256 dimensions, then L2 normalization;
+- cosine similarity for ranking.
 
-It should use full-dimensional embeddings from one fixed encoder. The three-dimensional PCA or t-SNE coordinates in `viz/embedding_explorer.html` are suitable for visualization, not semantic retrieval.
+The existing VIF Critic (Offline) encoder uses `classification: ` and must
+not be reused unchanged. Three-dimensional PCA or t-SNE coordinates from the
+Embedding Explorer are unsuitable for retrieval.
 
-Cosine similarity can rank the eligible Journal Entries. The first version should send only a small fixed number, such as the top three or top five, to North Star Moment review. The exact number is an evaluation parameter and must be fixed before the reported benchmark run.
+Rank one document per eligible Journal Entry, including its eligible user
+response with its source identified. Compare top-k values of 1, 3, and 5;
+select the smallest meeting the 90% proxy threshold. If none passes, stop.
+Freeze k before paid review and final benchmark work. Preserve retrieval
+order, use recency for equal similarities, and use a stable identifier for
+any remaining tie.
 
-Retrieval similarity remains internal. Experience must not show a relevance number, rank, or confidence indicator. A high similarity does not establish that the Journal Entry is supportive.
+#### North Star Moment review
 
-### 9.5 Step 4: perform North Star Moment review
+Use a new prompt and schema, separate from the Weekly Drift Reviewer.
+Start with the current Coach Digest generation settings:
+`gpt-5.6-luna`, reasoning effort `none`.
+Record requested and actual model identifiers. Use a different AI provider
+for benchmark reference decisions; select and freeze its exact configuration
+before paid work. Revise the evaluation plan if that provider is unavailable.
 
-The North Star Moment review should use a new prompt and response schema. It must not reuse the name, receipt schema, or authority of the Weekly Drift Reviewer.
+Send the retrieved Journal Entries in one batch. Require exactly one decision
+for every requested Journal Entry and the requested Core Value. For example:
 
-One possible internal response contract is:
-
-```json
+~~~json
 {
-  "entry_id": "journal-entry-id",
-  "decision": "supportive | not_supportive | abstain",
-  "evidence_quote": "exact substring or empty",
-  "reason_code": "observable_choice | other_value | intent_only | hypothetical | other_person | ambiguous | insufficient_text"
+  "schema_version": "north-star-moment-review-v1",
+  "core_value": "universalism",
+  "results": [
+    {
+      "entry_id": "8f83c818:entry:7",
+      "decision": "supportive",
+      "quote_source": "journal_entry",
+      "evidence_quote": "Helped two new guys file their claims.",
+      "reason_code": "observable_choice"
+    }
+  ]
 }
-```
+~~~
 
-The exact identifiers may change during implementation. The semantic contract should remain:
+Permitted decisions are `supportive`, `not_supportive`, and `abstain`. An accepted
+decision requires one non-empty exact quotation from the identified source:
+`journal_entry` or `nudge_response`. Rejected and abstaining decisions
+require an empty quotation and null source. Permit reason codes for observable
+choices, wrong values, intentions, hypotheticals, another person's action,
+same-Core-Value Conflict, ambiguity, and insufficient text.
 
-- `supportive` means the earlier Journal Entry describes an observable choice or behaviour supporting the requested Core Value;
-- `not_supportive` means the available text does not meet that definition;
-- `abstain` means the text is too ambiguous to decide without hidden context;
-- an accepted result requires a non-empty exact quotation;
-- rejected or Abstain results require an empty quotation;
-- the model cannot change the requested Journal Entry or Core Value coordinate;
-- malformed, refused, missing, or provider-error responses fail closed.
+Review all eligible user-written text attached to each Journal Entry.
+Reject an example containing Conflict against the requested Core Value even
+when another passage supports it. A model must not change identifiers, the
+requested Core Value, or the application-selected priority.
 
-The North Star Moment prompt should include hard cases involving intentions, emotions, someone else's actions, hypotheticals, value trade-offs, and supportive behaviour for another value.
+Reject the whole batch for missing, duplicate, extra, or malformed decisions,
+refusal, timeout, or provider error. A complete valid batch may contain a
+mixture of supportive, not-supportive, and abstaining decisions. Apply code
+checks to the batch before selecting the first accepted Journal Entry in the
+frozen retrieval order.
 
-### 9.6 Step 5: validate and select
+### B. Code checks, saved records, and integration
 
-Deterministic validation should confirm:
+#### Required checks
 
-- the returned Journal Entry was requested;
-- the returned Core Value is the requested Core Value;
-- the Journal Entry precedes the current Active Drift;
-- the Journal Entry is available at the current cutoff;
-- the quotation is an exact substring of the stored Journal Entry;
-- an accepted result has a quotation and a permitted reason code;
-- a rejected, Abstain, or unavailable result has no quotation;
-- user-facing text contains no raw internal Schwartz label;
-- no field claims recovery, progress, success, or an end to Active Drift.
+Validate the following before rendering:
 
-If several Journal Entries pass, selection should be deterministic. A reasonable first rule is:
-
-1. preserve semantic-retrieval order;
-2. select the first verified Journal Entry;
-3. use recency only as a fixed tie-breaker;
-4. display at most one Journal Entry for each attempted North Star Moment card.
-
-The report should disclose this rule. It should not describe the selected Journal Entry as the user's best or strongest example unless the evaluation establishes that interpretation.
-
-### 9.7 Step 6: persist a versioned receipt
-
-The receipt should preserve enough information to reproduce and inspect the decision without storing hidden provider reasoning. Suggested fields include:
-
-| Field | Purpose |
+| Check | Required behaviour |
 |---|---|
-| `schema_version` | Supports compatibility-safe evolution. |
-| `session_id` or `persona_id` | Links the North Star Moment to the correct history. |
-| `reviewed_week` | Links the North Star Moment to one Weekly Drift Detection result. |
-| `core_value` | Stores the internal coordinate used by the application. |
-| `user_facing_core_value_phrase` | Stores the phrase permitted in Experience. |
-| `active_drift_start_t_index` | Makes chronology validation inspectable. |
-| `eligible_entry_ids` | Records the deterministic pre-retrieval filter result. |
-| `retrieved_entry_ids` | Records the fixed top-k retrieval order. |
-| `selected_entry_id` | Identifies the displayed Journal Entry, when present. |
-| `evidence_quote` | Stores the exact displayed quotation. |
-| `decision` and `reason_code` | Records the bounded North Star Moment review. |
-| `validation` | Records exact quotation, chronology, identity, Core Value, and response checks. |
-| `prompt_name`, `prompt_version`, and hashes | Supports reproducibility. |
-| requested and actual model fields | Supports provider and model provenance. |
-| usage, latency, and status | Supports evaluation and operational reporting. |
+| Identity and membership | Every returned Journal Entry was requested for the same user or Persona. |
+| Core Value | The response identifies the requested Core Value. |
+| Chronology | The original text and any included response satisfy their availability rules and precede Drift start. |
+| Exact quotation | The quotation is a continuous exact substring of the identified user-written source. Never combine sources or repair a quotation by paraphrasing. |
+| Complete response | All requested decisions are present once, with permitted fields and decision/reason/source combinations. |
+| User-facing claims | Application-written text must not infer recovery, improvement, typical behaviour, success, or an ended Active Drift from the quotation. Review the quotation in context; these checks must not rewrite the user's words. |
+| Internal value labels | No raw internal Schwartz label appears in card fields. Omit an unsuitable quotation rather than rewriting it. |
+| Display | Expansion preserves the full accepted quotation, its source, and the route back to the current week. There is no fixed quotation word limit. |
+| Failure | A missing, stale, invalid, refused, or failed saved result produces no card. |
 
-Similarity values may be recorded for offline evaluation but should not appear in Experience. If retained, they must be documented as retrieval diagnostics rather than certainty.
+These are North Star Moment checks. Existing Coach Digest Validations do not
+automatically cover the card. Code can check identity, ordering, and text
+matching; semantic suitability still depends on AI review. Inspect records
+both results.
 
-### 9.8 Step 7: add Experience behavior
+#### Saved review record
 
-Experience should render North Star Moment as a progressive enhancement:
+A versioned record, called a receipt in existing code, should preserve:
 
-- Weekly Drift Detection remains visible if North Star Moment retrieval fails.
-- The Coach Digest remains visible if North Star Moment retrieval fails.
-- The North Star Moment card appears only after every required check passes.
-- Loading North Star Moment must not block the existing weekly result indefinitely.
-- Retry behavior must be explicit and idempotent.
-- The complete Journal Entry should be reachable without losing the current week.
-- The card must work at the project's primary narrow-screen width.
-- Keyboard focus, screen-reader labels, quotation semantics, and reduced-motion behavior should follow the existing Experience conventions.
+- session or Persona, week, cutoff, Profile reference, Core Value, and Drift start;
+- eligible and retrieved Journal Entry identifiers in order;
+- source text references, availability evidence, content hashes, selected
+  Journal Entry, quotation source, and exact quotation;
+- every AI decision and code-check result, including why no card appeared;
+- schema and prompt versions, prompt hash, creation time, and input hash;
+- encoder name, revision, prefixes, dimensions, and normalization;
+- requested and actual provider/model settings, usage, latency, calculated cost,
+  and status.
 
-The first version should render stored Persona North Star Moments without live provider calls. Optional live rerun should remain a separate action if it is implemented at all.
+Similarity values may be saved as retrieval diagnostics. Experience must not
+display them as relevance scores or confidence. Do not call the selected
+quotation the user's best or strongest example.
 
-### 9.9 Step 8: add Inspect behavior
+Inspect links the trigger, filtering, retrieval, prompt and model, response,
+checks, and selection. Do not expose hidden provider reasoning, secrets, or
+generation metadata. Store source-disclosed failure records for offline
+fixture generation. Freeze retry limits before paid work; repeating an
+identical completed request reuses its record instead of duplicating calls.
+Changed inputs require a new record.
 
-Inspect should let an assessor trace:
+#### Experience and Inspect integration
 
-1. which Active Drift triggered retrieval;
-2. which earlier Journal Entries were eligible;
-3. which Journal Entries semantic retrieval selected for review;
-4. which prompt and model contract ran;
-5. which North Star Moment decision was returned;
-6. which exact quotation was validated;
-7. why no North Star Moment appeared when retrieval or review failed;
-8. whether the result came from a saved Persona fixture or a live call.
+Precompute retrieval and AI review outside the Railway Experience image.
+`requirements-experience.txt` does not install PyTorch or Sentence
+Transformers. Keep those dependencies out of the hosted Experience image and
+do not substitute another embedding model for replay.
 
-Inspect should not expose chain-of-thought, hidden provider reasoning, API secrets, or generation metadata. A concise reason code and evidence quotation are sufficient.
+Add optional records compatibly to the existing session and scenario
+contracts. Older weeks remain usable with a **not evaluated** status and no
+card. Removing a Journal Entry, changing its response, changing the governing
+Profile, or recomputing affected Weekly Drift Detection output invalidates
+dependent North Star Moment results. The first version does not regenerate
+them through live sessions.
 
-### 9.10 Likely repository touchpoints
+Likely code locations are `src/demo/contracts.py`,
+`src/demo/experience_service.py`, `src/demo/scenarios.py`, a focused North
+Star Moment module, and the Experience/Inspect components under
+`frontend/onboarding/src/`. Reuse provider and validation patterns in
+`src/coach/`; inspect current callers and contracts before editing.
+Pydantic remains the shared schema source. Update generated schemas, React
+validation, saved Persona hashes, and manifests together.
 
-The implementation context should confirm the current tree before editing. Likely areas include:
+### C. Evaluation protocol
 
-- `src/demo/contracts.py` for the versioned Experience and Inspect contract;
-- `src/demo/experience_service.py` for orchestration and persistence;
-- `src/coach/` for shared provider-boundary and validation patterns, without giving the Coach Digest new Drift authority;
-- a new focused module for North Star Moment retrieval, review, and its receipt;
-- `frontend/onboarding/src/experienceApi.ts` and the corresponding contract fixtures;
-- the Experience component that renders Weekly Drift Detection and Coach Digest results;
-- the Inspect components and fixture builders;
-- `src/demo/scenarios.py` and saved Persona JSON files for deterministic replay;
-- focused Python, React, contract, replay, accessibility, and no-future-data tests;
-- an evaluation script and timestamped report under `logs/experiments/reports/`;
-- the PRD and Technical Paper only after implementation and evaluation are complete.
+#### Development and final evaluation
 
-The implementation must inspect current contracts rather than treating this list as exhaustive or current by definition.
+Keep development and final work separately named in scripts and reports.
+Phase 0B uses development cases to adjust the prompt. Under either separate
+benchmark option, Phase 3 uses different histories after the prompt, query, k,
+selection rule, code, and criteria are frozen. Exclude histories used for
+Phase 0A retrieval tuning as well as Phase 0B prompt development. If reserving
+final histories from the 42-Drift corpus, separate them before selecting k and
+report the development denominator separately from the full baseline. Group
+related replay cutoffs and Core Values from the same Persona to avoid reuse
+of the same writing across both groups.
 
-## 10. Evaluation Without User Testing
+Decision 11 must be resolved before assigning these histories. If the
+development-only option is adopted, report the development results and list
+final evaluation as outstanding work.
 
-### 10.1 Evaluation objective
+#### Benchmark cases and reference decisions
 
-The evaluation should answer:
+Each case includes the Persona, confirmed Core Values, week, Active Drift
+start and selected Core Value, every eligible earlier Journal Entry and user
+response, case categories, AI reference decisions, and a manifest with hashes.
+Freeze case count, sampling seed, selection method, source files, and exclusions
+before requesting reference decisions. Keep retrieval output used for
+sampling. Review only the task-specific benchmark, not all 1,651 Journal
+Entries.
 
-> Given an Active Drift for one Core Value and only the Journal Entries available before its onset, how reliably can Twinkl retrieve, verify, and faithfully display one earlier Journal Entry that describes behaviour supporting that Core Value?
+Include the following cases:
 
-It should not answer:
-
-- whether users like North Star Moment;
-- whether North Star Moment changes subsequent behaviour;
-- whether North Star Moment increases journaling;
-- whether North Star Moment improves wellbeing;
-- whether the user agrees with the selected Core Value;
-- whether the earlier action should be repeated.
-
-Those are user or behavioural outcome questions and remain outside this stretch goal.
-
-### 10.2 Why existing LLM-Judge VIF Labels are insufficient by themselves
-
-The existing corpus contains 16,510 LLM-Judge VIF Labels across 1,651 Journal Entries and ten value dimensions. A `+1` LLM-Judge VIF Label can help find possible supportive Journal Entries, but it was created to train or evaluate the VIF Critic (Offline). It is not a North Star Moment reference decision and does not use the exact runtime task, evidence contract, or chronology conditions proposed here.
-
-The existing LLM-Judge VIF Labels should therefore serve only as one source for benchmark construction or retrieval analysis. They must not silently become user-facing authority. The implementation should create a new, task-specific set of AI-reviewed synthetic reference decisions under the exact North Star Moment definition.
-
-### 10.3 Frozen benchmark design
-
-The benchmark should contain complete history coordinates rather than isolated positive examples. Each benchmark case should include:
-
-- Persona identifier;
-- confirmed Core Values;
-- reviewed week;
-- current Active Drift and onset;
-- all Journal Entries available before onset;
-- one of the benchmark categories below;
-- task-specific AI-reviewed reference decisions;
-- provenance for every reference decision and adjudication;
-- a frozen manifest with hashes.
-
-Required categories are:
-
-| Category | Expected behavior |
+| Category | Expected outcome |
 |---|---|
-| Clear same-Core-Value support | Retrieve and verify the eligible earlier Journal Entry. |
-| Semantic mention without supportive behaviour | Reject or abstain. |
-| Intention or emotion without observable action | Reject or abstain. |
-| Another person's supportive action | Reject. |
-| Support for a different value | Reject for the requested Core Value. |
-| Conflict against the requested Core Value | Reject. |
-| Mixed or ambiguous behaviour | Abstain unless the supportive choice is explicit. |
-| Valid support after Active Drift onset | Exclude before retrieval. |
-| Valid support after the replay cutoff | Exclude before retrieval and from provider input. |
-| Multiple valid earlier Journal Entries | Select one by the fixed deterministic rule. |
-| No valid earlier Journal Entry | Return no North Star Moment. |
-| Provider refusal, invalid JSON, or timeout | Return no North Star Moment and preserve the existing weekly result. |
+| Clear support for the affected Core Value | Accept an exact quotation from the original Journal Entry or eligible user response. |
+| A related phrase, intention, or emotion without action | Reject or abstain. |
+| Someone else's action or support only for another value | Reject for the requested Core Value. |
+| Conflict, including mixed support and Conflict for that Core Value | Reject. |
+| Ambiguous or context-dependent writing | Abstain. |
+| Several valid earlier examples | Apply the frozen retrieval and selection order. |
+| No valid earlier example | Show no card. |
+| Same-day writing with earlier stored order | Permit only when dates, order, and source availability agree. |
+| Writing or a response after Drift start or replay cutoff | Exclude before retrieval, provider input, and current-point Inspect records. |
+| Multiple Active Drifts with no example for the priority Core Value | Show no card without trying another Core Value. |
+| No Active Drift or Insufficient Evidence | Do not request North Star Moment. |
+| Refusal, invalid/incomplete JSON, timeout, stale or missing record | Show no card and retain existing Weekly Drift Detection and valid Coach Digest. |
 
-The benchmark should include hard Core Values and ambiguous short Journal Entries rather than only obvious success cases. Cases used to design prompts or selection rules must remain separate from the final reported benchmark cases.
+Sample displayed examples, retrieved-but-rejected examples, histories returning
+no card, and deliberately selected difficult cases. Include short or ambiguous
+writing and harder Core Values. Any use of implementation results for sampling
+must follow the agreed development/final separation and be recorded.
 
-### 10.4 Reference-decision process
+To establish that a history has **no valid example**, reference review must
+examine every eligible earlier Journal Entry and user response. Reviewing only
+the top-k results cannot establish this. A No Active Drift Persona tests
+non-triggering, not omission after an unsuccessful search.
 
-Because human review and user testing are excluded, every benchmark conclusion must be labelled as AI-reviewed synthetic reference evidence. A defensible process would:
+Reference review uses the exact North Star Moment definition, source
+boundaries, and mixed-Conflict exclusion. Request a decision and an exact
+quotation for accepted writing. Use a second AI review only for disagreements
+and predefined high-risk cases. Record how disagreements are handled; an
+unresolved reference cannot count as an accepted displayed example. Preserve
+prompts, model configurations, review sources, timestamps, usage, costs, hashes,
+and adjudications.
 
-1. define the North Star Moment task and examples before requesting reference decisions;
-2. use a model or provider separated from the runtime North Star Moment reviewer where feasible;
-3. request `supportive`, `not_supportive`, or `abstain` plus an exact quotation for supportive decisions;
-4. use a second AI review for disagreements or high-risk categories;
-5. preserve prompts, model snapshots, reasoning effort, hashes, costs, and timestamps;
-6. freeze the final manifest before evaluating the implementation;
-7. disclose that provider separation does not create human validation.
+Choose saved Personas after inspecting eligible writing and review results.
+Record whether failure examples came from injected tests or provider errors.
 
-### 10.5 Primary and secondary metrics
+#### Existing label baseline
 
-The primary metric should be **North Star Moment precision**: among displayed North Star Moments, the proportion accepted by the frozen task-specific reference decisions for the requested Core Value.
+The existing label baseline comes from
+`complete_development_drift_episodes.parquet`,
+`logs/judge_labels/judge_labels.parquet`, and
+`logs/judge_labels/consensus_labels.parquet`. Reproduce it in Phase 0A.
+These figures describe LLM-Judge VIF Labels. Phase 0A also records which user
+responses meet the source-availability rules.
 
-Precision should outrank coverage because an incorrect personal quotation is more harmful than showing no North Star Moment.
+| Existing development result | Count |
+|---|---:|
+| Known development Drifts | 42 |
+| Any Journal Entry before Drift start | 34 of 42 (81.0%) |
+| Earlier same-Core-Value `+1` persisted LLM-Judge VIF Label | 26 of 42 (61.9%) |
+| Earlier same-Core-Value `+1` consensus LLM-Judge VIF Label | 26 of 42 (61.9%) |
+| Active Drift at the final history cutoff | 10 of 42 |
+| Final-cutoff Active Drift with an earlier `+1` in each label file | 9 of 10 (90.0%) |
 
-Secondary metrics should include:
+Eight Drifts start at `t_index=0` and have no earlier Journal Entry. Five
+others start at `t_index=1` and each has one earlier Journal Entry; keep
+these groups separate.
 
-| Metric | Meaning |
+Use persisted labels as the primary Phase 0A proxy. Five-pass consensus
+measures agreement and helps group diagnostic results. Across 16,510 labels
+for 1,651 Journal Entries and ten values, the files differ at 1,368 coordinates
+(8.29%). Among 145 unique earlier same-Core-Value coordinates in the 42 Drift
+histories, 17 differ (11.72%). The persisted file has 68 positive coordinates;
+consensus has 64. Those 64 comprise 49 unanimous decisions, three four-of-five
+decisions, and 12 three-of-five decisions.
+
+Wei Jun illustrates the task mismatch. Before Drift starts at `t_index=8`,
+persisted labels mark Universalism `+1` at 1, 6, and 7. Consensus adds 0
+and 2, both by three-of-five majorities. At 0, the persisted LLM-Judge VIF Label is
+`-1`, consensus is `+1`, and the LLM-Judge Conflict Label is Conflict:
+he notices harm but stays silent.
+
+Report proxy retrieval recall separately for five-of-five, four-of-five,
+three-of-five, and persisted-versus-consensus disagreement groups. The 26-of-42
+availability result describes the persisted-label proxy. Task-specific review
+can reject positive-label examples or accept writing that lacked a positive
+label.
+
+#### Metrics and acceptance criteria
+
+| Metric | Definition and adopted criterion |
 |---|---|
-| North Star Moment coverage | Proportion of eligible Active Drift cases for which Twinkl displays a verified North Star Moment. |
-| Incorrect-selection count and rate | Displayed North Star Moments that the frozen reference rejects or marks Abstain. |
-| Correct no-card rate | Histories with no valid North Star Moment in which Twinkl correctly omits the card. |
-| Chronology violation count | North Star Moments at or after Active Drift onset or beyond the replay cutoff. The required result is zero. |
-| Exact-quotation failure count | Displayed text that is not an exact substring of the stored Journal Entry. The required result is zero. |
-| Wrong-user count | North Star Moments retrieved from another user or Persona. The required result is zero. |
-| Wrong-Core-Value rate | North Star Moments that support another value but not the affected Core Value. |
-| Abstention rate | Proportion of reviewed Journal Entries for which the North Star Moment review abstains. |
-| Retrieval recall at k | Proportion of cases with a valid reference North Star Moment where at least one valid Journal Entry appears in the fixed top-k retrieval result. |
-| Verification lift | Difference between retrieval-only precision and precision after North Star Moment review. |
-| Provider failure rate | Refused, invalid, timed-out, or error responses. |
-| Latency and calculated model cost | Operational evidence for one North Star Moment attempt and the full benchmark. |
+| Proxy retrieval recall at k | Histories where top-k includes at least one earlier persisted `+1`, divided by histories containing such a label. Require at least 90%; compare k = 1, 3, 5 and report agreement groups separately. |
+| North Star Moment precision | Displayed quotations accepted by the task-specific reference, divided by all displayed quotations. Require zero incorrect selections in the reported benchmark. Reference rejection or abstention counts as incorrect. Zero displayed quotations gives undefined precision, not 100%. |
+| Correct no-card rate | Reference-confirmed histories with no valid example that receive no card, divided by all reference-confirmed histories with no valid example. Require 100%. Include such histories; an empty denominator is not a pass. |
+| Coverage | Cases receiving a card divided by eligible Active Drift cases under the adopted priority rule. Report counts and exclusions, including histories without earlier writing. No minimum percentage; require at least one accepted saved-Persona demonstration. |
+| Task-specific retrieval recall at k | Histories with at least one reference-valid example in top-k, divided by histories containing any reference-valid example. Report separately from proxy recall. |
+| Verification lift | Difference between precision after AI review and retrieval-only precision on the same cases. Freeze the retrieval-only display rule before the run. |
+| Wrong-Core-Value rate | Displayed examples supporting another value but not the affected Core Value, divided by displayed examples. These also count as incorrect selections. |
+| Abstention rate | AI review abstentions divided by reviewed Journal Entries. |
+| Quotation, chronology, and wrong-user failures | Report separate counts; require zero for displayed results. |
+| Unexpected provider failure rate | Unexpected refused, invalid, timed-out, or error calls divided by actual non-injected calls. Include failed attempts before successful retries; require at most 5%. Report runtime review and reference-review calls separately. |
+| Cost and latency | Calculated cost, usage, and processing time per offline attempt and for the full benchmark, including reference decisions and retries. |
 
-Metric thresholds should be declared before the final benchmark run. The implementation context should not choose thresholds after inspecting final results.
+Declare denominators and exclusions before the respective runs. Report errors
+by Core Value and case category, counts alongside percentages, and uncertainty
+appropriate to the sample size. Preserve failed responses and diagnostics
+where permitted. Deliberately injected failure tests are reported separately.
 
-### 10.6 Mechanical validations
+If evaluating the card beside the Coach Digest, report additional criteria
+for the relationship to Active Drift, specificity, tone, treatment of tension,
+prohibited current-state claims, and whether the single reflective question
+remains appropriate. Name these separately from existing Coach Digest Evals
+unless that contract is explicitly extended.
 
-The feature should add validations for:
+### D. Verification and reporting checklist
 
-- exact quotation;
-- same user or Persona;
-- same requested Core Value;
-- strict pre-onset chronology;
-- replay cutoff;
-- selected Journal Entry membership in the reviewed set;
-- complete version and provenance fields;
-- valid decision and reason-code combinations;
-- absence of a North Star Moment on provider failure;
-- raw internal Schwartz label leakage in user-facing fields;
-- prohibited claims of improvement, recovery, progress, success, or an ended Active Drift;
-- length and rendering limits for the card.
+- Verify trigger rules, priority selection, same-user and same-Core-Value checks,
+  same-day ordering, response availability, removal, and future-data exclusion
+  before embeddings and provider calls.
+- Test frozen retrieval order, batch completeness, supportive/rejected/abstaining
+  decisions, mixed Conflict rejection, quotation source attribution, exact text,
+  and malformed, refused, missing, stale, and failed results.
+- Verify saved-request reuse, controlled offline retries, session resume, older
+  sessions, source-change invalidation, and affected-week recomputation.
+- Check narrow and wide layouts, expandable long quotations, keyboard focus,
+  screen-reader labels, quotation semantics, reduced motion, Journal Entry
+  navigation, Inspect links, and preserved week selection.
+- Update and check Python/React contracts, generated schemas, fixtures, saved
+  Persona hashes, manifests, and no-future-data replay.
+- Run relevant Python and React tests, Ruff, and MyPy when typed interfaces
+  change; run existing Weekly Drift Detection and Coach Digest regression
+  tests. Confirm no mutation of the Profile or existing Drift decisions.
+- Save commands, inputs, seeds, configuration, model revisions, prompt hashes,
+  results, errors, exclusions, calculated costs, latency, and limitations with
+  the reproduction script and report.
+- Update the PRD when scope is adopted and implementation status when earned.
+  After evaluation, update architecture/evaluation documentation, the Technical
+  Paper's method and results, and a walkthrough with accepted and omitted cards.
+- Report the benchmark data, review sources, and whether histories were
+  separate from development.
+- Read the revised logic and affected callers, inspect the final diff and
+  working-tree state, and record validation and remaining risks in the
+  implementation issue.
 
-These checks should be named separately from Coach Digest Validations unless they are formally added to that contract. The report must not imply that existing Coach Digest Validations already cover the new card.
-
-### 10.7 Coach Digest Evals
-
-If the North Star Moment card is evaluated together with the Coach Digest, the existing Coach Digest Eval dimensions can be extended or accompanied by North Star Moment review criteria:
-
-- correctness of the relationship between Active Drift and the earlier Journal Entry;
-- specificity of the displayed reference;
-- non-prescriptive tone;
-- tension honesty;
-- absence of recovery or success claims;
-- whether the existing reflective question remains open-ended when read beside North Star Moment.
-
-These results remain AI review, not human validation or evidence of user benefit.
-
-### 10.8 Regression and integration tests
-
-At minimum, automated tests should cover:
-
-- trigger only for Active Drift;
-- no trigger for No Active Drift and Insufficient Evidence;
-- same-user and same-Core-Value filtering;
-- strict pre-onset chronology;
-- no-future-data Persona replay;
-- semantic retrieval ordering under fixed embeddings;
-- accepted, rejected, and Abstain North Star Moment decisions;
-- malformed, refused, missing, and provider-error responses;
-- exact-quotation rejection;
-- idempotent retry and session resume;
-- Journal Entry removal and affected-week recomputation;
-- no mutation of Weekly Drift Reviewer Decisions or Drift Detector results;
-- no mutation of the Profile or Core Values;
-- Experience rendering at narrow and wide widths;
-- keyboard and screen-reader access;
-- Inspect linkage and source disclosure;
-- saved Persona hash and manifest behavior;
-- migration from sessions created before the North Star Moment fields existed;
-- all existing Weekly Drift Detection and Coach Digest tests.
-
-### 10.9 Permitted and prohibited final claims
-
-Permitted claim:
-
-> On a frozen AI-reviewed synthetic benchmark, the proposed retrieval and verification workflow selected earlier Journal Entries that met the North Star Moment definition at the reported precision and coverage, with zero detected chronology and exact-quotation failures.
-
-Permitted implementation claim:
-
-> Saved Persona replay demonstrates that Experience can display a verified earlier Journal Entry for Active Drift and that Inspect can trace its retrieval, review, validation, and source.
-
-Prohibited claims without users:
-
-> North Star Moment helps users return to their Core Values.
-
-> North Star Moment improves decision-making or wellbeing.
-
-> Users find North Star Moment accurate, motivating, or non-judgmental.
-
-> North Star Moment changes later Journal Entries or reduces future Drift.
-
-The product rationale may describe the intended guide-back role, but results and conclusions must retain these evidence boundaries.
-
-## 11. Recommended Implementation Sequence
-
-### Phase 0: feasibility gate
-
-Before changing Experience or Inspect:
-
-1. Freeze the North Star Moment definition and non-goals.
-2. Build a small development benchmark containing every required category.
-3. Run a retrieval-only baseline using the intended full-dimensional encoder.
-4. Test one North Star Moment structured prompt against the hard cases.
-5. Measure retrieval recall at k and North Star Moment precision.
-6. Decide whether the evidence supports continuing.
-
-If semantic retrieval rarely contains a valid Journal Entry or the North Star Moment review accepts too many near-misses, stop before interface work and adopt the fallback in Section 13.
-
-### Phase 1: contracts and core behavior
-
-1. Create a focused Beads feature with explicit acceptance criteria.
-2. Define the versioned request, response, validation, and receipt contracts.
-3. Implement deterministic eligibility and chronology filtering.
-4. Implement full-dimensional embedding retrieval with a fixed encoder.
-5. Implement the North Star Moment provider call and fail-closed parser.
-6. Implement deterministic validation and selection.
-7. Add focused unit and contract tests.
-
-### Phase 2: Experience, Inspect, and replay
-
-1. Extend the shared session contract compatibly.
-2. Add the optional North Star Moment card beneath the Coach Digest.
-3. Link the card to the complete Journal Entry and Inspect.
-4. Add Inspect events for trigger, filtering, retrieval, review, validation, and selection.
-5. Add saved Persona fixtures for accepted, absent, and failed North Star Moments.
-6. Verify session resume, retry, recomputation, removal, migration, and no-future-data behavior.
-7. Run narrow-screen, keyboard, screen-reader, and reduced-motion checks.
-
-### Phase 3: frozen evaluation
-
-1. Freeze the final benchmark manifest before evaluation.
-2. Run deterministic validations.
-3. Run the selected provider-separated AI review.
-4. Report every metric, failure, exclusion, cost, latency, prompt version, model, reasoning effort, and hash.
-5. Perform error analysis by Core Value and benchmark category.
-6. Preserve failed responses and validation diagnostics where privacy permits.
-
-### Phase 4: capstone integration
-
-1. Add one accepted-moment and one no-card path to the professor walkthrough.
-2. Update the PRD implementation status.
-3. Update architecture and evaluation documentation.
-4. Add the method, results, limitations, and before-and-after figure to the Technical Paper.
-5. State clearly that the evidence is AI-reviewed synthetic evaluation without user testing, a fresh final test, or deployment approval.
-
-## 12. Risks and Mitigations
-
-| Risk | Consequence | Mitigation |
-|---|---|---|
-| Semantic similarity is mistaken for supportive behaviour. | Twinkl shows an irrelevant or false personal reference. | Separate retrieval from North Star Moment review; make precision primary; fail closed. |
-| Existing `+1` LLM-Judge VIF Labels are treated as direct North Star Moment reference decisions. | The evaluation inherits a mismatched task definition and overstates validity. | Use them only to help construct cases; create task-specific AI-reviewed synthetic reference decisions. |
-| A later Journal Entry leaks into an earlier Persona replay point. | The demonstration violates chronological integrity. | Filter before embedding and provider calls; require zero chronology violations. |
-| The quotation is paraphrased or invented. | The most visible evidence is unfaithful. | Require an exact substring and reject the entire North Star Moment on mismatch. |
-| An earlier supportive action is presented as proof of recovery. | The card overstates the user's current state. | Keep Active Drift unchanged; add explicit language rules and claim validations. |
-| The selected Journal Entry supports another value. | The North Star Moment appears personally resonant but is semantically wrong. | Include wrong-value hard cases and report wrong-Core-Value rate. |
-| North Star Moment becomes implicit advice. | The user may feel instructed to repeat an action that does not fit the current context. | Display evidence only; add no new action prompt in the first version. |
-| The feature changes the frozen Weekly Drift Reviewer. | Existing evaluation and report claims become stale. | Create a separate North Star Moment review with no Drift authority. |
-| The new call fails or adds noticeable latency. | The weekly experience becomes fragile. | Run after the weekly result, preserve existing content, store failure status, and allow safe retry. |
-| North Star Moment coverage is low. | Few Active Drift cases receive the proposed card. | Treat coverage as secondary; report it honestly; use the fallback if the feature is not demonstrable. |
-| Same-provider evaluation rewards the runtime prompt's style. | AI review appears stronger than it is. | Use provider separation where feasible and disclose that this remains AI review. |
-| The feature expands into a recommendation product. | Scope, safety obligations, and evaluation needs exceed the capstone window. | Preserve the explicit non-goals and create separate future work for any action-planning feature. |
-| A stale Profile makes North Star Moment irrelevant. | The feature reinforces a Core Value the user no longer endorses. | Use only the confirmed Profile that governed the current Weekly Drift Detection result; do not claim the Profile is permanent. Profile evolution remains separate future work. |
-
-## 13. Fallback: Historical Drift Contrast
-
-If the North Star Moment review does not reach a convincing precision level, the project should not weaken the definition or hide failures to preserve the feature. The recommended fallback is a narrower Historical Drift contrast.
-
-The fallback would:
-
-- use only already stored Weekly Drift Detection output and Historical Drift Records;
-- identify an earlier comparable period for the same Core Value;
-- cite the exact earlier Conflict evidence and the later Not Conflict decision that ended that Conflict run;
-- say only that the earlier repeated pattern did not continue in the same way;
-- avoid describing the later Journal Entry as supportive behaviour, improvement, success, or recovery;
-- require no new supportive-behaviour decision.
-
-This fallback is less directional than North Star Moment, but it remains truthful and easier to evaluate. It can still help the user see that an Active Drift is a time-bounded pattern rather than a permanent identity claim.
-
-## 14. Open Decisions for the Implementation Context
-
-The following questions should be resolved before implementation begins:
-
-1. Should the first version render North Star Moment only as a separate Experience card, or also supply it to the Coach Digest prompt? The recommended answer is a separate card.
-2. Which fixed encoder should produce full-dimensional retrieval embeddings?
-3. Should the retrieval query use only the user-facing Core Value phrase or combine it with the internal rubric?
-4. What top-k retrieval value gives acceptable recall without unnecessary provider input?
-5. Should North Star Moment review examine retrieved Journal Entries in one batch or one at a time?
-6. What exact task-specific reference process will resolve ambiguous benchmark cases without human review?
-7. Which deterministic rule chooses among multiple verified Journal Entries?
-8. Which Active Drift receives the visible card when several Core Values have Active Drift?
-9. Should live manual Experience compute embeddings on demand or maintain a versioned per-session embedding cache?
-10. How should session migration represent historical weeks that predate the North Star Moment contract?
-11. Which saved Personas provide the clearest accepted-moment, no-card, and future-leak demonstrations?
-12. What precision, coverage, and provider-failure thresholds will be declared before the final benchmark run?
-13. What maximum latency and calculated cost are acceptable for one weekly North Star Moment attempt?
-14. Is the feature still worthwhile if high precision produces low coverage?
-
-## 15. Definition of Done for a Future Implementation
-
-The feature is complete only when:
-
-- the current PRD and a focused Beads feature record the adopted scope;
-- Weekly Drift Reviewer and Drift Detector contracts remain unchanged;
-- the versioned North Star Moment request, response, receipt, and validation contracts are implemented;
-- retrieval uses full-dimensional embeddings and excludes ineligible Journal Entries before any provider call;
-- invalid, refused, missing, and provider-error responses fail closed to no North Star Moment;
-- Experience renders at most one selected North Star Moment card according to the adopted policy;
-- Inspect exposes the complete permitted evidence path;
-- saved Persona replay demonstrates accepted, absent, failed, and no-future-data cases;
-- contract, Python, React, migration, replay, accessibility, and no-future-data tests pass;
-- the frozen benchmark and final evaluation report are committed with exact provenance;
-- exact-quotation, chronology, and wrong-user failures are zero in the final reported run;
-- retrieval and North Star Moment review metrics are reported separately;
-- the Technical Paper states that results are AI-reviewed synthetic evidence, not human validation, user testing, a fresh final test, or deployment approval;
-- the implementation context reads all changed files, runs proportionate quality checks, inspects the final diff and working-tree status, and records remaining risks.
-
-## 16. Related Documentation
+## References
 
 - [Product Requirements Document](../prd.md)
 - [Canonical Nouns and Communication Rules](../canonical_nouns.md)
@@ -870,3 +576,5 @@ The feature is complete only when:
 - [VIF Critic (Offline) concepts and roadmap](../vif/01_concepts_and_roadmap.md)
 - [Value evolution concept note](../evolution/01_value_evolution.md)
 - [Habit recommendation future work](habit_recommendations.md)
+- Steele, C. M. (1988). [The psychology of self-affirmation: Sustaining the integrity of the self](https://doi.org/10.1016/S0065-2601(08)60229-4). *Advances in Experimental Social Psychology, 21*, 261–302.
+- Cohen, G. L., & Sherman, D. K. (2014). [The psychology of change: Self-affirmation and social psychological intervention](https://doi.org/10.1146/annurev-psych-010213-115137). *Annual Review of Psychology, 65*, 333–371.
