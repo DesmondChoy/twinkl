@@ -75,10 +75,16 @@ backed by frozen code and raw evidence in
 with input and code hashes linked from Appendix A. The older evidence links still support
 only the earlier studies.
 
-The regenerated 37-page PDF was visually inspected on every page. The
+The initial 37-page NSM supplement PDF was visually inspected on every page. The
 [verification record](../../logs/experiments/reports/north_star_phase0b_20260905/validation.json)
-includes the report hashes, validation scope, and saved PDF QC captures;
-those captures are distinct from the blocked NSM browser QC.
+preserves that render's report hashes, validation scope, and PDF QC captures;
+it does not verify later report revisions, and those captures are distinct from
+the blocked NSM browser QC.
+
+The subsequent readability revision was regenerated as a 37-page PDF and
+visually inspected on every page. That pass corrected overflowing source-path
+labels and table pagination; its validation and final report hashes are recorded
+in Beads issue `twinkl-ity7`.
 
 ## Submission Checks
 
