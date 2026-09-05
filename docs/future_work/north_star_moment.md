@@ -72,6 +72,16 @@ Not Conflict also does not establish supportive behaviour.
 
 ## 3. What appears in Experience and Inspect
 
+Twinkl's application-written text in Experience must not tell the user they
+are "in a drift", "drifting", "drifting away", or "back on track", or use
+related drifting language to describe them. This applies to status badges,
+Coach Digest copy, North Star Moment copy, notices, and accessibility labels.
+Describe concrete actions and experiences in plain language instead. Drift,
+Active Drift, and the other detection terms remain internal terminology for
+the implementation, research documentation, and developer-facing Inspect.
+This wording rule does not change detection decisions or permit rewriting
+the user's quoted words.
+
 Experience shows at most one card containing:
 
 - **A past moment in your own words**;
@@ -80,8 +90,7 @@ Experience shows at most one card containing:
   user's nudge response;
 - an expandable quotation with no fixed word limit;
 - an action to open the complete Journal Entry without losing the current week;
-- the notice: **This earlier writing is a reference point for your Core Value.
-  It does not mean the current Drift has ended.**
+- the notice: **This earlier writing is a reference point for your Core Value.**
 
 Collapsing a long quotation changes its presentation only. Expanding it must
 reveal the complete accepted quotation without paraphrasing or joining
@@ -126,7 +135,6 @@ The card shows this earlier Journal Entry:
 > “Helped two new guys file their claims.”
 >
 > This earlier writing is a reference point for your Core Value.
-> It does not mean the current Drift has ended.
 
 The quotation is present at `t_index=7`, before Drift starts at `t_index=8`.
 
@@ -343,6 +351,7 @@ Validate the following before rendering:
 | Chronology | The original text and any included response satisfy their availability rules and precede Drift start. |
 | Exact quotation | The quotation is a continuous exact substring of the identified user-written source. Never combine sources or repair a quotation by paraphrasing. |
 | Complete response | All requested decisions are present once, with permitted fields and decision/reason/source combinations. |
+| User-facing terminology | Application-written Experience text, including badges, notices, and accessibility labels, must not expose internal Drift states or describe the user as drifting, drifting away, or back on track. Use concrete descriptions of actions and experiences. Preserve exact user quotations. |
 | User-facing claims | Application-written text must not infer recovery, improvement, typical behaviour, success, or an ended Active Drift from the quotation. Review the quotation in context; these checks must not rewrite the user's words. |
 | Internal value labels | No raw internal Schwartz label appears in card fields. Omit an unsuitable quotation rather than rewriting it. |
 | Display | Expansion preserves the full accepted quotation, its source, and the route back to the current week. There is no fixed quotation word limit. |
@@ -548,6 +557,9 @@ unless that contract is explicitly extended.
 - Check narrow and wide layouts, expandable long quotations, keyboard focus,
   screen-reader labels, quotation semantics, reduced motion, Journal Entry
   navigation, Inspect links, and preserved week selection.
+- Check that application-written Experience copy and accessibility labels
+  contain no internal Drift states or related drifting language. Keep the
+  checks against unsupported recovery or improvement claims.
 - Update and check Python/React contracts, generated schemas, fixtures, saved
   Persona hashes, manifests, and no-future-data replay.
 - Run relevant Python and React tests, Ruff, and MyPy when typed interfaces
