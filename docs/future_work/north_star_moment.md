@@ -2,11 +2,12 @@
 
 **Status:** Design specification.
 
-**First version:** One optional card in saved Persona replay. Manual sessions
-and live reruns receive no North Star Moment.
+**First version:** Both frontend paths: the demo with all five saved Personas
+and onboarding from scratch with the user's own writing. Each reviewed week
+can show at most one optional card.
 
 **Documentation:** Original brief: `twinkl-b8w3`; this revision:
-`twinkl-thgx`.
+`twinkl-thgx`; scope expansion to both frontend paths: `twinkl-peu9`.
 
 ## 1. What this adds
 
@@ -20,13 +21,21 @@ When Weekly Drift Detection reports Active Drift, Twinkl searches earlier
 Journal Entries and the user's nudge responses. It uses **semantic retrieval**,
 which searches by meaning, to find possible examples. A separate North Star
 Moment AI review checks whether the writing describes a supportive action.
-Code checks confirm that the quotation is exact, belongs to the same Persona,
-and comes from before the Drift began. If no example passes, no card appears.
+Code checks confirm that the quotation is exact, belongs to the same user or
+Persona, and comes from before the Drift began. If no example passes, no card
+appears.
 
-The first version prepares these results offline and saves them for Persona
-replay. Experience displays the quotation beneath the Coach Digest. Inspect
-shows why it was selected. This adds a personal example to the existing
-reflection without generating advice or a second question.
+The demo prepares results offline for all five saved Personas: Meera, Wei Jun,
+Marc, Noor, and Lukas. The onboarding path generates results during the user's
+session after an eligible closed-week review. Both paths use the same
+selection and validation rules. Experience displays the quotation beneath the
+Coach Digest. Inspect shows why it was selected. This adds a personal example
+to the existing reflection without generating advice or a second question.
+
+A Persona or user need not receive a card. Weeks without an eligible trigger
+or a suitable earlier action correctly show none. The onboarding path uses
+only that user's confirmed Profile, Journal Entries, and nudge responses;
+saved Persona writing must never become evidence for a new user.
 
 ## 2. Which writing qualifies
 
@@ -44,7 +53,7 @@ An earlier example must:
 
 - belong to the same user or Persona;
 - come before the first Conflict in the selected Active Drift and be available
-  at the selected replay point;
+  at the selected replay point or live review cutoff;
 - describe the user's action or choice supporting that Core Value;
 - contain no Conflict against that same Core Value in the writing reviewed;
 - pass AI review and every required code check.
@@ -52,7 +61,7 @@ An earlier example must:
 An earlier Journal Entry from the same day can qualify when its stored order
 precedes the first Conflict and its date agrees with that order. A Journal
 Entry written after Drift began stays ineligible for that Drift, even when
-replay later reaches it.
+replay or the live session later reaches it.
 
 Both the original Journal Entry and the user's nudge response can supply
 evidence. The quotation must come from one identified source. The AI-written
@@ -82,7 +91,7 @@ the implementation, research documentation, and developer-facing Inspect.
 This wording rule does not change detection decisions or permit rewriting
 the user's quoted words.
 
-Experience shows at most one card containing:
+Experience shows at most one card per reviewed week, in either path, containing:
 
 - **A past moment in your own words**;
 - the user-facing Core Value phrase and Journal Entry date;
@@ -102,11 +111,13 @@ results, AI review, code checks, and selected quotation. A **saved review
 record** contains these inputs and decisions, their versions, and model details.
 It lets teammates inspect why a card appeared or why it was omitted.
 
-Missing, invalid, or failed records produce no card and leave Weekly Drift
-Detection and any valid Coach Digest available. Inspect identifies older
-results as **not evaluated** and manual or live sessions as **unavailable
-outside saved Persona replay**. Changes to source data invalidate an affected
-saved result.
+Pending, missing, invalid, or failed records produce no card and leave Weekly
+Drift Detection and any valid Coach Digest available. Inspect distinguishes
+not evaluated, not eligible, pending, completed with or without a quotation,
+and failed results, with reasons. Older results without a record remain
+**not evaluated**. Onboarding sessions support live generation and bounded
+retry; they are not excluded because they are manual sessions. Changes to
+source data invalidate affected results in both paths.
 
 North Star Moment leaves the Profile, Core Values, Weekly Drift Reviewer
 Decisions, Drift Detector result, Historical Drift Records, and Coach Digest
@@ -166,13 +177,17 @@ supportive action.
 | Capstone contribution | Evidence to produce |
 |---|---|
 | Intelligent Reasoning Systems and Pattern Recognition Systems | Retrieval results and AI review decisions, measured separately. |
-| Intelligent Sensing Systems | Chronological Journal Entries and user responses restricted to what was available at each replay point. |
+| Intelligent Sensing Systems | Chronological Journal Entries and user responses restricted to what was available at each replay point or live review cutoff. |
 | Architecting AI Systems | Shared contracts, saved review records, Experience, Inspect, and failure tests. |
 | Technical Paper and implementation demonstration | Method, results, limitations, and a walkthrough linking the displayed quotation to its source. |
 
 Evaluation measures selection and quotation accuracy using AI-reviewed
-synthetic histories. User studies and deployment testing are outside its
-scope. The linked Capstone Requirements describe the assessment criteria.
+synthetic histories. Browser QC exercises both frontend paths, including
+controlled writing entered through a fresh onboarding session. This is
+integration evidence, not a human user study. Runtime checks cover the
+capstone app's launch and inference configuration; production deployment
+approval and user-benefit studies remain outside scope. The linked Capstone
+Requirements describe the assessment criteria.
 
 ## 6. Evaluation decisions
 
@@ -190,6 +205,11 @@ For the later task-specific benchmark, the adopted criteria are:
 - zero quotation, chronology, and wrong-user failures;
 - no more than 5% unexpected provider failures;
 - at least one accepted saved-Persona demonstration.
+
+Integration acceptance also requires checking every saved Persona and a fresh
+onboarding session through closed-week review, including an accepted card and
+correct omissions using controlled test writing. These checks do not require
+every Persona to receive a card and do not replace the task-specific benchmark.
 
 Report coverage, the proportion of eligible Active Drift cases receiving a
 card, without imposing a minimum percentage. Report counts alongside rates.
@@ -216,28 +236,34 @@ task-specific reference decisions.
 
 ## 7. Work plan and completion
 
-The estimate is **7–11 working days**, assuming stable Experience and Inspect
-contracts and an available evaluation provider.
+The earlier **7–11 working day** estimate covered saved Persona replay only.
+Re-estimate the expanded scope after inspecting the live session contracts and
+choosing how to host the fixed retrieval encoder. Account for live generation,
+retry, invalidation, and browser QC on both paths.
 
-| Phase | Work and output | Effort |
-|---|---|---:|
-| 0A: local retrieval check | Reproduce the existing baseline; freeze the query and encoder settings; compare retrieval at 1, 3, and 5. Stop if no setting reaches 90%. No paid calls. | 1–2 days for 0A and 0B |
-| 0B: development AI review | After the evaluation choice and paid budget are agreed, build development cases and reference decisions. Test the new prompt against the adopted criteria. | Included above |
-| 1: retrieval and review | Implement request and response contracts, filtering, retrieval, AI review, saved records, and code checks. | 2–3 days |
-| 2: Experience and Inspect | Add the card, source links, saved Persona results, migration, and replay/accessibility tests. | 2–3 days |
-| 3: evaluation and reporting | If a separate benchmark is adopted, evaluate the frozen implementation once, report errors and limitations, and update the Technical Paper and walkthrough. | 2–3 days |
+| Phase | Work and output |
+|---|---|
+| 0A: local retrieval check | Reproduce the existing baseline; freeze the query and encoder settings; compare retrieval at 1, 3, and 5. Stop if no setting reaches 90%. No paid calls. Inspect live hosting options and revise the effort estimate. |
+| 0B: development AI review | After the evaluation choice and paid budget are agreed, build development cases and reference decisions. Test the new prompt against the adopted criteria. |
+| 1: retrieval and review | Implement shared filtering, retrieval, AI review, records, and code checks, with offline preparation and live session execution. Include bounded retry, request reuse, and invalidation. |
+| 2: Experience and Inspect | Add the card, source links, all five saved Persona results, onboarding integration, migration, and replay/accessibility tests. Launch the frontend and backend for browser QC on both paths. |
+| 3: evaluation and reporting | If a separate benchmark is adopted, evaluate the frozen implementation once. Report errors and limitations, document browser QC separately, and update the Technical Paper and walkthrough for both paths. |
 
-The next implementation step is Phase 0A only. Before paid work, present a cost
-estimate and obtain agreed per-attempt and total limits covering review,
-reference decisions, retries, and evaluation.
+Start with Phase 0A. Before paid work, present a cost estimate and obtain agreed
+per-attempt and total limits covering offline and live review, reference
+decisions, retries, browser validation calls, and evaluation. Continue
+independent work while those decisions are pending; do not begin dependent
+paid work without agreement.
 
 If a phase fails its criteria, stop and keep the existing Coach Digest
 behaviour.
 
 Completion requires a focused implementation issue, an adopted PRD scope,
-passing contract and regression checks, reproducible reports, and saved
-Personas demonstrating acceptance, omission, provider failure, and exclusion
-of future writing. Final evaluation requirements depend on decision 11.
+passing contract and regression checks, reproducible reports, all five saved
+Persona replays, and a fresh onboarding session demonstrating the live path.
+Across the two paths, demonstrate acceptance, omission, provider failure and
+retry, invalidation, and exclusion of future writing. Final evaluation
+requirements depend on decision 11.
 Prepare reports with their exact source and configuration records.
 
 ## Technical appendix
@@ -247,22 +273,22 @@ Prepare reports with their exact source and configuration records.
 #### Inputs and eligibility
 
 The request records the schema version, user or Persona identifier, confirmed
-Profile reference, reviewed week, replay cutoff, selected Core Value and
-user-facing phrase, Active Drift start, supporting Journal Entry identifiers,
-eligible source text, prompt version and hash, model settings, and creation
-time. Each source distinguishes `journal_entry` from `nudge_response`.
+Profile reference, reviewed week, replay or live review cutoff, selected Core
+Value and user-facing phrase, Active Drift start, supporting Journal Entry
+identifiers, eligible source text, prompt version and hash, model settings,
+and creation time. Each source distinguishes `journal_entry` from `nudge_response`.
 
 Filter before any embedding or provider call. Require a matching identity,
 non-empty user-written text, `t_index < active_drift_start_t_index`, and
 `date <= active_drift_start_date`. Both ordering checks must pass. Exclude
 removed Journal Entries, current Drift evidence, and anything unavailable at
-the replay point. Dates and stored order must agree.
+the replay point or live review cutoff. Dates and stored order must agree.
 
 A nudge response needs its own evidence of availability before the first
-Conflict and at the replay point. Use recorded event order or timestamps;
-do not copy the parent Journal Entry's date as proof. If availability cannot
-be established, exclude that response while retaining an otherwise eligible
-original Journal Entry. Preserve source boundaries when composing text for
+Conflict and at the replay point or live review cutoff. Use recorded event
+order or timestamps; do not copy the parent Journal Entry's date as proof. If
+availability cannot be established, exclude that response while retaining an
+otherwise eligible original Journal Entry. Preserve source boundaries when composing text for
 retrieval and review. AI-written nudges and hidden generation or labelling
 information are excluded.
 
@@ -382,24 +408,58 @@ quotation the user's best or strongest example.
 
 Inspect links the trigger, filtering, retrieval, prompt and model, response,
 checks, and selection. Do not expose hidden provider reasoning, secrets, or
-generation metadata. Store source-disclosed failure records for offline
-fixture generation. Freeze retry limits before paid work; repeating an
-identical completed request reuses its record instead of duplicating calls.
-Changed inputs require a new record.
+generation metadata. Store source-disclosed failure records for both offline
+fixture generation and live execution. Freeze retry limits before paid work;
+repeating an identical completed request reuses its record instead of
+duplicating calls. Changed inputs require a new record.
 
 #### Experience and Inspect integration
 
-Precompute retrieval and AI review outside the Railway Experience image.
-`requirements-experience.txt` does not install PyTorch or Sentence
-Transformers. Keep those dependencies out of the hosted Experience image and
-do not substitute another embedding model for replay.
+Use one selection and validation implementation for both paths. The demo
+precomputes records for every reviewed week in all five saved Personas,
+including explicit non-triggering and no-card outcomes. Normal replay reads
+these records without provider calls and shows only records available at the
+selected cutoff. Optional demo live rerun is not a prerequisite for NSM; if
+used, its changed review output invalidates dependent saved NSM results and
+any regeneration follows the live rules below.
 
-Add optional records compatibly to the existing session and scenario
-contracts. Older weeks remain usable with a **not evaluated** status and no
-card. Removing a Journal Entry, changing its response, changing the governing
-Profile, or recomputing affected Weekly Drift Detection output invalidates
-dependent North Star Moment results. The first version does not regenerate
-them through live sessions.
+In the onboarding path, the existing closed-week review action triggers NSM
+after an eligible Weekly Drift Detection result. Saving writing in an open
+week does not trigger NSM. Keep the result and any valid Coach Digest usable
+while NSM runs or fails. No earlier eligible writing means no card and no
+unnecessary review call. Use the current session's confirmed Profile and
+source availability; do not borrow dates from a parent entry or treat
+backdated writing as available at an earlier cutoff.
+
+The live path must be executable in the documented capstone frontend/backend
+launch configuration. `requirements-experience.txt` currently omits PyTorch
+and Sentence Transformers, so the former offline-only packaging is insufficient.
+Compare hosting the fixed encoder in the backend with a separate inference
+service, including memory, startup time, latency, cost, and operational work.
+Record the chosen approach and any required infrastructure decision before
+implementing live retrieval. Prefer the smallest viable option; do not
+silently substitute an embedding model or build a speculative service layer.
+Keep inference and provider credentials server-side. Update launch and
+hosting documentation and verify the chosen configuration.
+
+Add optional records compatibly to existing session and scenario contracts.
+Older weeks remain usable with a **not evaluated** status and no card. Bind
+results to the session, governing Profile, source content and availability,
+review output, and cutoff. Removing a Journal Entry, changing its response,
+changing the governing Profile, or recomputing affected Weekly Drift Detection
+output invalidates dependent results before display. Discard an in-flight
+result if its inputs changed or its session was deleted. Regenerate affected
+live results only after the replacement closed-week result is ready and
+eligible; an ineligible result clears the card. Rebuild affected demo records
+offline rather than showing a stale card.
+
+Reuse completed requests for identical inputs, including valid no-card
+outcomes, and coalesce duplicate in-flight requests. Allow bounded retry of
+retryable failures within the agreed budget without rerunning successful
+Weekly Drift Detection or Coach Digest work. Record attempts and reasons in
+Inspect. Store live NSM records within the existing POC session lifecycle,
+including supported resume and Delete session behavior. Do not promise durable
+multi-user storage or add background scheduling.
 
 Likely code locations are `src/demo/contracts.py`,
 `src/demo/experience_service.py`, `src/demo/scenarios.py`, a focused North
@@ -449,10 +509,13 @@ Include the following cases:
 | Several valid earlier examples | Apply the frozen retrieval and selection order. |
 | No valid earlier example | Show no card. |
 | Same-day writing with earlier stored order | Permit only when dates, order, and source availability agree. |
-| Writing or a response after Drift start or replay cutoff | Exclude before retrieval, provider input, and current-point Inspect records. |
+| Writing or a response after Drift start or the replay/live review cutoff | Exclude before retrieval, provider input, and current-point Inspect records. |
 | Multiple Active Drifts with no example for the priority Core Value | Show no card without trying another Core Value. |
 | No Active Drift or Insufficient Evidence | Do not request North Star Moment. |
 | Refusal, invalid/incomplete JSON, timeout, stale or missing record | Show no card and retain existing Weekly Drift Detection and valid Coach Digest. |
+| Fresh onboarding with no eligible earlier writing | Show no card without borrowing Persona data or making an unnecessary review call. |
+| Source edit, removal, replacement review, or session deletion during a live request | Invalidate dependent records and discard obsolete in-flight output. |
+| Repeated live request or retry | Reuse completed results, coalesce in-flight work, and apply agreed retry and cost limits. |
 
 Sample displayed examples, retrieved-but-rejected examples, histories returning
 no card, and deliberately selected difficult cases. Include short or ambiguous
@@ -472,8 +535,11 @@ unresolved reference cannot count as an accepted displayed example. Preserve
 prompts, model configurations, review sources, timestamps, usage, costs, hashes,
 and adjudications.
 
-Choose saved Personas after inspecting eligible writing and review results.
-Record whether failure examples came from injected tests or provider errors.
+Exercise all five saved Personas; choose highlighted demonstration weeks
+after inspecting eligible writing and review results. Also exercise a fresh
+onboarding session with controlled test writing. Keep walkthrough and browser
+QC cases separate from a reserved final benchmark. Record whether failure
+examples came from injected tests or provider errors.
 
 #### Existing label baseline
 
@@ -531,7 +597,7 @@ label.
 | Abstention rate | AI review abstentions divided by reviewed Journal Entries. |
 | Quotation, chronology, and wrong-user failures | Report separate counts; require zero for displayed results. |
 | Unexpected provider failure rate | Unexpected refused, invalid, timed-out, or error calls divided by actual non-injected calls. Include failed attempts before successful retries; require at most 5%. Report runtime review and reference-review calls separately. |
-| Cost and latency | Calculated cost, usage, and processing time per offline attempt and for the full benchmark, including reference decisions and retries. |
+| Cost and latency | Calculated cost, usage, and processing time per offline and live attempt and for the full benchmark, including reference decisions and retries. Report live user wait time separately from offline preparation time. |
 
 Declare denominators and exclusions before the respective runs. Report errors
 by Core Value and case category, counts alongside percentages, and uncertainty
@@ -554,12 +620,22 @@ unless that contract is explicitly extended.
   and malformed, refused, missing, stale, and failed results.
 - Verify saved-request reuse, controlled offline retries, session resume, older
   sessions, source-change invalidation, and affected-week recomputation.
+- Verify live request reuse, in-flight deduplication, bounded retries, source
+  edits during generation, Delete session, and budget enforcement. Confirm
+  identical eligible inputs use the same selection rules in both paths.
 - Check narrow and wide layouts, expandable long quotations, keyboard focus,
   screen-reader labels, quotation semantics, reduced motion, Journal Entry
   navigation, Inspect links, and preserved week selection.
 - Check that application-written Experience copy and accessibility labels
   contain no internal Drift states or related drifting language. Keep the
   checks against unsupported recovery or improvement claims.
+- Launch the React frontend and Python backend with the documented inference
+  configuration. Perform browser QC at narrow and wide widths across all five
+  demo Personas and a fresh onboarding session through a closed-week review.
+  Exercise accepted cards, omissions, failures/retries, source changes, future
+  writing exclusion, quotation expansion, source navigation, and Inspect.
+  Save screenshots and distinguish mocked failure checks from live-provider
+  evidence. Repair QC findings and recheck affected flows.
 - Update and check Python/React contracts, generated schemas, fixtures, saved
   Persona hashes, manifests, and no-future-data replay.
 - Run relevant Python and React tests, Ruff, and MyPy when typed interfaces
@@ -570,7 +646,10 @@ unless that contract is explicitly extended.
   the reproduction script and report.
 - Update the PRD when scope is adopted and implementation status when earned.
   After evaluation, update architecture/evaluation documentation, the Technical
-  Paper's method and results, and a walkthrough with accepted and omitted cards.
+  Paper's method and results, and a walkthrough with accepted and omitted cards
+  in both paths. Update affected sources and generated outputs under
+  `docs/capstone_report/`, and keep implementation, AI evaluation, and browser
+  QC evidence distinct.
 - Report the benchmark data, review sources, and whether histories were
   separate from development.
 - Read the revised logic and affected callers, inspect the final diff and

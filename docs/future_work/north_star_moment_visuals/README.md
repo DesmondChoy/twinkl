@@ -2,13 +2,19 @@
 
 Three concept visuals generated with the built-in image_gen tool on 5 September 2026. These are presentation illustrations; screen excerpts are simplified, and NSM is a proposed addition. The tool returned 1536 × 1024 PNGs (3:2), despite the requested 16:9 framing; preserve their aspect ratio when placing them in slides.
 
+**Scope update:** The specification now covers all five saved Persona demos
+and onboarding from scratch. These images predate that expansion: their
+saved-replay-only captions and the third image's 7–11-day estimate are
+historical. Use the current specification for scope, live execution, and
+re-estimation. The before/after card concept still applies to both paths.
+
 All three images were visually inspected for legibility, quotations, chronology, current/proposed status, and the separation between AI review and code checks. The first image received the branding correction and the user-facing wording correction recorded below. Its current version removes both Active Drift badges and the Drift disclaimer. Internal terms in the implementation explainers describe developer concepts, not copy shown to users.
 
 ## Suggested presentation order
 
 1. **01-before-after.png** — Show what the user gains: a past supportive action beside the existing Coach Digest. The internal detection state and reflective question remain unchanged; no Drift terminology appears in the screen excerpts.
 2. **02-selection-workflow.png** — Explain why a semantically related phrase is insufficient, and distinguish AI review from deterministic source checks.
-3. **03-bounded-first-version.png** — Propose the local retrieval check as the next step, within the specification's saved Persona replay scope.
+3. **03-bounded-first-version.png** — Historical pitch for the narrower saved Persona replay version; its scope and estimate no longer describe the complete implementation.
 
 ## Sources and evidence boundaries
 
@@ -20,7 +26,7 @@ All three images were visually inspected for legibility, quotations, chronology,
 - Exact existing question and quoted passage: [saved Coach Digest responses](../../../src/demo/coach_digest_responses.json), `active-wei-jun::2025-06-30`.
 - Earlier quotation: [Wei Jun saved Persona](../../../frontend/onboarding/public/scenarios/active-wei-jun.json), Journal Entry at `t_index=7`, 22 June 2025.
 
-The examples come from a synthetic saved Persona. They illustrate the design and are not NSM evaluation results or evidence of user benefit. The 90% retrieval criterion is a proposed gate; 7–11 working days is the specification's estimate. Evaluation-history selection remains open. This image work does not adopt PRD scope or implement NSM.
+The examples come from a synthetic saved Persona. They illustrate the design and are not NSM evaluation results or evidence of user benefit. The 90% retrieval criterion is a feasibility gate; 7–11 working days was the earlier replay-only estimate. Evaluation-history selection remains open. The PRD now adopts the expanded scope; implementation remains outstanding.
 
 ## Exact generation prompts
 
