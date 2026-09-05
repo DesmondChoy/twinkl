@@ -1,0 +1,62 @@
+{
+  "decision_source": "User follow-up Yes proceed approving recommended small separate benchmark and US$20 total/US$0.25 per attempt/one retry on 2026-09-05",
+  "development_persona_ids": [
+    "02fb94f3",
+    "110fcd4f",
+    "11de77e8",
+    "127aefff",
+    "1496159d",
+    "152df7a4",
+    "2541429a",
+    "3a3b15e4",
+    "5fa8b540",
+    "66ced716",
+    "742c98d6",
+    "775c7d71",
+    "7adc5866",
+    "7c712a0a",
+    "7ff1d0fb",
+    "87e92805",
+    "8f83c818",
+    "8fcd7947",
+    "961a4e3f",
+    "988d1a65",
+    "9d126412",
+    "bf44e50f",
+    "cd7c2a11",
+    "dbe2c53d",
+    "e5c9d9e5",
+    "e6838e16",
+    "ed67c9cc"
+  ],
+  "evaluation_scope": "small_separate",
+  "excluded_personas": {},
+  "frozen_at": "2026-09-05T05:09:54.184815+00:00",
+  "paid_budget": {
+    "currency": "USD",
+    "max_attempts_per_request": 2,
+    "per_attempt": 0.25,
+    "sdk_retries": 0,
+    "total": 20
+  },
+  "reserved_persona_ids": [
+    "1f86f569",
+    "a24b8d8f",
+    "abf1ce49",
+    "ad378991",
+    "d7a0683f",
+    "dab3e9b9",
+    "e448979e",
+    "f418b74b"
+  ],
+  "saved_persona_qc_exclusions_from_final": [
+    "02fb94f3",
+    "11de77e8",
+    "23d101f8",
+    "8f83c818",
+    "988d1a65"
+  ],
+  "seed": 20260905,
+  "selection_method": "Eight non-demo Persona IDs with smallest SHA256(seed:persona_id), sorted ascending for storage. Entire histories stay together. No NSM ranking or prompt review inspected before selection.",
+  "source_episode_sha256": "a2065c1217776071a5ce4f317b4a7afd21d0f0b08644ceebd38dbdafc7cb1c22"
+}

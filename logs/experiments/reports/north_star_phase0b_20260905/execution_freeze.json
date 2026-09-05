@@ -1,0 +1,11 @@
+{
+  "frozen_at": "2026-09-05T05:27:36.922407+00:00",
+  "source_hashes": {
+    "src/north_star/provider.py": "03fc8135b377492d8342adb031703d3fd5086aaa480f281afca9b5eccd85e362",
+    "src/north_star/review.py": "b4b0f8bf9418847bafac4aa05ee357e141b016d4b778a4f293bbe371c98dfe9c",
+    "scripts/experiments/north_star_phase0b.py": "2e0585a0720a1216d1dc71fbcfd693c7ec9867ee80e5235d6127175f1764edbf",
+    "config/evals/north_star_moment_v1.json": "aa6e1a54206084034076767a62db15fed85c6c42f1ba594d56c4e7eb7ac09232",
+    "logs/experiments/reports/north_star_phase0b_20260905/manifest.json": "2c32a09c3ea32a8b45f3810bc9dcb4f7acf3ccd324ac2a9568f66b0c96e71e8d"
+  },
+  "paid_authorization": "User approved small separate benchmark; US$20 total, US$0.25 per attempt, two attempts max; SDK retries zero."
+}

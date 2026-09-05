@@ -1,0 +1,36 @@
+{
+  "code_revision": "7710840340a098cfb869c4f65e87cf2b1b70caca",
+  "created_at": "2026-09-05T04:15:58.013619+00:00",
+  "device": "cpu",
+  "dimensions": 256,
+  "first_encode_seconds": 0.034041999984765425,
+  "imports_seconds": 1.872136333025992,
+  "limitations": [
+    "Cached model; excludes network download and container build time.",
+    "Two short generic texts; not a representative history latency result.",
+    "Local process measurement; not Railway or Linux capacity evidence."
+  ],
+  "load_seconds": 1.269731624983251,
+  "model": "nomic-ai/nomic-embed-text-v1.5",
+  "normalization": "layer_norm -> truncate_256 -> L2",
+  "paid_calls": 0,
+  "peak_rss_mib": 1533.765625,
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "probe_seconds": 3.2138256250182167,
+  "python": "3.12.11",
+  "revision": "e9b6763023c676ca8431644204f50c2b100d9aab",
+  "script_sha256": "d7a0cdd335909e7340eebd945b6bdc9e0d365ed3f1a95a5655c346100f8b1984",
+  "texts": [
+    "search_query: Caring for people close to you",
+    "search_document: I cooked dinner for my neighbour."
+  ],
+  "torch_threads": 10,
+  "versions": {
+    "einops": "0.8.2",
+    "numpy": "2.4.1",
+    "sentence-transformers": "5.2.0",
+    "torch": "2.9.1",
+    "transformers": "4.57.6"
+  },
+  "warm_encode_seconds": 0.018143082997994497
+}

@@ -1,0 +1,68 @@
+{
+  "batch_size": 8,
+  "code_revision": "7710840340a098cfb869c4f65e87cf2b1b70caca",
+  "device": "cpu",
+  "dimensions": 256,
+  "document_template": "search_document: Journal Entry:\n{initial_entry}",
+  "ks": [
+    1,
+    3,
+    5
+  ],
+  "model": "nomic-ai/nomic-embed-text-v1.5",
+  "normalization": "layer_norm -> truncate_256 -> L2",
+  "queries": {
+    "achievement": {
+      "definition": "Personal success through demonstrating competence according to social standards. Derives from the necessity of competent performance that generates resources needed for individuals to survive and for social interaction and institutional functioning to succeed.",
+      "text": "search_query: Making progress toward something meaningful. Personal success through demonstrating competence according to social standards. Derives from the necessity of competent performance that generates resources needed for individuals to survive and for social interaction and institutional functioning to succeed.",
+      "user_phrase": "Making progress toward something meaningful"
+    },
+    "benevolence": {
+      "definition": "Preserving and enhancing the welfare of those with whom one is in frequent personal contact (the \"in-group\"). Derives from the basic requirement for smooth group functioning (cf. Kluckhohn, 1951; Williams, 1968) and from the organismic need for affiliation (cf. Korman, 1974; Maslow, 1965).",
+      "text": "search_query: Being there for the people closest to me. Preserving and enhancing the welfare of those with whom one is in frequent personal contact (the \"in-group\"). Derives from the basic requirement for smooth group functioning (cf. Kluckhohn, 1951; Williams, 1968) and from the organismic need for affiliation (cf. Korman, 1974; Maslow, 1965).",
+      "user_phrase": "Being there for the people closest to me"
+    },
+    "conformity": {
+      "definition": "Restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms. Derives from the requirement that individuals inhibit inclinations that might disrupt and undermine smooth interaction and group functioning (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).",
+      "text": "search_query: Being someone others can count on to do the right thing. Restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms. Derives from the requirement that individuals inhibit inclinations that might disrupt and undermine smooth interaction and group functioning (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).",
+      "user_phrase": "Being someone others can count on to do the right thing"
+    },
+    "hedonism": {
+      "definition": "Pleasure or sensuous gratification for oneself. Derives from organismic needs and the pleasure associated with satisfying them.",
+      "text": "search_query: Enjoying life and having fun. Pleasure or sensuous gratification for oneself. Derives from organismic needs and the pleasure associated with satisfying them.",
+      "user_phrase": "Enjoying life and having fun"
+    },
+    "power": {
+      "definition": "Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+      "text": "search_query: Having influence over how things go. Social status and prestige, control or dominance over people and resources. Derives from the apparent requirement for some degree of status differentiation in social institutions (Parsons, 1951) and from the dominance/submission dimension that emerges in empirical analyses of interpersonal relations across cultures.",
+      "user_phrase": "Having influence over how things go"
+    },
+    "security": {
+      "definition": "Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+      "text": "search_query: Feeling calm and secure in my life. Safety, harmony, and stability of society, of relationships, and of self. Derives from basic individual and group requirements for survival and welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve primarily individual interests (e.g., health), others wider group interests (e.g., national security).",
+      "user_phrase": "Feeling calm and secure in my life"
+    },
+    "self_direction": {
+      "definition": "Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+      "text": "search_query: Having the freedom to choose my own path. Independent thought and action \u2014 choosing, creating, exploring. Derives from organismic needs for control and mastery (e.g., Bandura, 1977; Deci, 1975) and interactional requirements of autonomy and independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).",
+      "user_phrase": "Having the freedom to choose my own path"
+    },
+    "stimulation": {
+      "definition": "Excitement, novelty, and challenge in life. Derives from the organismic need for variety and stimulation in order to maintain an optimal, positive, rather than threatening, level of activation. This need probably relates to the needs underlying Self-Direction values.",
+      "text": "search_query: Seeking new experiences and challenges. Excitement, novelty, and challenge in life. Derives from the organismic need for variety and stimulation in order to maintain an optimal, positive, rather than threatening, level of activation. This need probably relates to the needs underlying Self-Direction values.",
+      "user_phrase": "Seeking new experiences and challenges"
+    },
+    "tradition": {
+      "definition": "Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+      "text": "search_query: Honoring the customs and practices I was raised with. Respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides. Derives from the need for group solidarity: groups develop practices, symbols, ideas, and beliefs that represent their shared experience and fate, which become sanctioned as valued customs and traditions that symbolize the group's solidarity, express its unique worth, and contribute to its survival.",
+      "user_phrase": "Honoring the customs and practices I was raised with"
+    },
+    "universalism": {
+      "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+      "text": "search_query: Making the world a fairer, better place. Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+      "user_phrase": "Making the world a fairer, better place"
+    }
+  },
+  "revision": "e9b6763023c676ca8431644204f50c2b100d9aab",
+  "tie_break": "cosine descending, t_index descending, entry_id ascending"
+}
