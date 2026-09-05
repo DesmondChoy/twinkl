@@ -18,7 +18,7 @@ All three images were visually inspected for legibility, quotations, chronology,
 
 ## Sources and evidence boundaries
 
-- [North Star Moment specification](../north_star_moment.md), sections 1–7 and technical appendix.
+- [North Star Moment specification](../../north_star/north_star_moment.md), sections 1–7 and technical appendix.
 - [Current PRD](../../prd.md), current product loop and product principles.
 - [Canonical nouns](../../canonical_nouns.md).
 - Current screen structure: [WeeklyExperience.tsx](../../../frontend/onboarding/src/WeeklyExperience.tsx).

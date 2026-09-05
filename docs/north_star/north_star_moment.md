@@ -15,6 +15,14 @@ retrieval/review prototype and reproducible evidence are implemented; the
 Experience, Inspect, saved Persona bundles, and Coach Digest remain unchanged.
 NSM browser QC, screenshots, and fresh onboarding integration are blocked.
 
+The separately versioned [runner-hardening work](../../logs/experiments/reports/north_star_runner_hardening_20260905/README.md)
+under `twinkl-fz34.9` adds verified preparation and offline recovery of completed,
+omitted, interrupted, and exhausted requests. It preserves the original run and
+does not change the failed gate or authorize a revised paid experiment.
+
+The [NSM experiment results log](../../logs/experiments/north_star_moment.md)
+records Phase 0A, Phase 0B, and runner-hardening outcomes together.
+
 **First version:** Both frontend paths: the demo with all five saved Personas
 and onboarding from scratch with the user's own writing. Each reviewed week
 can show at most one optional card.
@@ -689,6 +697,6 @@ unless that contract is explicitly extended.
 - [Coach Digest explanation quality](../evals/explanation_quality_eval.md)
 - [VIF Critic (Offline) concepts and roadmap](../vif/01_concepts_and_roadmap.md)
 - [Value evolution concept note](../evolution/01_value_evolution.md)
-- [Habit recommendation future work](habit_recommendations.md)
+- [Habit recommendation future work](../future_work/habit_recommendations.md)
 - Steele, C. M. (1988). [The psychology of self-affirmation: Sustaining the integrity of the self](https://doi.org/10.1016/S0065-2601(08)60229-4). *Advances in Experimental Social Psychology, 21*, 261–302.
 - Cohen, G. L., & Sherman, D. K. (2014). [The psychology of change: Self-affirmation and social psychological intervention](https://doi.org/10.1146/annurev-psych-010213-115137). *Annual Review of Psychology, 65*, 333–371.

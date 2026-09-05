@@ -9,7 +9,7 @@ decisions were initially pending. The dated retrieval results below supersede
 that preflight state. The [subsequent Phase 0B gate](../north_star_phase0b_20260905/README.md)
 failed, preventing dependent application work. This report does not establish
 selection accuracy, implemented cards, or successful browser integration.
-The [specification](../../../../docs/future_work/north_star_moment.md) remains
+The [specification](../../../../docs/north_star/north_star_moment.md) remains
 the implementation authority. Existing Experience and Coach Digest behavior
 has not changed.
 

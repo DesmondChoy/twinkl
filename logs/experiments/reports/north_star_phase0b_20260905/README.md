@@ -5,7 +5,7 @@
 [`f3030c8d`](https://github.com/DesmondChoy/twinkl/tree/f3030c8deb9400685185e7c620bda53a6f58e8aa).
 
 Phase 0A passed, but **Phase 0B failed** the adopted acceptance criteria. The
-[specification](../../../../docs/future_work/north_star_moment.md) requires
+[specification](../../../../docs/north_star/north_star_moment.md) requires
 stopping dependent work when a phase fails. The application therefore retains
 its existing Coach Digest behavior. No prompt adjustment, final evaluation,
 or further paid work followed this result.

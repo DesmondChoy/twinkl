@@ -1,0 +1,52 @@
+{
+  "historical_replay": {
+    "attempts": 61,
+    "calculated_cost_usd": 0.20617785,
+    "cases": 33,
+    "gate_passed": false,
+    "historical_directory_files_unchanged": 39,
+    "historical_execution_source_hashes": {
+      "config/evals/north_star_moment_v1.json": "aa6e1a54206084034076767a62db15fed85c6c42f1ba594d56c4e7eb7ac09232",
+      "logs/experiments/reports/north_star_phase0b_20260905/manifest.json": "2c32a09c3ea32a8b45f3810bc9dcb4f7acf3ccd324ac2a9568f66b0c96e71e8d",
+      "scripts/experiments/north_star_phase0b.py": "2e0585a0720a1216d1dc71fbcfd693c7ec9867ee80e5235d6127175f1764edbf",
+      "src/north_star/provider.py": "03fc8135b377492d8342adb031703d3fd5086aaa480f281afca9b5eccd85e362",
+      "src/north_star/review.py": "b4b0f8bf9418847bafac4aa05ee357e141b016d4b778a4f293bbe371c98dfe9c"
+    },
+    "input_ledger_sha256": "0f22beddc4713a7c2204c48db082cffe6b22f4b0998575312300c7cf0d753998",
+    "input_report_sha256": "5849cb816cc2a44ca39f7a1455d8cfb8f81fdbd4a519cbe947d76ad3c2bb08ec",
+    "matches_original_case_statuses_selections_gate_counts_and_costs": true,
+    "new_provider_calls": 0,
+    "regression": "tests/evals/test_north_star_phase0b_freeze.py::test_frozen_33_case_run_reconstructs_exactly_without_transport",
+    "reserved_history_evaluation": false,
+    "source_directory": "logs/experiments/reports/north_star_phase0b_20260905"
+  },
+  "issue": "twinkl-fz34.9",
+  "limitations": [
+    "No new paid development experiment, embedding comparison, retrieval change, or application integration.",
+    "Pending attempts with unknown transport outcome retain reservations; no automatic retry.",
+    "Full-import MyPy retains five existing wrangling/registry errors; scoped checks pass.",
+    "No full-repository or application/browser suite was run; application code and shared provider/review modules are unchanged.",
+    "The failed semantic gate is unchanged. AI reference review of synthetic writing is not human validation."
+  ],
+  "recorded_at": "2026-09-05T07:26:03.647343+00:00",
+  "source_hashes": {
+    "scripts/experiments/north_star_phase0b_inputs.py": "d98289ded814a99ffe396c173358eb415e093af5c64c70cd2dfc7e20958b56e7",
+    "scripts/experiments/north_star_phase0b_v2.py": "7440a5abd86794fd8accee51a28474bd36779ab0fd3004d8a8979944e1ea1878",
+    "tests/evals/test_north_star_phase0b_budget.py": "88ce2052c0f948b15c61ad76407b9494b8c1d699ad5ec0f3e12da0f20d0f3560",
+    "tests/evals/test_north_star_phase0b_freeze.py": "875c28c440c9b9163f275401c0a8f37c43c68fb31ada1ee0ba46bbc31fc4ff5e",
+    "tests/evals/test_north_star_phase0b_inputs.py": "0d955f4fd1ba854f5d52ca93e67fd8dfddf136f350c58a1f1d2f9e6b6ac0f783",
+    "tests/evals/test_north_star_phase0b_v2.py": "2ca5d525da12c7b9950bf358f2408d4a982f3e12a6f3e089330e99f5ec202f3e"
+  },
+  "verification": {
+    "environment": "source .venv/bin/activate; UV_CACHE_DIR=/tmp/twinkl-uv-cache",
+    "independent_review": "Two findings fixed: in-flight requests now coalesce and all paid run directories use one cumulative ledger. Independent regression tests pass; no remaining actionable findings.",
+    "mypy_command": "uv run --with 'mypy==2.3.0' mypy --explicit-package-bases --follow-imports=silent scripts/experiments/north_star_phase0b_inputs.py scripts/experiments/north_star_phase0b_v2.py",
+    "mypy_status": "passed",
+    "new_regressions": 83,
+    "pytest_command": "uv run pytest tests/north_star tests/evals/test_north_star_phase0.py tests/evals/test_north_star_phase0b.py tests/evals/test_north_star_phase0b_inputs.py tests/evals/test_north_star_phase0b_v2.py tests/evals/test_north_star_phase0b_freeze.py tests/evals/test_north_star_phase0b_budget.py",
+    "pytest_failed": 0,
+    "pytest_passed": 193,
+    "ruff_command": "uv run ruff check scripts/experiments/north_star_phase0b_inputs.py scripts/experiments/north_star_phase0b_v2.py tests/evals/test_north_star_phase0b_inputs.py tests/evals/test_north_star_phase0b_v2.py tests/evals/test_north_star_phase0b_freeze.py tests/evals/test_north_star_phase0b_budget.py",
+    "ruff_status": "passed"
+  }
+}
