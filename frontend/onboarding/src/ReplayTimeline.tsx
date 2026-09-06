@@ -6,6 +6,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import CoachDigestCard from "./CoachDigestCard";
+import NorthStarMoment from "./NorthStarMoment";
 import DriftStateExplanation from "./DriftStateExplanation";
 import type { OnboardingProfile } from "./domain";
 import type {
@@ -186,6 +187,7 @@ export default function ReplayTimeline({
   onSelectJournalEntry,
 }: ReplayTimelineProps) {
   const [openEntry, setOpenEntry] = useState<JournalEntryContract | null>(null);
+  const openEntryTriggerRef = useRef<HTMLElement | null>(null);
   const [mobilePanel, setMobilePanel] = useState<"entries" | "result">(
     "entries",
   );
@@ -245,6 +247,8 @@ export default function ReplayTimeline({
   }, [resultVisible]);
 
   const openJournalEntry = (entry: JournalEntryContract) => {
+    openEntryTriggerRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement : null;
     onSelectJournalEntry(entry.journal_entry_id);
     setOpenEntry(entry);
   };
@@ -437,6 +441,17 @@ export default function ReplayTimeline({
                 className="coach-digest--replay"
               />
             ) : null}
+            {resultVisible && weeklyDigest && driftResult ? (
+              <NorthStarMoment
+                profile={profile}
+                journalEntries={reviewedJournalEntries}
+                weeklyDigest={weeklyDigest}
+                driftResult={driftResult}
+                traceEvents={reviewTraceEvents}
+                openJournalEntry={openJournalEntry}
+                headingLevel={3}
+              />
+            ) : null}
             {resultVisible && inspectEventId ? (
               <button
                 className="inspect-run-link replay-column__inspect"
@@ -456,6 +471,10 @@ export default function ReplayTimeline({
           const closingEntry = openEntry;
           setOpenEntry(null);
           window.requestAnimationFrame?.(() => {
+            if (openEntryTriggerRef.current?.isConnected) {
+              openEntryTriggerRef.current.focus({ preventScroll: true });
+              return;
+            }
             if (closingEntry) {
               document
                 .getElementById(

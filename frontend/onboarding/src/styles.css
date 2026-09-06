@@ -5428,6 +5428,72 @@ h2 {
   background: #fffdf8;
 }
 
+.north-star-moment,
+.north-star-status {
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--verdigris) 30%, var(--line));
+  border-radius: 24px;
+  padding: 24px;
+  background: #fffdf8;
+}
+
+.weekly-workspace__response {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  min-width: 0;
+}
+
+.north-star-moment h2,
+.north-star-moment h3 {
+  margin: 0 0 14px;
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.north-star-moment p,
+.north-star-status p {
+  line-height: 1.6;
+}
+
+.north-star-moment__value {
+  font-weight: 600;
+}
+
+.north-star-moment blockquote {
+  margin: 8px 0 18px;
+  border-left: 3px solid var(--verdigris);
+  padding-left: 14px;
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.north-star-moment a {
+  display: inline-block;
+  min-height: 44px;
+  padding-block: 10px;
+  overflow-wrap: anywhere;
+}
+
+.north-star-moment blockquote.north-star-moment__quote--collapsed {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+}
+
+.north-star-moment__reference {
+  color: rgba(20, 34, 59, 0.62);
+  font-size: 0.8rem;
+}
+
+.replay-column .north-star-moment {
+  margin-top: 18px;
+}
+
 .persona-replay .journal-thread {
   margin-top: 30px;
 }

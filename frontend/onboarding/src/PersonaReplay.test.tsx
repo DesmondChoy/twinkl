@@ -750,10 +750,43 @@ describe("persona replay", () => {
     expect(within(result).getByText("Why this state")).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "Inspect decision" }));
-    const coachEvent = [...experience.trace_events]
+    const northStarEvent = [...experience.trace_events]
       .reverse()
-      .find((event) => event.event_type === "weekly_coach_generated");
-    expect(inspectRun).toHaveBeenCalledWith(coachEvent?.event_id);
+      .find((event) => event.event_type === "north_star_reviewed");
+    expect(inspectRun).toHaveBeenCalledWith(northStarEvent?.event_id);
+  });
+
+  it.each([
+    { scenarioId: "uncertain-noor", scenarioJson: uncertainReplayJson, eventType: "north_star_reviewed" },
+    { scenarioId: "uncertain-noor", scenarioJson: uncertainReplayJson, eventType: "drift_detected" },
+    { scenarioId: "two-values-lukas", scenarioJson: twoValuesReplayJson, eventType: "weekly_coach_generated" },
+  ])("focuses the current $scenarioId week through $eventType instead of earlier events", async ({ scenarioId, scenarioJson, eventType }) => {
+    matchMedia(false);
+    const user = userEvent.setup();
+    const inspectRun = vi.fn();
+    const saved = validateExperienceInspectFixture(scenarioJson);
+    const item = catalog.scenarios.find((candidate) => candidate.scenario_id === scenarioId)!;
+    const weekIndex = saved.scenario.weeks.length - 1;
+    const currentIds = new Set(saved.scenario.weeks[weekIndex].event_ids);
+    const experience = experienceForWeek(weekIndex, saved, item);
+    if (eventType !== "north_star_reviewed") {
+      experience.trace_events = experience.trace_events.filter((event) =>
+        event.event_type !== "north_star_reviewed" || !currentIds.has(event.event_id));
+    }
+    const expected = experience.trace_events.find((event) =>
+      currentIds.has(event.event_id) && event.event_type === eventType);
+    expect(expected).toBeTruthy();
+    if (scenarioId === "uncertain-noor") {
+      expect(experience.trace_events.some((event) => event.event_type === "weekly_coach_generated"
+        && !currentIds.has(event.event_id))).toBe(true);
+    }
+    render(<PersonaReplayExperience loaded={{ catalogItem: item, fixture: saved }}
+      weekIndex={weekIndex} profile={saved.scenario.profile} experience={experience}
+      updateExperience={() => undefined} inspectRun={inspectRun}
+      onChoosePersona={() => undefined} onWeekChange={() => undefined} />);
+    await user.click(screen.getByRole("button", { name: "Inspect decision" }));
+    expect(inspectRun).toHaveBeenCalledWith(expected!.event_id);
+    expect(currentIds.has(inspectRun.mock.calls[0][0])).toBe(true);
   });
 
   it("labels the Core Value state and keeps AI review evidence beside each decision", async () => {

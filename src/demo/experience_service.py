@@ -9,7 +9,7 @@ import os
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
-from typing import Any, Literal, cast
+from typing import Any, Literal, Protocol, cast
 from uuid import uuid4
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -46,11 +46,17 @@ from src.demo.contracts import (
     JournalEntrySubmittedEvent,
     JournalEntrySubmittedResponse,
     ModelContract,
+    NorthStarReviewedDetails,
+    NorthStarReviewedEvent,
+    NorthStarReviewedResponse,
+    NorthStarReviewRequest,
     NudgeDecidedEvent,
     NudgeDecisionDetails,
     NudgeGeneratedDetails,
     NudgeGeneratedEvent,
     NudgeInteraction,
+    NudgeResponseRecordedDetails,
+    NudgeResponseRecordedEvent,
     NudgeSuppressionCheckedEvent,
     NudgeSuppressionDetails,
     ProfileConfirmedDetails,
@@ -83,6 +89,16 @@ from src.demo.contracts import (
 )
 from src.drift_detector import DriftDetectorResult, detect_drift
 from src.models.nudge import NUDGE_CATEGORIES, NudgeCategory
+from src.north_star.live_runtime import create_live_north_star_runtime
+from src.north_star.runtime import (
+    NorthStarRecord,
+    NorthStarRequest,
+    SourceWriting,
+    build_north_star_request,
+    pending_north_star_record,
+    profile_reference,
+    validate_north_star_record,
+)
 from src.nudge.decision import should_suppress_nudge
 from src.nudge.runtime import (
     NudgeRuntimeReceipt,
@@ -107,7 +123,15 @@ Operation = Literal[
     "delete_session",
     "load_scenario",
     "read_trace",
+    "review_north_star",
 ]
+
+
+class NorthStarRuntime(Protocol):
+    async def __call__(
+        self, request: NorthStarRequest, *, retry: bool = False
+    ) -> NorthStarRecord: ...
+
 
 _DEFAULT_COACH = object()
 
@@ -153,6 +177,7 @@ class InMemoryExperienceService:
         weekly_reviewer: WeeklyDriftReviewerFn | None = None,
         coach_llm_complete: LLMCompleteFn | None | object = _DEFAULT_COACH,
         coach_model_contract: ModelContract | None = None,
+        north_star_runtime: NorthStarRuntime | None = None,
         now: Callable[[], datetime] | None = None,
         make_id: Callable[[str], str] | None = None,
     ) -> None:
@@ -178,6 +203,12 @@ class InMemoryExperienceService:
         self._events: dict[str, list[TraceEvent]] = {}
         self._idempotency: dict[tuple[str, str], _IdempotentResult] = {}
         self._lock = asyncio.Lock()
+        self._north_star_runtime = (
+            north_star_runtime or create_live_north_star_runtime()
+        )
+        self._north_star_inflight: dict[
+            tuple[str, str], asyncio.Task[NorthStarRecord | None]
+        ] = {}
 
     def _timestamp(self) -> str:
         return self._now().isoformat()
@@ -398,6 +429,27 @@ class InMemoryExperienceService:
         )
 
     @staticmethod
+    def _same_writing_trace(
+        browser_events: list[TraceEvent], server_events: list[TraceEvent]
+    ) -> bool:
+        """NSM may finish independently of the browser's writing revision."""
+        server_moments = {
+            event.event_id: event.input_hash
+            for event in server_events
+            if isinstance(event, NorthStarReviewedEvent)
+        }
+        return (
+            [e for e in browser_events if not isinstance(e, NorthStarReviewedEvent)]
+            == [e for e in server_events if not isinstance(e, NorthStarReviewedEvent)]
+            and all(
+                event.event_id in server_moments
+                and event.input_hash == server_moments[event.event_id]
+                for event in browser_events
+                if isinstance(event, NorthStarReviewedEvent)
+            )
+        )
+
+    @staticmethod
     def _resume_update_date(
         existing: ExperienceSession,
         resume_state: SessionResumeState,
@@ -514,11 +566,60 @@ class InMemoryExperienceService:
         resume_state: SessionResumeState,
         affected_date: date,
     ) -> ExperienceSession:
-        reviewed_weeks = self._reviewed_week_starts(
-            self._events[existing.session_id]
-        )
+        reviewed_weeks = self._reviewed_week_starts(self._events[existing.session_id])
         events = list(resume_state.trace_events)
         affected_week, _ = self._week_bounds(affected_date.isoformat())
+        removed_parents = {
+            event.event_id: event.parent_event_id
+            for event in events
+            if isinstance(event, NorthStarReviewedEvent)
+            and date.fromisoformat(event.details.record.week_start) >= affected_week
+        }
+        forget = getattr(self._north_star_runtime, "forget", None)
+        if forget is not None:
+            for event in events:
+                if (
+                    isinstance(event, NorthStarReviewedEvent)
+                    and event.event_id in removed_parents
+                ):
+                    forget(event.details.record)
+        retained_events: list[TraceEvent] = []
+        for event in events:
+            if event.event_id in removed_parents:
+                continue
+            parent = event.parent_event_id
+            while parent in removed_parents:
+                parent = removed_parents[parent]
+            retained_events.append(event.model_copy(update={"parent_event_id": parent}))
+        events = retained_events
+        old_nudges = {nudge.nudge_id: nudge for nudge in existing.nudges}
+        for nudge in resume_state.nudges:
+            previous = old_nudges.get(nudge.nudge_id)
+            if (
+                nudge.response
+                and previous is not None
+                and nudge.response != previous.response
+            ):
+                events.append(
+                    NudgeResponseRecordedEvent(
+                        event_id=self._make_id("nudge-response-recorded"),
+                        session_id=existing.session_id,
+                        parent_event_id=events[-1].event_id,
+                        event_type="nudge_response_recorded",
+                        status="complete",
+                        source="live_run",
+                        input_refs=[
+                            ResourceRef(kind="journal_entry", id=nudge.journal_entry_id)
+                        ],
+                        input_hash=_hash_payload(nudge.model_dump(mode="json")),
+                        details=NudgeResponseRecordedDetails(
+                            journal_entry_id=nudge.journal_entry_id,
+                            nudge_id=nudge.nudge_id,
+                            response=nudge.response,
+                        ),
+                        **self._terminal_event_fields(),
+                    )
+                )
         decisions = [
             decision
             for decision in existing.weekly_reviewer_decisions
@@ -619,13 +720,21 @@ class InMemoryExperienceService:
                         message="This session already belongs to a different Profile.",
                     )
                 if request.resume_state is not None:
+                    resume_state = request.resume_state
+                    server_events = self._events[existing.session_id]
+                    if self._same_writing_trace(
+                        resume_state.trace_events, server_events
+                    ):
+                        resume_state = resume_state.model_copy(
+                            update={"trace_events": list(server_events)}
+                        )
                     affected_date = self._resume_update_date(
                         existing,
-                        request.resume_state,
+                        resume_state,
                     )
                     if affected_date is not None:
                         if (
-                            request.resume_state.trace_events
+                            resume_state.trace_events
                             != self._events[existing.session_id]
                         ):
                             return self._error(
@@ -638,10 +747,10 @@ class InMemoryExperienceService:
                             )
                         existing = await self._apply_resume_update(
                             existing=existing,
-                            resume_state=request.resume_state,
+                            resume_state=resume_state,
                             affected_date=affected_date,
                         )
-                    elif request.resume_state.revision != existing.revision:
+                    elif resume_state.revision != existing.revision:
                         return self._error(
                             requested_operation=request.operation,
                             request_id=request.request_id,
@@ -652,11 +761,11 @@ class InMemoryExperienceService:
                             ),
                         )
                     elif (
-                        request.resume_state.journal_entries != existing.journal_entries
-                        or request.resume_state.nudges != existing.nudges
-                        or request.resume_state.assessment_clock
+                        resume_state.journal_entries != existing.journal_entries
+                        or resume_state.nudges != existing.nudges
+                        or resume_state.assessment_clock
                         != existing.assessment_clock
-                        or request.resume_state.trace_events
+                        or resume_state.trace_events
                         != self._events[existing.session_id]
                     ):
                         return self._error(
@@ -665,8 +774,8 @@ class InMemoryExperienceService:
                             code="session_conflict",
                             message=(
                                 "The browser-held Experience state is not current."
-                                ),
-                            )
+                            ),
+                        )
                 if existing.assessment_clock is None and request.assessment_timezone:
                     try:
                         assessment_clock = self._initial_assessment_clock(
@@ -1171,9 +1280,7 @@ class InMemoryExperienceService:
             model_contract=self._coach_model_contract,
             prompt=prompt,
             raw_response=(
-                narrative.model_dump(mode="json")
-                if narrative is not None
-                else None
+                narrative.model_dump(mode="json") if narrative is not None else None
             ),
             validation=EventValidation(
                 valid=valid,
@@ -1192,9 +1299,7 @@ class InMemoryExperienceService:
             **self._terminal_event_fields(),
         )
         return (
-            attach_coach_artifacts(digest, narrative, validation)
-            if valid
-            else digest,
+            attach_coach_artifacts(digest, narrative, validation) if valid else digest,
             event,
         )
 
@@ -1438,9 +1543,7 @@ class InMemoryExperienceService:
         as_of: date,
         parent_event_id: str,
     ) -> tuple[ExperienceSession, list[TraceEvent]]:
-        reviewed_weeks = self._reviewed_week_starts(
-            self._events[session.session_id]
-        )
+        reviewed_weeks = self._reviewed_week_starts(self._events[session.session_id])
         due_weeks = sorted(
             {
                 week_start
@@ -1493,8 +1596,7 @@ class InMemoryExperienceService:
                         request_id=request.request_id,
                         code="idempotency_conflict",
                         message=(
-                            "This retry key was already used for another time "
-                            "change."
+                            "This retry key was already used for another time change."
                         ),
                     )
                 response = cast(AssessmentTimeAdvancedResponse, cached.response)
@@ -1554,8 +1656,7 @@ class InMemoryExperienceService:
                         request_id=request.request_id,
                         code="assessment_time_not_ready",
                         message=(
-                            "Finish the current Journal Entry before closing "
-                            "this week."
+                            "Finish the current Journal Entry before closing this week."
                         ),
                     )
                 current = previous + timedelta(days=7 - previous.weekday())
@@ -1572,9 +1673,7 @@ class InMemoryExperienceService:
                 event_type="assessment_time_advanced",
                 status="complete",
                 source="live_run",
-                input_refs=[
-                    ResourceRef(kind="assessment_time", id=session.session_id)
-                ],
+                input_refs=[ResourceRef(kind="assessment_time", id=session.session_id)],
                 result_refs=[
                     ResourceRef(kind="assessment_time", id=session.session_id)
                 ],
@@ -1804,6 +1903,307 @@ class InMemoryExperienceService:
             )
             return response
 
+    def _north_star_request(
+        self, session: ExperienceSession, week_start: str
+    ) -> NorthStarRequest:
+        events = self._events[session.session_id]
+        review_event = next(
+            (
+                event
+                for event in reversed(events)
+                if isinstance(event, WeeklyReviewRequestedEvent)
+                and event.details.request.week_start == week_start
+            ),
+            None,
+        )
+        if review_event is None:
+            raise ValueError("A live closed-week review is required")
+        completed = next(
+            (
+                event
+                for event in events
+                if isinstance(event, WeeklyReviewCompletedEvent)
+                and event.parent_event_id == review_event.event_id
+            ),
+            None,
+        )
+        drift = next(
+            (
+                event
+                for event in events
+                if isinstance(event, DriftDetectedEvent)
+                and completed is not None
+                and event.parent_event_id == completed.event_id
+            ),
+            None,
+        )
+        digest_event = next(
+            (
+                event
+                for event in events
+                if isinstance(event, WeeklyDigestBuiltEvent)
+                and drift is not None
+                and event.parent_event_id == drift.event_id
+            ),
+            None,
+        )
+        if drift is None or digest_event is None:
+            raise ValueError("A completed weekly review is required")
+        digest = digest_event.details.digest
+        submissions = {
+            event.details.journal_entry.journal_entry_id: event
+            for event in events
+            if isinstance(event, JournalEntrySubmittedEvent)
+        }
+        responses = {
+            event.details.journal_entry_id: event
+            for event in events
+            if isinstance(event, NudgeResponseRecordedEvent)
+        }
+        writing = []
+        for entry in session.journal_entries:
+            submitted = submissions.get(entry.journal_entry_id)
+            # Old browser state without source availability cannot supply evidence.
+            if (
+                submitted is None
+                or submitted.details.journal_entry.content != entry.content
+                or submitted.details.journal_entry.t_index != entry.t_index
+                or submitted.details.journal_entry.date != entry.date
+            ):
+                continue
+            response = responses.get(entry.journal_entry_id)
+            response_at = (
+                response.started_at
+                if response is not None
+                and response.details.response == entry.nudge_response
+                else None
+            )
+            writing.append(
+                SourceWriting(
+                    owner_id=session.profile.user_id,
+                    entry_id=entry.journal_entry_id,
+                    t_index=entry.t_index,
+                    date=entry.date,
+                    journal_entry=entry.content,
+                    nudge_response=entry.nudge_response,
+                    available_at=submitted.started_at,
+                    response_available_at=response_at,
+                )
+            )
+        return build_north_star_request(
+            session_id=session.session_id,
+            owner_id=session.profile.user_id,
+            profile_ref=profile_reference(session.profile.model_dump(mode="json")),
+            core_values=list(session.profile.top_values),
+            week_start=digest.week_start,
+            week_end=digest.week_end,
+            cutoff_at=review_event.started_at,
+            drift_result=drift.details.result,
+            writing=writing,
+        )
+
+    def _north_star_event(
+        self, record: NorthStarRecord, *, event_id: str, parent_event_id: str | None
+    ) -> NorthStarReviewedEvent:
+        pending = record.status == "pending"
+        failed = record.status == "failed"
+        return NorthStarReviewedEvent(
+            event_id=event_id,
+            session_id=record.session_id,
+            parent_event_id=parent_event_id,
+            event_type="north_star_reviewed",
+            status="running" if pending else "failed" if failed else "complete",
+            source="live_run",
+            input_refs=[
+                ResourceRef(kind="week", id=f"{record.session_id}:{record.week_start}")
+            ],
+            model_contract=ModelContract(
+                provider="openai", model="gpt-5.6-luna", reasoning_effort="low"
+            ),
+            input_hash=record.input_hash,
+            validation=EventValidation(
+                valid=record.status == "complete",
+                schema_name="NorthStarRecord",
+                errors=[record.reason] if failed else [],
+            ),
+            error=SafeError(
+                code="north_star_unavailable",
+                message="This moment could not be reviewed.",
+                retryable=record.retryable,
+            )
+            if failed
+            else None,
+            details=NorthStarReviewedDetails(record=record),
+            **(
+                {"started_at": self._timestamp()}
+                if pending
+                else self._terminal_event_fields()
+            ),
+        )
+
+    async def _execute_north_star(
+        self, snapshot: NorthStarRequest, event_id: str, *, retry: bool
+    ) -> NorthStarRecord | None:
+        """Finish publication and cleanup even if the HTTP waiter disconnects."""
+        key = (snapshot.session_id, snapshot.input_hash)
+        try:
+            try:
+                record = validate_north_star_record(
+                    await self._north_star_runtime(snapshot, retry=retry), snapshot
+                )
+            except Exception:
+                record = pending_north_star_record(snapshot).model_copy(
+                    update={
+                        "status": "failed",
+                        "reason": "runtime_error",
+                        "retryable": False,
+                    }
+                )
+            async with self._lock:
+                current = self._sessions.get(snapshot.session_id)
+                try:
+                    still_current = (
+                        current is not None
+                        and self._north_star_request(
+                            current, snapshot.week_start
+                        ).input_hash
+                        == snapshot.input_hash
+                    )
+                except ValueError:
+                    still_current = False
+                events = self._events.get(snapshot.session_id, [])
+                index = next(
+                    (i for i, event in enumerate(events) if event.event_id == event_id),
+                    None,
+                )
+                if not still_current or index is None:
+                    forget = getattr(self._north_star_runtime, "forget", None)
+                    if forget is not None:
+                        forget(record)
+                    if index is not None:
+                        omitted = pending_north_star_record(snapshot).model_copy(
+                            update={
+                                "status": "not_eligible",
+                                "reason": "inputs_changed",
+                            }
+                        )
+                        events[index] = self._north_star_event(
+                            omitted,
+                            event_id=event_id,
+                            parent_event_id=events[index].parent_event_id,
+                        )
+                    return None
+                events[index] = self._north_star_event(
+                    record,
+                    event_id=event_id,
+                    parent_event_id=events[index].parent_event_id,
+                )
+                self._north_star_inflight.pop(key, None)
+                return record
+        finally:
+            self._north_star_inflight.pop(key, None)
+
+    async def review_north_star(
+        self, request: NorthStarReviewRequest
+    ) -> NorthStarReviewedResponse | ApiErrorResponse:
+        """Review outside the session lock and verify the snapshot before publishing."""
+        async with self._lock:
+            session = self._sessions.get(request.session_id)
+            if session is None:
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="session_not_found",
+                    message="This session is no longer available.",
+                )
+            if session.revision != request.expected_revision:
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="session_conflict",
+                    message="The weekly review has changed.",
+                )
+            try:
+                snapshot = self._north_star_request(session, request.week_start)
+            except ValueError:
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="north_star_not_ready",
+                    message="Complete this week's review first.",
+                    retryable=True,
+                )
+            matching = next(
+                (
+                    event
+                    for event in reversed(self._events[session.session_id])
+                    if isinstance(event, NorthStarReviewedEvent)
+                    and event.input_hash == snapshot.input_hash
+                ),
+                None,
+            )
+            if matching is not None and matching.details.record.status != "pending":
+                try:
+                    validate_north_star_record(matching.details.record, snapshot)
+                except ValueError:
+                    matching = None
+                else:
+                    if not (request.retry and matching.details.record.retryable):
+                        return NorthStarReviewedResponse(
+                            operation="north_star_reviewed",
+                            request_id=request.request_id,
+                            status="ok",
+                            session=session,
+                            event_ids=[matching.event_id],
+                        )
+            key = (session.session_id, snapshot.input_hash)
+            task = self._north_star_inflight.get(key)
+            if task is None:
+                if matching is not None and matching.details.record.status == "pending":
+                    pending_event = matching
+                else:
+                    pending_event = self._north_star_event(
+                        pending_north_star_record(snapshot),
+                        event_id=self._make_id("north-star-reviewed"),
+                        parent_event_id=session.trace_event_ids[-1],
+                    )
+                    self._events[session.session_id].append(pending_event)
+                    self._append_session(session, event_ids=[pending_event.event_id])
+                task = asyncio.create_task(
+                    self._execute_north_star(
+                        snapshot, pending_event.event_id, retry=request.retry
+                    )
+                )
+                self._north_star_inflight[key] = task
+            event_id = next(
+                event.event_id
+                for event in reversed(self._events[session.session_id])
+                if isinstance(event, NorthStarReviewedEvent)
+                and event.input_hash == snapshot.input_hash
+            )
+
+        record = await asyncio.shield(task)
+        async with self._lock:
+            current = self._sessions.get(request.session_id)
+            if (
+                record is None
+                or current is None
+                or event_id not in current.trace_event_ids
+            ):
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="session_conflict",
+                    message="The writing changed while this moment was reviewed.",
+                )
+            return NorthStarReviewedResponse(
+                operation="north_star_reviewed",
+                request_id=request.request_id,
+                status="ok",
+                session=current,
+                event_ids=[event_id],
+            )
+
     async def read_trace(
         self,
         request: TraceReadRequest,
@@ -1841,6 +2241,11 @@ class InMemoryExperienceService:
     ) -> SessionDeletedResponse:
         """Delete one in-memory session and its request receipts."""
         async with self._lock:
+            forget = getattr(self._north_star_runtime, "forget", None)
+            if forget is not None:
+                for event in self._events.get(request.session_id, []):
+                    if isinstance(event, NorthStarReviewedEvent):
+                        forget(event.details.record)
             session_removed = self._sessions.pop(request.session_id, None) is not None
             events_removed = self._events.pop(request.session_id, None) is not None
             receipt_keys = [
@@ -1866,6 +2271,7 @@ class InMemoryExperienceService:
             | AssessmentTimeAdvanceRequest
             | SessionDeleteRequest
             | TraceReadRequest
+            | NorthStarReviewRequest
         ),
     ) -> ApiResponse:
         if isinstance(request, SessionCreateRequest):
@@ -1876,4 +2282,6 @@ class InMemoryExperienceService:
             return await self.advance_assessment_time(request)
         if isinstance(request, SessionDeleteRequest):
             return await self.delete_session(request)
+        if isinstance(request, NorthStarReviewRequest):
+            return await self.review_north_star(request)
         return await self.read_trace(request)

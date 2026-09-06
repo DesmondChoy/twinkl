@@ -18,6 +18,7 @@ const api = vi.hoisted(() => ({
   journalIdempotencyKey: vi.fn(),
   readExperienceTrace: vi.fn(),
   submitJournalEntry: vi.fn(),
+  reviewNorthStar: vi.fn(),
 }));
 
 vi.mock("./experienceApi", async (importOriginal) => {

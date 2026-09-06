@@ -1,0 +1,42 @@
+{
+  "attempt_status_counts": {
+    "completed": 130,
+    "failed": 1,
+    "invalid": 3
+  },
+  "coach_and_existing_trace_and_journals_unchanged": true,
+  "complete_input_receipts": 130,
+  "cumulative_spent_or_reserved_usd": 1.44526,
+  "final_report_and_source_ledger_unchanged": true,
+  "generation_attempts": 134,
+  "input_token_maximum": 3378,
+  "input_token_minimum": 1390,
+  "live_ledger_raw_responses_redacted": true,
+  "live_ledger_seed_verified": true,
+  "manifest_hash": "4d637f17f4c04f98b6587648d67dccf91ff623207a7b706f9752801b07917199",
+  "maximum_attempts_per_request": 2,
+  "new_metered_cost_usd": 0.77218975,
+  "new_spent_or_reserved_usd": 0.81547585,
+  "observed_input_minus_count_only_tokens": {
+    "low": {
+      "-1": 54
+    },
+    "xhigh": {
+      "0": 79
+    }
+  },
+  "offline_replay_byte_identical": {
+    "budget.json": "090f73a3f0472abe32e4d1ef13b6315c122e933be12a0bc695bb80eb20259dc0",
+    "input-counts.json": "21ad705570e68f2809539b17d083dc81b59a7554a6b5763b261c58e5044b344b",
+    "records.json": "51897693d18e475bdd185097bc5e1a2d1b012d72b93c1f836fb7c91c47a97439",
+    "report.json": "250810fb8bb50e1ea294fa471d577ef26a0d2b47950e6209188f18cb48878c4a"
+  },
+  "offline_replay_provider_and_count_calls": 0,
+  "original_experiment_files_unchanged": 26,
+  "prior_spend_usd": 0.62978415,
+  "reserved_source_hashes_unchanged": 16,
+  "saved_scenarios_validated": 5,
+  "saved_weeks_validated": 36,
+  "unique_generation_requests": 130,
+  "unmetered_reserved_cost_usd": 0.0432861
+}

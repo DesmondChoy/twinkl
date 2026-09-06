@@ -4,6 +4,7 @@ import {
   type ValueKey,
 } from "./domain";
 import CoachDigestCard from "./CoachDigestCard";
+import NorthStarMoment from "./NorthStarMoment";
 import {
   displayWeekRange,
 } from "./displayFormatters";
@@ -30,6 +31,12 @@ interface WeeklyExperienceProps {
   inspectRun: (eventId: string) => void;
   selectJournalEntry?: (journalEntryId: string) => void;
   showInspectAction?: boolean;
+  northStarReview?: {
+    pending: boolean;
+    failed: boolean;
+    retryable: boolean;
+    retry: () => void;
+  };
 }
 
 interface DigestEvidence {
@@ -149,6 +156,7 @@ export default function WeeklyExperience({
   inspectRun,
   selectJournalEntry,
   showInspectAction = true,
+  northStarReview,
 }: WeeklyExperienceProps) {
   if (driftResult === null || weeklyDigest === null) return null;
 
@@ -283,25 +291,49 @@ export default function WeeklyExperience({
         ) : null}
       </div>
 
-      <CoachDigestCard
-        weeklyDigest={weeklyDigest}
-        headingId="weekly-coach-title"
-      />
+      <div className="weekly-workspace__response">
+        <CoachDigestCard
+          weeklyDigest={weeklyDigest}
+          headingId="weekly-coach-title"
+        />
 
-      {coachUnavailable ? (
-        <aside
-          className="coach-digest coach-digest--unavailable"
-          aria-labelledby="weekly-coach-unavailable-title"
-        >
-          <p className="eyebrow">Coach Digest</p>
-          <h2 id="weekly-coach-unavailable-title">
-            Your weekly response could not be prepared.
-          </h2>
-          <p>
-            The Weekly Drift Detection result above remains available.
-          </p>
-        </aside>
-      ) : null}
+        <NorthStarMoment
+          profile={profile}
+          journalEntries={journalEntries}
+          weeklyDigest={weeklyDigest}
+          driftResult={driftResult}
+          traceEvents={traceEvents}
+          selectJournalEntry={selectJournalEntry}
+        />
+
+        {northStarReview?.pending || northStarReview?.failed ? (
+          <div className="north-star-status" role="status">
+            <p>{northStarReview.pending
+              ? "Looking through your writing for a North Star Moment…"
+              : "Your weekly result remains available. A North Star Moment could not be prepared."}</p>
+            {!northStarReview.pending && northStarReview.retryable ? (
+              <button className="button button--quiet" type="button" onClick={northStarReview.retry}>
+                Retry North Star Moment
+              </button>
+            ) : null}
+          </div>
+        ) : null}
+
+        {coachUnavailable ? (
+          <aside
+            className="coach-digest coach-digest--unavailable"
+            aria-labelledby="weekly-coach-unavailable-title"
+          >
+            <p className="eyebrow">Coach Digest</p>
+            <h2 id="weekly-coach-unavailable-title">
+              Your weekly response could not be prepared.
+            </h2>
+            <p>
+              The Weekly Drift Detection result above remains available.
+            </p>
+          </aside>
+        ) : null}
+      </div>
 
       {showInspectAction && inspectEventId ? (
         <button

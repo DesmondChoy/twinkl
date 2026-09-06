@@ -1,6 +1,11 @@
 # North Star Moment
 
-**Status:** Development evaluation complete under `twinkl-fz34.1`; application integration remains outstanding. On
+[Workflow infographic](assets/north-star-moment-workflow.png): decision paths
+after Coach Digest, source checks, and the supportive-action definition.
+
+**Status:** Development evaluation and the first POC integration are complete
+under `twinkl-fz34.1`–`.6`. Both frontend paths have source-checked cards and
+Inspect, with saved-Persona evaluation and browser QC reported separately. On
 5 September 2026, the user authorized removal of previous NSM experiment
 results and a fresh run under the [Luna evaluation protocol](luna_evaluation_20260905.md).
 The approved experiment supplies all eligible earlier Journal Entries within
@@ -20,10 +25,25 @@ accepted the development evidence for continued work on the time-boxed POC,
 with shortcomings retained, as recorded in `twinkl-fz34.1`. This decision
 supersedes the development stop rule below for this run; it does not relabel
 the gate as passed or set a new numerical threshold for final evaluation.
-The current experiment uses no embedding ranker. Application integration,
-NSM cards and Inspect events, the reserved final evaluation, and browser QC
-remain outstanding. The detailed protocol is the execution authority for this
-run; requirements for a future integrated application are specified below.
+The current experiment uses no embedding ranker. The first application
+integration implements cards and Inspect in both frontend paths. Its saved
+Persona evaluation and browser checks are recorded separately in the
+[integration report](../../logs/experiments/reports/north_star_integration_20260906/README.md).
+The reserved final evaluation remains outstanding. The detailed protocol is
+the execution authority for the original run; integrated application
+requirements are specified below.
+
+**Scope decision, 6 September 2026:** The user adopted full-history Luna `low`
+as the first integration baseline and extended North Star Moment to weeks
+without Active Drift. Both onboarding and all five saved Personas use the same
+rules. For Active Drift, an earlier supportive action provides perspective on
+the current tension. For No Active Drift, a verified supportive action from the
+reviewed week receives specific encouragement; an older example receives
+historical reminder wording. No Active Drift alone never establishes alignment.
+Insufficient Evidence produces no card. The frozen development experiment and
+its 24/25 result remain evidence for the original Drift-triggered task only;
+the encouragement path is assessed separately in the integration report,
+which retains four unresolved selections and one missed supportive example.
 
 **First version:** Both frontend paths: the demo with all five saved Personas
 and onboarding from scratch with the user's own writing. Each reviewed week
@@ -37,17 +57,18 @@ can show at most one optional card.
 Twinkl compares Journal Entries with the user's confirmed Core Values.
 Weekly Drift Detection identifies repeated Conflict, and the Coach Digest
 explains the finding and asks one reflective question. North Star Moment adds
-an earlier example of behaviour supporting the affected Core Value, quoted
-from the user's own writing.
+an example of behaviour supporting a confirmed Core Value, quoted from the
+user's own writing.
 
-When Weekly Drift Detection reports Active Drift, North Star Moment reviews
-earlier eligible Journal Entries and eligible user nudge responses for a
-supportive action. The current development experiment supplies all eligible
+After a closed-week Weekly Drift Detection result, North Star Moment reviews
+eligible Journal Entries and eligible user nudge responses for a supportive
+action. Active Drift uses writing from before onset; No Active Drift permits
+writing through the reviewed week. The current development experiment supplies all eligible
 original Journal Entries within the input budget; legacy nudge responses lack
 independent availability evidence and are excluded. A separate North Star
 Moment AI review checks whether the writing describes a supportive action.
 Code checks confirm that the quotation is exact, belongs to the same user or
-Persona, and comes from before the Drift began. If no example passes, no card
+Persona, and satisfies the source window for the selected treatment. If no example passes, no card
 appears.
 
 The demo prepares results offline for all five saved Personas: Meera, Wei Jun,
@@ -64,9 +85,10 @@ saved Persona writing must never become evidence for a new user.
 
 ## 2. Which writing qualifies
 
-North Star Moment runs only after Weekly Drift Detection completes for a
-closed week and reports Active Drift with a known start and supporting Journal
-Entries. The confirmed Profile and Core Values must be the same ones used for
+North Star Moment runs after Weekly Drift Detection completes for a closed
+week. Active Drift requires a known start and supporting Journal Entries.
+No Active Drift permits a separate supportive-action search; Insufficient
+Evidence omits the card without a provider call. The confirmed Profile and Core Values must be the same ones used for
 that Weekly Drift Detection result.
 
 If several Core Values have Active Drift, select the one with the longest
@@ -74,11 +96,19 @@ current Conflict run. Break a tie using the confirmed Profile order. If that
 Core Value has no suitable earlier quotation, show no card; do not move to
 another Core Value.
 
+For No Active Drift, review confirmed Core Values in Profile order. Prefer an
+accepted action from the reviewed week, choosing the first Core Value with
+such an example and its newest eligible source. If none has a current-week
+example, use the first Core Value with an accepted older example, newest
+first, and frame it as a historical reminder. Every selected action receives
+its own NSM assessment; a Not Conflict decision is never a support label.
+
 An earlier example must:
 
 - belong to the same user or Persona;
-- come before the first Conflict in the selected Active Drift and be available
-  at the selected replay point or live review cutoff;
+- be available at the selected replay point or live review cutoff; for Active
+  Drift it must also precede the first Conflict; for No Active Drift its date
+  must be no later than the reviewed week end;
 - describe the user's action or choice supporting that Core Value;
 - contain no Conflict against that same Core Value in the writing reviewed;
 - pass AI review and every required code check.
@@ -116,22 +146,28 @@ the implementation, research documentation, and developer-facing Inspect.
 This wording rule does not change detection decisions or permit rewriting
 the user's quoted words.
 
-Experience shows at most one card per reviewed week, in either path, containing:
+Experience shows at most one card per reviewed week, in either path. The
+Coach-facing introduction is deterministic and based on the accepted record:
+reflection for Active Drift, specific acknowledgment for a current-week
+action, or historical reminder for older writing. It does not add a second
+question or infer overall alignment, improvement, or recovery. The card contains:
 
-- **A past moment in your own words**;
+- **A moment in your own words** for current-week encouragement, or
+  **A past moment in your own words** for reflection and historical reminders;
 - the user-facing Core Value phrase and Journal Entry date;
 - one exact quotation, identified as coming from the Journal Entry or the
   user's nudge response;
 - an expandable quotation with no fixed word limit;
 - an action to open the complete Journal Entry without losing the current week;
-- the notice: **This earlier writing is a reference point for your Core Value.**
+- for reflection and historical reminders, the notice: **This earlier writing
+  is a reference point for your Core Value.**
 
 Collapsing a long quotation changes its presentation only. Expanding it must
 reveal the complete accepted quotation without paraphrasing or joining
 separate passages. The card must remain usable on a narrow screen and with a
 keyboard or screen reader.
 
-Inspect links the selected Active Drift to the eligible writing, source order,
+Inspect links the reviewed state and selected treatment to eligible writing, source order,
 AI review, code checks, and selected quotation. A **saved review
 record** contains these inputs and decisions, their versions, and model details.
 It lets teammates inspect why a card appeared or why it was omitted.
@@ -145,8 +181,9 @@ retry; they are not excluded because they are manual sessions. Changes to
 source data invalidate affected results in both paths.
 
 North Star Moment leaves the Profile, Core Values, Weekly Drift Reviewer
-Decisions, Drift Detector result, Historical Drift Records, and Coach Digest
-response unchanged. Advice, action plans, habits, external quotations, Profile
+Decisions, Drift Detector result, Historical Drift Records, and existing Coach Digest
+response unchanged. The NSM introduction supplies the additional context-sensitive
+Coach framing beside that response. Advice, action plans, habits, external quotations, Profile
 evolution, model training, production multi-user storage, and background
 scheduling remain outside this version.
 
@@ -237,8 +274,9 @@ onboarding session through closed-week review, including an accepted card and
 correct omissions using controlled test writing. These checks do not require
 every Persona to receive a card and do not replace the task-specific benchmark.
 
-Report coverage, the proportion of eligible Active Drift cases receiving a
-card, without imposing a minimum percentage. Report counts alongside rates.
+Report coverage, the proportion of eligible reviewed weeks receiving a card,
+separately for Active Drift and No Active Drift and by selected treatment,
+without imposing a minimum percentage. Report counts alongside rates.
 Report deliberately injected failures separately from unexpected provider
 failures.
 
@@ -274,13 +312,13 @@ requests must use frozen token, timeout, rate, retry, and budget settings.
 ## 7. Work plan and completion
 
 The authorized development experiment and independent evaluator review are
-complete. Application integration remains outstanding. Account separately for
+complete. Expanded application integration and validation are in progress. Account separately for
 live generation, retries, invalidation, and browser QC on both application paths.
 
 | Phase | Work and output |
 |---|---|
 | 0: development evaluation | Freeze all eligible development writing and the 16,000-token budget; run Luna at `low` for selection and `xhigh` for source and exact-quotation evaluation; review the evaluator independently. |
-| 1: source review and validation | If the semantic gate passes, implement shared filtering, bounded review, saved records, and code checks for offline preparation and live sessions. Include retry, reuse, and invalidation. |
+| 1: source review and validation | Under the accepted POC continuation decision, implement shared filtering, bounded review, saved records, and code checks for offline preparation and live sessions. Include retry, reuse, and invalidation. |
 | 2: Experience and Inspect | Add the card, source links, all five saved Persona results, onboarding integration, migration, and replay/accessibility tests. Launch the frontend and backend for browser QC on both paths. |
 | 3: final evaluation and reporting | Evaluate the frozen implementation on the reserved histories. Report errors and limitations, document browser QC separately, and update the Technical Paper and walkthrough for both paths. |
 
@@ -289,8 +327,10 @@ the approved per-attempt and total limits before every paid request, including
 evaluation and retries. An over-budget history must be recorded explicitly;
 do not silently truncate its writing or select a smaller subset.
 
-If a phase fails its criteria, stop and keep the existing Coach Digest
-behaviour.
+The original development gate remains failed under the explicit POC
+continuation decision above. A failed NSM request omits the card and retains
+the valid Coach Digest. The final benchmark criteria must be settled before
+opening reserved histories; no new numerical threshold is inferred here.
 
 Completion requires a focused implementation issue, an adopted PRD scope,
 passing contract and regression checks, reproducible reports, all five saved
@@ -312,14 +352,19 @@ Value and user-facing phrase, Active Drift start, supporting Journal Entry
 identifiers, eligible source text, prompt version and hash, model settings,
 and creation time. Each source distinguishes `journal_entry` from `nudge_response`.
 
-Filter before any embedding or provider call. Require a matching identity,
-non-empty user-written text, `t_index < active_drift_start_t_index`, and
-`date <= active_drift_start_date`. Both ordering checks must pass. Exclude
+Filter before any provider call. Require a matching identity,
+non-empty user-written text, and independent original-source availability
+through the cutoff. For Active Drift, require
+`t_index < active_drift_start_t_index` and `date <= active_drift_start_date`.
+Both ordering checks must pass. For No Active Drift, include original writing
+through the reviewed week end and prefer current-week examples. Exclude
 removed Journal Entries, current Drift evidence, and anything unavailable at
 the replay point or live review cutoff. Dates and stored order must agree.
 
-A nudge response needs its own evidence of availability before the first
-Conflict and at the replay point or live review cutoff. Use recorded event
+A nudge response needs its own evidence of availability at the replay point
+or live review cutoff, and before the first Conflict when Active Drift applies.
+The live application records a separate server-timestamped response event;
+legacy responses without such evidence remain excluded. Use recorded event
 order or timestamps; do not copy the parent Journal Entry's date as proof. If
 availability cannot be established, exclude that response while retaining an
 otherwise eligible original Journal Entry. Preserve source boundaries when composing text for
@@ -389,7 +434,7 @@ Validate the following before rendering:
 |---|---|
 | Identity and membership | Every returned Journal Entry was requested for the same user or Persona. |
 | Core Value | The response identifies the requested Core Value. |
-| Chronology | The original text and any included response satisfy their availability rules and precede Drift start. |
+| Chronology | Original text and responses satisfy their independent availability rules and mode-specific source window; Active Drift additionally requires pre-onset writing. |
 | Exact quotation | The quotation is a continuous exact substring of the identified user-written source. Never combine sources or repair a quotation by paraphrasing. |
 | Complete response | All requested decisions are present once, with permitted fields and decision/reason/source combinations. |
 | User-facing terminology | Application-written Experience text, including badges, notices, and accessibility labels, must not expose internal Drift states or describe the user as drifting, drifting away, or back on track. Use concrete descriptions of actions and experiences. Preserve exact user quotations. |
@@ -431,16 +476,18 @@ duplicating calls. Changed inputs require a new record.
 
 Use one selection and validation implementation for both paths. The demo
 precomputes records for every reviewed week in all five saved Personas,
-including explicit non-triggering and no-card outcomes. Normal replay reads
+including explicit Insufficient Evidence and no-card outcomes. Normal replay reads
 these records without provider calls and shows only records available at the
 selected cutoff. Optional demo live rerun is not a prerequisite for NSM; if
 used, its changed review output invalidates dependent saved NSM results and
 any regeneration follows the live rules below.
 
-In the onboarding path, the existing closed-week review action triggers NSM
-after an eligible Weekly Drift Detection result. Saving writing in an open
+In the onboarding path, the frontend requests `review_north_star` separately
+after the existing closed-week review action returns. The backend snapshots
+that week's recorded Weekly Drift Detection result and source window, awaits
+NSM outside the session lock, then verifies the input hash before publication. Saving writing in an open
 week does not trigger NSM. Keep the result and any valid Coach Digest usable
-while NSM runs or fails. No earlier eligible writing means no card and no
+while NSM runs or fails. No eligible writing for the selected treatment means no card and no
 unnecessary review call. Use the current session's confirmed Profile and
 source availability; do not borrow dates from a parent entry or treat
 backdated writing as available at an earlier cutoff.
@@ -520,7 +567,8 @@ Include the following cases:
 | Same-day writing with earlier stored order | Permit only when dates, order, and source availability agree. |
 | Writing or a response after Drift start or the replay/live review cutoff | Exclude before source selection, provider input, and current-point Inspect records. |
 | Multiple Active Drifts with no example for the priority Core Value | Show no card without trying another Core Value. |
-| No Active Drift or Insufficient Evidence | Do not request North Star Moment. |
+| No Active Drift | Review eligible writing for an actual supportive action; distinguish current-week encouragement from an older reminder. |
+| Insufficient Evidence | Do not request North Star Moment. |
 | Refusal, invalid/incomplete JSON, timeout, stale or missing record | Show no card and retain existing Weekly Drift Detection and valid Coach Digest. |
 | Fresh onboarding with no eligible earlier writing | Show no card without borrowing Persona data or making an unnecessary review call. |
 | Source edit, removal, replacement review, or session deletion during a live request | Invalidate dependent records and discard obsolete in-flight output. |
@@ -533,8 +581,9 @@ must follow the agreed development/final separation and be recorded.
 
 To establish that a history has **no valid example**, reference review must
 examine every eligible earlier Journal Entry and user response. An incomplete
-review cannot establish this. A No Active Drift Persona tests
-non-triggering, not omission after an unsuccessful search.
+review cannot establish this. A No Active Drift Persona now tests supportive
+action selection or appropriate omission, separately from the original
+Drift-triggered experiment.
 
 Reference review uses the exact North Star Moment definition, source
 boundaries, and same-Core-Value Conflict exclusion. The selector and evaluator
@@ -568,7 +617,7 @@ label-proxy retrieval scores.
 |---|---|
 | North Star Moment precision | Displayed quotations accepted by the task-specific reference, divided by all displayed quotations. Require zero incorrect selections in the reported benchmark. Reference rejection or abstention counts as incorrect. Zero displayed quotations gives undefined precision, not 100%. |
 | Correct no-card rate | Reference-confirmed histories with no valid example that receive no card, divided by all reference-confirmed histories with no valid example. Require 100%. Include such histories; an empty denominator is not a pass. |
-| Coverage | Cases receiving a card divided by eligible Active Drift cases under the adopted priority rule. Report counts and exclusions, including histories without earlier writing. No minimum percentage; require at least one accepted saved-Persona demonstration. |
+| Coverage | Cases receiving a card divided by eligible reviewed weeks under the adopted priority rule, reported separately by state and treatment. Report counts and exclusions, including histories without earlier writing. No minimum percentage; require at least one accepted saved-Persona demonstration. |
 | Wrong-Core-Value rate | Displayed examples supporting another value but not the affected Core Value, divided by displayed examples. These also count as incorrect selections. |
 | Abstention rate | AI review abstentions divided by reviewed Journal Entries. |
 | Quotation, chronology, and wrong-user failures | Report separate counts; require zero for displayed results. |
@@ -581,7 +630,7 @@ appropriate to the sample size. Preserve failed responses and diagnostics
 where permitted. Deliberately injected failure tests are reported separately.
 
 If evaluating the card beside the Coach Digest, report additional criteria
-for the relationship to Active Drift, specificity, tone, treatment of tension,
+for the relationship to the reviewed state, specificity, tone, treatment of tension,
 prohibited current-state claims, and whether the single reflective question
 remains appropriate. Name these separately from existing Coach Digest Evals
 unless that contract is explicitly extended.

@@ -7,6 +7,9 @@ import uncertainReplayJson from "../public/scenarios/uncertain-noor.json";
 import judgeSampleManifest from "../../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { validateExperienceInspectFixture } from "./demoContracts";
+import { currentNorthStarEvent, displayableNorthStarSelection, northStarProfileRef } from "./northStar";
+import { BWS_SETS } from "./domain";
+import { createExperienceState, createSession, parseSession, persistSession, SESSION_STORAGE_KEY, type OnboardingSession } from "./session";
 import {
   loadScenarioCatalog,
   projectScenarioWeek,
@@ -143,5 +146,58 @@ describe("saved persona replay", () => {
     expect(projectScenarioWeek(scenarioFixture, 0).session).toEqual(
       scenarioFixture.session,
     );
+  });
+
+  it.each([
+    ["Wei Jun", activeReplayJson], ["Marc", recoveredReplayJson],
+    ["Meera", stableReplayJson], ["Lukas", twoValuesReplayJson],
+    ["Noor", uncertainReplayJson],
+  ])("projects a source-bound North Star Moment assessment for every %s week", async (_name, scenarioJson) => {
+    const saved = validateExperienceInspectFixture(scenarioJson);
+    const profile = saved.scenario.profile;
+    const profileRef = await northStarProfileRef(profile);
+    for (let index = 0; index < saved.scenario.weeks.length; index += 1) {
+      const projected = projectScenarioWeek(saved, index);
+      const result = currentNorthStarEvent({
+        events: projected.events, profile, profileRef,
+        weeklyDigest: projected.session.weekly_digest,
+        journalEntries: projected.session.journal_entries,
+      });
+      expect(result, `${saved.scenario.scenario_id} week ${index + 1}`).not.toBeNull();
+      expect(result!.event.source).toBe("saved_replay");
+      expect(result!.record.week_end).toBe(saved.scenario.weeks[index].week_end);
+      expect(result!.record.sources.every((source) =>
+        String(source.date) <= saved.scenario.weeks[index].week_end)).toBe(true);
+      const selection = displayableNorthStarSelection(result, profile,
+        projected.session.journal_entries, projected.session.drift_result!);
+      if (result!.record.selected) expect(selection).toEqual(result!.record.selected);
+      else expect(selection).toBeNull();
+      const futureEventIds = new Set(saved.scenario.weeks.slice(index + 1).flatMap((week) => week.event_ids));
+      expect(projected.events.some((event) => futureEventIds.has(event.event_id))).toBe(false);
+    }
+    const finalIndex = saved.scenario.weeks.length - 1;
+    const final = projectScenarioWeek(saved, finalIndex);
+    const session: OnboardingSession = {
+      ...createSession(), user_id: profile.user_id, session_id: profile.session_id,
+      preferred_name: profile.preferred_name ?? "Friend", started_at: profile.started_at,
+      stage: "complete", set_index: BWS_SETS.length - 1,
+      set_order: BWS_SETS.map((_, index) => index),
+      displayed_orders: BWS_SETS.map((set) => [...profile.bws_responses.find((response) => response.set_number === set.setNumber)!.item_order_shown]),
+      responses: profile.bws_responses,
+      selected_top_values: profile.value_profile.top_values.length > 2 ? [...profile.top_values] : [],
+      confirmed_profile: profile,
+      experience: {
+        ...createExperienceState(), journal_started: true, revision: final.session.revision,
+        journal_entries: final.session.journal_entries, nudges: final.session.nudges,
+        selected_persona_id: saved.scenario.persona_id, selected_week: finalIndex,
+        weekly_reviewer_decisions: final.session.weekly_reviewer_decisions,
+        drift_result: final.session.drift_result, weekly_digest: final.session.weekly_digest,
+        run_state: "complete", trace_events: final.events, trace_event_ids: final.session.trace_event_ids,
+      },
+    };
+    expect(persistSession(session)).toBe(true);
+    const restored = parseSession(localStorage.getItem(SESSION_STORAGE_KEY));
+    expect(restored?.experience.trace_events).toEqual(final.events);
+    expect(restored?.confirmed_profile).toEqual(profile);
   });
 });

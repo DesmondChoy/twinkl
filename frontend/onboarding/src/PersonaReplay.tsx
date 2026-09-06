@@ -429,17 +429,14 @@ export function PersonaReplayExperience({
   const keyMomentIndex = preferredKeyIndex >= 0
     ? preferredKeyIndex
     : weeks.length - 1;
-  const inspectEventId =
-    [...experience.trace_events]
-      .reverse()
-      .find((event) => event.event_type === "weekly_coach_generated")?.event_id
-    ?? [...experience.trace_events]
-      .reverse()
-      .find((event) => event.event_type === "drift_detected")?.event_id
-    ?? [...experience.trace_events]
-      .reverse()
-      .find((event) => event.event_type === "weekly_digest_built")?.event_id
-    ?? null;
+  const currentWeekEventIds = new Set(currentWeek.event_ids);
+  const currentWeekEvents = [...experience.trace_events].reverse().filter(
+    (event) => currentWeekEventIds.has(event.event_id),
+  );
+  const inspectEventId = [
+    "north_star_reviewed", "weekly_coach_generated", "drift_detected", "weekly_digest_built",
+  ].map((eventType) => currentWeekEvents.find((event) => event.event_type === eventType))
+    .find((event) => event !== undefined)?.event_id ?? null;
 
   useEffect(() => {
     setPlaying(false);

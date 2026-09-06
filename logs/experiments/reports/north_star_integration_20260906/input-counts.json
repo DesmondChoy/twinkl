@@ -1,0 +1,1045 @@
+{
+  "counts": {
+    "02bac6a455cf60b91ac8aedf8b536913314d6da6708776cc38d8036b4be681c8": {
+      "counted_at": "2026-09-06T02:48:16.995603+00:00",
+      "input_tokens": 1715,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d60d4190c234ae382a3bb3e43d5fedc2dd80bb8597834bec019087a9873c576c",
+      "provider_request_id": "req_0f0011bcf5604e65acfeaa5861f55303",
+      "request_hash": "02bac6a455cf60b91ac8aedf8b536913314d6da6708776cc38d8036b4be681c8"
+    },
+    "05fa01d2157d28354f3d868e8d50864290cf07221b30bf8e277d242723a2113a": {
+      "counted_at": "2026-09-06T02:48:05.964324+00:00",
+      "input_tokens": 1572,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "113ac7ed2a0792107b5e08a7b7aa638aff7ad09e633bbe9d263e743579a48647",
+      "provider_request_id": "req_8b1aad8079dd4cb78e6ae8ec5eef781c",
+      "request_hash": "05fa01d2157d28354f3d868e8d50864290cf07221b30bf8e277d242723a2113a"
+    },
+    "06758741a2c2520e2c99c0d237d1ba915ba34443169b204261603420c5b2e357": {
+      "counted_at": "2026-09-06T02:48:14.213332+00:00",
+      "input_tokens": 1818,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d73eb131884be982709ad5be822c1b8c3c3bdf0b0f08cd0a12d15a5798ea040e",
+      "provider_request_id": "req_1aefbe9b81ea4baa8b5b63ef0715c9c6",
+      "request_hash": "06758741a2c2520e2c99c0d237d1ba915ba34443169b204261603420c5b2e357"
+    },
+    "093aba34be17d66682105167cdaa9906cfa4a1d89ca1e8aafef36f97099235e8": {
+      "counted_at": "2026-09-06T02:17:21.587387+00:00",
+      "input_tokens": 1390,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e6760a4542bc499aaba2803b4169f5bbc22b057b6baa7db362cca872973f900a",
+      "provider_request_id": "req_7bf1fcffa9a540a8a27280dc8a3afe1d",
+      "request_hash": "093aba34be17d66682105167cdaa9906cfa4a1d89ca1e8aafef36f97099235e8"
+    },
+    "0b0f1d65ffac016303545590374f40107716e0fd8acc71adc3f709dd67112982": {
+      "counted_at": "2026-09-06T02:17:50.937480+00:00",
+      "input_tokens": 2896,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "6ad78f53d46850a31aba92c7c84e5bb09652d3b5d392e04308f8dd925e44ca95",
+      "provider_request_id": "req_b9f087d521ee4a67929f985eca1f4695",
+      "request_hash": "0b0f1d65ffac016303545590374f40107716e0fd8acc71adc3f709dd67112982"
+    },
+    "0b6e265fe2d30df5e868c61c7d267a039218b5d5d08faf1c58a9e95ad7cd2ca5": {
+      "counted_at": "2026-09-06T02:17:35.772538+00:00",
+      "input_tokens": 2843,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "c808a1d71509b0ee234472814c961ba73fdf3c20a75b89fa52da510be165ae07",
+      "provider_request_id": "req_11068d1d9b294951be70c66481cecab4",
+      "request_hash": "0b6e265fe2d30df5e868c61c7d267a039218b5d5d08faf1c58a9e95ad7cd2ca5"
+    },
+    "0b92166e17a33c15c697c7922566e772ad25c6da91ad866a357673a77c207bc6": {
+      "counted_at": "2026-09-06T02:17:29.104200+00:00",
+      "input_tokens": 1575,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "db771a3ef6f0555093bdf3d4496219013eb422f1cbfde2333a8c267978273ddd",
+      "provider_request_id": "req_bf96371493e74102a8de9e1e4256759b",
+      "request_hash": "0b92166e17a33c15c697c7922566e772ad25c6da91ad866a357673a77c207bc6"
+    },
+    "183b538dbf42910605285cd1b0b1ce3aa09201e20902e7311ffba1a626a79180": {
+      "counted_at": "2026-09-06T02:17:54.956583+00:00",
+      "input_tokens": 2141,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e9599f636e1af5785e21cbf1abdb912a43527cbc0fb820a782da5c2c86d026e2",
+      "provider_request_id": "req_64d3a6719205415784977c21f336922d",
+      "request_hash": "183b538dbf42910605285cd1b0b1ce3aa09201e20902e7311ffba1a626a79180"
+    },
+    "1b7099ad97131fa1e7c2c6b3f6a932ffe94ce56a0e671d47c2d3ced09da3e562": {
+      "counted_at": "2026-09-06T02:17:58.299344+00:00",
+      "input_tokens": 2843,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "c87bbe8d023c6a32e166af56d286df9e3727949e2d1d78c035317284117201e8",
+      "provider_request_id": "req_08eb9ada6e9d4c85b22eb0952a5976dc",
+      "request_hash": "1b7099ad97131fa1e7c2c6b3f6a932ffe94ce56a0e671d47c2d3ced09da3e562"
+    },
+    "1be10b5119dc7e52db7e45ff45e41af0c51f893ed1d2729a61fdfe5499dff63a": {
+      "counted_at": "2026-09-06T02:17:29.657398+00:00",
+      "input_tokens": 1578,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d4f53a786618458474bfef48972e576e383676f5df2faca06030785af9737a6d",
+      "provider_request_id": "req_1618f367e7d14aabbcc369cfd9cef4f7",
+      "request_hash": "1be10b5119dc7e52db7e45ff45e41af0c51f893ed1d2729a61fdfe5499dff63a"
+    },
+    "1d105c3ff2ae2fb771b3488dca2ae61167b61d57585caeedccdb360087f0f455": {
+      "counted_at": "2026-09-06T02:17:34.289987+00:00",
+      "input_tokens": 2581,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "0a8e2155dedc89322340a6f78041ec7fbba20f7ca0ce79a402959f661b3f3f28",
+      "provider_request_id": "req_50763d1d567642218d9cd1aca9279518",
+      "request_hash": "1d105c3ff2ae2fb771b3488dca2ae61167b61d57585caeedccdb360087f0f455"
+    },
+    "1e3b8f2002a555e6336fefd11e33acf00e063ecb875b3c514e3343d5cfdf1db9": {
+      "counted_at": "2026-09-06T02:48:13.280332+00:00",
+      "input_tokens": 1639,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "95df21b836608326970a111b659a9c76682e8b3a154b9c87627cb46018a78bec",
+      "provider_request_id": "req_6f3ea15bce1c451eacdb9cc48d12f488",
+      "request_hash": "1e3b8f2002a555e6336fefd11e33acf00e063ecb875b3c514e3343d5cfdf1db9"
+    },
+    "1ee5b708723bcc44a81ecc6883bac678a1d0a97ed284e10ac0c55a046c9cf6fc": {
+      "counted_at": "2026-09-06T02:17:18.407323+00:00",
+      "input_tokens": 2765,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "dbc8ef178da321c75d39c1a13317e23907242ea636cf8976dcc477a05f545eda",
+      "provider_request_id": "req_c09b7201a4f34024ba61f893156ad888",
+      "request_hash": "1ee5b708723bcc44a81ecc6883bac678a1d0a97ed284e10ac0c55a046c9cf6fc"
+    },
+    "1f1075d3a1ce604fab0a0e69610ac6eb57b98cf9f3e5c8af11e2c31d17b3af56": {
+      "counted_at": "2026-09-06T02:17:37.079871+00:00",
+      "input_tokens": 1667,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "9b1548d710a822a023940d3c139f996e869a78b77d16e6497fa85d52342e6622",
+      "provider_request_id": "req_063300a10d1f4fcc956514dff96a282b",
+      "request_hash": "1f1075d3a1ce604fab0a0e69610ac6eb57b98cf9f3e5c8af11e2c31d17b3af56"
+    },
+    "20a59c64c7229e28b96ec34b9ca56aeda0bc1a9af946c4aadf1bae32373c0a23": {
+      "counted_at": "2026-09-06T02:17:36.079521+00:00",
+      "input_tokens": 2846,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d2a9f138b3066c5a4a5c65e1ba72541afe138a820ad368e26dc1af2e612fa279",
+      "provider_request_id": "req_cf6c11dd013745fc8b0148af80704a19",
+      "request_hash": "20a59c64c7229e28b96ec34b9ca56aeda0bc1a9af946c4aadf1bae32373c0a23"
+    },
+    "220d745ff2497b86ecb728a21ca017f3c24694ac8f5265e86e2acc93eb07d227": {
+      "counted_at": "2026-09-06T02:17:17.759156+00:00",
+      "input_tokens": 2456,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "3d025d7689e0647ea8f42c6b38ac4636238a5a1586f1ceabc5ddad5086a737f5",
+      "provider_request_id": "req_4d6fcca4edd04b869ee8923ec48d74de",
+      "request_hash": "220d745ff2497b86ecb728a21ca017f3c24694ac8f5265e86e2acc93eb07d227"
+    },
+    "241f0ce983ffe805f203be2e5571c9cc379463083b399a67ae07f999d4a3c126": {
+      "counted_at": "2026-09-06T02:17:17.430717+00:00",
+      "input_tokens": 2418,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "ce9cea5c4f1e2c2f3d735a8f39296c1d459422190f90cbab3a513414446ef65a",
+      "provider_request_id": "req_bda1ba1952be46ec8afdc076fdf64552",
+      "request_hash": "241f0ce983ffe805f203be2e5571c9cc379463083b399a67ae07f999d4a3c126"
+    },
+    "24f0e48a6bd21045fff31bdc3104d663e85ea44043ad2c578995df403a60b477": {
+      "counted_at": "2026-09-06T02:48:11.525104+00:00",
+      "input_tokens": 1595,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "aaad864e8b955814fffacaa5e87d7bb40537d6dd733736c6093d0b189fcd07e8",
+      "provider_request_id": "req_15a4ffc0d16c42b38bf0b6d1bb286203",
+      "request_hash": "24f0e48a6bd21045fff31bdc3104d663e85ea44043ad2c578995df403a60b477"
+    },
+    "273524ef73a51c0f9798e04d78334de370ddf5ecb2a0a6cb1802f272e1d7ff8b": {
+      "counted_at": "2026-09-06T02:48:15.617017+00:00",
+      "input_tokens": 1759,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "eb6ac8b4fbdb21adb9a15a6f0bacd83c6fe9bfa080fe74e6519b0c1b67d26699",
+      "provider_request_id": "req_0dfaa5a20ce5497399b61c5a3f0275b1",
+      "request_hash": "273524ef73a51c0f9798e04d78334de370ddf5ecb2a0a6cb1802f272e1d7ff8b"
+    },
+    "285f7863d645c3361d9fc7bb0cae6a8edf15a124b3a904e90a65914b023ebfb0": {
+      "counted_at": "2026-09-06T02:17:48.256552+00:00",
+      "input_tokens": 2813,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "1dd471eb2115161b04b48ccc922f47b2b417d967f24b4839282960b0acbeaf79",
+      "provider_request_id": "req_38d6f35194b542e2afa626c967ec1f08",
+      "request_hash": "285f7863d645c3361d9fc7bb0cae6a8edf15a124b3a904e90a65914b023ebfb0"
+    },
+    "2949a813fb652e449dde86a69efe62e0271059dc389d916bdf7f1740dbe72026": {
+      "counted_at": "2026-09-06T02:48:12.147281+00:00",
+      "input_tokens": 1579,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "a3d24eef65ee1c96ae7cb48b1efad36411ee7d51fe0d325491835274dd1b1715",
+      "provider_request_id": "req_7f7c9c159f0648eb9134df7c398e703c",
+      "request_hash": "2949a813fb652e449dde86a69efe62e0271059dc389d916bdf7f1740dbe72026"
+    },
+    "2b0898e0fc17fb0b4f9528996a56f3b5800cde3eb4565d579e4e307275079652": {
+      "counted_at": "2026-09-06T02:48:13.897834+00:00",
+      "input_tokens": 1629,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "333c3240c096b11ee9e811d97388bd5096bdc8dda5b343f4cc68dd0e22836840",
+      "provider_request_id": "req_de040a5b33164cb89e534e6e765ee4af",
+      "request_hash": "2b0898e0fc17fb0b4f9528996a56f3b5800cde3eb4565d579e4e307275079652"
+    },
+    "2b7e15f7c76aef14fff801e39a5bd8fc9981f92cffe5cd2fe4cfe6787a2aea0f": {
+      "counted_at": "2026-09-06T02:17:20.635502+00:00",
+      "input_tokens": 2592,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "02d3deb4e1dde01cc354541e9c06da8f1987d1d378919f8e8861aabac12f35e8",
+      "provider_request_id": "req_02317d5d9ec3460d9ded9ced14152d3f",
+      "request_hash": "2b7e15f7c76aef14fff801e39a5bd8fc9981f92cffe5cd2fe4cfe6787a2aea0f"
+    },
+    "2cdb1e0897cbf3c919c3f2ce6601344deae09e3089efd319ab655caf26b178d7": {
+      "counted_at": "2026-09-06T02:17:56.821093+00:00",
+      "input_tokens": 2578,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d781ce0fc5b3c1c249112dc3d3c4d473b3da2c83672d27816bad309cfee4258d",
+      "provider_request_id": "req_e9d219267bf34dafbf3132d54c89245f",
+      "request_hash": "2cdb1e0897cbf3c919c3f2ce6601344deae09e3089efd319ab655caf26b178d7"
+    },
+    "354c1f9fe7676c728c650bf7f3c069782223e26bc2aacc0b61aed471973c9fb5": {
+      "counted_at": "2026-09-06T02:17:23.632384+00:00",
+      "input_tokens": 2813,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "aafe9614b4647f57d0ce87ade22bb4d1c66d5d6078432af3a6c0130465a32767",
+      "provider_request_id": "req_c77ef6eb3d304734926061d7df5abef3",
+      "request_hash": "354c1f9fe7676c728c650bf7f3c069782223e26bc2aacc0b61aed471973c9fb5"
+    },
+    "36797db6c017a30041ec3011076ba368fcb485123f7996fb0448b808f0c355b6": {
+      "counted_at": "2026-09-06T02:17:47.606200+00:00",
+      "input_tokens": 1844,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "ea3bb327c7e1a9d963ec9e1e4f41abfd085e952833723498f10d3582a0ba81ab",
+      "provider_request_id": "req_0209915fd11f4dfa8fdcb159ba6577b5",
+      "request_hash": "36797db6c017a30041ec3011076ba368fcb485123f7996fb0448b808f0c355b6"
+    },
+    "37ffc4c14a0383c0138123a971b2ccae37a658bf3092cefbcfd282e3e9ebcae4": {
+      "counted_at": "2026-09-06T02:17:55.269479+00:00",
+      "input_tokens": 2144,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "586295c892baf1043772ca6f7bfa786e780786ec710b43f4afd866a5201b8cd9",
+      "provider_request_id": "req_65068871311d49d18d55c5071ec51f82",
+      "request_hash": "37ffc4c14a0383c0138123a971b2ccae37a658bf3092cefbcfd282e3e9ebcae4"
+    },
+    "39a2281bb1f2628aa9d157e26f9ca0cbf967021bb74a9fd1eecd30e057d02792": {
+      "counted_at": "2026-09-06T02:17:43.927164+00:00",
+      "input_tokens": 2253,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "6f0650a8311037a10b4d2304f11e5c8d6242286c708b4900c4c0ef8601bc9324",
+      "provider_request_id": "req_5b5163461e7c4d00bdccaec44dd22b98",
+      "request_hash": "39a2281bb1f2628aa9d157e26f9ca0cbf967021bb74a9fd1eecd30e057d02792"
+    },
+    "39f86fec8ba1fa4d1faa3b3ff38250d4927d80da84b3e83f7147e9e401937a13": {
+      "counted_at": "2026-09-06T02:17:41.578693+00:00",
+      "input_tokens": 2456,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "1eded61db29e2f71a15dcd0fab30c5fec3bf56658e59f1b0c29b465e3cff0e62",
+      "provider_request_id": "req_24d1bf0ffc394a0e8c5cc3f3a4dc9028",
+      "request_hash": "39f86fec8ba1fa4d1faa3b3ff38250d4927d80da84b3e83f7147e9e401937a13"
+    },
+    "3af9da059b834de2759474933c4395629443035ac99b7947523e73cedf1b2dce": {
+      "counted_at": "2026-09-06T02:17:22.599545+00:00",
+      "input_tokens": 1841,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "b00fc11ed636221349edc25e51001468e8a6fb7c7b8910c9e5b0c53cabfd721b",
+      "provider_request_id": "req_cda2f33f2e3743ff95f815a19c58c273",
+      "request_hash": "3af9da059b834de2759474933c4395629443035ac99b7947523e73cedf1b2dce"
+    },
+    "3b27bcf56b2062134d681e4153846cc6dd7af30fa4a90c287de3c78334a0d805": {
+      "counted_at": "2026-09-06T02:17:44.250266+00:00",
+      "input_tokens": 2592,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "41f076b7745f7fc720956f1d59ea41dbcb0002e94dbead6c7ffe4ad9476cf780",
+      "provider_request_id": "req_b427a747b1744c4eb9f596c8684b8a3a",
+      "request_hash": "3b27bcf56b2062134d681e4153846cc6dd7af30fa4a90c287de3c78334a0d805"
+    },
+    "3b9a49bd94131dc25f100866c04fefd3438da9e6437faf9ef8a535d0dde6dfdc": {
+      "counted_at": "2026-09-06T02:17:15.973021+00:00",
+      "input_tokens": 2009,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d4da77cb0a48752eb1b2beeb20a94b99bbd709699ad09f6f5d1dc540cb6f828a",
+      "provider_request_id": "req_400d05cadfee4c6ca4933f550254132d",
+      "request_hash": "3b9a49bd94131dc25f100866c04fefd3438da9e6437faf9ef8a535d0dde6dfdc"
+    },
+    "3edc195823ddeec0e94e45749c34c8ddc5c285987f7bc89e19f30689c77eb74a": {
+      "counted_at": "2026-09-06T02:17:45.867788+00:00",
+      "input_tokens": 2590,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e635985df229be3180d378fcc5d5e7afbbd8cb8372aaad02ce4efe16f3d4ffa3",
+      "provider_request_id": "req_e8ba8b3fd3ba466b8c0e8441e075a558",
+      "request_hash": "3edc195823ddeec0e94e45749c34c8ddc5c285987f7bc89e19f30689c77eb74a"
+    },
+    "4192e54561669f0744c9bda3c3cf64903c6eac80482486ced311d0ce83e69510": {
+      "counted_at": "2026-09-06T02:17:48.614179+00:00",
+      "input_tokens": 2882,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "cdae8264d99f499d01bbaa7a761a64c0fd5c066790c9263a5e12b135439918fc",
+      "provider_request_id": "req_6179ea5d13bc44f7b4497e0737084f6d",
+      "request_hash": "4192e54561669f0744c9bda3c3cf64903c6eac80482486ced311d0ce83e69510"
+    },
+    "41caa2dd7bc4e03ba1742c27999c4eb0bace8f0e906ae067ed4425dd628a7a33": {
+      "counted_at": "2026-09-06T02:17:38.045063+00:00",
+      "input_tokens": 2047,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "157ceac968e4de504f8690ba097b39937df1e7de7671b388e59bbc95c8a1b7d8",
+      "provider_request_id": "req_0f3c9d8814694fbb87288320250f7d1e",
+      "request_hash": "41caa2dd7bc4e03ba1742c27999c4eb0bace8f0e906ae067ed4425dd628a7a33"
+    },
+    "4431c1cc60e4484763cacb241b01df1d41028d6f2d6dc4dfdda277028ee9db1b": {
+      "counted_at": "2026-09-06T02:48:09.508792+00:00",
+      "input_tokens": 1717,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "1fdee97046ec9eb1622a2e594973f479dc91dfb0870b0ded31a618a70dbff1be",
+      "provider_request_id": "req_afa2854141bb42d58a56e94f0c6402c9",
+      "request_hash": "4431c1cc60e4484763cacb241b01df1d41028d6f2d6dc4dfdda277028ee9db1b"
+    },
+    "4a754314f0a9d71de7734097ce530cf8890f1194d682483c028cbb2dd60361f0": {
+      "counted_at": "2026-09-06T02:17:41.939004+00:00",
+      "input_tokens": 2727,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e335fd374b873606be4f0c7cf743e0b05f59e254df9e94fb374e81337e10d92c",
+      "provider_request_id": "req_6a618a6fd8204e8f947d74416ec3a836",
+      "request_hash": "4a754314f0a9d71de7734097ce530cf8890f1194d682483c028cbb2dd60361f0"
+    },
+    "4b6151e2fb51b5597a9a214a5d7c7f843c65054b3935f6ccd3d570019d0ed716": {
+      "counted_at": "2026-09-06T02:17:53.134170+00:00",
+      "input_tokens": 1494,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "9058787968124e67f522810938b02350a4319a964c1a1fa25883e5fb4d07c757",
+      "provider_request_id": "req_0a728d72459447bebc36d1db7b7aa5d4",
+      "request_hash": "4b6151e2fb51b5597a9a214a5d7c7f843c65054b3935f6ccd3d570019d0ed716"
+    },
+    "4c99d38bffb3ebee744688fd79fcaae89972ee71acb70e9b64771366f758b20b": {
+      "counted_at": "2026-09-06T02:48:10.446821+00:00",
+      "input_tokens": 1687,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "a0d771daa63477866dc5ddb2833e1d0f352003626fb5d8484a8bb85dfdbcb553",
+      "provider_request_id": "req_55df5f30ef1b40b0aadd6871122c0b98",
+      "request_hash": "4c99d38bffb3ebee744688fd79fcaae89972ee71acb70e9b64771366f758b20b"
+    },
+    "4d7ccbdef69e3a842f492713fcc3c9e8451b35997531580c0b11a3c0a79b9703": {
+      "counted_at": "2026-09-06T02:17:48.953425+00:00",
+      "input_tokens": 1887,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "b45fb7881e5f18f222a25ec924125e3db11a12ad8ee23423ccc45381830c3de1",
+      "provider_request_id": "req_1f0852e4b2764fd5b9b464a3fd848152",
+      "request_hash": "4d7ccbdef69e3a842f492713fcc3c9e8451b35997531580c0b11a3c0a79b9703"
+    },
+    "50a33c7e46185585e21b9289a4cad1954c86c5e4e740eab45ff978d0f1fd3adb": {
+      "counted_at": "2026-09-06T02:17:19.910714+00:00",
+      "input_tokens": 1783,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "dd017e8e5514e012139df7fd891475bbe2d16d506df7df502334de2bc068eaeb",
+      "provider_request_id": "req_3d4a45838e6f4a6189cc4d55b73a1de2",
+      "request_hash": "50a33c7e46185585e21b9289a4cad1954c86c5e4e740eab45ff978d0f1fd3adb"
+    },
+    "513f184bbf0c5b7f8c88f334b4c2a25f4d248e1bdcd3df11056e4b9fbacf314b": {
+      "counted_at": "2026-09-06T02:17:25.441755+00:00",
+      "input_tokens": 1888,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "f2cf3fc410d8b99b4d6befaf50ee13f3de987f2c3cb8d071ca9f2c315f0a8d7d",
+      "provider_request_id": "req_2936bb6572034468915b058ca0d4825b",
+      "request_hash": "513f184bbf0c5b7f8c88f334b4c2a25f4d248e1bdcd3df11056e4b9fbacf314b"
+    },
+    "52f22b21add8b0b179a6c2b611f154327c538c23c9cefab7d1b5492aa0e0014a": {
+      "counted_at": "2026-09-06T02:48:12.965885+00:00",
+      "input_tokens": 1703,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "82c8493fcba66b20c6eef90febdfff01a85017e46279de5295b7f79d89035beb",
+      "provider_request_id": "req_57ae7307ece145958141d1bd2b516841",
+      "request_hash": "52f22b21add8b0b179a6c2b611f154327c538c23c9cefab7d1b5492aa0e0014a"
+    },
+    "53e0e30ea37550e9285ba31c985b06eeee582b826c735c0adf5aadae935611a5": {
+      "counted_at": "2026-09-06T02:17:26.661478+00:00",
+      "input_tokens": 2997,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "06c190dac11d47df9dc808ef213737b1085247f3c70bcc1e311141471f9fedca",
+      "provider_request_id": "req_e7c90395a16d4948bed098156e93a0b4",
+      "request_hash": "53e0e30ea37550e9285ba31c985b06eeee582b826c735c0adf5aadae935611a5"
+    },
+    "5445fd0af51f842cc7fb85879a3bca04465eaba3038840c17e852245f05355c2": {
+      "counted_at": "2026-09-06T02:17:19.472363+00:00",
+      "input_tokens": 1623,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "fe45b4f6acde928bb796a9f49d80656d40c69912ddf83d55b6242a07c72d4fe1",
+      "provider_request_id": "req_ef1c7de959ae4bc5b64a2f45cb5775c4",
+      "request_hash": "5445fd0af51f842cc7fb85879a3bca04465eaba3038840c17e852245f05355c2"
+    },
+    "54b4557de838c0d74534c4a5622c9d4ed95ccd9f61cfa32252a9bc5c7a6f92e7": {
+      "counted_at": "2026-09-06T02:17:57.963711+00:00",
+      "input_tokens": 2581,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "93c37194218af54cb807d9b7a0ec03c16266ad809d4a35d746be38daace22f61",
+      "provider_request_id": "req_241e2998ad754ce7a762f5debc217cfc",
+      "request_hash": "54b4557de838c0d74534c4a5622c9d4ed95ccd9f61cfa32252a9bc5c7a6f92e7"
+    },
+    "567fa4d83ad3452f22d7ef569d25d2083d3bd1d2213c5838875d2036309a4de4": {
+      "counted_at": "2026-09-06T02:17:47.947690+00:00",
+      "input_tokens": 2484,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "0da01c9792d34b1491a15f0f2d99cda9ae09b6ec0a7fba98d52a20019ffcce2c",
+      "provider_request_id": "req_3fe7e2035caf42e18ed1c091ff940c0a",
+      "request_hash": "567fa4d83ad3452f22d7ef569d25d2083d3bd1d2213c5838875d2036309a4de4"
+    },
+    "56d65552894bbf5b2cf7b4a350d222b63df14df5b68b3220265b25258cb21916": {
+      "counted_at": "2026-09-06T02:17:27.401658+00:00",
+      "input_tokens": 2998,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "81b1d955bab6568ea06cefd4f4769ec705614b7d239ad6b5b5b21e324758d635",
+      "provider_request_id": "req_0c989e59ee6f4583ae6f5b1b0684d227",
+      "request_hash": "56d65552894bbf5b2cf7b4a350d222b63df14df5b68b3220265b25258cb21916"
+    },
+    "5742c2d4cc311dfc8f23678cf2612b1e519ac54bc58e6773b5d4e454a8ea7687": {
+      "counted_at": "2026-09-06T02:17:20.948624+00:00",
+      "input_tokens": 2757,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "6d870f59ff8933845e3c7c9bc9987e148aea23e94909af7222491844f140d89e",
+      "provider_request_id": "req_a0dee58546ff4c389495a178880802e0",
+      "request_hash": "5742c2d4cc311dfc8f23678cf2612b1e519ac54bc58e6773b5d4e454a8ea7687"
+    },
+    "57c7f2ff8429a23862f6e52d53a8cde49d108d72e94c8de9a0e2f4ca18ffb5a5": {
+      "counted_at": "2026-09-06T02:17:52.801428+00:00",
+      "input_tokens": 1491,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "644ab3004a8d6fd46b50bf30d86b3034ffddc2d6b3b8fb66e8a0fac7b2f6ffb4",
+      "provider_request_id": "req_57b2c181a8ae4ee78d501452cb529c74",
+      "request_hash": "57c7f2ff8429a23862f6e52d53a8cde49d108d72e94c8de9a0e2f4ca18ffb5a5"
+    },
+    "580381069af9e59787df30a9964ea509999fd645bcbf329b1bb99415412b1dd1": {
+      "counted_at": "2026-09-06T02:48:08.547678+00:00",
+      "input_tokens": 1755,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "24296f5d83702a596060f85938b19c237cc6dcb6474b0213743223800724cfa4",
+      "provider_request_id": "req_fe8dc55db1a74b84b52c25974c1865d2",
+      "request_hash": "580381069af9e59787df30a9964ea509999fd645bcbf329b1bb99415412b1dd1"
+    },
+    "5a41bd487f0ea01f6eac82b962844ed975fb18ae629f2c60d15af2791c0fc05a": {
+      "counted_at": "2026-09-06T02:17:27.755265+00:00",
+      "input_tokens": 3377,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "02aadc35a8a63ca4c39c36bc87c925593d619088b3bae6a36dc989e78519282c",
+      "provider_request_id": "req_c22fe039a9ed4bcba7c7c49bb2096f05",
+      "request_hash": "5a41bd487f0ea01f6eac82b962844ed975fb18ae629f2c60d15af2791c0fc05a"
+    },
+    "5d414ac922b29539899b3a451cdc02a8fcdd0113e60e4510c9739a56b9341d41": {
+      "counted_at": "2026-09-06T02:17:14.707369+00:00",
+      "input_tokens": 1633,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "31627a75354551c4b4eadd51e880d7341158b6d5330813692f285fc22108e01b",
+      "provider_request_id": "req_bb22c76abd3d41a1b80e7a32c5d51ddd",
+      "request_hash": "5d414ac922b29539899b3a451cdc02a8fcdd0113e60e4510c9739a56b9341d41"
+    },
+    "64ecdfffba3e72fa6103e6ed7cb2fa8dc98103d8d4fb748e8bd0b1f1e89aa8e4": {
+      "counted_at": "2026-09-06T02:17:39.309721+00:00",
+      "input_tokens": 2418,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "bb2e566e0cde0b06ae1465bf351bf4aa5a7f30807a063e1a2ae0cd6372016d57",
+      "provider_request_id": "req_849b80c144f24c4d9925a314aa2a555d",
+      "request_hash": "64ecdfffba3e72fa6103e6ed7cb2fa8dc98103d8d4fb748e8bd0b1f1e89aa8e4"
+    },
+    "68ee541dd3188ffb09fc7e2442b10a6c6ea04385af3698a16a7ea2a70de2bedf": {
+      "counted_at": "2026-09-06T02:17:46.249940+00:00",
+      "input_tokens": 1390,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "272675837aa6d88c7f99ca1f821d19ea1051aa129e05eb812082e38a288466b1",
+      "provider_request_id": "req_261e7f2779484cef87819bb2b056a257",
+      "request_hash": "68ee541dd3188ffb09fc7e2442b10a6c6ea04385af3698a16a7ea2a70de2bedf"
+    },
+    "6af2422122bc588713fc0280ac674cf69b1a8813ee63760f233f9d7bb7b20430": {
+      "counted_at": "2026-09-06T02:48:08.138430+00:00",
+      "input_tokens": 1700,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "03477fcf2f53d2c0c8ebf71f547b7731085fddf50bb785c64c0e4353a5d7ec62",
+      "provider_request_id": "req_391d9ab1eef347b8a483e0106a96eba6",
+      "request_hash": "6af2422122bc588713fc0280ac674cf69b1a8813ee63760f233f9d7bb7b20430"
+    },
+    "6b9d795e16b3b3a39ad9381388845cc9badc499a2dcc501505d38f3f54ab06c9": {
+      "counted_at": "2026-09-06T02:48:08.952150+00:00",
+      "input_tokens": 1765,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "ef4a257001f456ed35640a57682e5810b23df5257355fcc1b8bc14786d64d4f3",
+      "provider_request_id": "req_a4b3510b5dcc45e68faa18be3e444a7a",
+      "request_hash": "6b9d795e16b3b3a39ad9381388845cc9badc499a2dcc501505d38f3f54ab06c9"
+    },
+    "711d4835ccad2dc51d20560cc553f184818377a4d22aa34472079db0e81d2b41": {
+      "counted_at": "2026-09-06T02:17:32.408586+00:00",
+      "input_tokens": 2414,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "81c3eba06bbbc9ef8a02f77a653ea70ba51ce2f2766d1fcf412291a8941d5f6f",
+      "provider_request_id": "req_439560462ef541eba543055a45413ee8",
+      "request_hash": "711d4835ccad2dc51d20560cc553f184818377a4d22aa34472079db0e81d2b41"
+    },
+    "727928978b4f8ce41cf6386b5626e90ed5cf917e0fb03a42829c7247704f9f1c": {
+      "counted_at": "2026-09-06T02:17:30.631203+00:00",
+      "input_tokens": 2141,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "04f1467ae9ca2ff0edf0ed4b23399679dc7fb657efa8d98c6dc3a36c2e87239a",
+      "provider_request_id": "req_e71268099b2b44009add18bc0cabdae6",
+      "request_hash": "727928978b4f8ce41cf6386b5626e90ed5cf917e0fb03a42829c7247704f9f1c"
+    },
+    "763604bf82ba6740617c0a8ade6e93f775c43a3d75a3809613a4fee279c2ceaf": {
+      "counted_at": "2026-09-06T02:17:54.318909+00:00",
+      "input_tokens": 1747,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e76316d551fd5282112f7bf9c48cb84112d887b5148bed760bbb6713c5affb40",
+      "provider_request_id": "req_c320db660b1b4323a3da6748984e905c",
+      "request_hash": "763604bf82ba6740617c0a8ade6e93f775c43a3d75a3809613a4fee279c2ceaf"
+    },
+    "787989c2807345694b913c0f737055214312b21c0bbcc8a188c9bb7ce83a7d67": {
+      "counted_at": "2026-09-06T02:17:51.807473+00:00",
+      "input_tokens": 2998,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "3c0f8ee0444e20e5e515abadcafd35c5f1928d4431dd1bd437984181c67a33ec",
+      "provider_request_id": "req_8705dd1d1266414a8622f46f9a49fab0",
+      "request_hash": "787989c2807345694b913c0f737055214312b21c0bbcc8a188c9bb7ce83a7d67"
+    },
+    "7d73590a48dcbbed78b5302c8c8d28183e6fb36b62d80bc9348ba07c2a871211": {
+      "counted_at": "2026-09-06T02:17:24.006031+00:00",
+      "input_tokens": 2882,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "84bc358e360b1907303d7a899e90417b7713aa98964881da53b42da312a20e6d",
+      "provider_request_id": "req_d7666950b39841e793b32bad3d35d640",
+      "request_hash": "7d73590a48dcbbed78b5302c8c8d28183e6fb36b62d80bc9348ba07c2a871211"
+    },
+    "7d990aab8f3bf0a0fbd1e6ee2595ae3ebe26bc521434300c5d5efb061fd2ac02": {
+      "counted_at": "2026-09-06T02:17:50.029444+00:00",
+      "input_tokens": 1888,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "76d650a132ebe6ef9e9b35120e364e9ae19cc4c1c0cd92da6bb346d396c82720",
+      "provider_request_id": "req_12c678c1960c425e92ccde6da42012bb",
+      "request_hash": "7d990aab8f3bf0a0fbd1e6ee2595ae3ebe26bc521434300c5d5efb061fd2ac02"
+    },
+    "81dd40a5a9e7bd22118e56f5f24244178f3f89c39da642319fe1a2e9e5df136a": {
+      "counted_at": "2026-09-06T02:48:11.207313+00:00",
+      "input_tokens": 1593,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "c703bb2941e31878c2303367c3cb88b58754838e69524f052d6cdfd589e97ca0",
+      "provider_request_id": "req_24616318656b4b488f82c4077c5ae12e",
+      "request_hash": "81dd40a5a9e7bd22118e56f5f24244178f3f89c39da642319fe1a2e9e5df136a"
+    },
+    "831e2f45ac3010d48ad77110aa9b72e5a7b4b99b26198110780b30cc2c08e711": {
+      "counted_at": "2026-09-06T02:17:15.064253+00:00",
+      "input_tokens": 1667,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "f7ec5ef22bacaebe7a9e172f50b6c228261aeed6900e0c2ee723afbe69fe0906",
+      "provider_request_id": "req_2aa24db8e0a44fa8a902fd559e4e3b80",
+      "request_hash": "831e2f45ac3010d48ad77110aa9b72e5a7b4b99b26198110780b30cc2c08e711"
+    },
+    "840fd7d75fc542195955a8470b9fd2e5b1141fbb88f9c53f929ac97fe362c8a0": {
+      "counted_at": "2026-09-06T02:17:22.963313+00:00",
+      "input_tokens": 1844,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "a71f53895e59d0b9e4325deae7838f5bdf9d0379d729d03dc3538495c4b7a7f4",
+      "provider_request_id": "req_398d36f4f8344e169fff32232e631b7d",
+      "request_hash": "840fd7d75fc542195955a8470b9fd2e5b1141fbb88f9c53f929ac97fe362c8a0"
+    },
+    "84acdbf1578e1e86b0c6f42e5dd1397da193d9597353be82d425fa403fce26c8": {
+      "counted_at": "2026-09-06T02:48:07.526348+00:00",
+      "input_tokens": 1748,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "5e60ec81144398dd87e6b016f58d8be2b2b24ee231071b79515c68f42a00eff1",
+      "provider_request_id": "req_8997c092ad954ce9ab75ed2b62512b6a",
+      "request_hash": "84acdbf1578e1e86b0c6f42e5dd1397da193d9597353be82d425fa403fce26c8"
+    },
+    "872faf744eaf9b1be5c4389e4be23327f5b33d6e247aecdbaf6218741e0af060": {
+      "counted_at": "2026-09-06T02:17:46.907696+00:00",
+      "input_tokens": 1695,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "18311d6d97fd430ef016a6667951f9b79ff520f8f681213056ae92aa770c2ff3",
+      "provider_request_id": "req_4464b934b6204f8487e1280a1b5fbefa",
+      "request_hash": "872faf744eaf9b1be5c4389e4be23327f5b33d6e247aecdbaf6218741e0af060"
+    },
+    "87a1eabc797afecdbf670330f89e0e86b783d0815e66063a64235ddcc8bd90ce": {
+      "counted_at": "2026-09-06T02:17:28.783756+00:00",
+      "input_tokens": 1494,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "34d5aec8b26a71ef4981c8fc55304b77c335cc7d1d7ca8b649eaf04026ad527b",
+      "provider_request_id": "req_d476edf0b5de4a75942cba417a18f578",
+      "request_hash": "87a1eabc797afecdbf670330f89e0e86b783d0815e66063a64235ddcc8bd90ce"
+    },
+    "8ab535fc011730ae2b28e76f326a7d4c0fa5e8069aa13d881c740a2478460d75": {
+      "counted_at": "2026-09-06T02:48:16.011937+00:00",
+      "input_tokens": 1670,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "bd00be6a9670768c19b9005e2d308a11aac4043345e7c6a6e2cc3950c2be8cf4",
+      "provider_request_id": "req_7599381f66be4b0da2fb783447f802ce",
+      "request_hash": "8ab535fc011730ae2b28e76f326a7d4c0fa5e8069aa13d881c740a2478460d75"
+    },
+    "94552d32548c555f6b3ec285fb73a187a0075caffd73548943fe1e551c856076": {
+      "counted_at": "2026-09-06T02:17:32.028701+00:00",
+      "input_tokens": 2013,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "b3c57b2b6d9b1f3169581b49cb72f785d4c68ca346b682c4189ec0f1cd5bc8f5",
+      "provider_request_id": "req_2f771ceddd0d4f5694b0d3746db155fe",
+      "request_hash": "94552d32548c555f6b3ec285fb73a187a0075caffd73548943fe1e551c856076"
+    },
+    "9557901617daf95a0397aaa31c4864b50bea9b629d7cbe788847dd324955d565": {
+      "counted_at": "2026-09-06T02:17:16.294337+00:00",
+      "input_tokens": 2047,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "fad460592092ee2712c5c605800c5e30cbd26bc59a31a24a49961b7733e0f537",
+      "provider_request_id": "req_4d487ae2fd994547babbbb85f1aad50b",
+      "request_hash": "9557901617daf95a0397aaa31c4864b50bea9b629d7cbe788847dd324955d565"
+    },
+    "98d778feca8818585e2e693bb9c119126cba3bb6f9bc0c840ee6a8e2f2686fc8": {
+      "counted_at": "2026-09-06T02:17:32.801009+00:00",
+      "input_tokens": 2417,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "7cffe48f7a7e24845c6f842982a12493f9394bfd7ac95c4c66d83c6f02f503cb",
+      "provider_request_id": "req_a90dbc4f04e3454b99255d46d1f19a5b",
+      "request_hash": "98d778feca8818585e2e693bb9c119126cba3bb6f9bc0c840ee6a8e2f2686fc8"
+    },
+    "9945cdbb93f4eb7fe1d05d89ff8d4f939e8f5651f78a03e572ef8e94f6df8d9b": {
+      "counted_at": "2026-09-06T02:17:56.119981+00:00",
+      "input_tokens": 2414,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e65cdfe634916298bf3fbfb167f5352a8ba88756e3cb59cd237e82b76f0b64d3",
+      "provider_request_id": "req_26753085cbfe4cc8862f575ad6235d48",
+      "request_hash": "9945cdbb93f4eb7fe1d05d89ff8d4f939e8f5651f78a03e572ef8e94f6df8d9b"
+    },
+    "9b21e7546cb1da196d5b9d4a784bdd26d57c4eff550a574d4c63c68ad4dcb6be": {
+      "counted_at": "2026-09-06T02:17:54.648030+00:00",
+      "input_tokens": 1750,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "65a141abfe896bc0f2f7784737ca5a2abc8195c302397d1ffebdd9a12e92d02b",
+      "provider_request_id": "req_85f325c304834df9bf6adefa88fdb580",
+      "request_hash": "9b21e7546cb1da196d5b9d4a784bdd26d57c4eff550a574d4c63c68ad4dcb6be"
+    },
+    "9c0db5174d1b43c6d464f9f57ca2863eaf13389d4e0c6e32aad315d089597775": {
+      "counted_at": "2026-09-06T02:48:06.287616+00:00",
+      "input_tokens": 1561,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "a18c9cb505bd0b81a6b9e6bb8c7ae732d1f59cc7328140b431e3e6c47cfb3cb2",
+      "provider_request_id": "req_93b1c1c27ef040e6a95213a39f78ad5e",
+      "request_hash": "9c0db5174d1b43c6d464f9f57ca2863eaf13389d4e0c6e32aad315d089597775"
+    },
+    "9ec4fca6d1aaac95a2547c25656a7cf692aba91753dc32cb893409cfdfc4e813": {
+      "counted_at": "2026-09-06T02:17:52.170438+00:00",
+      "input_tokens": 3377,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "2498fba8c37b2ae4dc4979324b6a465fea478732b234622133dcf12788f2166b",
+      "provider_request_id": "req_c8c2cb5a74df45a78d5a77df27ff0cb9",
+      "request_hash": "9ec4fca6d1aaac95a2547c25656a7cf692aba91753dc32cb893409cfdfc4e813"
+    },
+    "9f9180ae2e9fff0832549ddb62cb45c874304712cb6e6f42cfd2d0e23b04a346": {
+      "counted_at": "2026-09-06T02:48:17.329742+00:00",
+      "input_tokens": 1617,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "dea962a6c3ec8c500e16e3b1f095732bce3072c5c3742364af574320313d64c9",
+      "provider_request_id": "req_ad884f4077fc40d0926ec0b9ae8241c0",
+      "request_hash": "9f9180ae2e9fff0832549ddb62cb45c874304712cb6e6f42cfd2d0e23b04a346"
+    },
+    "a53f8544142f679823af61719cab0302d2034dd965d07a0c857865c1dbac97f9": {
+      "counted_at": "2026-09-06T02:17:47.267116+00:00",
+      "input_tokens": 1841,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "f76cb516dea72e216fe2c10c2b964aee4394af3d85085b8fdc8b3fcb730f6bca",
+      "provider_request_id": "req_cd205084d61e48598492495787c7979f",
+      "request_hash": "a53f8544142f679823af61719cab0302d2034dd965d07a0c857865c1dbac97f9"
+    },
+    "a560200aa41427c0228c807ba31f0863d50890ed1375d0ddd4c90dd57e7e5935": {
+      "counted_at": "2026-09-06T02:48:15.308617+00:00",
+      "input_tokens": 1732,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "4ee2b068421d3a218d876172668db7ee92cd999c66866adfd3a61a53d688d61b",
+      "provider_request_id": "req_1f48261d0e184fac86c2ee89fdb0c9da",
+      "request_hash": "a560200aa41427c0228c807ba31f0863d50890ed1375d0ddd4c90dd57e7e5935"
+    },
+    "a58e8b02510181586fefd872f7b9de3db141d63e784e87574c11605b04017f75": {
+      "counted_at": "2026-09-06T02:17:50.359325+00:00",
+      "input_tokens": 2895,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "0292b5ec44759f0a7d64ec59019c3b68db483123bfd786dc1b1c62ca8c097015",
+      "provider_request_id": "req_d083052ea56941f9ba3cb9d343a770be",
+      "request_hash": "a58e8b02510181586fefd872f7b9de3db141d63e784e87574c11605b04017f75"
+    },
+    "a5bc2e6bb9b85c8a1e104d81b11c5037a9b3fb8347f3dbd5da34182d38ab89b2": {
+      "counted_at": "2026-09-06T02:48:13.597850+00:00",
+      "input_tokens": 1730,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "725a6d905ed3b4fe899a916e4a017f310b954367096aef019148898df86ce0de",
+      "provider_request_id": "req_992a00ffe029418a84a661ac5f948d21",
+      "request_hash": "a5bc2e6bb9b85c8a1e104d81b11c5037a9b3fb8347f3dbd5da34182d38ab89b2"
+    },
+    "a6b427a7a0099b00d8b3dfe9ac675d0544df350bd0653fb2f5ebc518c73a9c23": {
+      "counted_at": "2026-09-06T02:17:46.574151+00:00",
+      "input_tokens": 1629,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "ebfc6447335918768c67a151b8dfc17ec1546ee148cf28d103be3d75c659784d",
+      "provider_request_id": "req_6ccd24489a074b1a98f1281199b299ba",
+      "request_hash": "a6b427a7a0099b00d8b3dfe9ac675d0544df350bd0653fb2f5ebc518c73a9c23"
+    },
+    "a7453e84c763ae074a3ac02fc49ae01b18c9c3570adf2f8d1e6ee981b207879e": {
+      "counted_at": "2026-09-06T02:17:22.277453+00:00",
+      "input_tokens": 1695,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "759c3ffc1a50ae905b01c024fe7e514031bd23727a1740f61d86624ee0b2db46",
+      "provider_request_id": "req_4a407607992745f79627927e96e1e2e3",
+      "request_hash": "a7453e84c763ae074a3ac02fc49ae01b18c9c3570adf2f8d1e6ee981b207879e"
+    },
+    "a949d8fe1c25d7fd5ae7b582986582ae77cdb1bf9351ecb9366abda21b96eccb": {
+      "counted_at": "2026-09-06T02:17:37.691478+00:00",
+      "input_tokens": 2009,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "adad3b7c84ad0df65a043410f93ebb50b2bed1611a58393f3307d0164b13804b",
+      "provider_request_id": "req_36cced0c3d344cc8b88fd5404f8c36ff",
+      "request_hash": "a949d8fe1c25d7fd5ae7b582986582ae77cdb1bf9351ecb9366abda21b96eccb"
+    },
+    "aa8bf79eaffba4f38658bef19feafed191939767978a2a1be7c3c86449419a24": {
+      "counted_at": "2026-09-06T02:17:49.400763+00:00",
+      "input_tokens": 1888,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "cf013064f10ec6c6211ce966eaf161c9baf57bebc10479f1197ef3cc77751a41",
+      "provider_request_id": "req_3e5cf439b2ce4961859e91e1067b47ea",
+      "request_hash": "aa8bf79eaffba4f38658bef19feafed191939767978a2a1be7c3c86449419a24"
+    },
+    "ad3435ac8cedda976a9ab96ccfb3375453935cdd86fa0252681b6b5acd487b72": {
+      "counted_at": "2026-09-06T02:17:42.896586+00:00",
+      "input_tokens": 2990,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "5d265e92d7fa58e364ad05bb6abf7ecacff1de89a1ad18bbf96b65f90d194633",
+      "provider_request_id": "req_d4ae6fa7ed9140f099f92322b44c295f",
+      "request_hash": "ad3435ac8cedda976a9ab96ccfb3375453935cdd86fa0252681b6b5acd487b72"
+    },
+    "ad4882666782fa64bd3bff8818d892088013927967e739779b3062582a85c919": {
+      "counted_at": "2026-09-06T02:17:38.371949+00:00",
+      "input_tokens": 2175,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "dc789137b14f78079cec5db28a664bb824034bb4f19f6a1ec19a5db200f937b7",
+      "provider_request_id": "req_5e4ad13ef185469e9859934a51c30c9b",
+      "request_hash": "ad4882666782fa64bd3bff8818d892088013927967e739779b3062582a85c919"
+    },
+    "ae23e0e4fa767a6c47ccc77b74c15ab4fd809fa95456427cb7239cb80b8e3799": {
+      "counted_at": "2026-09-06T02:17:14.372920+00:00",
+      "input_tokens": 1595,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "f51383e10fd400ee7dd684d4cfd0fc83440ec3b94307f08e4c9e5526c4bc8e2a",
+      "provider_request_id": "req_8e215669e9414d84922a5f79e41ab8c2",
+      "request_hash": "ae23e0e4fa767a6c47ccc77b74c15ab4fd809fa95456427cb7239cb80b8e3799"
+    },
+    "aef3cfeeccb7fb233dd220937aa1dea8e96f9f158fec75ca5ee8bf51cb4a16ab": {
+      "counted_at": "2026-09-06T02:48:09.828223+00:00",
+      "input_tokens": 1682,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "de013214b1cdcd3c0c7c28a1d781a85b746228bcf17720ae99cfe2cf51cc5da2",
+      "provider_request_id": "req_d94ae26ecd2646f3aa469a84ac654a40",
+      "request_hash": "aef3cfeeccb7fb233dd220937aa1dea8e96f9f158fec75ca5ee8bf51cb4a16ab"
+    },
+    "aef89426119580ea15c09400c0607ec9ef51e60e5cee40acb6122852ee5d04c5": {
+      "counted_at": "2026-09-06T02:17:19.150544+00:00",
+      "input_tokens": 2990,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "caacf11a9e046ef0fea172c8dfa82a7e20b9c8095c71f59c13e1fb42179d3344",
+      "provider_request_id": "req_d12cf026004f42b7b8fb8e3a16a59e07",
+      "request_hash": "aef89426119580ea15c09400c0607ec9ef51e60e5cee40acb6122852ee5d04c5"
+    },
+    "b084d02e13280ca1dfca6e89c2918aefd19adaac904207302af0ef2a2451fff1": {
+      "counted_at": "2026-09-06T02:17:28.480635+00:00",
+      "input_tokens": 1491,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "c32699f08258972c5a2d888fafedbf4a132393ccf12ff6a9668d7aebd12c6b3e",
+      "provider_request_id": "req_8af3407ec6d740788deb32ed84cff561",
+      "request_hash": "b084d02e13280ca1dfca6e89c2918aefd19adaac904207302af0ef2a2451fff1"
+    },
+    "b093c9edc539aeecc0e28553df01a361d30009e07d3792a213c6d2918994a14e": {
+      "counted_at": "2026-09-06T02:17:18.748803+00:00",
+      "input_tokens": 2952,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "0dbb283e8daff4b62a44a1a8792b4462cff796e7ea8360942323f83f4cde2498",
+      "provider_request_id": "req_3dba1bae84024be88bbad189c0e0465e",
+      "request_hash": "b093c9edc539aeecc0e28553df01a361d30009e07d3792a213c6d2918994a14e"
+    },
+    "b1e7f80dc2565cb4724ce700fafb4ee6053396ee2da00a720088700a9a39e080": {
+      "counted_at": "2026-09-06T02:17:17.037463+00:00",
+      "input_tokens": 2213,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "38deecabda51ceda6e43937fc03e936889617877f0554a1cb43f5c33d6592aaa",
+      "provider_request_id": "req_8b18c8cc81254911b27eefc728ff88f0",
+      "request_hash": "b1e7f80dc2565cb4724ce700fafb4ee6053396ee2da00a720088700a9a39e080"
+    },
+    "b3b3da5ff06955e1a2ada01b4172cf26f67fb7c4154ce82ba0970a92e03ed4f9": {
+      "counted_at": "2026-09-06T02:17:21.255426+00:00",
+      "input_tokens": 2590,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "aae65e39a7ceefb6acf935c2d0196718c58180d610273624c1be2d626c4e6424",
+      "provider_request_id": "req_fc32309cf24b44abb8dccc3fe8a914a1",
+      "request_hash": "b3b3da5ff06955e1a2ada01b4172cf26f67fb7c4154ce82ba0970a92e03ed4f9"
+    },
+    "b99114b41ce767e129970999153034a83f2d25d79a7c51fccf4916e958849c1c": {
+      "counted_at": "2026-09-06T02:17:30.330224+00:00",
+      "input_tokens": 1750,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "11bc48df111046ad8ac2090f20abfe4ca4163a1f9243d40f96b575b5c6951413",
+      "provider_request_id": "req_514c48a579e04658aec66c5f08ce3a45",
+      "request_hash": "b99114b41ce767e129970999153034a83f2d25d79a7c51fccf4916e958849c1c"
+    },
+    "bcb049b9b4937c9a1a3e2b5e2c0922d869f40aa3be686a471515aabc239c413b": {
+      "counted_at": "2026-09-06T02:48:12.493583+00:00",
+      "input_tokens": 1571,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "4defb3aecefa7871938ba1f7a50c9819c68b69a3cf0b065e9cb33622fc2efb05",
+      "provider_request_id": "req_8044c4661833401d8028a19a29848609",
+      "request_hash": "bcb049b9b4937c9a1a3e2b5e2c0922d869f40aa3be686a471515aabc239c413b"
+    },
+    "c10e9d6a18136a95f8f1b4a6e06f3d68c3571d35161fbbc3653041ff93a5b52d": {
+      "counted_at": "2026-09-06T02:48:16.560135+00:00",
+      "input_tokens": 1609,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "8bfb2421da53a01afe830ee0806492b5aec90b6c0ae63643c2955660abd4c17e",
+      "provider_request_id": "req_262128965a634b2085261969cb16df7c",
+      "request_hash": "c10e9d6a18136a95f8f1b4a6e06f3d68c3571d35161fbbc3653041ff93a5b52d"
+    },
+    "c38528a9871957697bfc352a3805184e97524983581ba645910dcc57377e6f01": {
+      "counted_at": "2026-09-06T02:17:42.571746+00:00",
+      "input_tokens": 2952,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "f6c0806e4c9444e0d51c04feb51810969394d6778a02f3b25c0d3f6ff6ee0d64",
+      "provider_request_id": "req_74116fe8a7834b78b3c41f708831679c",
+      "request_hash": "c38528a9871957697bfc352a3805184e97524983581ba645910dcc57377e6f01"
+    },
+    "c94153918a66766fa113e531db29b6048e39e8988105610bcc6e06916012076a": {
+      "counted_at": "2026-09-06T02:17:30.987001+00:00",
+      "input_tokens": 2144,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "df82f7dd90ae62b6ada34cebe90ca9d55b833af6c72374b8a435abb07e7124cd",
+      "provider_request_id": "req_7a7b1210224d4d4d9c01cb58fb2926a7",
+      "request_hash": "c94153918a66766fa113e531db29b6048e39e8988105610bcc6e06916012076a"
+    },
+    "c94ee6a87fe19ab53ab70e71330ed658507993cf1609e18bd41f95c0205b05a9": {
+      "counted_at": "2026-09-06T02:17:30.019046+00:00",
+      "input_tokens": 1747,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "28c1ec418d0564ffbf6a3d9f35e8a25c0c4784892cc5b89922edfce27035d276",
+      "provider_request_id": "req_1f9753fd1a054d64b9b0c1b531fc20bf",
+      "request_hash": "c94ee6a87fe19ab53ab70e71330ed658507993cf1609e18bd41f95c0205b05a9"
+    },
+    "cbbff2cab7a3bdffa1d9791065c2d698b07a9e04c19c0521790d88d4e0550c02": {
+      "counted_at": "2026-09-06T02:17:23.289230+00:00",
+      "input_tokens": 2484,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "328725b96324897c2a24974645edffc20220be585bfc7b1d0498c75858b5b5cd",
+      "provider_request_id": "req_7e5eda0a4e234d80b54eae66499cbe90",
+      "request_hash": "cbbff2cab7a3bdffa1d9791065c2d698b07a9e04c19c0521790d88d4e0550c02"
+    },
+    "cd9c38e9c18b6dc03052af8aabff4de044fce17c955f9e04fd49676a5356e050": {
+      "counted_at": "2026-09-06T02:17:53.463182+00:00",
+      "input_tokens": 1575,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "c4945a5a9416e402d3f1f7448acab9aca68f67f053eb95e56d3ca4ac431663ae",
+      "provider_request_id": "req_5cf3e01b1de84ab7a3d370c899d8ad76",
+      "request_hash": "cd9c38e9c18b6dc03052af8aabff4de044fce17c955f9e04fd49676a5356e050"
+    },
+    "cea54779c95e1d416c55494b23c2e005f8b2b4ae293162e05a8b99093086cebf": {
+      "counted_at": "2026-09-06T02:17:38.706831+00:00",
+      "input_tokens": 2213,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "218c2c6d37070cf964a3a0dbc33d5c99bc3f2a32f1f5fd3f14797aa67b1de2e6",
+      "provider_request_id": "req_bde917e809164483a6867e03389f389a",
+      "request_hash": "cea54779c95e1d416c55494b23c2e005f8b2b4ae293162e05a8b99093086cebf"
+    },
+    "d24c516d03c174c5f51a69ad50a5116fd186c02897b0aea7301db7474117f78d": {
+      "counted_at": "2026-09-06T02:17:36.464640+00:00",
+      "input_tokens": 1595,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e9055a2f0eee5e707d10fc4032b5bbe983381d5e774cb0178bf5a955913b97f9",
+      "provider_request_id": "req_ee5d99066ca84b12852ce978fc2b1ea6",
+      "request_hash": "d24c516d03c174c5f51a69ad50a5116fd186c02897b0aea7301db7474117f78d"
+    },
+    "d463228f7934be5b4def5ce534d3821dc06471ae340a97a442927afd4526b1bc": {
+      "counted_at": "2026-09-06T02:17:53.981141+00:00",
+      "input_tokens": 1578,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d00d3a073d9f45212565f2ee08dc79b07a02d4bc7815fec161c8deb5a2a153a4",
+      "provider_request_id": "req_81c65bea5c30464c9f19c309dd52ac24",
+      "request_hash": "d463228f7934be5b4def5ce534d3821dc06471ae340a97a442927afd4526b1bc"
+    },
+    "d7df42fc8dc4f593873ea2697ab6128bc11cf988a696008cccd3b96c75c24290": {
+      "counted_at": "2026-09-06T02:48:10.822526+00:00",
+      "input_tokens": 1593,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "fcd9a33e2f2f03211be2cf5c5bf9b7ec99a583bc48c57558b2d8e343d636d540",
+      "provider_request_id": "req_d4f62a0193f643069646d4150b90f449",
+      "request_hash": "d7df42fc8dc4f593873ea2697ab6128bc11cf988a696008cccd3b96c75c24290"
+    },
+    "d80847af4c6cd08ce8a7cdb4797af586d80b69a49ef4d69920f7e474c23d665e": {
+      "counted_at": "2026-09-06T02:17:56.447256+00:00",
+      "input_tokens": 2417,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "cfc5950bc94edfbb07198f7670b6a36e62e4bcf4aadad16de13037f333426cb0",
+      "provider_request_id": "req_6c8094bafed84d6eac6d992c51490452",
+      "request_hash": "d80847af4c6cd08ce8a7cdb4797af586d80b69a49ef4d69920f7e474c23d665e"
+    },
+    "d8958a620c9f03ec104a1ccd1ac0d05480e3c71838cd50f2259e73ccc45955c2": {
+      "counted_at": "2026-09-06T02:17:44.569832+00:00",
+      "input_tokens": 2757,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "94d3154a97600dad89552a0bc2b7d19e0f7108749341b9c7faa97247bdfd2b88",
+      "provider_request_id": "req_64a973202640412ea1d9c19e98cfc882",
+      "request_hash": "d8958a620c9f03ec104a1ccd1ac0d05480e3c71838cd50f2259e73ccc45955c2"
+    },
+    "da61d6a8f31b99fdab51a6bf08d2ec8fb5b72ee5c1a1e3ecbe389f27f60e6971": {
+      "counted_at": "2026-09-06T02:48:11.834640+00:00",
+      "input_tokens": 1684,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d51f6c3c1b08784958b9ed5c37156a585d9f86758197ed17e29cbe85ab3198a1",
+      "provider_request_id": "req_1403ebb757cc4cd1b6a6ae237f8a0392",
+      "request_hash": "da61d6a8f31b99fdab51a6bf08d2ec8fb5b72ee5c1a1e3ecbe389f27f60e6971"
+    },
+    "da997fe34357c9f00ec58f526154fc468034027c0c4e987ea0bbef35d0740b4e": {
+      "counted_at": "2026-09-06T02:17:25.806667+00:00",
+      "input_tokens": 2895,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "f4434777fd1f36077680a50cef6973faa7b91ddab4ebeea25eabf53877809e97",
+      "provider_request_id": "req_02f41d84753a4bd2abdb1299b251ce52",
+      "request_hash": "da997fe34357c9f00ec58f526154fc468034027c0c4e987ea0bbef35d0740b4e"
+    },
+    "daa7498e7214bf916c5172b9c1a820b8d5788b71a6bd9311f325039b85cbbe69": {
+      "counted_at": "2026-09-06T02:17:16.702917+00:00",
+      "input_tokens": 2175,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d1f8815a411d88191af9bc6c134f8dbbceffe29987eaba3669aaf7cc07f31e52",
+      "provider_request_id": "req_4589e3b13eb24821a3fbdf04a712b206",
+      "request_hash": "daa7498e7214bf916c5172b9c1a820b8d5788b71a6bd9311f325039b85cbbe69"
+    },
+    "dc4f57a5f0ca1763344797f1ba27efef8734472535ee84b18614004b5ed15e4d": {
+      "counted_at": "2026-09-06T02:17:18.078868+00:00",
+      "input_tokens": 2727,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "5724c5da2690350e07043c07dc2e6f5c95b8be450a27df2daa7f9a64b8073056",
+      "provider_request_id": "req_cc20e0f52f8a4e2984da69d169e1d262",
+      "request_hash": "dc4f57a5f0ca1763344797f1ba27efef8734472535ee84b18614004b5ed15e4d"
+    },
+    "de0db36852d8523261cc504dbe0c57925a962210ecc61bec9cb35d4c67edd8c5": {
+      "counted_at": "2026-09-06T02:17:33.965249+00:00",
+      "input_tokens": 2578,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e7b0d77da727997048a42f20d0f5a510cb3c387e15e6234861dced53b30cc818",
+      "provider_request_id": "req_121c1c7f727f4152b50d860c504639b2",
+      "request_hash": "de0db36852d8523261cc504dbe0c57925a962210ecc61bec9cb35d4c67edd8c5"
+    },
+    "de55673d3be51df119602aa2c1b6536b69141e0606ad1969534893db8fa29627": {
+      "counted_at": "2026-09-06T02:17:26.132855+00:00",
+      "input_tokens": 2896,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "451a0bc1b9ad77acfda9fe126f990e12adb39e49439c493611b3f66de271f44c",
+      "provider_request_id": "req_a7778366954e440da4f1d16dbb1dd716",
+      "request_hash": "de55673d3be51df119602aa2c1b6536b69141e0606ad1969534893db8fa29627"
+    },
+    "df4bbbae61e9a5ac3852aa63bf8c227c97919acb021132a60aeaf7d5e92c9d0c": {
+      "counted_at": "2026-09-06T02:17:52.495581+00:00",
+      "input_tokens": 3378,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "5736e5c8656dc64d9659003fba2a03540e9508da540422ed60f08d0cacb00602",
+      "provider_request_id": "req_0a0835830dfa4888844535c00f117446",
+      "request_hash": "df4bbbae61e9a5ac3852aa63bf8c227c97919acb021132a60aeaf7d5e92c9d0c"
+    },
+    "e4c4b6dbbebb2fc122ea6c05a8e0c422d1d59a0e8e44cb4fd7a7d5c12f9e3e3a": {
+      "counted_at": "2026-09-06T02:17:21.961235+00:00",
+      "input_tokens": 1629,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e14cdbbfae1c38316a1f3bd1e3ab57a9b49c5d6ec040fda4089eb7a9aa9c041a",
+      "provider_request_id": "req_724895b0e5784faba017ccc41c5af0a8",
+      "request_hash": "e4c4b6dbbebb2fc122ea6c05a8e0c422d1d59a0e8e44cb4fd7a7d5c12f9e3e3a"
+    },
+    "e7052adae109b5cb757b1ee82f03f7ebe405d2d6ebd185af5e5db3198939b841": {
+      "counted_at": "2026-09-06T02:17:58.664557+00:00",
+      "input_tokens": 2846,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "f00dc73a5987077ecef3ce83b0b40ea6f08d0ad8e9afef6a39e7f3c5f79d9ddd",
+      "provider_request_id": "req_8c9aa1b1fc6145209cab3ac0a238b5f8",
+      "request_hash": "e7052adae109b5cb757b1ee82f03f7ebe405d2d6ebd185af5e5db3198939b841"
+    },
+    "e899cd53784fd2ce5500894801f7d1cc98d3b9e1f631033069960198b1c5d4ca": {
+      "counted_at": "2026-09-06T02:17:28.082612+00:00",
+      "input_tokens": 3378,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "e45b29a03f12fbf347045c3742192521dbb18b284ae971d5c820ec7b1de8099d",
+      "provider_request_id": "req_f1299bcad57c41cca5a4e6594fffcaab",
+      "request_hash": "e899cd53784fd2ce5500894801f7d1cc98d3b9e1f631033069960198b1c5d4ca"
+    },
+    "e9c5fe90732f1e165201ee66df1d09327832f6ca5b3424c6098bfc33900fe188": {
+      "counted_at": "2026-09-06T02:17:36.775306+00:00",
+      "input_tokens": 1633,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "7f867ea500b71a2cc93f4d0056aca709551baff31221edbe0b421bef1afc30d2",
+      "provider_request_id": "req_d05c172d02214d5884c8bb136a78e402",
+      "request_hash": "e9c5fe90732f1e165201ee66df1d09327832f6ca5b3424c6098bfc33900fe188"
+    },
+    "ea64e90747d72a52b7e82dd9c231856c61fa64eaa94ec160a4918081e343621b": {
+      "counted_at": "2026-09-06T02:17:42.260556+00:00",
+      "input_tokens": 2765,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "82684c83e88ebba45882b4ece1d7fcbf65c5ad229a76ea56ea1cc78d95804684",
+      "provider_request_id": "req_a2d124157c0243f5ae3a9226290807da",
+      "request_hash": "ea64e90747d72a52b7e82dd9c231856c61fa64eaa94ec160a4918081e343621b"
+    },
+    "eaac9cc03c9f1ec30c86afd5263bab8ba54acdbdc876a0894cf3e7fbc08f5a35": {
+      "counted_at": "2026-09-06T02:17:24.789696+00:00",
+      "input_tokens": 1888,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "f4d9976ac46944969cc76baedefe46ef37440a3b4037a313a1671a040117ec15",
+      "provider_request_id": "req_e2ffb8cbcbdb4292a11f22ccfa7d8422",
+      "request_hash": "eaac9cc03c9f1ec30c86afd5263bab8ba54acdbdc876a0894cf3e7fbc08f5a35"
+    },
+    "ebb65aa02f6976be53e70590319eff574acdf314a6932ec2709e57dbf2218950": {
+      "counted_at": "2026-09-06T02:17:55.599490+00:00",
+      "input_tokens": 2013,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "ae169e547b2bc4add96a2930808844c0961623d40cd480098dd65f3c1a951163",
+      "provider_request_id": "req_e7d5ce06718c482191f33e89428abd0f",
+      "request_hash": "ebb65aa02f6976be53e70590319eff574acdf314a6932ec2709e57dbf2218950"
+    },
+    "ed2e42b84a095df6241051bbfde4384d61570624021971c0fc0cbc26ca309ab3": {
+      "counted_at": "2026-09-06T02:17:24.339627+00:00",
+      "input_tokens": 1887,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "9708932978448383df8a40d6882c65abfd8ef815600f9286836dd5592fd6524c",
+      "provider_request_id": "req_e4a3a9cac8f849c7bc340dd60410d03f",
+      "request_hash": "ed2e42b84a095df6241051bbfde4384d61570624021971c0fc0cbc26ca309ab3"
+    },
+    "ee2fe79cbae21a9c0188939c8e26522e3d55ddfeb2299c80aabbaa7cfa65d367": {
+      "counted_at": "2026-09-06T02:17:51.266018+00:00",
+      "input_tokens": 2997,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "3f91d355e6a4aeecc8f5403ad9390dcbe8df1c37f01ba691e0b36381389e4a64",
+      "provider_request_id": "req_0a2654a23b80482d95351ca0e2f50a8b",
+      "request_hash": "ee2fe79cbae21a9c0188939c8e26522e3d55ddfeb2299c80aabbaa7cfa65d367"
+    },
+    "f130b982699e2a3a9df2c0d5d09ea990ed5021760365be8141ba7904e309ac58": {
+      "counted_at": "2026-09-06T02:17:20.316594+00:00",
+      "input_tokens": 2253,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "7598a7481d22ec101122c52c60a40e6db0019fc446175c60a29aa365fe532438",
+      "provider_request_id": "req_bd783b77349f4a61a2fc39fefe39ecb7",
+      "request_hash": "f130b982699e2a3a9df2c0d5d09ea990ed5021760365be8141ba7904e309ac58"
+    },
+    "f6db5d1642c60689bf9a6c3a08d2e6ce62295528353316914376b2b57a450632": {
+      "counted_at": "2026-09-06T02:17:37.377020+00:00",
+      "input_tokens": 1705,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "dae949f9f9b7766e080de643beeb77329d0c847a6b2e76ed35c07ce756e9dd42",
+      "provider_request_id": "req_117a0bef994f46d88538068a52ea2075",
+      "request_hash": "f6db5d1642c60689bf9a6c3a08d2e6ce62295528353316914376b2b57a450632"
+    },
+    "fbc82729337d7e784a651eecc07cbcd68fb3e934df526c7a3aaea675a1ca0a13": {
+      "counted_at": "2026-09-06T02:17:15.657919+00:00",
+      "input_tokens": 1705,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "c58ac09487522f9fc8bdf9773ef5ba17b05e7546336ef739a41b8319ad309a7f",
+      "provider_request_id": "req_fde536a25c1f46bdac7b1689ce553d62",
+      "request_hash": "fbc82729337d7e784a651eecc07cbcd68fb3e934df526c7a3aaea675a1ca0a13"
+    },
+    "fd937dfd6f1f813cb66f79dd672ebadace54dacc6f3aa2588039eb078c5122a7": {
+      "counted_at": "2026-09-06T02:17:43.620408+00:00",
+      "input_tokens": 1783,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "33681404362cd77b88e30364044b797f41b012894c211f54813b86593e01ed89",
+      "provider_request_id": "req_a5b8147de70e4a39ac1bd7513d171f60",
+      "request_hash": "fd937dfd6f1f813cb66f79dd672ebadace54dacc6f3aa2588039eb078c5122a7"
+    },
+    "fff064ee92db79e3aa6dc30d5fbc587eb6a6b8297b780634e19ff613198056be": {
+      "counted_at": "2026-09-06T02:17:43.258268+00:00",
+      "input_tokens": 1623,
+      "model": "gpt-5.6-luna",
+      "payload_hash": "d594daa70bcf2f6294f593ec6d5e521bee6aca062de5d2daf42cf688eccfc74d",
+      "provider_request_id": "req_bae97de29fa241d09b4d49989e2881a2",
+      "request_hash": "fff064ee92db79e3aa6dc30d5fbc587eb6a6b8297b780634e19ff613198056be"
+    }
+  },
+  "schema_version": "north-star-input-counts-v1"
+}

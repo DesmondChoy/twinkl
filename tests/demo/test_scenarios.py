@@ -338,7 +338,7 @@ def test_loader_rejects_changed_scenario_content(tmp_path: Path) -> None:
             "invalid-time",
             lambda payload: payload["scenario"]["journal_entries"].reverse(),
             ValueError,
-            "temporal order",
+            "temporal order|chronological t_index",
         ),
     ],
 )

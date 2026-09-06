@@ -1418,6 +1418,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 updateExperience={updateExperience}
                 inspectRun={inspectRun}
                 headingRef={headingRef}
+                northStarReviewEnabled={!deletingSession && deleteError === null}
               />
             </div>
           ) : null}

@@ -81,6 +81,14 @@ const EVENT_PRESENTATION: Record<string, EventPresentation> = {
     label: "Coach Digest response generated",
     component: "Coach Digest",
   },
+  north_star_reviewed: {
+    label: "North Star Moment reviewed",
+    component: "North Star Moment",
+  },
+  nudge_response_recorded: {
+    label: "Nudge response recorded",
+    component: "Journal Entry response",
+  },
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -119,6 +127,7 @@ function eventMatchesFilter(
       "nudge_suppression_checked",
       "nudge_decided",
       "nudge_generated",
+      "nudge_response_recorded",
     ].includes(event.event_type);
   }
   if (filter === "reviewer") {
@@ -131,6 +140,7 @@ function eventMatchesFilter(
     "drift_detected",
     "weekly_digest_built",
     "weekly_coach_generated",
+    "north_star_reviewed",
   ].includes(event.event_type);
 }
 
@@ -209,6 +219,16 @@ function eventSummary(
   if (errorMessage) return errorMessage;
 
   switch (event.event_type) {
+    case "north_star_reviewed": {
+      const result = record(details.record);
+      const selected = record(result?.selected);
+      const reason = string(result?.reason)?.replaceAll("_", " ") ?? "No reason recorded";
+      return selected && result?.status === "complete"
+        ? `${titleCase(string(result.mode) ?? "selected")} · ${string(selected.date) ?? "date unavailable"} · ${string(result.value_phrase) ?? string(result.core_value) ?? "Core Value"}`
+        : `${titleCase(string(result?.status) ?? "unavailable")} · ${reason}`;
+    }
+    case "nudge_response_recorded":
+      return "Recorded when this response became available for later review";
     case "profile_confirmed": {
       const profile = record(details.profile);
       const coreValues = array(profile?.top_values);
@@ -486,13 +506,15 @@ export default function InspectView({
     ||
     selectedEvent?.event_type === "drift_detected"
     || selectedEvent?.event_type === "weekly_digest_built"
-    || selectedEvent?.event_type === "weekly_coach_generated";
+    || selectedEvent?.event_type === "weekly_coach_generated"
+    || selectedEvent?.event_type === "north_star_reviewed";
   const latestWeeklyEvent = (eventType: string) =>
     [...currentEvents].reverse().find((event) => event.event_type === eventType)
     ?? null;
   const reviewerEvent = latestWeeklyEvent("weekly_review_completed");
   const driftEvent = latestWeeklyEvent("drift_detected");
   const coachEvent = latestWeeklyEvent("weekly_coach_generated");
+  const northStarEvent = latestWeeklyEvent("north_star_reviewed");
   const reviewerModel = record(reviewerEvent?.model_contract);
   const reviewerModelName = string(reviewerModel?.model);
   const reviewerEffort = string(reviewerModel?.reasoning_effort);
@@ -695,7 +717,9 @@ export default function InspectView({
             </details>
           </div>
           <p className="inspect-focus__evidence">
-            AI-reviewed synthetic development evidence · not human validation
+            {syntheticProfile
+              ? "AI-reviewed synthetic development evidence · not human validation"
+              : "AI-reviewed Journal Entries · not human validation"}
           </p>
           <ol className="inspect-focus__steps">
             <li>
@@ -732,6 +756,16 @@ export default function InspectView({
                     Uses Weekly Drift Detection output to create a response and
                     question.
                   </small>
+                </div>
+              </li>
+            ) : null}
+            {northStarEvent ? (
+              <li>
+                <span aria-hidden="true">{coachEvent ? "4" : "3"}</span>
+                <div>
+                  <strong>North Star Moment</strong>
+                  <p>{eventSummary(northStarEvent, currentJournalEntryIdSet)}</p>
+                  <small>AI-reviewed writing with exact quotation, ownership, and chronology checks. Open Technical details below for source and provider records.</small>
                 </div>
               </li>
             ) : null}

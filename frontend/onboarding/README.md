@@ -61,11 +61,60 @@ is the canonical workflow and evidence-boundary documentation. Background
 generation provenance is in
 [`public/card-backgrounds/README.md`](public/card-backgrounds/README.md).
 
+## North Star Moment
+
+Both frontend paths display at most one North Star Moment beneath the Coach
+Digest. Active Drift uses a supportive action from before onset. No Active
+Drift prefers a verified action from the reviewed week, with specific
+encouragement; older writing receives historical reminder wording. Neither an
+omission nor a Not Conflict decision establishes alignment. Insufficient
+Evidence omits the card.
+
+The card preserves the exact quotation, source date and Journal Entry link.
+Long quotations expand without rewriting the source. Inspect exposes the
+record, source checks, model settings, usage and review outcome. All five
+saved Personas use prepared per-week records; normal replay never calls a
+provider. Missing older records remain not evaluated.
+
+Manual onboarding calls `review_north_star` separately after the existing
+closed-week response, keeping Weekly Drift Detection and valid Coach Digest
+results available. It coalesces duplicate requests, reuses completed records,
+shows bounded retry when permitted, and discards obsolete results after source
+changes or deletion. Replies have separate server availability timestamps;
+legacy responses without independent evidence are excluded.
+
+The backend uses server-side `OPENAI_API_KEY`, Luna `low`, and the shared
+[integration policy](../../config/evals/north_star_integration_v1.json): complete
+inputs up to 16,000 tokens, no truncation, at most two attempts per model
+request, US$0.25 per attempt and US$20 cumulative including prior work. Default
+live provider receipts persist budget metadata. Full prompts, eligible source
+text and raw responses remain in server session memory and browser-held
+Inspect records; browser localStorage retains those records for resume.
+Confirmed Delete session removes both copies. A storage-quota failure raises
+the existing persistence warning; live history has no production storage
+capacity guarantee. Synthetic preparation receipts retain their
+source-disclosed raw outputs for reproduction. Stronger xhigh
+assessment is separate evaluation, not a second live generation requirement.
+
+Live NSM work is serialized in one worker thread. It uses the ignored
+`logs/exports/demo_tool_runs/north_star/` directory, carries forward finalized
+integration spend, and never writes into the saved experiment directory.
+A missing or changed integration budget fails closed before counting or
+provider work. Preserve both ledgers and reconcile all spend before adopting
+a successor budget; deleting the live ledger would lose its spending history.
+Finalizing a saved evaluation requires re-exporting all five bundles and their
+catalog because their provenance includes the final report hash.
+
+See the [integration record](../../logs/experiments/reports/north_star_integration_20260906/README.md)
+for execution and verification status. The original development result does
+not validate the newly added encouragement path or the untouched reserved
+final benchmark.
+
 ## Run locally
 
 ```sh
 source .venv/bin/activate
-uv run uvicorn src.demo.api:app --port 8000
+uv run uvicorn src.demo.api:app --env-file .env --port 8000
 ```
 
 In a second terminal:

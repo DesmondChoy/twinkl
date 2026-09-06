@@ -8,7 +8,7 @@ import re
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -39,6 +39,9 @@ from src.weekly_drift_reviewer import (
 )
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
+if TYPE_CHECKING:
+    from src.north_star.runtime import NorthStarRequest
+
 SCENARIO_DIRECTORY = Path("frontend/onboarding/public/scenarios")
 CATALOG_PATH = SCENARIO_DIRECTORY / "index.json"
 PROMPTS_PATH = Path(
@@ -57,6 +60,9 @@ LOW_MANIFEST_PATH = Path(
 BASE_CONFIG_PATH = Path("config/evals/twinkl_52zz_model_comparison_v1.yaml")
 LOW_CONFIG_PATH = Path("config/evals/twinkl_52zz_luna_low_v1.yaml")
 COACH_RESPONSES_PATH = Path("src/demo/coach_digest_responses.json")
+NORTH_STAR_REPORT_PATH = Path(
+    "logs/experiments/reports/north_star_integration_20260906/report.json"
+)
 
 LUNA_LOW = ModelContract(
     provider="openai",
@@ -308,9 +314,8 @@ def load_saved_coach_responses(root: Path) -> SavedCoachResponseFixture:
         ):
             raise ValueError("Coach Digest response does not match the curated roster")
         if response.generation is not None:
-            if (
-                response.generation.response_sha256
-                != _coach_response_sha256(response.narrative)
+            if response.generation.response_sha256 != _coach_response_sha256(
+                response.narrative
             ):
                 raise ValueError("Coach Digest response hash differs from its text")
     return fixture
@@ -633,6 +638,7 @@ def build_scenario_fixture(
     prompt_rows: list[dict[str, Any]] | None = None,
     response_rows: list[dict[str, Any]] | None = None,
     coach_responses: SavedCoachResponseFixture | None = None,
+    include_north_star: bool = True,
 ) -> ContractFixtureSet:
     """Build one saved replay without provider calls."""
     root = root.resolve()
@@ -962,9 +968,7 @@ def build_scenario_fixture(
         coach_key = f"{selection.scenario_id}::{boundary.week_start}"
         saved_coach_response = saved_coach_responses.responses.get(coach_key)
         coach_narrative = (
-            saved_coach_response.narrative
-            if saved_coach_response is not None
-            else None
+            saved_coach_response.narrative if saved_coach_response is not None else None
         )
         coach_validation = None
         if coach_narrative is not None:
@@ -1116,7 +1120,7 @@ def build_scenario_fixture(
         week_index=0,
     )
     request_id = f"request:{selection.scenario_id}:load"
-    return cast(
+    fixture = cast(
         ContractFixtureSet,
         ContractFixtureSet.model_validate(
             {
@@ -1146,6 +1150,120 @@ def build_scenario_fixture(
             }
         ),
     )
+    if include_north_star and (root / NORTH_STAR_REPORT_PATH).exists():
+        fixture = attach_saved_north_star(fixture, root=root)
+    return fixture
+
+
+def build_saved_north_star_request(
+    fixture: ContractFixtureSet, week_id: str
+) -> NorthStarRequest:
+    """Build the shared request from only the selected replay cutoff."""
+    from src.north_star.runtime import (
+        SourceWriting,
+        build_north_star_request,
+        profile_reference,
+    )
+
+    session, events = project_scenario_week(fixture, week_id)
+    week = next(w for w in fixture.scenario.weeks if w.week_id == week_id)
+    availability = {
+        event.details.journal_entry.journal_entry_id: event.started_at
+        for event in events
+        if event.event_type == "journal_entry_submitted"
+    }
+    digest_event = next(
+        event
+        for event in events
+        if event.event_type == "weekly_digest_built"
+        and event.event_id in week.event_ids
+    )
+    writing = [
+        SourceWriting(
+            owner_id=fixture.scenario.persona_id,
+            entry_id=entry.journal_entry_id,
+            t_index=entry.t_index,
+            date=entry.date,
+            journal_entry=entry.content,
+            nudge_response=entry.nudge_response,
+            available_at=availability[entry.journal_entry_id],
+            response_available_at=None,
+        )
+        for entry in session.journal_entries
+    ]
+    if session.drift_result is None:
+        raise ValueError("Saved North Star Moment requires a completed weekly review")
+    return build_north_star_request(
+        session_id=session.session_id,
+        owner_id=fixture.scenario.persona_id,
+        profile_ref=profile_reference(session.profile.model_dump(mode="json")),
+        core_values=[str(value) for value in session.profile.top_values],
+        week_start=week.week_start,
+        week_end=week.week_end,
+        cutoff_at=digest_event.completed_at or digest_event.started_at,
+        drift_result=session.drift_result,
+        writing=writing,
+    )
+
+
+def attach_saved_north_star(
+    fixture: ContractFixtureSet, *, root: Path
+) -> ContractFixtureSet:
+    """Attach frozen offline records; exporting and replaying never call a model."""
+    from src.north_star.runtime import NorthStarRecord, validate_north_star_record
+
+    report = json.loads((root / NORTH_STAR_REPORT_PATH).read_text())
+    records = {
+        row["week_id"]: row["record"]
+        for row in report["cases"]
+        if row["scenario_id"] == fixture.scenario.scenario_id
+    }
+    if set(records) != {week.week_id for week in fixture.scenario.weeks}:
+        raise ValueError("Saved North Star Moment records do not cover every week")
+    payload = fixture.model_dump(mode="json")
+    events_by_id = {event["event_id"]: event for event in payload["trace_events"]}
+    ordered_events: list[dict[str, Any]] = []
+    for week in payload["scenario"]["weeks"]:
+        request = build_saved_north_star_request(fixture, week["week_id"])
+        record = NorthStarRecord.model_validate(records[week["week_id"]])
+        validate_north_star_record(record, request)
+        ordered_events.extend(events_by_id[event_id] for event_id in week["event_ids"])
+        event_id = f"{fixture.scenario.scenario_id}:north-star:{week['week_start']}"
+        event = _event(
+            event_id=event_id,
+            session_id=fixture.session.session_id,
+            parent_event_id=week["event_ids"][-1],
+            event_type="north_star_reviewed",
+            started_at=ordered_events[-1]["completed_at"],
+            duration_ms=0,
+            input_refs=[{"kind": "week", "id": week["week_id"]}],
+            result_refs=[],
+            details={"record": record.model_dump(mode="json")},
+            model_contract=LUNA_LOW.model_dump(mode="json"),
+        )
+        event["input_hash"] = record.input_hash
+        ordered_events.append(event)
+        week["event_ids"].append(event_id)
+    payload["trace_events"] = ordered_events
+    scenario = payload["scenario"]
+    scenario["trace_event_ids"] = [event["event_id"] for event in ordered_events]
+    scenario["manifest"]["source_files"].append(NORTH_STAR_REPORT_PATH.as_posix())
+    scenario["manifest"]["input_hash"] = _sha256_json(
+        {
+            "base_input_hash": scenario["manifest"]["input_hash"],
+            "north_star_report_sha256": _sha256_file(root / NORTH_STAR_REPORT_PATH),
+        }
+    )
+    session = _initial_session_payload(
+        scenario=scenario, trace_events=ordered_events, week_index=0
+    )
+    payload["session"] = session
+    for response in payload["responses"]:
+        if response["operation"] == "load_scenario":
+            response["session"] = session
+            response["scenario"] = scenario
+            response["event_ids"] = session["trace_event_ids"]
+    return ContractFixtureSet.model_validate(payload)
 
 
 def project_scenario_week(
@@ -1199,12 +1317,38 @@ def _validate_fixture_semantics(
         raise ValueError("Scenario persona does not match the curated selection")
     if scenario.profile.provenance.source != "synthetic_persona_projection":
         raise ValueError("Saved persona replay lacks synthetic Profile provenance")
-    if scenario.manifest.source_files != [
-        path.as_posix() for path in _source_files(selection)
-    ]:
+    expected_sources = [path.as_posix() for path in _source_files(selection)]
+    expected_input_hash = _input_hash(root, selection)
+    has_north_star = any(
+        event.event_type == "north_star_reviewed" for event in fixture.trace_events
+    )
+    if has_north_star:
+        expected_sources.append(NORTH_STAR_REPORT_PATH.as_posix())
+        expected_input_hash = _sha256_json(
+            {
+                "base_input_hash": expected_input_hash,
+                "north_star_report_sha256": _sha256_file(root / NORTH_STAR_REPORT_PATH),
+            }
+        )
+    if scenario.manifest.source_files != expected_sources:
         raise ValueError("Scenario source provenance is incomplete")
-    if scenario.manifest.input_hash != _input_hash(root, selection):
+    if scenario.manifest.input_hash != expected_input_hash:
         raise ValueError("Scenario input hash differs from frozen sources")
+    if has_north_star:
+        from src.north_star.runtime import validate_north_star_record
+
+        for week in scenario.weeks:
+            records = [
+                event.details.record
+                for event in fixture.trace_events
+                if event.event_type == "north_star_reviewed"
+                and event.event_id in week.event_ids
+            ]
+            if len(records) != 1:
+                raise ValueError("Saved North Star Moment must cover every week once")
+            validate_north_star_record(
+                records[0], build_saved_north_star_request(fixture, week.week_id)
+            )
 
     coach_responses = load_saved_coach_responses(root)
     expected_coach_key = f"{selection.scenario_id}::{selection.coach_week_start}"
