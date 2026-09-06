@@ -3,9 +3,12 @@
 [Back to the methodology](../nsm_experiment_methodology.md#selected-persona-index)
 
 **70 Personas, 570 Journal Entries.** Selected from 169 eligible Personas
-with seed `20260906`, with ten memberships per Core Value. Development/final
-assignments remain unset. No ID from the saved-demo exclusion list was
-selected; an exposure audit is still required before claiming unseen data.
+with seed `20260906`, with ten memberships per Core Value. The subsequent
+[frozen partition](../nsm_experiment_methodology.md#development-and-final-evaluation-histories)
+assigns 54 to development and 16 to final evaluation; the consolidated record
+lists every assignment. No ID from the saved-demo exclusion list was selected,
+and the Git audit found no recorded NSM retrieval or semantic development use
+of these 70 histories. Prior upstream research use remains disclosed.
 
 | Persona ID | Name | Core Values, in stored order | Journal Entries |
 | --- | --- | --- | ---: |

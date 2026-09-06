@@ -3,11 +3,11 @@
 [Back to the methodology](../nsm_experiment_methodology.md#selected-persona-index)
 
 **35 Personas, 311 Journal Entries.** All IDs from the existing known-Drift
-cohort are retained. The table records the existing 27 development and eight
-reserved assignments. The eight reserved histories enter final evaluation only
-if they pass the prior NSM exposure audit; otherwise, move exposed histories
-to development and revisit the proposed split. Reserved writing was not
-inspected during cohort selection; the exposure audit remains pending.
+cohort are retained. The table preserves the historical 27 development and eight
+reserved assignments. Following the exposure audit, the user accepted those
+eight for final evaluation with their prior automated baseline exposure
+disclosed. See the [frozen partition and exposure findings](../nsm_experiment_methodology.md#development-and-final-evaluation-histories).
+No cohort membership or historical assignment label has changed.
 
 | Persona ID | Name | Core Values, in stored order | Journal Entries | Existing assignment |
 | --- | --- | --- | ---: | --- |

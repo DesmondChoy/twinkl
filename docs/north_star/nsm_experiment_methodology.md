@@ -1,8 +1,10 @@
 # North Star Moment experiment methodology
 
-**Status, 6 September 2026:** Housekeeping complete. The 105-Persona cohort
-is selected and verified; weekly cases, NSM judgments, and experiments remain
-pending.
+**Status, 6 September 2026:** Preparation audit complete. The 105-Persona
+cohort and 81/24 development/final partition are frozen. Upstream coverage
+is verified; the controlled runner and fresh NSM judgments remain pending.
+The [consolidated record](../../logs/experiments/reports/north_star_20260906/nsm_experiment.json)
+contains preparation evidence and settings, not NSM performance results.
 
 ## Reset scope
 
@@ -12,8 +14,10 @@ judgments, and conclusions will not be reused.
 - Removed old NSM reports, saved replay records, documentation findings,
   the dated protocol, stale capstone PDF, and obsolete experiment illustration.
 - Preserved source histories, upstream Drift data, reusable code, existing
-  configuration inputs, and unrelated work. Old configurations do not authorize
-  new experiment settings or spending. Git and closed Beads history remain.
+  configuration inputs, and unrelated work. Git and closed Beads history remain.
+  The user has now authorized this experiment's API calls without a spending
+  cap; the [execution settings](#execution-settings-and-remaining-preparation)
+  supersede the old experiment's monetary limits.
 - Saved NSM cards await fresh export. Live NSM fails closed until a fresh
   budget is configured; the rest of saved Persona replay remains available.
 - Amended `twinkl-fz34`, `twinkl-fz34.7`, and `twinkl-fz34.8`; closed
@@ -103,26 +107,49 @@ uv run --no-sync python scripts/experiments/north_star_cohort_selection.py
 
 ### Development and final evaluation histories
 
-**Proposed split, subject to the NSM exposure audit; added IDs remain unassigned:**
+**Frozen split, with the qualified final partition accepted after the audit:**
 
 | Partition | Drift | Non-drift | Total |
 | --- | ---: | ---: | ---: |
 | Development | 27 | 54 | 81 |
 | Final evaluation | 8 | 16 | 24 |
 
-This targets 2:1 in both partitions. The existing eight reserved histories
-remain in the cohort, but enter final evaluation only if they pass the prior
-NSM exposure audit. A feasible split gives 7–8 non-drift memberships per value
-in development and 2–3 in final evaluation; the latter supports only
-exploratory value-specific findings.
+Development contains 391 observed weeks, 696 Journal Entries, and 309 Persona
+responses; final evaluation contains 110 weeks, 185 entries, and 91 responses.
 
-Keep whole Persona histories together. Exposed histories belong in development;
-if any reserved history fails the audit, revisit the proposed split rather
-than force the eight-history allocation. Use development for
-prompt/configuration choices and freeze the setup before final evaluation.
-Report the partitions separately. “Unseen” refers to NSM development, not
-prior upstream research or a new human sample. **Decision pending:** settle
-the split after the audit and assign the 70 additional IDs.
+Both partitions retain 2:1. The added 16 final IDs were selected from the
+frozen 70 using seed `20260906`, binary constrained selection, and the cost
+`int(SHA256("20260906:final:" + persona_id)[:12], 16) / 16**12`.
+Require 16 unique IDs and 2–3 memberships per Core Value; the remaining 54
+give 7–8 development memberships. The consolidated record stores the IDs,
+solver settings, hashes, and achieved counts. Value-specific final findings
+remain exploratory.
+
+The exposure audit checked 317 distinct text versions across 17 NSM commits,
+including deleted reports. Historical retrieval and model-review cases used
+the original 27 development Personas or the five saved Personas. No such use
+was found for the eight reserved or 70 added histories. However, the earlier
+Phase 0 baseline automatically parsed all 35 known-Drift histories and used
+their availability and label statistics. Its reserved contribution covered
+66 Journal Entries and nine Drift records before the original split was frozen.
+The source is `3315325a:logs/experiments/reports/north_star_phase0_20260905/baseline.json`;
+the consolidated audit records the other inspected Git sources.
+
+The user accepted retaining these eight in final evaluation with that
+limitation disclosed. **Final means held apart from recorded NSM retrieval
+and semantic development; it does not mean untouched data.** The audit cannot
+rule out unlogged manual use, and the corpus has prior upstream research use.
+Keep whole histories together, use development for prompt/configuration choices,
+freeze the setup before final evaluation, and report the partitions separately.
+
+Preserve the registry's Core Value order as source provenance. For NSM
+priority, use the current confirmed Profile contract's canonical
+[`CORE_VALUE_ORDER`](../../src/demo/contracts.py), restricted to the Persona's
+declared values. Registry order differs for 28 Personas; historical reviewer
+prompt order also differs and must not determine NSM selection priority.
+Construct a declared-value benchmark Profile reference without inventing
+questionnaire responses; the five saved-demo Profile projections do not cover
+every selected Core Value combination.
 
 ### Closed-week cases and source eligibility
 
@@ -135,13 +162,40 @@ Evaluate each week's outcome: a selected quotation or no card. Three cases
 do not necessarily mean three cards or three model calls: Insufficient
 Evidence or no eligible writing can produce no-card outcomes without a call.
 
-Include finalized Monday–Sunday weeks, including sparse final weeks, and
-record each cutoff. Any budget-driven week sampling must be specified before
-selection. Cohort balance does not imply weekly balance.
+Use all 501 observed Monday–Sunday weeks, including 87 sparse final weeks;
+do not sample weeks to reduce spending. Three additional calendar weeks within
+history spans have no Journal Entries and no upstream review. Record them as
+unreviewed empty weeks outside the comparison, without inventing Drift states
+or reference opportunities. Cohort balance does not imply weekly balance.
 
-Freeze the same upstream Weekly Drift Reviewer Decisions and Drift Detector
-outputs across NSM variants. Cohort reference labels cannot replace them.
-**Preparation pending:** identify their source and any missing coverage.
+Freeze **repeat 1** from the existing Luna-low Weekly Drift Reviewer run for
+both variants, matching the saved replay convention. The source prompt records
+are `twinkl_52zz_model_comparison_20260714/prompts.jsonl`; responses are
+`twinkl_52zz_luna_low_20260714/responses_gpt_5_6_luna_low.jsonl`, both under
+`logs/experiments/artifacts/`. All 501 prompt/receipt pairs and 1,255
+Journal Entry–Core Value coordinates are present. Applying the current Drift
+Detector gives **24 Active Drift, 443 No Active Drift, and 34 Insufficient
+Evidence** weeks. Cohort reference labels do not replace these inputs.
+
+| Split | Active Drift | No Active Drift | Insufficient Evidence | Total |
+| --- | ---: | ---: | ---: | ---: |
+| Development | 13 | 353 | 25 | 391 |
+| Final evaluation | 11 | 90 | 9 | 110 |
+
+Keep the two invalid repeat-1 reviews (`742c98d6`, week `2025-10-06`;
+`ed67c9cc`, week `2025-02-10`) as failed reviews with Abstain decisions.
+Do not replace them with another repeat. These records used prompt **v2.0**,
+consistent with the [accepted no-rerun decision](../evals/drift_detection_eval.md).
+Current v3.0 validation would reject one additional historical valid receipt
+(`621be543`, week `2025-09-29`); retain and disclose its original v2.0 status.
+This benchmark therefore uses frozen v2.0 upstream inputs, not newly validated
+v3.0 outputs.
+
+The historical receipts record Sunday as `review_at_date`. Preserve that field
+as provenance; construct fresh replay cutoffs at the following Monday after
+the full week has closed. Record this as a synthetic replay convention, not
+an observed historical review timestamp. Freeze each derived Drift Detector
+output and cutoff once for both variants.
 
 Follow the [product priority and source rules](north_star_moment.md#2-which-writing-qualifies):
 
@@ -170,6 +224,12 @@ user's evidence. Preserve missing responses and source boundaries. Both
 [comparison variants](#controlled-comparisons) use Journal Entries and eligible
 Persona nudge responses for selection and review.
 
+The audit found **881 Journal Entries, 542 nudges, and 400 nonempty Persona
+responses**. Original and wrangled text, dates, entry order, and Core Values
+match, with no parse warnings or missing histories. Preserve the 142 nudges
+without a response. Sixty-four Personas have same-day entries, so entry index
+and interaction order remain necessary alongside dates.
+
 ### Provenance, labels, and validation before freezing
 
 Consolidate each experiment run into one **`nsm_experiment.json`** containing
@@ -194,14 +254,68 @@ from this consolidated record.
   NSM reference judgments later and disclose the AI evaluator and settings;
   these are not human validation.
 
-Before constructing weekly cases, settle the split and complete the remaining
-experiment choices and budget. No weekly cases or NSM judgments
-have been generated.
+The audit enumerated weekly metadata and recomputed upstream states without
+NSM semantic review. Construct executable NSM cases only after the remaining
+runner preparation below. No NSM reference judgments, quotations, or comparison
+results have been generated.
+
+### Execution settings and remaining preparation
+
+Histories contain 2–12 entries, with a median of nine. Local Nomic tokenization
+of complete entry-and-response candidates measured a median of 187 tokens,
+95th percentile of 358, and maximum of 596 against the pinned tokenizer's
+8,192-token limit. This uses a response-inclusive sizing template; freeze its
+exact serialization before retrieval.
+
+The authorized OpenAI count-only audit successfully measured 150 complete-history
+Persona–Core Value requests: **1,682–4,095 input tokens**, with a median of
+3,063.5 and 95th percentile of 3,794.7. All fit the 16,000-token limit. Two
+additional byte-size diagnostic probes also fit. These 152 calls produced
+token receipts, not NSM judgments. Their full-history contexts and placeholder
+context hashes are sizing probes; final weekly requests still require matching
+token counts after freezing. Receipts and prompt/schema hashes are in the
+consolidated record.
+
+These settings govern the fresh experiment. They preserve the existing
+reliability controls while removing its superseded spending limits:
+
+| Setting | Frozen choice |
+| --- | --- |
+| Spending | No total or per-attempt monetary cap, as authorized by the user. Record usage, costs, latency, and failed attempts. |
+| Luna input | At most 16,000 measured tokens per complete request, including instructions and schema; no truncation. Count each final request before generation. |
+| Luna output | At most 32,768 tokens per attempt, for both runtime and evaluation. |
+| Attempts | At most two total attempts per ordinary request; SDK retries disabled. Retry only transient failures, incomplete responses, or invalid structured output. Refusals are terminal. The contradictory-judgment recheck remains one fresh attempt. |
+| Timeout | 180 seconds per Luna-low attempt; 300 seconds per Luna-xhigh attempt. |
+| Bootstrap | 10,000 whole-Persona resamples per split, seed `20260906`, 95% percentile intervals. Report undefined resamples. |
+| Evaluator consistency | Twenty development cases from distinct Personas; two additional blinded Luna-xhigh assessments per case, in addition to the primary assessment. |
+| Human review | Deferred by user decision. This experiment supplies AI evaluation only; evaluator agreement does not establish human validity. |
+
+Select the consistency sample before inspecting NSM outputs: order development
+Personas by `SHA256("20260906:repeat:" + persona_id)`, retain the first 20
+with a non-Insufficient-Evidence week containing mechanically eligible writing,
+and choose one such week per Persona by
+`SHA256("20260906:repeat:" + persona_id + ":" + week_start)`.
+Repeat the complete reference review and the exact-quotation reviews of any
+displayed cards; do not rerun runtime selection. Use distinct repeat IDs to
+prevent receipt reuse, and retain failures and disagreements rather than
+selecting the most favourable pass. The primary judgments and the stated
+adjudication rule determine headline metrics. This sample is a practical
+consistency check, not a power calculation.
+
+**Implementation still required:** adapt Nomic serialization to include eligible
+responses; construct the 501 cases with explicit synthetic response availability;
+prepare the two-variant runner, blinded evaluation/rechecks, and consolidated
+reporting; and support the uncapped policy in the experiment provider adapter.
+The preserved policy files and runtime still enforce the old US$20 and US$0.25
+limits, so editing this methodology does not enable execution. Recount final
+inputs, verify the runner, and freeze prompt/configuration hashes before
+generation. No further spending approval is required within this experiment.
 
 ## Evaluation
 
 A **correct card** is an exact quotation of the Persona's supportive action
-that satisfies the Core Value, source eligibility, cutoff, and framing rules.
+that satisfies the Core Value, source eligibility, cutoff, selection priority,
+and framing rules.
 Showing a card is not automatically a success.
 
 A **reference opportunity** exists when independent review of the full eligible
@@ -213,6 +327,14 @@ support, applying Profile and source order within each. Insufficient Evidence
 controls have no reference opportunity
 and do not enter the recall denominator; their no-card outcomes are correct
 omissions.
+
+Judge both variants against **full-history reference priorities**. For example,
+in No Active Drift, selecting a historical quotation when suitable current-week
+writing exists is an incorrect selection (FP) and a missed opportunity (FN),
+even if the quotation is exact and supportive. Retrieval hit rate can still
+be positive: it checks for supportive writing in the shortlist, not whether
+the candidate preferred under product rules was retained. Sorting the shortlist cannot
+recover a preferred candidate that retrieval omitted.
 
 **Hypothetical ten-week example—not experiment results.** This confusion
 matrix distinguishes quotation quality from whether a card appeared:
@@ -247,7 +369,16 @@ headline scores:
 | --- | --- |
 | Correct omission | Among confidently assessed weeks without an eligible supportive quotation, the fraction receiving no card. |
 | Retrieval hit rate@k | Among opportunity weeks, the fraction whose top-k shortlist contains at least one eligible supportive candidate. Applies only to retrieval variants. |
-| Selection-rule correctness | Whether displayed cards follow the Core Value, source-window, and framing rules. |
+| Selection-rule correctness | Whether displayed cards follow the Core Value, source-window, framing, and full-history reference priority rules. |
+
+Score the final runtime outcome after the predeclared allowed attempts. A
+confirmed reference opportunity ending with no card because of a timeout,
+exhausted retries, input-limit rejection, or another runtime failure stays in
+the recall denominator and counts as a missed opportunity (FN). It adds no
+incorrect-card count (FP). Record the operational failure reason separately in
+`nsm_experiment.json`; do not exclude either variant's case from the paired
+comparison solely because runtime failed. These failures do not make a known
+reference opportunity uncertain.
 
 Reference judgments are **AI assessments, not human validation**. Report
 unresolved cases separately, show each metric's numerator and denominator,
@@ -259,6 +390,16 @@ Store case judgments, selection-error counts, headline results, diagnostics,
 and uncertainty in the consolidated **`nsm_experiment.json`**.
 
 ## Controlled comparisons
+
+**Core research question:** Can Nomic embedding retrieval provide a shortlist
+of supportive actions that preserves **Card precision** and **Opportunity
+recall** while reducing runtime cost, or does reviewing the full eligible
+history provide quality gains that justify its token use?
+
+This is an exploratory benchmark for method selection. Both approaches use
+Luna low for quotation selection; the comparison tests the effect of
+embedding-based shortlisting. Full-history review remains subject to the
+declared input limits. Neither approach is preferred in advance.
 
 Compare **two variants only**:
 
@@ -281,16 +422,47 @@ selection rules; apply the same source order after retrieval. If fewer than
 three candidates are eligible, retain all of them. **Luna xhigh** (`gpt-5.6-luna`,
 reasoning `xhigh`) evaluates both variants.
 
+Compare both variants on the same cases and report **Nomic minus full-history**
+differences in the two headline metrics, runtime cost, and latency. Include
+embedding preparation/retrieval overhead in runtime measurements and report
+shared Luna xhigh evaluation costs separately. For
+[Persona-level bootstrap intervals](https://rsample.tidymodels.org/reference/group_bootstraps.html),
+resample whole Personas with replacement within each split, keeping all their
+included weeks and both variants together. Recompute the aggregate metrics
+and their paired differences in each resample using the frozen execution
+settings; report undefined resamples separately.
+Store the comparison and intervals in `nsm_experiment.json`.
+
+Use precision and recall as the primary selection criteria. Matching or better
+scores for Nomic can support adopting the shortlist, with measured cost and
+latency informing the choice. Full-history quality gains can support that
+approach. If the metrics favour different variants or uncertainty prevents a
+clear comparison, report that trade-off and explain any practical choice.
+These results provide evidence for the tested configuration and synthetic
+cohort; matching point estimates alone do not establish equivalence.
+
 Luna xhigh first assesses all eligible sources independently of the Nomic
 shortlist. Reuse the same reference judgments and opportunity counts for both
 variants. Then judge each variant's **exact selected quotation** in its complete
 source context, without exposing runtime reasoning, prior judgments, or variant
 names.
 
-Check evaluator consistency through repeated assessments and a small
-independently human-reviewed sample; specify their sizes before execution and
-report agreement and unresolved disagreements. Using one evaluator improves
-comparability, but does not establish correctness. AI judges can show systematic
+If source and quotation judgments contradict each other, allow **one fresh
+Luna xhigh recheck** of the complete entry, eligible response, and exact
+quotation under the same rubric, without earlier judgments or variant names.
+A valid, unambiguous recheck supplies the final ruling; a failed or ambiguous
+recheck leaves the case unresolved. Apply revised source judgments to the
+shared reference and recompute opportunity and priority labels for both
+variants, grading their quotations separately. If final rechecks disagree on
+a shared source, keep it unresolved. Exclude unresolved cases from the affected
+paired metric for both variants using the same case list. Preserve original
+judgments, rechecks, final rulings, and exclusion reasons/counts in
+`nsm_experiment.json`.
+
+Check evaluator consistency through the repeated assessments specified above
+and report agreement and unresolved disagreements. Human review is deferred.
+Using one evaluator improves comparability, but does not establish correctness.
+AI judges can show systematic
 biases, including self-preference ([Zheng et al., 2023](https://arxiv.org/abs/2306.05685));
 this motivates checking Luna, rather than establishing a Luna-specific finding.
 
@@ -302,9 +474,7 @@ this motivates checking Luna, rather than establishing a Luna-specific finding.
 | Luna-low source assessment and independent Luna-xhigh reference review | [Source prompt](../../src/north_star/assessment.py): `SOURCE_SYSTEM_PROMPT` and `build_source_prompt()` |
 | Luna-xhigh assessment of the selected quotation | [Quotation prompt](../../src/north_star/assessment.py): `CANDIDATE_SYSTEM_PROMPT` and `build_candidate_prompt()` |
 
-Both Luna prompts include `SHARED_SEMANTIC_RUBRIC`. Freeze prompt text and
-settings in **`nsm_experiment.json`**, alongside both variants, repeat
-assessments, and human-review comparisons. **Preparation pending:** adapt the
-Nomic template to include eligible Persona nudge responses while preserving
-entry/response boundaries, and prepare the controlled runner; the linked code
-does not yet implement this complete comparison.
+Both Luna prompts include `SHARED_SEMANTIC_RUBRIC`. Freeze adapted prompt text
+and settings in **`nsm_experiment.json`**, alongside both variants, repeated
+assessments, and the human-review deferral. These reusable helpers do not yet
+implement the complete comparison described above.
