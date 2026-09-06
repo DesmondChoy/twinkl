@@ -1,10 +1,12 @@
 # North Star Moment experiment methodology
 
-**Status, 6 September 2026:** Preparation audit complete. The 105-Persona
-cohort and 81/24 development/final partition are frozen. Upstream coverage
-is verified; the controlled runner and fresh NSM judgments remain pending.
+**Status, 7 September 2026:** Both controlled experiments and the fresh AI
+evaluation are complete: 501 weeks from 105 Personas, with the frozen 81/24
+development/final partition. Full history achieved higher Card precision and
+Opportunity recall; Nomic used fewer API dollars and had lower measured latency.
 The [consolidated record](../../logs/experiments/reports/north_star_20260906/nsm_experiment.json)
-contains preparation evidence and settings, not NSM performance results.
+contains all fresh judgments, attempts, scores, uncertainty, and validation.
+See [completed results](#completed-results). Human review remains deferred.
 
 ## Reset scope
 
@@ -16,7 +18,7 @@ judgments, and conclusions will not be reused.
 - Preserved source histories, upstream Drift data, reusable code, existing
   configuration inputs, and unrelated work. Git and closed Beads history remain.
   The user has now authorized this experiment's API calls without a spending
-  cap; the [execution settings](#execution-settings-and-remaining-preparation)
+  cap; the [execution settings](#execution-settings)
   supersede the old experiment's monetary limits.
 - Saved NSM cards await fresh export. Live NSM fails closed until a fresh
   budget is configured; the rest of saved Persona replay remains available.
@@ -254,27 +256,30 @@ from this consolidated record.
   NSM reference judgments later and disclose the AI evaluator and settings;
   these are not human validation.
 
-The audit enumerated weekly metadata and recomputed upstream states without
-NSM semantic review. Construct executable NSM cases only after the remaining
-runner preparation below. No NSM reference judgments, quotations, or comparison
-results have been generated.
+The preparation audit enumerated weekly metadata and recomputed upstream states
+before any fresh NSM semantic review. The runner subsequently froze all 501
+executable cases and requests, then generated the judgments and quotations
+reported below. The original methodology snapshot and source hashes remain in
+the consolidated record alongside the completed analysis.
 
-### Execution settings and remaining preparation
+### Execution settings
 
 Histories contain 2–12 entries, with a median of nine. Local Nomic tokenization
 of complete entry-and-response candidates measured a median of 187 tokens,
 95th percentile of 358, and maximum of 596 against the pinned tokenizer's
-8,192-token limit. This uses a response-inclusive sizing template; freeze its
-exact serialization before retrieval.
+8,192-token limit. The runner froze the response-inclusive serialization before
+retrieval and embedded 839 distinct eligible documents without truncation.
 
 The authorized OpenAI count-only audit successfully measured 150 complete-history
 Persona–Core Value requests: **1,682–4,095 input tokens**, with a median of
 3,063.5 and 95th percentile of 3,794.7. All fit the 16,000-token limit. Two
 additional byte-size diagnostic probes also fit. These 152 calls produced
 token receipts, not NSM judgments. Their full-history contexts and placeholder
-context hashes are sizing probes; final weekly requests still require matching
-token counts after freezing. Receipts and prompt/schema hashes are in the
-consolidated record.
+context hashes are sizing probes. Execution separately counted all 2,011 fixed
+source-review requests after freezing: 2,010 succeeded at 1,304–4,067 tokens;
+one exhausted its two network attempts and remained a failed Nomic case.
+Quotation requests were counted before their own calls. All receipts and
+prompt/schema hashes are in the consolidated record.
 
 These settings govern the fresh experiment. They preserve the existing
 reliability controls while removing its superseded spending limits:
@@ -302,14 +307,36 @@ selecting the most favourable pass. The primary judgments and the stated
 adjudication rule determine headline metrics. This sample is a practical
 consistency check, not a power calculation.
 
-**Implementation still required:** adapt Nomic serialization to include eligible
-responses; construct the 501 cases with explicit synthetic response availability;
-prepare the two-variant runner, blinded evaluation/rechecks, and consolidated
-reporting; and support the uncapped policy in the experiment provider adapter.
-The preserved policy files and runtime still enforce the old US$20 and US$0.25
-limits, so editing this methodology does not enable execution. Recount final
-inputs, verify the runner, and freeze prompt/configuration hashes before
-generation. No further spending approval is required within this experiment.
+The [controlled runner](../../scripts/experiments/nsm_experiment.py) constructs
+all 501 cases, includes eligible responses in Nomic serialization, and implements
+the paired runtime, blinded evaluation, rechecks, repeated assessments, and
+consolidated reporting. Its experiment-specific provider adapter applies the
+uncapped policy while preserving the reliability controls above. Preparation
+freezes serialization before embedding, then records code, source, prompt,
+configuration, and request hashes. Execution counts all fixed source-review
+requests before generation and each exact-quotation request before its call.
+No further spending approval is required within this experiment.
+
+The generation commands used were `prepare`, followed by `run --concurrency 8`.
+After completion, two audited corrections to deterministic adjudication were
+applied as described below. The completed record accepts verification and
+regrading, while `prepare` and `run` reject the changed generation-code hashes.
+The original generation code is archived inside the same record.
+
+From the repository root, with `.venv` activated, reproduce validation and scores
+without provider calls:
+
+```sh
+uv run --no-sync python scripts/experiments/nsm_experiment.py verify
+uv run --no-sync python scripts/experiments/nsm_experiment.py report
+```
+
+The runner checkpoints into the consolidated record and reuses completed
+receipts on resume. It records uncertain interrupted attempts without replaying
+them. Runtime latency sums token-count and generation attempt durations, local
+selection, and Nomic ranking plus its equally allocated embedding preparation;
+batch queueing and experiment-checkpoint writes are excluded. Separate stage
+timestamps record experiment wall time. Human review remains deferred.
 
 ## Evaluation
 
@@ -476,5 +503,128 @@ this motivates checking Luna, rather than establishing a Luna-specific finding.
 
 Both Luna prompts include `SHARED_SEMANTIC_RUBRIC`. Freeze adapted prompt text
 and settings in **`nsm_experiment.json`**, alongside both variants, repeated
-assessments, and the human-review deferral. These reusable helpers do not yet
-implement the complete comparison described above.
+assessments, and the human-review deferral. The controlled runner composes these
+helpers without changing their semantic rubric.
+
+## Completed results
+
+Both variants completed all 501 weekly cases with `gpt-5.6-luna` at `low`
+reasoning; fresh shared references, exact-quotation reviews, contradiction
+rechecks, and consistency repeats used the same model at `xhigh`. The following
+results use corrected deterministic adjudication and identical paired exclusion
+lists for each affected metric. They are AI assessments of synthetic histories.
+
+| Partition | Variant | Card precision | Opportunity recall |
+| --- | --- | ---: | ---: |
+| Development: 391 weeks, 81 Personas | Nomic top three | 180/302 = 59.60% | 180/319 = 56.43% |
+| Development | Full eligible history | 240/314 = 76.43% | 240/319 = 75.24% |
+| Qualified final: 110 weeks, 24 Personas | Nomic top three | 52/86 = 60.47% | 52/87 = 59.77% |
+| Qualified final | Full eligible history | 72/86 = 83.72% | 72/87 = 82.76% |
+
+The paired differences below are **Nomic minus full history**, with 95%
+percentile intervals from 10,000 whole-Persona resamples within each partition.
+Negative precision and recall differences favour full history. None of these
+headline, cost, or latency intervals had an undefined resample.
+
+| Paired difference | Development: estimate [95% interval] | Qualified final: estimate [95% interval] |
+| --- | ---: | ---: |
+| Card precision, percentage points | −16.83 [−22.67, −10.80] | −23.26 [−35.26, −9.30] |
+| Opportunity recall, percentage points | −18.81 [−24.92, −12.46] | −22.99 [−35.62, −8.57] |
+| Total runtime API cost, USD | −0.33436 [−0.39536, −0.27730] | −0.06575 [−0.08897, −0.04369] |
+| Mean runtime latency per week, seconds | −5.37 [−6.27, −4.50] | −3.04 [−3.99, −2.06] |
+
+Full history therefore provides the stronger quality result for this tested
+configuration. Nomic's lower cost and latency came with lower precision and
+recall in both partitions; the benchmark does not support claiming that its
+top-three shortlist preserved quality. It supplies method-selection evidence
+without establishing human validity or deployment approval.
+
+### Denominators and diagnostics
+
+Development had 339 confirmed reference opportunities and nine unresolved
+opportunities. Final evaluation had 95 confirmed and one unresolved. After
+shared-reference and quotation adjudication, the paired exclusions were 25
+development cases for precision and 29 for recall; final exclusions were eight
+and nine respectively. Precision excludes unresolved displayed-card judgments;
+recall excludes unresolved opportunities or card judgments. The remaining
+non-opportunity and no-card cases contribute only where the metric definition
+applies. Exact case IDs, original judgments, and exclusion reasons are stored.
+
+Nomic displayed 322 development and 94 final cards; full history displayed 338
+and 94. Three Nomic runtime failures and one full-history runtime failure all
+occurred in development. Each retained a confirmed opportunity and counted as
+a missed opportunity, with no incorrect displayed card. Six primary reference
+requests failed in development; none failed in final evaluation. The final
+uncertainty exclusions therefore also reflect semantic disagreement and
+adjudication, rather than only failed requests.
+
+Nomic retrieval hit rate@3 was 329/336 (97.92%) in development and 95/95 (100%)
+in final evaluation. This checks whether any supportive source was retained.
+Among its scored cards with resolved reference priority, the shortlist omitted
+the source preferred under product rules in 90/299 development cases and
+27/86 final cases. Selection-rule correctness was 184/302 for Nomic versus
+251/313 for full history in development, and 54/86 versus 75/86 in final
+evaluation. This distinction explains why high supportive-source retrieval
+coverage did not preserve card quality.
+
+Both variants correctly omitted all 14 confidently assessed final cases
+without an opportunity. The final correct-omission diagnostic and its paired
+difference had 9,999 defined bootstrap resamples and one undefined resample;
+all other stored intervals had 10,000 defined resamples. The consolidated
+record contains every diagnostic's denominator and interval, plus descriptive
+counts and exclusions by cohort, partition, weekly state, and eligible source
+components. Of 501 cases, 418 had eligible Journal Entries and responses, 48
+had eligible Journal Entries only, and 35 had no semantically eligible writing
+(34 Insufficient Evidence controls and one empty-source Active Drift case).
+Selected quotation-source counts are reported separately for each variant.
+
+### Cost, consistency, and scoring corrections
+
+Measured runtime API costs were **$0.55685 for Nomic** and **$0.95696 for full
+history**, a 41.81% reduction for Nomic across all 501 cases. Mean per-week
+latency was 10.84 versus 16.21 seconds in development, and 9.90 versus 12.94
+seconds in final evaluation. These timings include Nomic embedding preparation
+and retrieval overhead under the allocation defined above. Local CPU compute
+was not assigned a dollar cost. Nomic ran first, so provider load and caching
+may affect the observed cost and latency differences.
+
+Shared AI evaluation had **$9.33377** in recorded usage costs; combined known
+runtime and evaluation costs were **$10.84758** across 3,079 generation attempts.
+Five timed-out evaluation attempts returned no usage receipt, so their costs
+are unknown and the combined figure is incomplete. All 3,074 received responses
+reported `gpt-5.6-luna`; no model substitution occurred.
+
+The 20-Persona consistency sample had raw source-decision pairwise agreement
+of 341/384 (88.80%); 21 of 128 source coordinates did not agree across all
+three assessments. Exact-quotation acceptance agreement was 107/109 (98.17%),
+with one disagreement and one incomplete coordinate among 37 quotations.
+One repeat quotation request exhausted both validation attempts. These raw
+label comparisons measure evaluator consistency. Derived opportunity, priority,
+and card-grade agreement is also stored, but compares the adjudicated primary
+pass with unadjudicated repeats and should be read only as a diagnostic.
+
+Independent review identified two deterministic adjudication defects during
+primary source review, before quotation review or headline scoring. The
+correction plan was recorded before those stages; the frozen generation run
+then completed unchanged. The corrected analysis requires an actual primary
+source judgment before a contradiction recheck can affect grading, and leaves
+a quotation unresolved when its source-based rejection was superseded without
+an independent assessment of that quotation. It does not transfer a recheck's
+quotation ruling between variants.
+
+Ten unnecessary rechecks across six development cases were preserved as
+protocol deviations and their rulings ignored; their $0.01214 cost remains in
+the evaluation total. The corrections added two development cases to each
+headline metric's paired exclusion list. Final metrics and intervals were
+unchanged. The record preserves the original grades, metrics, evaluator and
+runner source, immutable generation hashes, correction reasons, and corrected
+code hashes, so both analyses remain auditable. No additional recovery calls
+or runtime tuning followed the corrections.
+
+Validation passed 394 targeted experiment, North Star Moment, and affected
+demo tests, Ruff for the new modules and tests, and scoped MyPy for all four
+experiment modules. Independent audits reproduced all original and corrected
+grades, all 50 stored intervals, provider attempts and costs, and source hashes.
+The full repository suite was not rerun. The accepted qualified-final exposure
+limitation above still applies, and human review remains deferred. Saved-card
+export and the final capstone walkthrough remain separate work.

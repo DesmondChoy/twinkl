@@ -11,7 +11,9 @@ card until fresh records are exported. Live review fails closed without the
 removed integration budget; a fresh budget setup remains pending.
 
 The [fresh experiment methodology](nsm_experiment_methodology.md) records the
-reset and is pending user review. It replaces the previous experimental
+reset and the completed 501-week AI comparison. Full history achieved higher
+Card precision and Opportunity recall than Nomic top-three retrieval in both
+partitions; human review remains deferred. It replaces the previous experimental
 protocols, cohort decisions, and acceptance gates. This specification describes
 the existing product behavior and reusable implementation contracts; it does
 not establish results or authorize a new experiment.
@@ -194,7 +196,7 @@ reason in Inspect. The existing Coach Digest remains available.
 
 ## 5. Academic purpose
 
-The research question and evaluation design remain to be documented in the
+The research question and evaluation design are documented in the
 [fresh experiment methodology](nsm_experiment_methodology.md).
 
 Self-affirmation theory motivates the idea of placing a difficult observation
@@ -219,17 +221,18 @@ The linked Capstone Requirements describe the assessment criteria.
 
 Previous North Star Moment results and derived findings have been retired.
 The [fresh experiment methodology](nsm_experiment_methodology.md) is the sole
-location for the reset and subsequent experimental decisions. Dataset,
-sampling, holdout policy, comparison variants, metrics, criteria, and paid
-execution settings remain pending user review. Existing scripts and helpers
-are retained for reuse, not as an approved protocol.
+location for the reset and subsequent experimental decisions. The authorized
+Nomic and full-history comparison is complete across 105 Personas, with 81 in
+development and 24 in qualified final evaluation. Its results, uncertainty,
+scoring corrections, and evidence limits are documented there. This is AI
+assessment of synthetic histories; it does not establish human validity.
 
 ## 7. Work status
 
-Housekeeping is tracked in `twinkl-fz34.13`. The application implementation
-remains in place. Experiment execution, fresh saved-card export, and renewed
-validation are outside this housekeeping step. No previous experiment or
-browser success claim is carried forward.
+Housekeeping is tracked in `twinkl-fz34.13`; the completed experiment is tracked
+in `twinkl-fz34.7`. The application implementation remains in place. Fresh
+saved-card export and the final capstone walkthrough remain separate work.
+No previous experiment or browser success claim is carried forward.
 
 ## Technical appendix
 
