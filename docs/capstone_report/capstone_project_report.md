@@ -47,7 +47,7 @@ AI-assisted reflection can support self-examination, but a response that default
 
 Three linked empirical investigations organise the research. First, the project constructed 1,651 synthetic longitudinal Journal Entries from 204 personas under demographic, narrative-continuity, label-leakage, and train-only augmentation controls. A shared 115-Journal-Entry benchmark produced human-human Fleiss' kappa of 0.56 and mean LLM-Judge-human Cohen's kappa of 0.66, while two targeted synthetic batches produced local but not general improvements. Second, 69 run IDs covering 133 persisted configurations established a measurable but inadequate performance frontier for the Value Identity Function (VIF) Critic (Offline): the three-seed Balanced Softmax reference reached median quadratic weighted kappa (QWK) of 0.362 and Conflict recall of 0.313. Third, VIF Critic Predictions did not improve Drift recall in the tested reviewer-input or scheduling experiments, whereas the Weekly Drift Reviewer produced a more useful but still development-only operating point when it examined cumulative Journal Entry history. The entry-level VIF Critic (Offline) and longitudinal Weekly Drift Reviewer use different inputs and reference labels, so their scores are not a direct model comparison.
 
-The implemented core assessment path combines Weekly Drift Reviewer Decisions with the deterministic Drift Detector. The React Experience and Inspect views expose the Journal Entries, Weekly Drift Reviewer Decisions, justifications, validations, and state transitions behind each result, allowing an assessor to follow what was decided, how it was produced, and which evidence supports it. North Star Moment is integrated into both frontend paths, with source-checked cards, Inspect records, and completed browser checks. Its development evaluation and independent AI review are complete, while incorporation of numerical results and the source-level walkthrough into this paper remains paused at the user's request. The study supports an integrated and inspectable core capstone assessment path on AI-reviewed synthetic development evidence. Real-user usefulness, future human calibration of the AI review, fresh final-test performance, and deployment approval remain open.
+The implemented core assessment path combines Weekly Drift Reviewer Decisions with the deterministic Drift Detector. The React Experience and Inspect views expose the Journal Entries, Weekly Drift Reviewer Decisions, justifications, validations, and state transitions behind each result, allowing an assessor to follow what was decided, how it was produced, and which evidence supports it. North Star Moment implementation is retained in both frontend paths; card availability depends on fresh saved records and live budget setup, and its evaluation remains pending. The study supports an integrated and inspectable core capstone assessment path on AI-reviewed synthetic development evidence. Real-user usefulness, future human calibration of the AI review, fresh final-test performance, and deployment approval remain open.
 
 ## 1. Introduction
 
@@ -96,7 +96,7 @@ Table 1 separates completed work from claims that need more evidence.
 | VIF Critic (Offline) | Completed capstone experiment programme | Results support an offline research contribution, not user-facing Drift authority. |
 | Weekly Drift Detection | Development implementation | Results use AI-reviewed synthetic development data, not a fresh final test. |
 | Coach Digest | Experimental | Five saved responses passed Coach Digest Validations and same-model Coach Digest Evals. Future human calibration of the AI review is not complete. |
-| North Star Moment | First POC integration complete; results incorporation paused | Both frontend paths include source-checked cards and Inspect records and have passed browser checks. Numerical results and the source-level walkthrough remain outside this paper pending incorporation. |
+| North Star Moment | Implementation retained; evaluation pending | Saved cards require fresh export, and live generation requires a fresh budget. Evaluation findings and a source-level walkthrough await an approved methodology and execution. |
 | Experience and Inspect | Core assessment path implemented; capstone application in progress | Saved replays and tests show implemented behaviour. Coach Digest feedback capture, longitudinal Core Value history, the final professor walkthrough, real-user study, and optional live rerun remain open. |
 
 *Table 1. Capstone implementation status and the evidence boundary for each component.*
@@ -285,11 +285,11 @@ At the application-verification checkpoint on 30 August 2026, these overlapping 
 
 The public Railway assessment at [https://onboarding-production-1dd2.up.railway.app/](https://onboarding-production-1dd2.up.railway.app/) exposes the same end-to-end application for assessment. It is anonymous and assessment-only: it does not provide authentication, multi-tenant persistence, service-level guarantees, or deployment approval. Saved replays require no provider key, while live manual use can trigger paid provider calls. This application evidence supports the separate System Implementation & Demo assessment; it is not itself evidence for the Technical Paper's empirical conclusions.
 
-### 3.9 North Star Moment: development evaluation and reporting boundary
+### 3.9 North Star Moment: implementation and pending evaluation
 
-North Star Moment (NSM) is an integrated POC feature that quotes a completed action supporting a confirmed Core Value after an eligible closed-week result. Active Drift uses writing from before onset; No Active Drift prefers writing from the reviewed week and otherwise uses an earlier reference point. On 5 September 2026, the project reset its evaluation at the user's request. The [current protocol](../north_star/luna_evaluation_20260905.md) retains source identity and chronology checks and supplies all eligible earlier Journal Entries within a 16,000-token input budget, without embedding ranking. OpenAI `gpt-5.6-luna` at `low` reasoning performs selection, while the same model at `xhigh` reasoning evaluates sources and selected quotations using the same explicit semantic criteria. Repeated source/Core Value pairs receive one reference judgment, and the exact selected quotation is evaluated against its full source context.
+North Star Moment (NSM) is implemented to quote a completed action supporting a confirmed Core Value after an eligible closed-week result. Active Drift uses writing from before onset; No Active Drift prefers writing from the reviewed week and otherwise uses an earlier reference point. The implementation supports source-checked cards and Inspect records in both frontend paths, although the reset leaves saved cards awaiting fresh export and live generation unavailable until a fresh budget is configured.
 
-The [frozen Persona assignment](../../config/evals/north_star_cohort.json) preserves the separation between development and reserved histories. The revised run and an independent AI assessment of the evaluator are complete; incorporation of their results into this paper remains paused at the user's request. This procedure provides AI-reviewed synthetic evidence; differences in reasoning settings and a further AI review do not establish human validation or independence between model families. The [first POC integration](../../logs/experiments/reports/north_star_integration_20260906/README.md) includes source-checked cards and Inspect records in both frontend paths, with browser checks recorded separately from semantic evaluation.
+The [NSM experiment methodology](../north_star/nsm_experiment_methodology.md) records the evaluation reset and will define the first study in the new experiment record. Its design remains pending review, and no evaluation results are reported here.
 
 ## 4. Results
 
@@ -395,9 +395,9 @@ The displayed nudge is implemented and appears in the application flow, but it h
 
 **Implementation finding:** Twinkl implements one end-to-end and inspectable application path. It connects displayed conclusions to recorded inputs, model receipts, validations, and deterministic calculations; preserves chronological and session state; supports manual and saved Persona use; and provides bounded privacy and failure controls. Saved replays, validation checks, AI review, regression tests, and the public assessment deployment support implemented functionality, but they do not establish user usefulness, customer satisfaction, or longitudinal behaviour change.
 
-### 4.5 North Star Moment: results incorporation paused
+### 4.5 North Star Moment: evaluation pending
 
-Previous NSM experiment results were removed at the user's request when the evaluation was reset. The fresh development run and independent AI review of its evaluator are complete, with results retained separately; incorporation into this paper remains paused at the user's request. This paper therefore makes no current NSM accuracy, omission, cost, latency, or feasibility claim. The first POC application integration and browser checks are complete; the reserved final evaluation remains outstanding.
+NSM has no current evaluation results following the reset. Its first study in the new experiment record awaits an approved methodology and execution; the existing POC integration does not establish quotation quality or user usefulness.
 
 ## 5. Discussion
 
@@ -431,7 +431,7 @@ All Weekly Drift Detection references are AI-reviewed synthetic development evid
 
 Application evidence has similar limits. Five saved Coach Digest responses are too few to establish content quality, and the same model generated and evaluated them. Mechanical checks can identify broken evidence links or prohibited claims but cannot determine whether a person finds a response helpful, respectful, or well timed. The displayed nudge has no separate evaluation, while saved replays, regression tests, and an assessment deployment establish inspectability rather than usability, reliability under service load, privacy compliance, or deployment readiness.
 
-The NSM development evaluation uses synthetic histories and the same model family for selection and evaluation. Repeated writing within a Persona does not constitute independent participant evidence, and agreement with the evaluator cannot establish human correctness. The reserved histories remain excluded from development. Implementation and browser checks cover source invalidation and the two frontend paths, but they do not establish real-user usability, human usefulness, or final-test performance.
+NSM evaluation remains pending, so this paper draws no empirical conclusions about the feature's quotation quality or usefulness.
 
 ### 5.4 Safety, privacy, and ethics
 
@@ -453,13 +453,13 @@ The current evidence supports bounded use of the LLM-Judge VIF Labels for develo
 
 Future work should begin with the stored matched per-value error analysis described in Section 5.2, including exact Journal Entry case studies, followed by a frozen final test that excludes model and prompt development data. Future human calibration of the AI review with independent reviewers and a five-to-ten-user pilot should then examine perceived Coach Digest accuracy, relevance, timing, displayed-nudge response, and continued journaling over one to two weeks. A matched Luna-low VIF ablation would isolate whether the offline signal has value under the adopted reviewer contract, while provider attack testing, privacy review, and controlled latency measurement remain necessary before any deployment claim.
 
-The fresh NSM development evaluation, independent examination of the evaluator, and first POC application integration are complete, with browser verification recorded separately. Incorporation of numerical results and the source-level walkthrough into this paper remains paused. Subsequent work must distinguish task-specific AI review and browser checks from the reserved final evaluation and human validation.
+NSM is integrated into the POC, while its first study in the new experiment record awaits approval of the [evaluation methodology](../north_star/nsm_experiment_methodology.md). Results and a source-level walkthrough can be incorporated after that study is completed.
 
 ## AI Tool Declaration
 
 We used OpenAI Codex to inspect repository evidence, create report figures, capture local application screenshots, and help draft and edit this paper. We checked numerical claims against the named evaluation reports, current code, and stored run records. The authors remain responsible for study design, interpretation, source verification, and submitted text.
 
-The project also used language models for synthetic Journal Entry generation, LLM-Judge VIF Labels, LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, Coach Digest generation, Coach Digest Evals, and NSM development and reference review. Codex also assessed the evaluator independently after the fresh NSM run. Each use and its evidence limit are stated in the relevant method or result section.
+The project also used language models for synthetic Journal Entry generation, LLM-Judge VIF Labels, LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, Coach Digest generation, Coach Digest Evals, and NSM quotation selection. Each use and its evidence limit are stated in the relevant method or result section.
 
 ## References
 
@@ -517,7 +517,7 @@ The project also used language models for synthetic Journal Entry generation, LL
 
 The core experiment evidence snapshot used for this paper is commit [`dd4bfa9d`](https://github.com/DesmondChoy/twinkl/tree/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533). The implementation-objective evidence and test counts use commit [`44ebcf25`](https://github.com/DesmondChoy/twinkl/tree/44ebcf259537156e36f52dd489916d296dddd515), because application integration continued after the experiment snapshot. Table A1 links each principal claim to a stable file in the applicable snapshot.
 
-Sections 3.9 and 4.5 and Appendix C record the NSM reporting boundary following the evaluation reset. Its [current protocol](../north_star/luna_evaluation_20260905.md) and [frozen Persona assignment](../../config/evals/north_star_cohort.json) define the completed development experiment. The [experiment log](../../logs/experiments/north_star_moment.md) links its raw results, validation, independent evaluator review, saved-Persona supplement, and subsequent integration evidence. Incorporation of these results into this paper remains paused at the user's request; the core evidence snapshots below do not establish NSM performance.
+Sections 3.9 and 4.5 and Appendix C record the NSM reporting boundary following the evaluation reset. The [NSM experiment methodology](../north_star/nsm_experiment_methodology.md) is pending review; the core evidence snapshots below do not establish NSM performance.
 
 | Claim | Stable evidence |
 |---|---|
@@ -605,6 +605,6 @@ The application-verification environment on 30 August 2026 used Python 3.12.11 w
 
 The five accepted Persona key-week responses required seven generation calls because two initial responses failed Coach Digest Validations and were retried. Generation and Coach Digest Evals together used 12 calls, 16,547 input tokens, and 1,696 output tokens, with approximately 33.7 seconds of summed recorded request latency. Applying the provider's published standard-tier rates, including the cache-write multiplier, produced a total below one cent [25]. This is a reproduction calculation from saved receipts, not a billing record or a controlled latency benchmark.
 
-## Appendix C. NSM Evidence Incorporation Paused
+## Appendix C. NSM Walkthrough Pending Evaluation
 
-Independent review of the fresh NSM experiment's evaluator is complete. Rebuilding the source-level NSM walkthrough remains paused with the report updates at the user's request. It must identify the complete source context, the selected exact quotation or omission, the evaluator's reasoning, and any disagreements with the independent assessment. Application and browser walkthroughs are recorded in the [integration evidence](../../logs/experiments/reports/north_star_integration_20260906/browser-qc/README.md); incorporating that material into this appendix remains paused, and the existing application evidence in Section 4.4 retains its original scope.
+A source-level NSM walkthrough awaits the first study defined by the [NSM experiment methodology](../north_star/nsm_experiment_methodology.md). The existing application evidence in Section 4.4 retains its original scope.

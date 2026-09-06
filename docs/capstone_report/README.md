@@ -8,8 +8,8 @@ supporting capstone report materials. Submitted milestone files remain under
 
 - [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
   the Phase 2 Technical Paper
-- [`capstone_project_report.pdf`](capstone_project_report.pdf) — stale rendered PDF;
-  regenerate and visually verify it after the NSM evaluation reset
+- Rendered report PDF — unavailable following the NSM evaluation reset;
+  regenerate and visually verify it after a later approved paper update
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
 - [`images/`](images/) — report figures, interface captures, and evaluation
@@ -20,14 +20,14 @@ supporting capstone report materials. Submitted milestone files remain under
 ## Report Controls
 
 - **Document status:** Maintained Phase 2 Technical Paper source; rendered PDF
-  pending regeneration after the NSM evaluation reset
+  unavailable pending a later approved paper update
 - **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
 - **Product source:** [`../prd.md`](../prd.md)
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
-- **Evidence date:** Core paper 2026-08-31; NSM integration status corrected
-  2026-09-06; numerical results and walkthrough incorporation paused
+- **Evidence date:** Core paper 2026-08-31; NSM evaluation reset 2026-09-06,
+  with methodology review and the first study pending
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -61,18 +61,14 @@ for the five saved Persona key weeks. This result is same-model AI review. The
 independent-provider Coach Digest and Drift/control tooling has no committed paid result and
 does not change the report's evidence claim.
 
-The previous NSM results, figure, and source-level walkthrough have been
-removed from the maintained paper at the user's request. The [fresh evaluation
-protocol](../north_star/luna_evaluation_20260905.md) uses `gpt-5.6-luna` with
-`low` reasoning for selection and `xhigh` reasoning for evaluation, followed
-by independent AI review of the evaluator. The run and review are complete;
-incorporation of results into this paper remains paused at the user's request.
-The first POC integration and browser checks are also complete. The
-[experiment log](../../logs/experiments/north_star_moment.md) links the separate
-evidence. Sections 3.9 and 4.5 and Appendix C retain the pause on numerical
-results and walkthrough incorporation. When report updates resume, regenerate and inspect every PDF page.
-The existing PDF contains superseded NSM results and does not represent the
-revised source.
+Prior NSM results, derived insights, and evaluation artifacts have been removed
+from the current experiment record. The [NSM experiment
+methodology](../north_star/nsm_experiment_methodology.md) records the reset;
+its design remains pending review before the first study in the new record.
+Sections 3.9 and 4.5 and Appendix C preserve the implemented feature's scope
+without carrying forward evaluation or browser-success claims. The rendered
+report PDF has been removed because it contained superseded NSM results.
+Regenerate it and inspect every page after a later approved paper update.
 
 ## Submission Checks
 
