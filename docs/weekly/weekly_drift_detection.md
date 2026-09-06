@@ -432,6 +432,12 @@ The Coach Digest prompt requires:
 - separate cited evidence for the prior and current weeks;
 - cited Journal Entries;
 - reflective rather than prescriptive language;
+- natural connections across Journal Entries, with dates only when needed for
+  clarity and no narration of the review process; prior and current experiences
+  remain distinct, and findings must support any stated pattern or change;
+- conversational uncertainty that leaves room for the user's circumstances
+  without commentary about excerpts, evidence sufficiency, or model inference;
+  unclear situations remain explicit without assumed motives or reassurance;
 - no score jargon, gamification, or judgmental framing;
 - no micro-habit or action-plan output;
 - quoted evidence where possible; and
@@ -459,6 +465,12 @@ Drift as proof of success. More-reflection-needed responses state ambiguity
 gently and ask for useful context without deciding whether Drift exists.
 
 These checks are narrow guardrails, not a complete explanation-quality claim.
+
+Prompt version `4.2` adds these conversational style requirements. Saved
+responses retain their original wording and prompt provenance. The sample
+generation report reads the prompt version from saved generation provenance
+for both JSON and Markdown output; empty or mixed-version manifests are
+rejected rather than assigned a misleading version.
 
 ---
 

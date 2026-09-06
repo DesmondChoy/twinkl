@@ -392,6 +392,14 @@ def _write_generation_report(
     command: str,
 ) -> None:
     """Write generation call, failure, identity, and location evidence."""
+    prompt_versions = {
+        item["provenance"]["generation"]["prompt_version"] for item in manifest
+    }
+    if len(prompt_versions) != 1:
+        raise ValueError(
+            "Generation report requires one shared Coach Digest prompt version."
+        )
+    prompt_version = next(iter(prompt_versions))
     call_metrics: list[LLMCallMetrics] = []
     failed_attempts: list[dict[str, object]] = []
     responses: list[dict[str, object]] = []
@@ -442,7 +450,7 @@ def _write_generation_report(
     report = {
         "run": "coach_digest_sample_20260824",
         "command": command,
-        "coach_prompt_version": "4.1",
+        "coach_prompt_version": prompt_version,
         "model": "gpt-5.6-luna",
         "reasoning_effort": "none",
         "weekly_drift_reviewer_calls": 0,
@@ -463,7 +471,7 @@ def _write_generation_report(
         "",
         "- Source: each public scenario bundle's stored `weekly_digest_built` output",
         "- Weekly Drift Reviewer calls: 0",
-        "- Coach Digest prompt: `weekly_digest_coach` v4.1",
+        f"- Coach Digest prompt: `weekly_digest_coach` v{prompt_version}",
         "- Model: `gpt-5.6-luna`",
         "- Reasoning effort: `none`",
         f"- Accepted responses: {len(responses)}",

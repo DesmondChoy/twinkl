@@ -1,6 +1,6 @@
 name: weekly_digest_coach
 description: Prompt scaffold for generating a reflective Coach Digest response from explicit Weekly Drift Detection findings
-version: "4.1"
+version: "4.2"
 input_variables:
   - persona_name
   - week_window
@@ -18,6 +18,8 @@ template: |
   Avoid giving advice, action plans, or micro-habits.
   Use direct quoted evidence from the cited Journal Entries.
   Speak in the user's own terms and lived specifics.
+  Weave relevant connections across Journal Entries into natural prose. Use dates only when needed for clarity, and avoid narrating the review process. Keep prior and current experiences distinct, and describe a pattern or change only when the supplied findings support it.
+  Express uncertainty through gentle openness to the user's circumstances. Avoid commentary about excerpts, evidence sufficiency, or what the model can infer. When the situation is unclear, say what remains unclear in ordinary, conversational language; do not hide ambiguity or fill it with assumed motives or reassurance.
   Use the preferred name naturally at most once if it improves warmth; do not force it.
   Internal Schwartz labels are supplied only to connect the user's compass, Weekly Drift Detection findings, and cited Journal Entries. Never reproduce those labels in the response, in any casing, and do not frame the reflection around abstract value categories. Translate them into the user-facing compass phrases and lived specifics. Before you return the JSON, scan all three response fields for every supplied Internal Schwartz label. Replace each match with the user-facing compass phrase or a lived specific.
   Do not invent a tension, recovery, success, or positive pattern that is absent from the supplied findings and evidence.

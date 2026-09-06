@@ -15,6 +15,7 @@ from scripts.coach.generate_approved_judge_sample import (
     _extract_scenario_key_week_digests,
     _find_stored_digest_path,
     _generate_reusing_weekly_drift,
+    _write_generation_report,
 )
 from src.coach.schemas import EvidenceSnippet, LLMCallMetrics, WeeklyDigest
 
@@ -150,7 +151,7 @@ def test_coach_only_generation_reuses_outputs_and_builds_manifest(tmp_path: Path
     assert calls == 2
     assert len(manifest) == 2
     assert all(
-        item["provenance"]["coach_prompt_version"] == "4.1"
+        item["provenance"]["coach_prompt_version"] == "4.2"
         for item in manifest
     )
     assert all(item["digest"]["state_comparisons"] == [] for item in manifest)
@@ -251,3 +252,42 @@ def test_coach_only_generation_retries_one_validation_failure(tmp_path: Path):
     assert len(manifest) == 1
     assert manifest[0]["provenance"]["coach_attempt_count"] == 2
     assert len(list(output_dir.glob("*.coach_diagnostic.json"))) == 2
+
+
+@pytest.mark.parametrize("prompt_version", ["4.1", "4.2"])
+def test_generation_report_uses_saved_prompt_version(
+    tmp_path: Path, prompt_version: str
+):
+    manifest_path = (
+        Path(__file__).resolve().parents[2]
+        / "logs/experiments/reports/coach_digest_sample_20260824"
+        / "judge_sample_manifest.json"
+    )
+    manifest = json.loads(manifest_path.read_text())
+    for item in manifest:
+        item["provenance"]["generation"]["prompt_version"] = prompt_version
+
+    _write_generation_report(manifest, tmp_path, command="test report")
+
+    report = json.loads((tmp_path / "generation_metrics.json").read_text())
+    assert report["coach_prompt_version"] == prompt_version
+    assert (
+        f"Coach Digest prompt: `weekly_digest_coach` v{prompt_version}"
+        in (tmp_path / "report.md").read_text()
+    )
+
+
+@pytest.mark.parametrize("versions", [[], ["4.1", "4.2"]])
+def test_generation_report_rejects_missing_or_mixed_prompt_versions(
+    tmp_path: Path, versions: list[str]
+):
+    manifest = [
+        {"provenance": {"generation": {"prompt_version": version}}}
+        for version in versions
+    ]
+
+    with pytest.raises(ValueError, match="one shared Coach Digest prompt version"):
+        _write_generation_report(manifest, tmp_path, command="test report")
+
+    assert not (tmp_path / "generation_metrics.json").exists()
+    assert not (tmp_path / "report.md").exists()
