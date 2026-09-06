@@ -1,0 +1,670 @@
+{
+  "cumulative_cost_usd": 0.62978415,
+  "generation_attempts": 3,
+  "manifest_hash": "66ece6e4db1646dcd5a763cc76eabd4ac30b2cf4a950b3fa2992a1b173cc544f",
+  "new_cost_usd": 0.01085415,
+  "original_selection_precision_unchanged": true,
+  "scope": "Original-writing offline coverage. NSM frontend rendering, actual dispatch suppression, and independently timestamped nudge-response integration remain untested.",
+  "supplemental_cases": [
+    {
+      "accepted": true,
+      "candidate_assessment": {
+        "action_assessment": "The writer told Pieter they would think about the unsanctioned side project over the weekend, delaying an immediate commitment while considering whether it was allowed.",
+        "conflict_assessment": "No actual same-value-conflicting behavior is reported. The writer's desire to do the project is an inclination, not an action against conformity.",
+        "core_value": "conformity",
+        "entry_id": "11de77e8:entry:3",
+        "evaluated_quote": "I told Pieter I'd think about it over the weekend.",
+        "quote_assessment": "The quote records the writer deferring a response to the unsanctioned project; in context, this is an actual restraint of a potentially norm-violating impulse while the writer considers whether it is allowed.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Deferring rather than immediately accepting the project restrained the writer's stated impulse to proceed and helped avoid potentially violating workplace expectations or disrupting group functioning."
+      },
+      "case_id": "two-values-lukas:week:5:conformity",
+      "failed": false,
+      "reference": {
+        "core_value": "conformity",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:3",
+            "evidence_quote": "I told Pieter I'd think about it over the weekend. Which is code for \"I want to do it but I need to figure out if I'm allowed to want to do it.\"",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:2",
+            "evidence_quote": "Didn't say it though. The senior architects set up the current flow and they were in the call. Felt like bringing up a redesign right there would come across as me trying to show off, especially with the tech lead thing floating around. So I just nodded and said I could look into Devika's point offline.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:0",
+            "evidence_quote": "But I also know I did the right thing saying yes. Everyone on the team expects it, Noor would think I was insane to turn it down, and frankly it would look odd to pass on a promotion you're being handed.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "runtime": {
+        "core_value": "conformity",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:3",
+            "evidence_quote": "I told Pieter I'd think about it over the weekend.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:2",
+            "evidence_quote": "Didn't say it though. The senior architects set up the current flow and they were in the call. Felt like bringing up a redesign right there would come across as me trying to show off, especially with the tech lead thing floating around. So I just nodded and said I could look into Devika's point offline.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:0",
+            "evidence_quote": "But I also know I did the right thing saying yes. Everyone on the team expects it, Noor would think I was insane to turn it down, and frankly it would look odd to pass on a promotion you're being handed.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "11de77e8:entry:3",
+        "evidence_quote": "I told Pieter I'd think about it over the weekend.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      }
+    }
+  ],
+  "weeks": [
+    {
+      "case_id": null,
+      "core_value_states": {
+        "achievement": "no_active_drift",
+        "security": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "scenario_id": "stable-meera",
+      "source": "no_trigger_control",
+      "week_end": "2025-08-10",
+      "week_id": "stable-meera:week:1",
+      "week_start": "2025-08-04"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "achievement": "no_active_drift",
+        "security": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "scenario_id": "stable-meera",
+      "source": "no_trigger_control",
+      "week_end": "2025-08-17",
+      "week_id": "stable-meera:week:2",
+      "week_start": "2025-08-11"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "achievement": "no_active_drift",
+        "security": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "scenario_id": "stable-meera",
+      "source": "no_trigger_control",
+      "week_end": "2025-08-24",
+      "week_id": "stable-meera:week:3",
+      "week_start": "2025-08-18"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "achievement": "no_active_drift",
+        "security": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "scenario_id": "stable-meera",
+      "source": "no_trigger_control",
+      "week_end": "2025-08-31",
+      "week_id": "stable-meera:week:4",
+      "week_start": "2025-08-25"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "achievement": "no_active_drift",
+        "security": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "scenario_id": "stable-meera",
+      "source": "no_trigger_control",
+      "week_end": "2025-09-07",
+      "week_id": "stable-meera:week:5",
+      "week_start": "2025-09-01"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "achievement": "no_active_drift",
+        "security": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "scenario_id": "stable-meera",
+      "source": "no_trigger_control",
+      "week_end": "2025-09-14",
+      "week_id": "stable-meera:week:6",
+      "week_start": "2025-09-08"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "achievement": "no_active_drift",
+        "security": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "scenario_id": "stable-meera",
+      "source": "no_trigger_control",
+      "week_end": "2025-09-21",
+      "week_id": "stable-meera:week:7",
+      "week_start": "2025-09-15"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "universalism": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "scenario_id": "active-wei-jun",
+      "source": "no_trigger_control",
+      "week_end": "2025-06-01",
+      "week_id": "active-wei-jun:week:1",
+      "week_start": "2025-05-26"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "universalism": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "scenario_id": "active-wei-jun",
+      "source": "no_trigger_control",
+      "week_end": "2025-06-08",
+      "week_id": "active-wei-jun:week:2",
+      "week_start": "2025-06-02"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "universalism": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "scenario_id": "active-wei-jun",
+      "source": "no_trigger_control",
+      "week_end": "2025-06-15",
+      "week_id": "active-wei-jun:week:3",
+      "week_start": "2025-06-09"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "universalism": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "scenario_id": "active-wei-jun",
+      "source": "no_trigger_control",
+      "week_end": "2025-06-22",
+      "week_id": "active-wei-jun:week:4",
+      "week_start": "2025-06-16"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "universalism": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "scenario_id": "active-wei-jun",
+      "source": "no_trigger_control",
+      "week_end": "2025-06-29",
+      "week_id": "active-wei-jun:week:5",
+      "week_start": "2025-06-23"
+    },
+    {
+      "case_id": "8f83c818:universalism:episode_01",
+      "core_value_states": {
+        "universalism": "active_drift"
+      },
+      "delivery_state": "active_drift",
+      "expected_nsm_action": "review_eligible_writing",
+      "frozen_grade": "accepted",
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "scenario_id": "active-wei-jun",
+      "source": "matching_frozen_case",
+      "week_end": "2025-07-06",
+      "week_id": "active-wei-jun:week:6",
+      "week_start": "2025-06-30"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "power": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "scenario_id": "recovered-marc",
+      "source": "no_trigger_control",
+      "week_end": "2025-02-16",
+      "week_id": "recovered-marc:week:1",
+      "week_start": "2025-02-10"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "power": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "scenario_id": "recovered-marc",
+      "source": "no_trigger_control",
+      "week_end": "2025-02-23",
+      "week_id": "recovered-marc:week:2",
+      "week_start": "2025-02-17"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "power": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "scenario_id": "recovered-marc",
+      "source": "no_trigger_control",
+      "week_end": "2025-03-02",
+      "week_id": "recovered-marc:week:3",
+      "week_start": "2025-02-24"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "power": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "scenario_id": "recovered-marc",
+      "source": "no_trigger_control",
+      "week_end": "2025-03-09",
+      "week_id": "recovered-marc:week:4",
+      "week_start": "2025-03-03"
+    },
+    {
+      "case_id": "988d1a65:power:episode_01",
+      "core_value_states": {
+        "power": "active_drift"
+      },
+      "delivery_state": "active_drift",
+      "expected_nsm_action": "review_eligible_writing",
+      "frozen_grade": "accepted",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "scenario_id": "recovered-marc",
+      "source": "matching_frozen_case",
+      "week_end": "2025-03-16",
+      "week_id": "recovered-marc:week:5",
+      "week_start": "2025-03-10"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "power": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "scenario_id": "recovered-marc",
+      "source": "no_trigger_control",
+      "week_end": "2025-03-23",
+      "week_id": "recovered-marc:week:6",
+      "week_start": "2025-03-17"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "power": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "scenario_id": "recovered-marc",
+      "source": "no_trigger_control",
+      "week_end": "2025-03-30",
+      "week_id": "recovered-marc:week:7",
+      "week_start": "2025-03-24"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "power": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "scenario_id": "recovered-marc",
+      "source": "no_trigger_control",
+      "week_end": "2025-04-06",
+      "week_id": "recovered-marc:week:8",
+      "week_start": "2025-03-31"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "self_direction": "insufficient_evidence",
+        "tradition": "no_active_drift"
+      },
+      "delivery_state": "insufficient_evidence",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "02fb94f3",
+      "persona_name": "Noor Haddad",
+      "scenario_id": "uncertain-noor",
+      "source": "no_trigger_control",
+      "week_end": "2025-04-20",
+      "week_id": "uncertain-noor:week:1",
+      "week_start": "2025-04-14"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "self_direction": "no_active_drift",
+        "tradition": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "02fb94f3",
+      "persona_name": "Noor Haddad",
+      "scenario_id": "uncertain-noor",
+      "source": "no_trigger_control",
+      "week_end": "2025-04-27",
+      "week_id": "uncertain-noor:week:2",
+      "week_start": "2025-04-21"
+    },
+    {
+      "case_id": "02fb94f3:tradition:episode_01",
+      "core_value_states": {
+        "self_direction": "no_active_drift",
+        "tradition": "active_drift"
+      },
+      "delivery_state": "active_drift",
+      "expected_nsm_action": "review_eligible_writing",
+      "frozen_grade": "not_selected",
+      "persona_id": "02fb94f3",
+      "persona_name": "Noor Haddad",
+      "scenario_id": "uncertain-noor",
+      "source": "matching_frozen_case",
+      "week_end": "2025-05-04",
+      "week_id": "uncertain-noor:week:3",
+      "week_start": "2025-04-28"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "self_direction": "no_active_drift",
+        "tradition": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "02fb94f3",
+      "persona_name": "Noor Haddad",
+      "scenario_id": "uncertain-noor",
+      "source": "no_trigger_control",
+      "week_end": "2025-05-11",
+      "week_id": "uncertain-noor:week:4",
+      "week_start": "2025-05-05"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "self_direction": "no_active_drift",
+        "tradition": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "02fb94f3",
+      "persona_name": "Noor Haddad",
+      "scenario_id": "uncertain-noor",
+      "source": "no_trigger_control",
+      "week_end": "2025-05-18",
+      "week_id": "uncertain-noor:week:5",
+      "week_start": "2025-05-12"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "self_direction": "no_active_drift",
+        "tradition": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "02fb94f3",
+      "persona_name": "Noor Haddad",
+      "scenario_id": "uncertain-noor",
+      "source": "no_trigger_control",
+      "week_end": "2025-05-25",
+      "week_id": "uncertain-noor:week:6",
+      "week_start": "2025-05-19"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "no_trigger_control",
+      "week_end": "2025-08-24",
+      "week_id": "two-values-lukas:week:1",
+      "week_start": "2025-08-18"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "no_trigger_control",
+      "week_end": "2025-08-31",
+      "week_id": "two-values-lukas:week:2",
+      "week_start": "2025-08-25"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "no_trigger_control",
+      "week_end": "2025-09-07",
+      "week_id": "two-values-lukas:week:3",
+      "week_start": "2025-09-01"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "no_trigger_control",
+      "week_end": "2025-09-14",
+      "week_id": "two-values-lukas:week:4",
+      "week_start": "2025-09-08"
+    },
+    {
+      "case_id": "two-values-lukas:week:5:conformity",
+      "core_value_states": {
+        "conformity": "active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "delivery_state": "active_drift",
+      "expected_nsm_action": "review_eligible_writing",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "supplemental_active_case",
+      "week_end": "2025-09-21",
+      "week_id": "two-values-lukas:week:5",
+      "week_start": "2025-09-15"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "no_trigger_control",
+      "week_end": "2025-09-28",
+      "week_id": "two-values-lukas:week:6",
+      "week_start": "2025-09-22"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "no_trigger_control",
+      "week_end": "2025-10-05",
+      "week_id": "two-values-lukas:week:7",
+      "week_start": "2025-09-29"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "no_active_drift"
+      },
+      "delivery_state": "no_active_drift",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "no_trigger_control",
+      "week_end": "2025-10-12",
+      "week_id": "two-values-lukas:week:8",
+      "week_start": "2025-10-06"
+    },
+    {
+      "case_id": null,
+      "core_value_states": {
+        "conformity": "no_active_drift",
+        "self_direction": "insufficient_evidence"
+      },
+      "delivery_state": "insufficient_evidence",
+      "expected_nsm_action": "no_request_no_card",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "scenario_id": "two-values-lukas",
+      "source": "no_trigger_control",
+      "week_end": "2025-10-19",
+      "week_id": "two-values-lukas:week:9",
+      "week_start": "2025-10-13"
+    }
+  ]
+}

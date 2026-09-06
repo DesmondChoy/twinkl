@@ -1,14 +1,11 @@
 # VIF Experiment Index
 
-North Star Moment results are tracked in the separate
-[NSM experiment results log](north_star_moment.md), with links to the frozen
-Phase 0A/0B reports and runner-hardening verification. These experiments do not
-change the VIF Critic (Offline) frontier.
-
-Phase 0A passed its retrieval proxy gate at k=3, while Phase 0B remains failed.
-The later runner-hardening work passed 193 automated tests and reconstructed
-the original 33-case, 61-attempt result with zero new provider calls. This
-verified experiment recovery; no new model or retrieval evaluation was run.
+The North Star Moment development evaluation and independent AI review of the
+evaluator are complete under the [current protocol](../../docs/north_star/luna_evaluation_20260905.md).
+Previous NSM results were removed at the user's request. Incorporation of fresh
+results into maintained reports remains paused; the
+[NSM experiment log](north_star_moment.md) links the separate evidence. This
+work does not change the VIF Critic (Offline) frontier.
 
 ## Historical Corrected-Split Frontier (Post-d937094 Split)
 

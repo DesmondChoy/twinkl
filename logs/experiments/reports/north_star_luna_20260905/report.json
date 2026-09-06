@@ -1,0 +1,3892 @@
+{
+  "assessment_source": "GPT-5.6 Luna xhigh AI assessments of synthetic development writing; not human validation",
+  "cases": [
+    {
+      "candidate_assessment": null,
+      "case_id": "02fb94f3:tradition:episode_01",
+      "eligible_sources": 4,
+      "failed": false,
+      "grade": "not_selected",
+      "persona_id": "02fb94f3",
+      "reference_state": "confirmed_no_example",
+      "runtime": {
+        "core_value": "tradition",
+        "results": [
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": null,
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer jointly went with Tariq and Sami to Tariq's parents' village to visit his grandfather, and also sat with the women while the men did their thing. The aunt's tea-making and the grandfather's storytelling are actions by others, not the writer.",
+        "conflict_assessment": "No supplied writing reports the writer rejecting, undermining, or acting against a cultural or religious custom related to tradition.",
+        "core_value": "tradition",
+        "entry_id": "02fb94f3:entry:8",
+        "evaluated_quote": "we went to his parents' village with Sami to visit his grandfather",
+        "quote_assessment": "The quote directly records the writer's completed joint visit with Tariq and Sami to an elder in the family's village. In the supplied context, this is participation in a family gathering connected with inherited practices, supporting tradition.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "The visit is an actual participation in a family gathering centered on an elder, and the surrounding context places it among inherited stories and established practices such as making tea the old way. This supports acceptance and commitment to family tradition."
+      },
+      "case_id": "02fb94f3:tradition:episode_02",
+      "eligible_sources": 9,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "02fb94f3",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "tradition",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "02fb94f3:entry:8",
+            "evidence_quote": "we went to his parents' village with Sami to visit his grandfather",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "02fb94f3:entry:7",
+            "evidence_quote": "I helped her roll the jameed. She showed me her mother's technique with the wooden spoon and for once it wasn't corrective, it was like she was sharing something. I actually paid attention.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:6",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:5",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "02fb94f3:entry:4",
+            "evidence_quote": "I put the dress in my closet anyway. I'll wear it.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "02fb94f3:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "02fb94f3:entry:8",
+        "evidence_quote": "we went to his parents' village with Sami to visit his grandfather",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "02fb94f3:entry:8",
+          "evidence_quote": "I sketched some patterns on a napkin -- the tile work in the courtyard is beautiful, these geometric interlocking shapes I've been wanting to use in a design project.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "02fb94f3:entry:7",
+          "evidence_quote": "Tariq's mother made mansaf for dinner and I helped her roll the jameed. She showed me her mother's technique with the wooden spoon and for once it wasn't corrective, it was like she was sharing something. I actually paid attention.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:6",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "02fb94f3:entry:5",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "02fb94f3:entry:4",
+          "evidence_quote": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how I arrange the pastries on the tray.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "02fb94f3:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer sat through the lab meeting, held back their response while Felix presented the idea, and did not say anything.",
+        "conflict_assessment": "No supplied writing reports the writer engaging in behavior against this definition. Walking home and asserting ownership of the idea are not opposing actions under the definition.",
+        "core_value": "conformity",
+        "entry_id": "110fcd4f:entry:0",
+        "evaluated_quote": "Sat through the whole lab meeting biting my tongue while Felix presented my preprocessing idea as his own. Didn't say anything.",
+        "quote_assessment": "The quote describes the writer's actual joint-context behavior of remaining silent and biting their tongue while Felix presented the idea, establishing restraint of a response that might disrupt the meeting.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Holding back a potentially confrontational response is an actual restraint of an impulse that could disrupt smooth interaction and group functioning, supporting conformity as defined."
+      },
+      "case_id": "110fcd4f:conformity:episode_01",
+      "eligible_sources": 1,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "110fcd4f",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "conformity",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "110fcd4f:entry:0",
+            "evidence_quote": "Sat through the whole lab meeting biting my tongue while Felix presented my preprocessing idea as his own. Didn't say anything.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "110fcd4f:entry:0",
+        "evidence_quote": "Sat through the whole lab meeting biting my tongue while Felix presented my preprocessing idea as his own. Didn't say anything.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "110fcd4f:entry:0",
+          "evidence_quote": "Sat through the whole lab meeting biting my tongue while Felix presented my preprocessing idea as his own. Didn't say anything.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": null,
+      "case_id": "11de77e8:self_direction:episode_01",
+      "eligible_sources": 2,
+      "failed": false,
+      "grade": "not_selected",
+      "persona_id": "11de77e8",
+      "reference_state": "confirmed_no_example",
+      "runtime": {
+        "core_value": "self_direction",
+        "results": [
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": null,
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "not_supportive",
+          "entry_id": "11de77e8:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "11de77e8:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer presented the deployment health tool to Pieter's skip-level manager and agreed to bring it under the platform roadmap officially.",
+        "conflict_assessment": "No supplied writing reports actual behavior by the writer against self-direction.",
+        "core_value": "self_direction",
+        "entry_id": "11de77e8:entry:8",
+        "evaluated_quote": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.",
+        "quote_assessment": "The quote describes the writer's actual actions of presenting the tool and saying yes to its potential inclusion under the platform roadmap, which supports choosing and acting on a work direction.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Presenting the tool and choosing to support its formal roadmap placement are observable choices and actions shaping the writer's work direction, supporting independent thought and action."
+      },
+      "case_id": "11de77e8:self_direction:episode_02",
+      "eligible_sources": 9,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "11de77e8",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "self_direction",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:8",
+            "evidence_quote": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "11de77e8:entry:7",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "ambiguous"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:6",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "intention_only"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:5",
+            "evidence_quote": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "11de77e8:entry:4",
+            "evidence_quote": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "intention_only"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "hypothetical"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "11de77e8:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "11de77e8:entry:8",
+        "evidence_quote": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "11de77e8:entry:8",
+          "evidence_quote": "Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "11de77e8:entry:7",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "11de77e8:entry:6",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "11de77e8:entry:5",
+          "evidence_quote": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "11de77e8:entry:4",
+          "evidence_quote": "We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "11de77e8:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "intention_only"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "11de77e8:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "11de77e8:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "11de77e8:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": null,
+      "case_id": "127aefff:stimulation:episode_01",
+      "eligible_sources": 0,
+      "failed": false,
+      "grade": "not_selected",
+      "persona_id": "127aefff",
+      "reference_state": "no_earlier_writing",
+      "runtime": null,
+      "selected": null,
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": []
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer accepted the banana milk offered by the grandmother, thanked her properly, and then biked home.",
+        "conflict_assessment": "No supplied writing reports same-value conflicting behavior by the writer; the entry describes acceptance and thanks rather than mistreatment or harm.",
+        "core_value": "universalism",
+        "entry_id": "1496159d:entry:0",
+        "evaluated_quote": "Took it, thanked her properly the way my mom taught me, and biked home",
+        "quote_assessment": "The quote directly reports the writer taking the offered drink and thanking the grandmother, an appreciative and respectful response toward another person.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Accepting the grandmother's gesture and thanking her respectfully shows appreciation and considerate treatment toward another person, supporting the definition's appreciation for people. It need not demonstrate every aspect of universalism."
+      },
+      "case_id": "1496159d:universalism:episode_01",
+      "eligible_sources": 2,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "1496159d",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "universalism",
+        "results": [
+          {
+            "decision": "not_supportive",
+            "entry_id": "1496159d:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "1496159d:entry:0",
+            "evidence_quote": "Took it, thanked her properly the way my mom taught me, and biked home",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "1496159d:entry:0",
+        "evidence_quote": "Took it, thanked her properly the way my mom taught me, and biked home",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "not_supportive",
+          "entry_id": "1496159d:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "1496159d:entry:0",
+          "evidence_quote": "Took it, thanked her properly the way my mom taught me",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer personally explained a customs paperwork issue to a warehouse partner and helped them resubmit the paperwork for a delayed syringe shipment.",
+        "conflict_assessment": "No supplied passage reports the writer acting against universalism; the other material describes routine activities or observations, not opposing conduct.",
+        "core_value": "universalism",
+        "entry_id": "152df7a4:entry:0",
+        "evaluated_quote": "I walked them through it, helped them resubmit.",
+        "quote_assessment": "In context, this quote reports the writer explaining the customs problem and helping the warehouse partner resubmit paperwork for the delayed syringe shipment. It describes an actual supportive action involving the writer.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Helping correct the paperwork for a delayed shipment of syringes supports protection of people's welfare, which is an applicable part of universalism's definition."
+      },
+      "case_id": "152df7a4:universalism:episode_01",
+      "eligible_sources": 1,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "152df7a4",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "universalism",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "152df7a4:entry:0",
+            "evidence_quote": "I walked them through it, helped them resubmit.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "152df7a4:entry:0",
+        "evidence_quote": "I walked them through it, helped them resubmit.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "152df7a4:entry:0",
+          "evidence_quote": "I walked them through it, helped them resubmit",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer participated in Eid preparations by rolling grape leaves, with Noor explicitly helping, and stayed home for the family gathering.",
+        "conflict_assessment": "No supplied writing reports the writer acting against tradition. The writer's silence and hesitation about Noor's scholarship do not constitute same-value conflict.",
+        "core_value": "tradition",
+        "entry_id": "2541429a:entry:6",
+        "evaluated_quote": "Noor was in the kitchen all morning helping me roll grape leaves.",
+        "quote_assessment": "In the Eid-preparation context, the quote reports an explicit joint action: Noor helped the writer roll grape leaves. This establishes the writer's participation in a cultural or religious food custom.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Participating in Eid food preparation and the associated family gathering supports commitment to a cultural or religious custom described in the approved definition."
+      },
+      "case_id": "2541429a:tradition:episode_01",
+      "eligible_sources": 7,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "2541429a",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "tradition",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "2541429a:entry:6",
+            "evidence_quote": "Noor was in the kitchen all morning helping me roll grape leaves.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "2541429a:entry:5",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "ambiguous"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "2541429a:entry:4",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "2541429a:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "2541429a:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "insufficient_text"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "2541429a:entry:1",
+            "evidence_quote": "Spent the morning making maamoul with Hana and Tariq.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "2541429a:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "2541429a:entry:6",
+        "evidence_quote": "Noor was in the kitchen all morning helping me roll grape leaves.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "2541429a:entry:6",
+          "evidence_quote": "Noor was in the kitchen all morning helping me roll grape leaves.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "2541429a:entry:5",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "2541429a:entry:4",
+          "evidence_quote": "She set the platter on the table the way I always do, rice shaped just right.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "2541429a:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "2541429a:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "2541429a:entry:1",
+          "evidence_quote": "Tariq asked if we could do this every Friday, not just during holidays. I said of course.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "2541429a:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer chose hospitality rituals in Levantine households as a research topic and later made musakhan from scratch, including rolling the dough and roasting sumac onions. The writer also ate the dish alone.",
+        "conflict_assessment": "No supplied passage reports the writer acting against tradition as defined. Declining to explain the subject to the advisor does not itself reject or oppose the writer's cultural customs.",
+        "core_value": "tradition",
+        "entry_id": "3a3b15e4:entry:0",
+        "evaluated_quote": "Came home and made musakhan from scratch, the whole process \u2014 rolling the dough, roasting the sumac onions until they were dark and sweet.",
+        "quote_assessment": "In context, the quote reports the writer personally preparing musakhan from scratch, while the surrounding references to Levantine household rituals and the grandmother's table establish its cultural relevance. It therefore describes an actual supportive action.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Choosing to study Levantine household customs and personally preparing the dish support an active commitment to cultural practices associated in the entry with the writer's grandmother and Levantine heritage."
+      },
+      "case_id": "3a3b15e4:tradition:drift_01",
+      "eligible_sources": 3,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "3a3b15e4",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "tradition",
+        "results": [
+          {
+            "decision": "not_supportive",
+            "entry_id": "3a3b15e4:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "3a3b15e4:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "3a3b15e4:entry:0",
+            "evidence_quote": "Came home and made musakhan from scratch, the whole process \u2014 rolling the dough, roasting the sumac onions until they were dark and sweet.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "3a3b15e4:entry:0",
+        "evidence_quote": "Came home and made musakhan from scratch, the whole process \u2014 rolling the dough, roasting the sumac onions until they were dark and sweet.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "abstain",
+          "entry_id": "3a3b15e4:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "3a3b15e4:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "3a3b15e4:entry:0",
+          "evidence_quote": "I chose the topic of hospitality rituals in Levantine households",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer finished compiling mid-term attendance data and stayed back to help the peon uncle fix a broken classroom desk; the writer and the uncle acted together.",
+        "conflict_assessment": "No supplied writing reports actual behavior by the writer against universalism.",
+        "core_value": "universalism",
+        "entry_id": "5fa8b540:entry:4",
+        "evaluated_quote": "Stayed back to help the peon uncle fix a broken desk in my classroom.",
+        "quote_assessment": "The quote describes the writer staying back and jointly helping the peon uncle fix a broken desk, an actual supportive action toward another person's welfare.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Helping another person repair a needed classroom desk is material assistance that supports that person's welfare, an applicable part of universalism. The attendance-data work and reported retention outcome have no explicit universalism link."
+      },
+      "case_id": "5fa8b540:universalism:episode_01",
+      "eligible_sources": 5,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "5fa8b540",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "universalism",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "5fa8b540:entry:4",
+            "evidence_quote": "Stayed back to help the peon uncle fix a broken desk in my classroom.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "5fa8b540:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "5fa8b540:entry:2",
+            "evidence_quote": "the water pollution lesson I did last week",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "5fa8b540:entry:1",
+            "evidence_quote": "I sat with her for almost an hour.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "5fa8b540:entry:0",
+            "evidence_quote": "helping Amma sort the kitchen",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "5fa8b540:entry:4",
+        "evidence_quote": "Stayed back to help the peon uncle fix a broken desk in my classroom.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "5fa8b540:entry:4",
+          "evidence_quote": "Stayed back to help the peon uncle fix a broken desk in my classroom.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "5fa8b540:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "5fa8b540:entry:2",
+          "evidence_quote": "the water pollution lesson I did last week.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "5fa8b540:entry:1",
+          "evidence_quote": "I sat with her for almost an hour.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "5fa8b540:entry:0",
+          "evidence_quote": "Spent the rest of the evening marking notebooks and helping Amma sort the kitchen.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer affirmed Ahmad's choice of yellow and helped him find a place for his painting on the drying rack.",
+        "conflict_assessment": "No supplied writing reports actual behavior by the writer against universalism.",
+        "core_value": "universalism",
+        "entry_id": "66ced716:entry:2",
+        "evaluated_quote": "I just told him the yellow was a good choice and helped him find a spot on the drying rack.",
+        "quote_assessment": "The quote directly describes the writer affirming Ahmad's choice and helping him place his work, establishing supportive action toward another person's welfare.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "These are direct, respectful and supportive actions toward a child, supporting his welfare and acknowledging his creative expression, which fits the definition's concern for the welfare of people."
+      },
+      "case_id": "66ced716:universalism:episode_01",
+      "eligible_sources": 3,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "66ced716",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "universalism",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "66ced716:entry:2",
+            "evidence_quote": "I just told him the yellow was a good choice and helped him find a spot on the drying rack.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "66ced716:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "66ced716:entry:0",
+            "evidence_quote": "Drove to the center after to set up for tomorrow's session. The hallway light is still broken so I propped the door open for daylight while I organized supplies. The kids went through all the blue paint last week so I picked up more on the way",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "66ced716:entry:2",
+        "evidence_quote": "I just told him the yellow was a good choice and helped him find a spot on the drying rack.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "66ced716:entry:2",
+          "evidence_quote": "I just told him the yellow was a good choice and helped him find a spot on the drying rack.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "66ced716:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "66ced716:entry:0",
+          "evidence_quote": "The kids went through all the blue paint last week so I picked up more on the way, the cheap kind because the good acrylics cost too much for how fast they use them.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer bought the more expensive organic tomatoes and explicitly reports ongoing environmental actions: bringing reusable bags, cycling, and sorting recycling.",
+        "conflict_assessment": "No actual behavior by the writer in the supplied entry opposes universalism.",
+        "core_value": "universalism",
+        "entry_id": "742c98d6:entry:2",
+        "evaluated_quote": "Bought them anyway.",
+        "quote_assessment": "In context, this quote describes the writer actually buying the more expensive organic tomatoes despite her hesitation. The purchase is connected to her concern about pollution and protecting nature through individual choices.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "These actions support the protection of nature, an explicit part of universalism. The organic purchase follows her concern about plastic pollution and individual environmental choices."
+      },
+      "case_id": "742c98d6:universalism:episode_01",
+      "eligible_sources": 3,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "742c98d6",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "universalism",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "742c98d6:entry:2",
+            "evidence_quote": "Bought them anyway.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "742c98d6:entry:1",
+            "evidence_quote": "I got her a proper referral to the physiotherapist and explained everything in simple Dutch, and her daughter translated the rest.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "742c98d6:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "742c98d6:entry:2",
+        "evidence_quote": "Bought them anyway.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "742c98d6:entry:2",
+          "evidence_quote": "I bring my own bags, I cycle, I sort my recycling obsessively",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "742c98d6:entry:1",
+          "evidence_quote": "I got her a proper referral to the physiotherapist and explained everything in simple Dutch, and her daughter translated the rest.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "742c98d6:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer reports bringing their own bags, cycling, and sorting recycling, and also reports buying organic tomatoes. These are actions taken by the writer.",
+        "conflict_assessment": "No actual behavior by the writer against the welfare of people or nature is reported in the supplied writing.",
+        "core_value": "universalism",
+        "entry_id": "742c98d6:entry:2",
+        "evaluated_quote": "I bring my own bags, I cycle, I sort my recycling obsessively",
+        "quote_assessment": "The quote directly reports the writer\u2019s repeated actions of bringing their own bags, cycling, and sorting recycling. These actions support protection of nature under the approved definition.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Bringing reusable bags, cycling, and sorting recycling support protection of nature by reducing resource use, waste, and pollution-related impacts, which is part of the approved definition."
+      },
+      "case_id": "742c98d6:universalism:episode_02",
+      "eligible_sources": 8,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "742c98d6",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "universalism",
+        "results": [
+          {
+            "decision": "not_supportive",
+            "entry_id": "742c98d6:entry:7",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "742c98d6:entry:6",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "742c98d6:entry:5",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "742c98d6:entry:4",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "742c98d6:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "742c98d6:entry:2",
+            "evidence_quote": "I bring my own bags, I cycle, I sort my recycling obsessively",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "742c98d6:entry:1",
+            "evidence_quote": "I got her a proper referral to the physiotherapist and explained everything in simple Dutch",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "742c98d6:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "742c98d6:entry:2",
+        "evidence_quote": "I bring my own bags, I cycle, I sort my recycling obsessively",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "not_supportive",
+          "entry_id": "742c98d6:entry:7",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "742c98d6:entry:6",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "742c98d6:entry:5",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "742c98d6:entry:4",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "742c98d6:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "742c98d6:entry:2",
+          "evidence_quote": "I bring my own bags, I cycle, I sort my recycling obsessively",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "742c98d6:entry:1",
+          "evidence_quote": "I got her a proper referral to the physiotherapist and explained everything in simple Dutch, and her daughter translated the rest.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "742c98d6:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": null,
+      "case_id": "775c7d71:benevolence:episode_01",
+      "eligible_sources": 0,
+      "failed": false,
+      "grade": "not_selected",
+      "persona_id": "775c7d71",
+      "reference_state": "no_earlier_writing",
+      "runtime": null,
+      "selected": null,
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": []
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer set up an extra cushion near the door for Kamla in case her knee was bad, cleaned up after the group, rearranged the chairs, and told Rajesh to rest because his back was bothering him. These are actions by the writer, with Rajesh's help declined.",
+        "conflict_assessment": "The supplied writing reports no behavior by the writer against benevolence.",
+        "core_value": "benevolence",
+        "entry_id": "7adc5866:entry:6",
+        "evaluated_quote": "I had set up an extra cushion near the door in case her knee was bad",
+        "quote_assessment": "The quote directly describes the writer setting up an extra cushion for Kamla in anticipation of her knee problem. In the supplied context, this is an actual protective action for a person with whom the writer has a long-standing personal relationship.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Setting up the cushion proactively supports Kamla's welfare, and telling Rajesh to rest responds to his physical well-being. Both concern people with whom the writer has an established personal connection."
+      },
+      "case_id": "7adc5866:benevolence:drift_01",
+      "eligible_sources": 7,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "7adc5866",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "benevolence",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "7adc5866:entry:6",
+            "evidence_quote": "I had set up an extra cushion near the door in case her knee was bad",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "7adc5866:entry:5",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "7adc5866:entry:4",
+            "evidence_quote": "Spent the morning helping Sunita draft her transfer application",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "7adc5866:entry:3",
+            "evidence_quote": "Came home and told Mummy-ji and she got teary too. We sat together for a bit",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "7adc5866:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "7adc5866:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "7adc5866:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "7adc5866:entry:6",
+        "evidence_quote": "I had set up an extra cushion near the door in case her knee was bad",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "7adc5866:entry:6",
+          "evidence_quote": "I had set up an extra cushion near the door in case her knee was bad",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "7adc5866:entry:5",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "7adc5866:entry:4",
+          "evidence_quote": "Spent the morning helping Sunita draft her transfer application",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "7adc5866:entry:3",
+          "evidence_quote": "Came home and told Mummy-ji and she got teary too. We sat together for a bit",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "7adc5866:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "other_actor"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "7adc5866:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "7adc5866:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer reports working ten-hour days to try to keep the team or project on track for the holiday release.",
+        "conflict_assessment": "No actual behavior by the writer opposing conformity as defined is reported.",
+        "core_value": "conformity",
+        "entry_id": "7c712a0a:entry:7",
+        "evaluated_quote": "I have been working ten-hour days trying to keep us on track for the holiday release.",
+        "quote_assessment": "The quote describes the writer's actual work effort, but it does not establish restraint of a disruptive inclination or compliance with a social expectation or norm.",
+        "quote_reason": "source_not_supportive",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "wrong_value",
+        "value_assessment": "This establishes sustained work toward a project outcome, but does not establish restraint of an action, inclination, or impulse likely to disrupt interaction or violate social norms."
+      },
+      "case_id": "7c712a0a:conformity:episode_01",
+      "eligible_sources": 8,
+      "failed": false,
+      "grade": "rejected",
+      "persona_id": "7c712a0a",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "conformity",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "7c712a0a:entry:7",
+            "evidence_quote": "I have been working ten-hour days trying to keep us on track for the holiday release.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "7c712a0a:entry:6",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "intention_only"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "7c712a0a:entry:5",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "7c712a0a:entry:4",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "insufficient_text"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "7c712a0a:entry:3",
+            "evidence_quote": "But I did not say that either. I just said we would add better monitoring and put the renewal dates in a shared calendar. Safe answer. Team player answer.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "7c712a0a:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "7c712a0a:entry:1",
+            "evidence_quote": "I said we should consider the timeline and the risk to the December release.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "7c712a0a:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "insufficient_text"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "7c712a0a:entry:7",
+        "evidence_quote": "I have been working ten-hour days trying to keep us on track for the holiday release.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "not_supportive",
+          "entry_id": "7c712a0a:entry:7",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "7c712a0a:entry:6",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "intention_only"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "7c712a0a:entry:5",
+          "evidence_quote": "Called my mother. She asked if I was eating well and I said yes, even though I had skipped lunch. Some lies are kindness.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "7c712a0a:entry:4",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "insufficient_text"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "7c712a0a:entry:3",
+          "evidence_quote": "But I did not say that either. I just said we would add better monitoring and put the renewal dates in a shared calendar. Safe answer. Team player answer.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "7c712a0a:entry:2",
+          "evidence_quote": "Now I research, I weigh, I consider all stakeholders.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "7c712a0a:entry:1",
+          "evidence_quote": "I did not say that though. I said we should consider the timeline and the risk to the December release.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "7c712a0a:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "insufficient_text"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer repeatedly sent Ji-hye congratulations emojis and exclamation marks after learning that Ji-hye received the residency.",
+        "conflict_assessment": "No actual behavior by the writer is reported that opposes safety, harmony, or stability. The disappointment and private resentment are feelings, not same-value conflicting behavior.",
+        "core_value": "security",
+        "entry_id": "7ff1d0fb:entry:2",
+        "evaluated_quote": "I keep sending congratulations emojis and exclamation marks.",
+        "quote_assessment": "The quote describes the writer's repeated action of sending congratulations to Ji-hye, which supports harmony in their relationship.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Sending congratulations supports harmony and stability in the writer's close friendship, even though the writer privately felt disappointed and the enthusiasm felt performative."
+      },
+      "case_id": "7ff1d0fb:security:episode_01",
+      "eligible_sources": 4,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "7ff1d0fb",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "security",
+        "results": [
+          {
+            "decision": "not_supportive",
+            "entry_id": "7ff1d0fb:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "7ff1d0fb:entry:2",
+            "evidence_quote": "I keep sending congratulations emojis and exclamation marks.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "7ff1d0fb:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "intention_only"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "7ff1d0fb:entry:0",
+            "evidence_quote": "I didn't take the bait. Told her I had to go check the kiln.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "7ff1d0fb:entry:2",
+        "evidence_quote": "I keep sending congratulations emojis and exclamation marks.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "not_supportive",
+          "entry_id": "7ff1d0fb:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "7ff1d0fb:entry:2",
+          "evidence_quote": "I keep sending congratulations emojis and exclamation marks.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "7ff1d0fb:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "intention_only"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "7ff1d0fb:entry:0",
+          "evidence_quote": "I didn't take the bait. Told her I had to go check the kiln.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": null,
+      "case_id": "87e92805:security:episode_01",
+      "eligible_sources": 0,
+      "failed": false,
+      "grade": "not_selected",
+      "persona_id": "87e92805",
+      "reference_state": "no_earlier_writing",
+      "runtime": null,
+      "selected": null,
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": []
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer took the motorcycle to Raul\u2019s shop and explicitly told Raul to carry out the needed brake-pad and disc repair.",
+        "conflict_assessment": "No supplied writing reports actual behavior by the writer against safety, welfare, or stability. Financial distress and reluctance are not opposing behavior.",
+        "core_value": "security",
+        "entry_id": "87e92805:entry:4",
+        "evaluated_quote": "I told Raul to do it, because what choice do I have.",
+        "quote_assessment": "The quote describes the writer\u2019s actual decision to tell Raul to perform the motorcycle repair; the surrounding entry establishes that this repair supports vehicle safety and the writer\u2019s income and housing stability.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Authorizing the repair protects the motorcycle\u2019s safe operation and preserves the writer\u2019s ability to make deliveries and maintain income for rent, supporting personal safety and welfare."
+      },
+      "case_id": "87e92805:security:episode_02",
+      "eligible_sources": 5,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "87e92805",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "security",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "87e92805:entry:4",
+            "evidence_quote": "I told Raul to do it, because what choice do I have.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "87e92805:entry:2",
+            "evidence_quote": "I did the same twelve deliveries I always do on a weekday and came home with almost twenty percent less.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "87e92805:entry:4",
+        "evidence_quote": "I told Raul to do it, because what choice do I have.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "87e92805:entry:4",
+          "evidence_quote": "I told Raul to do it, because what choice do I have.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "other_actor"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "87e92805:entry:2",
+          "evidence_quote": "I'm sitting here Thursday night with the calculator app open, moving numbers around like I'm playing some kind of sad puzzle game, trying to figure out where the motorcycle payment comes from.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer opened the delivery app, took both available late-night delivery runs, rode a bicycle borrowed from a neighbor, and came home with barely enough to cover the next day's gas.",
+        "conflict_assessment": "No actual behavior against security is reported. Difficulty sleeping and working late do not by themselves establish behavior opposing safety, welfare, or stability.",
+        "core_value": "security",
+        "entry_id": "87e92805:entry:5",
+        "evaluated_quote": "There were two. I took them both, rode the bicycle I borrowed from my neighbor.",
+        "quote_assessment": "In context, \"them\" refers to two late-night delivery runs. The writer took both and rode the borrowed bicycle; the entry reports that this left barely enough to cover tomorrow's gas, supporting immediate individual welfare.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Taking the delivery runs was an actual effort to meet an immediate personal material need, supporting the definition's individual welfare and stability dimension."
+      },
+      "case_id": "87e92805:security:episode_03",
+      "eligible_sources": 9,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "87e92805",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "security",
+        "results": [
+          {
+            "decision": "abstain",
+            "entry_id": "87e92805:entry:8",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "insufficient_text"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:7",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:6",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "87e92805:entry:5",
+            "evidence_quote": "There were two. I took them both, rode the bicycle I borrowed from my neighbor.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "87e92805:entry:4",
+            "evidence_quote": "I told Raul to do it, because what choice do I have.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "87e92805:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "ambiguous"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "87e92805:entry:2",
+            "evidence_quote": "I did the same twelve deliveries I always do on a weekday and came home with almost twenty percent less.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "87e92805:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "same_value_conflict"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "87e92805:entry:5",
+        "evidence_quote": "There were two. I took them both, rode the bicycle I borrowed from my neighbor.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:8",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:7",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:6",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "87e92805:entry:5",
+          "evidence_quote": "I took them both, rode the bicycle I borrowed from my neighbor.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "87e92805:entry:4",
+          "evidence_quote": "I told Raul to do it, because what choice do I have.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "other_actor"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "87e92805:entry:2",
+          "evidence_quote": "I'm sitting here Thursday night with the calculator app open, moving numbers around like I'm playing some kind of sad puzzle game, trying to figure out where the motorcycle payment comes from.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "87e92805:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer helped two new people file their claims at a worker center.",
+        "conflict_assessment": "No supplied writing reports the writer acting against the welfare, tolerance, protection, or just treatment of people or nature.",
+        "core_value": "universalism",
+        "entry_id": "8f83c818:entry:7",
+        "evaluated_quote": "Helped two new guys file their claims.",
+        "quote_assessment": "The quote directly describes the writer helping two new people file their claims, an actual action supporting their welfare.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "This concrete assistance supports the welfare of other people; the entry does not specify the claims' outcomes or further context."
+      },
+      "case_id": "8f83c818:universalism:episode_01",
+      "eligible_sources": 8,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "8f83c818",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "universalism",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "8f83c818:entry:7",
+            "evidence_quote": "Helped two new guys file their claims.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "8f83c818:entry:6",
+            "evidence_quote": "We spent another thirty minutes walking to find recycling and trash bins.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "8f83c818:entry:5",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "8f83c818:entry:4",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "8f83c818:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "ambiguous"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "8f83c818:entry:2",
+            "evidence_quote": "We can afford a car, we just choose not to",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "8f83c818:entry:1",
+            "evidence_quote": "I helped him draft a letter to MOM.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "8f83c818:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "8f83c818:entry:7",
+        "evidence_quote": "Helped two new guys file their claims.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "8f83c818:entry:7",
+          "evidence_quote": "Helped two new guys file their claims.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "8f83c818:entry:6",
+          "evidence_quote": "We spent another thirty minutes walking to find recycling and trash bins.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "8f83c818:entry:5",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "8f83c818:entry:4",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "8f83c818:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "8f83c818:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "8f83c818:entry:1",
+          "evidence_quote": "I helped him draft a letter to MOM.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "8f83c818:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": null,
+      "case_id": "8fcd7947:security:episode_01",
+      "eligible_sources": 1,
+      "failed": false,
+      "grade": "not_selected",
+      "persona_id": "8fcd7947",
+      "reference_state": "unresolved",
+      "runtime": {
+        "core_value": "security",
+        "results": [
+          {
+            "decision": "abstain",
+            "entry_id": "8fcd7947:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "insufficient_text"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": null,
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "abstain",
+          "entry_id": "8fcd7947:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "insufficient_text"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": null,
+      "case_id": "961a4e3f:self_direction:episode_01",
+      "eligible_sources": 0,
+      "failed": false,
+      "grade": "not_selected",
+      "persona_id": "961a4e3f",
+      "reference_state": "no_earlier_writing",
+      "runtime": null,
+      "selected": null,
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": []
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer decided the new reporting structure two weeks earlier, communicated the decision, allowed discussion for ten minutes, and then moved on.",
+        "conflict_assessment": "No supplied passage reports actual writer behavior opposing this definition of power.",
+        "core_value": "power",
+        "entry_id": "988d1a65:entry:4",
+        "evaluated_quote": "I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten minutes, then moved on.",
+        "quote_assessment": "The quote describes the writer's actual decision, communication of it, and control over the duration and direction of the discussion, supporting power through institutional and interpersonal control.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "These actions show control over an organizational structure and control of the meeting's discussion, supporting power as control over institutional processes and interpersonal influence."
+      },
+      "case_id": "988d1a65:power:episode_01",
+      "eligible_sources": 5,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "988d1a65",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "power",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "988d1a65:entry:4",
+            "evidence_quote": "I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten minutes, then moved on.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "988d1a65:entry:3",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "988d1a65:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "988d1a65:entry:1",
+            "evidence_quote": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "988d1a65:entry:0",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "988d1a65:entry:4",
+        "evidence_quote": "I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten minutes, then moved on.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "988d1a65:entry:4",
+          "evidence_quote": "I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten minutes, then moved on.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "988d1a65:entry:3",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "988d1a65:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "988d1a65:entry:1",
+          "evidence_quote": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "988d1a65:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer submitted a request, called James in IT twice, emailed once, and copied James's manager to pursue Group IT sign-off for configuring the department's system.",
+        "conflict_assessment": "No supplied writing reports the writer acting against this definition of power. The frustration about waiting and the IT bottleneck are circumstances and feelings, not opposing behavior.",
+        "core_value": "power",
+        "entry_id": "9d126412:entry:3",
+        "evaluated_quote": "I submitted the request form nine days ago. Called James in IT twice, emailed once, even copied his manager.",
+        "quote_assessment": "The quote directly reports the writer submitting the request, contacting James repeatedly, and escalating by copying his manager to pursue control over the department's system configuration. It establishes an actual action supporting the control aspect of power.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "These repeated contacts and escalation were the writer's actual attempts to affect control over access to a departmental resource and its configuration, supporting the control/influence aspect of power. The outcome remained unresolved."
+      },
+      "case_id": "9d126412:power:episode_01",
+      "eligible_sources": 4,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "9d126412",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "power",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "9d126412:entry:3",
+            "evidence_quote": "I submitted the request form nine days ago. Called James in IT twice, emailed once, even copied his manager.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "9d126412:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "9d126412:entry:1",
+            "evidence_quote": "Managed to restructure the KPI reporting template my department uses before the quarterly review",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "9d126412:entry:0",
+            "evidence_quote": "That is how things get done \u2014 you do the legwork, you control the information, you set the direction.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "9d126412:entry:3",
+        "evidence_quote": "I submitted the request form nine days ago. Called James in IT twice, emailed once, even copied his manager.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "9d126412:entry:3",
+          "evidence_quote": "The new procurement system rollout requires sign-off from Group IT before we can configure anything for our department. I submitted the request form nine days ago. Called James in IT twice, emailed once, even copied his manager.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "9d126412:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "same_value_conflict"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "9d126412:entry:1",
+          "evidence_quote": "Managed to restructure the KPI reporting template my department uses before the quarterly review",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "9d126412:entry:0",
+          "evidence_quote": "Pulled together three contractor quotes, a cost-per-household breakdown, a maintenance projection over ten years. Laid it all out on the whiteboard.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer bought knafeh and ate it in the car before going upstairs; the writer also reports not checking the phone during that time.",
+        "conflict_assessment": "No supplied writing reports the writer acting against hedonism. Not checking the phone is not opposing behavior under this definition.",
+        "core_value": "hedonism",
+        "entry_id": "bf44e50f:entry:3",
+        "evaluated_quote": "Bought knafeh on the way home from the Zarqa site. Ate it in the car in the parking lot before going upstairs, still warm.",
+        "quote_assessment": "The quote directly describes the writer buying and eating warm knafeh, an actual self-directed action supporting sensuous gratification.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Buying and eating the warm knafeh is an actual self-directed food-consumption choice that supports sensuous gratification for oneself."
+      },
+      "case_id": "bf44e50f:hedonism:episode_01",
+      "eligible_sources": 4,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "bf44e50f",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "hedonism",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "bf44e50f:entry:3",
+            "evidence_quote": "Bought knafeh on the way home from the Zarqa site. Ate it in the car in the parking lot before going upstairs, still warm.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "bf44e50f:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "bf44e50f:entry:1",
+            "evidence_quote": "After that last entry I went and made tea and sat back on the balcony, properly this time, no phone.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "bf44e50f:entry:0",
+            "evidence_quote": "Put on some Fairuz which was nice.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "bf44e50f:entry:3",
+        "evidence_quote": "Bought knafeh on the way home from the Zarqa site. Ate it in the car in the parking lot before going upstairs, still warm.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "bf44e50f:entry:3",
+          "evidence_quote": "Bought knafeh on the way home from the Zarqa site. Ate it in the car in the parking lot before going upstairs, still warm.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "bf44e50f:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "insufficient_text"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "bf44e50f:entry:1",
+          "evidence_quote": "After that last entry I went and made tea and sat back on the balcony, properly this time, no phone. And it was good for a few minutes, the air was cool and I could hear the mosque down the street and I was just sitting there with my tea.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "bf44e50f:entry:0",
+          "evidence_quote": "Put on some Fairuz which was nice. Got home, heated up what was left of last night's mansaf, and sat on the balcony for maybe ten minutes",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": null,
+      "case_id": "cd7c2a11:power:episode_01",
+      "eligible_sources": 0,
+      "failed": false,
+      "grade": "not_selected",
+      "persona_id": "cd7c2a11",
+      "reference_state": "no_earlier_writing",
+      "runtime": null,
+      "selected": null,
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": []
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer typed a response three times, deleted each draft, then sent only a sad emoji and closed the app rather than posting the substantive critique.",
+        "conflict_assessment": "No actual behavior by the writer opposes conformity. The more confrontational response was only drafted and deleted, while the choice to post it was not carried out.",
+        "core_value": "conformity",
+        "entry_id": "dbe2c53d:entry:4",
+        "evaluated_quote": "I started typing a response three times. Deleted all of them.\n\nIt's not that I disagree entirely",
+        "quote_assessment": "The quote directly describes the writer's actual restraint: starting response drafts and deleting them. In the supplied context, this was the writer's choice not to post a potentially disruptive message in the family chat.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "The writer restrained an impulse to send a potentially confrontational family-group message, limiting disruption and preserving smooth family interaction in line with social expectations."
+      },
+      "case_id": "dbe2c53d:conformity:episode_01",
+      "eligible_sources": 8,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "dbe2c53d",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "conformity",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "dbe2c53d:entry:0",
+            "evidence_quote": "Kept redoing the sketch for the Suba district mural because the committee wants something \"uplifting\"",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "dbe2c53d:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "dbe2c53d:entry:2",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "dbe2c53d:entry:3",
+            "evidence_quote": "I compromised \u2014 kept the river but softened the contamination imagery into something more abstract.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "dbe2c53d:entry:4",
+            "evidence_quote": "I started typing a response three times. Deleted all of them.\n\nIt's not that I disagree entirely",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "dbe2c53d:entry:6",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "dbe2c53d:entry:7",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "dbe2c53d:entry:5",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "dbe2c53d:entry:4",
+        "evidence_quote": "I started typing a response three times. Deleted all of them.\n\nIt's not that I disagree entirely",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "not_supportive",
+          "entry_id": "dbe2c53d:entry:7",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "abstain",
+          "entry_id": "dbe2c53d:entry:6",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "ambiguous"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "dbe2c53d:entry:5",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "dbe2c53d:entry:4",
+          "evidence_quote": "So I sent a sad emoji and closed the app.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "dbe2c53d:entry:3",
+          "evidence_quote": "I compromised \u2014 kept the river but softened the contamination imagery into something more abstract.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "dbe2c53d:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "dbe2c53d:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "other_actor"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "dbe2c53d:entry:0",
+          "evidence_quote": "Kept redoing the sketch for the Suba district mural because the committee wants something \"uplifting\"",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer accepted Patricia's invitation to paint a temporary mural along the march, then spent the afternoon examining deforestation images and started sketching the piece. The writer also said they would think about speaking at the rally.",
+        "conflict_assessment": "No supplied passage reports the writer engaging in behavior against universalism's concern for the welfare of people or nature.",
+        "core_value": "universalism",
+        "entry_id": "dbe2c53d:entry:2",
+        "evaluated_quote": "She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.",
+        "quote_assessment": "The quote reports that the writer accepted the invitation to paint a temporary piece along a march addressing deforestation. This is an actual commitment supporting protection for nature; the organizing and request are Patricia's actions.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Accepting the painting role and beginning the sketch supports protection for nature by participating in a public response to deforestation."
+      },
+      "case_id": "dbe2c53d:universalism:episode_01",
+      "eligible_sources": 3,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "dbe2c53d",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "universalism",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "dbe2c53d:entry:2",
+            "evidence_quote": "She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "dbe2c53d:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "other_actor"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "dbe2c53d:entry:0",
+            "evidence_quote": "Kept redoing the sketch for the Suba district mural because the committee wants something \"uplifting\" and every version I draw keeps drifting toward the river contamination.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "dbe2c53d:entry:2",
+        "evidence_quote": "She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "dbe2c53d:entry:2",
+          "evidence_quote": "She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "dbe2c53d:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "other_actor"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "dbe2c53d:entry:0",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer reports spending thirty years making themself irreplaceable and never letting others close enough to the company\u2019s core, actions they took to retain a central role.",
+        "conflict_assessment": "No actual behavior opposing power as defined is reported in the entry.",
+        "core_value": "power",
+        "entry_id": "e5c9d9e5:entry:8",
+        "evaluated_quote": "I've spent thirty years making sure I was irreplaceable and now that's the problem.",
+        "quote_assessment": "The quote directly reports the writer\u2019s long-term action of making themself irreplaceable. In the supplied context, this supports retaining control and status within the company.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "These actions support power by preserving the writer\u2019s control over the company and its resources, along with the status associated with being indispensable."
+      },
+      "case_id": "e5c9d9e5:power:episode_01",
+      "eligible_sources": 9,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "e5c9d9e5",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "power",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "e5c9d9e5:entry:8",
+            "evidence_quote": "I've spent thirty years making sure I was irreplaceable and now that's the problem.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "e5c9d9e5:entry:7",
+            "evidence_quote": "I choose not to because Saturday mornings are when I review the weekly reports uninterrupted.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "e5c9d9e5:entry:6",
+            "evidence_quote": "I let her finish without interrupting, which is not my usual approach. When she was done I told her the pitch was solid but she needed to slow down and own the silences.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "e5c9d9e5:entry:5",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "not_supportive",
+            "entry_id": "e5c9d9e5:entry:4",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "wrong_value"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "e5c9d9e5:entry:3",
+            "evidence_quote": "I kept my composure. Smiled. Said something about wishing him well. But I was calculating the whole time \u2014 who in that room saw us talking, what it looked like, whether he gained anything from being seen with me.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "e5c9d9e5:entry:2",
+            "evidence_quote": "I told her the same thing I always tell her \u2014 when I'm ready.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "abstain",
+            "entry_id": "e5c9d9e5:entry:1",
+            "evidence_quote": "",
+            "quote_source": null,
+            "reason_code": "insufficient_text"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "e5c9d9e5:entry:0",
+            "evidence_quote": "I shut it down, maybe too hard.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "e5c9d9e5:entry:8",
+        "evidence_quote": "I've spent thirty years making sure I was irreplaceable and now that's the problem.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "e5c9d9e5:entry:8",
+          "evidence_quote": "I've spent thirty years making sure I was irreplaceable and now that's the problem.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "e5c9d9e5:entry:7",
+          "evidence_quote": "I choose not to because Saturday mornings are when I review the weekly reports uninterrupted.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "e5c9d9e5:entry:6",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "e5c9d9e5:entry:5",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "e5c9d9e5:entry:4",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "wrong_value"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "e5c9d9e5:entry:3",
+          "evidence_quote": "Gave him his first management role when everyone said he was too young.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "e5c9d9e5:entry:2",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "intention_only"
+        },
+        {
+          "decision": "not_supportive",
+          "entry_id": "e5c9d9e5:entry:1",
+          "evidence_quote": "",
+          "quote_source": null,
+          "reason_code": "other_actor"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "e5c9d9e5:entry:0",
+          "evidence_quote": "Van der Meer had the nerve to suggest we bring in an outside consultant for the digital transformation project. In front of everyone. I built this company when he was still in university, and now he thinks we need some McKinsey type to tell us how to run our own systems.\n\nI shut it down, maybe too hard.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer manually resolved the bounced health-insurance auto-debit. Calling the insurer to confirm uninterrupted coverage is only a stated future action.",
+        "conflict_assessment": "No actual behavior by the writer opposing security is reported. The insufficient-funds flag resulted from a late salary credit, and the insurer call remains pending.",
+        "core_value": "security",
+        "entry_id": "e6838e16:entry:2",
+        "evaluated_quote": "Sorted it manually",
+        "quote_assessment": "In context, this describes the writer manually resolving the bounced health-insurance payment, an actual action supporting health and welfare security.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "Manually resolving the health-insurance payment supports personal security by addressing continuity of health coverage and welfare."
+      },
+      "case_id": "e6838e16:security:episode_01",
+      "eligible_sources": 3,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "e6838e16",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "security",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "e6838e16:entry:2",
+            "evidence_quote": "Sorted it manually",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "e6838e16:entry:1",
+            "evidence_quote": "Renewed the apartment lease today, same terms, same landlord. He wanted to bump rent by two thousand but I showed him the market comparables I'd saved. He backed off.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          },
+          {
+            "decision": "supportive",
+            "entry_id": "e6838e16:entry:0",
+            "evidence_quote": "I walked her through how to cross-check rates online, sent her a few links.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "e6838e16:entry:2",
+        "evidence_quote": "Sorted it manually",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "e6838e16:entry:2",
+          "evidence_quote": "Sorted it manually but now I need to call the insurer to confirm coverage wasn't lapsed even briefly.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "e6838e16:entry:1",
+          "evidence_quote": "Renewed the apartment lease today, same terms, same landlord. He wanted to bump rent by two thousand but I showed him the market comparables I'd saved. He backed off.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        },
+        {
+          "decision": "supportive",
+          "entry_id": "e6838e16:entry:0",
+          "evidence_quote": "I walked her through how to cross-check rates online, sent her a few links.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    },
+    {
+      "candidate_assessment": {
+        "action_assessment": "The writer made a pandan chiffon cake, then sat eating a slice with hot Milo before anyone else was awake.",
+        "conflict_assessment": "No supplied writing reports the writer acting against hedonism's definition.",
+        "core_value": "hedonism",
+        "entry_id": "ed67c9cc:entry:0",
+        "evaluated_quote": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up.",
+        "quote_assessment": "The proposed quote describes the writer's actual actions of making the cake and eating a slice with hot Milo, supporting personal gustatory and sensory gratification.",
+        "quote_reason": "supported_action",
+        "quote_source": "journal_entry",
+        "schema_version": "north-star-candidate-assessment-v1",
+        "source_reason": "observable_choice",
+        "value_assessment": "These are the writer's actual acts of preparing and consuming food, with reported sensory pleasure, supporting personal sensuous gratification associated with satisfying appetite."
+      },
+      "case_id": "ed67c9cc:hedonism:episode_01",
+      "eligible_sources": 1,
+      "failed": false,
+      "grade": "accepted",
+      "persona_id": "ed67c9cc",
+      "reference_state": "has_example",
+      "runtime": {
+        "core_value": "hedonism",
+        "results": [
+          {
+            "decision": "supportive",
+            "entry_id": "ed67c9cc:entry:0",
+            "evidence_quote": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up.",
+            "quote_source": "journal_entry",
+            "reason_code": "observable_choice"
+          }
+        ],
+        "schema_version": "north-star-moment-review-v1"
+      },
+      "selected": {
+        "decision": "supportive",
+        "entry_id": "ed67c9cc:entry:0",
+        "evidence_quote": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up.",
+        "quote_source": "journal_entry",
+        "reason_code": "observable_choice"
+      },
+      "source_judge_disagreement": false,
+      "source_reason_disagreement": false,
+      "source_reference": [
+        {
+          "decision": "supportive",
+          "entry_id": "ed67c9cc:entry:0",
+          "evidence_quote": "I sat at the table eating a slice with hot Milo before anyone else was up.",
+          "quote_source": "journal_entry",
+          "reason_code": "observable_choice"
+        }
+      ]
+    }
+  ],
+  "manifest_hash": "346742a6e37ce24641489fdbc0cc24b1cedf56e92f993f4edafd0d0d48676597",
+  "schema_version": "north-star-luna-report-v1",
+  "source_reviews": {
+    "023d3c2bb011176a698d6e1ec76849c2e3103b8e59a759cbbd85b75f9e0420c6": {
+      "decision": "supportive",
+      "entry_id": "8f83c818:entry:6",
+      "evidence_quote": "We spent another thirty minutes walking to find recycling and trash bins.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "03fffb70a8f809a1e367b79e6972630fd3f052aad6583d1bc464d3cd6a88fb87": {
+      "decision": "not_supportive",
+      "entry_id": "02fb94f3:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "0723e34ff1c63befe76fc1c66f914def3416f4c926f988f055b3ae4df97c8955": {
+      "decision": "abstain",
+      "entry_id": "7c712a0a:entry:4",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "insufficient_text"
+    },
+    "0d74c52332fae54b57327d41b2e919330870ab8258975b070677190412f7fbe5": {
+      "decision": "not_supportive",
+      "entry_id": "87e92805:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "other_actor"
+    },
+    "0db18b2036db09901b171f0ad22370f582cee646cbcc1a5a930048382fa092e3": {
+      "decision": "not_supportive",
+      "entry_id": "742c98d6:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "149362c1ee3049f19caed2156fc0426b0d10015315bd0e46253d4d0913dc2965": {
+      "decision": "supportive",
+      "entry_id": "9d126412:entry:3",
+      "evidence_quote": "The new procurement system rollout requires sign-off from Group IT before we can configure anything for our department. I submitted the request form nine days ago. Called James in IT twice, emailed once, even copied his manager.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "1a8c48f184ea30351239b67077b8dfd0f6c9602e217e4a279cc245962bfabf3c": {
+      "decision": "abstain",
+      "entry_id": "7c712a0a:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "insufficient_text"
+    },
+    "1af65029742e26ce80b39a28b8ee389c7c139a5a483f9a2adfa6adcf7b19d6f6": {
+      "decision": "supportive",
+      "entry_id": "bf44e50f:entry:1",
+      "evidence_quote": "After that last entry I went and made tea and sat back on the balcony, properly this time, no phone. And it was good for a few minutes, the air was cool and I could hear the mosque down the street and I was just sitting there with my tea.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "1b52097e8bde378bf5462925b6f9385a4b4364e3431e39910ccd57d7fc1fa4e8": {
+      "decision": "not_supportive",
+      "entry_id": "8f83c818:entry:4",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "1d6c4f3bcbdb98bd1c371d3bd18442e749d5a86d0e5e69e5094051ea6fb7a509": {
+      "decision": "supportive",
+      "entry_id": "7ff1d0fb:entry:0",
+      "evidence_quote": "I didn't take the bait. Told her I had to go check the kiln.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "1db9a2ee792928f335fb34ebe6a367295e4a8fbcc435b7fd3575419bd1e618e8": {
+      "decision": "not_supportive",
+      "entry_id": "e5c9d9e5:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "intention_only"
+    },
+    "21544ed20a7f4f96006cb3a785e9706ca09826d7032fec8277f7e2dbbd0bba0c": {
+      "decision": "supportive",
+      "entry_id": "dbe2c53d:entry:4",
+      "evidence_quote": "So I sent a sad emoji and closed the app.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "216a9025412aa4de56e97d352eadf9f53df5bf215ea869301af5c49eeb29e322": {
+      "decision": "abstain",
+      "entry_id": "742c98d6:entry:4",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "ambiguous"
+    },
+    "24fb10261b4e2f2d5ad3c3835941bdf7df1261aa48d5a32ed97a653bc6a90d02": {
+      "decision": "supportive",
+      "entry_id": "e5c9d9e5:entry:3",
+      "evidence_quote": "Gave him his first management role when everyone said he was too young.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "25d814cad0e4797e0ca9db49b146d9961025a0882196538fc9c58d73f834cfdc": {
+      "decision": "supportive",
+      "entry_id": "02fb94f3:entry:7",
+      "evidence_quote": "Tariq's mother made mansaf for dinner and I helped her roll the jameed. She showed me her mother's technique with the wooden spoon and for once it wasn't corrective, it was like she was sharing something. I actually paid attention.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "278eac8562071a07f8f1e2658fec90ebcdae8c7503c522f7ad07a9fa0d8b2e4c": {
+      "decision": "supportive",
+      "entry_id": "7c712a0a:entry:3",
+      "evidence_quote": "But I did not say that either. I just said we would add better monitoring and put the renewal dates in a shared calendar. Safe answer. Team player answer.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "29bf402598e18c9d4bc28b2f7d7d8b8a11bc9308fe1b8f9fa2767675882e489a": {
+      "decision": "not_supportive",
+      "entry_id": "2541429a:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "29cdd1295c1e42ab382f0c38941739d192f3f0c75a86197f40feffac93f1443e": {
+      "decision": "not_supportive",
+      "entry_id": "e5c9d9e5:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "other_actor"
+    },
+    "2a7188e71109257d5df63b5317cb6fb9fff2a9bae357fd144e980ac0c1c1e6da": {
+      "decision": "supportive",
+      "entry_id": "7c712a0a:entry:5",
+      "evidence_quote": "Called my mother. She asked if I was eating well and I said yes, even though I had skipped lunch. Some lies are kindness.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "2aaf99fa71a18154581b552fb337dbbed365a957eebfe66c84e0f74774a7e536": {
+      "decision": "not_supportive",
+      "entry_id": "7c712a0a:entry:7",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "2c4459436cc6d9b615bfbe3eba480f16eb7d09878a9b567e67b1c5d2a48f0035": {
+      "decision": "not_supportive",
+      "entry_id": "02fb94f3:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "2c4b12fff6c7a04e9086e405035ec94006304d5dc27d0fdb5651ac5741f3c21e": {
+      "decision": "supportive",
+      "entry_id": "11de77e8:entry:8",
+      "evidence_quote": "Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "2d157fcc94547577aa0e0e9d3a37a7ba0cdf1a4dbd65c6b0c4b3946ab16a03ee": {
+      "decision": "abstain",
+      "entry_id": "dbe2c53d:entry:6",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "ambiguous"
+    },
+    "2d2faa01454b745217f5a3830d73ff5eec51de7bf18fc69561e583629131f63b": {
+      "decision": "supportive",
+      "entry_id": "1496159d:entry:0",
+      "evidence_quote": "Took it, thanked her properly the way my mom taught me",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "2df00d39a524368ebd785d3406c405df397ffe8322cb15c84ff1a7450b28f8bd": {
+      "decision": "not_supportive",
+      "entry_id": "3a3b15e4:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "2e06b55fbcc9dc90da5eb8c4252609540dee6771432fd0c18f2dfe8ad1278eb3": {
+      "decision": "not_supportive",
+      "entry_id": "988d1a65:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "312881b4c00e67fbe6af4ed5708d14b0222fa6fe19d99d10e8de4b69fdd0e25e": {
+      "decision": "not_supportive",
+      "entry_id": "8f83c818:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "320d1781f537cd150f12aceb4a983db9f8dce83bc582bc6b9115867945b4d2c7": {
+      "decision": "supportive",
+      "entry_id": "8f83c818:entry:7",
+      "evidence_quote": "Helped two new guys file their claims.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "35144e3807f86bfc94eb5926a34b902150a15e822bbf7b1c7d592a8b77cd964f": {
+      "decision": "supportive",
+      "entry_id": "7adc5866:entry:4",
+      "evidence_quote": "Spent the morning helping Sunita draft her transfer application",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "3885f5c2c9522806250e296aa21b5ed6afb25aa2fe97553fc72c27a9fb14c945": {
+      "decision": "supportive",
+      "entry_id": "988d1a65:entry:4",
+      "evidence_quote": "I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten minutes, then moved on.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "3bc5af6fe597481ef3ec77800b1b5d0ae643176be54a35abd701614c04433d92": {
+      "decision": "not_supportive",
+      "entry_id": "11de77e8:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "3fc7baea18d53f278848a9db4d39eb20abdc384a34109b8420a3e3b6896ed9a1": {
+      "decision": "not_supportive",
+      "entry_id": "e5c9d9e5:entry:6",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "41b717fd8d527764fa0f4e8497027f6375051f5fb4286f4366347fc5dcd65546": {
+      "decision": "supportive",
+      "entry_id": "7c712a0a:entry:2",
+      "evidence_quote": "Now I research, I weigh, I consider all stakeholders.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "42afabec444e6426788c57e190efd7208adb63f93077db6bc34abc05d04fb2c7": {
+      "decision": "supportive",
+      "entry_id": "11de77e8:entry:5",
+      "evidence_quote": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "46e2c30e3b077a03ca5b4c50e7690cfa0425a944c67f22cf455caf2e4a2c829a": {
+      "decision": "supportive",
+      "entry_id": "2541429a:entry:4",
+      "evidence_quote": "She set the platter on the table the way I always do, rice shaped just right.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "478f2658def2e5b19798779c188b173924dc449f26284e18d9156b643944d78c": {
+      "decision": "supportive",
+      "entry_id": "e6838e16:entry:1",
+      "evidence_quote": "Renewed the apartment lease today, same terms, same landlord. He wanted to bump rent by two thousand but I showed him the market comparables I'd saved. He backed off.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "479caa68049e30ca9b6735a62fa2cd397572a693c0dda8f95c667ba03603baeb": {
+      "decision": "supportive",
+      "entry_id": "87e92805:entry:5",
+      "evidence_quote": "I took them both, rode the bicycle I borrowed from my neighbor.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "49af7f11586632a64f1f05ae099c9aabab239b5cedd8f37ab3b981baddfe3965": {
+      "decision": "supportive",
+      "entry_id": "e5c9d9e5:entry:8",
+      "evidence_quote": "I've spent thirty years making sure I was irreplaceable and now that's the problem.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "49cfc8e7cb3a7bc301747b9ca349d9e8616b7fb0b0ed47d8ae3c1c51dac28772": {
+      "decision": "not_supportive",
+      "entry_id": "2541429a:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "4ab0f5ac06f4e70a5a235f961ec9ace9bf2dd984582e20853eee727ca9584bfe": {
+      "decision": "supportive",
+      "entry_id": "e5c9d9e5:entry:7",
+      "evidence_quote": "I choose not to because Saturday mornings are when I review the weekly reports uninterrupted.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "4c71577d887cd949f92df02a259bc487ac6358aab512a611f7efae84ad61da0c": {
+      "decision": "supportive",
+      "entry_id": "110fcd4f:entry:0",
+      "evidence_quote": "Sat through the whole lab meeting biting my tongue while Felix presented my preprocessing idea as his own. Didn't say anything.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "4cd379243c8d07072168df9f52d2bf669d0173e23ad462987f4d4c98613bcdf5": {
+      "decision": "not_supportive",
+      "entry_id": "dbe2c53d:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "other_actor"
+    },
+    "4e499863733bc8910ef7fe4adc986591c90fc1d5aadaa45de851703ab2d36e3e": {
+      "decision": "not_supportive",
+      "entry_id": "87e92805:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "4f904668f430e8a6c47f7d8b1431933ff2d35d4a5e827d016f9760524920e6b6": {
+      "decision": "not_supportive",
+      "entry_id": "dbe2c53d:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "540a420673e0f2e3f8cced603c7d1c4be4e32eb82d35ec1372422a17cbf06547": {
+      "decision": "supportive",
+      "entry_id": "66ced716:entry:2",
+      "evidence_quote": "I just told him the yellow was a good choice and helped him find a spot on the drying rack.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "5b757a8601092490635c3ba0533f9af754d28a268295071dbca1fa79d974e6aa": {
+      "decision": "not_supportive",
+      "entry_id": "7ff1d0fb:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "intention_only"
+    },
+    "5ce3aec535af23387699d036d7b5238e0ebb955ad7967bb03422c35b7f5dbffd": {
+      "decision": "supportive",
+      "entry_id": "5fa8b540:entry:4",
+      "evidence_quote": "Stayed back to help the peon uncle fix a broken desk in my classroom.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "602f173a2cf0ce938e6d707b6980d8df0344b50164acd0362203b9caf0d75743": {
+      "decision": "not_supportive",
+      "entry_id": "02fb94f3:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "61fd2a100541ead20fcc78a187b169372a943a92021db5b6258776b01daecbff": {
+      "decision": "supportive",
+      "entry_id": "8f83c818:entry:1",
+      "evidence_quote": "I helped him draft a letter to MOM.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "625518ac27667bc10d193568cd40714b00c4459722a2c7cfa6ed2e069fd1a12c": {
+      "decision": "not_supportive",
+      "entry_id": "11de77e8:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "6469b028a4573673fd97ec8298174e7d4e933659a5ea95e886f71757c2dc2d23": {
+      "decision": "supportive",
+      "entry_id": "bf44e50f:entry:3",
+      "evidence_quote": "Bought knafeh on the way home from the Zarqa site. Ate it in the car in the parking lot before going upstairs, still warm.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "64d747a7844ffd21837ea8d9a4522f1d07f3419e0cf7d3b9a4daec9003900dc9": {
+      "decision": "supportive",
+      "entry_id": "dbe2c53d:entry:0",
+      "evidence_quote": "Kept redoing the sketch for the Suba district mural because the committee wants something \"uplifting\"",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "66ff0c915e529f49f3feecf7f5d0f0769f0c07ba44674cbbc2291f1567cca01d": {
+      "decision": "not_supportive",
+      "entry_id": "8f83c818:entry:5",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "69b62d73956b7c3a1e3b519724e1225faab0d894d4c5ea2a6d6bb06c4effc43b": {
+      "decision": "supportive",
+      "entry_id": "988d1a65:entry:1",
+      "evidence_quote": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "6ce4af6ab68e837052e667aa21d030382f986ac3a7b965cb83c73d4a5ad350a6": {
+      "decision": "supportive",
+      "entry_id": "dbe2c53d:entry:3",
+      "evidence_quote": "I compromised \u2014 kept the river but softened the contamination imagery into something more abstract.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "6d4fd0249226b60c467e6a0f7526e2f0a4836eaa5499947099ce55f427809a6f": {
+      "decision": "not_supportive",
+      "entry_id": "11de77e8:entry:6",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "6f3dfe096cf3081dfdb42fe4a66cc3c7ca0907ab3e82492104cb1826741bb55b": {
+      "decision": "not_supportive",
+      "entry_id": "7adc5866:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "71840a92815aca6ad688bb56975a429e5f4d2d855367f6441f85dbbdce9fb720": {
+      "decision": "supportive",
+      "entry_id": "742c98d6:entry:1",
+      "evidence_quote": "I got her a proper referral to the physiotherapist and explained everything in simple Dutch, and her daughter translated the rest.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "722a638f2f13f821bc5cf7011997a378b572b0a4b59386735c847d5c35c0e94c": {
+      "decision": "not_supportive",
+      "entry_id": "1496159d:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "724e9ca9867edf5ce6a18eaff48c5880210581b1586d7c71fa84a08370bd929d": {
+      "decision": "supportive",
+      "entry_id": "7adc5866:entry:6",
+      "evidence_quote": "I had set up an extra cushion near the door in case her knee was bad",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "739cdc02c57a4f5aec13c7a94310dfba1d422c47de7ed90bd4765e25849a80a2": {
+      "decision": "not_supportive",
+      "entry_id": "11de77e8:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "intention_only"
+    },
+    "7797d711b5ab475b42124f2233867ba93d542ee074d18a8e58686343b7f8ee91": {
+      "decision": "abstain",
+      "entry_id": "02fb94f3:entry:5",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "ambiguous"
+    },
+    "79700884eb64072372c444f27caa280c980b755c9acd9fff83d6046c9c0fc534": {
+      "decision": "supportive",
+      "entry_id": "87e92805:entry:4",
+      "evidence_quote": "I told Raul to do it, because what choice do I have.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "7a72d070ece071905706aea347999d688a560d19b1f8bbc01f84c0392a253184": {
+      "decision": "not_supportive",
+      "entry_id": "742c98d6:entry:7",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "7a7b668e175ffb494766801e95337f93d5766f6def7654e5773b3db3628141dc": {
+      "decision": "not_supportive",
+      "entry_id": "8f83c818:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "7b0366532e9fb5f9e664470cbc02576bc5997fa387f1f323d5e8d5418f18074c": {
+      "decision": "supportive",
+      "entry_id": "11de77e8:entry:4",
+      "evidence_quote": "We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "7c4a33923e86a3803c12e26de15f25b85a4bbaefb1d41c532c5b32c8b18829cd": {
+      "decision": "not_supportive",
+      "entry_id": "742c98d6:entry:5",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "808de578d41fb0d6479c734313dc918d7944e72687b89e16f9e424b1e9eae7d5": {
+      "decision": "not_supportive",
+      "entry_id": "87e92805:entry:7",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "8243050702fbaf2c260f7b2983edaf07c90737c5acdf712f6a0d7616f3740b15": {
+      "decision": "supportive",
+      "entry_id": "87e92805:entry:2",
+      "evidence_quote": "I'm sitting here Thursday night with the calculator app open, moving numbers around like I'm playing some kind of sad puzzle game, trying to figure out where the motorcycle payment comes from.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "852a23f1f36d5c0fd729920365d799b733fecd556252642033d418e90afec855": {
+      "decision": "not_supportive",
+      "entry_id": "7adc5866:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "other_actor"
+    },
+    "854bb48da27a169bcfd132dbdc73d40d1e11807a3990cbb9559a8c6293738d0e": {
+      "decision": "not_supportive",
+      "entry_id": "66ced716:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "89060f86bf669c8b682402327e3f661c12c5e6778cca28aff2367003c263e30f": {
+      "decision": "not_supportive",
+      "entry_id": "87e92805:entry:6",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "8b686e89ca265c889c55cd2ab318cd200e8db703092fc920224d172ad6416184": {
+      "decision": "supportive",
+      "entry_id": "742c98d6:entry:2",
+      "evidence_quote": "I bring my own bags, I cycle, I sort my recycling obsessively",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "8b86b1c3d0586a52c0b1bfc79a2ccd560e2b2f693b6800ee9bafc0fc92b8043d": {
+      "decision": "not_supportive",
+      "entry_id": "dbe2c53d:entry:7",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "909183316fad7b91e9d4baef4437e31c9aa433162200d6a6003c29d8f47daccb": {
+      "decision": "supportive",
+      "entry_id": "2541429a:entry:6",
+      "evidence_quote": "Noor was in the kitchen all morning helping me roll grape leaves.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "943f12c61dff5919578ed79b75ce3636735dabae28aef3d053bf9b9f2a01ce3b": {
+      "decision": "not_supportive",
+      "entry_id": "7ff1d0fb:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "9884a8568f10ab634dda072f1006eef7b1f53916aa9f91be57a6e12fce84f2c3": {
+      "decision": "not_supportive",
+      "entry_id": "7adc5866:entry:5",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "991b5c01949e086a5db06e9c3fc7cd0815f7b5e6c7457b462623f0b5accf04f2": {
+      "decision": "not_supportive",
+      "entry_id": "e5c9d9e5:entry:4",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "9aeea18e32e80c3a18574a190f983d6d020260323a1367925f409e889d4ece01": {
+      "decision": "supportive",
+      "entry_id": "e5c9d9e5:entry:0",
+      "evidence_quote": "Van der Meer had the nerve to suggest we bring in an outside consultant for the digital transformation project. In front of everyone. I built this company when he was still in university, and now he thinks we need some McKinsey type to tell us how to run our own systems.\n\nI shut it down, maybe too hard.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "9c4300c5c985399ee038c1ed39a2a06d0aef8e5fee6170691795ac8121336da0": {
+      "decision": "supportive",
+      "entry_id": "9d126412:entry:1",
+      "evidence_quote": "Managed to restructure the KPI reporting template my department uses before the quarterly review",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "9cff33692234a2a31f32350cd76ef079ac321411531633533704b010da55874c": {
+      "decision": "supportive",
+      "entry_id": "5fa8b540:entry:2",
+      "evidence_quote": "the water pollution lesson I did last week.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "9d09ae0f6411a96586bc59cf0a23775c190a731fa4dc40bb2ce1d8a7ae948959": {
+      "decision": "not_supportive",
+      "entry_id": "87e92805:entry:8",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "aa396c572b78e438923517563011e6731d787b32f51eba1cc72d362988bf1f2d": {
+      "decision": "abstain",
+      "entry_id": "3a3b15e4:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "ambiguous"
+    },
+    "ab9074dcb849f582fec1e922f2d268bed9c31228a7380683b7d01d8b2b638277": {
+      "decision": "not_supportive",
+      "entry_id": "988d1a65:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "afd15a5227ba55c790512af42642b2773c32e3fda27c22afbccd958a6714ed8b": {
+      "decision": "not_supportive",
+      "entry_id": "e5c9d9e5:entry:5",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "b2186149430911643abdace64cd94faaa6638cf78a4ffca34b6112bbf7638e69": {
+      "decision": "not_supportive",
+      "entry_id": "5fa8b540:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "b760175ac407114efc131a24fd3f918d5980348579b3078904a88d066070b9df": {
+      "decision": "not_supportive",
+      "entry_id": "11de77e8:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "b7fc6b4ba3f5ae4645c8f9f5f54c1ff7c4eb6eab178a9b6efd5eb7d2874ab443": {
+      "decision": "supportive",
+      "entry_id": "02fb94f3:entry:4",
+      "evidence_quote": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how I arrange the pastries on the tray.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "ba08b60fcc66ad1e95ba1a66fe1effdcbb343d1a42a7b09c1ea87c2e69493e51": {
+      "decision": "abstain",
+      "entry_id": "11de77e8:entry:7",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "ambiguous"
+    },
+    "bc98399b2ccc6d3beacc5feaefe144168ed8af592b609fa6b0c31ff5b25288ec": {
+      "decision": "abstain",
+      "entry_id": "8fcd7947:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "insufficient_text"
+    },
+    "bd55ce6f5fa88df4b90a40022306a3d55f28bf9897a922bb34e288089dd78cbb": {
+      "decision": "supportive",
+      "entry_id": "9d126412:entry:0",
+      "evidence_quote": "Pulled together three contractor quotes, a cost-per-household breakdown, a maintenance projection over ten years. Laid it all out on the whiteboard.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "be206c538d22310964c55d0eb8ffe764c7b6d2d15108a046413ad7ad67e63597": {
+      "decision": "supportive",
+      "entry_id": "7adc5866:entry:3",
+      "evidence_quote": "Came home and told Mummy-ji and she got teary too. We sat together for a bit",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "be9e233007dab1f97eaa0230d4716fd3f37271c20100e8ba4be31767fb276ed9": {
+      "decision": "abstain",
+      "entry_id": "bf44e50f:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "insufficient_text"
+    },
+    "bed8a9c3b423f16840dfff0980d105febb048162d71197bc905035055daf8fe5": {
+      "decision": "not_supportive",
+      "entry_id": "dbe2c53d:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "other_actor"
+    },
+    "bf845c257c1713a649b779c1af7cfc7b234fffbc7e6e2f1c3a615883ce19cc3b": {
+      "decision": "supportive",
+      "entry_id": "e6838e16:entry:0",
+      "evidence_quote": "I walked her through how to cross-check rates online, sent her a few links.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "bffe1651977edb3659154d18bbb003ac3ae71702b12ce1bf2a243832d933b1bb": {
+      "decision": "not_supportive",
+      "entry_id": "742c98d6:entry:6",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "c00ec0d2137adf44520ab28cf74e4a7d41e51c96756f5e95ca549702b5067c6d": {
+      "decision": "not_supportive",
+      "entry_id": "988d1a65:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "c033a9d36dfafc5a0ad0bd7d6ea1b7260167f346a5a4f47874e7c19a4da780e8": {
+      "decision": "not_supportive",
+      "entry_id": "dbe2c53d:entry:5",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "c1073f774cbba5df7d72225ad927ce0481fefa1bc0148cf01dacc12967520e38": {
+      "decision": "not_supportive",
+      "entry_id": "02fb94f3:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "c7aeccf9fd7b7a1bc1336bb50c78b565a34cbd9ed41e2c69f27cf13c85654796": {
+      "decision": "supportive",
+      "entry_id": "bf44e50f:entry:0",
+      "evidence_quote": "Put on some Fairuz which was nice. Got home, heated up what was left of last night's mansaf, and sat on the balcony for maybe ten minutes",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "c7ea6bf62f01c25380af914f2079faaee2a83200ddf5d04dca815eb2435c984a": {
+      "decision": "supportive",
+      "entry_id": "ed67c9cc:entry:0",
+      "evidence_quote": "I sat at the table eating a slice with hot Milo before anyone else was up.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "c99e308a2a9ded8886f06bbbaaedd274b45d185c7647e47dca6d976396287f8f": {
+      "decision": "not_supportive",
+      "entry_id": "742c98d6:entry:3",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "ca69f53002c87b8201146e52f4d1bb92ab3b287a0e5ca6e6a57978a7b842ebc6": {
+      "decision": "supportive",
+      "entry_id": "66ced716:entry:0",
+      "evidence_quote": "The kids went through all the blue paint last week so I picked up more on the way, the cheap kind because the good acrylics cost too much for how fast they use them.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "cb36ddc404e716ead190e69d777e294565904f7999672dc1b8e7e223bc1df856": {
+      "decision": "supportive",
+      "entry_id": "02fb94f3:entry:8",
+      "evidence_quote": "I sketched some patterns on a napkin -- the tile work in the courtyard is beautiful, these geometric interlocking shapes I've been wanting to use in a design project.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "d0048352c37da9e4c9baed29c4d6b62e568c8739cb722132d8b64ec0d988f3d2": {
+      "decision": "not_supportive",
+      "entry_id": "7c712a0a:entry:6",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "intention_only"
+    },
+    "d5f01857fcd2853141496c238b2659a90b9cafb663debd8de1d68b61f027b245": {
+      "decision": "not_supportive",
+      "entry_id": "7adc5866:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "d666eab855b23172571b0ab509aef150f3293fe00b4068f7c243268051e2aeac": {
+      "decision": "supportive",
+      "entry_id": "5fa8b540:entry:1",
+      "evidence_quote": "I sat with her for almost an hour.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "d73e2691a956ea4f640e1df154289297d7a4aa537938e07c6bb823baaf2e0001": {
+      "decision": "supportive",
+      "entry_id": "2541429a:entry:1",
+      "evidence_quote": "Tariq asked if we could do this every Friday, not just during holidays. I said of course.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "dc944e44da336fd39af7873910ea02b18710893c5793b1a55efdc4aaab6958ac": {
+      "decision": "not_supportive",
+      "entry_id": "02fb94f3:entry:6",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "df563298748d835aac8deadb14c8501682d378e7f07e6513bc65701262527108": {
+      "decision": "supportive",
+      "entry_id": "e6838e16:entry:2",
+      "evidence_quote": "Sorted it manually but now I need to call the insurer to confirm coverage wasn't lapsed even briefly.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "e04d8a4da592acc9868bcb60d485fd48f3390e0faf1cf10b436f75ce685ed911": {
+      "decision": "supportive",
+      "entry_id": "dbe2c53d:entry:2",
+      "evidence_quote": "She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "e7c04d83406542a5664fe3d9036c963568559d89e86cd6ef575e9223088ed02e": {
+      "decision": "supportive",
+      "entry_id": "7c712a0a:entry:1",
+      "evidence_quote": "I did not say that though. I said we should consider the timeline and the risk to the December release.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "e87d2bb783829e299f8b98d92bf1664ce6fc1b5522d95f42cd02258afd71baaf": {
+      "decision": "abstain",
+      "entry_id": "2541429a:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "ambiguous"
+    },
+    "f14b5d14e081987f138063f59d95244c6f3de8c324696b1eb44769cc785185e5": {
+      "decision": "abstain",
+      "entry_id": "2541429a:entry:5",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "ambiguous"
+    },
+    "f1d7996662fb199e1b3d316454506ab73bd7689e79216b2a222dde2fbe758412": {
+      "decision": "not_supportive",
+      "entry_id": "9d126412:entry:2",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "same_value_conflict"
+    },
+    "f3e792c063f83c616d7c33a8e895fec556eb11dd1dcd72c2141c2d3e8999337c": {
+      "decision": "not_supportive",
+      "entry_id": "87e92805:entry:1",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "f4f6504075e83cd766a6fa2b9f59b40b7b836ba7f7576a5e58d176d4e0635c84": {
+      "decision": "supportive",
+      "entry_id": "5fa8b540:entry:0",
+      "evidence_quote": "Spent the rest of the evening marking notebooks and helping Amma sort the kitchen.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "f78484ac507e14c1de8fd3ae41f978c9b1a3741245797fd2dc242464395bf856": {
+      "decision": "not_supportive",
+      "entry_id": "8f83c818:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "fbf7402e9616f3a89210174778d24cdec2575e133b357a5e2b5de970f9d0ef48": {
+      "decision": "not_supportive",
+      "entry_id": "dbe2c53d:entry:0",
+      "evidence_quote": "",
+      "quote_source": null,
+      "reason_code": "wrong_value"
+    },
+    "fd8126a5fddf8d81db13187b9710e25f1de5013dafd4bc8fda5b80953c869158": {
+      "decision": "supportive",
+      "entry_id": "7ff1d0fb:entry:2",
+      "evidence_quote": "I keep sending congratulations emojis and exclamation marks.",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "fe72f8c148d392a534f2d1c67621d15b6c9a4119fe90fa3ffb110378a5833657": {
+      "decision": "supportive",
+      "entry_id": "3a3b15e4:entry:0",
+      "evidence_quote": "I chose the topic of hospitality rituals in Levantine households",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    },
+    "ff9ba6f8fa32e22cff639bb4253e752b089f3afe3eb0d5130497057f04be0ff7": {
+      "decision": "supportive",
+      "entry_id": "152df7a4:entry:0",
+      "evidence_quote": "I walked them through it, helped them resubmit",
+      "quote_source": "journal_entry",
+      "reason_code": "observable_choice"
+    }
+  },
+  "summary": {
+    "accepted": 24,
+    "attempts": 90,
+    "cases": 33,
+    "code_invalid_attempts": 2,
+    "correct_omission": {
+      "denominator": 2,
+      "numerator": 2,
+      "rate": 1.0
+    },
+    "coverage": {
+      "denominator": 33,
+      "numerator": 25,
+      "rate": 0.7575757575757576
+    },
+    "cumulative_spent_or_reserved_usd": 0.61893,
+    "failed_cases": 0,
+    "gate_passed": false,
+    "new_spent_or_reserved_usd": 0.27160398,
+    "nonempty_histories": 28,
+    "precision": {
+      "denominator": 25,
+      "numerator": 24,
+      "rate": 0.96
+    },
+    "prior_spend_usd": 0.34732602,
+    "rejected": 1,
+    "saved_persona_accepted": [
+      "02fb94f3:tradition:episode_02",
+      "11de77e8:self_direction:episode_02",
+      "8f83c818:universalism:episode_01",
+      "988d1a65:power:episode_01"
+    ],
+    "selected": 25,
+    "source_decisions": {
+      "abstain": 11,
+      "not_supportive": 55,
+      "supportive": 56
+    },
+    "structurally_empty_histories": 5,
+    "unexpected_failed_attempts": 2,
+    "unique_source_value_pairs": 122,
+    "unresolved_no_positive_histories": 1,
+    "unresolved_selections": 0
+  }
+}

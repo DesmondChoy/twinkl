@@ -1,0 +1,457 @@
+{
+  "reviewer": "Primary Codex assistant independent AI assessment",
+  "manifest_hash": "346742a6e37ce24641489fdbc0cc24b1cedf56e92f993f4edafd0d0d48676597",
+  "method": "Read masked full sources and exact selected quotations before inspecting any case-level evaluator or independent source-agent judgment. Aggregate evaluator counts were known after the user requested status. Medium-confidence acceptance is rubric-based agreement, not human adjudication.",
+  "results": [
+    {
+      "case_id": "02fb94f3:tradition:episode_02",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "tradition",
+        "entry_id": "02fb94f3:entry:8",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer joins the family visit to the ancestral village and grandfather.",
+        "value_assessment": "The intergenerational visit sits within explicitly traditional household practices and supports family custom.",
+        "conflict_assessment": "No writer behavior rejecting these customs is reported.",
+        "quote_assessment": "The quote describes the joint visit; the complete source supplies the cultural context.",
+        "evaluated_quote": "we went to his parents' village with Sami to visit his grandfather"
+      },
+      "accepted": true,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "110fcd4f:conformity:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "conformity",
+        "entry_id": "110fcd4f:entry:0",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer deliberately stays silent during the lab meeting despite wanting credit.",
+        "value_assessment": "Restraint of a confrontation supports smooth group interaction under the approved definition.",
+        "conflict_assessment": "Private hurt is not a reported disruptive action.",
+        "quote_assessment": "The quote directly describes suppressing the response and remaining silent.",
+        "evaluated_quote": "Sat through the whole lab meeting biting my tongue while Felix presented my preprocessing idea as his own. Didn't say anything."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "11de77e8:self_direction:episode_02",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "self_direction",
+        "entry_id": "11de77e8:entry:8",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer presents a tool and immediately accepts the offered roadmap inclusion.",
+        "value_assessment": "An explicitly made choice about the project is a reported exercise of agency; opposition to others is not required.",
+        "conflict_assessment": "No imposed choice or actual surrender of agency is established.",
+        "quote_assessment": "The quote includes the actual decision, rather than merely a wish or possibility.",
+        "evaluated_quote": "Presented the deployment health tool to Pieter's skip-level manager today. She liked it. Asked if we'd want to bring it under the platform roadmap officially. Said yes without hesitating."
+      },
+      "accepted": true,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "1496159d:universalism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "universalism",
+        "entry_id": "1496159d:entry:0",
+        "quote_source": "journal_entry",
+        "source_reason": "ambiguous",
+        "quote_reason": "source_not_supportive",
+        "action_assessment": "The writer accepts a customer gift and thanks her.",
+        "value_assessment": "Ordinary courtesy is established, but a sufficiently specific connection to understanding, tolerance or protection of broader human welfare is uncertain.",
+        "conflict_assessment": "No opposing behavior is reported; the uncertainty concerns support, not Conflict.",
+        "quote_assessment": "The quote reports courtesy and departure; it does not resolve the uncertain Universalism relationship.",
+        "evaluated_quote": "Took it, thanked her properly the way my mom taught me, and biked home"
+      },
+      "accepted": false,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "152df7a4:universalism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "universalism",
+        "entry_id": "152df7a4:entry:0",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer guides a warehouse partner through corrected customs paperwork and resubmission.",
+        "value_assessment": "Removing an obstacle to medical-supply delivery can support human welfare; doing it as work does not itself disqualify the action.",
+        "conflict_assessment": "No actual opposing behavior toward people or nature is reported.",
+        "quote_assessment": "The brief quote states the help performed; its referent and medical-supply context are explicit in the source.",
+        "evaluated_quote": "I walked them through it, helped them resubmit."
+      },
+      "accepted": true,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "2541429a:tradition:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "tradition",
+        "entry_id": "2541429a:entry:6",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer rolls grape leaves with Noor helping during Eid preparations.",
+        "value_assessment": "Participating in Eid food preparation supports the cultural custom.",
+        "conflict_assessment": "Concern about the daughter leaving is not an action against the custom.",
+        "quote_assessment": "Helping me explicitly includes the writer as a joint actor.",
+        "evaluated_quote": "Noor was in the kitchen all morning helping me roll grape leaves."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "3a3b15e4:tradition:drift_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "tradition",
+        "entry_id": "3a3b15e4:entry:0",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer prepares musakhan from scratch using its traditional process.",
+        "value_assessment": "The food preparation is explicitly grounded in valued inherited household practice.",
+        "conflict_assessment": "The dismissive view of an advisor does not itself oppose the requested cultural tradition.",
+        "quote_assessment": "The quote identifies the actual cooking process.",
+        "evaluated_quote": "Came home and made musakhan from scratch, the whole process \u2014 rolling the dough, roasting the sumac onions until they were dark and sweet."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "5fa8b540:universalism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "universalism",
+        "entry_id": "5fa8b540:entry:4",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer stays after work and helps repair a classroom desk.",
+        "value_assessment": "Repairing shared school resources with a staff member is a concrete contribution to educational welfare, although its Universalism specificity is less explicit than the environmental cases.",
+        "conflict_assessment": "No same-value opposing behavior is reported.",
+        "quote_assessment": "The quote describes the actual repair contribution, with school context supplied.",
+        "evaluated_quote": "Stayed back to help the peon uncle fix a broken desk in my classroom."
+      },
+      "accepted": true,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "66ced716:universalism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "universalism",
+        "entry_id": "66ced716:entry:2",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer gives specific encouragement and helps a child store his artwork.",
+        "value_assessment": "This is a concrete contribution to a child-oriented workshop and the participants welfare; no inferred trauma or recovery is needed.",
+        "conflict_assessment": "No writer action against the childs welfare is reported.",
+        "quote_assessment": "The quote describes the encouragement and practical assistance; the source establishes the workshop context.",
+        "evaluated_quote": "I just told him the yellow was a good choice and helped him find a spot on the drying rack."
+      },
+      "accepted": true,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "742c98d6:universalism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "universalism",
+        "entry_id": "742c98d6:entry:2",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer buys the organic tomatoes despite their additional cost.",
+        "value_assessment": "The surrounding environmental concern gives the reported purchase an environmentally supportive context.",
+        "conflict_assessment": "Doubting the scale of individual impact is not conflicting behavior.",
+        "quote_assessment": "Them unambiguously refers to the organic tomatoes, and bought is an actual action.",
+        "evaluated_quote": "Bought them anyway."
+      },
+      "accepted": true,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "742c98d6:universalism:episode_02",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "universalism",
+        "entry_id": "742c98d6:entry:2",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer reports bringing bags, cycling and sorting recycling as repeated activities.",
+        "value_assessment": "These explicit practices support environmental protection.",
+        "conflict_assessment": "Frustration with pollution and corporate behavior is not the writers opposing action.",
+        "quote_assessment": "The quote directly states the repeated practices.",
+        "evaluated_quote": "I bring my own bags, I cycle, I sort my recycling obsessively"
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "7adc5866:benevolence:drift_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "benevolence",
+        "entry_id": "7adc5866:entry:6",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer prepares a cushion for a longstanding friend with knee pain.",
+        "value_assessment": "The action supports the welfare of a person with whom the writer has frequent personal contact.",
+        "conflict_assessment": "No harm to that person or the relevant in-group is reported.",
+        "quote_assessment": "The quote describes the accommodation already made.",
+        "evaluated_quote": "I had set up an extra cushion near the door in case her knee was bad"
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "7c712a0a:conformity:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "conformity",
+        "entry_id": "7c712a0a:entry:7",
+        "quote_source": "journal_entry",
+        "source_reason": "ambiguous",
+        "quote_reason": "source_not_supportive",
+        "action_assessment": "The writer works ten-hour days to maintain a release schedule.",
+        "value_assessment": "Diligence and helping a schedule do not alone establish restraint of impulses that would upset others or violate norms; references to managing leaders reputations describe role demands without a clear performed restraint.",
+        "conflict_assessment": "No definite same-value opposing action is established.",
+        "quote_assessment": "The quote establishes long work hours, not the specific self-restraint required by the approved Conformity definition.",
+        "evaluated_quote": "I have been working ten-hour days trying to keep us on track for the holiday release."
+      },
+      "accepted": false,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "7ff1d0fb:security:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "security",
+        "entry_id": "7ff1d0fb:entry:2",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer sends congratulations despite private jealousy and disappointment.",
+        "value_assessment": "The overt response supports harmony in a valued relationship under the approved Security definition.",
+        "conflict_assessment": "Closing the chat and private distress do not establish destabilizing behavior toward the friend.",
+        "quote_assessment": "The quote describes repeated conciliatory messages.",
+        "evaluated_quote": "I keep sending congratulations emojis and exclamation marks."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "87e92805:security:episode_02",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "security",
+        "entry_id": "87e92805:entry:4",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer authorizes replacement of the defective motorcycle brakes.",
+        "value_assessment": "The authorization supports physical safety and income stability despite financial stress.",
+        "conflict_assessment": "The repair bill and poor appetite are circumstances or feelings, not opposing behavior.",
+        "quote_assessment": "Do it unambiguously refers to the identified brake repair and describes an actual authorization.",
+        "evaluated_quote": "I told Raul to do it, because what choice do I have."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "87e92805:security:episode_03",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "security",
+        "entry_id": "87e92805:entry:5",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer takes two delivery jobs and uses a borrowed bicycle.",
+        "value_assessment": "The concrete earning activity supports immediate material stability even though proceeds are small.",
+        "conflict_assessment": "Late-night work after being unable to sleep does not by itself prove opposing behavior.",
+        "quote_assessment": "The quote states accepted jobs and the transport actually used.",
+        "evaluated_quote": "There were two. I took them both, rode the bicycle I borrowed from my neighbor."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "8f83c818:universalism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "universalism",
+        "entry_id": "8f83c818:entry:7",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer helps two newcomers file claims at a worker center.",
+        "value_assessment": "Practical assistance with worker claims directly supports fair treatment and welfare beyond the household.",
+        "conflict_assessment": "No opposing conduct is reported.",
+        "quote_assessment": "The quote names the assistance performed; the worker-center context is explicit.",
+        "evaluated_quote": "Helped two new guys file their claims."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "988d1a65:power:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "power",
+        "entry_id": "988d1a65:entry:4",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer previously decides a reporting structure, communicates it and ends renewed discussion.",
+        "value_assessment": "These actions exercise organizational authority and control.",
+        "conflict_assessment": "Allowing brief discussion is not an actual loss or relinquishment of control.",
+        "quote_assessment": "The quote describes both the decision and control of the meeting agenda.",
+        "evaluated_quote": "I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten minutes, then moved on."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "9d126412:power:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "power",
+        "entry_id": "9d126412:entry:3",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer submits a departmental request, follows up repeatedly and escalates to the coordinators manager.",
+        "value_assessment": "The escalation is an actual effort to exert institutional influence over departmental resources; the rubric does not require successful control.",
+        "conflict_assessment": "External delay and dependence on approval are not the writers opposing behavior.",
+        "quote_assessment": "The quote includes the hierarchy-based escalation, rather than only an outcome or frustration.",
+        "evaluated_quote": "I submitted the request form nine days ago. Called James in IT twice, emailed once, even copied his manager."
+      },
+      "accepted": true,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "bf44e50f:hedonism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "hedonism",
+        "entry_id": "bf44e50f:entry:3",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer buys and eats warm knafeh without checking a phone.",
+        "value_assessment": "The sensory food experience supports pleasure for oneself.",
+        "conflict_assessment": "No opposing behavior is reported.",
+        "quote_assessment": "The quote includes consumption and its sensory context.",
+        "evaluated_quote": "Bought knafeh on the way home from the Zarqa site. Ate it in the car in the parking lot before going upstairs, still warm."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "dbe2c53d:conformity:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "conformity",
+        "entry_id": "dbe2c53d:entry:4",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer types and deletes replies to avoid a family argument.",
+        "value_assessment": "This is explicit restraint of an impulse likely to disrupt family interaction.",
+        "conflict_assessment": "Regret and an impulse to argue do not negate the actual restraint.",
+        "quote_assessment": "The quote describes the deletion action; the source explains its family-harmony context.",
+        "evaluated_quote": "I started typing a response three times. Deleted all of them.\n\nIt's not that I disagree entirely"
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "dbe2c53d:universalism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "universalism",
+        "entry_id": "dbe2c53d:entry:2",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer accepts a concrete request to contribute art to an environmental march.",
+        "value_assessment": "The already-made commitment supports an environmental cause; the later rally speech remains undecided and is a separate action.",
+        "conflict_assessment": "Uncertainty about speaking is not opposing behavior.",
+        "quote_assessment": "The quote includes the environmental task and the completed acceptance.",
+        "evaluated_quote": "She's organizing a march next month about the deforestation in Guaviare and wants muralists to paint temporary pieces along the route. No committee, no brief, no polite rewrites \u2014 just paint what you see and feel. I said yes before I finished my coffee."
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "e5c9d9e5:power:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "power",
+        "entry_id": "e5c9d9e5:entry:8",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer reports repeatedly restricting others access to the company core and maintaining indispensability.",
+        "value_assessment": "Keeping control of the enterprise supports the approved Power definition despite its succession cost.",
+        "conflict_assessment": "Succession anxiety is not an action relinquishing control.",
+        "quote_assessment": "Making sure I was irreplaceable reports sustained active maintenance, and the complete source identifies the withholding of core access; it is broader wording than the strongest available quotation but is not merely I was irreplaceable.",
+        "evaluated_quote": "I've spent thirty years making sure I was irreplaceable and now that's the problem."
+      },
+      "accepted": true,
+      "confidence": "medium"
+    },
+    {
+      "case_id": "e6838e16:security:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "security",
+        "entry_id": "e6838e16:entry:2",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer manually resolves a failed insurance-premium payment.",
+        "value_assessment": "The corrective action supports health coverage and personal stability without proving uninterrupted coverage.",
+        "conflict_assessment": "Late salary and an unresolved coverage check are not opposing writer actions.",
+        "quote_assessment": "Sorted it manually states a completed corrective action with an unambiguous payment referent.",
+        "evaluated_quote": "Sorted it manually"
+      },
+      "accepted": true,
+      "confidence": "high"
+    },
+    {
+      "case_id": "ed67c9cc:hedonism:episode_01",
+      "assessment": {
+        "schema_version": "north-star-candidate-assessment-v1",
+        "core_value": "hedonism",
+        "entry_id": "ed67c9cc:entry:0",
+        "quote_source": "journal_entry",
+        "source_reason": "observable_choice",
+        "quote_reason": "supported_action",
+        "action_assessment": "The writer makes cake and eats it with a hot drink before the household wakes.",
+        "value_assessment": "The reported taste, smell and enjoyment support sensory pleasure.",
+        "conflict_assessment": "No opposing behavior is reported.",
+        "quote_assessment": "The quote names the making and eating with sensory context.",
+        "evaluated_quote": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up."
+      },
+      "accepted": true,
+      "confidence": "high"
+    }
+  ]
+}

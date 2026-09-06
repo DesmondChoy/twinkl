@@ -1,0 +1,13 @@
+{
+  "review_source": "primary assistant AI review; not human validation",
+  "blinding": "Read approved shared/candidate rubric, complete original four sources, and selected quote identity/text only; no runtime reasoning, reference results, or candidate assessment read before this judgment.",
+  "case_id": "two-values-lukas:week:5:conformity",
+  "entry_id": "11de77e8:entry:3",
+  "quote_source": "journal_entry",
+  "evaluated_quote": "I told Pieter I'd think about it over the weekend.",
+  "source_reason": "observable_choice",
+  "quote_reason": "supported_action",
+  "accepted": true,
+  "confidence": "medium",
+  "reason": "The writer actually deferred committing to an unsanctioned project despite wanting to join immediately, explicitly considering the manager's expected disapproval. That temporary restraint supports Conformity; no actual unsanctioned participation is reported. The quote states the performed deferral, and the supplied context establishes its object and reason. This is a borderline example because hesitation also reflects career concerns; it does not establish a final refusal or lasting compliance."
+}

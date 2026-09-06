@@ -1,0 +1,334 @@
+{
+  "reviewer": "independent Codex agent B",
+  "manifest_hash": "346742a6e37ce24641489fdbc0cc24b1cedf56e92f993f4edafd0d0d48676597",
+  "results": [
+    {
+      "group_id": "c1073f774cbba5df7d72225ad927ce0481fefa1bc0148cf01dacc12967520e38",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Laundry, cooking and logo work are reported, but no cultural or religious custom is established.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "cb36ddc404e716ead190e69d777e294565904f7999672dc1b8e7e223bc1df856",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I sat with the women while the men did their thing. Tariq's aunt made sage tea the old way, on a brass tray over coals. It was good. Quiet.",
+      "explanation": "The writer participates in the family gathering and its customary shared tea; the private sketching does not oppose that custom.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "7797d711b5ab475b42124f2233867ba93d542ee074d18a8e58686343b7f8ee91",
+      "decision": "abstain",
+      "reason_code": "ambiguous",
+      "evidence_quote": "",
+      "explanation": "Wearing the embroidered dress is actual, but its relationship to a cultural or religious custom is not supplied.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "625518ac27667bc10d193568cd40714b00c4459722a2c7cfa6ed2e069fd1a12c",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Helping onboard the colleague is established, but no independent choice, creation or exploration by the writer is reported.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "ba08b60fcc66ad1e95ba1a66fe1effdcbb343d1a42a7b09c1ea87c2e69493e51",
+      "decision": "abstain",
+      "reason_code": "ambiguous",
+      "evidence_quote": "",
+      "explanation": "Doing both suggests ongoing activity, but this entry does not establish what the repo activity involves or how it expresses independent thought or action.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "7b0366532e9fb5f9e664470cbc02576bc5997fa387f1f323d5e8d5418f18074c",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer.",
+      "explanation": "The writer commits to a project and creates its API layer. Constraints in the day job are not opposing behavior by the writer.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "722a638f2f13f821bc5cf7011997a378b572b0a4b59386735c847d5c35c0e94c",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Paid design and delivery work are reported without an action toward justice, wider welfare or nature.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "909183316fad7b91e9d4baef4437e31c9aa433162200d6a6003c29d8f47daccb",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Noor was in the kitchen all morning helping me roll grape leaves.",
+      "explanation": "The writer jointly prepares food for Eid, enacting the religious celebration. Anxiety about Noor leaving is not contrary cultural behavior.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "29bf402598e18c9d4bc28b2f7d7d8b8a11bc9308fe1b8f9fa2767675882e489a",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Sitting in the garden and reflecting on family concerns does not establish observance or acceptance of a cultural custom.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "49cfc8e7cb3a7bc301747b9ca349d9e8616b7fb0b0ed47d8ae3c1c51dac28772",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "The writer postpones a conversation and clears plates; no link to a cultural or religious custom is established.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "fe72f8c148d392a534f2d1c67621d15b6c9a4119fe90fa3ffb110378a5833657",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Came home and made musakhan from scratch, the whole process — rolling the dough, roasting the sumac onions until they were dark and sweet.",
+      "explanation": "Cooking the familiar dish in the context of valued family hospitality practices enacts cultural continuity. Attitudes toward the advisor do not oppose this definition.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "9cff33692234a2a31f32350cd76ef079ac321411531633533704b010da55874c",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "the water pollution lesson I did last week",
+      "explanation": "The writer taught about water pollution, supporting environmental understanding; the student’s later action is distinct.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "540a420673e0f2e3f8cced603c7d1c4be4e32eb82d35ec1372422a17cbf06547",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I just told him the yellow was a good choice and helped him find a spot on the drying rack.",
+      "explanation": "The writer encourages and assists a child in a workshop, supporting his welfare without claiming responsibility for his changed painting.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "8b686e89ca265c889c55cd2ab318cd200e8db703092fc920224d172ad6416184",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I bring my own bags, I cycle, I sort my recycling obsessively",
+      "explanation": "Repeated practical environmental actions are explicitly reported in the pollution context. Feeling their impact is small is not contrary behavior.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "7a72d070ece071905706aea347999d688a560d19b1f8bbc01f84c0392a253184",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Cycling to shop and gardening are actual, but this entry supplies no environmental or wider-welfare relationship.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "216a9025412aa4de56e97d352eadf9f53df5bf215ea869301af5c49eeb29e322",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Colleague made a joke about the refugee patients \"costing us all money\" at lunch and everyone laughed. I didn't laugh but I didn't say anything either.",
+      "explanation": "The writer explicitly refrains from joining the disparagement of refugee patients. Silence does not itself establish discriminatory behavior.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "9884a8568f10ab634dda072f1006eef7b1f53916aa9f91be57a6e12fce84f2c3",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "The writer withholds a complaint to avoid adding noise, but no action preserving colleagues’ welfare is established.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "852a23f1f36d5c0fd729920365d799b733fecd556252642033d418e90afec855",
+      "decision": "not_supportive",
+      "reason_code": "other_actor",
+      "evidence_quote": "",
+      "explanation": "Bahu makes the considerate chai; the writer reports its emotional effect but no supportive action of their own.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "2aaf99fa71a18154581b552fb337dbbed365a957eebfe66c84e0f74774a7e536",
+      "decision": "abstain",
+      "reason_code": "ambiguous",
+      "evidence_quote": "",
+      "explanation": "Long workdays are actual, but the entry describes a responsibility to protect leadership’s image without clearly reporting an instance of restrained behavior.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "0723e34ff1c63befe76fc1c66f914def3416f4c926f988f055b3ae4df97c8955",
+      "decision": "abstain",
+      "reason_code": "ambiguous",
+      "evidence_quote": "",
+      "explanation": "The writing reports sensations and going through unspecified motions, without an assessable act of restraint.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "e7c04d83406542a5664fe3d9036c963568559d89e86cd6ef575e9223088ed02e",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I did not say that though. I said we should consider the timeline and the risk to the December release.",
+      "explanation": "The writer restrains a wish for a rewrite and raises release risks to preserve the team’s functioning. Discomfort is not contrary behavior.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "fd8126a5fddf8d81db13187b9710e25f1de5013dafd4bc8fda5b80953c869158",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Ji-hye keeps texting me details — the studio setup, the housing, the firing schedule — and I keep sending congratulations emojis and exclamation marks.",
+      "explanation": "The writer repeatedly responds supportively to maintain harmony with a close friend despite disappointment; resentment is not opposing behavior.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "79700884eb64072372c444f27caa280c980b755c9acd9fff83d6046c9c0fc534",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I told Raul to do it, because what choice do I have.",
+      "explanation": "The writer authorizes replacement of unsafe brakes, protecting safety and the means of earning a living despite the financial strain.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "f3e792c063f83c616d7c33a8e895fec556eb11dd1dcd72c2141c2d3e8999337c",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Rejecting a subordinate warehouse job expresses resistance to disrespect, but the entry does not establish a safety or stability action.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "808de578d41fb0d6479c734313dc918d7944e72687b89e16f9e424b1e9eae7d5",
+      "decision": "not_supportive",
+      "reason_code": "other_actor",
+      "evidence_quote": "",
+      "explanation": "The job recommendation and offered advance come from others. Buying celebratory pet food does not establish the writer’s protection of financial stability.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "320d1781f537cd150f12aceb4a983db9f8dce83bc582bc6b9115867945b4d2c7",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Helped two new guys file their claims.",
+      "explanation": "Assisting new workers with claims supports their access to fair treatment and welfare.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "1b52097e8bde378bf5462925b6f9385a4b4364e3431e39910ccd57d7fc1fa4e8",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Drinking coffee and travelling are actual but do not support wider welfare or nature in the supplied writing.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "61fd2a100541ead20fcc78a187b169372a943a92021db5b6258776b01daecbff",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I helped him draft a letter to MOM.",
+      "explanation": "The writer assists an injured worker whose employer has not filed a report, supporting his welfare and fair treatment.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "3885f5c2c9522806250e296aa21b5ed6afb25aa2fe97553fc72c27a9fb14c945",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten minutes, then moved on.",
+      "explanation": "The writer sets the reporting structure and controls how long the meeting debates it, exercising authority over the team.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "69b62d73956b7c3a1e3b519724e1225faab0d894d4c5ea2a6d6bb06c4effc43b",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative.",
+      "explanation": "The writer controls the division’s review presentation and narrative, exercising organizational authority.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "f1d7996662fb199e1b3d316454506ab73bd7689e79216b2a222dde2fbe758412",
+      "decision": "not_supportive",
+      "reason_code": "same_value_conflict",
+      "evidence_quote": "",
+      "explanation": "The writer explicitly lets another person present their idea without credit, yielding recognition and control in the leadership meeting.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "6469b028a4573673fd97ec8298174e7d4e933659a5ea95e886f71757c2dc2d23",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Bought knafeh on the way home from the Zarqa site. Ate it in the car in the parking lot before going upstairs, still warm. Didn't check my phone once.",
+      "explanation": "The writer buys and eats a warm treat without phone distraction, an act of personal sensory enjoyment.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "c7aeccf9fd7b7a1bc1336bb50c78b565a34cbd9ed41e2c69f27cf13c85654796",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Put on some Fairuz which was nice.",
+      "explanation": "The writer chooses music and enjoys it. A lukewarm desk lunch and later agenda work do not explicitly establish behavior opposing sensory enjoyment.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "c033a9d36dfafc5a0ad0bd7d6ea1b7260167f346a5a4f47874e7c19a4da780e8",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Completing an expressive mural is actual, but does not demonstrate restraint of harmful or socially disruptive impulses.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "4f904668f430e8a6c47f7d8b1431933ff2d35d4a5e827d016f9760524920e6b6",
+      "decision": "not_supportive",
+      "reason_code": "wrong_value",
+      "evidence_quote": "",
+      "explanation": "Committing to and sketching a mural are actual, but no restraint of harmful or disruptive inclinations is reported; a march is not automatically norm violation.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "e04d8a4da592acc9868bcb60d485fd48f3390e0faf1cf10b436f75ce685ed911",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I started sketching a piece that layers the satellite view underneath a portrait of a family I met two years ago when I traveled there for a residency.",
+      "explanation": "The writer commits to an anti-deforestation mural and begins it, supporting concern for nature and affected people; speaking remains undecided.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "49af7f11586632a64f1f05ae099c9aabab239b5cedd8f37ab3b981baddfe3965",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I never let anyone get close enough to the core.",
+      "explanation": "The writer reports repeatedly restricting others’ access to the company’s core, retaining control. Regret about succession does not reverse that behavior.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "afd15a5227ba55c790512af42642b2773c32e3fda27c22afbccd958a6714ed8b",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Told the team they exceeded expectations.",
+      "explanation": "Evaluating the team at its quarterly review exercises a position of organizational authority; the growth outcome alone is not the evidence.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "1db9a2ee792928f335fb34ebe6a367295e4a8fbcc435b7fd3575419bd1e618e8",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "She asked when I'm going to retire. I told her the same thing I always tell her — when I'm ready.",
+      "explanation": "The writer repeatedly asserts the decision to retain the company role until personally ready to leave, preserving authority described in the entry.",
+      "confidence": "medium"
+    },
+    {
+      "group_id": "df563298748d835aac8deadb14c8501682d378e7f07e6513bc65701262527108",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "Sorted it manually",
+      "explanation": "The writer manually resolves the failed insurance payment, protecting health coverage even though confirmation of continuity is pending.",
+      "confidence": "high"
+    },
+    {
+      "group_id": "c7ea6bf62f01c25380af914f2079faaee2a83200ddf5d04dca815eb2435c984a",
+      "decision": "supportive",
+      "reason_code": "observable_choice",
+      "evidence_quote": "I sat at the table eating a slice with hot Milo before anyone else was up. It was nice.",
+      "explanation": "The writer eats the homemade cake with a hot drink and explicitly enjoys it, providing personal sensory gratification.",
+      "confidence": "high"
+    }
+  ]
+}

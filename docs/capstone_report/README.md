@@ -8,25 +8,25 @@ supporting capstone report materials. Submitted milestone files remain under
 
 - [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
   the Phase 2 Technical Paper
-- [`capstone_project_report.pdf`](capstone_project_report.pdf) — rendered PDF
+- [`capstone_project_report.pdf`](capstone_project_report.pdf) — stale rendered PDF;
+  regenerate and visually verify it after the NSM evaluation reset
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
 - [`images/`](images/) — report figures, interface captures, and evaluation
   charts
 - [`../../scripts/capstone/generate_report_figures.py`](../../scripts/capstone/generate_report_figures.py)
   — deterministic figure generation from committed evidence
-- [`../../scripts/capstone/generate_north_star_figure.py`](../../scripts/capstone/generate_north_star_figure.py)
-  — NSM feasibility figure and source-hash manifest from preserved run outputs
 
 ## Report Controls
 
-- **Document status:** Maintained Phase 2 Technical Paper source and rendered PDF
+- **Document status:** Maintained Phase 2 Technical Paper source; rendered PDF
+  pending regeneration after the NSM evaluation reset
 - **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
 - **Product source:** [`../prd.md`](../prd.md)
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
-- **Evidence date:** Core paper 2026-08-31; NSM supplement 2026-09-05
+- **Evidence date:** Core paper 2026-08-31; fresh NSM results incorporation paused
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -43,8 +43,6 @@ source .venv/bin/activate
 export UV_CACHE_DIR=/tmp/twinkl-uv-cache
 MPLCONFIGDIR=/tmp/twinkl-matplotlib \
   uv run python scripts/capstone/generate_report_figures.py
-MPLCONFIGDIR=/tmp/twinkl-matplotlib \
-  uv run python scripts/capstone/generate_north_star_figure.py
 quarto render docs/capstone_report/capstone_project_report.md --to pdf
 ```
 
@@ -62,29 +60,17 @@ for the five saved Persona key weeks. This result is same-model AI review. The
 independent-provider Coach Digest and Drift/control tooling has no committed paid result and
 does not change the report's evidence claim.
 
-The September NSM supplement is separate from Coach Digest Evals. Its
-[Phase 0A retrieval gate](../../logs/experiments/reports/north_star_phase0_20260905/README.md)
-passed, but [Phase 0B](../../logs/experiments/reports/north_star_phase0b_20260905/README.md)
-failed: independent AI reference review accepted 12/19 selected quotations,
-correct omission was 5/9, and two of 29 OpenAI attempts were contract-invalid.
-The 61 attempts cost US$0.2062 at frozen rates. The paper adds the experimental
-architecture, measured results, limitations, and an offline evidence walkthrough;
-it does not claim NSM application integration or browser QC. The supplement is
-backed by frozen code and raw evidence in
-[`f3030c8d`](https://github.com/DesmondChoy/twinkl/tree/f3030c8deb9400685185e7c620bda53a6f58e8aa),
-with input and code hashes linked from Appendix A. The older evidence links still support
-only the earlier studies.
-
-The initial 37-page NSM supplement PDF was visually inspected on every page. The
-[verification record](../../logs/experiments/reports/north_star_phase0b_20260905/validation.json)
-preserves that render's report hashes, validation scope, and PDF QC captures;
-it does not verify later report revisions, and those captures are distinct from
-the blocked NSM browser QC.
-
-The subsequent readability revision was regenerated as a 37-page PDF and
-visually inspected on every page. That pass corrected overflowing source-path
-labels and table pagination; its validation and final report hashes are recorded
-in Beads issue `twinkl-ity7`.
+The previous NSM results, figure, and source-level walkthrough have been
+removed from the maintained paper at the user's request. The [fresh evaluation
+protocol](../north_star/luna_evaluation_20260905.md) uses `gpt-5.6-luna` with
+`low` reasoning for selection and `xhigh` reasoning for evaluation, followed
+by independent AI review of the evaluator. The run and review are complete;
+incorporation of results into this paper remains paused at the user's request.
+The [experiment log](../../logs/experiments/north_star_moment.md) links the
+separate evidence. Sections 3.9 and 4.5 and Appendix C retain this reporting
+boundary. When report updates resume, regenerate and inspect every PDF page.
+The existing PDF contains superseded NSM results and does not represent the
+revised source.
 
 ## Submission Checks
 

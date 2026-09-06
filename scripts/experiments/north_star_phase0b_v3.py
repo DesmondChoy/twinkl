@@ -43,7 +43,6 @@ from src.north_star.review import (  # noqa: E402
     SourceEntry,
 )
 
-PROTOCOL_PATH = Path("docs/north_star/phase0b_revision_20260905.md")
 HARDENING_VALIDATION = Path(
     "logs/experiments/reports/north_star_runner_hardening_20260905/validation.json"
 )
@@ -51,7 +50,6 @@ EXECUTION_SOURCES = (
     *recovery.EXECUTION_SOURCES,
     "scripts/experiments/north_star_phase0b_v3.py",
     "src/north_star/review_v2.py",
-    str(PROTOCOL_PATH),
 )
 SAVED_PERSONAS = {"8f83c818", "988d1a65", "02fb94f3", "11de77e8", "23d101f8"}
 

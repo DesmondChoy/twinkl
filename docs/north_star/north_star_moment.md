@@ -1,38 +1,29 @@
 # North Star Moment
 
-**Status:** Blocked at the Phase 0B feasibility gate under `twinkl-fz34`. The
-[Phase 0A retrieval gate](../../logs/experiments/reports/north_star_phase0_20260905/retrieval.json)
-passed: top-3 found an earlier positive-label Journal Entry in 21 of 22 eligible
-development histories (95.5%), so k is frozen at 3. The user approved a small
-separate benchmark and the paid-work limits below on 5 September 2026.
-[Phase 0B](../../logs/experiments/reports/north_star_phase0b_20260905/README.md)
-failed: independent AI reference review accepted 12 of 19 selected quotations
-(63.2%), correct omission was 5 of 9 nonempty histories with no valid example
-(55.6%), and 2 of 29 OpenAI attempts failed the response contract (6.9%).
-The 61 paid attempts cost US$0.2062 at the frozen rates. Per the stop rule,
-dependent implementation and final evaluation have not proceeded. The offline
-retrieval/review prototype and reproducible evidence are implemented; the
-Experience, Inspect, saved Persona bundles, and Coach Digest remain unchanged.
-NSM browser QC, screenshots, and fresh onboarding integration are blocked.
+**Status:** Development evaluation complete under `twinkl-fz34.1`; application integration remains outstanding. On
+5 September 2026, the user authorized removal of previous NSM experiment
+results and a fresh run under the [Luna evaluation protocol](luna_evaluation_20260905.md).
+The approved experiment supplies all eligible earlier Journal Entries within
+a 16,000-token input limit, with `gpt-5.6-luna` at `low` reasoning for selection
+and `xhigh` reasoning for evaluation. Source judgments are deduplicated, and
+selected quotations receive a separate assessment against full source context
+under the same explicit semantic rubric. The run and independent AI review of the evaluator are complete. Incorporation
+of results into maintained reports remains paused at the user's request.
+The [raw experiment result](../../logs/experiments/reports/north_star_luna_20260905/report.json)
+and [saved-Persona supplement](../../logs/experiments/reports/north_star_saved_checks_20260906/README.md)
+retain the evidence separately.
 
-The separately versioned [runner-hardening work](../../logs/experiments/reports/north_star_runner_hardening_20260905/README.md)
-under `twinkl-fz34.9` adds verified preparation and offline recovery of completed,
-omitted, interrupted, and exhausted requests. It preserves the original run and
-does not change the failed gate or authorize a revised paid experiment.
-
-Under `twinkl-fz34.1`, a [separate development revision](../../logs/experiments/reports/north_star_phase0b_revision_20260905/README.md)
-now implements explicit action/value/context assessment, code-derived decisions,
-exact-quotation comparison, and visible reference ambiguity. After explicit
-user approval, its frozen 33-case run also failed: 11/19 selections accepted,
-7/9 correct omissions, and zero failures across 28 new OpenAI runtime calls
-and 12 new Gemini quotation checks. New cost was US$0.09887802, bringing
-cumulative cost to US$0.30505587. The revised reference-consistency rule would
-also score the original selections 11/19, so the raw precision change does
-not establish regression. The implementation passes 300 NSM tests, but the
-semantic gate and dependent integration remain blocked.
-
-The [NSM experiment results log](../../logs/experiments/north_star_moment.md)
-records Phase 0A, Phase 0B, runner hardening, and the failed revision together.
+The [frozen Persona assignment](../../config/evals/north_star_cohort.json),
+source eligibility rules, and criteria used to score the completed experiment
+remain unchanged. The original strict gate was not met. The user nevertheless
+accepted the development evidence for continued work on the time-boxed POC,
+with shortcomings retained, as recorded in `twinkl-fz34.1`. This decision
+supersedes the development stop rule below for this run; it does not relabel
+the gate as passed or set a new numerical threshold for final evaluation.
+The current experiment uses no embedding ranker. Application integration,
+NSM cards and Inspect events, the reserved final evaluation, and browser QC
+remain outstanding. The detailed protocol is the execution authority for this
+run; requirements for a future integrated application are specified below.
 
 **First version:** Both frontend paths: the demo with all five saved Personas
 and onboarding from scratch with the user's own writing. Each reviewed week
@@ -49,9 +40,11 @@ explains the finding and asks one reflective question. North Star Moment adds
 an earlier example of behaviour supporting the affected Core Value, quoted
 from the user's own writing.
 
-When Weekly Drift Detection reports Active Drift, Twinkl searches earlier
-Journal Entries and the user's nudge responses. It uses **semantic retrieval**,
-which searches by meaning, to find possible examples. A separate North Star
+When Weekly Drift Detection reports Active Drift, North Star Moment reviews
+earlier eligible Journal Entries and eligible user nudge responses for a
+supportive action. The current development experiment supplies all eligible
+original Journal Entries within the input budget; legacy nudge responses lack
+independent availability evidence and are excluded. A separate North Star
 Moment AI review checks whether the writing describes a supportive action.
 Code checks confirm that the quotation is exact, belongs to the same user or
 Persona, and comes from before the Drift began. If no example passes, no card
@@ -108,7 +101,7 @@ depends on missing context, the AI review should abstain.
 
 Generation instructions, biography-only claims, LLM-Judge VIF Labels,
 LLM-Judge Conflict Labels, and VIF Critic Predictions are excluded from
-retrieval and North Star Moment review.
+source selection and North Star Moment review.
 Not Conflict also does not establish supportive behaviour.
 
 ## 3. What appears in Experience and Inspect
@@ -138,8 +131,8 @@ reveal the complete accepted quotation without paraphrasing or joining
 separate passages. The card must remain usable on a narrow screen and with a
 keyboard or screen reader.
 
-Inspect links the selected Active Drift to the eligible writing, retrieval
-results, AI review, code checks, and selected quotation. A **saved review
+Inspect links the selected Active Drift to the eligible writing, source order,
+AI review, code checks, and selected quotation. A **saved review
 record** contains these inputs and decisions, their versions, and model details.
 It lets teammates inspect why a card appeared or why it was omitted.
 
@@ -187,8 +180,8 @@ An earlier Journal Entry says:
 
 > “The promotion process here is never fair.”
 
-Semantic retrieval might find this phrase because it relates to fairness.
-It does not describe the user's supportive action. North Star Moment review
+The phrase relates to fairness but does not describe the user's supportive
+action. North Star Moment review
 rejects it, Experience shows no card, and Inspect records the reason. The
 existing Coach Digest remains available.
 
@@ -196,7 +189,7 @@ existing Coach Digest remains available.
 
 The research question is:
 
-> Can semantic retrieval followed by AI review select an earlier Journal Entry
+> Can AI review of eligible earlier writing select a Journal Entry
 > or user nudge response that describes behaviour supporting the same Core
 > Value involved in Active Drift, and quote it faithfully?
 
@@ -208,7 +201,7 @@ supportive action.
 
 | Capstone contribution | Evidence to produce |
 |---|---|
-| Intelligent Reasoning Systems and Pattern Recognition Systems | Retrieval results and AI review decisions, measured separately. |
+| Intelligent Reasoning Systems | Source-level support assessments and exact-quotation selection, measured separately. |
 | Intelligent Sensing Systems | Chronological Journal Entries and user responses restricted to what was available at each replay point or live review cutoff. |
 | Architecting AI Systems | Shared contracts, saved review records, Experience, Inspect, and failure tests. |
 | Technical Paper and implementation demonstration | Method, results, limitations, and a walkthrough linking the displayed quotation to its source. |
@@ -223,14 +216,15 @@ Requirements describe the assessment criteria.
 
 ## 6. Evaluation decisions
 
-First test retrieval locally, using existing LLM-Judge VIF Labels as a rough
-reference. Later evaluation uses North Star Moment-specific reference
-decisions. Compare retrieval of the top 1, 3, and 5 Journal Entries,
-then choose the smallest number reaching **at least 90% proxy retrieval
-recall**: finding an earlier positively labelled Journal Entry in at least
-90% of histories that contain one.
+The approved development experiment reviews all eligible earlier writing
+within a 16,000-token input limit. Freeze the assembled inputs and prompt,
+model and reasoning settings, source ordering, evaluation criteria, and
+budget before paid execution. The evaluator uses the same semantic rubric
+as the selector and separately assesses complete sources and exact selected
+quotations. A further independent AI assessment checks the evaluator after
+the run; it does not replace the frozen results or constitute human validation.
 
-For the later task-specific benchmark, the adopted criteria are:
+For the task-specific benchmark, the adopted criteria are:
 
 - no incorrect displayed North Star Moments;
 - correct omission in every history confirmed to contain no valid example;
@@ -249,7 +243,7 @@ Report deliberately injected failures separately from unexpected provider
 failures.
 
 **Decision 11 adopted on 5 September 2026: reserve a small, separate benchmark.**
-Development histories are examples used to adjust the prompt or retrieval.
+Development histories are examples used to adjust prompts or source selection.
 Final evaluation histories are examples examined after those choices are
 finished. Adjusting a prompt after seeing its test answers can make the
 reported result look better than performance on unseen writing.
@@ -266,36 +260,34 @@ The considered options were:
 The user approved option 1 before history assignment. Eight entire non-demo
 Persona histories were reserved using seed 20260905 and SHA-256 identifier
 ordering; the other 27 Personas supply 33 development Drift episodes. The
-[frozen cohort](../../logs/experiments/reports/north_star_phase0_20260905/cohort.json)
+[frozen cohort](../../config/evals/north_star_cohort.json)
 records identifiers, source hash, selection method, and approval. Saved Persona
 demos and onboarding QC are separate from final evaluation.
 
 The approved paid envelope is US$20 total, US$0.25 per attempt, and at most one
 retry per request, including offline/live review, reference decisions, browser
-validation calls, and evaluation. SDK retries are disabled. The frozen
-[policy](../../config/evals/north_star_moment_v1.json) records the runtime and
-reference models, token/timeout limits, rates, and local hosting choice.
+validation calls, and evaluation. SDK retries are disabled. The current
+[evaluation protocol](luna_evaluation_20260905.md) records the model and reasoning
+settings, input limit, evaluation procedure, and execution requirements. Paid
+requests must use frozen token, timeout, rate, retry, and budget settings.
 
 ## 7. Work plan and completion
 
-The earlier **7–11 working day** estimate covered saved Persona replay only.
-Re-estimate the expanded scope after inspecting the live session contracts and
-choosing how to host the fixed retrieval encoder. Account for live generation,
-retry, invalidation, and browser QC on both paths.
+The authorized development experiment and independent evaluator review are
+complete. Application integration remains outstanding. Account separately for
+live generation, retries, invalidation, and browser QC on both application paths.
 
 | Phase | Work and output |
 |---|---|
-| 0A: local retrieval check | Reproduce the existing baseline; freeze the query and encoder settings; compare retrieval at 1, 3, and 5. Stop if no setting reaches 90%. No paid calls. Inspect live hosting options and revise the effort estimate. |
-| 0B: development AI review | After the evaluation choice and paid budget are agreed, build development cases and reference decisions. Test the new prompt against the adopted criteria. |
-| 1: retrieval and review | Implement shared filtering, retrieval, AI review, records, and code checks, with offline preparation and live session execution. Include bounded retry, request reuse, and invalidation. |
+| 0: development evaluation | Freeze all eligible development writing and the 16,000-token budget; run Luna at `low` for selection and `xhigh` for source and exact-quotation evaluation; review the evaluator independently. |
+| 1: source review and validation | If the semantic gate passes, implement shared filtering, bounded review, saved records, and code checks for offline preparation and live sessions. Include retry, reuse, and invalidation. |
 | 2: Experience and Inspect | Add the card, source links, all five saved Persona results, onboarding integration, migration, and replay/accessibility tests. Launch the frontend and backend for browser QC on both paths. |
-| 3: evaluation and reporting | If a separate benchmark is adopted, evaluate the frozen implementation once. Report errors and limitations, document browser QC separately, and update the Technical Paper and walkthrough for both paths. |
+| 3: final evaluation and reporting | Evaluate the frozen implementation on the reserved histories. Report errors and limitations, document browser QC separately, and update the Technical Paper and walkthrough for both paths. |
 
-Start with Phase 0A. Before paid work, present a cost estimate and obtain agreed
-per-attempt and total limits covering offline and live review, reference
-decisions, retries, browser validation calls, and evaluation. Continue
-independent work while those decisions are pending; do not begin dependent
-paid work without agreement.
+The user has authorized the fresh experiment and its model settings. Enforce
+the approved per-attempt and total limits before every paid request, including
+evaluation and retries. An over-budget history must be recorded explicitly;
+do not silently truncate its writing or select a smaller subset.
 
 If a phase fails its criteria, stop and keep the existing Coach Digest
 behaviour.
@@ -310,7 +302,7 @@ Prepare reports with their exact source and configuration records.
 
 ## Technical appendix
 
-### A. Retrieval and AI review
+### A. Source selection and AI review
 
 #### Inputs and eligibility
 
@@ -331,80 +323,61 @@ Conflict and at the replay point or live review cutoff. Use recorded event
 order or timestamps; do not copy the parent Journal Entry's date as proof. If
 availability cannot be established, exclude that response while retaining an
 otherwise eligible original Journal Entry. Preserve source boundaries when composing text for
-retrieval and review. AI-written nudges and hidden generation or labelling
+selection and review. AI-written nudges and hidden generation or labelling
 information are excluded.
 
-#### Semantic retrieval
+#### Bounded full-history input
 
-Use the user-facing Core Value phrase plus its approved definition. Freeze
-the exact definition and its source before Phase 0A. Use only the value
-definition; do not import Persona-generation examples, instructions, biography,
-labels, or current Conflict text into the query.
+Supply the user-facing Core Value phrase and its approved definition from
+`config/schwartz_values.yaml`. Do not import Persona-generation examples,
+instructions, biography, labels, or current Conflict text into the semantic
+assessment. The caller selects the affected Core Value before this review.
 
-The fixed encoder is `nomic-ai/nomic-embed-text-v1.5`, using:
-
-- a recorded model revision and 256-dimensional Matryoshka representation;
-- `search_query: ` for the query and `search_document: ` for eligible writing;
-- the encoder's normalization sequence: layer normalization, truncation to
-  256 dimensions, then L2 normalization;
-- cosine similarity for ranking.
-
-The existing VIF Critic (Offline) encoder uses `classification: ` and must
-not be reused unchanged. Three-dimensional PCA or t-SNE coordinates from the
-Embedding Explorer are unsuitable for retrieval.
-
-Rank one document per eligible Journal Entry, including its eligible user
-response with its source identified. Compare top-k values of 1, 3, and 5;
-select the smallest meeting the 90% proxy threshold. If none passes, stop.
-Freeze k before paid review and final benchmark work. Preserve retrieval
-order, use recency for equal similarities, and use a stable identifier for
-any remaining tie.
+The current experiment sends all eligible original Journal Entries in the
+frozen source order without embedding ranking. The 16,000-token input ceiling
+covers instructions, the Core Value definition, source identifiers and text,
+and response-schema/request formatting. Output has a separate allowance.
+Count assembled requests before execution, preserve the measurements, and
+stop or record an explicit over-budget outcome if the complete input does not
+fit. Do not silently truncate writing. The current protocol defines ordering
+and selection; freeze both before reading new model results.
 
 #### North Star Moment review
 
-Use a new prompt and schema, separate from the Weekly Drift Reviewer.
-Start with the current Coach Digest generation settings:
-`gpt-5.6-luna`, reasoning effort `none`.
-Record requested and actual model identifiers. Use a different AI provider
-for benchmark reference decisions; select and freeze its exact configuration
-before paid work. Revise the evaluation plan if that provider is unavailable.
+Use a prompt and typed schema separate from the Weekly Drift Reviewer.
+The selector uses `gpt-5.6-luna` at reasoning effort `low`; the evaluator uses
+`gpt-5.6-luna` at reasoning effort `xhigh`. Record requested and actual model
+identifiers and reasoning settings. Both roles apply the same explicit rubric
+in the [current protocol](luna_evaluation_20260905.md).
 
-Send the retrieved Journal Entries in one batch. Require exactly one decision
-for every requested Journal Entry and the requested Core Value. For example:
+For every requested source and Core Value, assess whether the writer reports
+an action, whether that action supports the approved Core Value definition,
+and whether the complete eligible context contains the writer's behavior
+against that same Core Value. Negative emotion, external hardship, uncertainty
+about outcomes, and another person's behavior do not alone establish the
+writer's Conflict. Joint actions can include the writer's own participation;
+intentions and outcomes alone do not establish a completed supportive action.
 
-~~~json
-{
-  "schema_version": "north-star-moment-review-v1",
-  "core_value": "universalism",
-  "results": [
-    {
-      "entry_id": "8f83c818:entry:7",
-      "decision": "supportive",
-      "quote_source": "journal_entry",
-      "evidence_quote": "Helped two new guys file their claims.",
-      "reason_code": "observable_choice"
-    }
-  ]
-}
-~~~
-
-Permitted decisions are `supportive`, `not_supportive`, and `abstain`. An accepted
-decision requires one non-empty exact quotation from the identified source:
-`journal_entry` or `nudge_response`. Rejected and abstaining decisions
-require an empty quotation and null source. Permit reason codes for observable
-choices, wrong values, intentions, hypotheticals, another person's action,
-same-Core-Value Conflict, ambiguity, and insufficient text.
-
-Review all eligible user-written text attached to each Journal Entry.
-Reject an example containing Conflict against the requested Core Value even
-when another passage supports it. A model must not change identifiers, the
+Accept only an exact, continuous quotation that itself conveys the writer's
+supportive action when read with its supplied context. Do not require the
+quotation to state the Core Value label. Reject unsupported interpretations;
+abstain when the available writing cannot resolve a necessary fact. Preserve
+concise evidence-based explanations that can be audited, rather than asking
+for hidden model reasoning. A model must not change source identifiers, the
 requested Core Value, or the application-selected priority.
 
-Reject the whole batch for missing, duplicate, extra, or malformed decisions,
-refusal, timeout, or provider error. A complete valid batch may contain a
-mixture of supportive, not-supportive, and abstaining decisions. Apply code
-checks to the batch before selecting the first accepted Journal Entry in the
-frozen retrieval order.
+The evaluator judges each distinct source/Core Value pair once, without
+seeing the selector's decision. A separate exact-quotation assessment then
+checks every selected quotation against its full eligible source. Source
+acceptance alone cannot approve a different quotation. Preserve both judgments
+and their provenance. A further independent AI assessment reviews the evaluator
+and records agreements and disagreements separately from the frozen scores.
+
+Require complete, schema-valid decisions for all requested sources. Reject
+missing, duplicate, extra, or malformed decisions, refusals, timeouts, and
+provider errors. Validate exact source matching, chronology, and identity in
+code before selecting a quotation under the frozen rule. A missing valid
+selection produces no card.
 
 ### B. Code checks, saved records, and integration
 
@@ -435,20 +408,19 @@ both results.
 A versioned record, called a receipt in existing code, should preserve:
 
 - session or Persona, week, cutoff, Profile reference, Core Value, and Drift start;
-- eligible and retrieved Journal Entry identifiers in order;
+- eligible and supplied Journal Entry identifiers in order;
 - source text references, availability evidence, content hashes, selected
   Journal Entry, quotation source, and exact quotation;
 - every AI decision and code-check result, including why no card appeared;
 - schema and prompt versions, prompt hash, creation time, and input hash;
-- encoder name, revision, prefixes, dimensions, and normalization;
+- source ordering and complete-input token measurements;
 - requested and actual provider/model settings, usage, latency, calculated cost,
   and status.
 
-Similarity values may be saved as retrieval diagnostics. Experience must not
-display them as relevance scores or confidence. Do not call the selected
-quotation the user's best or strongest example.
+Experience must not present model assessments as confidence scores or call
+the selected quotation the user's best or strongest example.
 
-Inspect links the trigger, filtering, retrieval, prompt and model, response,
+Inspect links the trigger, filtering, source order, prompt and model, response,
 checks, and selection. Do not expose hidden provider reasoning, secrets, or
 generation metadata. Store source-disclosed failure records for both offline
 fixture generation and live execution. Freeze retry limits before paid work;
@@ -474,15 +446,12 @@ source availability; do not borrow dates from a parent entry or treat
 backdated writing as available at an earlier cutoff.
 
 The live path must be executable in the documented capstone frontend/backend
-launch configuration. `requirements-experience.txt` currently omits PyTorch
-and Sentence Transformers, so the former offline-only packaging is insufficient.
-Compare hosting the fixed encoder in the backend with a separate inference
-service, including memory, startup time, latency, cost, and operational work.
-Record the chosen approach and any required infrastructure decision before
-implementing live retrieval. Prefer the smallest viable option; do not
-silently substitute an embedding model or build a speculative service layer.
-Keep inference and provider credentials server-side. Update launch and
-hosting documentation and verify the chosen configuration.
+launch configuration. Full-history review does not require an embedding
+service. Keep provider credentials server-side and verify token, cost,
+concurrency, timeout, and latency limits in the intended configuration before
+claiming live readiness. Define explicit behavior for histories exceeding the
+input limit before application integration. Update affected launch and hosting
+documentation when that integration is implemented.
 
 Add optional records compatibly to existing session and scenario contracts.
 Older weeks remain usable with a **not evaluated** status and no card. Bind
@@ -516,18 +485,16 @@ validation, saved Persona hashes, and manifests together.
 #### Development and final evaluation
 
 Keep development and final work separately named in scripts and reports.
-Phase 0B uses development cases to adjust the prompt. Under either separate
-benchmark option, Phase 3 uses different histories after the prompt, query, k,
-selection rule, code, and criteria are frozen. Exclude histories used for
-Phase 0A retrieval tuning as well as Phase 0B prompt development. If reserving
-final histories from the 42-Drift corpus, separate them before selecting k and
-report the development denominator separately from the full baseline. Group
-related replay cutoffs and Core Values from the same Persona to avoid reuse
-of the same writing across both groups.
+Development cases may inform prompt changes. Evaluate the reserved histories
+only after the prompt, ordering, selection rule, code, and criteria are frozen.
+The existing frozen assignment keeps related cutoffs and Core Values from the
+same Persona together. Preserve that assignment when resetting experiment
+outputs; do not repartition after seeing development results.
 
 Decision 11 is resolved as the small separate benchmark. Reserved Persona
-histories must remain excluded from retrieval tuning and prompt development;
-final evaluation stays outstanding until the frozen implementation is evaluated.
+histories remain excluded from prompt development and independent development
+review. Final evaluation stays outstanding until the frozen implementation is
+evaluated.
 
 #### Benchmark cases and reference decisions
 
@@ -535,9 +502,9 @@ Each case includes the Persona, confirmed Core Values, week, Active Drift
 start and selected Core Value, every eligible earlier Journal Entry and user
 response, case categories, AI reference decisions, and a manifest with hashes.
 Freeze case count, sampling seed, selection method, source files, and exclusions
-before requesting reference decisions. Keep retrieval output used for
-sampling. Review only the task-specific benchmark, not all 1,651 Journal
-Entries.
+before requesting reference decisions. Preserve the complete eligible source
+manifest and any sampling decisions. Review only the task-specific benchmark,
+not all 1,651 Journal Entries.
 
 Include the following cases:
 
@@ -548,10 +515,10 @@ Include the following cases:
 | Someone else's action or support only for another value | Reject for the requested Core Value. |
 | Conflict, including mixed support and Conflict for that Core Value | Reject. |
 | Ambiguous or context-dependent writing | Abstain. |
-| Several valid earlier examples | Apply the frozen retrieval and selection order. |
+| Several valid earlier examples | Apply the frozen source and selection order. |
 | No valid earlier example | Show no card. |
 | Same-day writing with earlier stored order | Permit only when dates, order, and source availability agree. |
-| Writing or a response after Drift start or the replay/live review cutoff | Exclude before retrieval, provider input, and current-point Inspect records. |
+| Writing or a response after Drift start or the replay/live review cutoff | Exclude before source selection, provider input, and current-point Inspect records. |
 | Multiple Active Drifts with no example for the priority Core Value | Show no card without trying another Core Value. |
 | No Active Drift or Insufficient Evidence | Do not request North Star Moment. |
 | Refusal, invalid/incomplete JSON, timeout, stale or missing record | Show no card and retain existing Weekly Drift Detection and valid Coach Digest. |
@@ -559,23 +526,26 @@ Include the following cases:
 | Source edit, removal, replacement review, or session deletion during a live request | Invalidate dependent records and discard obsolete in-flight output. |
 | Repeated live request or retry | Reuse completed results, coalesce in-flight work, and apply agreed retry and cost limits. |
 
-Sample displayed examples, retrieved-but-rejected examples, histories returning
+Sample selected examples, reviewed-but-rejected examples, histories returning
 no card, and deliberately selected difficult cases. Include short or ambiguous
 writing and harder Core Values. Any use of implementation results for sampling
 must follow the agreed development/final separation and be recorded.
 
 To establish that a history has **no valid example**, reference review must
-examine every eligible earlier Journal Entry and user response. Reviewing only
-the top-k results cannot establish this. A No Active Drift Persona tests
+examine every eligible earlier Journal Entry and user response. An incomplete
+review cannot establish this. A No Active Drift Persona tests
 non-triggering, not omission after an unsuccessful search.
 
 Reference review uses the exact North Star Moment definition, source
-boundaries, and mixed-Conflict exclusion. Request a decision and an exact
-quotation for accepted writing. Use a second AI review only for disagreements
-and predefined high-risk cases. Record how disagreements are handled; an
-unresolved reference cannot count as an accepted displayed example. Preserve
-prompts, model configurations, review sources, timestamps, usage, costs, hashes,
-and adjudications.
+boundaries, and same-Core-Value Conflict exclusion. The selector and evaluator
+share the rubric, with separate requests and recorded model settings. The
+source evaluator does not see selection decisions. Deduplicate repeated
+source/Core Value inputs, request auditable explanations, and evaluate the
+exact selected quotations separately. The subsequent independent AI review
+records disagreement without silently overwriting the frozen evaluator output.
+An unresolved reference cannot count as an accepted displayed example or prove
+that a history has no valid example. Preserve prompts, model configurations,
+review sources, timestamps, usage, costs, hashes, and adjudications.
 
 Exercise all five saved Personas; choose highlighted demonstration weeks
 after inspecting eligible writing and review results. Also exercise a fresh
@@ -583,58 +553,22 @@ onboarding session with controlled test writing. Keep walkthrough and browser
 QC cases separate from a reserved final benchmark. Record whether failure
 examples came from injected tests or provider errors.
 
-#### Existing label baseline
+#### Source corpus and prior labels
 
-The existing label baseline comes from
-`complete_development_drift_episodes.parquet`,
-`logs/judge_labels/judge_labels.parquet`, and
-`logs/judge_labels/consensus_labels.parquet`. Reproduce it in Phase 0A.
-These figures describe LLM-Judge VIF Labels. Phase 0A also records which user
-responses meet the source-availability rules.
-
-| Existing development result | Count |
-|---|---:|
-| Known development Drifts | 42 |
-| Any Journal Entry before Drift start | 34 of 42 (81.0%) |
-| Earlier same-Core-Value `+1` persisted LLM-Judge VIF Label | 26 of 42 (61.9%) |
-| Earlier same-Core-Value `+1` consensus LLM-Judge VIF Label | 26 of 42 (61.9%) |
-| Active Drift at the final history cutoff | 10 of 42 |
-| Final-cutoff Active Drift with an earlier `+1` in each label file | 9 of 10 (90.0%) |
-
-Eight Drifts start at `t_index=0` and have no earlier Journal Entry. Five
-others start at `t_index=1` and each has one earlier Journal Entry; keep
-these groups separate.
-
-Use persisted labels as the primary Phase 0A proxy. Five-pass consensus
-measures agreement and helps group diagnostic results. Across 16,510 labels
-for 1,651 Journal Entries and ten values, the files differ at 1,368 coordinates
-(8.29%). Among 145 unique earlier same-Core-Value coordinates in the 42 Drift
-histories, 17 differ (11.72%). The persisted file has 68 positive coordinates;
-consensus has 64. Those 64 comprise 49 unanimous decisions, three four-of-five
-decisions, and 12 three-of-five decisions.
-
-Wei Jun illustrates the task mismatch. Before Drift starts at `t_index=8`,
-persisted labels mark Universalism `+1` at 1, 6, and 7. Consensus adds 0
-and 2, both by three-of-five majorities. At 0, the persisted LLM-Judge VIF Label is
-`-1`, consensus is `+1`, and the LLM-Judge Conflict Label is Conflict:
-he notices harm but stays silent.
-
-Report proxy retrieval recall separately for five-of-five, four-of-five,
-three-of-five, and persisted-versus-consensus disagreement groups. The 26-of-42
-availability result describes the persisted-label proxy. Task-specific review
-can reject positive-label examples or accept writing that lacked a positive
-label.
+The source histories and known development Drift records remain shared input
+data. The [frozen assignment](../../config/evals/north_star_cohort.json) defines
+which Personas may be used in this experiment. Existing LLM-Judge VIF Labels
+and consensus labels are not NSM reference decisions and must not be supplied
+to the selector or evaluator. The fresh full-history protocol does not use
+label-proxy retrieval scores.
 
 #### Metrics and acceptance criteria
 
 | Metric | Definition and adopted criterion |
 |---|---|
-| Proxy retrieval recall at k | Histories where top-k includes at least one earlier persisted `+1`, divided by histories containing such a label. Require at least 90%; compare k = 1, 3, 5 and report agreement groups separately. |
 | North Star Moment precision | Displayed quotations accepted by the task-specific reference, divided by all displayed quotations. Require zero incorrect selections in the reported benchmark. Reference rejection or abstention counts as incorrect. Zero displayed quotations gives undefined precision, not 100%. |
 | Correct no-card rate | Reference-confirmed histories with no valid example that receive no card, divided by all reference-confirmed histories with no valid example. Require 100%. Include such histories; an empty denominator is not a pass. |
 | Coverage | Cases receiving a card divided by eligible Active Drift cases under the adopted priority rule. Report counts and exclusions, including histories without earlier writing. No minimum percentage; require at least one accepted saved-Persona demonstration. |
-| Task-specific retrieval recall at k | Histories with at least one reference-valid example in top-k, divided by histories containing any reference-valid example. Report separately from proxy recall. |
-| Verification lift | Difference between precision after AI review and retrieval-only precision on the same cases. Freeze the retrieval-only display rule before the run. |
 | Wrong-Core-Value rate | Displayed examples supporting another value but not the affected Core Value, divided by displayed examples. These also count as incorrect selections. |
 | Abstention rate | AI review abstentions divided by reviewed Journal Entries. |
 | Quotation, chronology, and wrong-user failures | Report separate counts; require zero for displayed results. |
@@ -656,8 +590,8 @@ unless that contract is explicitly extended.
 
 - Verify trigger rules, priority selection, same-user and same-Core-Value checks,
   same-day ordering, response availability, removal, and future-data exclusion
-  before embeddings and provider calls.
-- Test frozen retrieval order, batch completeness, supportive/rejected/abstaining
+  before provider calls.
+- Test frozen source order, batch completeness, supportive/rejected/abstaining
   decisions, mixed Conflict rejection, quotation source attribution, exact text,
   and malformed, refused, missing, stale, and failed results.
 - Verify saved-request reuse, controlled offline retries, session resume, older

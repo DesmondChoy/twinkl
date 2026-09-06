@@ -9,10 +9,12 @@ from unittest.mock import AsyncMock
 import pytest
 
 from src.north_star.provider import (
+    LUNA_POLICY_PATH,
     POLICY_PATH,
     BudgetedProvider,
     BudgetError,
     BudgetLedger,
+    stable_hash,
 )
 
 
@@ -187,7 +189,7 @@ def gemini_response(usage=None, reason="STOP", block_reason=None):
     )
 
 
-async def complete(provider, kind="openai", retry=False):
+async def complete(provider, kind="openai", retry=False, role=None):
     return await provider.complete(
         system="Review instructions",
         prompt="Injected writing",
@@ -195,6 +197,7 @@ async def complete(provider, kind="openai", retry=False):
         provider=kind,
         purpose="injected-test",
         retry=retry,
+        role=role,
     )
 
 
@@ -380,6 +383,143 @@ async def test_identical_inflight_calls_coalesce_including_explicit_retry(
     assert create.call_count == 1
     assert len(provider.ledger.snapshot()["attempts"]) == 1
     assert not provider._inflight
+
+
+def luna_ledger(tmp_path, **overrides):
+    policy = json.loads(LUNA_POLICY_PATH.read_text())
+    policy.update(overrides)
+    path = tmp_path / "luna-policy.json"
+    path.write_text(json.dumps(policy))
+    return BudgetLedger(tmp_path / "luna-ledger.json", path)
+
+
+@pytest.mark.asyncio
+async def test_openai_roles_have_distinct_calls_and_matching_count_payloads(
+    tmp_path, monkeypatch
+):
+    from src.north_star.input_budget import count_payload
+
+    budget = luna_ledger(tmp_path)
+    provider = BudgetedProvider(budget)
+    create, constructors = mock_openai(monkeypatch, openai_response())
+    attempts = await asyncio.gather(
+        complete(provider, role="runtime"), complete(provider, role="reference")
+    )
+    assert create.call_count == 2
+    assert {attempt.role for attempt in attempts} == {"runtime", "reference"}
+    assert {attempt.reasoning_effort for attempt in attempts} == {"low", "xhigh"}
+    assert len({attempt.request_hash for attempt in attempts}) == 2
+    assert constructors == [
+        {"max_retries": 0, "timeout": 180},
+        {"max_retries": 0, "timeout": 300},
+    ]
+    for attempt, call in zip(attempts, create.call_args_list, strict=True):
+        counted_request = {
+            "system": "Review instructions",
+            "prompt": "Injected writing",
+            "schema": {"type": "object"},
+            "provider": "openai",
+            "purpose": "injected-test",
+            "policy_hash": stable_hash(budget.policy),
+            "role": attempt.role,
+        }
+        assert attempt.request_hash == stable_hash(counted_request)
+        payload = count_payload(counted_request, budget.policy)
+        assert call.kwargs == {
+            **payload,
+            "max_output_tokens": 32768,
+            "service_tier": "default",
+            "store": False,
+        }
+        reused = await complete(provider, role=attempt.role)
+        assert reused.reused and reused.request_hash == attempt.request_hash
+    assert create.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_reference_openai_usage_uses_reference_prices(tmp_path, monkeypatch):
+    reference = json.loads(LUNA_POLICY_PATH.read_text())["reference"]
+    reference.update(
+        input_usd_per_million=1.1,
+        cached_input_usd_per_million=0.1,
+        output_usd_per_million=2.2,
+    )
+    provider = BudgetedProvider(luna_ledger(tmp_path, reference=reference))
+    usage = SimpleNamespace(
+        input_tokens=1000,
+        output_tokens=50,
+        total_tokens=1050,
+        input_tokens_details=SimpleNamespace(cached_tokens=200),
+    )
+    mock_openai(monkeypatch, openai_response(usage))
+    attempt = await complete(provider, role="reference")
+    assert attempt.calculated_cost_usd == pytest.approx(
+        (800 * 1.1 + 200 * 0.1 + 50 * 2.2) / 1_000_000
+    )
+    assert attempt.reasoning_effort == "xhigh"
+
+
+@pytest.mark.asyncio
+async def test_omitted_role_preserves_legacy_request_identity(tmp_path, monkeypatch):
+    budget = ledger(tmp_path)
+    provider = BudgetedProvider(budget)
+    create, _ = mock_openai(monkeypatch, openai_response())
+    attempt = await complete(provider)
+    assert attempt.request_hash == stable_hash(
+        {
+            "system": "Review instructions",
+            "prompt": "Injected writing",
+            "schema": {"type": "object"},
+            "provider": "openai",
+            "purpose": "injected-test",
+            "policy_hash": stable_hash(budget.policy),
+        }
+    )
+    assert attempt.role is None
+    assert attempt.reasoning_effort == "none"
+    assert create.call_args.kwargs["reasoning"] == {"effort": "none"}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("role", ["reference", "unknown"])
+async def test_mismatched_role_fails_before_reservation_or_connection(
+    tmp_path, monkeypatch, role
+):
+    provider = BudgetedProvider(ledger(tmp_path))
+    create, constructors = mock_openai(monkeypatch, openai_response())
+    with pytest.raises(BudgetError, match="role"):
+        await complete(provider, role=role)
+    assert not provider.ledger.path.exists()
+    assert not constructors
+    create.assert_not_awaited()
+
+
+def test_fresh_ledger_still_counts_spend_from_prior_experiments(tmp_path):
+    budget = luna_ledger(tmp_path, budget_usd=0.35)
+    assert not budget.path.exists()
+    with pytest.raises(BudgetError, match="Total authorized"):
+        budget.reserve({**request(), "role": "runtime"}, retry=False)
+    assert not budget.path.exists()
+
+
+def test_prior_spend_combines_with_metered_and_unmetered_new_attempts(tmp_path):
+    prior = 0.34732602
+    budget = luna_ledger(tmp_path, budget_usd=prior + 0.06)
+    attempt = budget.reserve(request(), retry=False)
+    attempt.status = "completed"
+    attempt.calculated_cost_usd = 0.001
+    budget.finish(attempt)
+    budget.reserve(request("unmetered"), retry=False)
+    with pytest.raises(BudgetError, match="Total authorized"):
+        budget.reserve(request("third"), retry=False)
+    assert len(budget.snapshot()["attempts"]) == 2
+
+
+@pytest.mark.parametrize("prior", [-1, float("nan"), float("inf"), True, "0.1"])
+def test_invalid_prior_spend_cannot_bypass_budget(tmp_path, prior):
+    budget = ledger(tmp_path, prior_spend_usd=prior)
+    with pytest.raises(BudgetError, match="Prior spend"):
+        budget.reserve(request(), retry=False)
 
 
 @pytest.mark.asyncio

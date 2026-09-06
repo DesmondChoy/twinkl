@@ -11,6 +11,7 @@ import asyncio
 import fcntl
 import hashlib
 import json
+import math
 import os
 import tempfile
 import time
@@ -23,10 +24,12 @@ from pydantic import BaseModel, ConfigDict
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY_PATH = ROOT / "config/evals/north_star_moment_v1.json"
+LUNA_POLICY_PATH = ROOT / "config/evals/north_star_luna_20260905.json"
 DEFAULT_LEDGER = (
     ROOT / "logs/experiments/reports/north_star_phase0b_20260905/budget.json"
 )
 T = TypeVar("T")
+ProviderRole = Literal["runtime", "reference"]
 
 
 class BudgetError(RuntimeError):
@@ -40,6 +43,7 @@ class ProviderAttempt(BaseModel):
     attempt_number: int
     purpose: str
     provider: Literal["openai", "gemini"]
+    role: ProviderRole | None = None
     requested_model: str
     actual_model: str | None = None
     reasoning_effort: str
@@ -63,6 +67,40 @@ def stable_hash(value: Any) -> str:
     return hashlib.sha256(
         json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
+
+
+def provider_settings(request: dict, policy: dict) -> dict:
+    """Resolve an explicit role, retaining provider-based legacy routing."""
+    provider = request["provider"]
+    role = request.get("role", "runtime" if provider == "openai" else "reference")
+    if role not in ("runtime", "reference"):
+        raise BudgetError("Unknown provider role")
+    settings: dict = policy[role]
+    if settings["provider"] != provider:
+        raise BudgetError("Provider does not match the frozen role policy")
+    return settings
+
+
+def openai_input_payload(request: dict, policy: dict) -> dict:
+    """Share exact input-bearing fields between generation and token counting."""
+    settings = provider_settings(request, policy)
+    if request["provider"] != "openai":
+        raise BudgetError("OpenAI input payload requires the OpenAI provider")
+    return {
+        "model": settings["model"],
+        "instructions": request["system"],
+        "input": request["prompt"],
+        "reasoning": {"effort": settings.get("reasoning_effort", "none")},
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "nsm_review",
+                "strict": True,
+                "schema": request["schema"],
+            }
+        },
+        "truncation": "disabled",
+    }
 
 
 def _token_count(value: Any) -> int | None:
@@ -218,7 +256,14 @@ class BudgetLedger:
     def reserve(self, request: dict, *, retry: bool) -> ProviderAttempt:
         key = stable_hash(request)
         provider = request["provider"]
-        settings = self.policy["runtime" if provider == "openai" else "reference"]
+        settings = provider_settings(request, self.policy)
+        prior_spend = self.policy.get("prior_spend_usd", 0)
+        if (
+            type(prior_spend) not in (int, float)
+            or not math.isfinite(prior_spend)
+            or prior_spend < 0
+        ):
+            raise BudgetError("Prior spend must be a finite nonnegative amount")
         # UTF-8 byte count plus protocol/schema margin conservatively bounds input
         # tokens for these text-only requests. Use a cache-write uplift for OpenAI.
         input_bound = len(json.dumps(request, ensure_ascii=False).encode()) + 2048
@@ -246,7 +291,7 @@ class BudgetLedger:
                     return ProviderAttempt(**{**attempts[-1], "reused": True})
                 if len(attempts) >= self.policy["max_attempts"]:
                     raise BudgetError("Retry limit reached")
-            spent = sum(
+            spent = prior_spend + sum(
                 a["calculated_cost_usd"]
                 if a["calculated_cost_usd"] is not None
                 else a["reserved_cost_usd"]
@@ -259,6 +304,7 @@ class BudgetLedger:
                 attempt_number=len(attempts) + 1,
                 purpose=request["purpose"],
                 provider=provider,
+                role=request.get("role"),
                 requested_model=settings["model"],
                 reasoning_effort=settings.get(
                     "reasoning_effort", settings.get("thinking_level", "none")
@@ -303,7 +349,9 @@ class BudgetedProvider:
         provider: Literal["openai", "gemini"],
         purpose: str,
         retry: bool = False,
+        role: ProviderRole | None = None,
     ) -> ProviderAttempt:
+        """Generate for an optional role; omission preserves legacy routing."""
         policy = self.ledger.policy
         request = {
             "system": system,
@@ -313,6 +361,8 @@ class BudgetedProvider:
             "purpose": purpose,
             "policy_hash": stable_hash(policy),
         }
+        if role is not None:
+            request["role"] = role
         key = stable_hash(request)
         pending = self._inflight.get(key)
         if pending is not None:
@@ -335,6 +385,7 @@ class BudgetedProvider:
         policy = self.ledger.policy
         system, prompt, schema = request["system"], request["prompt"], request["schema"]
         provider = request["provider"]
+        settings = provider_settings(request, policy)
         attempt = self.ledger.reserve(request, retry=retry)
         if attempt.reused:
             return attempt
@@ -344,24 +395,14 @@ class BudgetedProvider:
                 from openai import AsyncOpenAI
 
                 async with AsyncOpenAI(
-                    max_retries=0, timeout=policy["timeout_seconds"]
+                    max_retries=0,
+                    timeout=settings.get("timeout_seconds", policy["timeout_seconds"]),
                 ) as client:
                     response = await client.responses.create(
-                        model=attempt.requested_model,
-                        instructions=system,
-                        input=prompt,
-                        reasoning={"effort": "none"},
+                        **openai_input_payload(request, policy),
                         max_output_tokens=policy["max_output_tokens"],
-                        service_tier="default",
+                        service_tier=settings.get("service_tier", "default"),
                         store=False,
-                        text={
-                            "format": {
-                                "type": "json_schema",
-                                "name": "nsm_review",
-                                "strict": True,
-                                "schema": schema,
-                            }
-                        },
                     )
                 attempt.raw_text = response.output_text or None
                 attempt.actual_model = response.model
@@ -381,7 +422,7 @@ class BudgetedProvider:
                         if response.status == "completed" and attempt.raw_text
                         else "incomplete"
                     )
-                _record_openai_usage(attempt, response.usage, policy["runtime"])
+                _record_openai_usage(attempt, response.usage, settings)
             else:
                 result = await asyncio.to_thread(self._gemini, system, prompt, schema)
                 attempt.raw_text = result.text or None
