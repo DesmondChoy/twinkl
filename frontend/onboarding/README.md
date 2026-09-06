@@ -83,6 +83,11 @@ shows bounded retry when permitted, and discards obsolete results after source
 changes or deletion. Replies have separate server availability timestamps;
 legacy responses without independent evidence are excluded.
 
+Temporary token-counting timeouts, connection failures, and retryable HTTP
+errors allow the same explicit retry. Invalid token receipts and over-limit
+inputs remain terminal. Counting failures consume no generation attempt, and
+retry reuses any earlier completed Core Value reviews.
+
 The backend uses server-side `OPENAI_API_KEY`, Luna `low`, and the shared
 [integration policy](../../config/evals/north_star_integration_v1.json): complete
 inputs up to 16,000 tokens, no truncation, at most two attempts per model

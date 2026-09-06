@@ -15,13 +15,18 @@ from src.demo.contracts import (
     SessionResumeState,
     TraceReadRequest,
 )
-from src.north_star.runtime import NorthStarRequest, pending_north_star_record
+from src.north_star.runtime import (
+    NorthStarRequest,
+    OpenAINorthStarRuntime,
+    pending_north_star_record,
+)
 from tests.demo.test_experience_service import (
     _create_assessment,
     _receipt,
     _service,
     _submit_request,
 )
+from tests.north_star.test_runtime import FakeProvider, count_requests
 
 
 class ControlledRuntime:
@@ -139,6 +144,47 @@ async def test_nsm_failure_and_retry_do_not_repeat_weekly_review():
     )
     assert retried.operation == "north_star_reviewed"
     assert len(runtime.requests) == 2
+    assert len(reviewer.requests) == 1
+
+
+@pytest.mark.asyncio
+async def test_transient_count_failure_recovers_without_repeating_weekly_work(tmp_path):
+    calls = 0
+
+    async def measure(*args):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise TimeoutError("temporary count service failure")
+        return await count_requests(*args)
+
+    service, _, reviewer, session, request = await reviewed_session(ControlledRuntime())
+    provider = FakeProvider(tmp_path)
+    service._north_star_runtime = OpenAINorthStarRuntime(
+        provider=provider, count_requests=measure
+    )
+    weekly_events = list(service._events[session.session_id])
+    first = await service.review_north_star(request)
+    assert first.operation == "north_star_reviewed"
+    failed = service._events[session.session_id][-1]
+    assert isinstance(failed, NorthStarReviewedEvent)
+    assert failed.details.record.retryable
+    assert failed.error.retryable
+    assert provider.generated == 0
+    repeated = await service.review_north_star(request)
+    assert repeated.event_ids == first.event_ids
+    assert calls == 1
+    recovered = await service.review_north_star(
+        request.model_copy(update={"retry": True})
+    )
+    assert recovered.operation == "north_star_reviewed"
+    assert service._events[session.session_id][-1].details.record.status == "complete"
+    assert recovered.session.weekly_digest == session.weekly_digest
+    assert [
+        event
+        for event in service._events[session.session_id]
+        if not isinstance(event, NorthStarReviewedEvent)
+    ] == weekly_events
     assert len(reviewer.requests) == 1
 
 

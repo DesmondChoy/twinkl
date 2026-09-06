@@ -439,9 +439,17 @@ Validate the following before rendering:
 | Complete response | All requested decisions are present once, with permitted fields and decision/reason/source combinations. |
 | User-facing terminology | Application-written Experience text, including badges, notices, and accessibility labels, must not expose internal Drift states or describe the user as drifting, drifting away, or back on track. Use concrete descriptions of actions and experiences. Preserve exact user quotations. |
 | User-facing claims | Application-written text must not infer recovery, improvement, typical behaviour, success, or an ended Active Drift from the quotation. Review the quotation in context; these checks must not rewrite the user's words. |
-| Internal value labels | No raw internal Schwartz label appears in card fields. Omit an unsuitable quotation rather than rewriting it. |
+| Internal value labels | No raw internal Schwartz label appears in card fields. The current POC rejects the whole response batch when any supportive quotation contains one, permits one retry within the attempt budget, and shows no card if validation still fails. Never rewrite the quotation. |
 | Display | Expansion preserves the full accepted quotation, its source, and the route back to the current week. There is no fixed quotation word limit. |
 | Failure | A missing, stale, invalid, refused, or failed saved result produces no card. |
+
+The internal-label check is a conservative POC limitation: it matches ordinary
+words such as “security,” “power,” and “tradition” even when the writer uses
+them naturally. A match invalidates the batch, including other potentially
+suitable quotations; the retry can therefore consume both attempts without
+producing a card. This restriction preserves the existing fail-closed policy.
+Candidate-level exclusion or distinguishing ordinary language from internal
+labels would require a separate policy change and validation.
 
 These are North Star Moment checks. Existing Coach Digest Validations do not
 automatically cover the card. Code can check identity, ordering, and text

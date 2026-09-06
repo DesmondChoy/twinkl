@@ -3,9 +3,12 @@
 The North Star Moment development evaluation and independent AI review of the
 evaluator are complete under the [current protocol](../../docs/north_star/luna_evaluation_20260905.md).
 Previous NSM results were removed at the user's request. Incorporation of fresh
-results into maintained reports remains paused; the
-[NSM experiment log](north_star_moment.md) links the separate evidence. This
-work does not change the VIF Critic (Offline) frontier.
+numerical results and the source-level walkthrough into the capstone paper
+remains paused. The [NSM experiment log](north_star_moment.md) links the separate
+evidence, including the subsequent [36-week integration report](reports/north_star_integration_20260906/README.md)
+and [browser verification](reports/north_star_integration_20260906/browser-qc/README.md)
+for both frontend paths. These results preserve the original failed gate and
+unresolved AI judgments; they do not change the VIF Critic (Offline) frontier.
 
 ## Historical Corrected-Split Frontier (Post-d937094 Split)
 

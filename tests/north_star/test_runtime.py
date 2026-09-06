@@ -6,7 +6,9 @@ import json
 from pathlib import Path
 from typing import Any
 
+import httpx
 import pytest
+from openai import APIConnectionError, APIStatusError, APITimeoutError
 
 from src.drift_detector import detect_drift
 from src.north_star import assessment, input_budget
@@ -323,8 +325,113 @@ async def test_over_limit_complete_input_omits_without_truncation_or_generation(
     runner.count_requests = oversized
     result = await runner(request())
     assert result.status == "failed"
+    assert not result.retryable
     assert result.validation_evidence == ["complete_input_exceeds_16000"]
     assert runner.provider.generated == 0
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "error",
+    [
+        TimeoutError("private request content"),
+        ConnectionError("private request content"),
+        APITimeoutError(request=httpx.Request("POST", "https://example.test")),
+        APIConnectionError(request=httpx.Request("POST", "https://example.test")),
+        *[
+            APIStatusError(
+                "private request content",
+                response=httpx.Response(
+                    status, request=httpx.Request("POST", "https://example.test")
+                ),
+                body=None,
+            )
+            for status in (408, 429, 500, 502, 503, 504)
+        ],
+    ],
+)
+async def test_transient_count_failure_allows_explicit_retry(tmp_path, error):
+    async def unavailable(*args):
+        raise error
+
+    runner = runtime(tmp_path)
+    runner.count_requests = unavailable
+    value = request()
+    failed = await runner(value)
+    assert failed.status == "failed"
+    assert failed.retryable
+    assert failed.reason == f"input_budget:{type(error).__name__}"
+    assert failed.validation_evidence == []
+    assert failed.attempts == 0
+    assert runner.provider.generated == 0
+    runner.count_requests = count_requests
+    recovered = await runner(value, retry=True)
+    assert recovered.status == "complete"
+    assert runner.provider.generated == 1
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("invalid", ["request_hash", "input_tokens"])
+async def test_invalid_count_receipt_remains_terminal(tmp_path, invalid):
+    async def malformed(requests, policy, output):
+        counts = await count_requests(requests, policy, output)
+        next(iter(counts["counts"].values()))[invalid] = "invalid"
+        return counts
+
+    runner = runtime(tmp_path)
+    runner.count_requests = malformed
+    result = await runner(request())
+    assert result.status == "failed"
+    assert not result.retryable
+    assert runner.provider.generated == 0
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("status", [400, 401, 403, 404, 422])
+async def test_permanent_count_service_failure_remains_terminal(tmp_path, status):
+    async def rejected(*args):
+        raise APIStatusError(
+            "private request content",
+            response=httpx.Response(
+                status, request=httpx.Request("POST", "https://example.test")
+            ),
+            body=None,
+        )
+
+    runner = runtime(tmp_path)
+    runner.count_requests = rejected
+    result = await runner(request())
+    assert result.status == "failed"
+    assert not result.retryable
+    assert result.validation_evidence == []
+    assert runner.provider.generated == 0
+
+
+@pytest.mark.asyncio
+async def test_count_retry_reuses_successful_earlier_value_receipt(tmp_path):
+    calls = 0
+
+    async def interrupted(*args):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise TimeoutError("temporary count failure for second Core Value")
+        return await count_requests(*args)
+
+    runner = runtime(tmp_path)
+    runner.count_requests = interrupted
+    value = request(values=["benevolence", "security"])
+    failed = await runner(value)
+    assert failed.retryable
+    assert runner.provider.generated == 1
+    recovered = await runner(value, retry=True)
+    assert recovered.status == "complete"
+    assert recovered.reviews[0].provider_attempts[-1].reused
+    assert recovered.attempts == 1
+    assert runner.provider.generated == 2
+    attempts = runner.provider.ledger.snapshot()["attempts"]
+    assert len(attempts) == 2
+    assert sum(row["calculated_cost_usd"] for row in attempts) == 0.002
 
 
 @pytest.mark.asyncio

@@ -11,7 +11,8 @@ source and exact-quotation evaluation. Both roles share an explicit semantic
 rubric. The input ceiling is 16,000 tokens; the paid envelope remains US$20
 cumulative, US$0.25 per attempt, and one retry. Independent AI review follows
 execution. The run and independent review are now complete. Incorporation of
-results into maintained reports remains paused at the user's request.
+numerical results and the source-level walkthrough into the capstone paper
+remains paused at the user's request.
 
 The [raw experiment result](reports/north_star_luna_20260905/report.json),
 [independent review comparison](reports/north_star_luna_20260905/independent_review_comparison.json),
@@ -20,3 +21,14 @@ the completed run. The separate
 [saved-Persona supplement](reports/north_star_saved_checks_20260906/README.md)
 records the additional coverage and case checks without changing the original
 experiment's results.
+
+The subsequent [36-week integration report](reports/north_star_integration_20260906/README.md)
+records the first POC integration across all five saved Personas, including
+current-week encouragement and historical reminders when there is No Active
+Drift. Its [implementation validation](reports/north_star_integration_20260906/implementation-validation.md)
+and [browser verification](reports/north_star_integration_20260906/browser-qc/README.md)
+cover both frontend paths. This expanded scope supersedes the supplement's
+coverage statements limited to Active Drift without changing its frozen results or
+the original failed gate. The integration report retains unresolved AI
+judgments; evaluation of reserved histories and human evaluation remain
+outstanding.

@@ -588,12 +588,18 @@ class OpenAINorthStarRuntime:
                 if count > input_budget.INPUT_TOKEN_LIMIT:
                     raise input_budget.InputBudgetError("complete_input_exceeds_16000")
             except Exception as exc:
+                code = getattr(exc, "status_code", getattr(exc, "code", None))
+                retryable = code in (408, 429, 500, 502, 503, 504) or any(
+                    word in type(exc).__name__.lower()
+                    for word in ("timeout", "connection")
+                )
                 return _record(
                     request,
                     status="failed",
                     reason=f"input_budget:{type(exc).__name__}",
                     reviews=reviews,
                     attempts=attempts,
+                    retryable=retryable,
                     validation_evidence=[str(exc)]
                     if isinstance(exc, input_budget.InputBudgetError)
                     else [],

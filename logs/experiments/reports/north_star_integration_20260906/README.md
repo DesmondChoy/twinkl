@@ -1,5 +1,10 @@
 # North Star Moment saved-Persona integration
 
+Subsequent [branch review and corrections](reviews/branch-20260906/README.md)
+preserve this run's frozen results. Reproduce its recorded execution with
+commit `76fecbdcca508d45bbdf1a0fd8e25454ad6635c6`; the later runtime retry fix
+intentionally changes its execution hash and is not part of these measurements.
+
 The completed run covers all 36 closed weeks across Meera, Wei Jun, Marc,
 Noor, and Lukas. It uses the shared application source filter, full-history
 Luna-low assessment, and deterministic single-card selection. Independent

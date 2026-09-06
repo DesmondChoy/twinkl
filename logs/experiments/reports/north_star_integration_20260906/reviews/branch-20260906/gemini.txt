@@ -1,0 +1,162 @@
+# Independent Code & Architecture Review: `codex/north-star-moment`
+
+**Repository:** `/Users/desmondchoy/Projects/twinkl`
+**Base Commit:** [`493bc086a4205bc94ff64d2c5df677faa3255d17`](file:///Users/desmondchoy/Projects/twinkl)
+**Head Commit:** [`76fecbdcca508d45bbdf1a0fd8e25454ad6635c6`](file:///Users/desmondchoy/Projects/twinkl)
+**Diff Scope:** 11 commits, 144 changed files (+77,364 / -701 lines)
+**Review Type:** Read-only, comprehensive independent evaluation
+
+---
+
+## Executive Summary
+
+The `codex/north-star-moment` branch successfully integrates the North Star Moment (NSM) capability across the full Twinkl stack—from core LLM provider abstraction, assessment schemas, and budget accounting, to the Experience demo service, API endpoints, scenario generation, and React frontend UI with deep inspection tooling.
+
+The branch exhibits exceptional engineering rigor:
+- **Budget Discipline:** Cumulative evaluation spend is audited down to single-token fractions ($1.44526 total spend against a strict $20.00 cap).
+- **Process Isolation:** The live demo runtime is decoupled from frozen experiment outputs, preventing dirty writes or corruption of research provenance.
+- **Fail-Closed Verification:** Strict Pydantic models, SHA-256 provenance hashes, JSON canonicalization, and atomic file transactions prevent silent data drift.
+- **Trace Replay Safety:** Slicing logic preserves chronology, prevents future event leaks, and cleanses invalidated writing states.
+
+Below are the actionable findings, design observations, verification results, and detailed subsystem evaluations.
+
+---
+
+## Actionable Findings (Ordered by Severity)
+
+### Confirmed Defects
+
+#### [Medium] Finding 1: Full System Prompts, JSON Schemas, and Raw Provider Texts Persisted into Client `localStorage`
+- **Location:** [`src/north_star/runtime.py:617-619`](file:///Users/desmondchoy/Projects/twinkl/src/north_star/runtime.py#L617-L619), [`src/demo/experience_service.py:2197-2205`](file:///Users/desmondchoy/Projects/twinkl/src/demo/experience_service.py#L2197-L2205), and [`frontend/onboarding/src/session.ts:546`](file:///Users/desmondchoy/Projects/twinkl/frontend/onboarding/src/session.ts#L546).
+- **Trigger:** A North Star Moment is reviewed and returned as a `NorthStarReviewedEvent`.
+- **Observed:**
+  - `_PrivateResponseLedger` in [`runtime.py`](file:///Users/desmondchoy/Projects/twinkl/src/north_star/runtime.py#L480) zeroes `raw_text = None` when writing to the server disk ledger to prevent leaking raw completions. However, the live `record.reviews[].provider_attempts` still contains the in-memory `raw_text`, and `NorthStarValueReview` carries the entire `provider_request` (~5 KB system prompt, complete JSON schema, and duplicated source texts).
+  - The Experience service sends this unredacted event trace directly to the client browser in `read_trace`, and `session.ts:546` serializes the full trace into the browser's `localStorage`.
+- **Expected:**
+  - Public trace events sent to the client and stored in `localStorage` should omit internal system prompts and redundant schemas, carrying a cryptographic hash (e.g. `provider_request_hash`) instead, or redacting heavy debug payloads before browser persistence.
+- **Impact:**
+  1. **Privacy Boundary Gap:** Server-side `delete_session` and `forget()` only clear server memory and ledgers. The raw model completions and source texts remain cached indefinitely in the user's browser `localStorage`.
+  2. **Storage Quota Exemption/Failure:** Browser `localStorage` is typically capped at 5 MB. Accumulating multiple weeks of duplicated source entries, schemas, and prompts can cause `QuotaExceededError`. While `session.ts` catches this error soft via `persistenceError`, failing `localStorage` writes silently disables the session restore capability upon page refresh.
+- **Reproduction / Evidence:** Inspecting `session.ts:546` shows `localStorage.setItem(storageKey, JSON.stringify(session))`. In `tests/demo/test_north_star_service.py:126`, `event.details.record.reviews[0].provider_request` contains the full prompt and system schema.
+- **Fix Direction:** In `NorthStarValueReview`, replace `provider_request` with `provider_request_hash: str` on client-facing events. Strip `raw_text` from `ProviderAttempt` before serialization across the API, retaining the full text in server debug memory only if explicitly queried by an authorized debug endpoint.
+
+---
+
+### Questions, Design Observations & Baseline Limitations
+
+#### [Medium] Observation 1: Baseline Whole-Batch Rejection on Ordinary English Value Words in User Quotations
+- **Location:** [`src/north_star/review.py:55-60`](file:///Users/desmondchoy/Projects/twinkl/src/north_star/review.py#L55-L60), [`src/north_star/review.py:309-312`](file:///Users/desmondchoy/Projects/twinkl/src/north_star/review.py#L309-L312).
+- **Trigger:** A user writes an authentic journal entry containing a standard English Schwartz value word (e.g., *"I took the extra shift to ensure financial security for my family"* or *"Finishing the half-marathon gave me a sense of achievement"*), and the model quotes that sentence.
+- **Observed:** `_INTERNAL_LABEL_PATTERN` matches `"security"` or `"achievement"` inside the quote. `validate_review` records `internal_value_label_in_quote` into `errors` and aborts the **entire review batch** with `ReviewValidationError`. In [`runtime.py:629`](file:///Users/desmondchoy/Projects/twinkl/src/north_star/runtime.py#L629), this marks the attempt as invalid, triggers a single retry (which will likely pick the same quote or fail similarly), and ends with `status="failed"`, wasting paid provider attempts.
+- **Expected / Consideration:** While designed in the Luna offline evaluation to prevent the model from quoting internal classification labels, deploying this rule against real user writing penalizes users for using natural English words.
+- **Impact:** Legitimate user writing is rejected, surfacing as a review failure.
+- **Recommendation:** Rather than failing the entire batch, demote the single candidate source quote from eligibility (mark as `unselectable`), allowing the model or runtime to select an alternative valid candidate if one exists.
+
+#### [Low] Observation 2: Saved Replays Exclude Nudge Responses as Evidence Due to Unset Availability
+- **Location:** [`src/demo/scenarios.py:1190`](file:///Users/desmondchoy/Projects/twinkl/src/demo/scenarios.py#L1190), [`scripts/experiments/north_star_integration.py:131-134`](file:///Users/desmondchoy/Projects/twinkl/scripts/experiments/north_star_integration.py#L131-L134).
+- **Trigger:** Generating saved scenario bundles and running offline evaluation.
+- **Observed:** `build_saved_north_star_request` explicitly hardcodes `response_available_at=None`, causing `build_north_star_request` to discard all `nudge_response` candidates. `north_star_integration.py` enforces this with an explicit assertion `assert source.nudge_response is None`.
+- **Expected / Consideration:** In the live application (`src/demo/experience_service.py`), user nudge responses *are* eligible sources for NSM selection.
+- **Impact:** The 36-week offline evaluation and saved replays only exercise the `quote_source == "journal_entry"` code path; the `quote_source == "nudge_response"` path is never exercised in frozen scenario replays (though it is tested via unit tests in [`tests/north_star/test_runtime.py:262-277`](file:///Users/desmondchoy/Projects/twinkl/tests/north_star/test_runtime.py#L262-L277)).
+- **Recommendation:** Keep as documented design intent (offline replays avoid simulating nudge generation timestamps to preserve evidence authenticity), but explicitly state this divergence in evaluation reports.
+
+#### [Low] Observation 3: Post-Await Conflict Returns `retryable=False`
+- **Location:** [`src/demo/experience_service.py:2193-2198`](file:///Users/desmondchoy/Projects/twinkl/src/demo/experience_service.py#L2193-L2198).
+- **Trigger:** Writing changes concurrently while an NSM review is in-flight, causing the post-await session state check to fail.
+- **Observed:** `_error` is invoked without specifying `retryable`, which defaults to `False`. The client hook receives `retryable: false` for that specific session state.
+- **Expected:** Because writing changed, the user or client hook should be allowed to retry against the fresh session state once settled.
+- **Impact:** Mitigated by the fact that `useNorthStarReview.ts` computes an `identity` that includes the session `revision`; any subsequent writing mutation updates the revision, which produces a new identity and resets the attempt counter. However, if the client receives the response before a local mutation completes, it briefly flags the state as non-retryable.
+- **Recommendation:** Pass `retryable=True` on `session_conflict` in `review_north_star`.
+
+---
+
+## Detailed Subsystem Evaluation
+
+### 1. Provider, Assessment, Review, Budgeting & Runtime
+- **Budget Accounting & Idempotency:**
+  - All calls calculate precise token usage against prices defined in [`config/evals/north_star_integration_v1.json`](file:///Users/desmondchoy/Projects/twinkl/config/evals/north_star_integration_v1.json) ($0.15/M prompt, $0.075/M cached prompt, $0.60/M output).
+  - The two-phase reserve/finish protocol in [`BudgetLedger.reserve`](file:///Users/desmondchoy/Projects/twinkl/src/north_star/provider.py#L130) correctly accounts for in-flight calls against the budget cap.
+  - Transactions use POSIX file locks (`fcntl.flock(LOCK_EX)`), atomic write-to-temp, and `os.fsync` on both file and parent directory.
+- **Live vs Experiment Isolation:**
+  - [`src/north_star/live_runtime.py`](file:///Users/desmondchoy/Projects/twinkl/src/north_star/live_runtime.py) completely decouples demo tool runs from experiment artifacts.
+  - `_SeededLiveLedger._seed()` seeds the live ledger directly from the experiment's final cumulative spend ($1.44526000), guaranteeing that live demo traffic respects the shared $20.00 ceiling without dirtying experiment directories.
+  - Heavy blocking disk I/O (`flock`, `fsync`) is dispatched to a background thread pool executor, preventing blocking of the Starlette/Uvicorn async event loop.
+- **Selection Semantics (`_pick`):**
+  - **Active Drift:** Selects the drifted Core Value with the longest `current_run_length` (breaking ties by onboarding profile preference order). Filters strictly for pre-onset evidence (`available_at <= onset_available_at`). Mode: `reflection`.
+  - **No Active Drift:** Evaluates current week across confirmed values. If none, falls back chronologically across historical weeks for the highest-priority value. Mode: `encouragement` (current week) or `reminder` (historical lookback).
+  - **Insufficient Evidence:** Emits `status="not_eligible", reason="insufficient_evidence"` with zero provider calls.
+
+### 2. Experience Service & API Integration
+- **In-flight Coalescing & Locks:**
+  - In-flight reviews are coalesced on `(session_id, input_hash)`.
+  - [`src/demo/experience_service.py:2101`](file:///Users/desmondchoy/Projects/twinkl/src/demo/experience_service.py#L2101) pops the task key *inside* `async with self._lock` upon publication, eliminating the race condition where a rapid retry could await an already completed, failed task.
+- **Trace Invalidation & Cleanup:**
+  - When an entry is deleted or a nudge response updated via `_apply_resume_update`, events starting from the affected week are purged.
+  - The runtime's `forget(record)` method is called, properly reclaiming in-memory raw text.
+  - Any in-flight review task that completes after an invalidating mutation detects `still_current == False`, discards the record, calls `forget(record)`, and writes an omitted event (`reason: "inputs_changed"`).
+- **Client Synchronization (`_same_writing_trace`):**
+  - Commit [`76fecbdc`](file:///Users/desmondchoy/Projects/twinkl) validates the browser-server trace reconciliation.
+  - If non-NSM events (writing, nudges, digests) match exactly in order, and all browser-held NSM events are known server events with matching `input_hash`, the server discards the client's NSM payload and synchronizes with canonical server events, preventing spurious 409 conflicts.
+
+### 3. Frontend Integration, Display Rules & Accessibility
+- **Display Integrity:**
+  - [`NorthStarMoment.tsx`](file:///Users/desmondchoy/Projects/twinkl/frontend/onboarding/src/NorthStarMoment.tsx) implements strict canonical terminology:
+    - Never uses forbidden jargon (*"drifting"*, *"back on track"*, numerical scores).
+    - Uses approved headings: *"A past moment in your own words"* (lookback/reminder) or *"A moment in your own words"* (current week/encouragement/reflection).
+    - Quotes are prominently displayed with opening/closing quotation marks, entry date, and associated Core Value badge.
+- **Client State Hook (`useNorthStarReview.ts`):**
+  - Restricts retries to a maximum of 2 attempts per unique `identity`.
+  - On `session_not_found` (e.g. server reboot or memory purge), it reconstructs the session on the backend via `createExperienceSession` and seamlessly retries the review.
+- **Accessibility & Responsiveness:**
+  - Verified keyboard focus management on the Inspect view and timeline navigation.
+  - Semantic ARIA attributes (`aria-hidden` on step indices, proper heading hierarchy).
+  - Responsive styles in `styles.css` wrap flex items and adapt typography down to narrow mobile viewports (verified against committed screenshots in `logs/experiments/reports/north_star_integration_20260906/browser-qc/`).
+
+### 4. Saved Replays, Evaluation Artifacts & Auditability
+- **Spend Accounting Audit:**
+  - Total cumulative authorized spend across all project phases:
+    - Prior research spend: **$0.34732602**
+    - Luna evaluation (`20260905`): **$0.27160398**
+    - Saved replays pre-check (`20260906`): **$0.01085415**
+    - Integration evaluation (`20260906`): **$0.81547585**
+    - **Total Cumulative Spend:** **$1.44526000** (Remaining envelope: **$18.55474000** of $20.00 cap).
+  - Recorded in [`audit.json`](file:///Users/desmondchoy/Projects/twinkl/logs/experiments/reports/north_star_integration_20260906/audit.json) and verified via [`scripts/experiments/north_star_integration.py`](file:///Users/desmondchoy/Projects/twinkl/scripts/experiments/north_star_integration.py).
+- **Artifact Hash Integrity:**
+  - Five persona scenario bundles in `frontend/onboarding/public/scenarios/` bind their `manifest.input_hash` to the exact cryptographic hash of `report.json`.
+  - Re-export pipeline guarantees that offline replay bundles match the frozen experimental record.
+
+### 5. Cross-Cutting & Unrelated Changes
+- **Coach Digest Prompt Bump (`prompts/weekly_digest_coach.yaml`):**
+  - Bumped from version `4.1` to `4.2` in commit [`15480b90`](file:///Users/desmondchoy/Projects/twinkl).
+  - Adds guidance to foster natural connections across journal entries, avoid meta-narrating the review process, and express conversational uncertainty.
+  - Input variables (`user_name`, `core_values`, `weekly_entries`, etc.) and output JSON schemas remain unchanged.
+  - All 69 coach test cases in [`tests/coach/`](file:///Users/desmondchoy/Projects/twinkl/tests/coach/) pass.
+- **Capstone Report Updates (`docs/capstone_report/`):**
+  - Captures the engineering narrative of the NSM feasibility gate, the lessons learned from earlier prototypes, and the architecture of the lightweight, single-call model.
+
+---
+
+## Verification & Test Execution Summary
+
+All tests, linters, and typecheckers were executed locally in the environment using `.venv` and `frontend/onboarding`:
+
+| Check | Scope | Command | Result |
+|---|---|---|---|
+| **Pytest (Coach)** | Coach digest prompt & generation | `pytest tests/coach/` | **69 passed** |
+| **Pytest (Demo)** | Experience service, scenarios, API | `pytest tests/demo/` | **81 passed** |
+| **Pytest (North Star & Evals)** | Provider, runtime, live runtime, evaluation | `pytest tests/north_star/ tests/evals/` | **483 passed** |
+| **Jest (Frontend)** | React components, hooks, scenario replay | `npm --prefix frontend/onboarding run test` | **201 passed** (15 test suites) |
+| **TypeScript Typecheck** | Frontend codebase | `npm --prefix frontend/onboarding run typecheck` | **Passed (0 errors)** |
+| **Ruff Linter** | Modified Python packages | `ruff check src/north_star/ tests/north_star/ src/demo/ tests/demo/ tests/evals/ scripts/` | **Passed (0 errors)** |
+| **MyPy Static Analysis** | North Star module | `mypy --follow-imports=silent src/north_star/` | **Passed (0 errors in 8 files)** |
+
+---
+
+## Residual Risks & Unverified Areas
+
+1. **Local Storage Quota Limits in Production Browsers:**
+   While tested with synthetic traces, heavily utilized long-running user accounts that span multiple months with frequent reviews may encounter `localStorage` limits unless payload pruning (Finding 1) is implemented.
+2. **Real-User Quotation Filter Brittleness:**
+   The lexical blacklist in `_INTERNAL_LABEL_PATTERN` (Observation 1) has not been tested against a large corpus of unconstrained natural user writing; users mentioning words like "security" or "conformity" may see unexpected review rejections.
+3. **Live Model Contention & OpenAI API Rate Limits:**
+   All automated tests utilize controlled mock runtimes or deterministic fixtures. Behavior under real network latency, transient OpenAI 429/500 outages, or network partitions relies on code paths inspected rather than live-executed during this review.

@@ -26,7 +26,8 @@ supporting capstone report materials. Submitted milestone files remain under
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
-- **Evidence date:** Core paper 2026-08-31; fresh NSM results incorporation paused
+- **Evidence date:** Core paper 2026-08-31; NSM integration status corrected
+  2026-09-06; numerical results and walkthrough incorporation paused
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -66,9 +67,10 @@ protocol](../north_star/luna_evaluation_20260905.md) uses `gpt-5.6-luna` with
 `low` reasoning for selection and `xhigh` reasoning for evaluation, followed
 by independent AI review of the evaluator. The run and review are complete;
 incorporation of results into this paper remains paused at the user's request.
-The [experiment log](../../logs/experiments/north_star_moment.md) links the
-separate evidence. Sections 3.9 and 4.5 and Appendix C retain this reporting
-boundary. When report updates resume, regenerate and inspect every PDF page.
+The first POC integration and browser checks are also complete. The
+[experiment log](../../logs/experiments/north_star_moment.md) links the separate
+evidence. Sections 3.9 and 4.5 and Appendix C retain the pause on numerical
+results and walkthrough incorporation. When report updates resume, regenerate and inspect every PDF page.
 The existing PDF contains superseded NSM results and does not represent the
 revised source.
 

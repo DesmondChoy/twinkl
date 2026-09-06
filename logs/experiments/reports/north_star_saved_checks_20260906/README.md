@@ -1,5 +1,11 @@
 # North Star Moment: saved-Persona coverage and case checks
 
+> Historical scope: this report preserves the earlier checks limited to Active
+> Drift, before frontend integration. The subsequent [integration report](../north_star_integration_20260906/README.md)
+> supersedes its statements about omitted cards and outstanding integration by adding
+> encouragement and reminders for No Active Drift and completing both frontend
+> paths and browser checks. Original results below remain unchanged.
+
 This supplement adds Meera and checks the actual saved frontend replay states.
 It also diagnoses the rejected selection and unresolved history from the
 [completed experiment](../north_star_luna_20260905/report.json). Original
