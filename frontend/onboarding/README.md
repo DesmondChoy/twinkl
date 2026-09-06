@@ -73,15 +73,17 @@ Evidence omits the card.
 The card preserves the exact quotation, source date and Journal Entry link.
 Long quotations expand without rewriting the source. Inspect exposes the
 record, source checks, model settings, usage and review outcome. All five
-saved Personas use prepared per-week records; normal replay never calls a
-provider. Missing older records remain not evaluated.
+saved Personas support prepared per-week records; normal replay never calls a
+provider. Previous NSM records were removed during the experiment reset.
+Saved weeks remain not evaluated with no card until a fresh export.
 
 Manual onboarding calls `review_north_star` separately after the existing
 closed-week response, keeping Weekly Drift Detection and valid Coach Digest
 results available. It coalesces duplicate requests, reuses completed records,
 shows bounded retry when permitted, and discards obsolete results after source
 changes or deletion. Replies have separate server availability timestamps;
-legacy responses without independent evidence are excluded.
+the current runtime excludes responses without an availability value. This
+runtime behavior does not define the fresh experiment's synthetic-data policy.
 
 Temporary token-counting timeouts, connection failures, and retryable HTTP
 errors allow the same explicit retry. Invalid token receipts and over-limit
@@ -91,29 +93,27 @@ retry reuses any earlier completed Core Value reviews.
 The backend uses server-side `OPENAI_API_KEY`, Luna `low`, and the shared
 [integration policy](../../config/evals/north_star_integration_v1.json): complete
 inputs up to 16,000 tokens, no truncation, at most two attempts per model
-request, US$0.25 per attempt and US$20 cumulative including prior work. Default
-live provider receipts persist budget metadata. Full prompts, eligible source
+request, US$0.25 per attempt and US$20 cumulative. These are retained runtime
+settings, not an approved budget for the fresh experiment. Default live
+provider receipts persist budget metadata. Full prompts, eligible source
 text and raw responses remain in server session memory and browser-held
 Inspect records; browser localStorage retains those records for resume.
 Confirmed Delete session removes both copies. A storage-quota failure raises
 the existing persistence warning; live history has no production storage
-capacity guarantee. Synthetic preparation receipts retain their
-source-disclosed raw outputs for reproduction. Stronger xhigh
-assessment is separate evaluation, not a second live generation requirement.
+capacity guarantee. The reusable synthetic preparation code supports
+source-disclosed raw outputs for reproduction; previous outputs were removed.
+The live runtime does not make a separate evaluation call.
 
 Live NSM work is serialized in one worker thread. It uses the ignored
-`logs/exports/demo_tool_runs/north_star/` directory, carries forward finalized
-integration spend, and never writes into the saved experiment directory.
-A missing or changed integration budget fails closed before counting or
-provider work. Preserve both ledgers and reconcile all spend before adopting
-a successor budget; deleting the live ledger would lose its spending history.
-Finalizing a saved evaluation requires re-exporting all five bundles and their
-catalog because their provenance includes the final report hash.
+`logs/exports/demo_tool_runs/north_star/` directory and requires a finalized
+integration budget. A missing or changed integration budget fails closed
+before counting or provider work. The reset removed the old budget artifacts;
+fresh budget setup remains pending, so live NSM generation is unavailable.
+No paid calls are authorized by this housekeeping step.
 
-See the [integration record](../../logs/experiments/reports/north_star_integration_20260906/README.md)
-for execution and verification status. The original development result does
-not validate the newly added encouragement path or the untouched reserved
-final benchmark.
+The [fresh experiment methodology](../../docs/north_star/nsm_experiment_methodology.md)
+records the reset and is pending user review. Previous performance findings,
+validation results, and browser evidence are no longer retained.
 
 ## Run locally
 

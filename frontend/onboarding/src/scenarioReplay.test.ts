@@ -152,7 +152,7 @@ describe("saved persona replay", () => {
     ["Wei Jun", activeReplayJson], ["Marc", recoveredReplayJson],
     ["Meera", stableReplayJson], ["Lukas", twoValuesReplayJson],
     ["Noor", uncertainReplayJson],
-  ])("projects a source-bound North Star Moment assessment for every %s week", async (_name, scenarioJson) => {
+  ])("preserves %s replay without precomputed North Star Moment results", async (_name, scenarioJson) => {
     const saved = validateExperienceInspectFixture(scenarioJson);
     const profile = saved.scenario.profile;
     const profileRef = await northStarProfileRef(profile);
@@ -163,15 +163,11 @@ describe("saved persona replay", () => {
         weeklyDigest: projected.session.weekly_digest,
         journalEntries: projected.session.journal_entries,
       });
-      expect(result, `${saved.scenario.scenario_id} week ${index + 1}`).not.toBeNull();
-      expect(result!.event.source).toBe("saved_replay");
-      expect(result!.record.week_end).toBe(saved.scenario.weeks[index].week_end);
-      expect(result!.record.sources.every((source) =>
-        String(source.date) <= saved.scenario.weeks[index].week_end)).toBe(true);
-      const selection = displayableNorthStarSelection(result, profile,
-        projected.session.journal_entries, projected.session.drift_result!);
-      if (result!.record.selected) expect(selection).toEqual(result!.record.selected);
-      else expect(selection).toBeNull();
+      expect(result, `${saved.scenario.scenario_id} week ${index + 1}`).toBeNull();
+      expect(projected.events.some((event) => event.event_type === "north_star_reviewed")).toBe(false);
+      expect(displayableNorthStarSelection(result, profile,
+        projected.session.journal_entries, projected.session.drift_result!)).toBeNull();
+      expect(projected.session.weekly_digest).not.toBeNull();
       const futureEventIds = new Set(saved.scenario.weeks.slice(index + 1).flatMap((week) => week.event_ids));
       expect(projected.events.some((event) => futureEventIds.has(event.event_id))).toBe(false);
     }

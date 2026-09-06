@@ -41,6 +41,7 @@ import {
   SESSION_STORAGE_KEY,
   type ExperienceState,
 } from "./session";
+import { northStarProfileRef, type NorthStarRecord } from "./northStar";
 
 const fixture = validateExperienceInspectFixture(activeReplayJson);
 const catalog = validateScenarioCatalog(scenarioCatalogJson);
@@ -750,10 +751,11 @@ describe("persona replay", () => {
     expect(within(result).getByText("Why this state")).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "Inspect decision" }));
-    const northStarEvent = [...experience.trace_events]
+    const coachEvent = [...experience.trace_events]
       .reverse()
-      .find((event) => event.event_type === "north_star_reviewed");
-    expect(inspectRun).toHaveBeenCalledWith(northStarEvent?.event_id);
+      .find((event) => event.event_type === "weekly_coach_generated");
+    expect(coachEvent).toBeTruthy();
+    expect(inspectRun).toHaveBeenCalledWith(coachEvent!.event_id);
   });
 
   it.each([
@@ -769,9 +771,24 @@ describe("persona replay", () => {
     const weekIndex = saved.scenario.weeks.length - 1;
     const currentIds = new Set(saved.scenario.weeks[weekIndex].event_ids);
     const experience = experienceForWeek(weekIndex, saved, item);
-    if (eventType !== "north_star_reviewed") {
-      experience.trace_events = experience.trace_events.filter((event) =>
-        event.event_type !== "north_star_reviewed" || !currentIds.has(event.event_id));
+    if (eventType === "north_star_reviewed") {
+      const week = saved.scenario.weeks[weekIndex];
+      const baseEvent = experience.trace_events.at(-1)!;
+      const record: NorthStarRecord = {
+        schema_version: "north-star-record-v1", session_id: saved.session.session_id,
+        owner_id: saved.scenario.profile.user_id, profile_ref: await northStarProfileRef(saved.scenario.profile),
+        week_start: week.week_start, week_end: week.week_end, cutoff_at: baseEvent.started_at,
+        input_hash: "a".repeat(64), status: "failed", mode: null, reason: "budget_unavailable",
+        core_value: null, value_phrase: null, selected: null, sources: [], reviews: [],
+        onset_t_index: null, onset_date: null, onset_available_at: null, attempts: 0, retryable: false,
+      };
+      const event = { ...baseEvent, event_id: `${scenarioId}:test-north-star`,
+        event_type: "north_star_reviewed" as const, input_hash: record.input_hash, details: { record } };
+      experience.trace_events.push(event);
+      experience.trace_event_ids.push(event.event_id);
+      saved.trace_events.push(event);
+      week.event_ids.push(event.event_id);
+      currentIds.add(event.event_id);
     }
     const expected = experience.trace_events.find((event) =>
       currentIds.has(event.event_id) && event.event_type === eventType);
