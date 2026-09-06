@@ -39,10 +39,10 @@ contracts, provenance, lifecycle and verification. Independent Opus review
 used `claude -p --model opus` with read-only Read/Grep/Glob access. Its initial
 review and follow-up were adjudicated against current implementation and
 actual browser evidence; AI review is not human validation. The [final Opus
-review](reviews/opus-final.json) found no reproducible safety or correctness
+review](reviews/opus-final.md) found no reproducible safety or correctness
 regression in the final trace reconciliation and closed the remaining
-report/export and budget-runbook findings. The [initial review](reviews/opus-initial.json)
-and [follow-up](reviews/opus-followup.json) retain the full findings and their
+report/export and budget-runbook findings. The [initial review](reviews/opus-initial.md)
+and [follow-up](reviews/opus-followup.md) retain the full findings and their
 evidence-based dispositions.
 
 Corrections include separate live storage, cumulative spending preservation,
