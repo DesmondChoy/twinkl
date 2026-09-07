@@ -9,7 +9,7 @@ const EXPECTED_LINKS: Record<ExperienceSectionMapView, string[]> = {
   complete: ["Profile", "Journal Entry"],
   journal: ["Prompt", "Write"],
   "persona-picker": ["Introduction", "Personas", "Evidence"],
-  "persona-replay": ["Persona", "Week", "Journal Entries", "Weekly Drift"],
+  "persona-replay": ["Persona", "Week", "This week"],
   inspect: ["Summary", "Recorded work"],
 };
 

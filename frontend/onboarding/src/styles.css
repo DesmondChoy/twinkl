@@ -6542,16 +6542,6 @@ h2 {
   margin-top: 8px;
 }
 
-.replay-result-placeholder {
-  margin-top: 10px;
-  border: 1px dashed rgba(20, 34, 59, 0.14);
-  border-radius: 13px;
-  padding: 12px;
-  color: rgba(20, 34, 59, 0.42);
-  font-size: 0.68rem;
-  text-align: center;
-}
-
 .replay-timeline__empty {
   margin: 12px 0;
   color: rgba(20, 34, 59, 0.56);
@@ -6849,11 +6839,6 @@ h2 {
     font-size: 0.58rem !important;
   }
 
-  .replay-result-placeholder {
-    padding: 9px;
-    font-size: 0.61rem;
-  }
-
   .replay-analysis {
     margin-top: 8px;
   }
@@ -7009,13 +6994,30 @@ h2 {
 .replay-workspace {
   display: grid;
   min-height: 0;
-  grid-template-columns: minmax(0, 1.58fr) minmax(320px, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   gap: 12px;
   margin-top: 10px;
 }
 
-.replay-workspace__mobile-controls {
-  display: none;
+.replay-workspace__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.replay-workspace__controls > span {
+  color: rgba(20, 34, 59, 0.65);
+  font-size: 0.76rem;
+}
+
+.replay-workspace__controls .button {
+  flex-shrink: 0;
+  min-height: 42px;
+  padding: 9px 16px;
+  font-size: 0.78rem;
 }
 
 .replay-column {
@@ -7027,6 +7029,10 @@ h2 {
   border-radius: 18px;
   background: rgba(255, 253, 248, 0.94);
   box-shadow: 0 12px 30px rgba(20, 34, 59, 0.055);
+}
+
+.replay-column[hidden] {
+  display: none;
 }
 
 .replay-column--entries {
@@ -7103,6 +7109,44 @@ h2 {
   padding: 12px;
 }
 
+.replay-reflections {
+  display: grid;
+  align-items: start;
+  gap: 14px;
+}
+
+.replay-reflections > :only-child {
+  grid-column: 1 / -1;
+}
+
+.replay-reflections .north-star-moment {
+  margin: 0;
+}
+
+.replay-reflection-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.replay-reflection-links button {
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  padding: 5px 0;
+  color: var(--verdigris);
+  background: transparent;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+@media (min-width: 1100px) {
+  .replay-reflections {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  }
+}
+
 .replay-column .replay-entry__number {
   left: -30px;
 }
@@ -7169,13 +7213,15 @@ h2 {
   padding-top: 9px;
 }
 
-.replay-result__details > h4 {
+.replay-result__details > summary {
   margin: 0 0 8px;
   color: rgba(20, 34, 59, 0.62);
   font-size: 0.62rem;
   font-weight: 820;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  cursor: pointer;
+  padding-block: 5px;
 }
 
 .state-change-list {
@@ -7409,58 +7455,6 @@ h2 {
     grid-template-rows: auto minmax(0, 1fr);
   }
 
-  .replay-workspace__mobile-controls {
-    display: grid;
-    min-width: 0;
-    gap: 7px;
-  }
-
-  .replay-workspace__mobile-result {
-    display: flex;
-    min-height: 38px;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid rgba(20, 34, 59, 0.11);
-    border-radius: 12px;
-    padding: 6px 8px 6px 11px;
-    background: rgba(255, 253, 248, 0.9);
-    font-size: 0.66rem;
-    font-weight: 820;
-  }
-
-  .replay-workspace__switch {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    overflow: hidden;
-    border: 1px solid rgba(20, 34, 59, 0.13);
-    border-radius: 12px;
-    padding: 3px;
-    background: rgba(255, 253, 248, 0.9);
-  }
-
-  .replay-workspace__switch button {
-    min-height: 38px;
-    border: 0;
-    border-radius: 9px;
-    color: rgba(20, 34, 59, 0.62);
-    background: transparent;
-    cursor: pointer;
-    font-size: 0.68rem;
-    font-weight: 820;
-  }
-
-  .replay-workspace__switch button[aria-pressed="true"] {
-    color: #fff;
-    background: var(--ink);
-  }
-
-  .replay-column[data-mobile-visible="false"] {
-    display: none;
-  }
-
-  .replay-column[data-mobile-visible="true"] {
-    min-height: 0;
-  }
 }
 
 @media (max-width: 620px) {
@@ -7513,16 +7507,25 @@ h2 {
     margin-top: 7px;
   }
 
-  .replay-workspace__mobile-controls {
+  .replay-workspace__controls {
+    align-items: flex-start;
+    flex-direction: column;
     gap: 5px;
   }
 
-  .replay-workspace__mobile-result {
-    min-height: 34px;
+  .replay-workspace__controls .button {
+    width: 100%;
+    min-height: 44px;
   }
 
-  .replay-workspace__switch button {
-    min-height: 34px;
+  .replay-column--result .replay-column__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .replay-reflection-links button {
+    min-height: 36px;
   }
 
   .replay-column {

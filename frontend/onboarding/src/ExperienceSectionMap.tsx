@@ -97,14 +97,9 @@ const MAPS: Record<
         description: "Replay controls",
       },
       {
-        id: "replay-entries-title",
-        label: "Journal Entries",
-        description: "Moments from this week",
-      },
-      {
-        id: "replay-result-column-title",
-        label: "Weekly Drift",
-        description: "Result and evidence",
+        id: "replay-workspace",
+        label: "This week",
+        description: "Journal Entries and reflection",
       },
     ],
   },

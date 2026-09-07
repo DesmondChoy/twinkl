@@ -8,6 +8,11 @@ import { createPortal } from "react-dom";
 import CoachDigestCard from "./CoachDigestCard";
 import NorthStarMoment from "./NorthStarMoment";
 import DriftStateExplanation from "./DriftStateExplanation";
+import {
+  currentNorthStarEvent,
+  displayableNorthStarSelection,
+  useNorthStarProfileRef,
+} from "./northStar";
 import type { OnboardingProfile } from "./domain";
 import type {
   JournalEntryContract,
@@ -35,6 +40,8 @@ interface ReplayTimelineProps {
   visibleNudgeEntryIds: ReadonlySet<string>;
   pendingNudgeEntryId: string | null;
   resultVisible: boolean;
+  onRevealResult: () => void;
+  onPauseReplay: () => void;
   playing: boolean;
   driftResult: JsonObject | null;
   weeklyDigest: JsonObject | null;
@@ -179,6 +186,8 @@ export default function ReplayTimeline({
   visibleNudgeEntryIds,
   pendingNudgeEntryId,
   resultVisible,
+  onRevealResult,
+  onPauseReplay,
   playing,
   driftResult,
   weeklyDigest,
@@ -188,9 +197,34 @@ export default function ReplayTimeline({
 }: ReplayTimelineProps) {
   const [openEntry, setOpenEntry] = useState<JournalEntryContract | null>(null);
   const openEntryTriggerRef = useRef<HTMLElement | null>(null);
-  const [mobilePanel, setMobilePanel] = useState<"entries" | "result">(
-    "entries",
+  const [panel, setPanel] = useState<"entries" | "result">(
+    resultVisible ? "result" : "entries",
   );
+  const resultHeadingRef = useRef<HTMLHeadingElement>(null);
+  const entriesHeadingRef = useRef<HTMLHeadingElement>(null);
+  const resultScrollRef = useRef<HTMLDivElement>(null);
+  const profileRef = useNorthStarProfileRef(profile);
+  const northStarEvent = weeklyDigest
+    ? currentNorthStarEvent({
+      events: reviewTraceEvents,
+      profile,
+      profileRef,
+      weeklyDigest,
+      journalEntries: reviewedJournalEntries,
+    })
+    : null;
+  const hasNorthStar = northStarEvent && driftResult
+    ? Boolean(displayableNorthStarSelection(
+      northStarEvent, profile, reviewedJournalEntries, driftResult,
+    ))
+    : false;
+  const coachNarrative = object(weeklyDigest?.coach_narrative);
+  const hasCoach = ["weekly_mirror", "tension_explanation", "reflective_question"]
+    .every((key) =>
+      typeof coachNarrative?.[key] === "string"
+      && coachNarrative[key].trim().length > 0,
+    );
+  const showingResult = resultVisible && panel === "result";
   const visibleEntries = journalEntries.slice(0, visibleEntryCount);
   const nudgeByEntryId = useMemo(
     () => new Map(
@@ -244,14 +278,30 @@ export default function ReplayTimeline({
 
   useEffect(() => {
     setOpenEntry(null);
-    setMobilePanel("entries");
   }, [week.week_id]);
 
   useEffect(() => {
-    if (resultVisible) setMobilePanel("result");
-  }, [resultVisible]);
+    setPanel(resultVisible ? "result" : "entries");
+  }, [week.week_id, resultVisible]);
+
+  useEffect(() => {
+    if (showingResult) {
+      resultScrollRef.current?.scrollTo?.({ top: 0 });
+      resultHeadingRef.current?.focus({ preventScroll: true });
+    }
+  }, [showingResult, week.week_id]);
+
+  const focusReflection = (selector: string) => {
+    onPauseReplay();
+    const heading = resultScrollRef.current?.querySelector<HTMLElement>(selector);
+    if (!heading) return;
+    heading.tabIndex = -1;
+    heading.focus({ preventScroll: true });
+    heading.scrollIntoView?.({ block: "start", behavior: "instant" });
+  };
 
   const openJournalEntry = (entry: JournalEntryContract) => {
+    onPauseReplay();
     openEntryTriggerRef.current = document.activeElement instanceof HTMLElement
       ? document.activeElement : null;
     onSelectJournalEntry(entry.journal_entry_id);
@@ -261,47 +311,59 @@ export default function ReplayTimeline({
   return (
     <>
       <section
+        id="replay-workspace"
         className="replay-workspace"
         aria-label={`Week workspace with ${journalEntries.length} Journal Entries`}
       >
-        <div className="replay-workspace__mobile-controls">
-          <div className="replay-workspace__mobile-result">
-            <span>Weekly Drift Detection</span>
-            <strong className={`replay-state replay-state--${state}`}>
-              {resultVisible ? replayStateLabel(state) : "Not reviewed"}
-            </strong>
-          </div>
-          <div
-            className="replay-workspace__switch"
-            role="group"
-            aria-label="Weekly workspace view"
-          >
+        <div className="replay-workspace__controls">
+          <span>{showingResult
+            ? `${journalEntries.length} Journal Entries · minimized`
+            : resultVisible
+              ? "Revisit the week's Journal Entries."
+              : "Read the week, then reveal its reflection."}</span>
+          {showingResult ? (
             <button
+              className="button button--quiet"
               type="button"
-              aria-pressed={mobilePanel === "entries"}
-              onClick={() => setMobilePanel("entries")}
+              aria-controls="replay-journals"
+              onClick={() => {
+                onPauseReplay();
+                setPanel("entries");
+                window.requestAnimationFrame?.(() =>
+                  entriesHeadingRef.current?.focus({ preventScroll: true }),
+                );
+              }}
             >
-              Journal Entries
+              Read Journal Entries
             </button>
+          ) : (
             <button
+              className="button button--primary"
               type="button"
-              aria-pressed={mobilePanel === "result"}
-              onClick={() => setMobilePanel("result")}
+              aria-controls="replay-weekly-result"
+              onClick={() => {
+                onPauseReplay();
+                setPanel("result");
+                if (!resultVisible) onRevealResult();
+              }}
             >
-              Weekly Drift
+              {resultVisible ? "Read Weekly Drift Detection" : "Reveal Weekly Drift Detection"}
             </button>
-          </div>
+          )}
         </div>
 
         <section
+          id="replay-journals"
           className="replay-column replay-column--entries"
-          data-mobile-visible={mobilePanel === "entries" ? "true" : "false"}
+          hidden={showingResult}
           aria-labelledby="replay-entries-title"
         >
           <header className="replay-column__header">
             <div>
               <p className="eyebrow">This week</p>
-              <h2 id="replay-entries-title">Journal Entries</h2>
+              <h2 id="replay-entries-title" ref={entriesHeadingRef} tabIndex={-1}>
+                Journal Entries
+              </h2>
             </div>
             <span>
               {visibleEntries.length} of {journalEntries.length}
@@ -380,14 +442,15 @@ export default function ReplayTimeline({
         </section>
 
         <aside
+          id="replay-weekly-result"
           className="replay-column replay-column--result"
-          data-mobile-visible={mobilePanel === "result" ? "true" : "false"}
+          hidden={!showingResult}
           aria-labelledby="replay-result-column-title"
         >
           <header className="replay-column__header">
             <div>
               <p className="eyebrow">This week</p>
-              <h2 id="replay-result-column-title">
+              <h2 id="replay-result-column-title" ref={resultHeadingRef} tabIndex={-1}>
                 Weekly Drift Detection{" "}
                 <span className="replay-column__basis">
                   (based on {cumulativeEntryCount} Journal{" "}
@@ -397,8 +460,22 @@ export default function ReplayTimeline({
                 </span>
               </h2>
             </div>
+            {showingResult && (hasCoach || hasNorthStar) ? (
+              <nav className="replay-reflection-links" aria-label="Weekly reflection sections">
+                {hasCoach ? (
+                  <button type="button" onClick={() => focusReflection(".coach-digest h3")}>
+                    Coach Digest
+                  </button>
+                ) : null}
+                {hasNorthStar ? (
+                  <button type="button" onClick={() => focusReflection(".north-star-moment h3")}>
+                    North Star Moment
+                  </button>
+                ) : null}
+              </nav>
+            ) : null}
           </header>
-          <div className="replay-column__scroll replay-column__scroll--result">
+          <div className="replay-column__scroll replay-column__scroll--result" ref={resultScrollRef}>
             {resultVisible ? (
               <article
                 className={`replay-result replay-result--${state}`}
@@ -415,11 +492,11 @@ export default function ReplayTimeline({
                       Each has its own state below; they can differ.
                     </p>
                   ) : null}
-                  <section
+                  <details
                     className="replay-result__details"
-                    aria-labelledby="state-change-title"
+                    key={week.week_id}
                   >
-                    <h4 id="state-change-title">Why this state</h4>
+                    <summary>Why this state</summary>
                     <DriftStateExplanation
                       profile={profile}
                       journalEntries={reviewedJournalEntries}
@@ -430,47 +507,45 @@ export default function ReplayTimeline({
                       driftResult={driftResult}
                       onOpenEntry={openJournalEntry}
                     />
-                  </section>
+                  </details>
                 </div>
               </article>
-            ) : (
-              <div className="replay-result-placeholder" aria-live="polite">
-                Weekly Drift Detection appears after the final Journal Entry.
-              </div>
-            )}
-            {resultVisible ? (
-              <CoachDigestCard
-                weeklyDigest={weeklyDigest}
-                headingId="replay-coach-digest-title"
-                headingLevel={3}
-                className="coach-digest--replay"
-                journalEntries={reviewedJournalEntries}
-                onOpenEntry={openJournalEntry}
-              />
             ) : null}
-            {resultVisible && typeof coachUnavailableReason === "string"
-              && !weeklyDigest?.coach_narrative ? (
-              <aside className="coach-digest coach-digest--replay" aria-labelledby="replay-coach-unavailable-title">
-                <p className="eyebrow">Coach Digest</p>
-                <h3 id="replay-coach-unavailable-title">No saved Coach Digest for this result</h3>
-                <p>
-                  {coachUnavailableReason.startsWith("Historical Coach Digest omitted:")
-                    ? "The earlier Coach Digest was based on different Weekly Drift Detection results and is omitted from this replay."
-                    : "A Coach Digest response has not been saved for this replay week."}
-                </p>
-              </aside>
-            ) : null}
-            {resultVisible && weeklyDigest && driftResult ? (
-              <NorthStarMoment
-                profile={profile}
-                journalEntries={reviewedJournalEntries}
-                weeklyDigest={weeklyDigest}
-                driftResult={driftResult}
-                traceEvents={reviewTraceEvents}
-                openJournalEntry={openJournalEntry}
-                headingLevel={3}
-              />
-            ) : null}
+            <div className="replay-reflections">
+              {resultVisible ? (
+                <CoachDigestCard
+                  weeklyDigest={weeklyDigest}
+                  headingId="replay-coach-digest-title"
+                  headingLevel={3}
+                  className="coach-digest--replay"
+                  journalEntries={reviewedJournalEntries}
+                  onOpenEntry={openJournalEntry}
+                />
+              ) : null}
+              {resultVisible && typeof coachUnavailableReason === "string"
+                && !weeklyDigest?.coach_narrative ? (
+                <aside className="coach-digest coach-digest--replay" aria-labelledby="replay-coach-unavailable-title">
+                  <p className="eyebrow">Coach Digest</p>
+                  <h3 id="replay-coach-unavailable-title">No saved Coach Digest for this result</h3>
+                  <p>
+                    {coachUnavailableReason.startsWith("Historical Coach Digest omitted:")
+                      ? "The earlier Coach Digest was based on different Weekly Drift Detection results and is omitted from this replay."
+                      : "A Coach Digest response has not been saved for this replay week."}
+                  </p>
+                </aside>
+              ) : null}
+              {resultVisible && weeklyDigest && driftResult ? (
+                <NorthStarMoment
+                  profile={profile}
+                  journalEntries={reviewedJournalEntries}
+                  weeklyDigest={weeklyDigest}
+                  driftResult={driftResult}
+                  traceEvents={reviewTraceEvents}
+                  openJournalEntry={openJournalEntry}
+                  headingLevel={3}
+                />
+              ) : null}
+            </div>
             {resultVisible && inspectEventId ? (
               <button
                 className="inspect-run-link replay-column__inspect"

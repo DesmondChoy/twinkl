@@ -261,12 +261,16 @@ week does not lock weeks that were already revealed. Restart clears replay
 progress. Automatic replay pauses when Experience closes and does not resume
 automatically after reload.
 
-Manual next-step movement and automatic replay use the same sequence. Journal
-Entries appear one at a time as compact excerpts. The Weekly Drift Detection
-result appears only after the final Journal Entry. The next week then starts
-empty. Automatic replay leaves enough time to read each step. Opening a Journal
+Manual next-step movement and automatic replay show Journal Entries one at a
+time as compact excerpts. **Reveal Weekly Drift Detection** completes the current
+week's saved sequence, pauses automatic replay, and opens its result; it never
+reveals a later week. The professor can use it after reading the Journal Entries
+or to move directly to that week's reflection. Once the entries and nudges have
+been shown, **Next step** is disabled until this explicit reveal. Optional
+automatic replay retains its timed result reveal. The next week starts with the
+Journal Entries panel. Opening a Journal
 Entry uses a desktop side panel or mobile bottom sheet so the timeline does not
-reflow.
+reflow, and pauses automatic replay while the professor reads.
 
 When a Journal Entry has a displayed Nudge, the Nudge appears 800 ms after the
 Journal Entry. An early **Next step** action reveals that pending Nudge before
@@ -275,7 +279,7 @@ after the Nudge appears. Reduced-motion mode keeps the delay and removes the
 horizontal movement.
 
 When a saved Coach Digest response is present, it appears after the Weekly
-Drift Detection result in the same scrollable column. It does not replace the
+Drift Detection result in the same reading area. It does not replace the
 Weekly Drift Detection result. The short heading **Your weekly reflection**
 precedes readable narrative paragraphs and links to the supporting Journal
 Entries. Ellipsis-ended quotations expand through the source sentence only
@@ -286,12 +290,23 @@ The card discloses expansion; Inspect retains the original model response.
 Ambiguous matches and ellipses present in the source remain
 unchanged, with the complete Journal Entry available through its link.
 
-The desktop Experience uses a fixed weekly workspace. The Journal Entry column
-and Weekly Drift Detection column stay in the same viewport. Each column scrolls
-internally when necessary. The phone Experience uses a Journal Entries and
-Weekly Drift view control instead of two narrow columns. The current result
-stays visible above that control. The active week stays centered in the week
-rail.
+The desktop and phone Experience use one expanded panel in the fixed weekly
+workspace. Journal Entries occupy the full width first, with **Reveal Weekly
+Drift Detection** on the right (below the introduction on phones). Revealing the
+result minimizes the journals to a count and **Read Journal Entries** button.
+That button restores the journals and hides the result; **Read Weekly Drift
+Detection** returns to the completed result without changing its evidence.
+Switching panels pauses automatic replay. Key-week jumps and returning to a
+completed week open its result; a new week or restart opens Journal Entries.
+
+The result uses the full workspace width. **Why this state** keeps its detailed
+evidence collapsed until requested. On wide desktops, Coach Digest and North
+Star Moment appear beside each other beneath the state summary; phones stack
+them. Direct **Coach Digest** and **North Star Moment** buttons appear only when
+the corresponding card is available, scroll to that card and move keyboard
+focus to its heading. The active panel scrolls internally when necessary. Source
+links open the Journal Entry drawer without expanding the journals panel. The
+active week stays centered in the week rail.
 
 Profile details remain collapsed by default and include a short Persona context.
 Each Core Value explanation names its state beside the Core Value. When a

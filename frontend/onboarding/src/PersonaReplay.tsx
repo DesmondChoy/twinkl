@@ -732,7 +732,7 @@ export function PersonaReplayExperience({
           <button
             className="button button--primary"
             type="button"
-            disabled={isLast && resultVisible}
+            disabled={(isLast && resultVisible) || nextReplayStep?.kind === "result"}
             onClick={advanceOneStep}
           >
             Next step
@@ -774,6 +774,8 @@ export function PersonaReplayExperience({
             : null
         }
         resultVisible={resultVisible}
+        onRevealResult={() => showCompletedWeek(safeWeekIndex)}
+        onPauseReplay={() => setPlaying(false)}
         playing={playing}
         driftResult={experience.drift_result}
         weeklyDigest={experience.weekly_digest}
