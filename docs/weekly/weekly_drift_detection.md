@@ -507,10 +507,20 @@ learned routing policies.
 
 ## Current Coach Digest Batch Status
 
+The [September v4 Run 1 replay refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+provides five accepted key-week responses for Noor, Nisha, Sook Yin, Wei Jun,
+and Henrik. Generation used Luna at reasoning effort `none` and prompt `4.2`:
+seven calls including validation-guided retries for Noor and Wei Jun. All five
+responses passed Coach Digest Validations and match the current saved Weekly
+Drift Detection inputs. No Weekly Drift Reviewer or NSM calls were made, and
+no new Coach Digest Evals or human review was performed.
+
 The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
-uses one key week for each deployed Persona replay. The same five accepted
-responses appear in the public scenario bundles and evaluation manifest. All
-five passed all Coach Digest Validations. Coach Digest Evals scored mean
+preserves five key-week responses from the August Persona roster and inputs.
+These historical responses remain in its evaluation manifest. Current v4 Run 1
+scenario bundles accept a response only when its Weekly Drift Detection input
+hash matches; missing or incompatible responses remain unavailable. All five
+August responses passed all Coach Digest Validations. Coach Digest Evals scored mean
 correctness `4.80`, specificity `5.00`, non-prescriptive tone `5.00`, and
 tension honesty `4.60`; all reflective questions passed, with no failed
 verdicts or review flags. Luna-none generated and evaluated the responses.

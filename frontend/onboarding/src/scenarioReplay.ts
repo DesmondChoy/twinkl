@@ -28,6 +28,7 @@ export interface ScenarioCatalogItem {
     | "insufficient_evidence"
     | "two_core_values";
   progression: ScenarioDeliveryState[];
+  key_week_start?: string | null;
   summary: string;
   recommended: boolean;
 }
@@ -109,6 +110,10 @@ function validateCatalogItem(
   if (typeof item.recommended !== "boolean") {
     throw new Error(`${name}.recommended must be a boolean`);
   }
+  if (item.key_week_start !== undefined && item.key_week_start !== null
+    && (typeof item.key_week_start !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(item.key_week_start))) {
+    throw new Error(`${name}.key_week_start is incompatible`);
+  }
   return {
     scenario_id: scenarioId,
     file,
@@ -121,6 +126,7 @@ function validateCatalogItem(
     core_values: textList(item.core_values, `${name}.core_values`),
     role: role as ScenarioCatalogItem["role"],
     progression,
+    ...(item.key_week_start !== undefined ? { key_week_start: item.key_week_start as string | null } : {}),
     summary: text(item.summary, `${name}.summary`),
     recommended: item.recommended,
   };
@@ -198,7 +204,9 @@ export async function loadSavedScenario(
   if (
     fixture.scenario.scenario_id !== catalogItem.scenario_id ||
     fixture.scenario.persona_id !== catalogItem.persona_id ||
-    fixture.scenario.weeks.length !== catalogItem.progression.length
+    fixture.scenario.weeks.length !== catalogItem.progression.length ||
+    (catalogItem.key_week_start != null
+      && !fixture.scenario.weeks.some((week) => week.week_start === catalogItem.key_week_start))
   ) {
     throw new Error("The saved persona replay does not match its catalog.");
   }

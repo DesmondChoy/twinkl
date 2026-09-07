@@ -207,6 +207,11 @@ export default function ReplayTimeline({
     weeklyDigest,
     week.week_start,
   );
+  const digestEvent = reviewTraceEvents.find((event) =>
+    week.event_ids.includes(event.event_id)
+    && event.event_type === "weekly_digest_built"
+  );
+  const coachUnavailableReason = digestEvent?.details.coach_unavailable_reason;
   const status = useMemo(() => {
     if (resultVisible) return `${replayStateLabel(state)} revealed.`;
     if (pendingNudgeEntryId) {
@@ -440,6 +445,18 @@ export default function ReplayTimeline({
                 headingLevel={3}
                 className="coach-digest--replay"
               />
+            ) : null}
+            {resultVisible && typeof coachUnavailableReason === "string"
+              && !weeklyDigest?.coach_narrative ? (
+              <aside className="coach-digest coach-digest--replay" aria-labelledby="replay-coach-unavailable-title">
+                <p className="eyebrow">Coach Digest</p>
+                <h3 id="replay-coach-unavailable-title">No saved Coach Digest for this result</h3>
+                <p>
+                  {coachUnavailableReason.startsWith("Historical Coach Digest omitted:")
+                    ? "The earlier Coach Digest was based on different Weekly Drift Detection results and is omitted from this replay."
+                    : "A Coach Digest response has not been saved for this replay week."}
+                </p>
+              </aside>
             ) : null}
             {resultVisible && weeklyDigest && driftResult ? (
               <NorthStarMoment

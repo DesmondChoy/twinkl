@@ -1,0 +1,239 @@
+{
+  "persona_id": "02fb94f3",
+  "persona_name": "Noor Haddad",
+  "week_start": "2025-05-19",
+  "week_end": "2025-05-25",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "self_direction",
+    "tradition"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "self_direction": "no_active_drift",
+    "tradition": "no_active_drift"
+  },
+  "drift_details": {
+    "self_direction": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 11,
+      "last_date": "2025-05-22"
+    },
+    "tradition": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 11,
+      "last_date": "2025-05-22"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "self_direction",
+      "previous_week_start": "2025-05-12",
+      "previous_week_end": "2025-05-18",
+      "current_week_start": "2025-05-19",
+      "current_week_end": "2025-05-25",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-05-15",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-05-22",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+        }
+      ]
+    },
+    {
+      "core_value": "tradition",
+      "previous_week_start": "2025-05-12",
+      "previous_week_end": "2025-05-18",
+      "current_week_start": "2025-05-19",
+      "current_week_end": "2025-05-25",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-05-15",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-05-22",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+        },
+        {
+          "date": "2025-05-22",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-05-15",
+      "t_index": 9,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+    },
+    {
+      "date": "2025-05-15",
+      "t_index": 9,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+    },
+    {
+      "date": "2025-05-22",
+      "t_index": 10,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+    },
+    {
+      "date": "2025-05-22",
+      "t_index": 10,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+    },
+    {
+      "date": "2025-05-22",
+      "t_index": 11,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+    },
+    {
+      "date": "2025-05-22",
+      "t_index": 11,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week held both your own choices and the pull of family life. You described an honest conversation with Tariq\u2014\u201cI almost lied but I was too tired to come up with something so I told him\u201d\u2014while later at dinner you said \u201ceverything was fine\u201d when his mother asked, even as \u201cthe way she...\u201d stayed with you.",
+    "tension_explanation": "There is no confirmed active tension this week, though the entries leave an open contrast between speaking plainly with Tariq and keeping things contained around his mother. Last week, accepting the logo project before considering your capacity happened alongside Sami not sleeping well and the house feeling demanding; this week\u2019s entries focus more on what you chose to share and what you kept private.",
+    "reflective_question": "What felt different between being direct with Tariq and saying \u201ceverything was fine\u201d at dinner?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I almost lied but I was too tired to come up with something so I told him",
+      "everything was fine",
+      "the way she...",
+      "everything was fine"
+    ],
+    "word_count": 135,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 4 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 135 words (target 25-180)."
+      }
+    ]
+  }
+}

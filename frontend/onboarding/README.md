@@ -39,7 +39,7 @@ React session and replays Journal Entries, displayed nudges and responses,
 Drift, Coach Digest responses, and Inspect events one week at a time. **Next step** is
 the default. **Previous** returns to an earlier week. **Auto replay** and
 **Pause replay** provide optional automatic replay. **Restart** and named jumps
-such as **Show Active Drift — week 6** provide quick navigation. The Persona
+such as **Show Active Drift — week 4** in Nisha's replay provide quick navigation. The Persona
 picker includes a collapsed professor guide mapping saved weeks to Drift
 states. Each Core Value explanation names its own state. These controls preserve
 the selected week, revealed step, and previously revealed weeks across Experience
@@ -74,8 +74,12 @@ The card preserves the exact quotation, source date and Journal Entry link.
 Long quotations expand without rewriting the source. Inspect exposes the
 record, source checks, model settings, usage and review outcome. All five
 saved Personas support prepared per-week records; normal replay never calls a
-provider. Previous NSM records were removed during the experiment reset.
-Saved weeks remain not evaluated with no card until a fresh export.
+provider. The replay uses Weekly Drift prompt v4 Run 1 and the full-history
+runtime outcomes from the [completed targeted NSM update](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md).
+The five selected Personas cover 27 reviewed weeks: 23 selected quotations,
+three ineligible outcomes, and one completed review with no supportive source.
+Records preserve original model receipts and synthetic source availability;
+they do not substitute AI evaluation grades for runtime decisions.
 
 Manual onboarding calls `review_north_star` separately after the existing
 closed-week response, keeping Weekly Drift Detection and valid Coach Digest
@@ -101,7 +105,8 @@ Inspect records; browser localStorage retains those records for resume.
 Confirmed Delete session removes both copies. A storage-quota failure raises
 the existing persistence warning; live history has no production storage
 capacity guarantee. The reusable synthetic preparation code supports
-source-disclosed raw outputs for reproduction; previous outputs were removed.
+source-disclosed raw outputs for reproduction. The saved replay links the
+completed experiment's original receipts without making new provider calls.
 The live runtime does not make a separate evaluation call.
 
 Live NSM work is serialized in one worker thread. It uses the ignored
@@ -109,11 +114,11 @@ Live NSM work is serialized in one worker thread. It uses the ignored
 integration budget. A missing or changed integration budget fails closed
 before counting or provider work. The reset removed the old budget artifacts;
 fresh budget setup remains pending, so live NSM generation is unavailable.
-No paid calls are authorized by this housekeeping step.
+Saved replay does not require a live integration budget.
 
-The [fresh experiment methodology](../../docs/north_star/nsm_experiment_methodology.md)
-records the reset and is pending user review. Previous performance findings,
-validation results, and browser evidence are no longer retained.
+The [experiment methodology](../../docs/north_star/nsm_experiment_methodology.md)
+records the completed comparison and targeted v4 Run 1 update. Its results are
+AI assessments of synthetic histories, with human review deferred.
 
 ## Run locally
 
@@ -153,9 +158,21 @@ files, the public `/health` route, and same-origin `/api/experience` requests
 from one Railway process. The Docker build context excludes `.env`, Git data,
 development caches, and unrelated experiment outputs.
 
-The frontend build imports the exact Coach Digest evaluation manifest used by
-the five saved Persona key weeks, so the Dockerfile copies that manifest before
-`npm run build`. The browser requests the scenario catalog and bundles with
+The image includes the five current Personas' wrangled and synthetic source
+files, plus the v4 definitions study's `requests.jsonl`, `responses.jsonl`,
+`attempts.jsonl`, and `manifest.json`. The compact NSM replay records ship with
+`src/`; the full experiment record is not needed in the deployed image. React
+builds from the exported scenario bundles without importing the historical
+August Coach Digest evaluation manifest.
+
+The scenario exporter verifies saved Coach Digest provenance against the
+current key-week Weekly Drift Detection output. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+provides one accepted response for each of the five current key weeks, generated
+with Luna at reasoning effort `none` and prompt `4.2`. All five passed Coach
+Digest Validations; no new Coach Digest Evals or human review was performed.
+Incompatible responses remain unavailable. The August Coach Digest evaluation
+remains historical evidence. The browser requests
+the scenario catalog and bundles with
 `cache: no-store`, then verifies each bundle against its catalogued SHA-256
 hash.
 

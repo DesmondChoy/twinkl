@@ -1,0 +1,42 @@
+{
+  "02fb94f3": {
+    "scenario_id": "stable-noor",
+    "source_bundle_path": "frontend/onboarding/public/scenarios/stable-noor.json",
+    "source_bundle_content_sha256": "12629c75a2b0cc076729452deed274d0387a8f1ab73346543a2e875d7bfd0ca1",
+    "weekly_digest_event_id": "stable-noor:event:067",
+    "week_start": "2025-05-19",
+    "week_end": "2025-05-25"
+  },
+  "5fa8b540": {
+    "scenario_id": "active-nisha",
+    "source_bundle_path": "frontend/onboarding/public/scenarios/active-nisha.json",
+    "source_bundle_content_sha256": "7e50eae5527078f2657d981059f323fba1aa84441cdd8d46bc47130601920406",
+    "weekly_digest_event_id": "active-nisha:event:042",
+    "week_start": "2025-03-03",
+    "week_end": "2025-03-09"
+  },
+  "ed67c9cc": {
+    "scenario_id": "ended-sook-yin",
+    "source_bundle_path": "frontend/onboarding/public/scenarios/ended-sook-yin.json",
+    "source_bundle_content_sha256": "eeb17549d5674a88012e49abe4bda69ad7e390a00a329edf360b878870695bd0",
+    "weekly_digest_event_id": "ended-sook-yin:event:038",
+    "week_start": "2025-02-10",
+    "week_end": "2025-02-16"
+  },
+  "8f83c818": {
+    "scenario_id": "uncertain-wei-jun",
+    "source_bundle_path": "frontend/onboarding/public/scenarios/uncertain-wei-jun.json",
+    "source_bundle_content_sha256": "311c4d2b054b89e5092323458b80d7257af3198d818ca562eee8bef7ff831c88",
+    "weekly_digest_event_id": "uncertain-wei-jun:event:064",
+    "week_start": "2025-06-30",
+    "week_end": "2025-07-06"
+  },
+  "2d928d8a": {
+    "scenario_id": "two-values-henrik",
+    "source_bundle_path": "frontend/onboarding/public/scenarios/two-values-henrik.json",
+    "source_bundle_content_sha256": "95665a8b8fa6d4c47d704ec36d2821a94ee380e55403a5ac4bf3eca1b15242dd",
+    "weekly_digest_event_id": "two-values-henrik:event:030",
+    "week_start": "2025-02-17",
+    "week_end": "2025-02-23"
+  }
+}

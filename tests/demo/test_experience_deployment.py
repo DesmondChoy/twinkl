@@ -1,11 +1,42 @@
 """Deployment contract checks for the public Experience and Inspect demo."""
 
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def test_current_replay_sources_are_packaged_and_load_without_full_nsm_study(
+    tmp_path: Path,
+) -> None:
+    from src.demo.north_star_replay import EXPERIMENT_PATH, EXPORT_PATH
+    from src.demo.scenarios import (
+        SCENARIO_DIRECTORY,
+        SELECTIONS,
+        _source_files,
+        load_scenario_catalog,
+    )
+
+    dockerfile = (ROOT / "frontend/onboarding/Dockerfile").read_text()
+    dockerignore = (ROOT / "frontend/onboarding/Dockerfile.dockerignore").read_text()
+    sources = {path for selection in SELECTIONS for path in _source_files(selection)}
+    sources.add(EXPORT_PATH)
+    for path in sources:
+        if path.parts[0] != "src":
+            assert path.as_posix() in dockerfile
+            assert f"!{path.as_posix()}\n" in dockerignore
+        target = tmp_path / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / path, target)
+    shutil.copytree(ROOT / SCENARIO_DIRECTORY, tmp_path / SCENARIO_DIRECTORY)
+    assert not (tmp_path / EXPERIMENT_PATH).exists()
+    catalog, _ = load_scenario_catalog(tmp_path)
+    assert {item.scenario_id for item in catalog.scenarios} == {
+        selection.scenario_id for selection in SELECTIONS
+    }
 
 
 def test_railway_builds_the_combined_experience_image_from_the_repository() -> None:
@@ -21,6 +52,12 @@ def test_railway_builds_the_combined_experience_image_from_the_repository() -> N
     assert config["deploy"]["healthcheckPath"] == "/health"
     assert "FROM node:22-alpine AS frontend-build" in dockerfile
     assert "FROM python:3.12-slim" in dockerfile
+    frontend_stage = dockerfile.split("FROM python:3.12-slim", maxsplit=1)[0]
+    assert (
+        "COPY src/demo/coach_digest_responses.json "
+        "/app/src/demo/coach_digest_responses.json"
+        in frontend_stage.split("RUN npm run build", maxsplit=1)[0]
+    )
     assert "TWINKL_STATIC_ROOT=/app/frontend/onboarding/dist" in dockerfile
     assert "TWINKL_PUBLIC_DEMO" not in dockerfile
     assert "TWINKL_DEMO_USERNAME" not in dockerfile

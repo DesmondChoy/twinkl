@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+from datetime import UTC, date, datetime, time, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -42,9 +43,13 @@ def test_all_saved_week_inputs_preserve_available_original_writing(base_fixtures
             request = build_saved_north_star_request(fixture, week.week_id)
             session, events = project_scenario_week(fixture, week.week_id)
             expected = {
-                event.details.journal_entry.journal_entry_id: event.started_at
-                for event in events
-                if event.event_type == "journal_entry_submitted"
+                entry.journal_entry_id: (
+                    datetime.combine(
+                        date.fromisoformat(entry.date), time.min, tzinfo=UTC
+                    )
+                    + timedelta(microseconds=3 * entry.t_index)
+                ).isoformat()
+                for entry in session.journal_entries
             }
             assert request.profile_ref
             assert request.owner_id == fixture.scenario.persona_id
@@ -53,8 +58,8 @@ def test_all_saved_week_inputs_preserve_available_original_writing(base_fixtures
                 source.available_at == expected[source.entry_id]
                 and source.available_at <= request.cutoff_at
                 and source.date <= week.week_end
-                and source.nudge_response is None
-                and source.response_available_at is None
+                and (source.nudge_response is None)
+                == (source.response_available_at is None)
                 for source in request.writing
             )
             for provider_request in source_review_requests(request):
@@ -67,13 +72,17 @@ def test_all_saved_week_inputs_preserve_available_original_writing(base_fixtures
                     "context_hash",
                 }
                 for source in payload["sources"]:
-                    assert source["nudge_response"] is None
+                    assert source["nudge_response"] == next(
+                        entry.nudge_response
+                        for entry in session.journal_entries
+                        if entry.journal_entry_id == source["entry_id"]
+                    )
                     assert source["journal_entry"] == next(
                         entry.content
                         for entry in session.journal_entries
                         if entry.journal_entry_id == source["entry_id"]
                     )
-    assert total == 36
+    assert total == 27
 
 
 def _save_pending_records(directory, fixtures):
@@ -149,20 +158,14 @@ def test_saved_attachment_rejects_stale_profile(base_fixtures, tmp_path):
         attach_saved_north_star(base_fixtures[0], root=tmp_path)
 
 
-def test_preparation_freezes_complete_budget_and_preserves_report_inputs(tmp_path):
-    manifest = integration.prepare(tmp_path)
-    assert len(manifest["cases"]) == 36
-    assert len({case["persona_id"] for case in manifest["cases"]}) == 5
-    budget = manifest["budget_preflight"]
-    assert budget["includes_one_retry_each"]
-    assert budget["maximum_cumulative_usd"] < 20
-    assert manifest["policy"]["prior_spend_usd"] == pytest.approx(0.62978415)
-    assert NORTH_STAR_REPORT_PATH.as_posix() not in manifest["input_hashes"]
-    assert integration.verify(tmp_path) == manifest
-    manifest["cases"][0]["request"]["owner_id"] = "other-owner"
-    (tmp_path / "manifest.json").write_text(json.dumps(manifest))
-    with pytest.raises(ValueError, match="manifest changed"):
-        integration.verify(tmp_path)
+def test_legacy_paid_preparation_rejects_experiment_response_availability(tmp_path):
+    # This helper used the pre-reset Journal-Entry-only policy. The current
+    # experiment export must never silently become a fresh live budget setup.
+    with pytest.raises(
+        ValueError, match="Legacy responses lack independent availability"
+    ):
+        integration.prepare(tmp_path)
+    assert not (tmp_path / "manifest.json").exists()
 
 
 def test_offline_assessment_records_invalid_cached_response_without_mutation(

@@ -1595,11 +1595,11 @@ def test_deployment_ignores_legacy_demo_credentials(
 def test_http_adapter_loads_each_saved_persona_at_its_first_week() -> None:
     service, _, _ = _service([])
     scenario_ids = [
-        "stable-meera",
-        "active-wei-jun",
-        "recovered-marc",
-        "uncertain-noor",
-        "two-values-lukas",
+        "stable-noor",
+        "active-nisha",
+        "ended-sook-yin",
+        "uncertain-wei-jun",
+        "two-values-henrik",
     ]
 
     with TestClient(create_app(service, scenario_root=ROOT)) as client:
@@ -1652,7 +1652,7 @@ def test_http_adapter_returns_a_safe_scenario_integrity_error(
         ROOT / "frontend/onboarding/public/scenarios",
         scenario_directory,
     )
-    changed = scenario_directory / "stable-meera.json"
+    changed = scenario_directory / "stable-noor.json"
     changed.write_bytes(changed.read_bytes() + b" ")
 
     service, _, _ = _service([])
@@ -1662,7 +1662,7 @@ def test_http_adapter_returns_a_safe_scenario_integrity_error(
             json=ScenarioLoadRequest(
                 operation="load_scenario",
                 request_id="load-tampered",
-                scenario_id="stable-meera",
+                scenario_id="stable-noor",
             ).model_dump(mode="json"),
         )
 

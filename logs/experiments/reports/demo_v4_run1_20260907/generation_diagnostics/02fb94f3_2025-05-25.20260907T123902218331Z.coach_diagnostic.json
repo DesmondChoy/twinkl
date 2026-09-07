@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "02fb94f3",
+  "week_start": "2025-05-19",
+  "week_end": "2025-05-25",
+  "accepted": false,
+  "failure_stage": "coach_validation",
+  "failure_details": [
+    "groundedness: No quoted phrase from selected evidence was detected."
+  ],
+  "raw_output": "{\"weekly_mirror\":\"Noor, this week held a difficult conversation with Tariq: you \u201calmost lied,\u201d then told him what was happening because you were too tired to keep it in. Later, when his mother asked whether everything was okay, you said it was fine and Tariq backed you up, leaving some tension in what was shared openly and what was kept within the family.\",\"tension_explanation\":\"There is no confirmed current tension around having the freedom to choose your own path or honoring the customs and practices you were raised with. Still, the contrast between being candid with Tariq and offering his mother a reassuring answer suggests that different relationships may call for different kinds of openness, and it is not clear how that felt for you.\",\"reflective_question\":\"What did you want to protect, or make possible, by being honest with Tariq but saying everything was fine to his mother?\"}",
+  "narrative": {
+    "weekly_mirror": "Noor, this week held a difficult conversation with Tariq: you \u201calmost lied,\u201d then told him what was happening because you were too tired to keep it in. Later, when his mother asked whether everything was okay, you said it was fine and Tariq backed you up, leaving some tension in what was shared openly and what was kept within the family.",
+    "tension_explanation": "There is no confirmed current tension around having the freedom to choose your own path or honoring the customs and practices you were raised with. Still, the contrast between being candid with Tariq and offering his mother a reassuring answer suggests that different relationships may call for different kinds of openness, and it is not clear how that felt for you.",
+    "reflective_question": "What did you want to protect, or make possible, by being honest with Tariq but saying everything was fine to his mother?"
+  },
+  "validation": {
+    "grounded_quotes": [],
+    "word_count": 144,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": false,
+        "details": "No quoted phrase from selected evidence was detected."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 144 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:02fb94f3:2025-05-25:attempt_1",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_07d6f3eb2733a78b016a9eb062883887d0adb15fb6736c1992",
+    "status": "completed",
+    "latency_seconds": 4.779669959010789,
+    "input_tokens": 1791,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1788,
+    "output_tokens": 191,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 1982,
+    "calculated_cost_usd": 0.0006768,
+    "error_type": null
+  }
+}

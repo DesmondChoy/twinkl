@@ -42,6 +42,19 @@ function object(value: unknown): JsonObject | null {
     : null;
 }
 
+function compareTimestamps(left: string, right: string): number {
+  const milliseconds = Date.parse(left) - Date.parse(right);
+  if (milliseconds !== 0) return milliseconds;
+  // Saved experiments order same-day entries at microsecond precision.
+  const fraction = (value: string) => value.match(/\.(\d+)(?:Z|[+-]\d{2}:\d{2})$/)?.[1] ?? "";
+  const leftFraction = fraction(left);
+  const rightFraction = fraction(right);
+  const precision = Math.max(leftFraction.length, rightFraction.length);
+  const normalizedLeft = leftFraction.padEnd(precision, "0");
+  const normalizedRight = rightFraction.padEnd(precision, "0");
+  return normalizedLeft < normalizedRight ? -1 : normalizedLeft > normalizedRight ? 1 : 0;
+}
+
 function canonicalJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   const item = object(value);
@@ -135,7 +148,7 @@ export function displayableNorthStarSelection(
   if (!source || source.owner_id !== profile.user_id) return null;
   const availableAt = selected.quote_source === "nudge_response" ? source.response_available_at : source.available_at;
   if (typeof availableAt !== "string" || !Number.isFinite(Date.parse(availableAt))
-    || Date.parse(availableAt) > Date.parse(record.cutoff_at)) return null;
+    || compareTimestamps(availableAt, record.cutoff_at) > 0) return null;
   const states = object(driftResult.core_value_states);
   const active = driftResult.delivery_state === "active_drift";
   if (record.mode === "reflection") {
@@ -147,7 +160,7 @@ export function displayableNorthStarSelection(
       || entry.t_index >= onset.onset_t_index || entry.date > onset.onset_date
       || record.onset_t_index !== onset.onset_t_index || record.onset_date !== onset.onset_date
       || typeof record.onset_available_at !== "string" || !Number.isFinite(Date.parse(record.onset_available_at))
-      || Date.parse(availableAt) >= Date.parse(record.onset_available_at)) return null;
+      || compareTimestamps(availableAt, record.onset_available_at) >= 0) return null;
   } else if (record.mode === "encouragement") {
     if (driftResult.delivery_state !== "no_active_drift" || entry.date < record.week_start) return null;
   } else if (record.mode === "reminder") {

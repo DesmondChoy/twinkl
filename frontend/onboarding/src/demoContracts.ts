@@ -813,9 +813,14 @@ function validateEventDetails(event: JsonObject, name: string): void {
       validateDriftResult(details.result, `${name}.details.result`);
       break;
     case "weekly_digest_built":
-      exactKeys(details, ["digest", "cited_journal_entry_ids"], `${name}.details`);
+      exactKeys(details, ["digest", "cited_journal_entry_ids",
+        ...("coach_unavailable_reason" in details ? ["coach_unavailable_reason"] : []),
+      ], `${name}.details`);
       object(details.digest, `${name}.details.digest`);
       stringArray(details.cited_journal_entry_ids, `${name}.details.cited_journal_entry_ids`);
+      if ("coach_unavailable_reason" in details) {
+        nullableString(details.coach_unavailable_reason, `${name}.details.coach_unavailable_reason`);
+      }
       break;
     case "weekly_coach_generated":
       exactKeys(details, ["narrative", "validation"], `${name}.details`);
@@ -840,7 +845,27 @@ function validateEventDetails(event: JsonObject, name: string): void {
         "cutoff_at", "input_hash", "status", "mode", "reason", "core_value", "value_phrase",
         "selected", "source_ids", "sources", "onset_t_index", "onset_date", "onset_available_at",
         "reviews", "validation_evidence", "attempts", "retryable", "created_at",
+        ...("experiment" in record ? ["experiment"] : []),
       ], `${name}.details.record`);
+      if ("experiment" in record) {
+        const experiment = object(record.experiment, `${name}.details.record.experiment`);
+        exactKeys(experiment, ["source_path", "source_sha256", "method", "case_id",
+          "case", "output", "receipts", "policy", "availability_basis"], `${name}.details.record.experiment`);
+        for (const field of ["source_path", "source_sha256", "case_id"]) {
+          string(experiment[field], `${name}.details.record.experiment.${field}`);
+        }
+        if (!HASH_PATTERN.test(String(experiment.source_sha256))
+          || experiment.method !== "full_history"
+          || experiment.availability_basis !== "synthetic_immediate_parent_order") {
+          throw new Error(`${name}.details.record.experiment has incompatible provenance`);
+        }
+        for (const field of ["case", "output"]) {
+          if (experiment[field] !== null) object(experiment[field], `${name}.details.record.experiment.${field}`);
+        }
+        array(experiment.receipts, `${name}.details.record.experiment.receipts`)
+          .forEach((receipt, index) => object(receipt, `${name}.details.record.experiment.receipts[${index}]`));
+        object(experiment.policy, `${name}.details.record.experiment.policy`);
+      }
       for (const key of ["session_id", "owner_id", "profile_ref", "week_start", "week_end", "cutoff_at", "input_hash", "status", "reason", "created_at"]) {
         string(record[key], `${name}.details.record.${key}`);
       }

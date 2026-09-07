@@ -113,9 +113,13 @@ function keyMomentState(
 }
 
 function keyMomentIndexFor(
-  role: ScenarioCatalogItem["role"],
+  item: ScenarioCatalogItem,
   weeks: LoadedScenario["fixture"]["scenario"]["weeks"],
 ): number {
+  if (item.key_week_start != null) {
+    return weeks.findIndex((week) => week.week_start === item.key_week_start);
+  }
+  const role = item.role;
   if (role === "drift_ended") {
     return weeks.findIndex(
       (week, index) =>
@@ -307,8 +311,9 @@ export function PersonaReplayPicker({
             ))}
           </ul>
           <p>
-            Start with Lukas for independent Core Value states, Wei Jun for
-            Active Drift, or Marc for a Historical Drift Record that ends.
+            {catalog.scenarios.map((item) =>
+              `${item.persona_name}: ${personaLesson(item).copy}`
+            ).join(" ")}
           </p>
         </details>
       ) : null}
@@ -425,7 +430,7 @@ export function PersonaReplayExperience({
   const resultVisible = revealedSteps.some((step) => step.kind === "result");
   const isFirst = safeWeekIndex === 0;
   const isLast = safeWeekIndex === weeks.length - 1;
-  const preferredKeyIndex = keyMomentIndexFor(loaded.catalogItem.role, weeks);
+  const preferredKeyIndex = keyMomentIndexFor(loaded.catalogItem, weeks);
   const keyMomentIndex = preferredKeyIndex >= 0
     ? preferredKeyIndex
     : weeks.length - 1;

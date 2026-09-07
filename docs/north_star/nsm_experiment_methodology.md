@@ -106,13 +106,25 @@ These findings favour full history for the tested synthetic configuration,
 without establishing human validity, real-user benefit, Weekly Drift accuracy,
 or deployment approval. The original qualified-final exposure limitation
 remains: the final histories had prior upstream research use, including the
-broader Weekly Drift development comparison. Saved-card export and the final
-application walkthrough remain separate work.
+broader Weekly Drift development comparison. The saved replay now selects five
+Personas and 27 reviewed weeks from this record; the final application
+walkthrough remains separate work.
 
 Validation passed 441 relevant tests, Ruff, scoped MyPy, and independent
 quality review. See the report for exact commands, frozen hashes, failure
 provenance, and verification details. The original study below retains its
 own design, results, timing observations, and correction history.
+
+For experiment verification, use the published study revision `f7e14ebb`,
+whose files match all 15 code hashes in the targeted-update manifest. The later
+replay integration adds saved-experiment contracts and Coach Digest diagnostics
+to `src/demo/contracts.py`, so the experiment verifier correctly rejects that
+file's changed hash in the current checkout. The completed record and its
+frozen hashes remain unchanged. Current replay export instead verifies the
+pinned completed-study hash and semantic input equality, including the Drift
+result, Core Values, source writing, chronology, requests, and original
+receipts. This export makes no provider calls and does not replace the frozen
+experiment's verification procedure.
 
 ## Reset scope
 
@@ -127,8 +139,9 @@ above retains eligible observations from that completed post-reset study.
   The user has now authorized this experiment's API calls without a spending
   cap; the [execution settings](#execution-settings)
   supersede the old experiment's monetary limits.
-- Saved NSM cards await fresh export. Live NSM fails closed until a fresh
-  budget is configured; the rest of saved Persona replay remains available.
+- Saved NSM cards were removed at reset. The later v4 Run 1 replay integration
+  uses completed full-history outcomes for its selected Personas. Live NSM
+  still fails closed until a fresh budget is configured.
 - Amended `twinkl-fz34`, `twinkl-fz34.7`, and `twinkl-fz34.8`; closed
   housekeeping task `twinkl-fz34.13`.
   Reset checks passed: 21 Python tests, 201 frontend tests, TypeScript,
@@ -430,8 +443,9 @@ applied as described below. The completed record accepts verification and
 regrading, while `prepare` and `run` reject the changed generation-code hashes.
 The original generation code is archived inside the same record.
 
-From the repository root, with `.venv` activated, reproduce validation and scores
-without provider calls:
+From a repository snapshot matching the study's frozen code, with `.venv`
+activated, reproduce validation and scores without provider calls. The current
+replay integration changes a hash-checked contract file, as explained above:
 
 ```sh
 uv run --no-sync python scripts/experiments/nsm_experiment.py verify
@@ -733,5 +747,6 @@ demo tests, Ruff for the new modules and tests, and scoped MyPy for all four
 experiment modules. Independent audits reproduced all original and corrected
 grades, all 50 stored intervals, provider attempts and costs, and source hashes.
 The full repository suite was not rerun. The accepted qualified-final exposure
-limitation above still applies, and human review remains deferred. Saved-card
-export and the final capstone walkthrough remain separate work.
+limitation above still applies, and human review remains deferred. Saved replay
+integration uses the later targeted v4 Run 1 record described above; the final
+capstone walkthrough remains separate work.

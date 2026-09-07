@@ -760,8 +760,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           requestedWeek,
           loaded.fixture.scenario.weeks.length - 1,
         );
-        setLoadedScenario(loaded);
         applyScenarioWeek(loaded, safeWeek);
+        setLoadedScenario(loaded);
       })
       .catch(() => {
         if (!cancelled) {
@@ -949,6 +949,23 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
         ? "Across 11 groups, choose Most, then Least, as a guide for your life. Choosing Least advances after one second. Some cards return."
         : "Start with Most. Tap the principle that matters most to you in this group."
       : "Now choose Least. Tap the principle that matters least to you in this group.";
+  const replayRestoreStatus = (
+    <div className="stage stage--journal replay-loading" aria-live="polite">
+      <p className="eyebrow">Saved Persona replay</p>
+      <h1 ref={headingRef} tabIndex={-1}>
+        {scenarioLoadError ? "The replay needs another try." : "Restoring the replay…"}
+      </h1>
+      {scenarioLoadError ? (
+        <>
+          <p className="lede">{scenarioLoadError}</p>
+          <button className="button button--primary" type="button"
+            onClick={() => setScenarioLoadAttempt((value) => value + 1)}>
+            Try loading again
+          </button>
+        </>
+      ) : null}
+    </div>
+  );
 
   return (
     <div className={`app-shell app-shell--${
@@ -1116,28 +1133,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           ) : null}
 
           {!personaPickerOpen && selectedPersonaId &&
-          loadedScenario?.catalogItem.persona_id !== selectedPersonaId ? (
-            <div className="stage stage--journal replay-loading" aria-live="polite">
-              <p className="eyebrow">Saved Persona replay</p>
-              <h1 ref={headingRef} tabIndex={-1}>
-                {scenarioLoadError
-                  ? "The replay needs another try."
-                  : "Restoring the replay…"}
-              </h1>
-              {scenarioLoadError ? (
-                <>
-                  <p className="lede">{scenarioLoadError}</p>
-                  <button
-                    className="button button--primary"
-                    type="button"
-                    onClick={() => setScenarioLoadAttempt((value) => value + 1)}
-                  >
-                    Try loading again
-                  </button>
-                </>
-              ) : null}
-            </div>
-          ) : null}
+          !personaReplayReady ? replayRestoreStatus : null}
 
           {!personaPickerOpen && !selectedPersonaId &&
           session.stage === "name" ? (
@@ -1439,6 +1435,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             )}
           </aside>
           <section className="flow-panel flow-panel--inspect">
+            {selectedPersonaId && !personaReplayReady ? replayRestoreStatus : (
             <InspectView
               events={session.experience.trace_events}
               currentWeekEventIds={
@@ -1511,6 +1508,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               }
               onReturn={() => showView("experience")}
             />
+            )}
           </section>
         </main>
       )}

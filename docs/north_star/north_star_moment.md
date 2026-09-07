@@ -4,10 +4,10 @@
 after Coach Digest, source checks, and the supportive-action definition.
 
 **Status:** Application code supports North Star Moment in onboarding and all
-five saved Persona replays, for Active Drift and No Active Drift. Saved weeks
-have no North Star Moment card until fresh records are exported. Live review
-fails closed without the removed integration budget; a fresh budget setup
-remains pending.
+five saved Persona replays, for Active Drift and No Active Drift. The saved
+replay uses the completed full-history outcomes from the targeted Weekly Drift
+v4 Run 1 update, preserving no-card outcomes and original receipt provenance.
+Live review fails closed without a fresh integration budget.
 
 The [experiment methodology](nsm_experiment_methodology.md) records the reset
 and the original 501-week AI comparison using Weekly Drift v2 repeat 1.
@@ -51,8 +51,8 @@ Code checks confirm that the quotation is exact, belongs to the same user or
 Persona, and satisfies the source window for the selected treatment. If no example passes, no card
 appears.
 
-The demo supports offline records for all five saved Personas: Meera, Wei Jun,
-Marc, Noor, and Lukas. Those records have been removed during the reset. The
+The demo uses offline records for Noor, Nisha, Sook Yin, Wei Jun, and Henrik,
+covering 27 reviewed weeks from the completed targeted experiment. The
 onboarding path supports generation during the user's session after an
 eligible closed-week review when its runtime budget is available. Both paths
 use the same selection and validation rules. Experience displays the quotation beneath the
@@ -172,26 +172,23 @@ scheduling remain outside this version.
 
 ### An earlier supportive action
 
-In the saved Wei Jun Persona, Active Drift concerns **Making the world a
-fairer, better place**. The Coach Digest asks:
-
-> When you notice yourself saying “okay” or nodding despite knowing what matters,
-> what feels at stake in speaking or acting differently?
-
-An illustrative card could quote this earlier Journal Entry; it is not a
-retained evaluation result or a currently prepared card:
+In Nisha's saved week starting 3 March 2025, Active Drift concerns
+**Making the world a fairer, better place**. The completed full-history runtime
+selects this earlier supportive action:
 
 > **A past moment in your own words**
 >
 > Making the world a fairer, better place
 >
-> 22 June 2025 · From your Journal Entry
+> 7 March 2025 · From your Journal Entry
 >
-> “Helped two new guys file their claims.”
+> “Stayed back to help the peon uncle fix a broken desk in my classroom.”
 >
 > This earlier writing is a reference point for your Core Value.
 
-The quotation is present at `t_index=7`, before Drift starts at `t_index=8`.
+The quotation is present at `t_index=4`, before Drift starts at `t_index=5`
+on 8 March. It is an exact runtime selection from the targeted experiment,
+not a new generation or a human-validated example.
 
 ### A related phrase that should be rejected
 
@@ -243,10 +240,11 @@ establish human validity.
 
 ## 7. Work status
 
-Housekeeping is tracked in `twinkl-fz34.13`; the completed experiment is tracked
-in `twinkl-fz34.7`. The application implementation remains in place. Fresh
-saved-card export and the final capstone walkthrough remain separate work.
-No previous experiment or browser success claim is carried forward.
+Housekeeping is tracked in `twinkl-fz34.13`, the original experiment in
+`twinkl-fz34.7`, and the targeted update in `twinkl-fz34.14`. The saved replay
+integration is tracked in `twinkl-fz34.15`. Its five Personas demonstrate the
+current v4 Run 1 Drift patterns using the completed full-history outcomes.
+The final capstone walkthrough and human review remain separate work.
 
 ## Technical appendix
 
@@ -386,7 +384,9 @@ Both paths use one selection and validation implementation. The demo supports
 precomputed records for every reviewed week in all five saved Personas,
 including explicit Insufficient Evidence and no-card outcomes. Normal replay
 reads available records without provider calls and restricts them to the
-selected cutoff. The reset removes these records; fresh export is pending.
+selected cutoff. Current records come from the targeted v4 Run 1 experiment;
+export preserves the original provider requests and raw responses rather than
+presenting them as fresh application calls.
 Optional demo live rerun is not a prerequisite for NSM; if used, its changed
 review output invalidates dependent saved NSM results and any regeneration
 follows the live rules below.

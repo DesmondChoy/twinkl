@@ -80,6 +80,32 @@ _SELECTED_PAIRS: dict[frozenset[str], tuple[SelectedPair, ...]] = {
         ("conformity", "tradition"),
         ("power", "security"),
     ),
+    frozenset({"hedonism"}): (
+        ("universalism_nature", "benevolence"),
+        ("hedonism", "benevolence"),
+        ("security", "conformity"),
+        ("hedonism", "security"),
+        ("hedonism", "universalism_social"),
+        ("power", "stimulation"),
+        ("hedonism", "self_direction"),
+        ("hedonism", "conformity"),
+        ("hedonism", "stimulation"),
+        ("self_direction", "tradition"),
+        ("security", "power"),
+    ),
+    frozenset({"stimulation", "security"}): (
+        ("security", "universalism_social"),
+        ("power", "tradition"),
+        ("security", "power"),
+        ("security", "universalism_social"),
+        ("power", "universalism_nature"),
+        ("stimulation", "power"),
+        ("tradition", "hedonism"),
+        ("stimulation", "conformity"),
+        ("stimulation", "hedonism"),
+        ("stimulation", "conformity"),
+        ("security", "conformity"),
+    ),
 }
 
 

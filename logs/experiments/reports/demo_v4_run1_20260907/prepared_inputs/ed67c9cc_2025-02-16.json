@@ -1,0 +1,157 @@
+{
+  "persona_id": "ed67c9cc",
+  "persona_name": "Lim Sook Yin",
+  "week_start": "2025-02-10",
+  "week_end": "2025-02-16",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 3,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "hedonism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "hedonism": "no_active_drift"
+  },
+  "drift_details": {
+    "hedonism": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 6,
+      "last_date": "2025-02-16"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "hedonism",
+      "previous_week_start": "2025-02-03",
+      "previous_week_end": "2025-02-09",
+      "current_week_start": "2025-02-10",
+      "current_week_end": "2025-02-16",
+      "previous_state": "active_drift",
+      "current_state": "no_active_drift",
+      "change": "active_drift_ended",
+      "end_reason": "not_conflict",
+      "previous_evidence": [
+        {
+          "date": "2025-02-08",
+          "t_index": 2,
+          "direction": "misaligned",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "I wanted to take a long bath — the kind with the lavender salts my friend gave me for my birthday — but the bathroom still needed cleaning from the kids using it, and by the time I finished scrubbing..."
+        },
+        {
+          "date": "2025-02-09",
+          "t_index": 3,
+          "direction": "misaligned",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "I know a massage would help. I know lying down with a heat pad for an hour would help. But I keep hearing my mother's voice in my head telling me not to be so pampered, that at her age..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-02-11",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "Finished the grocery run this morning and treated myself to a bowl of laksa at the hawker centre after. I almost didn't — the queue was long and I had frozen things in the bag. But I thought, five more..."
+        },
+        {
+          "date": "2025-02-14",
+          "t_index": 5,
+          "direction": "misaligned",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "I wanted to sit down and have one with tea and just enjoy it, the way you see people do in those café videos online. But I was in the middle of folding the laundry and then I remembered I..."
+        },
+        {
+          "date": "2025-02-16",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "Went to Ma's nursing home today, usual Sunday visit. Brought her the dried tangerine peel she asked for and sat with her for two hours. She complained the aircon was too cold, same as always. I adjusted it, brought her..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "ed67c9cc:hedonism:1:not_conflict"
+  ],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-08",
+      "t_index": 2,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I wanted to take a long bath — the kind with the lavender salts my friend gave me for my birthday — but the bathroom still needed cleaning from the kids using it, and by the time I finished scrubbing..."
+    },
+    {
+      "date": "2025-02-09",
+      "t_index": 3,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I know a massage would help. I know lying down with a heat pad for an hour would help. But I keep hearing my mother's voice in my head telling me not to be so pampered, that at her age..."
+    },
+    {
+      "date": "2025-02-11",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "Finished the grocery run this morning and treated myself to a bowl of laksa at the hawker centre after. I almost didn't — the queue was long and I had frozen things in the bag. But I thought, five more..."
+    },
+    {
+      "date": "2025-02-14",
+      "t_index": 5,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I wanted to sit down and have one with tea and just enjoy it, the way you see people do in those café videos online. But I was in the middle of folding the laundry and then I remembered I..."
+    },
+    {
+      "date": "2025-02-16",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "Went to Ma's nursing home today, usual Sunday visit. Brought her the dried tangerine peel she asked for and sat with her for two hours. She complained the aircon was too cold, same as always. I adjusted it, brought her..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

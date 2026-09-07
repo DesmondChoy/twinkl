@@ -44,4 +44,6 @@ independent experiment. The original record, frozen methodology, receipts, and
 correction history remain preserved. The separate report links the new
 manifest, per-case differences, evidence lineage, complete failures and
 denominators, and verification. The evidence is AI review of synthetic
-histories; human review remains deferred and saved-card export remains pending.
+histories; human review remains deferred. Saved replay integration uses the
+full-history outcomes for five selected Personas and 27 reviewed weeks, with
+original receipts and explicit no-card outcomes.

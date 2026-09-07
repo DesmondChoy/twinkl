@@ -1,5 +1,6 @@
 """Saved persona scenario export and replay checks."""
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -12,7 +13,10 @@ from src.demo.scenarios import (
     RESPONSES_PATH,
     SCENARIO_DIRECTORY,
     SELECTIONS,
+    SavedCoachResponseFixture,
+    _coach_response_sha256,
     _read_jsonl,
+    _weekly_drift_input_sha256,
     build_scenario_fixture,
     load_saved_coach_responses,
     load_scenario_catalog,
@@ -36,12 +40,11 @@ def test_catalog_covers_five_diverse_personas(loaded_scenarios) -> None:
     assert len(fixtures) == 5
     assert sum(item.recommended for item in catalog.scenarios) == 1
     assert next(item for item in catalog.scenarios if item.recommended).scenario_id == (
-        "two-values-lukas"
+        "active-nisha"
     )
     assert {value for item in catalog.scenarios for value in item.core_values} == {
-        "achievement",
-        "conformity",
-        "power",
+        "hedonism",
+        "stimulation",
         "security",
         "self_direction",
         "tradition",
@@ -78,149 +81,150 @@ def test_catalog_covers_five_diverse_personas(loaded_scenarios) -> None:
 
 def test_required_drift_progressions_are_preserved(loaded_scenarios) -> None:
     _, fixtures = loaded_scenarios
-
-    stable = fixtures["stable-meera"].scenario.drift_result
-    assert stable.delivery_state == "no_active_drift"
-    assert stable.drifts == []
-
-    active = fixtures["active-wei-jun"].scenario.drift_result
-    assert active.delivery_state == "active_drift"
+    assert all(
+        week.expected_delivery_state == "no_active_drift"
+        for week in fixtures["stable-noor"].scenario.weeks
+    )
+    nisha = fixtures["active-nisha"]
+    assert [week.expected_delivery_state for week in nisha.scenario.weeks] == [
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "active_drift",
+        "no_active_drift",
+    ]
     assert [
-        (drift.core_value, drift.onset_t_index, drift.confirmation_t_index)
-        for drift in active.drifts
-    ] == [("universalism", 8, 9)]
-
-    ended = fixtures["recovered-marc"].scenario.drift_result
+        (d.core_value, d.onset_t_index, d.confirmation_t_index)
+        for d in nisha.scenario.drift_result.drifts
+    ] == [("universalism", 5, 6)]
+    ended = fixtures["ended-sook-yin"].scenario.drift_result
     assert ended.delivery_state == "no_active_drift"
     assert ended.drifts[0].termination_verdict == "not_conflict"
-
-    uncertain_fixture = fixtures["uncertain-noor"]
-    assert "insufficient_evidence" in {
-        week.expected_delivery_state for week in uncertain_fixture.scenario.weeks
-    }
-    assert any(
-        decision.verdict == "abstain"
-        for decision in uncertain_fixture.scenario.weekly_reviewer_decisions
-    )
-
-    two_values = fixtures["two-values-lukas"].scenario.drift_result
-    assert two_values.delivery_state == "insufficient_evidence"
-    assert two_values.core_value_states == {
-        "conformity": "no_active_drift",
-        "self_direction": "insufficient_evidence",
+    uncertain = fixtures["uncertain-wei-jun"].scenario.drift_result
+    assert uncertain.delivery_state == "insufficient_evidence"
+    assert uncertain.drifts == []
+    henrik = fixtures["two-values-henrik"]
+    key = next(w for w in henrik.scenario.weeks if w.week_start == "2025-02-17")
+    session, _ = project_scenario_week(henrik, key.week_id)
+    assert session.drift_result.core_value_states == {
+        "security": "no_active_drift",
+        "stimulation": "insufficient_evidence",
     }
 
 
 def test_deployed_persona_roster_and_key_week_rules(loaded_scenarios) -> None:
     _, fixtures = loaded_scenarios
     expected = {
-        "two-values-lukas": ("11de77e8", "2025-10-13", "insufficient_evidence"),
-        "stable-meera": ("23d101f8", "2025-09-15", "no_active_drift"),
-        "active-wei-jun": ("8f83c818", "2025-06-30", "active_drift"),
-        "recovered-marc": ("988d1a65", "2025-03-17", "no_active_drift"),
-        "uncertain-noor": ("02fb94f3", "2025-04-14", "insufficient_evidence"),
+        "stable-noor": ("02fb94f3", "2025-05-19", "no_active_drift"),
+        "active-nisha": ("5fa8b540", "2025-03-03", "active_drift"),
+        "ended-sook-yin": ("ed67c9cc", "2025-02-10", "no_active_drift"),
+        "uncertain-wei-jun": ("8f83c818", "2025-06-30", "insufficient_evidence"),
+        "two-values-henrik": ("2d928d8a", "2025-02-17", "insufficient_evidence"),
     }
-
+    assert set(fixtures) == set(expected)
+    assert sum(len(f.scenario.weeks) for f in fixtures.values()) == 27
     for scenario_id, (persona_id, week_start, state) in expected.items():
         fixture = fixtures[scenario_id]
-        key_index = next(
-            index
-            for index, week in enumerate(fixture.scenario.weeks)
-            if week.week_start == week_start
-        )
+        key = next(w for w in fixture.scenario.weeks if w.week_start == week_start)
         assert fixture.scenario.persona_id == persona_id
-        assert fixture.scenario.weeks[key_index].expected_delivery_state == state
-
-    assert fixtures["stable-meera"].scenario.weeks[-1].week_start == "2025-09-15"
-    assert all(
-        week.expected_delivery_state != "active_drift"
-        for week in fixtures["active-wei-jun"].scenario.weeks[:5]
-    )
-    marc_weeks = fixtures["recovered-marc"].scenario.weeks
-    assert marc_weeks[4].expected_delivery_state == "active_drift"
-    assert marc_weeks[5].expected_delivery_state == "no_active_drift"
-    assert fixtures["uncertain-noor"].scenario.weeks[0].week_start == "2025-04-14"
-    assert fixtures["two-values-lukas"].scenario.weeks[-1].week_start == (
-        "2025-10-13"
-    )
+        assert key.expected_delivery_state == state
 
 
-def test_five_key_weeks_have_the_exact_evaluated_coach_digests(
-    loaded_scenarios,
-) -> None:
+def test_five_key_weeks_reuse_exact_fresh_coach_digests(loaded_scenarios) -> None:
+    from src.coach.schemas import WeeklyDigest
+
     _, fixtures = loaded_scenarios
     saved_responses = load_saved_coach_responses(ROOT)
-    manifest = json.loads(
-        (
-            ROOT
-            / "logs/experiments/reports/coach_digest_sample_20260824/"
-            "judge_sample_manifest.json"
-        ).read_text(encoding="utf-8")
+    assert set(saved_responses.responses) == {
+        f"{selection.scenario_id}::{selection.coach_week_start}"
+        for selection in SELECTIONS
+    }
+    assert (
+        sum(
+            response.generation.attempt_count
+            for response in saved_responses.responses.values()
+        )
+        == 7
     )
-    coach_events = [
-        event
-        for fixture in fixtures.values()
-        for event in fixture.trace_events
-        if event.event_type == "weekly_coach_generated"
-    ]
-
-    assert len(saved_responses.responses) == 5
-    assert len(coach_events) == 5
-    assert len(manifest) == 5
-
     for selection in SELECTIONS:
         fixture = fixtures[selection.scenario_id]
-        key_week_index = next(
-            index
-            for index, week in enumerate(fixture.scenario.weeks)
+        key_week = next(
+            week
+            for week in fixture.scenario.weeks
             if week.week_start == selection.coach_week_start
         )
-        key_week = fixture.scenario.weeks[key_week_index]
-        event = next(
+        saved = saved_responses.responses[
+            f"{selection.scenario_id}::{selection.coach_week_start}"
+        ]
+        generation = saved.generation
+        assert generation is not None
+        assert generation.prompt_version == "4.2"
+        assert generation.model_contract.provider == "openai"
+        assert generation.model_contract.model == "gpt-5.6-luna"
+        assert generation.model_contract.reasoning_effort == "none"
+        assert (
+            generation.prompt_sha256
+            == hashlib.sha256(generation.prompt.encode("utf-8")).hexdigest()
+        )
+        assert json.loads(generation.raw_output) == saved.narrative.model_dump(
+            mode="json"
+        )
+        assert generation.response_sha256 == _coach_response_sha256(saved.narrative)
+        assert 1 <= generation.attempt_count <= 2
+        assert (
+            len(generation.call_metrics)
+            == len(generation.diagnostic_paths)
+            == (generation.attempt_count)
+        )
+        for metric, diagnostic_path in zip(
+            generation.call_metrics, generation.diagnostic_paths, strict=True
+        ):
+            diagnostic = json.loads((ROOT / diagnostic_path).read_text())
+            assert diagnostic["llm_call"] == metric.model_dump(mode="json")
+            assert metric.provider == "openai"
+            assert metric.model == "gpt-5.6-luna"
+            assert metric.reasoning_effort == "none"
+            assert metric.status == "completed"
+            assert metric.response_id
+            assert metric.input_tokens > 0
+            assert metric.output_tokens > 0
+        accepted = json.loads((ROOT / generation.diagnostic_paths[-1]).read_text())
+        assert accepted["accepted"] is True
+        assert accepted["raw_output"] == generation.raw_output
+        assert accepted["narrative"] == saved.narrative.model_dump(mode="json")
+        assert all(check["passed"] for check in accepted["validation"]["checks"])
+        coach_events = [
             event
             for event in fixture.trace_events
             if event.event_type == "weekly_coach_generated"
-        )
-        digest_event = next(
-            event
-            for event in fixture.trace_events
-            if event.event_type == "weekly_digest_built"
-            and event.event_id in key_week.event_ids
-        )
-        narrative = digest_event.details.digest.coach_narrative
-        validation = digest_event.details.digest.validation
-        manifest_entry = next(
-            item
-            for item in manifest
-            if item["provenance"]["scenario_id"] == selection.scenario_id
-        )
-
+        ]
+        assert len(coach_events) == 1
+        event = coach_events[0]
         assert event.event_id in key_week.event_ids
+        assert event.prompt == generation.prompt
+        assert event.raw_response == generation.raw_output
+        assert event.details.narrative == saved.narrative
+        assert event.model_contract == generation.model_contract
         assert event.source == "saved_replay"
-        assert event.model_contract is not None
-        assert event.model_contract.model == "gpt-5.6-luna"
-        assert event.model_contract.reasoning_effort == "none"
-        assert event.prompt is not None
-        assert event.raw_response is not None
-        assert narrative == event.details.narrative
-        assert narrative is not None
-        assert narrative.model_dump(mode="json") == manifest_entry["narrative"]
-        assert validation == event.details.validation
-        assert validation is not None
-        assert all(check.passed for check in validation.checks)
-        assert manifest_entry["provenance"]["scenario_bundle_content_sha256"]
-
-        for earlier_index in range(key_week_index):
-            earlier, earlier_events = project_scenario_week(
-                fixture,
-                fixture.scenario.weeks[earlier_index].week_id,
-            )
-            assert earlier.weekly_digest is not None
-            assert earlier.weekly_digest.coach_narrative is None
-            assert all(
-                prior.event_type != "weekly_coach_generated"
-                for prior in earlier_events
-            )
+        generated_digest = WeeklyDigest.model_validate_json(
+            (ROOT / generation.generated_response_path).read_bytes()
+        )
+        for digest_event in fixture.trace_events:
+            if digest_event.event_type != "weekly_digest_built":
+                continue
+            digest = digest_event.details.digest
+            if digest_event.event_id in key_week.event_ids:
+                assert digest == generated_digest
+                assert digest_event.event_id == generation.weekly_digest_event_id
+                assert _weekly_drift_input_sha256(digest) == (
+                    generation.weekly_drift_input_sha256
+                )
+                assert digest_event.details.coach_unavailable_reason is None
+            else:
+                assert digest.coach_narrative is None
+                assert digest_event.details.coach_unavailable_reason == (
+                    "No saved Coach Digest response exists for this replay week."
+                )
 
 
 def test_checked_in_scenarios_match_deterministic_builder(
@@ -293,11 +297,11 @@ def _scenario_payload(scenario_id: str) -> tuple[Path, dict]:
 
 
 def test_loader_rejects_changed_scenario_content(tmp_path: Path) -> None:
-    source, payload = _scenario_payload("stable-meera")
+    source, payload = _scenario_payload("stable-noor")
     expected_hash = next(
         item["content_sha256"]
         for item in json.loads((ROOT / CATALOG_PATH).read_text())["scenarios"]
-        if item["scenario_id"] == "stable-meera"
+        if item["scenario_id"] == "stable-noor"
     )
     payload["scenario"]["title"] += " changed"
     changed = tmp_path / source.name
@@ -349,10 +353,152 @@ def test_loader_rejects_invalid_manifest_or_time(
     error_type: type[Exception],
     match: str,
 ) -> None:
-    _, payload = _scenario_payload("stable-meera")
+    _, payload = _scenario_payload("stable-noor")
     mutation(payload)
     changed = tmp_path / f"{name}.json"
     changed.write_text(json.dumps(payload), encoding="utf-8")
 
     with pytest.raises(error_type, match=match):
         load_scenario_file(changed, root=ROOT)
+
+
+@pytest.fixture(scope="module")
+def weekly_sources():
+    from src.demo.scenarios import ATTEMPTS_PATH
+
+    return {
+        "prompt_rows": _read_jsonl(ROOT / PROMPTS_PATH),
+        "response_rows": _read_jsonl(ROOT / RESPONSES_PATH),
+        "attempt_rows": _read_jsonl(ROOT / ATTEMPTS_PATH),
+    }
+
+
+def _historical_selection(persona_id: str, scenario_id: str, week: str):
+    from src.demo.scenarios import ScenarioSelection
+
+    return ScenarioSelection(
+        persona_id=persona_id,
+        scenario_id=scenario_id,
+        role="no_active_drift",
+        title="Source compatibility check",
+        description="Source compatibility check",
+        summary="Source compatibility check",
+        coach_week_start=week,
+    )
+
+
+def test_v4_failed_receipt_preserves_effective_abstain(weekly_sources) -> None:
+    selection = next(s for s in SELECTIONS if s.persona_id == "8f83c818")
+    fixture = build_scenario_fixture(
+        ROOT, selection, include_north_star=False, **weekly_sources
+    )
+    event = next(
+        event
+        for event in fixture.trace_events
+        if event.event_type == "weekly_review_completed"
+        and event.details.receipt.week_start == "2025-06-23"
+    )
+    receipt = event.details.receipt
+    assert receipt.status == "invalid"
+    assert receipt.prompt_version == "4.0"
+    assert receipt.validation_error == "Evidence quote is not present in t_index=8"
+    assert receipt.assessments[0].verdict == "conflict"
+    assert receipt.decisions[0].verdict == "abstain"
+    assert receipt.decisions[0].review_status == "invalid"
+    assert event.raw_response["attempt"]["response_id"] == receipt.response_id
+    assert fixture.scenario.drift_result.delivery_state == "insufficient_evidence"
+
+
+@pytest.mark.parametrize("missing_provenance", [False, True])
+def test_incompatible_coach_source_is_omitted(
+    weekly_sources, missing_provenance
+) -> None:
+    selection = SELECTIONS[0]
+    payload = load_saved_coach_responses(ROOT).model_dump(mode="json")
+    key = f"{selection.scenario_id}::{selection.coach_week_start}"
+    if missing_provenance:
+        payload["responses"][key]["generation"] = None
+    else:
+        payload["responses"][key]["generation"]["weekly_drift_input_sha256"] = "0" * 64
+    fixture = build_scenario_fixture(
+        ROOT,
+        selection,
+        include_north_star=False,
+        **weekly_sources,
+        coach_responses=SavedCoachResponseFixture.model_validate(payload),
+    )
+    assert not any(
+        event.event_type == "weekly_coach_generated" for event in fixture.trace_events
+    )
+    digest_event = next(
+        event
+        for event in fixture.trace_events
+        if event.event_type == "weekly_digest_built"
+        and event.details.digest.week_start == selection.coach_week_start
+    )
+    assert digest_event.details.digest.coach_narrative is None
+    reason = digest_event.details.coach_unavailable_reason
+    if missing_provenance:
+        assert "input provenance is unavailable" in reason
+    else:
+        assert "Weekly Drift input differs" in reason
+        assert "0" * 64 in reason
+        assert _weekly_drift_input_sha256(digest_event.details.digest) in reason
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "variant_hash",
+        "request_input",
+        "response_hash",
+        "duplicate_response",
+        "attempt_hash",
+        "raw_response",
+        "decision",
+        "empty_responses",
+    ],
+)
+def test_v4_builder_rejects_mismatched_source_binding(weekly_sources, mutation) -> None:
+    import copy
+
+    from src.demo.scenarios import _sha256_json
+
+    sources = copy.deepcopy(weekly_sources)
+    selection = _historical_selection("23d101f8", "stable-meera", "2025-09-15")
+    request = next(
+        row
+        for row in sources["prompt_rows"]
+        if row["request"]["persona_id"] == selection.persona_id
+    )
+    key = f"definitions:1:{request['case_id']}"
+    response = next(
+        row for row in sources["response_rows"] if row["request_key"] == key
+    )
+    attempt = next(
+        row
+        for row in sources["attempt_rows"]
+        if row["request_key"] == key and row["event"] == "finished"
+    )
+    if mutation == "variant_hash":
+        request["variants"]["definitions"]["request_sha256"] = "0" * 64
+    elif mutation == "request_input":
+        variant = request["variants"]["definitions"]
+        variant["input_data"] = "{}"
+        variant["request_sha256"] = _sha256_json(
+            {k: v for k, v in variant.items() if k != "request_sha256"}
+        )
+    elif mutation == "response_hash":
+        response["request_sha256"] = "0" * 64
+    elif mutation == "duplicate_response":
+        sources["response_rows"].append(copy.deepcopy(response))
+    elif mutation == "attempt_hash":
+        attempt["request_sha256"] = "0" * 64
+    elif mutation == "raw_response":
+        attempt["raw_text"] = '{"assessments": []}'
+    elif mutation == "decision":
+        response["decisions"][0]["verdict"] = "abstain"
+    else:
+        sources["response_rows"] = []
+    with pytest.raises(ValueError):
+        build_scenario_fixture(ROOT, selection, include_north_star=False, **sources)

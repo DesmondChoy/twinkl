@@ -30,12 +30,14 @@ from src.demo.profile_projection import build_projected_profile
 from src.drift_detector import detect_drift
 from src.drift_review_app.data import ReviewData, load_review_data
 from src.nudge.decision import should_suppress_nudge
+from src.prompt_boundary import render_live_prompt_receipt
 from src.weekly_drift_reviewer import (
-    VerifierAssessment,
     WeeklyDriftReviewerDecision,
-    WeeklyDriftReviewerEntry,
     WeeklyDriftReviewerReceipt,
     WeeklyDriftReviewerRequest,
+    WeeklyVerifierResponse,
+    _effective_decisions,
+    validate_weekly_drift_reviewer_response,
 )
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
@@ -44,25 +46,16 @@ if TYPE_CHECKING:
 
 SCENARIO_DIRECTORY = Path("frontend/onboarding/public/scenarios")
 CATALOG_PATH = SCENARIO_DIRECTORY / "index.json"
-PROMPTS_PATH = Path(
-    "logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/prompts.jsonl"
+WEEKLY_EXPERIMENT_DIRECTORY = Path(
+    "logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907"
 )
-RESPONSES_PATH = Path(
-    "logs/experiments/artifacts/"
-    "twinkl_52zz_luna_low_20260714/responses_gpt_5_6_luna_low.jsonl"
-)
-BASE_MANIFEST_PATH = Path(
-    "logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/manifest.json"
-)
-LOW_MANIFEST_PATH = Path(
-    "logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/manifest.json"
-)
-BASE_CONFIG_PATH = Path("config/evals/twinkl_52zz_model_comparison_v1.yaml")
-LOW_CONFIG_PATH = Path("config/evals/twinkl_52zz_luna_low_v1.yaml")
+PROMPTS_PATH = WEEKLY_EXPERIMENT_DIRECTORY / "requests.jsonl"
+RESPONSES_PATH = WEEKLY_EXPERIMENT_DIRECTORY / "responses.jsonl"
+ATTEMPTS_PATH = WEEKLY_EXPERIMENT_DIRECTORY / "attempts.jsonl"
+WEEKLY_MANIFEST_PATH = WEEKLY_EXPERIMENT_DIRECTORY / "manifest.json"
+WEEKLY_VARIANT = "definitions"
 COACH_RESPONSES_PATH = Path("src/demo/coach_digest_responses.json")
-NORTH_STAR_REPORT_PATH = Path(
-    "logs/experiments/reports/north_star_integration_20260906/report.json"
-)
+NORTH_STAR_REPORT_PATH = Path("src/demo/north_star_replay_records.json")
 
 LUNA_LOW = ModelContract(
     provider="openai",
@@ -96,65 +89,65 @@ class ScenarioSelection:
 
 SELECTIONS = (
     ScenarioSelection(
-        scenario_id="stable-meera",
-        persona_id="23d101f8",
+        scenario_id="stable-noor",
+        persona_id="02fb94f3",
         role="no_active_drift",
-        title="Meera — steady priorities under pressure",
+        title="Noor — autonomy, family, and steady priorities",
         description=(
-            "A teacher balances school change and family responsibilities while "
-            "Achievement and Security have no active Drift."
+            "A young parent navigates Self-Direction and Tradition with "
+            "No Active Drift across six reviewed weeks."
         ),
-        summary="A calm baseline with meaningful nudges and no confirmed Drift.",
-        coach_week_start="2025-09-15",
+        summary="A baseline with no detected Drift across the saved history.",
+        coach_week_start="2025-05-19",
     ),
     ScenarioSelection(
-        scenario_id="active-wei-jun",
-        persona_id="8f83c818",
+        scenario_id="active-nisha",
+        persona_id="5fa8b540",
         role="active_drift",
-        title="Wei Jun — convenience versus fairness",
+        title="Nisha — everyday choices and fairness",
         description=(
-            "A fintech engineer repeatedly stays quiet about remittance failures, "
-            "forming active Universalism Drift."
+            "A teacher's Universalism Drift becomes active, then a later "
+            "Not Conflict decision ends the pattern."
         ),
-        summary="The clearest two-consecutive-Conflict path into active Drift.",
+        summary="Recommended: a complete progression into and out of Active Drift.",
+        coach_week_start="2025-03-03",
+        recommended=True,
+    ),
+    ScenarioSelection(
+        scenario_id="ended-sook-yin",
+        persona_id="ed67c9cc",
+        role="drift_ended",
+        title="Sook Yin — making room for enjoyment",
+        description=(
+            "A stay-at-home mother's Hedonism Drift ends after a later "
+            "Not Conflict decision; the Historical Drift Record remains visible."
+        ),
+        summary="A closed Hedonism Drift episode with its supporting Journal Entries.",
+        coach_week_start="2025-02-10",
+    ),
+    ScenarioSelection(
+        scenario_id="uncertain-wei-jun",
+        persona_id="8f83c818",
+        role="insufficient_evidence",
+        title="Wei Jun — fairness and uncertain evidence",
+        description=(
+            "A fintech engineer considers remittance failures. A rejected "
+            "evidence quote leaves Insufficient Evidence for Universalism Drift."
+        ),
+        summary="A failed Weekly Drift review prevents an unsupported Drift claim.",
         coach_week_start="2025-06-30",
     ),
     ScenarioSelection(
-        scenario_id="recovered-marc",
-        persona_id="988d1a65",
-        role="drift_ended",
-        title="Marc — status pressure and a changed choice",
-        description=(
-            "A manager notices how status anxiety shapes his choices, then takes a "
-            "clear later choice that ends the active Power Drift pattern."
-        ),
-        summary="A compact active-to-no-active Drift progression.",
-        coach_week_start="2025-03-17",
-    ),
-    ScenarioSelection(
-        scenario_id="uncertain-noor",
-        persona_id="02fb94f3",
-        role="insufficient_evidence",
-        title="Noor — autonomy, family, and ambiguity",
-        description=(
-            "A young parent navigates Self-Direction and Tradition; an effective "
-            "Abstain leaves insufficient evidence for one weekly Drift state."
-        ),
-        summary="A nuanced case where the Weekly Drift Reviewer does not overclaim.",
-        coach_week_start="2025-04-14",
-    ),
-    ScenarioSelection(
-        scenario_id="two-values-lukas",
-        persona_id="11de77e8",
+        scenario_id="two-values-henrik",
+        persona_id="2d928d8a",
         role="two_core_values",
-        title="Lukas — belonging without losing direction",
+        title="Henrik — security alongside new experiences",
         description=(
-            "A software engineer has an ended Conformity Drift episode and "
-            "insufficient Self-Direction evidence in independent histories."
+            "Security has No Active Drift while Stimulation has Insufficient "
+            "Evidence in the key week, with independent Core Value histories."
         ),
-        summary="Recommended: the fullest walkthrough and clearest state independence.",
-        coach_week_start="2025-10-13",
-        recommended=True,
+        summary="Two Core Values with different current states at the same cutoff.",
+        coach_week_start="2025-02-17",
     ),
 )
 
@@ -169,7 +162,7 @@ class SavedCoachGeneration(CatalogModel):
     model_contract: ModelContract
     service_tier: str
     prompt_name: str
-    prompt_version: Literal["4.1"]
+    prompt_version: Literal["4.1", "4.2"]
     prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     prompt: str = Field(min_length=1)
     raw_output: str = Field(min_length=1)
@@ -237,6 +230,7 @@ class ScenarioCatalogItem(CatalogModel):
     progression: list[str] = Field(min_length=1)
     summary: str
     recommended: bool
+    key_week_start: str | None = None
 
 
 class ScenarioCatalog(CatalogModel):
@@ -295,24 +289,32 @@ def _weekly_drift_input_sha256(digest: Any) -> str:
     return _sha256_json(payload)
 
 
+def _coach_unavailable_reason(
+    response: SavedCoachResponse | None, digest: Any
+) -> str | None:
+    if response is None:
+        return "No saved Coach Digest response exists for this replay week."
+    if response.generation is None:
+        return (
+            "Historical Coach Digest omitted: "
+            "its saved input provenance is unavailable."
+        )
+    actual = _weekly_drift_input_sha256(digest)
+    expected = response.generation.weekly_drift_input_sha256
+    if actual != expected:
+        return (
+            "Historical Coach Digest omitted: its Weekly Drift input differs from "
+            f"v4 Run 1 (saved SHA-256 {expected}; current SHA-256 {actual})."
+        )
+    return None
+
+
 def load_saved_coach_responses(root: Path) -> SavedCoachResponseFixture:
     """Load and validate the checked-in scenario Coach Digest responses."""
     fixture: SavedCoachResponseFixture = SavedCoachResponseFixture.model_validate_json(
         (root.resolve() / COACH_RESPONSES_PATH).read_bytes()
     )
-    expected_keys = {
-        f"{selection.scenario_id}::{selection.coach_week_start}"
-        for selection in SELECTIONS
-    }
-    if set(fixture.responses) != expected_keys:
-        raise ValueError("Coach Digest fixture must contain the deployed roster")
     for response in fixture.responses.values():
-        selection = _selection_by_scenario_id(response.scenario_id)
-        if (
-            response.persona_id != selection.persona_id
-            or response.week_start != selection.coach_week_start
-        ):
-            raise ValueError("Coach Digest response does not match the curated roster")
         if response.generation is not None:
             if response.generation.response_sha256 != _coach_response_sha256(
                 response.narrative
@@ -341,10 +343,8 @@ def _source_files(selection: ScenarioSelection) -> list[Path]:
         Path(f"logs/synthetic_data/persona_{selection.persona_id}.md"),
         PROMPTS_PATH,
         RESPONSES_PATH,
-        BASE_MANIFEST_PATH,
-        LOW_MANIFEST_PATH,
-        BASE_CONFIG_PATH,
-        LOW_CONFIG_PATH,
+        ATTEMPTS_PATH,
+        WEEKLY_MANIFEST_PATH,
         COACH_RESPONSES_PATH,
     ]
 
@@ -407,44 +407,133 @@ def _raw_nudge_metadata(path: Path) -> dict[int, dict[str, str]]:
     return metadata
 
 
-def _reviewer_decisions(
+def _saved_weekly_sources(
     *,
-    data: ReviewData,
-    persona_id: str,
-    run: int,
+    selection: ScenarioSelection,
+    prompts: list[dict[str, Any]],
+    responses: list[dict[str, Any]],
+    attempts: list[dict[str, Any]],
     entries_by_index: dict[int, dict[str, Any]],
-) -> list[WeeklyDriftReviewerDecisionContract]:
-    rows: list[WeeklyDriftReviewerDecisionContract] = []
-    for case in data.cases_for_persona(persona_id):
-        for entry in case.entries:
-            decision = data.decision("luna_low", run, case.case_id, entry.t_index)
-            if decision.response_status != "ok" or decision.verdict is None:
+) -> tuple[dict[str, WeeklyDriftReviewerRequest], dict[str, dict[str, Any]]]:
+    """Bind v4 Run 1 decisions to the exact frozen messages and provider output."""
+    requests: dict[str, WeeklyDriftReviewerRequest] = {}
+    receipts: dict[str, dict[str, Any]] = {}
+    selected = [
+        row for row in prompts if row["request"]["persona_id"] == selection.persona_id
+    ]
+    for row in selected:
+        original = WeeklyDriftReviewerRequest.model_validate(row["request"])
+        week_start = original.week_start
+        if week_start in requests:
+            raise ValueError("Duplicate selected Weekly Drift request")
+        case_id = f"{selection.persona_id}:week:{week_start}"
+        if row["case_id"] != case_id:
+            raise ValueError("Weekly Drift request case identity mismatch")
+        variant = row["variants"][WEEKLY_VARIANT]
+        variant_hash = _sha256_json(
+            {key: value for key, value in variant.items() if key != "request_sha256"}
+        )
+        if (
+            variant_hash != variant["request_sha256"]
+            or variant["prompt_version"] != "4.0"
+        ):
+            raise ValueError("Weekly Drift variant hash or version mismatch")
+        history = [entry.model_dump(mode="json") for entry in original.history]
+        if _sha256_json(history) != original.runtime_text_sha256:
+            raise ValueError("Weekly Drift runtime source hash mismatch")
+        for entry in original.history:
+            source = entries_by_index[entry.t_index]
+            parts = [str(source["initial_entry"])]
+            if source.get("nudge_text"):
+                parts.append(f'Nudge: "{source["nudge_text"]}"')
+            if source.get("response_text"):
+                parts.append(f"Response: {source['response_text']}")
+            if entry.date != str(source["date"]) or entry.text != "\n\n".join(parts):
                 raise ValueError(
-                    f"Selected scenario has an invalid receipt: {case.case_id} "
-                    f"t_index={entry.t_index}"
+                    "Weekly Drift history differs from saved Journal Entries"
                 )
-            rows.append(
-                WeeklyDriftReviewerDecisionContract.model_validate(
-                    {
-                        "persona_id": persona_id,
-                        "week_start": decision.week_start,
-                        "week_end": next(
-                            boundary.week_end
-                            for boundary in data.boundaries_for_persona(persona_id)
-                            if boundary.week_start == decision.week_start
-                        ),
-                        "t_index": decision.t_index,
-                        "date": str(entries_by_index[decision.t_index]["date"]),
-                        "core_value": decision.dimension,
-                        "verdict": decision.verdict,
-                        "confidence": decision.confidence,
-                        "reason_code": decision.reason_code,
-                        "evidence_quote": decision.evidence_quote,
-                        "review_status": "ok",
-                    }
-                )
+        expected_input = {
+            "current_week_entry_t_indices": original.current_t_indices,
+            "declared_core_values": original.core_values,
+            "journal_entries": [
+                {"t_index": entry.t_index, "text": entry.text}
+                for entry in original.history
+            ],
+        }
+        if json.loads(variant["input_data"]) != expected_input:
+            raise ValueError("Weekly Drift variant input differs from saved history")
+        prompt = render_live_prompt_receipt(
+            instructions=variant["instructions"], input_data=variant["input_data"]
+        )
+        request = original.model_copy(
+            update={
+                "prompt": prompt,
+                "prompt_sha256": _sha256_bytes(prompt.encode("utf-8")),
+            }
+        )
+        request_key = f"{WEEKLY_VARIANT}:{selection.run}:{case_id}"
+        matching = [
+            response
+            for response in responses
+            if response.get("request_key") == request_key
+        ]
+        if len(matching) != 1:
+            raise ValueError("Selected Weekly Drift response is missing or duplicated")
+        response = matching[0]
+        if (
+            response.get("case_id") != case_id
+            or response.get("variant") != WEEKLY_VARIANT
+            or response.get("repeat") != selection.run
+            or response.get("status") not in {"ok", "invalid"}
+            or response.get("request_sha256") != variant_hash
+        ):
+            raise ValueError("Weekly Drift response source binding mismatch")
+        matching_attempts = [
+            attempt
+            for attempt in attempts
+            if attempt.get("request_key") == request_key
+            and attempt.get("event") == "finished"
+            and attempt.get("attempt_number") == response["attempts"]
+        ]
+        if len(matching_attempts) != 1:
+            raise ValueError(
+                "Selected Weekly Drift provider attempt is missing or duplicated"
             )
-    return sorted(rows, key=lambda row: (row.t_index, row.core_value))
+        attempt = matching_attempts[0]
+        if (
+            attempt.get("request_sha256") != variant_hash
+            or attempt.get("status") != response["status"]
+        ):
+            raise ValueError("Weekly Drift provider attempt source binding mismatch")
+        parsed = WeeklyVerifierResponse.model_validate(attempt["parsed"])
+        if WeeklyVerifierResponse.model_validate_json(attempt["raw_text"]) != parsed:
+            raise ValueError(
+                "Weekly Drift raw response differs from parsed assessments"
+            )
+        if response["status"] == "ok":
+            validate_weekly_drift_reviewer_response(parsed, request)
+        else:
+            try:
+                validate_weekly_drift_reviewer_response(parsed, request)
+            except ValueError as error:
+                if str(error) != attempt.get("validation_error"):
+                    raise ValueError(
+                        "Weekly Drift validation diagnostic differs"
+                    ) from error
+            else:
+                raise ValueError("Weekly Drift invalid receipt has valid assessments")
+        decisions = _effective_decisions(
+            request, status=response["status"], response=parsed
+        )
+        if [decision.model_dump(mode="json") for decision in decisions] != response[
+            "decisions"
+        ]:
+            raise ValueError(
+                "Weekly Drift saved decisions differ from provider assessments"
+            )
+        requests[week_start] = request
+        receipts[week_start] = {"response": response, "attempt": attempt}
+    return requests, receipts
 
 
 def _event(
@@ -509,51 +598,40 @@ def _make_event_id(scenario_id: str, number: int) -> str:
 
 def _receipt(
     *,
-    prompt_row: dict[str, Any],
-    response_row: dict[str, Any],
-    decisions: list[WeeklyDriftReviewerDecisionContract],
+    request: WeeklyDriftReviewerRequest,
+    source: dict[str, Any],
 ) -> WeeklyDriftReviewerReceipt:
-    if response_row.get("status") != "ok":
-        raise ValueError(
-            "Curated scenarios require valid Weekly Drift Reviewer receipts"
-        )
-    parsed = response_row.get("parsed")
-    if not isinstance(parsed, dict):
-        raise ValueError("Weekly Drift Reviewer receipt lacks parsed assessments")
-    assessments = [
-        VerifierAssessment.model_validate(item)
-        for item in parsed.get("assessments", [])
-    ]
-    usage = {
-        key: value
-        for key, value in dict(response_row.get("usage") or {}).items()
-        if isinstance(value, int) and not isinstance(value, bool)
-    }
+    response, attempt = source["response"], source["attempt"]
     return WeeklyDriftReviewerReceipt(
-        created_at=_simulated_at(str(prompt_row["review_at_date"]), hour=20),
-        persona_id=str(prompt_row["persona_id"]),
-        week_start=str(prompt_row["week_start"]),
-        week_end=str(prompt_row["week_end"]),
-        core_values=_normalized_core_values(
-            [str(value) for value in prompt_row["declared_values"]]
-        ),
-        current_t_indices=[int(value) for value in prompt_row["current_t_indices"]],
+        created_at=attempt["completed_at"],
+        persona_id=request.persona_id,
+        week_start=request.week_start,
+        week_end=request.week_end,
+        core_values=request.core_values,
+        current_t_indices=request.current_t_indices,
         prompt_name="weekly_vif_verifier",
-        prompt_version="2.0",
-        prompt_sha256=str(response_row["prompt_sha256"]),
-        runtime_text_sha256=str(response_row["runtime_text_sha256"]),
-        requested_model=str(response_row["requested_model"]),
+        prompt_version="4.0",
+        prompt_sha256=request.prompt_sha256,
+        runtime_text_sha256=request.runtime_text_sha256,
+        requested_model=LUNA_LOW.model,
         reasoning_effort="low",
-        status="ok",
-        attempts=int(response_row["attempts"]),
-        latency_seconds=float(response_row["latency_seconds"]),
-        resolved_model=str(response_row["resolved_model"]),
-        response_id=str(response_row["response_id"]),
-        usage=usage,
-        assessments=assessments,
+        status=response["status"],
+        validation_error=attempt.get("validation_error"),
+        attempts=response["attempts"],
+        latency_seconds=attempt["latency_seconds"],
+        resolved_model=attempt["resolved_model"],
+        response_id=attempt["response_id"],
+        usage={
+            key: value
+            for key, value in attempt["usage"].items()
+            if isinstance(value, int) and not isinstance(value, bool)
+        },
+        assessments=WeeklyVerifierResponse.model_validate(
+            attempt["parsed"]
+        ).assessments,
         decisions=[
-            WeeklyDriftReviewerDecision.model_validate(decision.model_dump(mode="json"))
-            for decision in decisions
+            WeeklyDriftReviewerDecision.model_validate(row)
+            for row in response["decisions"]
         ],
     )
 
@@ -637,14 +715,32 @@ def build_scenario_fixture(
     data: ReviewData | None = None,
     prompt_rows: list[dict[str, Any]] | None = None,
     response_rows: list[dict[str, Any]] | None = None,
+    attempt_rows: list[dict[str, Any]] | None = None,
     coach_responses: SavedCoachResponseFixture | None = None,
     include_north_star: bool = True,
 ) -> ContractFixtureSet:
     """Build one saved replay without provider calls."""
     root = root.resolve()
     review_data = data or load_review_data(root)
-    prompts = prompt_rows or _read_jsonl(root / PROMPTS_PATH)
-    responses = response_rows or _read_jsonl(root / RESPONSES_PATH)
+    prompts = (
+        prompt_rows if prompt_rows is not None else _read_jsonl(root / PROMPTS_PATH)
+    )
+    responses = (
+        response_rows
+        if response_rows is not None
+        else _read_jsonl(root / RESPONSES_PATH)
+    )
+    attempts = (
+        attempt_rows if attempt_rows is not None else _read_jsonl(root / ATTEMPTS_PATH)
+    )
+    weekly_manifest = json.loads((root / WEEKLY_MANIFEST_PATH).read_text())
+    if (
+        weekly_manifest["requests_sha256"] != _sha256_file(root / PROMPTS_PATH)
+        or weekly_manifest["treatment_prompt_version"] != "4.0"
+        or weekly_manifest["settings"]["model"] != LUNA_LOW.model
+        or weekly_manifest["settings"]["reasoning_effort"] != "low"
+    ):
+        raise ValueError("Weekly Drift experiment manifest differs from saved sources")
     saved_coach_responses = coach_responses or load_saved_coach_responses(root)
 
     wrangled_path = root / f"logs/wrangled/persona_{selection.persona_id}.md"
@@ -686,27 +782,33 @@ def build_scenario_fixture(
     journal_id_by_index = {
         entry["t_index"]: entry["journal_entry_id"] for entry in journal_entries
     }
-    decisions = _reviewer_decisions(
-        data=review_data,
-        persona_id=selection.persona_id,
-        run=selection.run,
+    request_by_week, response_by_week = _saved_weekly_sources(
+        selection=selection,
+        prompts=prompts,
+        responses=responses,
+        attempts=attempts,
         entries_by_index=entries_by_index,
     )
-    prompt_by_week = {
-        str(row["week_start"]): row
-        for row in prompts
-        if row.get("persona_id") == selection.persona_id
-    }
-    response_by_week = {
-        str(row["week_start"]): row
-        for row in responses
-        if row.get("persona_id") == selection.persona_id
-        and int(row.get("repeat", 0)) == selection.run
-    }
-    if set(prompt_by_week) != {boundary.week_start for boundary in boundaries}:
+    if set(request_by_week) != {boundary.week_start for boundary in boundaries}:
         raise ValueError("Selected prompt weeks are incomplete")
-    if set(response_by_week) != set(prompt_by_week):
-        raise ValueError("Selected response weeks are incomplete")
+    for boundary in boundaries:
+        request = request_by_week[boundary.week_start]
+        if (
+            request.week_end != boundary.week_end
+            or request.current_t_indices != list(boundary.current_t_indices)
+            or [entry.t_index for entry in request.history]
+            != list(boundary.visible_t_indices)
+            or set(request.core_values) != set(core_values)
+        ):
+            raise ValueError("Weekly Drift request cutoff differs from saved replay")
+    decisions = sorted(
+        [
+            WeeklyDriftReviewerDecisionContract.model_validate(row)
+            for source in response_by_week.values()
+            for row in source["response"]["decisions"]
+        ],
+        key=lambda decision: (decision.t_index, decision.core_value),
+    )
 
     event_rows: list[dict[str, Any]] = []
     week_rows: list[dict[str, Any]] = []
@@ -849,7 +951,7 @@ def build_scenario_fixture(
                     )
                 )
 
-        prompt_row = prompt_by_week[boundary.week_start]
+        request = request_by_week[boundary.week_start]
         response_row = response_by_week[boundary.week_start]
         current_decisions = [
             row for row in decisions if row.week_start == boundary.week_start
@@ -861,31 +963,7 @@ def build_scenario_fixture(
             WeeklyDriftReviewerDecision.model_validate(row.model_dump(mode="json"))
             for row in cumulative_decisions
         ]
-        request = WeeklyDriftReviewerRequest(
-            persona_id=selection.persona_id,
-            week_start=boundary.week_start,
-            week_end=boundary.week_end,
-            core_values=core_values,
-            history=[
-                WeeklyDriftReviewerEntry(
-                    t_index=int(index),
-                    date=str(entries_by_index[int(index)]["date"]),
-                    text=str(text),
-                )
-                for index, text in sorted(
-                    (
-                        (int(key), value)
-                        for key, value in prompt_row["entry_text_by_t_index"].items()
-                    ),
-                    key=lambda item: item[0],
-                )
-            ],
-            current_t_indices=current_indices,
-            prompt=str(prompt_row["prompt"]),
-            prompt_sha256=str(prompt_row["prompt_sha256"]),
-            runtime_text_sha256=str(prompt_row["runtime_text_sha256"]),
-        )
-        review_started_at = _simulated_at(str(prompt_row["review_at_date"]), hour=20)
+        review_started_at = _simulated_at(boundary.week_end, hour=20)
         week_id = f"{selection.scenario_id}:week:{week_number}"
         week_event_ids.append(
             append_event(
@@ -909,9 +987,8 @@ def build_scenario_fixture(
             )
         )
         receipt = _receipt(
-            prompt_row=prompt_row,
-            response_row=response_row,
-            decisions=current_decisions,
+            request=request,
+            source=response_row,
         )
         week_event_ids.append(
             append_event(
@@ -940,7 +1017,7 @@ def build_scenario_fixture(
         week_event_ids.append(
             append_event(
                 event_type="drift_detected",
-                started_at=_simulated_at(str(prompt_row["review_at_date"]), hour=21),
+                started_at=_simulated_at(boundary.week_end, hour=21),
                 duration_ms=0,
                 input_refs=[{"kind": "weekly_review", "id": week_id}],
                 result_refs=[{"kind": "drift", "id": week_id}],
@@ -967,8 +1044,13 @@ def build_scenario_fixture(
         )
         coach_key = f"{selection.scenario_id}::{boundary.week_start}"
         saved_coach_response = saved_coach_responses.responses.get(coach_key)
+        coach_unavailable_reason = _coach_unavailable_reason(
+            saved_coach_response, digest
+        )
         coach_narrative = (
-            saved_coach_response.narrative if saved_coach_response is not None else None
+            saved_coach_response.narrative
+            if saved_coach_response is not None and coach_unavailable_reason is None
+            else None
         )
         coach_validation = None
         if coach_narrative is not None:
@@ -978,13 +1060,6 @@ def build_scenario_fixture(
                 or saved_coach_response.week_end != boundary.week_end
             ):
                 raise ValueError("Saved Coach Digest response has the wrong identity")
-            if saved_coach_response.generation is not None and (
-                saved_coach_response.generation.weekly_drift_input_sha256
-                != _weekly_drift_input_sha256(digest)
-            ):
-                raise ValueError(
-                    "Saved Coach Digest source hash differs from the key week"
-                )
             coach_validation = validate_weekly_digest_narrative(
                 digest,
                 coach_narrative,
@@ -1009,9 +1084,7 @@ def build_scenario_fixture(
         week_event_ids.append(
             append_event(
                 event_type="weekly_digest_built",
-                started_at=_simulated_at(
-                    str(prompt_row["review_at_date"]), hour=21, sequence=100
-                ),
+                started_at=_simulated_at(boundary.week_end, hour=21, sequence=100),
                 duration_ms=0,
                 input_refs=[
                     {"kind": "week", "id": week_id},
@@ -1021,6 +1094,7 @@ def build_scenario_fixture(
                 details={
                     "digest": final_digest,
                     "cited_journal_entry_ids": cited_ids,
+                    "coach_unavailable_reason": coach_unavailable_reason,
                 },
             )
         )
@@ -1038,9 +1112,7 @@ def build_scenario_fixture(
             week_event_ids.append(
                 append_event(
                     event_type="weekly_coach_generated",
-                    started_at=_simulated_at(
-                        str(prompt_row["review_at_date"]), hour=21, sequence=200
-                    ),
+                    started_at=_simulated_at(boundary.week_end, hour=21, sequence=200),
                     duration_ms=(
                         round(accepted_call.latency_seconds * 1000)
                         if accepted_call is not None
@@ -1085,12 +1157,11 @@ def build_scenario_fixture(
     if final_drift is None or final_digest is None:
         raise ValueError("Scenario has no weekly result")
     prompt_set_hash = _sha256_json(
-        [
-            prompt_by_week[boundary.week_start]["prompt_sha256"]
-            for boundary in boundaries
-        ]
+        [request_by_week[boundary.week_start].prompt_sha256 for boundary in boundaries]
     )
-    low_manifest = json.loads((root / LOW_MANIFEST_PATH).read_text(encoding="utf-8"))
+    weekly_manifest = json.loads(
+        (root / WEEKLY_MANIFEST_PATH).read_text(encoding="utf-8")
+    )
     scenario = {
         "schema_version": "experience-inspect-v1",
         "scenario_id": selection.scenario_id,
@@ -1107,7 +1178,7 @@ def build_scenario_fixture(
         "trace_event_ids": [event["event_id"] for event in event_rows],
         "manifest": {
             "bundle_version": "scenario-bundle-v1",
-            "created_at": str(low_manifest["prepared_at"]),
+            "created_at": str(weekly_manifest["frozen_at"]),
             "input_hash": _input_hash(root, selection),
             "source_files": [path.as_posix() for path in _source_files(selection)],
             "model_contract": LUNA_LOW.model_dump(mode="json"),
@@ -1167,10 +1238,14 @@ def build_saved_north_star_request(
 
     session, events = project_scenario_week(fixture, week_id)
     week = next(w for w in fixture.scenario.weeks if w.week_id == week_id)
+    # The completed synthetic experiment uses immediate parent ordering. This
+    # is declared synthetic availability, not a human response timestamp.
     availability = {
-        event.details.journal_entry.journal_entry_id: event.started_at
-        for event in events
-        if event.event_type == "journal_entry_submitted"
+        entry.journal_entry_id: datetime.combine(
+            date.fromisoformat(entry.date), time.min, tzinfo=UTC
+        )
+        + timedelta(microseconds=3 * entry.t_index)
+        for entry in session.journal_entries
     }
     digest_event = next(
         event
@@ -1186,8 +1261,14 @@ def build_saved_north_star_request(
             date=entry.date,
             journal_entry=entry.content,
             nudge_response=entry.nudge_response,
-            available_at=availability[entry.journal_entry_id],
-            response_available_at=None,
+            available_at=availability[entry.journal_entry_id].isoformat(),
+            response_available_at=(
+                (
+                    availability[entry.journal_entry_id] + timedelta(microseconds=2)
+                ).isoformat()
+                if entry.nudge_response
+                else None
+            ),
         )
         for entry in session.journal_entries
     ]
@@ -1210,14 +1291,28 @@ def attach_saved_north_star(
     fixture: ContractFixtureSet, *, root: Path
 ) -> ContractFixtureSet:
     """Attach frozen offline records; exporting and replaying never call a model."""
-    from src.north_star.runtime import NorthStarRecord, validate_north_star_record
+    from pydantic import TypeAdapter
 
+    from src.demo.north_star_replay import (
+        SavedExperimentRecord,
+        validate_saved_record,
+        verify_experiment_source,
+    )
+    from src.north_star.runtime import NorthStarRecord
+
+    verify_experiment_source(root)
+    adapter: TypeAdapter[SavedExperimentRecord | NorthStarRecord] = TypeAdapter(
+        SavedExperimentRecord | NorthStarRecord
+    )
     report = json.loads((root / NORTH_STAR_REPORT_PATH).read_text())
-    records = {
-        row["week_id"]: row["record"]
+    matching = [
+        row
         for row in report["cases"]
         if row["scenario_id"] == fixture.scenario.scenario_id
-    }
+    ]
+    records = {row["week_id"]: row["record"] for row in matching}
+    if len(records) != len(matching):
+        raise ValueError("Saved North Star Moment repeats a week")
     if set(records) != {week.week_id for week in fixture.scenario.weeks}:
         raise ValueError("Saved North Star Moment records do not cover every week")
     payload = fixture.model_dump(mode="json")
@@ -1225,8 +1320,8 @@ def attach_saved_north_star(
     ordered_events: list[dict[str, Any]] = []
     for week in payload["scenario"]["weeks"]:
         request = build_saved_north_star_request(fixture, week["week_id"])
-        record = NorthStarRecord.model_validate(records[week["week_id"]])
-        validate_north_star_record(record, request)
+        record = adapter.validate_python(records[week["week_id"]])
+        validate_saved_record(record, request)
         ordered_events.extend(events_by_id[event_id] for event_id in week["event_ids"])
         event_id = f"{fixture.scenario.scenario_id}:north-star:{week['week_start']}"
         event = _event(
@@ -1335,8 +1430,18 @@ def _validate_fixture_semantics(
     if scenario.manifest.input_hash != expected_input_hash:
         raise ValueError("Scenario input hash differs from frozen sources")
     if has_north_star:
-        from src.north_star.runtime import validate_north_star_record
+        from src.demo.north_star_replay import (
+            validate_saved_record,
+            verify_experiment_source,
+        )
 
+        verify_experiment_source(root)
+        report = json.loads((root / NORTH_STAR_REPORT_PATH).read_text())
+        expected_records = {
+            row["week_id"]: row["record"]
+            for row in report["cases"]
+            if row["scenario_id"] == scenario.scenario_id
+        }
         for week in scenario.weeks:
             records = [
                 event.details.record
@@ -1346,7 +1451,11 @@ def _validate_fixture_semantics(
             ]
             if len(records) != 1:
                 raise ValueError("Saved North Star Moment must cover every week once")
-            validate_north_star_record(
+            if records[0].model_dump(mode="json") != expected_records.get(week.week_id):
+                raise ValueError(
+                    "Saved NSM record differs from the exported experiment"
+                )
+            validate_saved_record(
                 records[0], build_saved_north_star_request(fixture, week.week_id)
             )
 
@@ -1358,21 +1467,37 @@ def _validate_fixture_semantics(
         for event in fixture.trace_events
         if event.event_type == "weekly_coach_generated"
     ]
-    if expected_coach is None:
-        if coach_events:
-            raise ValueError("Scenario has an unexpected Coach Digest response")
+    key_week = next(
+        week for week in scenario.weeks if week.week_start == selection.coach_week_start
+    )
+    key_digest_event = next(
+        event
+        for event in fixture.trace_events
+        if event.event_type == "weekly_digest_built"
+        and event.event_id in key_week.event_ids
+    )
+    unavailable_reason = _coach_unavailable_reason(
+        expected_coach, key_digest_event.details.digest
+    )
+    if unavailable_reason is not None:
+        if coach_events or key_digest_event.details.digest.coach_narrative is not None:
+            raise ValueError(
+                "Scenario has an incompatible historical Coach Digest response"
+            )
+        if key_digest_event.details.coach_unavailable_reason != unavailable_reason:
+            raise ValueError("Scenario Coach Digest source diagnostic differs")
     else:
         if len(coach_events) != 1:
-            raise ValueError("Scenario must have one key-week Coach Digest response")
-        key_week = next(
-            week
-            for week in scenario.weeks
-            if week.week_start == selection.coach_week_start
-        )
+            raise ValueError(
+                "Scenario must have one compatible key-week Coach Digest response"
+            )
         coach_event = coach_events[0]
         if coach_event.event_id not in key_week.event_ids:
             raise ValueError("Coach Digest response is attached to the wrong week")
-        if coach_event.details.narrative != expected_coach.narrative:
+        if (
+            expected_coach is None
+            or coach_event.details.narrative != expected_coach.narrative
+        ):
             raise ValueError("Coach Digest event differs from the saved response")
 
     entries = scenario.journal_entries
@@ -1467,6 +1592,8 @@ def load_scenario_catalog(
             fixture.scenario.scenario_id != item.scenario_id
             or fixture.scenario.persona_id != item.persona_id
             or fixture.scenario.profile.top_values != item.core_values
+            or item.key_week_start
+            != _selection_by_scenario_id(item.scenario_id).coach_week_start
         ):
             raise ValueError(f"Scenario catalog identity mismatch: {item.scenario_id}")
         fixtures[item.scenario_id] = fixture
@@ -1522,6 +1649,7 @@ def export_scenarios(root: Path) -> ScenarioCatalog:
                 ],
                 summary=selection.summary,
                 recommended=selection.recommended,
+                key_week_start=selection.coach_week_start,
             )
         )
     catalog = ScenarioCatalog(scenarios=catalog_items)

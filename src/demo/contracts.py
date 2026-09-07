@@ -9,6 +9,7 @@ from typing import Annotated, Any, Literal, cast
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from src.coach.schemas import CoachNarrative, DigestValidation, WeeklyDigest
+from src.demo.north_star_replay import SavedExperimentRecord
 from src.drift_detector import (
     CoreValueDriftState,
     DriftDetectorResult,
@@ -579,6 +580,7 @@ class DriftDetectedDetails(ContractModel):
 class WeeklyDigestBuiltDetails(ContractModel):
     digest: WeeklyDigest
     cited_journal_entry_ids: list[str]
+    coach_unavailable_reason: str | None = None
 
 
 class WeeklyCoachGeneratedDetails(ContractModel):
@@ -593,7 +595,7 @@ class WeeklyCoachGeneratedDetails(ContractModel):
 
 
 class NorthStarReviewedDetails(ContractModel):
-    record: NorthStarRecord
+    record: SavedExperimentRecord | NorthStarRecord
 
 
 class NudgeResponseRecordedDetails(ContractModel):

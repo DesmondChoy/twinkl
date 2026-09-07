@@ -2,6 +2,9 @@ import { act, fireEvent, render, screen, waitFor, within } from "@testing-librar
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App, { AppErrorBoundary } from "./App";
+import activeReplayJson from "../public/scenarios/active-nisha.json";
+import activeReplayRaw from "../public/scenarios/active-nisha.json?raw";
+import scenarioCatalogJson from "../public/scenarios/index.json";
 import {
   BWS_SETS,
   VALUE_ORDER,
@@ -25,8 +28,11 @@ import { canonicalInspectFixture } from "./inspectFixture";
 import {
   LEGACY_SESSION_STORAGE_KEY,
   SESSION_STORAGE_KEY,
+  createExperienceState,
   createSession,
+  parseSession,
 } from "./session";
+import { validateExperienceInspectFixture } from "./demoContracts";
 
 vi.mock("./experienceApi", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./experienceApi")>();
@@ -38,8 +44,6 @@ vi.mock("./experienceApi", async (importOriginal) => {
     submitJournalEntry: vi.fn(),
   };
 });
-
-vi.stubGlobal("confirm", () => true);
 
 const profileEvents = new Map<string, TraceEventContract>();
 const tiedSelectedPairs = [
@@ -89,7 +93,35 @@ function enterPreferredName(name = "Casey") {
   fireEvent.click(screen.getByRole("button", { name: "Continue" }));
 }
 
+function saveReplayInInspect(personaId: string) {
+  const fixture = validateExperienceInspectFixture(activeReplayJson);
+  const profile = fixture.scenario.profile;
+  const saved = createSession();
+  const oldEvent = { ...fixture.trace_events[0], prompt: "Stale saved experiment prompt" };
+  Object.assign(saved, {
+    user_id: profile.user_id, session_id: profile.session_id,
+    preferred_name: profile.preferred_name ?? "Friend", started_at: profile.started_at,
+    stage: "complete", set_index: BWS_SETS.length - 1,
+    set_order: BWS_SETS.map((_, index) => index),
+    displayed_orders: BWS_SETS.map((set) =>
+      profile.bws_responses.find((response) => response.set_number === set.setNumber)!.item_order_shown),
+    responses: profile.bws_responses, confirmed_profile: profile,
+    experience: {
+      ...createExperienceState(), revision: fixture.session.revision,
+      journal_entries: fixture.session.journal_entries, nudges: fixture.session.nudges,
+      weekly_reviewer_decisions: fixture.session.weekly_reviewer_decisions,
+      drift_result: fixture.session.drift_result, weekly_digest: fixture.session.weekly_digest,
+      active_view: "inspect", journal_started: true, selected_persona_id: personaId,
+      selected_week: 0, selected_entry_id: null, selected_event_id: oldEvent.event_id,
+      trace_event_ids: [oldEvent.event_id], trace_events: [oldEvent],
+    },
+  });
+  expect(parseSession(JSON.stringify(saved))).not.toBeNull();
+  localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(saved));
+}
+
 beforeEach(() => {
+  vi.stubGlobal("confirm", () => true);
   localStorage.clear();
   profileEvents.clear();
   vi.mocked(createExperienceSession).mockReset();
@@ -153,9 +185,57 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 describe("onboarding app", () => {
+  it("withholds persisted Inspect decisions until the current replay is validated and projected", async () => {
+    saveReplayInInspect(activeReplayJson.scenario.persona_id);
+    let resolveCatalog!: (response: Response) => void;
+    let resolveScenario!: (response: Response) => void;
+    const catalogResponse = new Promise<Response>((resolve) => { resolveCatalog = resolve; });
+    const scenarioResponse = new Promise<Response>((resolve) => { resolveScenario = resolve; });
+    const fetchMock = vi.fn().mockReturnValueOnce(catalogResponse)
+      .mockReturnValueOnce(scenarioResponse);
+    vi.stubGlobal("fetch", fetchMock);
+    render(<App />);
+
+    expect(screen.getByRole("heading", { name: "Restoring the replay…" })).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
+    expect(screen.queryByText("Stale saved experiment prompt")).toBeNull();
+    await act(async () => { resolveCatalog(new Response(JSON.stringify(scenarioCatalogJson))); });
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    expect(screen.getByRole("heading", { name: "Restoring the replay…" })).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
+    await act(async () => { resolveScenario(new Response(activeReplayRaw)); });
+    await screen.findByRole("heading", { name: "How Twinkl reached this result." });
+    expect(screen.queryByText("Stale saved experiment prompt")).toBeNull();
+    expect(screen.getByText("Nisha Agarwal · saved replay")).toBeTruthy();
+    const stored = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    expect(stored.experience.trace_events.length).toBeGreaterThan(1);
+    expect(stored.experience.trace_events[0].prompt).toBe(activeReplayJson.trace_events[0].prompt);
+  });
+
+  it("never shows retired Persona decisions in Inspect and offers replay recovery controls", async () => {
+    saveReplayInInspect("11de77e8");
+    const fetchMock = vi.fn().mockImplementation(async () =>
+      new Response(JSON.stringify(scenarioCatalogJson)));
+    vi.stubGlobal("fetch", fetchMock);
+    const user = userEvent.setup();
+    render(<App />);
+
+    expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
+    await screen.findByRole("heading", { name: "The replay needs another try." });
+    expect(screen.queryByText("Stale saved experiment prompt")).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Try loading again" }));
+    await screen.findByRole("heading", { name: "The replay needs another try." });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Change Persona" }));
+    await screen.findByRole("heading", { name: "Choose what you want to observe." });
+    expect(await screen.findByText("Nisha Agarwal")).toBeTruthy();
+  });
+
   it("keeps Start over reachable after an unexpected render failure", () => {
     const consoleError = vi
       .spyOn(console, "error")
