@@ -1,7 +1,8 @@
 name: weekly_vif_verifier
 description: Canonical Weekly Drift Reviewer prompt for Journal Entry Conflict decisions.
-version: '3.0'
+version: '4.0'
 input_variables:
+  - core_value_definitions
   - declared_values
   - cumulative_history
   - current_week_entries
@@ -26,7 +27,10 @@ template: |
   abstain, the evidence quote may be empty. Every supplied evidence quote must
   be an exact substring of that entry.
 
-  DECLARED CORE VALUES
+  {% if core_value_definitions %}APPROVED CORE VALUE DEFINITIONS
+  {{ core_value_definitions }}
+
+  {% endif %}DECLARED CORE VALUES
   {{ declared_values }}
 
   CUMULATIVE STUDENT-VISIBLE HISTORY THROUGH THIS WEEK

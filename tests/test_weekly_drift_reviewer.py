@@ -1,12 +1,17 @@
 """Tests for the maintained Weekly Drift Reviewer contract."""
 
+import hashlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+import yaml
 
+from src.models.judge import SCHWARTZ_VALUE_ORDER
+from src.prompt_boundary import UNTRUSTED_DATA_RULE, render_live_prompt_receipt
 from src.weekly_drift_reviewer import (
+    SCHWARTZ_CONFIG_PATH,
     OpenAIWeeklyDriftReviewer,
     VerifierAssessment,
     WeeklyVerifierResponse,
@@ -16,12 +21,12 @@ from src.weekly_drift_reviewer import (
 )
 
 
-def _request():
+def _request(*, core_values: list[str] | None = None):
     return build_weekly_drift_reviewer_request(
         persona_id="deadbeef",
         week_start="2025-01-06",
         week_end="2025-01-12",
-        core_values=["benevolence"],
+        core_values=core_values if core_values is not None else ["benevolence"],
         history=[
             {
                 "t_index": 0,
@@ -53,6 +58,95 @@ def test_request_and_response_contract_excludes_vif_critic_input():
     assert "VIF Critic" not in request.prompt
     assert "Cancelled dinner with my family" in request.prompt
     assert request.expected_coordinates == {(0, "benevolence")}
+
+
+@pytest.mark.parametrize(
+    "core_values",
+    [[value] for value in SCHWARTZ_VALUE_ORDER]
+    + [["self_direction", "benevolence"]],
+)
+def test_request_supplies_only_selected_approved_value_fields(core_values):
+    configured = yaml.safe_load(SCHWARTZ_CONFIG_PATH.read_text())["values"]
+    approved = {
+        name.lower().replace("-", "_"): details
+        for name, details in configured.items()
+    }
+    request = _request(core_values=core_values)
+
+    _rules, marker, definitions = request.instructions.partition(
+        "\n\nAPPROVED CORE VALUE DEFINITIONS\n"
+    )
+    assert marker
+    assert definitions == "\n\n".join(
+        [
+            f"[{value}]\nDefinition: {approved[value]['definition'].strip()}\n"
+            f"Core motivation: {approved[value]['core_motivation'].strip()}"
+            for value in core_values
+        ]
+        + [UNTRUSTED_DATA_RULE]
+    )
+    payload = json.loads(request.input_data)
+    assert payload == {
+        "current_week_entry_t_indices": [0],
+        "declared_core_values": core_values,
+        "journal_entries": [
+            {
+                "t_index": 0,
+                "text": "Cancelled dinner with my family to stay at work.",
+            }
+        ],
+    }
+
+
+def test_value_context_excludes_generation_and_labeling_metadata(
+    monkeypatch, tmp_path: Path
+):
+    config = {
+        "values": {
+            "Benevolence": {
+                "definition": "Approved definition.",
+                "core_motivation": "Approved core motivation.",
+                "persona_narrative_guidance": "HIDDEN_GENERATION_GUIDANCE",
+                "behavioral_manifestations": ["HIDDEN_BEHAVIOR_EXAMPLE"],
+                "label": "HIDDEN_LABEL",
+            },
+            "Power": {
+                "definition": "UNSELECTED_VALUE_DEFINITION",
+                "core_motivation": "UNSELECTED_VALUE_MOTIVATION",
+            },
+        }
+    }
+    path = tmp_path / "schwartz_values.yaml"
+    path.write_text(yaml.safe_dump(config))
+    monkeypatch.setattr("src.weekly_drift_reviewer.SCHWARTZ_CONFIG_PATH", path)
+
+    request = _request()
+
+    assert "Approved definition." in request.instructions
+    assert "Approved core motivation." in request.instructions
+    assert "HIDDEN_" not in request.prompt
+    assert "UNSELECTED_" not in request.prompt
+
+
+def test_definitions_change_prompt_hash_without_changing_prior_rules_or_data():
+    request = _request()
+    rules, _marker, _definitions = request.instructions.partition(
+        "\n\nAPPROVED CORE VALUE DEFINITIONS\n"
+    )
+    original_prompt = render_live_prompt_receipt(
+        instructions=f"{rules}\n\n{UNTRUSTED_DATA_RULE}",
+        input_data=request.input_data,
+    )
+    original_hash = hashlib.sha256(original_prompt.encode()).hexdigest()
+
+    assert original_hash == (
+        "8382f1fe5c21ec6bccbd05523ce1f53663b3e4ae75420bd8ffdf26893949662f"
+    )
+    assert request.prompt_sha256 != original_hash
+    assert request.prompt_sha256 == hashlib.sha256(request.prompt.encode()).hexdigest()
+    assert request.runtime_text_sha256 == (
+        "5f2444bd38deba817ce0b81ab76ed861fa61262df5b94d190d29cd3f2470b2e2"
+    )
 
 
 def test_request_keeps_entry_and_nudge_commands_in_input_data():
@@ -173,7 +267,11 @@ async def test_openai_caller_persists_effective_decision_and_frozen_contract(
     request = _request()
     assert responses.kwargs["instructions"] == request.instructions
     assert responses.kwargs["input"] == request.input_data
+    assert responses.kwargs["text_format"] is WeeklyVerifierResponse
+    assert "APPROVED CORE VALUE DEFINITIONS" in responses.kwargs["instructions"]
     assert payload["schema_version"] == "weekly-drift-reviewer-receipt-v1"
+    assert payload["prompt_version"] == "4.0"
+    assert payload["prompt_sha256"] == request.prompt_sha256
 
 
 @pytest.mark.asyncio

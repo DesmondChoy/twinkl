@@ -77,11 +77,24 @@ See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
   coverage and abstention, cross-week hits, detection delay, entry-level and
   per-Core-Value metrics, response status, latency, token use, and cost.
 
-The prompt used for the reported development Runs is version `2.0`. Current
-runtime prompt version `3.0` adds stricter confidence, reason, and exact-quote
-rules. The user explicitly accepted no development rerun, and the capstone
-stops without scoring version `3.0` on a fresh final test. Frozen historical
-prompts and results remain bound to their original hashes.
+The prompt used for the reported development Runs is version `2.0`. Runtime
+version `3.0` added stricter confidence, reason, and exact-quote rules; the user
+accepted that cleanup without a development rerun. Current runtime version
+`4.0` adds the selected Core Values' existing `definition` and `core_motivation`
+fields: Schwartz-based definitions plus project-specific elaborations.
+The separate
+[`twinkl-j3k7` comparison](../../logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md)
+ran fresh versions `3.0` and `4.0` on the same 204 Personas and 951 observed
+weeks, with three Runs per version. Detected Drift totals changed from
+22/22/21 to 19/21/18. Core Value composition and individual identities also
+changed: Run 2 retained two Conformity Drifts while replacing both detected
+Personas. The report preserves all ten Core Values, exact identity and
+boundary differences, repeat variation, and invalid-output effects. This
+synthetic development study measures detections, not accuracy or a fresh
+final test. It evaluates the two fields together and does not establish
+whether either field alone helps or harms detection. Both remain in the
+adopted version `4.0` prompt.
+Frozen historical prompts and results remain bound to their original hashes.
 
 The approved Drift Detector uses two consecutive Weekly Drift Reviewer
 Conflicts for the same Core Value. The user-facing path does not run the VIF

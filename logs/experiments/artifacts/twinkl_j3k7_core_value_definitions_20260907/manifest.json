@@ -1,0 +1,54 @@
+{
+  "schema_version": "weekly-drift-definitions-experiment-v1",
+  "issue": "twinkl-j3k7",
+  "frozen_at": "2026-09-07T01:48:01.163525+00:00",
+  "settings": {
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "low",
+    "repeats": 3,
+    "timeout_seconds": 60,
+    "max_output_tokens": 2000,
+    "max_attempts": 2,
+    "sdk_retries": 0,
+    "concurrency": 8,
+    "schedule_seed": 20260907,
+    "service_tier": "default",
+    "store": false
+  },
+  "baseline_prompt_version": "3.0",
+  "treatment_prompt_version": "4.0",
+  "personas": 204,
+  "weeks": 951,
+  "expected_terminal_requests": 5706,
+  "baseline_snapshot_sha256": "10162eeb3564f8c262d9371cf9fba1f4364109ca63932ea7988290cbed78cbe8",
+  "requests_sha256": "ed9565638c0432a880d0095031e23e2ebc030d89e3dc89352d62147a98b2d017",
+  "code_sha256": {
+    "scripts/experiments/weekly_drift_definitions.py": "c9e186254ce0177d830cce618a7be8ee8c4ff52edfde0eaf9d3b286970bffb2e",
+    "src/weekly_drift_reviewer.py": "95eca6a13d75ccbe7ab482d82f00ec031d5eaf231ce901bbc845d6822f481e18",
+    "src/drift_detector.py": "6a7b5a6e9985560772ff763f91b7599aa24ab7330d36dba2d8a7a62a7598f035",
+    "src/drift_rules.py": "fc04b3b6b7c1bd99419ec3639fb5e6c4ca5272f88c6934e17a26ab0084ddfc55",
+    "src/prompt_boundary.py": "fcdddc427ecb300ccdaea94a3d57224817bf064cf8cea99ea6c897404d727553",
+    "prompts/weekly_vif_verifier.yaml": "230e84d2ddb8008a5f02ba3d11e5b0ab99c275357e226f4c503e265895d06775",
+    "prompts/__init__.py": "4d678d6efee6e618aa7d49a7046e554b5afeef1d485025ed279819738d62c42b",
+    "config/schwartz_values.yaml": "03284ce78405816d16854a1f9428acc6d2594b73686d246e935707ebce0f31af"
+  },
+  "versions": {
+    "openai": "2.11.0",
+    "pydantic": "2.12.5",
+    "pyyaml": "6.0.3"
+  },
+  "comparison": {
+    "population": "Existing Weekly Drift study: 204 Personas and 951 weeks",
+    "baseline": "Fresh current v3; historical v2 receipts are context only",
+    "intervention": "Selected approved definitions and core motivations only",
+    "schedule": "Seeded shuffle of all case/repeat/variant requests",
+    "counting": "Unique historical Drifts at each Persona's final cutoff",
+    "identity": "Persona, Core Value, onset, confirmation, supporting indices",
+    "boundaries": "Also compare termination reason, index and verdict",
+    "overlap": "Overlapping unmatched spans form boundary/split/merge groups",
+    "failure": "Invalid or refused output is terminal and becomes Abstain",
+    "scope": "Detected counts and identity changes; no NSM rerun or relabeling",
+    "interpretation": "Synthetic development study; counts are not accuracy"
+  },
+  "authorization": "User authorized the paid definitions study on 2026-09-07"
+}

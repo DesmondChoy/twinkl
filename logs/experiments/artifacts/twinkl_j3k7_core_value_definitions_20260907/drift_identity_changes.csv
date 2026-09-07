@@ -1,0 +1,64 @@
+run,change_group,change,variant,persona_id,core_value,onset_t_index,confirmation_t_index,end_t_index,supporting_t_indices,onset_date,confirmation_date,end_date,termination_reason,termination_t_index,termination_verdict
+1,1:1,removed,baseline,110fcd4f,conformity,1,2,2,"[1, 2]",2025-06-25,2025-06-28,2025-06-28,,,
+1,1:2,removed,baseline,11de77e8,conformity,3,4,5,"[3, 4, 5]",2025-09-10,2025-09-12,2025-09-19,not_conflict,6,not_conflict
+1,1:3,removed,baseline,3a3b15e4,tradition,3,4,5,"[3, 4, 5]",2025-06-10,2025-06-12,2025-06-15,not_conflict,6,not_conflict
+1,1:4,removed,baseline,8f83c818,universalism,9,10,10,"[9, 10]",2025-07-01,2025-07-05,2025-07-05,,,
+1,1:5,removed,baseline,988d1a65,power,5,6,6,"[5, 6]",2025-03-10,2025-03-16,2025-03-16,not_conflict,7,not_conflict
+1,1:6,removed,baseline,dbe2c53d,conformity,8,9,9,"[8, 9]",2025-02-26,2025-03-05,2025-03-05,abstain,10,abstain
+1,1:7,removed,baseline,eb969aef,security,3,4,4,"[3, 4]",2026-01-03,2026-01-07,2026-01-07,not_conflict,5,not_conflict
+1,1:8,added,definitions,152df7a4,universalism,2,3,3,"[2, 3]",2025-02-24,2025-03-03,2025-03-03,not_conflict,4,not_conflict
+1,1:9,added,definitions,663cb334,conformity,1,2,2,"[1, 2]",2025-05-12,2025-05-14,2025-05-14,not_conflict,3,not_conflict
+1,1:10,added,definitions,e5c9d9e5,power,9,10,10,"[9, 10]",2025-04-15,2025-04-17,2025-04-17,not_conflict,11,not_conflict
+1,1:11,added,definitions,f6180c27,benevolence,4,5,5,"[4, 5]",2025-07-23,2025-07-23,2025-07-23,not_conflict,6,not_conflict
+1,1:12,termination_change,baseline,11de77e8,self_direction,9,10,10,"[9, 10]",2025-10-11,2025-10-14,2025-10-14,abstain,11,abstain
+1,1:12,termination_change,definitions,11de77e8,self_direction,9,10,10,"[9, 10]",2025-10-11,2025-10-14,2025-10-14,not_conflict,11,not_conflict
+1,1:13,boundary_change,baseline,abf1ce49,security,8,9,9,"[8, 9]",2025-10-10,2025-10-14,2025-10-14,,,
+1,1:13,boundary_change,definitions,abf1ce49,security,7,8,9,"[7, 8, 9]",2025-10-06,2025-10-10,2025-10-14,,,
+1,1:14,boundary_change,baseline,d7a0683f,universalism,2,3,3,"[2, 3]",2026-01-08,2026-01-13,2026-01-13,not_conflict,4,not_conflict
+1,1:14,boundary_change,definitions,d7a0683f,universalism,0,1,3,"[0, 1, 2, 3]",2025-12-31,2026-01-04,2026-01-13,abstain,4,abstain
+2,2:1,removed,baseline,0d42f985,benevolence,0,1,1,"[0, 1]",2025-08-13,2025-08-18,2025-08-18,not_conflict,2,not_conflict
+2,2:2,removed,baseline,110fcd4f,conformity,1,2,2,"[1, 2]",2025-06-25,2025-06-28,2025-06-28,,,
+2,2:3,removed,baseline,11de77e8,conformity,3,4,4,"[3, 4]",2025-09-10,2025-09-12,2025-09-12,not_conflict,5,not_conflict
+2,2:4,removed,baseline,152df7a4,universalism,2,3,3,"[2, 3]",2025-02-24,2025-03-03,2025-03-03,not_conflict,4,not_conflict
+2,2:5,removed,baseline,5a522de7,universalism,6,7,7,"[6, 7]",2025-06-21,2025-06-21,2025-06-21,not_conflict,8,not_conflict
+2,2:6,removed,baseline,988d1a65,power,5,6,6,"[5, 6]",2025-03-10,2025-03-16,2025-03-16,not_conflict,7,not_conflict
+2,2:7,removed,baseline,abf1ce49,security,1,2,3,"[1, 2, 3]",2025-09-13,2025-09-14,2025-09-21,not_conflict,4,not_conflict
+2,2:8,removed,baseline,f418b74b,hedonism,2,3,3,"[2, 3]",2025-09-11,2025-09-14,2025-09-14,not_conflict,4,not_conflict
+2,2:9,added,definitions,663cb334,conformity,1,2,2,"[1, 2]",2025-05-12,2025-05-14,2025-05-14,not_conflict,3,not_conflict
+2,2:10,added,definitions,742c98d6,universalism,8,9,9,"[8, 9]",2025-10-07,2025-10-08,2025-10-08,not_conflict,10,not_conflict
+2,2:11,added,definitions,9ca30614,security,3,4,4,"[3, 4]",2025-11-03,2025-11-10,2025-11-10,not_conflict,5,not_conflict
+2,2:12,added,definitions,a532dde6,conformity,6,7,7,"[6, 7]",2025-05-27,2025-05-30,2025-05-30,not_conflict,8,not_conflict
+2,2:13,added,definitions,ad378991,universalism,5,6,6,"[5, 6]",2025-05-05,2025-05-06,2025-05-06,,,
+2,2:14,added,definitions,cd7c2a11,power,0,1,2,"[0, 1, 2]",2025-08-28,2025-09-04,2025-09-05,not_conflict,3,not_conflict
+2,2:15,added,definitions,e6838e16,security,5,6,6,"[5, 6]",2025-03-08,2025-03-10,2025-03-10,not_conflict,7,not_conflict
+2,2:16,termination_change,baseline,11de77e8,self_direction,9,10,10,"[9, 10]",2025-10-11,2025-10-14,2025-10-14,abstain,11,abstain
+2,2:16,termination_change,definitions,11de77e8,self_direction,9,10,10,"[9, 10]",2025-10-11,2025-10-14,2025-10-14,not_conflict,11,not_conflict
+2,2:17,boundary_change,baseline,8f83c818,universalism,8,9,10,"[8, 9, 10]",2025-06-25,2025-07-01,2025-07-05,,,
+2,2:17,boundary_change,definitions,8f83c818,universalism,8,9,9,"[8, 9]",2025-06-25,2025-07-01,2025-07-01,abstain,10,abstain
+2,2:18,boundary_change,baseline,d7a0683f,universalism,2,3,3,"[2, 3]",2026-01-08,2026-01-13,2026-01-13,abstain,4,abstain
+2,2:18,boundary_change,definitions,d7a0683f,universalism,0,1,3,"[0, 1, 2, 3]",2025-12-31,2026-01-04,2026-01-13,abstain,4,abstain
+2,2:19,boundary_change,baseline,ed67c9cc,hedonism,1,2,3,"[1, 2, 3]",2025-02-02,2025-02-08,2025-02-09,not_conflict,4,not_conflict
+2,2:19,boundary_change,definitions,ed67c9cc,hedonism,2,3,3,"[2, 3]",2025-02-08,2025-02-09,2025-02-09,abstain,4,abstain
+3,3:1,removed,baseline,110fcd4f,conformity,1,2,2,"[1, 2]",2025-06-25,2025-06-28,2025-06-28,,,
+3,3:2,removed,baseline,11de77e8,conformity,3,4,4,"[3, 4]",2025-09-10,2025-09-12,2025-09-12,not_conflict,5,not_conflict
+3,3:3,removed,baseline,152df7a4,universalism,2,3,3,"[2, 3]",2025-02-24,2025-03-03,2025-03-03,not_conflict,4,not_conflict
+3,3:4,removed,baseline,5fa8b540,universalism,5,6,6,"[5, 6]",2025-03-08,2025-03-09,2025-03-09,not_conflict,7,not_conflict
+3,3:5,removed,baseline,a532dde6,conformity,6,7,7,"[6, 7]",2025-05-27,2025-05-30,2025-05-30,not_conflict,8,not_conflict
+3,3:6,removed,baseline,abf1ce49,security,1,2,3,"[1, 2, 3]",2025-09-13,2025-09-14,2025-09-21,not_conflict,4,not_conflict
+3,3:7,removed,baseline,ad378991,universalism,5,6,6,"[5, 6]",2025-05-05,2025-05-06,2025-05-06,,,
+3,3:8,removed,baseline,f418b74b,hedonism,2,3,3,"[2, 3]",2025-09-11,2025-09-14,2025-09-14,not_conflict,4,not_conflict
+3,3:9,added,definitions,663cb334,conformity,1,2,2,"[1, 2]",2025-05-12,2025-05-14,2025-05-14,not_conflict,3,not_conflict
+3,3:10,added,definitions,742c98d6,universalism,8,9,9,"[8, 9]",2025-10-07,2025-10-08,2025-10-08,not_conflict,10,not_conflict
+3,3:11,added,definitions,9d126412,power,4,5,5,"[4, 5]",2025-10-16,2025-10-20,2025-10-20,not_conflict,6,not_conflict
+3,3:12,added,definitions,e5c9d9e5,power,7,8,8,"[7, 8]",2025-04-14,2025-04-15,2025-04-15,not_conflict,9,not_conflict
+3,3:13,added,definitions,f6180c27,benevolence,4,5,5,"[4, 5]",2025-07-23,2025-07-23,2025-07-23,not_conflict,6,not_conflict
+3,3:14,termination_change,baseline,11de77e8,self_direction,9,10,10,"[9, 10]",2025-10-11,2025-10-14,2025-10-14,abstain,11,abstain
+3,3:14,termination_change,definitions,11de77e8,self_direction,9,10,10,"[9, 10]",2025-10-11,2025-10-14,2025-10-14,not_conflict,11,not_conflict
+3,3:15,boundary_change,baseline,1496159d,universalism,2,3,4,"[2, 3, 4]",2025-07-16,2025-07-21,2025-07-22,abstain,5,abstain
+3,3:15,boundary_change,definitions,1496159d,universalism,2,3,5,"[2, 3, 4, 5]",2025-07-16,2025-07-21,2025-07-22,,,
+3,3:16,boundary_change,baseline,a24b8d8f,universalism,1,2,5,"[1, 2, 3, 4, 5]",2025-06-11,2025-06-14,2025-07-01,not_conflict,6,not_conflict
+3,3:16,boundary_change,definitions,a24b8d8f,universalism,1,2,4,"[1, 2, 3, 4]",2025-06-11,2025-06-14,2025-06-25,abstain,5,abstain
+3,3:17,boundary_change,baseline,abf1ce49,security,8,9,9,"[8, 9]",2025-10-10,2025-10-14,2025-10-14,,,
+3,3:17,boundary_change,definitions,abf1ce49,security,7,8,9,"[7, 8, 9]",2025-10-06,2025-10-10,2025-10-14,,,
+3,3:18,termination_change,baseline,ed67c9cc,hedonism,1,2,3,"[1, 2, 3]",2025-02-02,2025-02-08,2025-02-09,not_conflict,4,not_conflict
+3,3:18,termination_change,definitions,ed67c9cc,hedonism,1,2,3,"[1, 2, 3]",2025-02-02,2025-02-08,2025-02-09,abstain,4,abstain

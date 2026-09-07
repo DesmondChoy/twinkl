@@ -6,6 +6,20 @@ Its experiment outputs and derived conclusions have been cleared. No North
 Star Moment result is retained in this index; the other research records below
 are unchanged.
 
+## Weekly Drift Reviewer Core Value Definitions (2026-09-07)
+
+The [`twinkl-j3k7` comparison](reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md)
+added the selected Core Values' existing `definition` and `core_motivation`
+fields to runtime prompt version `4.0`: Schwartz-based definitions plus
+project-specific elaborations. On 204 Personas and 951 observed weeks, three
+fresh Luna-low Runs per variant changed detected Drift totals from baseline
+v3 **22/22/21** to v4 **19/21/18**. The report includes all ten Core Values and
+exact Drift changes: Run 2 kept two Conformity Drifts while replacing both
+detected Personas. All 5,706 requests completed; 22 invalid reviews remain
+fail-closed. Independent reconstruction matched the reported results. These
+are detected-count and identity findings on synthetic development data;
+accuracy and North Star Moment were not evaluated in this study.
+
 ## Historical Corrected-Split Frontier (Post-d937094 Split)
 
 This table preserves the QWK-led policy used to select the historical frontier.

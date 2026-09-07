@@ -55,6 +55,19 @@ The runtime writes one Weekly Drift Reviewer JSON receipt per reviewed week.
 It also writes the Drift Detector result and structured Weekly Drift Detection
 output as JSON, markdown, and parquet. It renders the Coach Digest prompt.
 
+Prompt version `4.0` supplies the selected Core Values' existing `definition`
+and `core_motivation` fields from
+[`config/schwartz_values.yaml`](../../config/schwartz_values.yaml) in the trusted
+instructions. Together these provide Schwartz-based definitions plus
+project-specific elaborations, including motivation prose from the project's
+Persona-generation configuration. Both fields are retained as evaluated;
+the comparison does not isolate either field's effect. Journal Entry text
+remains separate untrusted input. Other
+generation guidance in that configuration is excluded. The response schema,
+Luna-low settings, and deterministic Drift rule are unchanged. Historical
+experiment renderers that omit the optional definitions block retain their
+prior rendered text; their existing receipts are not rewritten.
+
 The Experience cadence uses Monday-through-Sunday calendar weeks. Its
 due-review caller supplies an `as_of` date resolved in the user's IANA
 timezone, and only finalized weeks whose Sunday is earlier than `as_of` are
