@@ -95,11 +95,16 @@ dependencies.
 Runs `validate_weekly_digest_narrative()` over the exact responses in the public
 scenario sample manifest and reports per-check pass rates against the targets in
 [`explanation_quality_eval.md`](./explanation_quality_eval.md).
+The [September manifest](../../logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json)
+contains the five accepted current key-week responses. All passed Coach Digest
+Validations; no new Coach Digest Evals or human review was performed. Section
+3a documents generation when a future input change requires a new sample.
+The August manifest remains available for reproducing the historical sample.
 
 ```sh
 uv run python -m src.evals.coach_digest_validations \
-  --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json \
-  --out logs/experiments/reports/coach_digest_validations_20260824
+  --manifest logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json \
+  --out logs/experiments/reports/demo_v4_run1_20260907/validations
 ```
 
 - Use `--parquet` only for a separate persisted-output batch.
@@ -138,17 +143,27 @@ those bundles:
 ```sh
 # Dry run — prints the plan, makes no calls:
 .venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-  --personas 11de77e8 23d101f8 8f83c818 988d1a65 02fb94f3 \
-  --reuse-scenario-key-weeks
+  --personas 02fb94f3 5fa8b540 ed67c9cc 8f83c818 2d928d8a \
+  --reuse-scenario-key-weeks \
+  --manifest-out logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json \
+  --parquet-path logs/experiments/reports/demo_v4_run1_20260907/weekly_digests.parquet
 
 # Real run — one paid Coach Digest call per Persona plus validation-guided
 # retries. This command makes zero Weekly Drift Reviewer calls:
 .venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-  --personas 11de77e8 23d101f8 8f83c818 988d1a65 02fb94f3 \
-  --reuse-scenario-key-weeks --execute
+  --personas 02fb94f3 5fa8b540 ed67c9cc 8f83c818 2d928d8a \
+  --reuse-scenario-key-weeks --execute \
+  --manifest-out logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json \
+  --parquet-path logs/experiments/reports/demo_v4_run1_20260907/weekly_digests.parquet
 ```
 
 The runner requires an explicit Persona roster. It has no default roster.
+Use a new output directory and a separate Parquet path for refreshed inputs
+so the August sample, its AI evaluation, and the historical persisted corpus
+remain reproducible. The [completed September generation report](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+records seven Luna-none calls, including two validation-guided retries. Its
+accepted responses and diagnostics are already saved; generation is unnecessary
+for ordinary replay or validation.
 
 Each Coach Digest call writes a separate timestamped
 `*.coach_diagnostic.json` file under the sample report directory. A new attempt
@@ -170,12 +185,12 @@ uses `gpt-5.6-luna` at reasoning effort `low`.
 ```sh
 # Dry run — prints the plan, makes no evaluator calls:
 uv run python -m src.evals.coach_narrative_judge \
-  --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json
+  --manifest logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json
 
 # Real run — paid evaluator calls; writes metrics.json and report.md:
 uv run python -m src.evals.coach_narrative_judge \
-  --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json \
-  --out logs/experiments/reports/coach_digest_evals_20260824 \
+  --manifest logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json \
+  --out logs/experiments/reports/demo_v4_run1_20260907/evals \
   --execute
 ```
 
@@ -187,9 +202,9 @@ evaluates OpenAI-generated responses with Gemini:
 
 ```sh
 uv run python -m src.evals.coach_narrative_judge \
-  --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json \
+  --manifest logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json \
   --judge-provider gemini \
-  --out logs/experiments/reports/coach_digest_evals_cross_provider \
+  --out logs/experiments/reports/demo_v4_run1_20260907/evals_cross_provider \
   --execute
 ```
 

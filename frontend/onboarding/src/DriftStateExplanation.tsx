@@ -465,6 +465,20 @@ export default function DriftStateExplanation({
               && decision.week_start === weekStart
               && decision.week_end === weekEnd,
           );
+          const terminationDecision = drift?.termination_verdict === "not_conflict"
+            && typeof drift.termination_t_index === "number"
+            ? decisionFor(drift.termination_t_index, coreValue)
+            : undefined;
+          const endingEntry = terminationDecision?.verdict === "not_conflict"
+            && terminationDecision.review_status === "ok"
+            ? entriesByIndex.get(terminationDecision.t_index)
+            : undefined;
+          const endedThisWeek = endingEntry !== undefined
+            && endingEntry.date >= weekStart
+            && endingEntry.date <= weekEnd;
+          const otherCurrentDecisions = currentDecisions.filter(
+            (decision) => decision.t_index !== endingEntry?.t_index,
+          );
 
           return (
             <section
@@ -486,9 +500,31 @@ export default function DriftStateExplanation({
                     No active Drift is confirmed at this cutoff. This does not
                     prove a positive change.
                   </p>
-                  {currentDecisions.length > 0 ? (
+                  {endingEntry ? (
+                    <>
+                      <p className="state-change__marker">
+                        {endedThisWeek ? "Drift ended here." : "Earlier Drift ended here."}
+                      </p>
+                      <p className="state-change__summary">
+                        The Weekly Drift Reviewer's Not Conflict decision for the
+                        Journal Entry from {displayEntryDate(endingEntry.date)} ended
+                        the earlier Conflict run. Its Historical Drift Record remains.
+                      </p>
+                      <div className="state-change__evidence-pair">
+                        {renderDecisionEvidence(
+                          endingEntry,
+                          terminationDecision,
+                          `${coreValue}-ending-${endingEntry.t_index}`,
+                        )}
+                      </div>
+                    </>
+                  ) : null}
+                  {endingEntry && otherCurrentDecisions.length > 0 ? (
+                    <p className="state-change__marker">This week's decisions.</p>
+                  ) : null}
+                  {otherCurrentDecisions.length > 0 ? (
                     <div className="state-change__evidence-pair">
-                      {currentDecisions.flatMap((decision) => {
+                      {otherCurrentDecisions.flatMap((decision) => {
                         const entry = entriesByIndex.get(decision.t_index);
                         return entry
                           ? [renderDecisionEvidence(

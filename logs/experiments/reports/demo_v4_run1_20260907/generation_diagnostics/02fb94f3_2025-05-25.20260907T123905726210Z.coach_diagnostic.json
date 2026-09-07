@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "02fb94f3",
+  "week_start": "2025-05-19",
+  "week_end": "2025-05-25",
+  "accepted": true,
+  "failure_stage": null,
+  "failure_details": [],
+  "raw_output": "{\"weekly_mirror\":\"This week held both your own choices and the pull of family life. You described an honest conversation with Tariq\u2014\u201cI almost lied but I was too tired to come up with something so I told him\u201d\u2014while later at dinner you said \u201ceverything was fine\u201d when his mother asked, even as \u201cthe way she...\u201d stayed with you.\",\"tension_explanation\":\"There is no confirmed active tension this week, though the entries leave an open contrast between speaking plainly with Tariq and keeping things contained around his mother. Last week, accepting the logo project before considering your capacity happened alongside Sami not sleeping well and the house feeling demanding; this week\u2019s entries focus more on what you chose to share and what you kept private.\",\"reflective_question\":\"What felt different between being direct with Tariq and saying \u201ceverything was fine\u201d at dinner?\"}",
+  "narrative": {
+    "weekly_mirror": "This week held both your own choices and the pull of family life. You described an honest conversation with Tariq\u2014\u201cI almost lied but I was too tired to come up with something so I told him\u201d\u2014while later at dinner you said \u201ceverything was fine\u201d when his mother asked, even as \u201cthe way she...\u201d stayed with you.",
+    "tension_explanation": "There is no confirmed active tension this week, though the entries leave an open contrast between speaking plainly with Tariq and keeping things contained around his mother. Last week, accepting the logo project before considering your capacity happened alongside Sami not sleeping well and the house feeling demanding; this week\u2019s entries focus more on what you chose to share and what you kept private.",
+    "reflective_question": "What felt different between being direct with Tariq and saying \u201ceverything was fine\u201d at dinner?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I almost lied but I was too tired to come up with something so I told him",
+      "everything was fine",
+      "the way she...",
+      "everything was fine"
+    ],
+    "word_count": 135,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 4 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 135 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:02fb94f3:2025-05-25:attempt_2",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_06594e448961d19a016a9eb0668d4887d09b11a3d2edeaa9b1",
+    "status": "completed",
+    "latency_seconds": 3.4630546669941396,
+    "input_tokens": 1832,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1829,
+    "output_tokens": 185,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 2017,
+    "calculated_cost_usd": 0.00067985,
+    "error_type": null
+  }
+}

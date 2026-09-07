@@ -6,8 +6,7 @@ COPY frontend/onboarding/package.json frontend/onboarding/package-lock.json ./
 RUN npm ci
 
 COPY frontend/onboarding/ ./
-COPY logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json \
-    /app/logs/experiments/reports/coach_digest_sample_20260824/
+COPY src/demo/coach_digest_responses.json /app/src/demo/coach_digest_responses.json
 RUN npm run build
 
 FROM python:3.12-slim
@@ -28,27 +27,25 @@ COPY --chown=twinkl:twinkl config/ ./config/
 COPY --chown=twinkl:twinkl frontend/onboarding/public/scenarios/ \
     ./frontend/onboarding/public/scenarios/
 COPY --chown=twinkl:twinkl \
-    logs/wrangled/persona_23d101f8.md \
+    logs/wrangled/persona_5fa8b540.md \
     logs/wrangled/persona_8f83c818.md \
-    logs/wrangled/persona_988d1a65.md \
+    logs/wrangled/persona_ed67c9cc.md \
     logs/wrangled/persona_02fb94f3.md \
-    logs/wrangled/persona_11de77e8.md \
+    logs/wrangled/persona_2d928d8a.md \
     ./logs/wrangled/
 COPY --chown=twinkl:twinkl \
-    logs/synthetic_data/persona_23d101f8.md \
+    logs/synthetic_data/persona_5fa8b540.md \
     logs/synthetic_data/persona_8f83c818.md \
-    logs/synthetic_data/persona_988d1a65.md \
+    logs/synthetic_data/persona_ed67c9cc.md \
     logs/synthetic_data/persona_02fb94f3.md \
-    logs/synthetic_data/persona_11de77e8.md \
+    logs/synthetic_data/persona_2d928d8a.md \
     ./logs/synthetic_data/
 COPY --chown=twinkl:twinkl \
-    logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/prompts.jsonl \
-    logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/manifest.json \
-    ./logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/
-COPY --chown=twinkl:twinkl \
-    logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/responses_gpt_5_6_luna_low.jsonl \
-    logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/manifest.json \
-    ./logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/
+    logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/requests.jsonl \
+    logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/responses.jsonl \
+    logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/attempts.jsonl \
+    logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/manifest.json \
+    ./logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/
 COPY --from=frontend-build --chown=twinkl:twinkl \
     /app/frontend/onboarding/dist/ ./frontend/onboarding/dist/
 

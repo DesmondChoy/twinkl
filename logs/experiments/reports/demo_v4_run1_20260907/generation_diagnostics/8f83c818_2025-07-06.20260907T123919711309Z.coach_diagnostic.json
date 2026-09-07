@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "8f83c818",
+  "week_start": "2025-06-30",
+  "week_end": "2025-07-06",
+  "accepted": true,
+  "failure_stage": null,
+  "failure_details": [],
+  "raw_output": "{\"weekly_mirror\":\"This week, the pressure around the remittance feature remained present in your words: \u201cI nodded. Again,\u201d after being asked to cut corners on the data validation layer Ravi had already flagged. At dinner, Xiao Yu\u2019s question\u2014\u201cdo I help everyone\u201d\u2014brought that work into a more personal frame, while your answer stopped at \u201cdaddy helps move money from one place to another.\u201d\",\"tension_explanation\":\"It remains unclear how you experienced the gap between what the work is meant to do for people and what happened when you were asked to leave a known concern unresolved. Your notes hold both the wish to \u201cescalate next time\u201d and the repeated decision to nod in the moment, without enough context to know what shaped that choice this week.\",\"reflective_question\":\"What was happening for you in the moment you nodded, and how did Xiao Yu\u2019s question affect the way you saw that decision afterward?\"}",
+  "narrative": {
+    "weekly_mirror": "This week, the pressure around the remittance feature remained present in your words: \u201cI nodded. Again,\u201d after being asked to cut corners on the data validation layer Ravi had already flagged. At dinner, Xiao Yu\u2019s question\u2014\u201cdo I help everyone\u201d\u2014brought that work into a more personal frame, while your answer stopped at \u201cdaddy helps move money from one place to another.\u201d",
+    "tension_explanation": "It remains unclear how you experienced the gap between what the work is meant to do for people and what happened when you were asked to leave a known concern unresolved. Your notes hold both the wish to \u201cescalate next time\u201d and the repeated decision to nod in the moment, without enough context to know what shaped that choice this week.",
+    "reflective_question": "What was happening for you in the moment you nodded, and how did Xiao Yu\u2019s question affect the way you saw that decision afterward?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "escalate next time"
+    ],
+    "word_count": 145,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 145 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:8f83c818:2025-07-06:attempt_2",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_0933587de970f68f016a9eb074a59487d0acf22bff78c8e9f1",
+    "status": "completed",
+    "latency_seconds": 3.297772582998732,
+    "input_tokens": 1260,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1257,
+    "output_tokens": 201,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 1461,
+    "calculated_cost_usd": 0.00055605,
+    "error_type": null
+  }
+}

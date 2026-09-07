@@ -1,0 +1,128 @@
+{
+  "run": "coach_digest_sample_20260824",
+  "command": "TWINKL_COACH_PROVIDER=openai TWINKL_COACH_MODEL=gpt-5.6-luna uv run python scripts/coach/generate_approved_judge_sample.py --personas 02fb94f3 5fa8b540 ed67c9cc 8f83c818 2d928d8a --reuse-scenario-key-weeks --manifest-out logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json --parquet-path logs/experiments/reports/demo_v4_run1_20260907/weekly_digests.parquet --execute (executed in a Python process wrapper setting AsyncOpenAI max_retries=0; see execution.json)",
+  "coach_prompt_version": "4.2",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "none",
+  "weekly_drift_reviewer_calls": 0,
+  "accepted_responses": 5,
+  "generation_api_usage": {
+    "n_calls": 7,
+    "n_calls_with_usage": 7,
+    "input_tokens": 10980,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 10959,
+    "output_tokens": 1335,
+    "total_tokens": 12315,
+    "calculated_cost_usd": 0.00434595,
+    "total_latency_seconds": 25.3830211260356,
+    "mean_latency_seconds": 3.626145875147943,
+    "median_latency_seconds": 3.3434043750166893,
+    "max_latency_seconds": 4.779669959010789
+  },
+  "retry_count": 2,
+  "failed_attempts": [
+    {
+      "persona_id": "02fb94f3",
+      "diagnostic_path": "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/02fb94f3_2025-05-25.20260907T123902218331Z.coach_diagnostic.json",
+      "failure_stage": "coach_validation",
+      "failure_details": [
+        "groundedness: No quoted phrase from selected evidence was detected."
+      ],
+      "raw_output_preserved": true
+    },
+    {
+      "persona_id": "8f83c818",
+      "diagnostic_path": "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/8f83c818_2025-07-06.20260907T123916365076Z.coach_diagnostic.json",
+      "failure_stage": "coach_validation",
+      "failure_details": [
+        "groundedness: No quoted phrase from selected evidence was detected."
+      ],
+      "raw_output_preserved": true
+    }
+  ],
+  "responses": [
+    {
+      "scenario_id": "stable-noor",
+      "persona_id": "02fb94f3",
+      "week_start": "2025-05-19",
+      "week_end": "2025-05-25",
+      "generated_response_path": "logs/experiments/reports/demo_v4_run1_20260907/generated_responses/02fb94f3_2025-05-25.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/stable-noor.json",
+      "weekly_digest_event_id": "stable-noor:event:067",
+      "scenario_bundle_content_sha256": "71c320f8d1f7a4a28eb65a037ecb16674eb60a7aaadd55449f896b1aa1cb9592",
+      "weekly_drift_input_sha256": "7778f53422fe464fa31875cdbf489660680564b60be6731bc75e27034527aa62",
+      "coach_response_sha256": "befe5b3c9ba08769f00cbd068850956657f349d8a98cda3d341c8a03cefa5ac9",
+      "attempt_count": 2,
+      "diagnostic_paths": [
+        "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/02fb94f3_2025-05-25.20260907T123902218331Z.coach_diagnostic.json",
+        "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/02fb94f3_2025-05-25.20260907T123905726210Z.coach_diagnostic.json"
+      ]
+    },
+    {
+      "scenario_id": "active-nisha",
+      "persona_id": "5fa8b540",
+      "week_start": "2025-03-03",
+      "week_end": "2025-03-09",
+      "generated_response_path": "logs/experiments/reports/demo_v4_run1_20260907/generated_responses/5fa8b540_2025-03-09.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/active-nisha.json",
+      "weekly_digest_event_id": "active-nisha:event:042",
+      "scenario_bundle_content_sha256": "c480b75b4f836983574b0a55907a62f787db052e30972cec40cd96781b025801",
+      "weekly_drift_input_sha256": "fcdc5cc71e6950b77d4042c05dae097161837275234a074ed15389f1471982f7",
+      "coach_response_sha256": "b179fb0754fe74d9342c33f9263637abd07f79a42f8d09ce40d0b5f5b7225572",
+      "attempt_count": 1,
+      "diagnostic_paths": [
+        "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/5fa8b540_2025-03-09.20260907T123908974640Z.coach_diagnostic.json"
+      ]
+    },
+    {
+      "scenario_id": "ended-sook-yin",
+      "persona_id": "ed67c9cc",
+      "week_start": "2025-02-10",
+      "week_end": "2025-02-16",
+      "generated_response_path": "logs/experiments/reports/demo_v4_run1_20260907/generated_responses/ed67c9cc_2025-02-16.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/ended-sook-yin.json",
+      "weekly_digest_event_id": "ended-sook-yin:event:038",
+      "scenario_bundle_content_sha256": "293d85e198c0a820c11872f5128d39e36eba2ecca00ef047044394e69f46bf95",
+      "weekly_drift_input_sha256": "50303ce30da83344eca6c0d39c2a0d487fa08f9bef614a0a72fc11b792a49fbc",
+      "coach_response_sha256": "2101f4f7f2742c49579041a540b13bafd41dd7a85e1b2a518d82b7400a39f928",
+      "attempt_count": 1,
+      "diagnostic_paths": [
+        "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/ed67c9cc_2025-02-16.20260907T123913071827Z.coach_diagnostic.json"
+      ]
+    },
+    {
+      "scenario_id": "uncertain-wei-jun",
+      "persona_id": "8f83c818",
+      "week_start": "2025-06-30",
+      "week_end": "2025-07-06",
+      "generated_response_path": "logs/experiments/reports/demo_v4_run1_20260907/generated_responses/8f83c818_2025-07-06.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/uncertain-wei-jun.json",
+      "weekly_digest_event_id": "uncertain-wei-jun:event:064",
+      "scenario_bundle_content_sha256": "5d257049efeac02b3435842dc0910562fc2e6ce57a2cbc11d0610108295f9aee",
+      "weekly_drift_input_sha256": "817c288c5780a4ac8324956ad8154ce212cd7c8ea53fb8d5e0bf9cee18606fe2",
+      "coach_response_sha256": "342bea4f2464d7a8bf8d042a782cbe83e5dc56640f9c09338d1eeb0d4629b504",
+      "attempt_count": 2,
+      "diagnostic_paths": [
+        "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/8f83c818_2025-07-06.20260907T123916365076Z.coach_diagnostic.json",
+        "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/8f83c818_2025-07-06.20260907T123919711309Z.coach_diagnostic.json"
+      ]
+    },
+    {
+      "scenario_id": "two-values-henrik",
+      "persona_id": "2d928d8a",
+      "week_start": "2025-02-17",
+      "week_end": "2025-02-23",
+      "generated_response_path": "logs/experiments/reports/demo_v4_run1_20260907/generated_responses/2d928d8a_2025-02-23.json",
+      "public_scenario_path": "frontend/onboarding/public/scenarios/two-values-henrik.json",
+      "weekly_digest_event_id": "two-values-henrik:event:030",
+      "scenario_bundle_content_sha256": "63f5fb4129cc357df1d68a65793b335c67e375101d50880b14a5e604bd1e3086",
+      "weekly_drift_input_sha256": "0d8ae45ac7a21ac13ed856ee631b1d6d2cadc991bc9cad8bd4af5ba4007ba4e6",
+      "coach_response_sha256": "50b75e84764b1475b379adf7591b0b0e95bed300fe911a10b83c6e3798d46346",
+      "attempt_count": 1,
+      "diagnostic_paths": [
+        "logs/experiments/reports/demo_v4_run1_20260907/generation_diagnostics/2d928d8a_2025-02-23.20260907T123923100411Z.coach_diagnostic.json"
+      ]
+    }
+  ]
+}

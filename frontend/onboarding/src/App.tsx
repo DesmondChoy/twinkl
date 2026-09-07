@@ -23,6 +23,7 @@ import {
 } from "./domain";
 import AssessmentSectionMap from "./AssessmentSectionMap";
 import CoreValueReminder from "./CoreValueReminder";
+import EntryChoice from "./EntryChoice";
 import ExperienceSectionMap, {
   type ExperienceSectionMapView,
 } from "./ExperienceSectionMap";
@@ -41,6 +42,7 @@ import type {
 import {
   clearSession,
   clearChoice,
+  createSession,
   setChoice,
   type OnboardingSession,
 } from "./session";
@@ -370,7 +372,11 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     restart: restartSession,
   } = useSharedSession();
   const [activeDrop, setActiveDrop] = useState<DropTarget>(null);
+  const [entryChoiceOpen, setEntryChoiceOpen] = useState(
+    () => session.stage === "name" && !session.preferred_name.trim(),
+  );
   const [personaPickerOpen, setPersonaPickerOpen] = useState(false);
+  const [pickerReturnsToChoice, setPickerReturnsToChoice] = useState(false);
   const [inspectCalculation, setInspectCalculation] = useState(false);
   const [loadedScenario, setLoadedScenario] = useState<LoadedScenario | null>(
     null,
@@ -524,7 +530,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   useLayoutEffect(() => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-    if (activeView === "experience") {
+    if (activeView === "experience" || entryChoiceOpen) {
       headingRef.current?.focus({ preventScroll: true });
     }
   }, [
@@ -534,6 +540,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     activeView,
     selectedPersonaId,
     personaPickerOpen,
+    entryChoiceOpen,
   ]);
 
   useEffect(() => {
@@ -606,6 +613,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     profileSyncInFlightRef.current = null;
     choicesCompletedAtRef.current = null;
     setPersonaPickerOpen(false);
+    setEntryChoiceOpen(true);
     setLoadedScenario(null);
     setScenarioLoadError(null);
     setDeleteError(null);
@@ -738,6 +746,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     setLoadedScenario(loaded);
     setScenarioLoadError(null);
     setPersonaPickerOpen(false);
+    setPickerReturnsToChoice(false);
     applyScenarioWeek(loaded, 0);
     updateExperience({ replay_progress: null });
     return true;
@@ -760,8 +769,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           requestedWeek,
           loaded.fixture.scenario.weeks.length - 1,
         );
-        setLoadedScenario(loaded);
         applyScenarioWeek(loaded, safeWeek);
+        setLoadedScenario(loaded);
       })
       .catch(() => {
         if (!cancelled) {
@@ -950,20 +959,58 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
         : "Start with Most. Tap the principle that matters most to you in this group."
       : "Now choose Least. Tap the principle that matters least to you in this group.";
 
+  const chooseOnboarding = () => {
+    if (selectedPersonaId) {
+      // Saved Personas have no manual work to carry into a new Profile.
+      profileSyncGenerationRef.current += 1;
+      profileSyncInFlightRef.current = null;
+      updateSession(createSession());
+      setLoadedScenario(null);
+      setScenarioLoadError(null);
+    } else {
+      showView("experience");
+    }
+    setPersonaPickerOpen(false);
+    setEntryChoiceOpen(false);
+  };
+  const replayRestoreStatus = (
+    <div className="stage stage--journal replay-loading" aria-live="polite">
+      <p className="eyebrow">Saved Persona replay</p>
+      <h1 ref={headingRef} tabIndex={-1}>
+        {scenarioLoadError ? "The replay needs another try." : "Restoring the replay…"}
+      </h1>
+      {scenarioLoadError ? (
+        <>
+          <p className="lede">{scenarioLoadError}</p>
+          <button className="button button--primary" type="button"
+            onClick={() => setScenarioLoadAttempt((value) => value + 1)}>
+            Try loading again
+          </button>
+        </>
+      ) : null}
+    </div>
+  );
+
   return (
     <div className={`app-shell app-shell--${
-      activeView === "inspect"
+      entryChoiceOpen
+        ? "entry"
+        : activeView === "inspect"
         ? "inspect"
         : personaPickerOpen
           ? "persona"
           : journalStarted
             ? "journal"
             : session.stage
-    }${selectedPersonaId ? " app-shell--saved-persona" : ""}`}>
+    }${selectedPersonaId && !entryChoiceOpen ? " app-shell--saved-persona" : ""}`}>
       <header className="topbar">
-        <a className="wordmark" href="#main">
+        <a className="wordmark" href="#main" aria-label="Twinkl home"
+          onClick={() => {
+            if (!deletingSession) setEntryChoiceOpen(true);
+          }}>
           twinkl<span>·</span>
         </a>
+        {!entryChoiceOpen ? <>
         <nav className="view-switcher" aria-label="Demo view">
           <button
             className={activeView === "experience" ? "view-switcher__option view-switcher__option--active" : "view-switcher__option"}
@@ -998,6 +1045,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               type="button"
               disabled={deletingSession}
               onClick={() => {
+                setPickerReturnsToChoice(false);
                 setPersonaPickerOpen(true);
                 showView("experience");
               }}
@@ -1018,6 +1066,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 : "Start over"}
           </button>
         </div>
+        </> : null}
       </header>
 
       {persistenceError ? (
@@ -1032,7 +1081,21 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
         </p>
       ) : null}
 
-      {activeView === "experience" ? (
+      {entryChoiceOpen ? (
+        <EntryChoice
+          headingRef={headingRef}
+          hasOnboardingProgress={!selectedPersonaId && (
+            session.stage !== "name" || Boolean(session.preferred_name.trim())
+          )}
+          onDemo={() => {
+            setEntryChoiceOpen(false);
+            setPickerReturnsToChoice(true);
+            setPersonaPickerOpen(true);
+            showView("experience");
+          }}
+          onOnboarding={chooseOnboarding}
+        />
+      ) : activeView === "experience" ? (
         <main
           id="main"
           aria-busy={deletingSession}
@@ -1090,7 +1153,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           {personaPickerOpen ? (
             <PersonaReplayPicker
               currentPersonaId={selectedPersonaId}
-              onBack={() => setPersonaPickerOpen(false)}
+              onBack={() => {
+                setPersonaPickerOpen(false);
+                if (pickerReturnsToChoice) setEntryChoiceOpen(true);
+              }}
               onLoad={activateScenario}
             />
           ) : null}
@@ -1116,28 +1182,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           ) : null}
 
           {!personaPickerOpen && selectedPersonaId &&
-          loadedScenario?.catalogItem.persona_id !== selectedPersonaId ? (
-            <div className="stage stage--journal replay-loading" aria-live="polite">
-              <p className="eyebrow">Saved Persona replay</p>
-              <h1 ref={headingRef} tabIndex={-1}>
-                {scenarioLoadError
-                  ? "The replay needs another try."
-                  : "Restoring the replay…"}
-              </h1>
-              {scenarioLoadError ? (
-                <>
-                  <p className="lede">{scenarioLoadError}</p>
-                  <button
-                    className="button button--primary"
-                    type="button"
-                    onClick={() => setScenarioLoadAttempt((value) => value + 1)}
-                  >
-                    Try loading again
-                  </button>
-                </>
-              ) : null}
-            </div>
-          ) : null}
+          !personaReplayReady ? replayRestoreStatus : null}
 
           {!personaPickerOpen && !selectedPersonaId &&
           session.stage === "name" ? (
@@ -1418,6 +1463,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 updateExperience={updateExperience}
                 inspectRun={inspectRun}
                 headingRef={headingRef}
+                northStarReviewEnabled={!deletingSession && deleteError === null}
               />
             </div>
           ) : null}
@@ -1438,6 +1484,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             )}
           </aside>
           <section className="flow-panel flow-panel--inspect">
+            {selectedPersonaId && !personaReplayReady ? replayRestoreStatus : (
             <InspectView
               events={session.experience.trace_events}
               currentWeekEventIds={
@@ -1510,6 +1557,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               }
               onReturn={() => showView("experience")}
             />
+            )}
           </section>
         </main>
       )}

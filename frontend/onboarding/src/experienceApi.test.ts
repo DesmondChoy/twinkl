@@ -7,6 +7,7 @@ import {
   deleteExperienceSession,
   ExperienceApiError,
   readExperienceTrace,
+  reviewNorthStar,
   submitJournalEntry,
 } from "./experienceApi";
 
@@ -32,6 +33,20 @@ afterEach(() => {
 });
 
 describe("Experience API client", () => {
+  it("reviews a North Star Moment separately from the weekly review", async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse({
+      schema_version: "experience-inspect-v1", operation: "north_star_reviewed",
+      request_id: "north-star-response", status: "ok",
+      session: canonicalInspectFixture.session, event_ids: ["north-star-1"],
+    }));
+    const response = await reviewNorthStar({ sessionId: profile.session_id,
+      expectedRevision: 3, weekStart: "2026-07-06", retry: true });
+    expect(response.operation).toBe("north_star_reviewed");
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({
+      operation: "review_north_star", session_id: profile.session_id,
+      expected_revision: 3, week_start: "2026-07-06", retry: true,
+    });
+  });
   it("rebuilds a factual resume state after Core Value reselection", async () => {
     const resumeState = await buildProfileReselectionResumeState(
       profile,

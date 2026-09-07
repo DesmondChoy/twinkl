@@ -76,6 +76,7 @@ def _validation_error(payload: Any) -> JSONResponse:
         "delete_session",
         "load_scenario",
         "read_trace",
+        "review_north_star",
     }:
         operation = "create_session"
     body = {

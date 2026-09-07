@@ -113,9 +113,13 @@ function keyMomentState(
 }
 
 function keyMomentIndexFor(
-  role: ScenarioCatalogItem["role"],
+  item: ScenarioCatalogItem,
   weeks: LoadedScenario["fixture"]["scenario"]["weeks"],
 ): number {
+  if (item.key_week_start != null) {
+    return weeks.findIndex((week) => week.week_start === item.key_week_start);
+  }
+  const role = item.role;
   if (role === "drift_ended") {
     return weeks.findIndex(
       (week, index) =>
@@ -184,6 +188,7 @@ export function PersonaReplayPicker({
   onLoad,
 }: PersonaReplayPickerProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const replayRequestGenerationRef = useRef(0);
   const [catalog, setCatalog] = useState<ScenarioCatalog | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -205,18 +210,23 @@ export function PersonaReplayPicker({
     headingRef.current?.focus({ preventScroll: true });
     return () => {
       cancelled = true;
+      replayRequestGenerationRef.current += 1;
     };
   }, [catalogAttempt, currentPersonaId]);
 
   const startReplay = async (selected: ScenarioCatalogItem) => {
     if (loadingId !== null || selected.persona_id === currentPersonaId) return;
+    const generation = ++replayRequestGenerationRef.current;
     setLoadingId(selected.scenario_id);
     setError(null);
     try {
-      if (!onLoad(await loadSavedScenario(selected))) {
+      const loaded = await loadSavedScenario(selected);
+      if (generation !== replayRequestGenerationRef.current) return;
+      if (!onLoad(loaded)) {
         setLoadingId(null);
       }
     } catch {
+      if (generation !== replayRequestGenerationRef.current) return;
       setError("This saved Persona replay could not be loaded.");
       setLoadingId(null);
     }
@@ -307,8 +317,9 @@ export function PersonaReplayPicker({
             ))}
           </ul>
           <p>
-            Start with Lukas for independent Core Value states, Wei Jun for
-            Active Drift, or Marc for a Historical Drift Record that ends.
+            {catalog.scenarios.map((item) =>
+              `${item.persona_name}: ${personaLesson(item).copy}`
+            ).join(" ")}
           </p>
         </details>
       ) : null}
@@ -425,21 +436,18 @@ export function PersonaReplayExperience({
   const resultVisible = revealedSteps.some((step) => step.kind === "result");
   const isFirst = safeWeekIndex === 0;
   const isLast = safeWeekIndex === weeks.length - 1;
-  const preferredKeyIndex = keyMomentIndexFor(loaded.catalogItem.role, weeks);
+  const preferredKeyIndex = keyMomentIndexFor(loaded.catalogItem, weeks);
   const keyMomentIndex = preferredKeyIndex >= 0
     ? preferredKeyIndex
     : weeks.length - 1;
-  const inspectEventId =
-    [...experience.trace_events]
-      .reverse()
-      .find((event) => event.event_type === "weekly_coach_generated")?.event_id
-    ?? [...experience.trace_events]
-      .reverse()
-      .find((event) => event.event_type === "drift_detected")?.event_id
-    ?? [...experience.trace_events]
-      .reverse()
-      .find((event) => event.event_type === "weekly_digest_built")?.event_id
-    ?? null;
+  const currentWeekEventIds = new Set(currentWeek.event_ids);
+  const currentWeekEvents = [...experience.trace_events].reverse().filter(
+    (event) => currentWeekEventIds.has(event.event_id),
+  );
+  const inspectEventId = [
+    "north_star_reviewed", "weekly_coach_generated", "drift_detected", "weekly_digest_built",
+  ].map((eventType) => currentWeekEvents.find((event) => event.event_type === eventType))
+    .find((event) => event !== undefined)?.event_id ?? null;
 
   useEffect(() => {
     setPlaying(false);

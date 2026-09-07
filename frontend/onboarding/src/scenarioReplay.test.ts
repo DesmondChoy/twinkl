@@ -1,12 +1,15 @@
-import activeReplayJson from "../public/scenarios/active-wei-jun.json";
-import recoveredReplayJson from "../public/scenarios/recovered-marc.json";
+import activeReplayJson from "../public/scenarios/active-nisha.json";
+import recoveredReplayJson from "../public/scenarios/ended-sook-yin.json";
 import scenarioCatalogJson from "../public/scenarios/index.json";
-import stableReplayJson from "../public/scenarios/stable-meera.json";
-import twoValuesReplayJson from "../public/scenarios/two-values-lukas.json";
-import uncertainReplayJson from "../public/scenarios/uncertain-noor.json";
-import judgeSampleManifest from "../../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json";
+import stableReplayJson from "../public/scenarios/stable-noor.json";
+import twoValuesReplayJson from "../public/scenarios/two-values-henrik.json";
+import uncertainReplayJson from "../public/scenarios/uncertain-wei-jun.json";
+import savedCoachResponses from "../../../src/demo/coach_digest_responses.json";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { validateExperienceInspectFixture } from "./demoContracts";
+import { currentNorthStarEvent, displayableNorthStarSelection, northStarProfileRef } from "./northStar";
+import { BWS_SETS } from "./domain";
+import { createExperienceState, createSession, parseSession, persistSession, SESSION_STORAGE_KEY, type OnboardingSession } from "./session";
 import {
   loadScenarioCatalog,
   projectScenarioWeek,
@@ -16,6 +19,16 @@ import {
 afterEach(() => {
   vi.unstubAllGlobals();
 });
+
+function canonicalJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value !== null && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record).sort().map((key) =>
+      `${JSON.stringify(key)}:${canonicalJson(record[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
 
 describe("saved persona replay", () => {
   const fixture = validateExperienceInspectFixture(activeReplayJson);
@@ -75,7 +88,7 @@ describe("saved persona replay", () => {
     expect(final.session.journal_entries).toEqual(
       fixture.scenario.journal_entries,
     );
-    expect(final.session.drift_result?.delivery_state).toBe("active_drift");
+    expect(final.session.drift_result?.delivery_state).toBe("no_active_drift");
   });
 
   it("is deterministic and rejects week boundaries", () => {
@@ -90,44 +103,86 @@ describe("saved persona replay", () => {
     ).toThrow("Unknown saved replay week");
   });
 
+  it("preserves strict microsecond chronology for same-day North Star Moment sources", async () => {
+    const saved = validateExperienceInspectFixture(recoveredReplayJson);
+    const projected = projectScenarioWeek(saved, 1);
+    const profile = saved.scenario.profile;
+    const result = currentNorthStarEvent({
+      events: projected.events, profile, profileRef: await northStarProfileRef(profile),
+      weeklyDigest: projected.session.weekly_digest, journalEntries: projected.session.journal_entries,
+    })!;
+    const display = (candidate: typeof result) => displayableNorthStarSelection(
+      candidate, profile, projected.session.journal_entries, projected.session.drift_result!,
+    );
+    expect(result.record.mode).toBe("reflection");
+    expect(display(result)).toEqual(result.record.selected);
+    const source = result.record.sources.find((item) => item.entry_id === result.record.selected!.entry_id)!;
+    const availableAt = source.available_at as string;
+    expect(display({ ...result, record: { ...result.record, onset_available_at: availableAt } })).toBeNull();
+
+    const laterSource = structuredClone(result);
+    laterSource.record.sources[0].available_at = "2025-02-02T00:00:00.000004Z";
+    expect(display(laterSource)).toBeNull();
+
+    const beyondCutoff = structuredClone(result);
+    beyondCutoff.record.cutoff_at = "2025-02-02T00:00:00.000001Z";
+    beyondCutoff.record.sources[0].available_at = "2025-02-02T00:00:00.000002Z";
+    expect(display(beyondCutoff)).toBeNull();
+  });
+
   it.each([
-    ["two-values-lukas", twoValuesReplayJson, "2025-10-13"],
-    ["stable-meera", stableReplayJson, "2025-09-15"],
-    ["active-wei-jun", activeReplayJson, "2025-06-30"],
-    ["recovered-marc", recoveredReplayJson, "2025-03-17"],
-    ["uncertain-noor", uncertainReplayJson, "2025-04-14"],
+    ["two-values-henrik", twoValuesReplayJson],
+    ["stable-noor", stableReplayJson],
+    ["active-nisha", activeReplayJson],
+    ["ended-sook-yin", recoveredReplayJson],
+    ["uncertain-wei-jun", uncertainReplayJson],
   ])(
-    "reveals the evaluated Coach Digest only in the %s key week",
-    (scenarioId, scenarioJson, weekStart) => {
+    "projects one fresh source-bound Coach Digest only in the %s key week",
+    async (scenarioId, scenarioJson) => {
       const scenarioFixture = validateExperienceInspectFixture(scenarioJson);
+      const item = validateScenarioCatalog(scenarioCatalogJson).scenarios.find(
+        (candidate) => candidate.scenario_id === scenarioId,
+      )!;
+      const savedResponse = Object.values(savedCoachResponses.responses).find(
+        (response) => response.scenario_id === scenarioId && response.week_start === item.key_week_start,
+      )!;
+      expect(savedResponse).toBeTruthy();
       const keyWeekIndex = scenarioFixture.scenario.weeks.findIndex(
-        (week) => week.week_start === weekStart,
+        (week) => week.week_start === item.key_week_start,
       );
-      const manifestEntry = judgeSampleManifest.find(
-        (entry) => entry.provenance.scenario_id === scenarioId,
-      );
-
-      expect(keyWeekIndex).toBeGreaterThanOrEqual(0);
-      expect(manifestEntry).toBeTruthy();
-      for (let index = 0; index < keyWeekIndex; index += 1) {
-        const earlier = projectScenarioWeek(scenarioFixture, index);
-        expect(earlier.session.weekly_digest?.coach_narrative).toBeNull();
-        expect(JSON.stringify(earlier)).not.toContain(
-          manifestEntry!.narrative.weekly_mirror,
-        );
+      for (let index = 0; index < scenarioFixture.scenario.weeks.length; index += 1) {
+        const projected = projectScenarioWeek(scenarioFixture, index);
+        const currentEventIds = new Set(scenarioFixture.scenario.weeks[index].event_ids);
+        const coachEvents = projected.events.filter((event) => event.event_type === "weekly_coach_generated");
+        const currentCoachEvents = coachEvents.filter((event) => currentEventIds.has(event.event_id));
+        const digestEvent = projected.events.find((event) =>
+          currentEventIds.has(event.event_id)
+          && event.event_type === "weekly_digest_built");
+        expect(coachEvents).toHaveLength(index < keyWeekIndex ? 0 : 1);
+        if (index === keyWeekIndex) {
+          expect(projected.session.weekly_digest?.coach_narrative).toEqual(savedResponse.narrative);
+          expect(digestEvent?.details.coach_unavailable_reason).toBeNull();
+          expect(currentCoachEvents).toHaveLength(1);
+          expect(currentCoachEvents[0]).toMatchObject({
+            source: "saved_replay", model_contract: savedResponse.generation.model_contract,
+            prompt: savedResponse.generation.prompt, raw_response: savedResponse.generation.raw_output,
+            details: { narrative: savedResponse.narrative },
+          });
+          const input = Object.fromEntries(Object.entries(projected.session.weekly_digest!)
+            .filter(([key]) => !["coach_narrative", "validation"].includes(key)));
+          const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(canonicalJson(input)));
+          expect(Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, "0")).join(""))
+            .toBe(savedResponse.generation.weekly_drift_input_sha256);
+          expect(digestEvent?.event_id).toBe(savedResponse.generation.weekly_digest_event_id);
+        } else {
+          expect(projected.session.weekly_digest?.coach_narrative).toBeNull();
+          expect(currentCoachEvents).toHaveLength(0);
+          expect(typeof digestEvent?.details.coach_unavailable_reason).toBe("string");
+          if (index < keyWeekIndex) {
+            expect(JSON.stringify(projected)).not.toContain(savedResponse.narrative.weekly_mirror);
+          }
+        }
       }
-
-      const keyWeek = projectScenarioWeek(scenarioFixture, keyWeekIndex);
-      expect(keyWeek.session.weekly_digest?.coach_narrative).toEqual(
-        manifestEntry!.narrative,
-      );
-      const coachEvents = keyWeek.events.filter(
-        (event) => event.event_type === "weekly_coach_generated",
-      );
-      expect(coachEvents).toHaveLength(1);
-      expect(coachEvents[0].details.narrative).toEqual(
-        manifestEntry!.narrative,
-      );
     },
   );
 
@@ -143,5 +198,60 @@ describe("saved persona replay", () => {
     expect(projectScenarioWeek(scenarioFixture, 0).session).toEqual(
       scenarioFixture.session,
     );
+  });
+
+  it.each([
+    ["Nisha", activeReplayJson], ["Lim Sook Yin", recoveredReplayJson],
+    ["Noor", stableReplayJson], ["Henrik", twoValuesReplayJson],
+    ["Wei Jun", uncertainReplayJson],
+  ])("preserves %s completed experiment evidence without future-week leakage", async (_name, scenarioJson) => {
+    const saved = validateExperienceInspectFixture(scenarioJson);
+    const profile = saved.scenario.profile;
+    const profileRef = await northStarProfileRef(profile);
+    for (let index = 0; index < saved.scenario.weeks.length; index += 1) {
+      const projected = projectScenarioWeek(saved, index);
+      const result = currentNorthStarEvent({
+        events: projected.events, profile, profileRef,
+        weeklyDigest: projected.session.weekly_digest,
+        journalEntries: projected.session.journal_entries,
+      });
+      expect(result, `${saved.scenario.scenario_id} week ${index + 1}`).not.toBeNull();
+      expect(result!.event.source).toBe("saved_replay");
+      expect(result!.record.experiment).toMatchObject({
+        source_path: "logs/experiments/reports/north_star_v4_run1_20260907/nsm_experiment.json",
+        method: "full_history",
+        case_id: `${saved.scenario.persona_id}:week:${saved.scenario.weeks[index].week_start}`,
+      });
+      const selection = displayableNorthStarSelection(result, profile,
+        projected.session.journal_entries, projected.session.drift_result!);
+      expect(selection).toEqual(result!.record.selected);
+      expect(projected.session.weekly_digest).not.toBeNull();
+      const futureEventIds = new Set(saved.scenario.weeks.slice(index + 1).flatMap((week) => week.event_ids));
+      expect(projected.events.some((event) => futureEventIds.has(event.event_id))).toBe(false);
+    }
+    const finalIndex = saved.scenario.weeks.length - 1;
+    const final = projectScenarioWeek(saved, finalIndex);
+    const session: OnboardingSession = {
+      ...createSession(), user_id: profile.user_id, session_id: profile.session_id,
+      preferred_name: profile.preferred_name ?? "Friend", started_at: profile.started_at,
+      stage: "complete", set_index: BWS_SETS.length - 1,
+      set_order: BWS_SETS.map((_, index) => index),
+      displayed_orders: BWS_SETS.map((set) => [...profile.bws_responses.find((response) => response.set_number === set.setNumber)!.item_order_shown]),
+      responses: profile.bws_responses,
+      selected_top_values: profile.value_profile.top_values.length > 2 ? [...profile.top_values] : [],
+      confirmed_profile: profile,
+      experience: {
+        ...createExperienceState(), journal_started: true, revision: final.session.revision,
+        journal_entries: final.session.journal_entries, nudges: final.session.nudges,
+        selected_persona_id: saved.scenario.persona_id, selected_week: finalIndex,
+        weekly_reviewer_decisions: final.session.weekly_reviewer_decisions,
+        drift_result: final.session.drift_result, weekly_digest: final.session.weekly_digest,
+        run_state: "complete", trace_events: final.events, trace_event_ids: final.session.trace_event_ids,
+      },
+    };
+    expect(persistSession(session)).toBe(true);
+    const restored = parseSession(localStorage.getItem(SESSION_STORAGE_KEY));
+    expect(restored?.experience.trace_events).toEqual(final.events);
+    expect(restored?.confirmed_profile).toEqual(profile);
   });
 });

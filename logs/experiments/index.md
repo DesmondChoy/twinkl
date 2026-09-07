@@ -1,5 +1,34 @@
 # VIF Experiment Index
 
+**Latest NSM results to use:** the [targeted Weekly Drift v4 Run 1 update](reports/north_star_v4_run1_20260907/report.md), completed on 7 September 2026, is the current basis for NSM reporting and method comparisons. It supersedes the original v2 repeat-1 results for current reporting; the original record remains historical evidence. These results retain prior observations and remain AI assessments of synthetic histories.
+
+The original [North Star Moment 501-week AI comparison](../../docs/north_star/nsm_experiment_methodology.md#completed-results)
+is complete using Weekly Drift v2 repeat 1. The separate
+[targeted v4 Run 1 update](reports/north_star_v4_run1_20260907/report.md)
+is also complete: both methods reassessed 38 affected cases and retained
+observations for 463 unchanged cases, preserving the original 105 Personas,
+501 weeks, 81/24 partition, and historical record. Full eligible history still
+achieved higher Card precision and Opportunity recall than Nomic top-three
+retrieval in both partitions. These are AI assessments of synthetic histories
+with retained observations; human review and saved-card export remain pending.
+Incremental costs and failures are reported separately from historical costs
+and latency. See the
+[NSM experiment log](north_star_moment.md) for the evidence lineage.
+
+## Weekly Drift Reviewer Core Value Definitions (2026-09-07)
+
+The [`twinkl-j3k7` comparison](reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md)
+added the selected Core Values' existing `definition` and `core_motivation`
+fields to runtime prompt version `4.0`: Schwartz-based definitions plus
+project-specific elaborations. On 204 Personas and 951 observed weeks, three
+fresh Luna-low Runs per variant changed detected Drift totals from baseline
+v3 **22/22/21** to v4 **19/21/18**. The report includes all ten Core Values and
+exact Drift changes: Run 2 kept two Conformity Drifts while replacing both
+detected Personas. All 5,706 requests completed; 22 invalid reviews remain
+fail-closed. Independent reconstruction matched the reported results. These
+are detected-count and identity findings on synthetic development data;
+accuracy and North Star Moment were not evaluated in this study.
+
 ## Historical Corrected-Split Frontier (Post-d937094 Split)
 
 This table preserves the QWK-led policy used to select the historical frontier.

@@ -66,9 +66,19 @@ user-perceived-accuracy checks for those two outputs.
 
 ### Current Result Status
 
+The [September replay refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+contains five accepted responses for the current v4 Run 1 Persona key weeks.
+All passed Coach Digest Validations. Luna at reasoning effort `none`, using
+prompt `4.2`, made seven generation calls, including retries for Noor and Wei
+Jun. No new Coach Digest Evals or human review was performed, so these
+responses have no new semantic-quality scores.
+
 The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
-contains one key-week response for each deployed Persona. The evaluation
-manifest reads the exact responses from the rebuilt public scenario bundles.
+preserves one key-week response for each Persona deployed in August. Its
+evaluation manifest records the exact responses from those scenario bundles.
+The current v4 Run 1 replay uses a revised Persona roster and accepts saved
+Coach Digest responses only when their input hashes match the current Weekly
+Drift Detection output. Historical scores do not transfer to new responses.
 All five responses passed groundedness, non-circularity, raw value leakage,
 current-state claims, and length checks. The [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
 scored mean correctness `4.80`, specificity `5.00`, non-prescriptive tone
@@ -157,8 +167,8 @@ different from the plan you had in mind?"
 - Avoids prescriptive or judgmental language
 
 The approved path lives in `src/coach/weekly_drift_runtime.py` and
-`src/coach/weekly_digest.py`. The five saved Persona responses have completed
-Coach Digest Validations and same-model Coach Digest Evals. Provider-separated
+`src/coach/weekly_digest.py`. The five historical August Persona responses
+completed Coach Digest Validations and same-model Coach Digest Evals. Provider-separated
 AI review and Drift/control comparison are supported but have no committed
 paid result. User-study calibration remains pending.
 

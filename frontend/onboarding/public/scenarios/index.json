@@ -3,85 +3,9 @@
   "evidence_source": "ai_reviewed_synthetic_development",
   "scenarios": [
     {
-      "scenario_id": "stable-meera",
-      "file": "stable-meera.json",
-      "content_sha256": "07e8d1f2fb5def74747797b0b559d9a23765983f28ce62fef89c8868bb249d8a",
-      "persona_id": "23d101f8",
-      "persona_name": "Meera Krishnamurthy",
-      "age": "45-54",
-      "profession": "Teacher",
-      "culture": "South Asian",
-      "core_values": [
-        "achievement",
-        "security"
-      ],
-      "role": "no_active_drift",
-      "progression": [
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift"
-      ],
-      "summary": "A calm baseline with meaningful nudges and no confirmed Drift.",
-      "recommended": false
-    },
-    {
-      "scenario_id": "active-wei-jun",
-      "file": "active-wei-jun.json",
-      "content_sha256": "4e8143a38f2334d742909575420b9f2e84f75ac6b08fc4437703470f6dff68ab",
-      "persona_id": "8f83c818",
-      "persona_name": "Wei Jun Chen",
-      "age": "35-44",
-      "profession": "Software Engineer",
-      "culture": "East Asian",
-      "core_values": [
-        "universalism"
-      ],
-      "role": "active_drift",
-      "progression": [
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "active_drift"
-      ],
-      "summary": "The clearest two-consecutive-Conflict path into active Drift.",
-      "recommended": false
-    },
-    {
-      "scenario_id": "recovered-marc",
-      "file": "recovered-marc.json",
-      "content_sha256": "172dc747a8e6e366c43838028387fa3835e7aecda04f01cfc52d27a85bc72e0d",
-      "persona_id": "988d1a65",
-      "persona_name": "Marc Vandenberghe",
-      "age": "45-54",
-      "profession": "Manager",
-      "culture": "Western European",
-      "core_values": [
-        "power"
-      ],
-      "role": "drift_ended",
-      "progression": [
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift"
-      ],
-      "summary": "A compact active-to-no-active Drift progression.",
-      "recommended": false
-    },
-    {
-      "scenario_id": "uncertain-noor",
-      "file": "uncertain-noor.json",
-      "content_sha256": "b2a1bbdc976819b30007e233396d2efe56842891affd3a312491b79bc092349b",
+      "scenario_id": "stable-noor",
+      "file": "stable-noor.json",
+      "content_sha256": "71c320f8d1f7a4a28eb65a037ecb16674eb60a7aaadd55449f896b1aa1cb9592",
       "persona_id": "02fb94f3",
       "persona_name": "Noor Haddad",
       "age": "18-24",
@@ -91,45 +15,116 @@
         "self_direction",
         "tradition"
       ],
-      "role": "insufficient_evidence",
+      "role": "no_active_drift",
       "progression": [
-        "insufficient_evidence",
         "no_active_drift",
-        "active_drift",
+        "no_active_drift",
+        "no_active_drift",
         "no_active_drift",
         "no_active_drift",
         "no_active_drift"
       ],
-      "summary": "A nuanced case where the Weekly Drift Reviewer does not overclaim.",
-      "recommended": false
+      "summary": "A baseline with no detected Drift across the saved history.",
+      "recommended": false,
+      "key_week_start": "2025-05-19"
     },
     {
-      "scenario_id": "two-values-lukas",
-      "file": "two-values-lukas.json",
-      "content_sha256": "147af300e880dd258df5365f37111838a952abd0b1d56578c29dc9297f0a4dad",
-      "persona_id": "11de77e8",
-      "persona_name": "Lukas Vermeer",
-      "age": "25-34",
+      "scenario_id": "active-nisha",
+      "file": "active-nisha.json",
+      "content_sha256": "c480b75b4f836983574b0a55907a62f787db052e30972cec40cd96781b025801",
+      "persona_id": "5fa8b540",
+      "persona_name": "Nisha Agarwal",
+      "age": "18-24",
+      "profession": "Teacher",
+      "culture": "South Asian",
+      "core_values": [
+        "universalism"
+      ],
+      "role": "active_drift",
+      "progression": [
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "active_drift",
+        "no_active_drift"
+      ],
+      "summary": "Recommended: a complete progression into and out of Active Drift.",
+      "recommended": true,
+      "key_week_start": "2025-03-03"
+    },
+    {
+      "scenario_id": "ended-sook-yin",
+      "file": "ended-sook-yin.json",
+      "content_sha256": "293d85e198c0a820c11872f5128d39e36eba2ecca00ef047044394e69f46bf95",
+      "persona_id": "ed67c9cc",
+      "persona_name": "Lim Sook Yin",
+      "age": "55+",
+      "profession": "Parent (Stay-at-home)",
+      "culture": "East Asian",
+      "core_values": [
+        "hedonism"
+      ],
+      "role": "drift_ended",
+      "progression": [
+        "no_active_drift",
+        "active_drift",
+        "no_active_drift",
+        "no_active_drift"
+      ],
+      "summary": "A closed Hedonism Drift episode with its supporting Journal Entries.",
+      "recommended": false,
+      "key_week_start": "2025-02-10"
+    },
+    {
+      "scenario_id": "uncertain-wei-jun",
+      "file": "uncertain-wei-jun.json",
+      "content_sha256": "5d257049efeac02b3435842dc0910562fc2e6ce57a2cbc11d0610108295f9aee",
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "age": "35-44",
       "profession": "Software Engineer",
+      "culture": "East Asian",
+      "core_values": [
+        "universalism"
+      ],
+      "role": "insufficient_evidence",
+      "progression": [
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "insufficient_evidence",
+        "insufficient_evidence"
+      ],
+      "summary": "A failed Weekly Drift review prevents an unsupported Drift claim.",
+      "recommended": false,
+      "key_week_start": "2025-06-30"
+    },
+    {
+      "scenario_id": "two-values-henrik",
+      "file": "two-values-henrik.json",
+      "content_sha256": "63f5fb4129cc357df1d68a65793b335c67e375101d50880b14a5e604bd1e3086",
+      "persona_id": "2d928d8a",
+      "persona_name": "Henrik Larsson",
+      "age": "45-54",
+      "profession": "Entrepreneur",
       "culture": "Western European",
       "core_values": [
-        "self_direction",
-        "conformity"
+        "stimulation",
+        "security"
       ],
       "role": "two_core_values",
       "progression": [
         "no_active_drift",
         "no_active_drift",
+        "insufficient_evidence",
         "no_active_drift",
         "no_active_drift",
-        "active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
-        "insufficient_evidence"
+        "no_active_drift"
       ],
-      "summary": "Recommended: the fullest walkthrough and clearest state independence.",
-      "recommended": true
+      "summary": "Two Core Values with different current states at the same cutoff.",
+      "recommended": false,
+      "key_week_start": "2025-02-17"
     }
   ]
 }

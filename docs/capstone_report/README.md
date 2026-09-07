@@ -8,7 +8,8 @@ supporting capstone report materials. Submitted milestone files remain under
 
 - [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
   the Phase 2 Technical Paper
-- [`capstone_project_report.pdf`](capstone_project_report.pdf) — rendered PDF
+- Rendered report PDF — unavailable following the NSM evaluation reset;
+  regenerate and visually verify it after a later approved paper update
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
 - [`images/`](images/) — report figures, interface captures, and evaluation
@@ -18,13 +19,15 @@ supporting capstone report materials. Submitted milestone files remain under
 
 ## Report Controls
 
-- **Document status:** Maintained Phase 2 Technical Paper source and rendered PDF
+- **Document status:** Maintained Phase 2 Technical Paper source; rendered PDF
+  unavailable pending a later approved paper update
 - **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
 - **Product source:** [`../prd.md`](../prd.md)
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
-- **Evidence date:** 2026-08-31
+- **Evidence date:** Core paper 2026-08-31; NSM evaluation reset 2026-09-06,
+  with methodology review and the first study pending
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -37,6 +40,8 @@ supporting capstone report materials. Submitted milestone files remain under
 Run the following commands from the repository root:
 
 ```sh
+source .venv/bin/activate
+export UV_CACHE_DIR=/tmp/twinkl-uv-cache
 MPLCONFIGDIR=/tmp/twinkl-matplotlib \
   uv run python scripts/capstone/generate_report_figures.py
 quarto render docs/capstone_report/capstone_project_report.md --to pdf
@@ -53,8 +58,17 @@ The rendered report cites the committed
 [Coach Digest Validations](../../logs/experiments/reports/coach_digest_validations_20260824/report.md),
 and [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
 for the five saved Persona key weeks. This result is same-model AI review. The
-independent-provider and Drift/control tooling has no committed paid result and
+independent-provider Coach Digest and Drift/control tooling has no committed paid result and
 does not change the report's evidence claim.
+
+Prior NSM results, derived insights, and evaluation artifacts have been removed
+from the current experiment record. The [NSM experiment
+methodology](../north_star/nsm_experiment_methodology.md) records the reset;
+its design remains pending review before the first study in the new record.
+Sections 3.9 and 4.5 and Appendix C preserve the implemented feature's scope
+without carrying forward evaluation or browser-success claims. The rendered
+report PDF has been removed because it contained superseded NSM results.
+Regenerate it and inspect every page after a later approved paper update.
 
 ## Submission Checks
 

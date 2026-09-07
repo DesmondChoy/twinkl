@@ -1,0 +1,242 @@
+{
+  "persona_id": "2d928d8a",
+  "persona_name": "Henrik Larsson",
+  "week_start": "2025-02-17",
+  "week_end": "2025-02-23",
+  "response_mode": "insufficient_evidence",
+  "mode_source": "drift_detector",
+  "mode_rationale": "A recent Conflict run lacks enough evidence for a current claim.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "stimulation",
+    "security"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "security": "no_active_drift",
+    "stimulation": "insufficient_evidence"
+  },
+  "drift_details": {
+    "security": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 4,
+      "last_date": "2025-02-22"
+    },
+    "stimulation": {
+      "state": "insufficient_evidence",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "ok",
+      "last_t_index": 4,
+      "last_date": "2025-02-22"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "stimulation",
+      "previous_week_start": "2025-02-10",
+      "previous_week_end": "2025-02-16",
+      "current_week_start": "2025-02-17",
+      "current_week_end": "2025-02-23",
+      "previous_state": "no_active_drift",
+      "current_state": "insufficient_evidence",
+      "change": "evidence_became_insufficient",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-13",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Call with the Lisbon founder again today, third one this week. She pitched the expansion roadmap and honestly it is ambitious but not reckless. I ran the downside scenarios on a napkin while she was talking, which is a habit..."
+        },
+        {
+          "date": "2025-02-14",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Valentine's dinner last night, the Italian place near Erasmusbrug. We had a good time, actually managed to not talk about business for most of it. Ingrid brought up taking a trip to Gotland this summer to visit her mother, maybe..."
+        },
+        {
+          "date": "2025-02-15",
+          "t_index": 3,
+          "direction": "misaligned",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "I am going to pass on the Lisbon deal."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-02-22",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "One of our portfolio companies, the cold storage outfit in Antwerp, just lost their anchor client. Found out this morning from a panicked call from the founder who I could barely understand because he was speaking so fast. This is..."
+        }
+      ]
+    },
+    {
+      "core_value": "security",
+      "previous_week_start": "2025-02-10",
+      "previous_week_end": "2025-02-16",
+      "current_week_start": "2025-02-17",
+      "current_week_end": "2025-02-23",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-13",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Call with the Lisbon founder again today, third one this week. She pitched the expansion roadmap and honestly it is ambitious but not reckless. I ran the downside scenarios on a napkin while she was talking, which is a habit..."
+        },
+        {
+          "date": "2025-02-14",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Valentine's dinner last night, the Italian place near Erasmusbrug. We had a good time, actually managed to not talk about business for most of it. Ingrid brought up taking a trip to Gotland this summer to visit her mother, maybe..."
+        },
+        {
+          "date": "2025-02-15",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Saturday morning, sitting with coffee in the kitchen. The house is quiet. Ingrid went to the market early which means she is buying too much cheese again and I will pretend to be surprised when she gets back. I made..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-02-22",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "One of our portfolio companies, the cold storage outfit in Antwerp, just lost their anchor client. Found out this morning from a panicked call from the founder who I could barely understand because he was speaking so fast. This is..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [
+    "stimulation"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-13",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Call with the Lisbon founder again today, third one this week. She pitched the expansion roadmap and honestly it is ambitious but not reckless. I ran the downside scenarios on a napkin while she was talking, which is a habit..."
+    },
+    {
+      "date": "2025-02-13",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Call with the Lisbon founder again today, third one this week. She pitched the expansion roadmap and honestly it is ambitious but not reckless. I ran the downside scenarios on a napkin while she was talking, which is a habit..."
+    },
+    {
+      "date": "2025-02-14",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Valentine's dinner last night, the Italian place near Erasmusbrug. We had a good time, actually managed to not talk about business for most of it. Ingrid brought up taking a trip to Gotland this summer to visit her mother, maybe..."
+    },
+    {
+      "date": "2025-02-14",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Valentine's dinner last night, the Italian place near Erasmusbrug. We had a good time, actually managed to not talk about business for most of it. Ingrid brought up taking a trip to Gotland this summer to visit her mother, maybe..."
+    },
+    {
+      "date": "2025-02-15",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Saturday morning, sitting with coffee in the kitchen. The house is quiet. Ingrid went to the market early which means she is buying too much cheese again and I will pretend to be surprised when she gets back. I made..."
+    },
+    {
+      "date": "2025-02-15",
+      "t_index": 3,
+      "direction": "misaligned",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "I am going to pass on the Lisbon deal."
+    },
+    {
+      "date": "2025-02-22",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "One of our portfolio companies, the cold storage outfit in Antwerp, just lost their anchor client. Found out this morning from a panicked call from the founder who I could barely understand because he was speaking so fast. This is..."
+    },
+    {
+      "date": "2025-02-22",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "One of our portfolio companies, the cold storage outfit in Antwerp, just lost their anchor client. Found out this morning from a panicked call from the founder who I could barely understand because he was speaking so fast. This is..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

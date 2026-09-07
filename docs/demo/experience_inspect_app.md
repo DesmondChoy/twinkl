@@ -2,6 +2,21 @@
 
 ## Status
 
+North Star Moment application code now covers onboarding and all five saved
+Personas. After a closed-week review, it selects at most one exact quotation:
+a pre-onset reminder during Active Drift, specific encouragement for a verified
+current-week action without Active Drift, or a historical reminder for older
+supportive writing. Insufficient Evidence and failed or unsuitable reviews
+produce no card. The existing Coach Digest remains usable independently.
+Saved replay uses Weekly Drift prompt v4 Run 1 and the full-history runtime
+outcomes from the [completed targeted NSM update](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md).
+The five selected Personas cover 27 reviewed weeks: 23 selected quotations,
+three ineligible outcomes, and one completed review with no supportive source.
+Original model receipts and synthetic source availability remain
+inspectable. Live NSM fails closed without a fresh integration budget; offline
+replay does not require that budget. The [methodology](../north_star/nsm_experiment_methodology.md)
+discloses retained observations and the limits of AI assessment.
+
 This document specifies the capstone assessment experience. The shared React
 Experience and Inspect shell, resumable client session, view selector, and
 focused Inspect navigation are implemented. Manual Journal Entry processing,
@@ -17,9 +32,13 @@ The five deterministic Persona replays load into the shared React session
 with manual next-step replay, previous-week navigation, optional automatic
 replay and pause, restart, named jumps to key weeks, reduced-motion behavior,
 no-future-data projection, and browser-side scenario hash verification. The
-release quality gate is implemented. The five Persona key-week Coach Digest
-responses match the [current evaluation
-manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json).
+release quality gate is implemented. A saved Coach Digest response is available
+only when its source hash matches the current key-week Weekly Drift Detection
+output. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+provides five accepted key-week responses using Luna at reasoning effort `none`
+and prompt `4.2`. All passed Coach Digest Validations. No new Coach Digest
+Evals or human review was performed; the [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
+remains historical evidence for the previous Persona roster and inputs.
 Current capstone work is
 Coach Digest feedback capture, longitudinal Core Value history, and the final
 professor walkthrough. The
@@ -42,9 +61,9 @@ Core Value contracts.
 - **Access:** The assessment URL allows anonymous browser access.
 - **Provider boundary:** Provider credentials remain on the server.
 - **Provider cost:** Live Journal Entry work can make paid provider calls.
-- **Replay build boundary:** The frontend build imports the exact Coach Digest
-  evaluation manifest for the saved Persona replay checks before Vite produces
-  the deployable assets.
+- **Replay build boundary:** The frontend verifies catalogued scenario hashes
+  and source-bound Coach Digest responses. The current replay uses Weekly Drift
+  v4 Run 1 and saved full-history North Star Moment outcomes.
 - **Deletion behavior:** After Profile confirmation, Delete session removes the
   matching in-memory Python session and request receipts before React clears
   browser storage. Before Profile confirmation, Start over clears browser-only
@@ -141,6 +160,13 @@ screen position and selection where practical.
 
 ## 5. Experience View
 
+Fresh visits open a two-choice screen. **Try the Demo** opens the current
+five-Persona catalog; **Try Onboarding** opens the personal assessment. Existing
+sessions resume their current flow. The Twinkl wordmark returns to the choice
+without clearing progress, and choosing Onboarding resumes manual work or
+starts a fresh personal Profile when leaving a synthetic Persona replay.
+Loading a Persona over manual work retains the existing replacement confirmation.
+
 ### 5.1 Manual onboarding
 
 Preserve the complete React onboarding flow:
@@ -224,7 +250,7 @@ the user experience change between Active Drift, No Active Drift, and
 Insufficient Evidence. Historical Drift Records remain available after the
 current state changes. Future weeks remain disabled. A named jump to a key week
 provides explicit fast navigation without making future results look available.
-The button names its destination and week, such as **Show Active Drift — week 6**
+The button names its destination and week, such as **Show Active Drift — week 4**
 or **Show independent Core Value states — week 9**. The Persona picker includes
 a collapsed **Professor guide: states by week**, derived from the saved catalog.
 It maps each Persona to the states shown by its weeks.
@@ -250,7 +276,15 @@ horizontal movement.
 
 When a saved Coach Digest response is present, it appears after the Weekly
 Drift Detection result in the same scrollable column. It does not replace the
-Weekly Drift Detection result.
+Weekly Drift Detection result. The short heading **Your weekly reflection**
+precedes readable narrative paragraphs and links to the supporting Journal
+Entries. Ellipsis-ended quotations expand through the source sentence only
+when they match a unique occurrence in a cited Journal Entry available by the
+week's cutoff. If inline expansion would interrupt the surrounding sentence,
+the complete source quotation appears immediately below that paragraph.
+The card discloses expansion; Inspect retains the original model response.
+Ambiguous matches and ellipses present in the source remain
+unchanged, with the complete Journal Entry available through its link.
 
 The desktop Experience uses a fixed weekly workspace. The Journal Entry column
 and Weekly Drift Detection column stay in the same viewport. Each column scrolls
@@ -268,6 +302,10 @@ The Persona header always names the selected Schwartz Core Values. State-change
 evidence appears with the Weekly Drift Detection result. The first two Conflicts
 show where Drift started. Later Conflicts show that Drift continued. No Active
 Drift cites current Journal Entries and their Weekly Drift Reviewer Decisions.
+When a successful Not Conflict decision ended the latest Drift, the explanation
+also names and links that ending Journal Entry. It distinguishes an ending in
+the selected week from an earlier Historical Drift Record, without implying
+improvement or changing the current Drift state.
 Insufficient Evidence cites the blocking Journal Entry and its Abstain or
 failed review status when available.
 
@@ -471,7 +509,7 @@ Provider keys and unredacted provider configuration stay on the Python side.
 
 ### 7.1 Version 1 contract
 
-`experience-inspect-v1` defines six framework-neutral operations:
+`experience-inspect-v1` defines seven framework-neutral operations:
 
 | Operation | Purpose |
 |---|---|
@@ -481,12 +519,18 @@ Provider keys and unredacted provider configuration stay on the Python side.
 | `delete_session` | Remove one matching in-memory Python session, trace, and request receipts before browser state is cleared |
 | `load_scenario` | Load one deterministic saved persona scenario |
 | `read_trace` | Retrieve typed trace events, optionally after a known event |
+| `review_north_star` | Review a frozen closed-week snapshot separately, reuse matching records, or retry a retryable NSM failure |
 
 Python Pydantic models are the schema source. The checked-in JSON Schema and
 canonical fixture are generated by
 `uv run python -m src.demo.export_contract_schema`. React validates the same
-fixture through `frontend/onboarding/src/demoContracts.ts`. The fixture covers
-all 11 event types and complete, reused, refused, invalid, and failed results.
+fixture through `frontend/onboarding/src/demoContracts.ts`. The canonical
+fixture retains the original event examples; focused tests also cover
+`north_star_reviewed` and `nudge_response_recorded`. The current saved NSM
+records preserve completed v4 Run 1 experiment outcomes. Live NSM completion
+updates its pending event, so clients
+refresh the complete trace after a dedicated review rather than using a cursor
+that would omit the updated event.
 
 The following rules are part of the contract rather than a chosen HTTP
 framework:
@@ -508,6 +552,21 @@ framework:
 - `advance_assessment_time` carries `expected_revision`. Python rejects a
   backward date, an unanswered displayed nudge, or a close-week request without
   a finalized Journal Entry in the current week.
+- `review_north_star` carries the session revision, reviewed Monday, and an
+  explicit retry flag. The backend snapshots the corresponding saved weekly
+  review, releases the session lock before token counting or model calls, and
+  verifies the inputs again before publishing. Identical in-flight requests
+  share one worker. That worker owns completion and cleanup even if its HTTP
+  waiter disconnects. Source edits remove affected records; stale output is
+  discarded. A restored pending event is reused rather than left running.
+- A server-timestamped `nudge_response_recorded` event proves response
+  availability separately from its parent Journal Entry. Original submission
+  identity, date, order, and content must match before NSM uses the source.
+- NSM records bind the confirmed Profile content, owner, source window, weekly
+  review, source text and availability, prompt and policy. Browser Profile
+  hashes normalize integral floats and optional null preferred names for parity.
+  Missing legacy records show no card until reviewed. No positive claim is
+  inferred from No Active Drift.
 - Event order is represented by timestamps plus `parent_event_id`. Journal
   Entry order is represented by `t_index`; callers must not infer it from
   response array order alone.
@@ -610,23 +669,26 @@ The capstone demo uses these five curated scenarios:
 
 | Scenario | Persona | Core Values | Saved progression |
 |---|---|---|---|
-| No Active Drift | Meera Krishnamurthy, South Asian teacher, 45–54 | Achievement, Security | No Active Drift throughout |
-| Active Drift | Wei Jun Chen, East Asian software engineer, 35–44 | Universalism | No Active Drift → Active Drift |
-| Drift ended | Marc Vandenberghe, Western European manager, 45–54 | Power | No Active Drift → Active Drift → No Active Drift |
-| Insufficient Evidence | Noor Haddad, Middle Eastern stay-at-home parent, 18–24 | Self-Direction, Tradition | Insufficient Evidence → No Active Drift → Active Drift → No Active Drift |
-| Two Core Values | Lukas Vermeer, Western European software engineer, 25–34 | Self-Direction, Conformity | Conformity has No Active Drift while Self-Direction has Insufficient Evidence |
+| No Active Drift | Noor Haddad, Middle Eastern stay-at-home parent, 18–24 | Self-Direction, Tradition | No Active Drift in all six weeks |
+| Active Drift | Nisha Agarwal, South Asian teacher, 18–24 | Universalism | No Active Drift in weeks 1–3 → Active Drift in week 4 → No Active Drift in week 5 |
+| Drift ended | Lim Sook Yin, East Asian stay-at-home parent, 55+ | Hedonism | No Active Drift → Active Drift → No Active Drift in weeks 3–4 |
+| Insufficient Evidence | Wei Jun Chen, East Asian software engineer, 35–44 | Universalism | No Active Drift in weeks 1–4 → Insufficient Evidence in weeks 5–6 |
+| Two Core Values | Henrik Larsson, Western European entrepreneur, 45–54 | Stimulation, Security | In week 3, Security has No Active Drift while Stimulation has Insufficient Evidence; both have No Active Drift in the other weeks |
 
-Lukas is the recommended professor walkthrough because his nine-week replay
-shows displayed nudges and responses, two independent Core Value histories,
-an ended Historical Drift Record, Abstain, Insufficient Evidence, and a grounded Coach Digest response in
-the key week. The other four personas make each individual state easy to
-demonstrate.
+Nisha is the recommended professor walkthrough: her five-week replay shows
+how two consecutive Conflicts produce Active Drift and how a later Not Conflict
+decision ends that pattern. Her key week starts on 3 March 2025. Sook Yin's
+week starting 10 February demonstrates an ended Historical Drift Record;
+Wei Jun's week starting 30 June demonstrates a failed review that blocks a
+current claim; Henrik's week starting 17 February demonstrates independent
+Core Value states. Noor's week starting 19 May closes the No Active Drift
+baseline without implying that this state proves alignment.
 
-This menu covers seven Schwartz Core Values, four cultural backgrounds, four
-age bands, and several work and family contexts. Selection favored coherent
-week-by-week behavior over maximizing Core Value count: the reviewed
-eight-value alternative began with Insufficient Evidence without a useful
-No Active Drift progression.
+This menu covers six Schwartz Core Values, four cultural backgrounds, four
+age bands, 52 Journal Entries, and 27 reviewed weeks. Selection used saved
+v4 Run 1 Drift patterns, coherent histories, completed NSM source coverage,
+and compatibility with the existing displayed-nudge anti-annoyance rule.
+It did not use AI evaluation grades to select successful-looking cards.
 
 Each saved scenario bundle contains or references:
 
@@ -639,16 +701,17 @@ Each saved scenario bundle contains or references:
 - Drift Detector results;
 - Weekly Drift Detection outputs, Coach Digest event status, and valid Coach
   Digest responses when available;
-- model contract, timestamps, response IDs when available, and input hashes;
-  and
+- full-history North Star Moment records, including no-card outcomes;
+- model contract, timestamps, response IDs when available, and input hashes; and
 - a bundle manifest version, plus a content hash in the scenario catalog.
 
 Scenario selection must be based on reviewed, reproducible behavior. Do not
 rewrite Journal Entries or decisions merely to make the demonstration cleaner.
 If a scenario is AI-reviewed synthetic development evidence, say so.
 
-The checked-in files use Run 1 of the frozen `gpt-5.6-luna` reasoning-effort
-`low` Weekly Drift Reviewer setup. Each onboarding Profile is a deterministic
+The checked-in files use the definitions variant of prompt v4, Run 1, with
+`gpt-5.6-luna` at reasoning effort `low`, from the [completed Core Value context
+comparison](../../logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md). Each onboarding Profile is a deterministic
 projection from the synthetic persona's declared Core Values, not a claim that
 the persona completed onboarding. Its provenance is
 `synthetic_persona_projection`; the original React onboarding provenance

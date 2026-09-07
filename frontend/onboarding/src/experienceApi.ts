@@ -7,6 +7,7 @@ import {
   type ExperienceResumeStateContract,
   type JournalEntryContract,
   type JournalEntrySubmittedResponseContract,
+  type NorthStarReviewedResponseContract,
   type SessionDeletedResponseContract,
   type SessionCreatedResponseContract,
   type TraceReadResponseContract,
@@ -311,6 +312,36 @@ export async function readExperienceTrace(
   if (response.operation !== "read_trace") {
     throw new ExperienceApiError(
       "Inspect returned the wrong result.",
+      "unexpected_operation",
+      false,
+    );
+  }
+  return response;
+}
+
+export async function reviewNorthStar({
+  sessionId,
+  expectedRevision,
+  weekStart,
+  retry = false,
+}: {
+  sessionId: string;
+  expectedRevision: number;
+  weekStart: string;
+  retry?: boolean;
+}): Promise<NorthStarReviewedResponseContract> {
+  const response = await postExperience({
+    schema_version: EXPERIENCE_INSPECT_CONTRACT_VERSION,
+    operation: "review_north_star",
+    request_id: requestId(),
+    session_id: sessionId,
+    expected_revision: expectedRevision,
+    week_start: weekStart,
+    retry,
+  });
+  if (response.operation !== "north_star_reviewed") {
+    throw new ExperienceApiError(
+      "The North Star Moment review returned the wrong result.",
       "unexpected_operation",
       false,
     );

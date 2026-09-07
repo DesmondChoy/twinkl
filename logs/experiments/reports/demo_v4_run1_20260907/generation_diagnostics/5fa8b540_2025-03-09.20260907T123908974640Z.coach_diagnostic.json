@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "5fa8b540",
+  "week_start": "2025-03-03",
+  "week_end": "2025-03-09",
+  "accepted": true,
+  "failure_stage": null,
+  "failure_details": [],
+  "raw_output": "{\"weekly_mirror\":\"This week held both practical care and moments where fairness seemed harder to carry through. You stayed back to help the peon uncle fix a broken desk, while later you \u201ckept quiet because Sharma sir is senior\u201d and, tired and wanting to finish quickly, spent \u201cprobably twice as much at a chain store\u201d instead of waiting another day.\",\"tension_explanation\":\"The tension appears in how tiredness, hierarchy, and convenience shaped your choices: \u201cI didn't have the energy to start something,\u201d and \u201cI just wanted to get it done fast.\u201d These moments sit alongside your wish to make the world a fairer, better place, including the earlier realization after speaking with Didi that \u201cwe didn't talk about...\u201d what might have mattered to her.\",\"reflective_question\":\"When tiredness, hierarchy, or convenience are present, what kinds of fairness become easiest for you to notice\u2014and which become harder to act on?\"}",
+  "narrative": {
+    "weekly_mirror": "This week held both practical care and moments where fairness seemed harder to carry through. You stayed back to help the peon uncle fix a broken desk, while later you \u201ckept quiet because Sharma sir is senior\u201d and, tired and wanting to finish quickly, spent \u201cprobably twice as much at a chain store\u201d instead of waiting another day.",
+    "tension_explanation": "The tension appears in how tiredness, hierarchy, and convenience shaped your choices: \u201cI didn't have the energy to start something,\u201d and \u201cI just wanted to get it done fast.\u201d These moments sit alongside your wish to make the world a fairer, better place, including the earlier realization after speaking with Didi that \u201cwe didn't talk about...\u201d what might have mattered to her.",
+    "reflective_question": "When tiredness, hierarchy, or convenience are present, what kinds of fairness become easiest for you to notice\u2014and which become harder to act on?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "kept quiet because Sharma sir is senior",
+      "probably twice as much at a chain store",
+      "I just wanted to get it done fast.",
+      "we didn't talk about..."
+    ],
+    "word_count": 143,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 4 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 143 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:5fa8b540:2025-03-09:attempt_1",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_03a46b7c1542a707016a9eb06a3b5887d0b6ce9f1b64e6e2d4",
+    "status": "completed",
+    "latency_seconds": 3.198178332997486,
+    "input_tokens": 1363,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1360,
+    "output_tokens": 201,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 1564,
+    "calculated_cost_usd": 0.0005818,
+    "error_type": null
+  }
+}

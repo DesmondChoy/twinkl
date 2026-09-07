@@ -96,15 +96,34 @@ If ambiguity does not affect correctness or design direction, proceed with an
 explicit assumption. Ask only when the answer would materially change the
 result or authorize a meaningful external action.
 
+Treat a request to implement or fix something as an instruction to act, even
+when phrased as a capability question. Carry authorized work through relevant
+verification and requested delivery. Continue until the task is complete or a
+concrete blocker requires user input or an external change.
+
+Before seeking approval for an additional action, finish the authorized
+preparation needed to make that action reviewable. Use approval already given
+in the session; do not add another confirmation step for the same action.
+Continue independent authorized work while a question is pending.
+
+Explicit user directions override conflicting skill guidance. Skills do not
+extend the task's scope or permissions. If a skill appears to require a pause,
+check whether the current request already resolves it. When a skill still
+causes a question, stop, or departure from the requested work, link the exact
+`SKILL.md`, quote the relevant rule, and explain its effect. Distinguish the
+written rule from your interpretation.
+
 ## Planning and Delegation
 
 - For non-trivial implementation or architecture choices, write a proportional
   plan in the active Beads issue before editing.
 - Re-plan when evidence invalidates the approach. Skip formal planning for
   small edits and read-only questions.
-- Use subagents only for bounded, independent work where parallelism materially
-  improves speed or confidence. Give each one clear ownership and avoid
-  concurrent edits to the same files.
+- Delegate bounded, independent work to available subagents when it would
+  materially improve speed or confidence. Give each one clear ownership and
+  enough context to work independently. Stay within the available concurrency
+  limits, avoid concurrent edits to the same files, and check delegated results
+  before incorporating them.
 - For architecture or capstone-scope decisions, present options and trade-offs.
   Do not silently commit the project to a major modeling or architecture choice.
 
@@ -140,6 +159,12 @@ Verify in proportion to risk before describing work as complete:
 6. Remove dead code, debug remnants, and accidental generated files.
 7. Inspect `git diff` and `git status`, then report what was and was not tested.
 
+Add tests when they verify meaningful behavior or guard against a relevant
+regression. Avoid tests for minor reversible edits that merely duplicate the
+implementation. Reuse passing checks when they remain applicable; repeat or
+broaden verification only if a change, failure, or unresolved concern warrants
+it.
+
 Before an authorized commit, use `.claude/skills/quality/SKILL.md` as the
 fresh-eyes review checklist (`/quality` where that alias is supported).
 
@@ -156,6 +181,9 @@ decisions change. Do not perform a generic documentation sweep by default.
   definitions apply. Otherwise, use natural, precise language suited to the
   audience. Explain unfamiliar technical terms when needed.
 - Keep terminology consistent for each defined product concept.
+- Lead with the result and the evidence needed to assess it. Use lists and
+  tables when they clarify sequences or comparisons. Avoid canned framing,
+  unnecessary formatting, and invented jargon.
 - Outside academic papers and research reports, prefer concise prose, active
   voice, and paragraphs that develop one topic. Vary sentence structure when
   it makes an explanation clearer.
@@ -173,6 +201,9 @@ decisions change. Do not perform a generic documentation sweep by default.
   records.
 - Name the exact component, data, experiment setup, or output when a general
   term would be ambiguous.
+- Answer side questions and incorporate corrections while preserving progress
+  on the active task. Resume the authorized work unless the user redirects or
+  cancels it.
 - In non-trivial handoffs, summarize material assumptions, the chosen approach,
   verification performed, and remaining risks.
 

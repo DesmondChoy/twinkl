@@ -1,24 +1,29 @@
 # North Star Moment team pitch images
 
-Three concept visuals generated with the built-in image_gen tool on 5 September 2026. These are presentation illustrations; screen excerpts are simplified, and NSM is a proposed addition. The tool returned 1536 × 1024 PNGs (3:2), despite the requested 16:9 framing; preserve their aspect ratio when placing them in slides.
+Two retained concept visuals generated with the built-in image_gen tool on
+5 September 2026. These are presentation illustrations, not application
+screenshots or experiment results. The PNGs are 1536 × 1024 (3:2); preserve
+their aspect ratio when placing them in slides.
 
 **Scope update:** The specification now covers all five saved Persona demos
 and onboarding from scratch. These images predate that expansion: their
-saved-replay-only captions and the third image's 7–11-day estimate are
-historical. Use the current specification for scope, live execution, and
-re-estimation. The before/after card concept still applies to both paths.
+saved-replay-only captions and retrieval workflow are historical product
+concepts. Use the current specification for scope and runtime behavior. The
+before/after card concept still applies to both paths.
 
-All three images were visually inspected for legibility, quotations, chronology, current/proposed status, and the separation between AI review and code checks. The first image received the branding correction and the user-facing wording correction recorded below. Its current version removes both Active Drift badges and the Drift disclaimer. Internal terms in the implementation explainers describe developer concepts, not copy shown to users.
+The first image received the branding and user-facing wording corrections
+recorded below. Its current version removes both Active Drift badges and the
+Drift disclaimer. Internal terms in the implementation explainer describe
+developer concepts, not copy shown to users.
 
 ## Suggested presentation order
 
 1. **01-before-after.png** — Show what the user gains: a past supportive action beside the existing Coach Digest. The internal detection state and reflective question remain unchanged; no Drift terminology appears in the screen excerpts.
 2. **02-selection-workflow.png** — Explain why a semantically related phrase is insufficient, and distinguish AI review from deterministic source checks.
-3. **03-bounded-first-version.png** — Historical pitch for the narrower saved Persona replay version; its scope and estimate no longer describe the complete implementation.
 
 ## Sources and evidence boundaries
 
-- [North Star Moment specification](../north_star_moment.md), sections 1–7 and technical appendix.
+- [North Star Moment specification](../../north_star/north_star_moment.md), sections 1–7 and technical appendix.
 - [Current PRD](../../prd.md), current product loop and product principles.
 - [Canonical nouns](../../canonical_nouns.md).
 - Current screen structure: [WeeklyExperience.tsx](../../../frontend/onboarding/src/WeeklyExperience.tsx).
@@ -26,7 +31,13 @@ All three images were visually inspected for legibility, quotations, chronology,
 - Exact existing question and quoted passage: [saved Coach Digest responses](../../../src/demo/coach_digest_responses.json), `active-wei-jun::2025-06-30`.
 - Earlier quotation: [Wei Jun saved Persona](../../../frontend/onboarding/public/scenarios/active-wei-jun.json), Journal Entry at `t_index=7`, 22 June 2025.
 
-The examples come from a synthetic saved Persona. They illustrate the design and are not NSM evaluation results or evidence of user benefit. The 90% retrieval criterion is a feasibility gate; 7–11 working days was the earlier replay-only estimate. Evaluation-history selection remains open. The PRD now adopts the expanded scope; implementation remains outstanding.
+The examples come from a synthetic saved Persona. They illustrate the design
+and are not NSM evaluation results or evidence of user benefit. The images and
+their generation prompts preserve historical product concepts only; they do
+not define experimental requirements.
+Application code now covers both frontend paths. The
+[fresh experiment methodology](../../north_star/nsm_experiment_methodology.md)
+replaces previous experiment protocols and remains pending user review.
 
 ## Exact generation prompts
 
@@ -104,29 +115,4 @@ Explanation: "No supportive action described → no card."
 Lower slim band with small source/inspection icon and exact text: "Inspect shows the sources, AI decisions and code checks."
 Footer: "Proposed design · Results prepared offline for saved Persona replay · If no example passes, the Coach Digest remains available"
 Constraints: Do not imply embeddings prove support, that code verifies semantic truth, or that AI-written nudges are user evidence. Do not show all history as eligible, future writing, external quotes, numerical confidence, or access to hidden model reasoning. The positive example illustrates the specification, not a completed benchmark.
-```
-
-### 3
-
-```text
-Use case: infographic-diagram
-Asset type: polished raster presentation image for Twinkl capstone teammates, landscape 16:9, high resolution.
-Style: restrained editorial product storytelling. Twinkl's actual palette: paper #f7faf9, mist #e7edf2, navy #14223b, blue #5576d9, apricot #ff8a5b, verdigris #2e8c82. Elegant Source Serif-style headline and Manrope-style sans-serif body. Clear large type, generous whitespace, crisp card edges, quiet soft shadows, subtle hand-drawn editorial accents. Flat frontal layouts. No stock photos, no robot, no brain, no fake charts, no extra copy or watermarks. Text must be verbatim and readable at presentation size. Use color with restraint. Do not portray benefits as measured outcomes.
-Primary request: Persuasive practical scope and implementation visual for teammates deciding whether to explore North Star Moment. Show an existing product foundation, a compact optional addition, and three staged build steps. Make it feel achievable and concrete without selling a production launch or guaranteed outcomes. Use layered paper/card imagery and a small star on the added card; no rocket or growth chart.
-Headline: "Start with one card in saved Persona replay"
-Subtitle: "A visible product addition. A focused research question."
-Upper half contains a wide visual composition: a solid foundation of two connected existing cards labelled "Weekly Drift Detection" and "Coach Digest", joined by an additive plus symbol to one highlighted card labelled "North Star Moment". In the highlighted card show the exact quotation "Helped two new guys file their claims." A small source tag "Earlier Journal Entry" below it. A branch from this card points to a compact "Inspect" panel with the words "Source → Review → Checks". Label over the existing pair "EXISTING EXPERIENCE"; label over the new card "OPTIONAL ADDITION".
-Under this composition a prominent sentence: "Can we select a supportive past action and quote it faithfully?"
-Lower half is three horizontal numbered steps with clear visual progression:
-"1  Test retrieval locally"
-"Compare 1, 3 and 5 results. Continue only at ≥90% proxy retrieval recall."
-Small badge: "No paid calls"
-"2  Build the saved replay"
-"Prepare retrieval and AI review offline. Add the card, source link and Inspect record."
-"3  Evaluate and demonstrate"
-"Measure selection accuracy, faithful quotes, correct omissions, cost and failures."
-Below the steps, a compact decision strip: "Before paid work: agree the budget and which histories to reserve for evaluation."
-Bottom line in two concise parts: "Estimate: 7–11 working days" and "Assumes stable app contracts and an available evaluation provider"
-Footer: "First version: saved Persona replay only · User benefit remains a question for future study"
-Constraints: 90% is a target for proxy retrieval recall, never an achieved result, NSM accuracy score, or deployment threshold. Do not show manual/live availability, new model training, production storage, background scheduling, guaranteed wellbeing gains or completed feature status. Do not call the roadmap approved implementation. Make the estimate subordinate to the bounded scope.
 ```

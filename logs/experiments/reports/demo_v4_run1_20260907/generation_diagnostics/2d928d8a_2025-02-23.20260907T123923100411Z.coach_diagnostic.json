@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "persona_id": "2d928d8a",
+  "week_start": "2025-02-17",
+  "week_end": "2025-02-23",
+  "accepted": true,
+  "failure_stage": null,
+  "failure_details": [],
+  "raw_output": "{\"weekly_mirror\":\"This week brought a sharp business shock: an Antwerp portfolio company lost its anchor client, and you received the news through \u201ca panicked call from the founder who I could barely understand because he was speaking so fast.\u201d It sits alongside the earlier Lisbon decision, where you considered the risks carefully before saying, \u201cI am going to pass on the Lisbon deal,\u201d while quieter moments with Ingrid and coffee in the kitchen offered a different kind of steadiness.\",\"tension_explanation\":\"There is not enough recent context to tell what this Antwerp situation meant for your wish to seek new experiences and challenges. The earlier Lisbon choice was clear, but the current entry describes an unexpected problem rather than your own decision or response, so the thread remains open.\",\"reflective_question\":\"What did you notice in yourself after the call about Antwerp, especially in relation to the kind of challenge you want to take on?\"}",
+  "narrative": {
+    "weekly_mirror": "This week brought a sharp business shock: an Antwerp portfolio company lost its anchor client, and you received the news through \u201ca panicked call from the founder who I could barely understand because he was speaking so fast.\u201d It sits alongside the earlier Lisbon decision, where you considered the risks carefully before saying, \u201cI am going to pass on the Lisbon deal,\u201d while quieter moments with Ingrid and coffee in the kitchen offered a different kind of steadiness.",
+    "tension_explanation": "There is not enough recent context to tell what this Antwerp situation meant for your wish to seek new experiences and challenges. The earlier Lisbon choice was clear, but the current entry describes an unexpected problem rather than your own decision or response, so the thread remains open.",
+    "reflective_question": "What did you notice in yourself after the call about Antwerp, especially in relation to the kind of challenge you want to take on?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "a panicked call from the founder who I could barely understand because he was speaking so fast."
+    ],
+    "word_count": 150,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 150 words (target 25-180)."
+      }
+    ]
+  },
+  "llm_call": {
+    "schema_version": "1.0.0",
+    "call_label": "coach_generation:2d928d8a:2025-02-23:attempt_1",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "reasoning_effort": "none",
+    "service_tier": "default",
+    "response_id": "resp_0394baa50220bfe2016a9eb0781cc087d0b6a03db521e575f3",
+    "status": "completed",
+    "latency_seconds": 3.3434043750166893,
+    "input_tokens": 1968,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 1965,
+    "output_tokens": 193,
+    "reasoning_output_tokens": 0,
+    "total_tokens": 2161,
+    "calculated_cost_usd": 0.00072345,
+    "error_type": null
+  }
+}

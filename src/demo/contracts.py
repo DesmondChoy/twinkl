@@ -9,12 +9,14 @@ from typing import Annotated, Any, Literal, cast
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from src.coach.schemas import CoachNarrative, DigestValidation, WeeklyDigest
+from src.demo.north_star_replay import SavedExperimentRecord
 from src.drift_detector import (
     CoreValueDriftState,
     DriftDetectorResult,
     drift_decision_transitions,
 )
 from src.models.nudge import NudgeCategory
+from src.north_star.runtime import NorthStarRecord
 from src.weekly_drift_reviewer import (
     WeeklyDriftReviewerDecision,
     WeeklyDriftReviewerReceipt,
@@ -66,6 +68,7 @@ Operation = Literal[
     "delete_session",
     "load_scenario",
     "read_trace",
+    "review_north_star",
 ]
 
 CORE_VALUE_ORDER = (
@@ -577,6 +580,7 @@ class DriftDetectedDetails(ContractModel):
 class WeeklyDigestBuiltDetails(ContractModel):
     digest: WeeklyDigest
     cited_journal_entry_ids: list[str]
+    coach_unavailable_reason: str | None = None
 
 
 class WeeklyCoachGeneratedDetails(ContractModel):
@@ -588,6 +592,16 @@ class WeeklyCoachGeneratedDetails(ContractModel):
         if (self.narrative is None) != (self.validation is None):
             raise ValueError("Coach Digest narrative and validation must be paired")
         return self
+
+
+class NorthStarReviewedDetails(ContractModel):
+    record: SavedExperimentRecord | NorthStarRecord
+
+
+class NudgeResponseRecordedDetails(ContractModel):
+    journal_entry_id: str
+    nudge_id: str
+    response: str = Field(min_length=1)
 
 
 class AssessmentTimeAdvancedDetails(ContractModel):
@@ -672,6 +686,24 @@ class WeeklyCoachGeneratedEvent(TraceEventBase):
     details: WeeklyCoachGeneratedDetails
 
 
+class NorthStarReviewedEvent(TraceEventBase):
+    event_type: Literal["north_star_reviewed"]
+    details: NorthStarReviewedDetails
+
+    @model_validator(mode="after")
+    def validate_record_owner(self) -> NorthStarReviewedEvent:
+        if self.details.record.session_id != self.session_id:
+            raise ValueError("North Star Moment record must belong to its session")
+        if self.input_hash != self.details.record.input_hash:
+            raise ValueError("North Star Moment event must match its record inputs")
+        return self
+
+
+class NudgeResponseRecordedEvent(TraceEventBase):
+    event_type: Literal["nudge_response_recorded"]
+    details: NudgeResponseRecordedDetails
+
+
 class AssessmentTimeAdvancedEvent(TraceEventBase):
     event_type: Literal["assessment_time_advanced"]
     details: AssessmentTimeAdvancedDetails
@@ -688,6 +720,8 @@ TraceEvent = Annotated[
     | DriftDetectedEvent
     | WeeklyDigestBuiltEvent
     | WeeklyCoachGeneratedEvent
+    | NorthStarReviewedEvent
+    | NudgeResponseRecordedEvent
     | AssessmentTimeAdvancedEvent,
     Field(discriminator="event_type"),
 ]
@@ -882,6 +916,23 @@ class SessionDeleteRequest(ContractModel):
     session_id: str
 
 
+class NorthStarReviewRequest(ContractModel):
+    schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
+    operation: Literal["review_north_star"]
+    request_id: str
+    session_id: str
+    expected_revision: int = Field(ge=0)
+    week_start: str
+    retry: bool = False
+
+    @field_validator("week_start")
+    @classmethod
+    def validate_week_start(cls, value: str) -> str:
+        if date.fromisoformat(value).weekday() != 0:
+            raise ValueError("Reviewed week must start on Monday")
+        return value
+
+
 class ScenarioLoadRequest(ContractModel):
     schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
     operation: Literal["load_scenario"]
@@ -903,7 +954,8 @@ ApiRequest = Annotated[
     | AssessmentTimeAdvanceRequest
     | SessionDeleteRequest
     | ScenarioLoadRequest
-    | TraceReadRequest,
+    | TraceReadRequest
+    | NorthStarReviewRequest,
     Field(discriminator="operation"),
 ]
 
@@ -943,6 +995,15 @@ class SessionDeletedResponse(ContractModel):
     deleted: bool
 
 
+class NorthStarReviewedResponse(ContractModel):
+    schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
+    operation: Literal["north_star_reviewed"]
+    request_id: str
+    status: Literal["ok"]
+    session: ExperienceSession
+    event_ids: list[str] = Field(min_length=1)
+
+
 class ScenarioLoadedResponse(ContractModel):
     schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
     operation: Literal["load_scenario"]
@@ -978,6 +1039,7 @@ ApiResponse = Annotated[
     | SessionDeletedResponse
     | ScenarioLoadedResponse
     | TraceReadResponse
+    | NorthStarReviewedResponse
     | ApiErrorResponse,
     Field(discriminator="operation"),
 ]

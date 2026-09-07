@@ -23,6 +23,7 @@ import {
 import { journalEntryAnchorId } from "./journalEntryAnchor";
 import { NUDGE_REVEAL_DELAY_MS } from "./nudgeReveal";
 import WeeklyExperience from "./WeeklyExperience";
+import useNorthStarReview from "./useNorthStarReview";
 import type {
   ExperienceState,
   PendingJournalSubmission,
@@ -36,6 +37,7 @@ interface JournalExperienceProps {
   headingRef?: RefObject<HTMLHeadingElement | null>;
   mode?: "manual" | "saved_replay";
   showWeeklySummary?: boolean;
+  northStarReviewEnabled?: boolean;
 }
 
 const UNSAVED_JOURNAL_ERROR =
@@ -184,6 +186,7 @@ export default function JournalExperience({
   headingRef,
   mode = "manual",
   showWeeklySummary = true,
+  northStarReviewEnabled = true,
 }: JournalExperienceProps) {
   const submissionLockRef = useRef(false);
   const nudgeHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -291,6 +294,12 @@ export default function JournalExperience({
       : isAwaitingResponse && !isActiveNudgeVisible
         ? "Saved."
         : statusCopy(experience);
+
+  const northStar = useNorthStarReview({
+    profile, experience, updateExperience,
+    enabled: mode === "manual" && experience.data_notice_acknowledged && northStarReviewEnabled,
+    busy: isBusy || timeAction !== null || removingEntryId !== null,
+  });
 
   useEffect(() => {
     if (!isAwaitingResponse || !activeNudge) return;
@@ -941,6 +950,7 @@ export default function JournalExperience({
         updateExperience({ selected_entry_id: journalEntryId })
       }
       showInspectAction={mode === "manual"}
+      northStarReview={mode === "manual" ? northStar : undefined}
     />
   );
 

@@ -17,6 +17,8 @@ const EVENT_TYPES = new Set([
   "drift_detected",
   "weekly_digest_built",
   "weekly_coach_generated",
+  "north_star_reviewed",
+  "nudge_response_recorded",
 ]);
 const EVENT_STATUSES = new Set([
   "queued",
@@ -50,6 +52,7 @@ const OPERATIONS = new Set([
   "delete_session",
   "load_scenario",
   "read_trace",
+  "review_north_star",
 ]);
 const HASH_PATTERN = /^[0-9a-f]{64}$/;
 
@@ -210,6 +213,15 @@ export interface AssessmentTimeAdvancedResponseContract extends JsonObject {
   event_ids: string[];
 }
 
+export interface NorthStarReviewedResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "north_star_reviewed";
+  request_id: string;
+  status: "ok";
+  session: ExperienceSessionContract;
+  event_ids: string[];
+}
+
 export interface SessionDeletedResponseContract extends JsonObject {
   schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
   operation: "delete_session";
@@ -243,6 +255,7 @@ export type ExperienceApiResponseContract =
   | SessionCreatedResponseContract
   | JournalEntrySubmittedResponseContract
   | AssessmentTimeAdvancedResponseContract
+  | NorthStarReviewedResponseContract
   | SessionDeletedResponseContract
   | ScenarioLoadedResponseContract
   | TraceReadResponseContract;
@@ -800,9 +813,14 @@ function validateEventDetails(event: JsonObject, name: string): void {
       validateDriftResult(details.result, `${name}.details.result`);
       break;
     case "weekly_digest_built":
-      exactKeys(details, ["digest", "cited_journal_entry_ids"], `${name}.details`);
+      exactKeys(details, ["digest", "cited_journal_entry_ids",
+        ...("coach_unavailable_reason" in details ? ["coach_unavailable_reason"] : []),
+      ], `${name}.details`);
       object(details.digest, `${name}.details.digest`);
       stringArray(details.cited_journal_entry_ids, `${name}.details.cited_journal_entry_ids`);
+      if ("coach_unavailable_reason" in details) {
+        nullableString(details.coach_unavailable_reason, `${name}.details.coach_unavailable_reason`);
+      }
       break;
     case "weekly_coach_generated":
       exactKeys(details, ["narrative", "validation"], `${name}.details`);
@@ -814,6 +832,82 @@ function validateEventDetails(event: JsonObject, name: string): void {
       }
       if ((details.narrative === null) !== (details.validation === null)) {
         throw new Error(`${name}.details Coach Digest fields must be paired`);
+      }
+      break;
+    case "north_star_reviewed": {
+      exactKeys(details, ["record"], `${name}.details`);
+      const record = object(details.record, `${name}.details.record`);
+      if (record.schema_version !== "north-star-record-v1") {
+        throw new Error(`${name}.details.record has an incompatible version`);
+      }
+      exactKeys(record, [
+        "schema_version", "session_id", "owner_id", "profile_ref", "week_start", "week_end",
+        "cutoff_at", "input_hash", "status", "mode", "reason", "core_value", "value_phrase",
+        "selected", "source_ids", "sources", "onset_t_index", "onset_date", "onset_available_at",
+        "reviews", "validation_evidence", "attempts", "retryable", "created_at",
+        ...("experiment" in record ? ["experiment"] : []),
+      ], `${name}.details.record`);
+      if ("experiment" in record) {
+        const experiment = object(record.experiment, `${name}.details.record.experiment`);
+        exactKeys(experiment, ["source_path", "source_sha256", "method", "case_id",
+          "case", "output", "receipts", "policy", "availability_basis"], `${name}.details.record.experiment`);
+        for (const field of ["source_path", "source_sha256", "case_id"]) {
+          string(experiment[field], `${name}.details.record.experiment.${field}`);
+        }
+        if (!HASH_PATTERN.test(String(experiment.source_sha256))
+          || experiment.method !== "full_history"
+          || experiment.availability_basis !== "synthetic_immediate_parent_order") {
+          throw new Error(`${name}.details.record.experiment has incompatible provenance`);
+        }
+        for (const field of ["case", "output"]) {
+          if (experiment[field] !== null) object(experiment[field], `${name}.details.record.experiment.${field}`);
+        }
+        array(experiment.receipts, `${name}.details.record.experiment.receipts`)
+          .forEach((receipt, index) => object(receipt, `${name}.details.record.experiment.receipts[${index}]`));
+        object(experiment.policy, `${name}.details.record.experiment.policy`);
+      }
+      for (const key of ["session_id", "owner_id", "profile_ref", "week_start", "week_end", "cutoff_at", "input_hash", "status", "reason", "created_at"]) {
+        string(record[key], `${name}.details.record.${key}`);
+      }
+      if (!["pending", "complete", "failed", "not_eligible"].includes(String(record.status))) {
+        throw new Error(`${name}.details.record has an incompatible status`);
+      }
+      if (record.mode !== null && !["reflection", "encouragement", "reminder"].includes(String(record.mode))) {
+        throw new Error(`${name}.details.record has an incompatible mode`);
+      }
+      array(record.reviews, `${name}.details.record.reviews`);
+      stringArray(record.source_ids, `${name}.details.record.source_ids`);
+      stringArray(record.validation_evidence, `${name}.details.record.validation_evidence`);
+      for (const key of ["core_value", "value_phrase", "onset_date", "onset_available_at"]) {
+        nullableString(record[key], `${name}.details.record.${key}`);
+      }
+      if (record.onset_t_index !== null) integer(record.onset_t_index, `${name}.details.record.onset_t_index`);
+      array(record.sources, `${name}.details.record.sources`).forEach((value, index) => {
+        const sourceName = `${name}.details.record.sources[${index}]`;
+        const source = object(value, sourceName);
+        exactKeys(source, ["owner_id", "entry_id", "t_index", "date", "journal_entry", "nudge_response", "available_at", "response_available_at"], sourceName);
+        for (const key of ["owner_id", "entry_id", "date", "available_at"]) string(source[key], `${sourceName}.${key}`);
+        integer(source.t_index, `${sourceName}.t_index`);
+        if (typeof source.journal_entry !== "string") throw new Error(`${sourceName}.journal_entry must be text`);
+        if (source.nudge_response !== null && typeof source.nudge_response !== "string") throw new Error(`${sourceName}.nudge_response must be text or null`);
+        nullableString(source.response_available_at, `${sourceName}.response_available_at`);
+      });
+      if (record.selected !== null) {
+        const selectedName = `${name}.details.record.selected`;
+        const selected = object(record.selected, selectedName);
+        exactKeys(selected, ["entry_id", "t_index", "date", "quote_source", "evidence_quote"], selectedName);
+        for (const key of ["entry_id", "date", "evidence_quote"]) string(selected[key], `${selectedName}.${key}`);
+        integer(selected.t_index, `${selectedName}.t_index`);
+        if (!["journal_entry", "nudge_response"].includes(String(selected.quote_source))) throw new Error(`${selectedName}.quote_source is incompatible`);
+      }
+      integer(record.attempts, `${name}.details.record.attempts`);
+      boolean(record.retryable, `${name}.details.record.retryable`);
+      break;
+    }
+    case "nudge_response_recorded":
+      exactKeys(details, ["journal_entry_id", "nudge_id", "response"], `${name}.details`);
+      for (const key of ["journal_entry_id", "nudge_id", "response"]) {
+        string(details[key], `${name}.details.${key}`);
       }
       break;
     case "assessment_time_advanced":
@@ -1041,6 +1135,7 @@ function validateRequest(value: unknown, name: string): JsonObject {
     delete_session: ["schema_version", "operation", "request_id", "session_id"],
     load_scenario: ["schema_version", "operation", "request_id", "scenario_id"],
     read_trace: ["schema_version", "operation", "request_id", "session_id", "after_event_id"],
+    review_north_star: ["schema_version", "operation", "request_id", "session_id", "expected_revision", "week_start", "retry"],
   };
   const expectedKeys = [...requestKeys[String(request.operation)]];
   if (request.operation === "create_session" && "resume_state" in request) {
@@ -1083,6 +1178,12 @@ function validateRequest(value: unknown, name: string): JsonObject {
   if (request.operation === "delete_session") {
     string(request.session_id, `${name}.session_id`);
   }
+  if (request.operation === "review_north_star") {
+    string(request.session_id, `${name}.session_id`);
+    integer(request.expected_revision, `${name}.expected_revision`);
+    string(request.week_start, `${name}.week_start`);
+    boolean(request.retry, `${name}.retry`);
+  }
   return request;
 }
 
@@ -1102,7 +1203,7 @@ function validateResponse(value: unknown, name: string): JsonObject {
     validateSafeError(response.error, `${name}.error`);
     return response;
   }
-  if (!OPERATIONS.has(String(response.operation)) || response.status !== "ok") {
+  if ((!OPERATIONS.has(String(response.operation)) && response.operation !== "north_star_reviewed") || response.status !== "ok") {
     throw new Error(`${name} has an incompatible success response`);
   }
   const responseKeys: Record<string, string[]> = {
@@ -1141,6 +1242,7 @@ function validateResponse(value: unknown, name: string): JsonObject {
       "event_ids",
     ],
     read_trace: ["schema_version", "operation", "request_id", "status", "session_id", "events"],
+    north_star_reviewed: ["schema_version", "operation", "request_id", "status", "session", "event_ids"],
   };
   exactKeys(response, responseKeys[String(response.operation)], name);
   if ([
@@ -1148,6 +1250,7 @@ function validateResponse(value: unknown, name: string): JsonObject {
     "submit_journal_entry",
     "advance_assessment_time",
     "load_scenario",
+    "north_star_reviewed",
   ].includes(String(response.operation))) {
     validateSession(response.session, `${name}.session`);
   }
@@ -1156,6 +1259,7 @@ function validateResponse(value: unknown, name: string): JsonObject {
     "submit_journal_entry",
     "advance_assessment_time",
     "load_scenario",
+    "north_star_reviewed",
   ].includes(String(response.operation))) {
     stringArray(response.event_ids, `${name}.event_ids`);
   }

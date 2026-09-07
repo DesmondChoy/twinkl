@@ -22,7 +22,8 @@
             "advance_assessment_time",
             "delete_session",
             "load_scenario",
-            "read_trace"
+            "read_trace",
+            "review_north_star"
           ],
           "title": "Requested Operation",
           "type": "string"
@@ -1582,6 +1583,84 @@
       "title": "ExperienceSession",
       "type": "object"
     },
+    "ExperimentEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "availability_basis": {
+          "const": "synthetic_immediate_parent_order",
+          "default": "synthetic_immediate_parent_order",
+          "title": "Availability Basis",
+          "type": "string"
+        },
+        "case": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Case"
+        },
+        "case_id": {
+          "title": "Case Id",
+          "type": "string"
+        },
+        "method": {
+          "const": "full_history",
+          "default": "full_history",
+          "title": "Method",
+          "type": "string"
+        },
+        "output": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Output"
+        },
+        "policy": {
+          "additionalProperties": true,
+          "title": "Policy",
+          "type": "object"
+        },
+        "receipts": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Receipts",
+          "type": "array"
+        },
+        "source_path": {
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_path",
+        "source_sha256",
+        "case_id",
+        "case",
+        "output",
+        "receipts",
+        "policy"
+      ],
+      "title": "ExperimentEvidence",
+      "type": "object"
+    },
     "JournalEntry": {
       "additionalProperties": false,
       "properties": {
@@ -1944,6 +2023,606 @@
         "model"
       ],
       "title": "ModelContract",
+      "type": "object"
+    },
+    "NorthStarRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "attempts": {
+          "default": 0,
+          "title": "Attempts",
+          "type": "integer"
+        },
+        "core_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Core Value"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "cutoff_at": {
+          "title": "Cutoff At",
+          "type": "string"
+        },
+        "input_hash": {
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "reflection",
+                "encouragement",
+                "reminder"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mode"
+        },
+        "onset_available_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onset Available At"
+        },
+        "onset_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onset Date"
+        },
+        "onset_t_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onset T Index"
+        },
+        "owner_id": {
+          "title": "Owner Id",
+          "type": "string"
+        },
+        "profile_ref": {
+          "title": "Profile Ref",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "retryable": {
+          "default": false,
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "reviews": {
+          "items": {
+            "$ref": "#/$defs/NorthStarValueReview"
+          },
+          "title": "Reviews",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "north-star-record-v1",
+          "default": "north-star-record-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "selected": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NorthStarSelection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/SourceWriting"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "complete",
+            "failed",
+            "not_eligible"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation_evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Validation Evidence",
+          "type": "array"
+        },
+        "value_phrase": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value Phrase"
+        },
+        "week_end": {
+          "title": "Week End",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "owner_id",
+        "profile_ref",
+        "week_start",
+        "week_end",
+        "cutoff_at",
+        "input_hash",
+        "status",
+        "reason",
+        "created_at"
+      ],
+      "title": "NorthStarRecord",
+      "type": "object"
+    },
+    "NorthStarReviewRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "operation": {
+          "const": "review_north_star",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "retry": {
+          "default": false,
+          "title": "Retry",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "session_id",
+        "expected_revision",
+        "week_start"
+      ],
+      "title": "NorthStarReviewRequest",
+      "type": "object"
+    },
+    "NorthStarReviewedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "record": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SavedExperimentRecord"
+            },
+            {
+              "$ref": "#/$defs/NorthStarRecord"
+            }
+          ],
+          "title": "Record"
+        }
+      },
+      "required": [
+        "record"
+      ],
+      "title": "NorthStarReviewedDetails",
+      "type": "object"
+    },
+    "NorthStarReviewedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/NorthStarReviewedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "north_star_reviewed",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "NorthStarReviewedEvent",
+      "type": "object"
+    },
+    "NorthStarReviewedResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Event Ids",
+          "type": "array"
+        },
+        "operation": {
+          "const": "north_star_reviewed",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session": {
+          "$ref": "#/$defs/ExperienceSession"
+        },
+        "status": {
+          "const": "ok",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "status",
+        "session",
+        "event_ids"
+      ],
+      "title": "NorthStarReviewedResponse",
+      "type": "object"
+    },
+    "NorthStarSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "entry_id": {
+          "title": "Entry Id",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "title": "Evidence Quote",
+          "type": "string"
+        },
+        "quote_source": {
+          "enum": [
+            "journal_entry",
+            "nudge_response"
+          ],
+          "title": "Quote Source",
+          "type": "string"
+        },
+        "t_index": {
+          "title": "T Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "entry_id",
+        "t_index",
+        "date",
+        "quote_source",
+        "evidence_quote"
+      ],
+      "title": "NorthStarSelection",
+      "type": "object"
+    },
+    "NorthStarValueReview": {
+      "additionalProperties": false,
+      "properties": {
+        "approved_definition": {
+          "title": "Approved Definition",
+          "type": "string"
+        },
+        "core_value": {
+          "title": "Core Value",
+          "type": "string"
+        },
+        "input_receipt": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Receipt"
+        },
+        "prompt_version": {
+          "default": "north-star-source-assessment-prompt-v1",
+          "title": "Prompt Version",
+          "type": "string"
+        },
+        "provider_attempts": {
+          "items": {
+            "$ref": "#/$defs/ProviderAttempt"
+          },
+          "title": "Provider Attempts",
+          "type": "array"
+        },
+        "provider_request": {
+          "additionalProperties": true,
+          "title": "Provider Request",
+          "type": "object"
+        },
+        "schema_version": {
+          "default": "north-star-source-assessment-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/SourceWriting"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "validation_errors": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Validation Errors",
+          "type": "array"
+        },
+        "value_phrase": {
+          "title": "Value Phrase",
+          "type": "string"
+        }
+      },
+      "required": [
+        "core_value",
+        "value_phrase",
+        "approved_definition",
+        "sources",
+        "provider_request"
+      ],
+      "title": "NorthStarValueReview",
       "type": "object"
     },
     "NudgeDecidedEvent": {
@@ -2466,6 +3145,208 @@
         "outcome"
       ],
       "title": "NudgeInteraction",
+      "type": "object"
+    },
+    "NudgeResponseRecordedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "journal_entry_id": {
+          "title": "Journal Entry Id",
+          "type": "string"
+        },
+        "nudge_id": {
+          "title": "Nudge Id",
+          "type": "string"
+        },
+        "response": {
+          "minLength": 1,
+          "title": "Response",
+          "type": "string"
+        }
+      },
+      "required": [
+        "journal_entry_id",
+        "nudge_id",
+        "response"
+      ],
+      "title": "NudgeResponseRecordedDetails",
+      "type": "object"
+    },
+    "NudgeResponseRecordedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/NudgeResponseRecordedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "nudge_response_recorded",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "NudgeResponseRecordedEvent",
       "type": "object"
     },
     "NudgeSuppressionCheckedEvent": {
@@ -3106,6 +3987,189 @@
       "title": "ProfileTransform",
       "type": "object"
     },
+    "ProviderAttempt": {
+      "additionalProperties": false,
+      "properties": {
+        "actual_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Actual Model"
+        },
+        "attempt_number": {
+          "title": "Attempt Number",
+          "type": "integer"
+        },
+        "cache_write_input_tokens": {
+          "default": 0,
+          "title": "Cache Write Input Tokens",
+          "type": "integer"
+        },
+        "cached_input_tokens": {
+          "default": 0,
+          "title": "Cached Input Tokens",
+          "type": "integer"
+        },
+        "calculated_cost_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calculated Cost Usd"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "error_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Type"
+        },
+        "input_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Tokens"
+        },
+        "latency_seconds": {
+          "default": 0,
+          "title": "Latency Seconds",
+          "type": "number"
+        },
+        "output_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Tokens"
+        },
+        "provider": {
+          "enum": [
+            "openai",
+            "gemini"
+          ],
+          "title": "Provider",
+          "type": "string"
+        },
+        "provider_response_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider Response Id"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "raw_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Text"
+        },
+        "reasoning_effort": {
+          "title": "Reasoning Effort",
+          "type": "string"
+        },
+        "request_hash": {
+          "title": "Request Hash",
+          "type": "string"
+        },
+        "requested_model": {
+          "title": "Requested Model",
+          "type": "string"
+        },
+        "reserved_cost_usd": {
+          "title": "Reserved Cost Usd",
+          "type": "number"
+        },
+        "retryable": {
+          "default": false,
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "reused": {
+          "default": false,
+          "title": "Reused",
+          "type": "boolean"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "enum": [
+                "runtime",
+                "reference"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_hash",
+        "attempt_number",
+        "purpose",
+        "provider",
+        "requested_model",
+        "reasoning_effort",
+        "created_at",
+        "status",
+        "reserved_cost_usd"
+      ],
+      "title": "ProviderAttempt",
+      "type": "object"
+    },
     "ReactProfileProvenance": {
       "additionalProperties": false,
       "properties": {
@@ -3189,6 +4253,207 @@
         "retryable"
       ],
       "title": "SafeError",
+      "type": "object"
+    },
+    "SavedExperimentRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "attempts": {
+          "default": 0,
+          "title": "Attempts",
+          "type": "integer"
+        },
+        "core_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Core Value"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "cutoff_at": {
+          "title": "Cutoff At",
+          "type": "string"
+        },
+        "experiment": {
+          "$ref": "#/$defs/ExperimentEvidence"
+        },
+        "input_hash": {
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "reflection",
+                "encouragement",
+                "reminder"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mode"
+        },
+        "onset_available_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onset Available At"
+        },
+        "onset_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onset Date"
+        },
+        "onset_t_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Onset T Index"
+        },
+        "owner_id": {
+          "title": "Owner Id",
+          "type": "string"
+        },
+        "profile_ref": {
+          "title": "Profile Ref",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "retryable": {
+          "default": false,
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "reviews": {
+          "items": {
+            "$ref": "#/$defs/NorthStarValueReview"
+          },
+          "title": "Reviews",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "north-star-record-v1",
+          "default": "north-star-record-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "selected": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NorthStarSelection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/SourceWriting"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "complete",
+            "failed",
+            "not_eligible"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation_evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Validation Evidence",
+          "type": "array"
+        },
+        "value_phrase": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value Phrase"
+        },
+        "week_end": {
+          "title": "Week End",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "session_id",
+        "owner_id",
+        "profile_ref",
+        "week_start",
+        "week_end",
+        "cutoff_at",
+        "input_hash",
+        "status",
+        "reason",
+        "created_at",
+        "experiment"
+      ],
+      "title": "SavedExperimentRecord",
       "type": "object"
     },
     "ScenarioBundle": {
@@ -3674,8 +4939,10 @@
                 "assessment_time_advanced": "#/$defs/AssessmentTimeAdvancedEvent",
                 "drift_detected": "#/$defs/DriftDetectedEvent",
                 "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
+                "north_star_reviewed": "#/$defs/NorthStarReviewedEvent",
                 "nudge_decided": "#/$defs/NudgeDecidedEvent",
                 "nudge_generated": "#/$defs/NudgeGeneratedEvent",
+                "nudge_response_recorded": "#/$defs/NudgeResponseRecordedEvent",
                 "nudge_suppression_checked": "#/$defs/NudgeSuppressionCheckedEvent",
                 "profile_confirmed": "#/$defs/ProfileConfirmedEvent",
                 "weekly_coach_generated": "#/$defs/WeeklyCoachGeneratedEvent",
@@ -3715,6 +4982,12 @@
               },
               {
                 "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+              },
+              {
+                "$ref": "#/$defs/NorthStarReviewedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeResponseRecordedEvent"
               },
               {
                 "$ref": "#/$defs/AssessmentTimeAdvancedEvent"
@@ -3786,6 +5059,70 @@
         "view"
       ],
       "title": "SessionSelection",
+      "type": "object"
+    },
+    "SourceWriting": {
+      "additionalProperties": false,
+      "properties": {
+        "available_at": {
+          "title": "Available At",
+          "type": "string"
+        },
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "entry_id": {
+          "title": "Entry Id",
+          "type": "string"
+        },
+        "journal_entry": {
+          "title": "Journal Entry",
+          "type": "string"
+        },
+        "nudge_response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nudge Response"
+        },
+        "owner_id": {
+          "title": "Owner Id",
+          "type": "string"
+        },
+        "response_available_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Available At"
+        },
+        "t_index": {
+          "minimum": 0,
+          "title": "T Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "owner_id",
+        "entry_id",
+        "t_index",
+        "date",
+        "journal_entry",
+        "available_at"
+      ],
+      "title": "SourceWriting",
       "type": "object"
     },
     "SyntheticPersonaProfileProvenance": {
@@ -3868,8 +5205,10 @@
                 "assessment_time_advanced": "#/$defs/AssessmentTimeAdvancedEvent",
                 "drift_detected": "#/$defs/DriftDetectedEvent",
                 "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
+                "north_star_reviewed": "#/$defs/NorthStarReviewedEvent",
                 "nudge_decided": "#/$defs/NudgeDecidedEvent",
                 "nudge_generated": "#/$defs/NudgeGeneratedEvent",
+                "nudge_response_recorded": "#/$defs/NudgeResponseRecordedEvent",
                 "nudge_suppression_checked": "#/$defs/NudgeSuppressionCheckedEvent",
                 "profile_confirmed": "#/$defs/ProfileConfirmedEvent",
                 "weekly_coach_generated": "#/$defs/WeeklyCoachGeneratedEvent",
@@ -3909,6 +5248,12 @@
               },
               {
                 "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+              },
+              {
+                "$ref": "#/$defs/NorthStarReviewedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeResponseRecordedEvent"
               },
               {
                 "$ref": "#/$defs/AssessmentTimeAdvancedEvent"
@@ -4463,6 +5808,18 @@
           },
           "title": "Cited Journal Entry Ids",
           "type": "array"
+        },
+        "coach_unavailable_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Coach Unavailable Reason"
         },
         "digest": {
           "$ref": "#/$defs/WeeklyDigest"
@@ -5439,6 +6796,7 @@
             "delete_session": "#/$defs/SessionDeleteRequest",
             "load_scenario": "#/$defs/ScenarioLoadRequest",
             "read_trace": "#/$defs/TraceReadRequest",
+            "review_north_star": "#/$defs/NorthStarReviewRequest",
             "submit_journal_entry": "#/$defs/JournalEntrySubmitRequest"
           },
           "propertyName": "operation"
@@ -5461,6 +6819,9 @@
           },
           {
             "$ref": "#/$defs/TraceReadRequest"
+          },
+          {
+            "$ref": "#/$defs/NorthStarReviewRequest"
           }
         ]
       },
@@ -5476,6 +6837,7 @@
             "delete_session": "#/$defs/SessionDeletedResponse",
             "error": "#/$defs/ApiErrorResponse",
             "load_scenario": "#/$defs/ScenarioLoadedResponse",
+            "north_star_reviewed": "#/$defs/NorthStarReviewedResponse",
             "read_trace": "#/$defs/TraceReadResponse",
             "submit_journal_entry": "#/$defs/JournalEntrySubmittedResponse"
           },
@@ -5499,6 +6861,9 @@
           },
           {
             "$ref": "#/$defs/TraceReadResponse"
+          },
+          {
+            "$ref": "#/$defs/NorthStarReviewedResponse"
           },
           {
             "$ref": "#/$defs/ApiErrorResponse"
@@ -5527,8 +6892,10 @@
             "assessment_time_advanced": "#/$defs/AssessmentTimeAdvancedEvent",
             "drift_detected": "#/$defs/DriftDetectedEvent",
             "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
+            "north_star_reviewed": "#/$defs/NorthStarReviewedEvent",
             "nudge_decided": "#/$defs/NudgeDecidedEvent",
             "nudge_generated": "#/$defs/NudgeGeneratedEvent",
+            "nudge_response_recorded": "#/$defs/NudgeResponseRecordedEvent",
             "nudge_suppression_checked": "#/$defs/NudgeSuppressionCheckedEvent",
             "profile_confirmed": "#/$defs/ProfileConfirmedEvent",
             "weekly_coach_generated": "#/$defs/WeeklyCoachGeneratedEvent",
@@ -5568,6 +6935,12 @@
           },
           {
             "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+          },
+          {
+            "$ref": "#/$defs/NorthStarReviewedEvent"
+          },
+          {
+            "$ref": "#/$defs/NudgeResponseRecordedEvent"
           },
           {
             "$ref": "#/$defs/AssessmentTimeAdvancedEvent"

@@ -1,5 +1,6 @@
 """Tests for the bounded twinkl-752.1 weekly verifier ablation."""
 
+import hashlib
 import importlib.util
 import sys
 from pathlib import Path
@@ -41,8 +42,9 @@ def test_canonical_prompt_has_no_vif_critic_input() -> None:
             "Canonical Weekly Drift Reviewer prompt for Journal Entry Conflict "
             "decisions."
         ),
-        "version": "3.0",
+        "version": "4.0",
         "input_variables": [
+            "core_value_definitions",
             "declared_values",
             "cumulative_history",
             "current_week_entries",
@@ -50,6 +52,10 @@ def test_canonical_prompt_has_no_vif_critic_input() -> None:
     }
     assert "critic" not in prompt.lower()
     assert "P(-1)" not in prompt
+    # Historical renderers omit definitions and retain their version-3 surface.
+    assert hashlib.sha256(prompt.encode()).hexdigest() == (
+        "ead2e84317e303693c302cb3dafc73991afeffa8679d6df24cafb71967b9af82"
+    )
 
 
 def test_live_population_and_call_surface_are_frozen(prepared) -> None:

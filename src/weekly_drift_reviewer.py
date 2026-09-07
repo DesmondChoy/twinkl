@@ -12,6 +12,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
+import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from prompts import get_prompt_metadata, load_prompt
@@ -26,6 +27,9 @@ WEEKLY_DRIFT_REVIEWER_MODEL = "gpt-5.6-luna"
 WEEKLY_DRIFT_REVIEWER_REASONING_EFFORT = "low"
 WEEKLY_DRIFT_REVIEWER_PROMPT = "weekly_vif_verifier"
 WEEKLY_DRIFT_REVIEWER_MAX_ATTEMPTS = 2
+SCHWARTZ_CONFIG_PATH = (
+    Path(__file__).resolve().parents[1] / "config/schwartz_values.yaml"
+)
 
 Verdict = Literal["conflict", "not_conflict", "abstain"]
 Confidence = Literal["low", "medium", "high"]
@@ -189,6 +193,19 @@ def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def _render_core_value_definitions(core_values: Sequence[str]) -> str:
+    configured = yaml.safe_load(SCHWARTZ_CONFIG_PATH.read_text())
+    values = {
+        name.lower().replace("-", "_"): details
+        for name, details in configured["values"].items()
+    }
+    return "\n\n".join(
+        f"[{value}]\nDefinition: {values[value]['definition'].strip()}\n"
+        f"Core motivation: {values[value]['core_motivation'].strip()}"
+        for value in core_values
+    )
+
+
 def _render_weekly_reviewer_messages(
     *,
     core_values: Sequence[str],
@@ -198,6 +215,7 @@ def _render_weekly_reviewer_messages(
     rendered = (
         load_prompt(WEEKLY_DRIFT_REVIEWER_PROMPT)
         .render(
+            core_value_definitions=_render_core_value_definitions(core_values),
             declared_values="UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
             cumulative_history="UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
             current_week_entries="UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",

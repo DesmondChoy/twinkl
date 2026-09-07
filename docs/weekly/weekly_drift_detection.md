@@ -55,6 +55,19 @@ The runtime writes one Weekly Drift Reviewer JSON receipt per reviewed week.
 It also writes the Drift Detector result and structured Weekly Drift Detection
 output as JSON, markdown, and parquet. It renders the Coach Digest prompt.
 
+Prompt version `4.0` supplies the selected Core Values' existing `definition`
+and `core_motivation` fields from
+[`config/schwartz_values.yaml`](../../config/schwartz_values.yaml) in the trusted
+instructions. Together these provide Schwartz-based definitions plus
+project-specific elaborations, including motivation prose from the project's
+Persona-generation configuration. Both fields are retained as evaluated;
+the comparison does not isolate either field's effect. Journal Entry text
+remains separate untrusted input. Other
+generation guidance in that configuration is excluded. The response schema,
+Luna-low settings, and deterministic Drift rule are unchanged. Historical
+experiment renderers that omit the optional definitions block retain their
+prior rendered text; their existing receipts are not rewritten.
+
 The Experience cadence uses Monday-through-Sunday calendar weeks. Its
 due-review caller supplies an `as_of` date resolved in the user's IANA
 timezone, and only finalized weeks whose Sunday is earlier than `as_of` are
@@ -432,6 +445,12 @@ The Coach Digest prompt requires:
 - separate cited evidence for the prior and current weeks;
 - cited Journal Entries;
 - reflective rather than prescriptive language;
+- natural connections across Journal Entries, with dates only when needed for
+  clarity and no narration of the review process; prior and current experiences
+  remain distinct, and findings must support any stated pattern or change;
+- conversational uncertainty that leaves room for the user's circumstances
+  without commentary about excerpts, evidence sufficiency, or model inference;
+  unclear situations remain explicit without assumed motives or reassurance;
 - no score jargon, gamification, or judgmental framing;
 - no micro-habit or action-plan output;
 - quoted evidence where possible; and
@@ -460,6 +479,12 @@ gently and ask for useful context without deciding whether Drift exists.
 
 These checks are narrow guardrails, not a complete explanation-quality claim.
 
+Prompt version `4.2` adds these conversational style requirements. Saved
+responses retain their original wording and prompt provenance. The sample
+generation report reads the prompt version from saved generation provenance
+for both JSON and Markdown output; empty or mixed-version manifests are
+rejected rather than assigned a misleading version.
+
 ---
 
 ## Safety and Selection Behavior
@@ -482,10 +507,20 @@ learned routing policies.
 
 ## Current Coach Digest Batch Status
 
+The [September v4 Run 1 replay refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+provides five accepted key-week responses for Noor, Nisha, Sook Yin, Wei Jun,
+and Henrik. Generation used Luna at reasoning effort `none` and prompt `4.2`:
+seven calls including validation-guided retries for Noor and Wei Jun. All five
+responses passed Coach Digest Validations and match the current saved Weekly
+Drift Detection inputs. No Weekly Drift Reviewer or NSM calls were made, and
+no new Coach Digest Evals or human review was performed.
+
 The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
-uses one key week for each deployed Persona replay. The same five accepted
-responses appear in the public scenario bundles and evaluation manifest. All
-five passed all Coach Digest Validations. Coach Digest Evals scored mean
+preserves five key-week responses from the August Persona roster and inputs.
+These historical responses remain in its evaluation manifest. Current v4 Run 1
+scenario bundles accept a response only when its Weekly Drift Detection input
+hash matches; missing or incompatible responses remain unavailable. All five
+August responses passed all Coach Digest Validations. Coach Digest Evals scored mean
 correctness `4.80`, specificity `5.00`, non-prescriptive tone `5.00`, and
 tension honesty `4.60`; all reflective questions passed, with no failed
 verdicts or review flags. Luna-none generated and evaluated the responses.

@@ -6,6 +6,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import CoachDigestCard from "./CoachDigestCard";
+import NorthStarMoment from "./NorthStarMoment";
 import DriftStateExplanation from "./DriftStateExplanation";
 import type { OnboardingProfile } from "./domain";
 import type {
@@ -186,6 +187,7 @@ export default function ReplayTimeline({
   onSelectJournalEntry,
 }: ReplayTimelineProps) {
   const [openEntry, setOpenEntry] = useState<JournalEntryContract | null>(null);
+  const openEntryTriggerRef = useRef<HTMLElement | null>(null);
   const [mobilePanel, setMobilePanel] = useState<"entries" | "result">(
     "entries",
   );
@@ -205,6 +207,11 @@ export default function ReplayTimeline({
     weeklyDigest,
     week.week_start,
   );
+  const digestEvent = reviewTraceEvents.find((event) =>
+    week.event_ids.includes(event.event_id)
+    && event.event_type === "weekly_digest_built"
+  );
+  const coachUnavailableReason = digestEvent?.details.coach_unavailable_reason;
   const status = useMemo(() => {
     if (resultVisible) return `${replayStateLabel(state)} revealed.`;
     if (pendingNudgeEntryId) {
@@ -245,6 +252,8 @@ export default function ReplayTimeline({
   }, [resultVisible]);
 
   const openJournalEntry = (entry: JournalEntryContract) => {
+    openEntryTriggerRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement : null;
     onSelectJournalEntry(entry.journal_entry_id);
     setOpenEntry(entry);
   };
@@ -435,6 +444,31 @@ export default function ReplayTimeline({
                 headingId="replay-coach-digest-title"
                 headingLevel={3}
                 className="coach-digest--replay"
+                journalEntries={reviewedJournalEntries}
+                onOpenEntry={openJournalEntry}
+              />
+            ) : null}
+            {resultVisible && typeof coachUnavailableReason === "string"
+              && !weeklyDigest?.coach_narrative ? (
+              <aside className="coach-digest coach-digest--replay" aria-labelledby="replay-coach-unavailable-title">
+                <p className="eyebrow">Coach Digest</p>
+                <h3 id="replay-coach-unavailable-title">No saved Coach Digest for this result</h3>
+                <p>
+                  {coachUnavailableReason.startsWith("Historical Coach Digest omitted:")
+                    ? "The earlier Coach Digest was based on different Weekly Drift Detection results and is omitted from this replay."
+                    : "A Coach Digest response has not been saved for this replay week."}
+                </p>
+              </aside>
+            ) : null}
+            {resultVisible && weeklyDigest && driftResult ? (
+              <NorthStarMoment
+                profile={profile}
+                journalEntries={reviewedJournalEntries}
+                weeklyDigest={weeklyDigest}
+                driftResult={driftResult}
+                traceEvents={reviewTraceEvents}
+                openJournalEntry={openJournalEntry}
+                headingLevel={3}
               />
             ) : null}
             {resultVisible && inspectEventId ? (
@@ -456,6 +490,10 @@ export default function ReplayTimeline({
           const closingEntry = openEntry;
           setOpenEntry(null);
           window.requestAnimationFrame?.(() => {
+            if (openEntryTriggerRef.current?.isConnected) {
+              openEntryTriggerRef.current.focus({ preventScroll: true });
+              return;
+            }
             if (closingEntry) {
               document
                 .getElementById(

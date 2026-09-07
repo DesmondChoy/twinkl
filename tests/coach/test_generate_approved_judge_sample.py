@@ -15,6 +15,7 @@ from scripts.coach.generate_approved_judge_sample import (
     _extract_scenario_key_week_digests,
     _find_stored_digest_path,
     _generate_reusing_weekly_drift,
+    _write_generation_report,
 )
 from src.coach.schemas import EvidenceSnippet, LLMCallMetrics, WeeklyDigest
 
@@ -72,7 +73,7 @@ def test_sample_generator_requires_explicit_personas():
 
 
 def test_extracts_only_deployed_key_week_digests(tmp_path: Path):
-    personas = ["11de77e8", "23d101f8", "8f83c818", "988d1a65", "02fb94f3"]
+    personas = ["02fb94f3", "5fa8b540", "ed67c9cc", "8f83c818", "2d928d8a"]
 
     sources = _extract_scenario_key_week_digests(personas, tmp_path)
 
@@ -80,11 +81,11 @@ def test_extracts_only_deployed_key_week_digests(tmp_path: Path):
         persona_id: (source["scenario_id"], source["week_start"])
         for persona_id, source in sources.items()
     } == {
-        "11de77e8": ("two-values-lukas", "2025-10-13"),
-        "23d101f8": ("stable-meera", "2025-09-15"),
-        "8f83c818": ("active-wei-jun", "2025-06-30"),
-        "988d1a65": ("recovered-marc", "2025-03-17"),
-        "02fb94f3": ("uncertain-noor", "2025-04-14"),
+        "02fb94f3": ("stable-noor", "2025-05-19"),
+        "5fa8b540": ("active-nisha", "2025-03-03"),
+        "ed67c9cc": ("ended-sook-yin", "2025-02-10"),
+        "8f83c818": ("uncertain-wei-jun", "2025-06-30"),
+        "2d928d8a": ("two-values-henrik", "2025-02-17"),
     }
     for persona_id in personas:
         paths = list(tmp_path.glob(f"{persona_id}_*.json"))
@@ -150,7 +151,7 @@ def test_coach_only_generation_reuses_outputs_and_builds_manifest(tmp_path: Path
     assert calls == 2
     assert len(manifest) == 2
     assert all(
-        item["provenance"]["coach_prompt_version"] == "4.1"
+        item["provenance"]["coach_prompt_version"] == "4.2"
         for item in manifest
     )
     assert all(item["digest"]["state_comparisons"] == [] for item in manifest)
@@ -251,3 +252,42 @@ def test_coach_only_generation_retries_one_validation_failure(tmp_path: Path):
     assert len(manifest) == 1
     assert manifest[0]["provenance"]["coach_attempt_count"] == 2
     assert len(list(output_dir.glob("*.coach_diagnostic.json"))) == 2
+
+
+@pytest.mark.parametrize("prompt_version", ["4.1", "4.2"])
+def test_generation_report_uses_saved_prompt_version(
+    tmp_path: Path, prompt_version: str
+):
+    manifest_path = (
+        Path(__file__).resolve().parents[2]
+        / "logs/experiments/reports/coach_digest_sample_20260824"
+        / "judge_sample_manifest.json"
+    )
+    manifest = json.loads(manifest_path.read_text())
+    for item in manifest:
+        item["provenance"]["generation"]["prompt_version"] = prompt_version
+
+    _write_generation_report(manifest, tmp_path, command="test report")
+
+    report = json.loads((tmp_path / "generation_metrics.json").read_text())
+    assert report["coach_prompt_version"] == prompt_version
+    assert (
+        f"Coach Digest prompt: `weekly_digest_coach` v{prompt_version}"
+        in (tmp_path / "report.md").read_text()
+    )
+
+
+@pytest.mark.parametrize("versions", [[], ["4.1", "4.2"]])
+def test_generation_report_rejects_missing_or_mixed_prompt_versions(
+    tmp_path: Path, versions: list[str]
+):
+    manifest = [
+        {"provenance": {"generation": {"prompt_version": version}}}
+        for version in versions
+    ]
+
+    with pytest.raises(ValueError, match="one shared Coach Digest prompt version"):
+        _write_generation_report(manifest, tmp_path, command="test report")
+
+    assert not (tmp_path / "generation_metrics.json").exists()
+    assert not (tmp_path / "report.md").exists()
