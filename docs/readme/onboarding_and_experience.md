@@ -24,13 +24,48 @@ capstone.
 
 ## Experience and Inspect React App — 🚧 In Progress
 
-The React app also contains the manual Experience, saved Persona replay, and
-Inspect. Manual Experience submits Journal Entries to the versioned Python
+The entry page offers **Try the Demo** for five saved synthetic Persona stories
+and **Try Onboarding** for the personal assessment. The Twinkl wordmark and
+**Go home** return to this page while preserving progress. **Continue replay**
+resumes the current Persona from the picker.
+
+The manual Experience submits Journal Entries to the versioned Python
 boundary, supports displayed nudge reply and skip actions, reviews only closed
 Monday-through-Sunday weeks, and keeps the Weekly Drift Detection result when
-the Coach Digest cannot return a valid response. Inspect reads the same Profile,
+the Coach Digest cannot return a valid response. **Write on the next day** and
+**Close week and review** advance Simulated time after the newest Journal Entry
+is final. Journal Entry removal and saved nudge responses recompute affected
+closed weeks that were already reviewed. Inspect reads the same Profile,
 Journal Entries, Weekly Drift Reviewer Decisions, Drift state, Coach Digest
-response, and trace events.
+response, North Star Moment record, and trace events. Manual sessions retain
+**View Profile calculation** in Inspect; saved Persona Profiles disclose their
+synthetic projection.
+
+Saved Persona replay shows all Journal Entries, displayed nudges, and responses
+for the selected week immediately. **Review Weekly Drift Detection** opens the
+result in the full weekly workspace; **Next week** becomes available after
+review. **Previous**, **Restart**, reviewed week markers, and named key-week
+jumps provide navigation. Week changes, reload, and returning from Inspect
+open Journal Entries first. Results keep **Why this state** collapsed until
+requested, with source links and per-Core-Value AI review details. Coach Digest
+and North Star Moment cards have direct navigation when available.
+
+The five Personas are Noor (No Active Drift), Nisha (Active Drift), Sook Yin
+(an ended Historical Drift Record), Wei Jun (Insufficient Evidence), and Henrik
+(independent Core Value states). Their saved Weekly Drift prompt v4 Run 1
+results cover 27 reviewed weeks and 52 Journal Entries.
+Saved Coach Digest responses cover one key week per Persona; the other 22
+weeks retain Weekly Drift Detection output without a saved Coach Digest response.
+
+North Star Moment displays at most one exact quotation beneath the Coach
+Digest, with its source date and Journal Entry link. Active Drift uses a
+supportive action from before onset; No Active Drift prefers a verified
+current-week action and otherwise uses a historical reminder. Insufficient
+Evidence produces no card. The saved replay preserves 23 selected quotations,
+three ineligible outcomes, and one completed review without a supportive
+source. These are AI assessments of synthetic writing, with human review
+deferred. Live review uses the separate `review_north_star` operation and fails
+closed without a finalized integration budget; the live budget is unavailable.
 
 Saved Persona replay is deterministic and does not require a provider key. The
 browser requests the scenario catalog and bundles with `cache: no-store`, then
@@ -41,7 +76,8 @@ invalid, and failed events remain unavailable.
 Run the Python boundary from the repository root:
 
 ```sh
-uv run uvicorn src.demo.api:app --port 8000
+source .venv/bin/activate
+uv run uvicorn src.demo.api:app --env-file .env --port 8000
 ```
 
 Run the React development server in a second terminal:
@@ -52,11 +88,22 @@ npm install
 npm run dev
 ```
 
-React checks are available through `npm test`, `npm run typecheck`, and
-`npm run build`. Regenerate the shared JSON Schema and canonical fixture with
-`uv run python -m src.demo.export_contract_schema` after a contract change.
+React checks are available through `npm test`, `npm run test:watch`,
+`npm run typecheck`, and `npm run build`. From the repository root, these
+commands regenerate the shared contracts and saved experiment replay without
+provider calls:
+
+```sh
+source .venv/bin/activate
+uv run python -m src.demo.export_contract_schema
+uv run python -m scripts.export_demo_experiments
+```
+
+The replay export writes the compact North Star Moment records, five scenario
+bundles, and catalog hashes from pinned experiment inputs. It preserves saved
+Coach Digest responses only when their source hashes match the current inputs.
 See the [Experience and Inspect guide](../../docs/demo/experience_inspect_app.md) for
-the six operations, assessment deployment, data boundary, and verification
+the seven operations, assessment deployment, data boundary, and verification
 workflow.
 
 The [public assessment](https://onboarding-production-1dd2.up.railway.app/)

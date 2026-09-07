@@ -34,11 +34,11 @@ writing. No Active Drift prefers current-week encouragement, then an older
 historical reminder. No Active Drift alone never establishes alignment.
 Insufficient Evidence produces no card.
 
-## 1. What this adds
+## 1. Role in the weekly reflection
 
 Twinkl compares Journal Entries with the user's confirmed Core Values.
 Weekly Drift Detection identifies repeated Conflict, and the Coach Digest
-explains the finding and asks one reflective question. North Star Moment adds
+explains the finding and asks one reflective question. North Star Moment supplies
 an example of behaviour supporting a confirmed Core Value, quoted from the
 user's own writing.
 
@@ -56,8 +56,8 @@ covering 27 reviewed weeks from the completed targeted experiment. The
 onboarding path supports generation during the user's session after an
 eligible closed-week review when its runtime budget is available. Both paths
 use the same selection and validation rules. Experience displays the quotation beneath the
-Coach Digest. Inspect shows why it was selected. This adds a personal example
-to the existing reflection without generating advice or a second question.
+Coach Digest. Inspect shows why it was selected. The personal example
+accompanies the reflection without generating advice or a second question.
 
 A Persona or user need not receive a card. Weeks without an eligible trigger
 or a suitable earlier action correctly show none. The onboarding path uses

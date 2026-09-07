@@ -8,8 +8,8 @@ supporting capstone report materials. Submitted milestone files remain under
 
 - [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
   the Phase 2 Technical Paper
-- Rendered report PDF — unavailable following the NSM evaluation reset;
-  regenerate and visually verify it after a later approved paper update
+- Rendered report PDF — not included; generate it from the maintained source
+  and visually verify every page before distribution
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
 - [`images/`](images/) — report figures, interface captures, and evaluation
@@ -19,15 +19,15 @@ supporting capstone report materials. Submitted milestone files remain under
 
 ## Report Controls
 
-- **Document status:** Maintained Phase 2 Technical Paper source; rendered PDF
-  unavailable pending a later approved paper update
+- **Document status:** Maintained Phase 2 Technical Paper source; PDF generation
+  and visual verification are required before distribution
 - **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
 - **Product source:** [`../prd.md`](../prd.md)
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
-- **Evidence date:** Core paper 2026-08-31; NSM evaluation reset 2026-09-06,
-  with methodology review and the first study pending
+- **Evidence date:** Core paper 2026-08-31; North Star Moment targeted v4 Run 1
+  results and saved Persona evidence 2026-09-07
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -53,22 +53,30 @@ charts under
 [`images/`](images/). The Quarto front matter selects XeLaTeX and records the
 fonts, page geometry, table of contents, and PDF presentation settings.
 
-The rendered report cites the committed
+The paper cites the historical August
 [Coach Digest sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md),
 [Coach Digest Validations](../../logs/experiments/reports/coach_digest_validations_20260824/report.md),
 and [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
-for the five saved Persona key weeks. This result is same-model AI review. The
+for the previous five-Persona roster and inputs. This result is same-model AI review. The
 independent-provider Coach Digest and Drift/control tooling has no committed paid result and
 does not change the report's evidence claim.
 
-Prior NSM results, derived insights, and evaluation artifacts have been removed
-from the current experiment record. The [NSM experiment
-methodology](../north_star/nsm_experiment_methodology.md) records the reset;
-its design remains pending review before the first study in the new record.
-Sections 3.9 and 4.5 and Appendix C preserve the implemented feature's scope
-without carrying forward evaluation or browser-success claims. The rendered
-report PDF has been removed because it contained superseded NSM results.
-Regenerate it and inspect every page after a later approved paper update.
+The [September Coach Digest sample](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+contains five accepted key-week responses for the current Persona roster and
+Weekly Drift inputs. All pass Coach Digest Validations, with no corresponding
+Coach Digest Evals or human review. The August scores do not describe these
+responses.
+
+The [NSM experiment methodology](../north_star/nsm_experiment_methodology.md)
+and [targeted v4 Run 1 results](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
+support Sections 3.9 and 4.5. The comparison covers 501 weeks from 105 synthetic
+Personas, with 38 reassessed cases and 463 retained observations. Full eligible
+history has higher Card precision and Opportunity recall than Nomic top-three
+retrieval in both partitions. These are AI assessments with qualified final
+histories that have prior upstream research exposure, not human validation or
+an untouched final test. Appendix C describes saved full-history outcomes for
+five Personas and 27 weeks. Live budget configuration and the final source-level
+walkthrough remain separate work.
 
 ## Submission Checks
 

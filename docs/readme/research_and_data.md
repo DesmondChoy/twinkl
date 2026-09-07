@@ -4,6 +4,56 @@
 
 ---
 
+## Weekly Drift Detection and North Star Moment
+
+Weekly Drift Detection reviews Journal Entries against the confirmed Profile's
+Core Values using `gpt-5.6-luna` with reasoning effort `low`. Prompt `4.0`
+includes only the selected Core Values' `definition` and `core_motivation`
+fields from `config/schwartz_values.yaml`: Schwartz-based definitions plus
+project-specific elaborations. This context belongs to trusted instructions;
+Journal Entry text remains separate user-controlled input. The deterministic
+Drift Detector identifies two consecutive Conflicts for the same Core Value.
+
+The [Core Value definitions comparison](../../logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md)
+contains three Runs per prompt across 204 Personas and 951 observed weeks.
+The v3 baseline detects 22, 22, and 21 Drifts; v4 detects 19, 21, and 18.
+The report compares Core Value totals, individual Drift boundaries and
+terminations, changed entry decisions, and variation between Runs. These
+counts establish differences in detections, not better or worse accuracy.
+The historical Luna-low recall and false-alert results use prompt v2 and
+remain a separate development result.
+
+North Star Moment supplies at most one exact quotation of a supportive action
+beneath the Coach Digest. Active Drift uses writing from before onset; No
+Active Drift prefers current-week encouragement, then a historical reminder.
+Insufficient Evidence produces no card. Eligible Journal Entries and user
+nudge responses require ownership and availability evidence; AI-written nudges
+cannot supply the quotation. Full eligible history is the application method,
+using Luna-low source review and deterministic quotation, chronology, and
+selection checks. Live execution requires a finalized integration budget and
+fails closed when that budget is unavailable.
+
+The [targeted NSM comparison](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
+uses saved Weekly Drift v4 Run 1 outputs for 501 weeks from 105 Personas.
+It reassesses both methods on 38 affected weeks and retains observations for
+463 unchanged weeks, preserving the 81/24 development/final Persona split.
+
+| Partition | Method | Card precision | Opportunity recall |
+|---|---|---:|---:|
+| Development | Nomic top-three retrieval | 58.58% | 55.35% |
+| Development | Full eligible history | 75.54% | 74.62% |
+| Qualified final | Nomic top-three retrieval | 57.65% | 56.98% |
+| Qualified final | Full eligible history | 82.35% | 81.40% |
+
+These are AI assessments of synthetic writing with paired metric exclusions,
+not human validation or an untouched final test. The final histories have prior
+upstream research exposure, and the comparison retains earlier observations.
+It does not establish real-user benefit, Weekly Drift accuracy, or deployment
+approval. The five saved Persona replays preserve full-history selections and
+no-card outcomes across 27 weeks. See the [feature specification](../north_star/north_star_moment.md),
+[experiment methodology](../north_star/nsm_experiment_methodology.md), and
+[research commands](status_and_setup.md#weekly-drift-and-north-star-moment-experiments).
+
 ## VIF Critic (Offline) — ✅ Complete Capstone Research
 
 The VIF Critic (Offline) training and evaluation stack is complete for the time-boxed
@@ -160,7 +210,9 @@ The evaluations follow two connected paths:
 - **User-facing path:** Weekly Drift Detection checks whether the fixed Weekly
   Drift Reviewer and Drift Detector find Drift without unacceptable false
   Drift alerts. Coach Digest evaluation checks the cited evidence, response
-  contract, and future user-perceived accuracy.
+  contract, and future user-perceived accuracy. North Star Moment evaluation
+  compares exact quotations and omissions against shared AI assessments of
+  eligible writing, with Card precision and Opportunity recall as primary metrics.
 - **Offline research path:** LLM-Judge validation measures label consistency and
   project-team agreement. Value Modeling records how well the VIF Critic
   (Offline) recovers Conflict. The VIF Critic (Offline) remains outside the
@@ -174,8 +226,11 @@ Digest generator. The deterministic Drift/control study selects one target for
 each of the 42 known development Drifts and 42 matched controls under the
 current committed inputs. Its default command writes the target catalog without
 provider calls. The paid generation, cross-provider AI review, and comparison
-report have no committed result; the five-response result remains same-model AI
-review, not human validation.
+report have no committed result. The August five-response result remains
+same-model AI review, not human validation. The five current saved Persona
+responses use Coach Digest prompt `4.2` and Luna-none, pass Coach Digest
+Validations, and match their current Weekly Drift inputs. They have no
+corresponding Coach Digest Evals result; the August scores do not describe them.
 
 ## Embedding Explorer — ✅ Complete
 

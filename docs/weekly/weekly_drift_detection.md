@@ -64,7 +64,7 @@ Persona-generation configuration. Both fields are retained as evaluated;
 the comparison does not isolate either field's effect. Journal Entry text
 remains separate untrusted input. Other
 generation guidance in that configuration is excluded. The response schema,
-Luna-low settings, and deterministic Drift rule are unchanged. Historical
+Luna-low settings, and deterministic Drift rule are fixed. Historical
 experiment renderers that omit the optional definitions block retain their
 prior rendered text; their existing receipts are not rewritten.
 
@@ -479,11 +479,21 @@ gently and ask for useful context without deciding whether Drift exists.
 
 These checks are narrow guardrails, not a complete explanation-quality claim.
 
-Prompt version `4.2` adds these conversational style requirements. Saved
+Prompt version `4.2` includes these conversational style requirements. Saved
 responses retain their original wording and prompt provenance. The sample
 generation report reads the prompt version from saved generation provenance
 for both JSON and Markdown output; empty or mixed-version manifests are
 rejected rather than assigned a misleading version.
+
+In Experience, an eligible closed-week result can also show a
+[North Star Moment](../north_star/north_star_moment.md) beneath the Coach Digest.
+This separate review selects at most one exact quotation of a supportive action;
+it does not alter Weekly Drift Detection or the Coach Digest response contract.
+Active Drift restricts sources to pre-onset writing, No Active Drift permits
+current-week encouragement or an older reminder, and Insufficient Evidence
+produces no card. Saved replay supplies completed records; live review requires
+a valid integration budget. The batch Weekly Drift Detection CLI renders the
+Coach Digest prompt and does not run North Star Moment.
 
 ---
 

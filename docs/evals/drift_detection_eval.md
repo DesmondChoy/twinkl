@@ -77,10 +77,9 @@ See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
   coverage and abstention, cross-week hits, detection delay, entry-level and
   per-Core-Value metrics, response status, latency, token use, and cost.
 
-The prompt used for the reported development Runs is version `2.0`. Runtime
-version `3.0` added stricter confidence, reason, and exact-quote rules; the user
-accepted that cleanup without a development rerun. Current runtime version
-`4.0` adds the selected Core Values' existing `definition` and `core_motivation`
+The prompt used for the reported accuracy results is version `2.0`. The
+version `3.0` contract enforces confidence, reason, and exact-quote rules.
+Current runtime version `4.0` also supplies the selected Core Values' `definition` and `core_motivation`
 fields: Schwartz-based definitions plus project-specific elaborations.
 The separate
 [`twinkl-j3k7` comparison](../../logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md)

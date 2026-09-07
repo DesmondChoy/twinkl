@@ -158,6 +158,20 @@ those bundles:
 ```
 
 The runner requires an explicit Persona roster. It has no default roster.
+`--reuse-scenario-key-weeks` selects the exact `weekly_digest_built` input at
+each public scenario's key week. `--reuse-weekly-drift-output` instead reads
+saved outputs under `--weekly-drift-output-dir`. These options are mutually
+exclusive and both skip Weekly Drift Reviewer calls. Without either reuse
+option, `--execute` runs paid Weekly Drift Detection as well as Coach Digest
+generation. Omitting `--execute` prints the selected plan without provider calls.
+
+`--manifest-out` selects the sample manifest, `--parquet-path` selects the
+persisted Weekly Drift Detection dataset, and `--response-fixture-out` selects
+the generated response fixture (default `src/demo/coach_digest_responses.json`).
+Scenario reuse also rebuilds the public scenario bundles and derives the
+manifest from their displayed responses. A saved response must match the
+current Weekly Drift Detection input hash before the exporter accepts it.
+
 Use a new output directory and a separate Parquet path for refreshed inputs
 so the August sample, its AI evaluation, and the historical persisted corpus
 remain reproducible. The [completed September generation report](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)

@@ -12,8 +12,9 @@
 | Coach Digest validation depth | ⚠️ Partial | The [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json) preserves five accepted key-week responses from the previous Persona roster and inputs. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md) supplies five accepted current key-week responses using Luna-none and prompt `4.2`, with matching current input hashes and passing Coach Digest Validations. No new Coach Digest Evals or human review was performed. The five historical August responses passed all Coach Digest Validations; their Coach Digest Evals scored mean correctness `4.80`, specificity `5.00`, non-prescriptive tone `5.00`, and tension honesty `4.60`; all reflective questions passed, with no failed verdicts or review flags. These scores are same-model AI review, not human validation. Cross-provider evaluator options and the deterministic 42-Drift/42-control study are implemented, but no paid independent-provider result is committed. Future human calibration of the AI review remains incomplete. |
 | Experience and Inspect completion | 🚧 In Progress | The shared app, five saved Persona replays, manual Journal Entries, displayed nudges, Weekly Drift Detection, Coach Digest, Inspect, privacy notice, confirmed session deletion, and release checks are implemented. Coach Digest feedback, longitudinal Core Value history, and the final professor walkthrough evidence remain open. |
 | Displayed nudge user evidence | ⚠️ Not collected | Displayed nudge implementation is complete. A future external pilot can measure response rate, continued journaling, and perceived relevance. Saved replays and regression tests do not establish those user outcomes. |
+| North Star Moment | 🧪 AI evaluation and saved replay | Full eligible history supplies exact supportive-action quotations and no-card outcomes across all five saved Persona replays. The [v4 Run 1 comparison](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md) covers 501 weeks from 105 synthetic Personas, with 38 reassessed cases and 463 retained observations. Human review and real-user benefit remain unestablished. Live execution fails closed without a finalized integration budget. |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic (Offline) embeddings |
-| Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. The evidence is AI-reviewed synthetic development evidence; no fresh final test was run, so no deployment approval is claimed. |
+| Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. Prompt `4.0` includes the selected Core Values' definitions and core motivations. Its [comparison with v3](../../logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md) measures changes in detections across three Runs per variant; it does not establish accuracy. Evidence remains AI-reviewed synthetic development evidence without a fresh final test or deployment approval. |
 | Journaling anomaly radar | ❌ Not Started | Cadence/gap detection beyond the current prototype-router tooling |
 | Goal-aligned inspiration feed | ❌ Not Started | External API integration |
 
@@ -21,7 +22,8 @@ For the full breakdown, see the [Implementation Status](../../docs/prd.md#implem
 
 ## Common Commands
 
-Examples below use `uv run` so they pick up the project environment directly. Activating `.venv` manually also works.
+Run these commands from the repository root with `.venv` activated, except
+where a frontend directory is specified. `uv run` uses the project environment.
 
 - Launch the annotation tool: `uv run shiny run src/annotation_tool/app.py`
 - Launch the Experience and Inspect Python boundary: `uv run uvicorn src.demo.api:app --port 8000`
@@ -69,6 +71,84 @@ The Drift/control runner accepts source and output overrides through
 Weekly Drift Reviewer and Coach Digest calls. See the
 [Coach Digest test and eval guide](../../docs/evals/coach_narrative_test_and_eval_guide.md)
 before using either paid command.
+
+### Weekly Drift and North Star Moment experiments
+
+The experiment runners expose the following commands and options:
+
+| Module (`python -m …`) | Commands | Options |
+|---|---|---|
+| `scripts.experiments.weekly_drift_definitions` | `prepare`, `run`, `report`, `verify` | `--output PATH` selects the frozen experiment directory. `run --limit N` executes at most N incomplete requests and retains them for resumption. |
+| `scripts.experiments.nsm_experiment` | `prepare`, `run`, `report`, `verify` | `--record PATH` selects the consolidated original study JSON. `--concurrency N` accepts 1–32, default 8. |
+| `scripts.experiments.nsm_targeted_update` | `audit`, `prepare`, `run`, `report`, `verify` | `--output PATH` selects a separate update directory; it cannot be the original study directory. `--concurrency N` accepts 1–32, default 8. |
+
+These runners' `run` commands make paid provider calls for incomplete requests;
+they have no `--execute` flag. Completed receipts are reused on resume.
+`verify` checks frozen inputs and code without provider calls. `report` also
+makes no provider calls but writes derived results. `audit` writes the targeted
+update's impact audit, and `prepare` freezes inputs and may perform local Nomic
+encoding. Preserve the published records when choosing output paths.
+
+Reproduce the frozen 105-Persona cohort without provider calls or file writes:
+
+```sh
+uv run --no-sync python -m scripts.experiments.north_star_cohort_selection
+```
+
+Verify the saved Weekly Drift definitions study, or inspect runner options:
+
+```sh
+uv run --no-sync python -m scripts.experiments.weekly_drift_definitions verify
+uv run --no-sync python -m scripts.experiments.nsm_targeted_update --help
+uv run --no-sync python -m scripts.experiments.nsm_experiment --help
+```
+
+Exact NSM verification requires the recorded study source versions. The
+published targeted-update revision `f7e14ebb` matches its 15 frozen code hashes;
+the current application contracts differ, so running its `verify` command
+against the current checkout rejects that mismatch. Use the
+[methodology's reproduction guidance](../north_star/nsm_experiment_methodology.md)
+for the original study and the
+[targeted-update report](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
+for its retained observations, audit, and regrading procedure. The saved replay
+export instead validates the completed-study hash and matching semantic inputs;
+see [Experience and Inspect](../demo/experience_inspect_app.md).
+
+The `north_star_phase0*`, `north_star_luna`, `north_star_encoder_probe`,
+`north_star_integration`, and `north_star_saved_checks` scripts support historical
+preparation and diagnostics. Their experiment outputs do not supply the current
+NSM comparison; use the two `nsm_*` runners and linked frozen records above.
+
+### Saved Persona Coach Digest responses
+
+The sample generator requires an explicit `--personas` roster. Preview the
+current five-Persona key-week regeneration without provider calls:
+
+```sh
+uv run python -m scripts.coach.generate_approved_judge_sample \
+  --personas 02fb94f3 5fa8b540 ed67c9cc 8f83c818 2d928d8a \
+  --reuse-scenario-key-weeks \
+  --manifest-out logs/exports/coach_digest_refresh/judge_sample_manifest.json \
+  --parquet-path logs/exports/coach_digest_refresh/weekly_digests.parquet
+```
+
+`--execute` performs the generation. With `--reuse-scenario-key-weeks`, the
+runner requires exactly those five deployed Persona IDs, reads each public
+scenario's key-week Weekly Drift Detection output, generates and validates
+Coach Digest responses, writes the response fixture, rebuilds the public
+scenario bundles, and derives the evaluation manifest from their displayed
+responses. It makes no Weekly Drift Reviewer calls. Diagnostic records preserve
+generation failures and validation-guided retries.
+
+The mutually exclusive `--reuse-weekly-drift-output` mode reads stored output
+from `--weekly-drift-output-dir` and generates only Coach Digest responses.
+Without either reuse mode, execution runs the Weekly Drift Reviewer and Drift
+Detector before Coach Digest generation. `--manifest-out`, `--parquet-path`,
+and `--response-fixture-out` select output files; changing the manifest or
+Parquet path alone does not redirect the checked-in response fixture or public
+scenario rebuild. See the
+[Coach Digest test and eval guide](../evals/coach_narrative_test_and_eval_guide.md)
+for evaluation commands and generation/evaluator provenance.
 
 ## Setup
 

@@ -10,14 +10,38 @@ topics, Twinkl starts with a confirmed Profile, reviews Journal Entries over
 time, and shows evidence when behavior conflicts with Core Values. The current
 POC keeps the Profile fixed. Profile evolution is future work.
 
+## Experience
+
+- **Try the Demo** explores five saved synthetic Personas: Noor, Nisha, Sook
+  Yin, Wei Jun, and Henrik. Each week shows its Journal Entries, nudges, and
+  responses; **Review Weekly Drift Detection** opens the saved weekly result.
+  The 27-week replay uses recorded model responses and requires no provider key.
+- **Try Onboarding** begins the values assessment and manual Experience.
+  A confirmed Profile holds at most two Core Values. Manual Journal Entries
+  support contextual nudges, replies, skips, and closed-week review.
+- **Weekly Drift Detection** uses a Luna-low Weekly Drift Reviewer and the
+  deterministic rule that two consecutive Conflicts for one Core Value form
+  Drift. The **Coach Digest** explains the result with cited writing and one
+  reflective question.
+- **North Star Moment** shows at most one exact quotation of a supportive
+  action beneath an eligible weekly reflection. Saved replay includes its
+  selections and no-card outcomes. Live review requires a valid integration
+  budget and otherwise leaves the card unavailable.
+- **Inspect** exposes the same evidence, model provenance, decisions, and
+  trace events as Experience. The VIF Critic (Offline) is a separate research
+  component.
+
 > **Project status:** Twinkl is under active development as an academic capstone. Status markers in each section indicate capability maturity:
-> ✅ Complete · 🧪 Experimental · ⚠️ Partial · 📋 Specified · ❌ Not Started
+> ✅ Complete · 🧪 Experimental · 🚧 In Progress · ⚠️ Partial · 📋 Specified · ❌ Not Started
 >
 > See [Known Gaps](docs/readme/status_and_setup.md#known-gaps) for the summary and [Implementation Status](docs/prd.md#implementation-status) for the full breakdown.
 
 ## Architecture
 
-[![Twinkl end-to-end architecture](docs/architecture/e2e_architecture.png)](docs/architecture/e2e_architecture.md)
+See the [end-to-end architecture](docs/architecture/e2e_architecture.md) for the
+Experience, Weekly Drift Detection, North Star Moment, and offline research
+paths. [Status and Setup](docs/readme/status_and_setup.md) covers local launch,
+checks, scenario export, and experiment commands.
 
 ## Documentation Guide
 
@@ -30,8 +54,10 @@ POC keeps the Profile fixed. Profile evolution is future work.
 - [`docs/drift/trajectory_eda.md`](docs/drift/trajectory_eda.md) — historical Drift-definition analysis comparing five-pass LLM-Judge consensus with persisted labels
 - [`docs/evals/drift_v1_student_visible_target.md`](docs/evals/drift_v1_student_visible_target.md) — historical five-Drift development result and withheld former final-test score
 - [`docs/weekly/weekly_drift_detection.md`](docs/weekly/weekly_drift_detection.md) — Weekly Drift Detection and Coach Digest contracts and runtime CLI
+- [`docs/north_star/north_star_moment.md`](docs/north_star/north_star_moment.md) — North Star Moment eligibility, exact-quotation checks, Experience, and Inspect
+- [`docs/north_star/nsm_experiment_methodology.md`](docs/north_star/nsm_experiment_methodology.md) — full-history and retrieval comparison, cohort selection, reproducibility, and AI evaluation limits
 - [`docs/evals/overview.md`](docs/evals/overview.md) and [`docs/evals/coach_narrative_test_and_eval_guide.md`](docs/evals/coach_narrative_test_and_eval_guide.md) — evaluation status, offline checks, paid Coach Digest Evals, and the Drift/control study
 - [`docs/demo/weekly_drift_review_app.md`](docs/demo/weekly_drift_review_app.md) — read-only Drift inspection of the frozen Weekly Drift Reviewer comparison Runs
 - [`docs/demo/review_app.md`](docs/demo/review_app.md) — deprecated Runtime Demo Review App for the VIF Critic (Offline) compatibility path
-- [`docs/capstone_report/capstone_project_report.md`](docs/capstone_report/capstone_project_report.md) and [`docs/capstone_report/capstone_project_report.pdf`](docs/capstone_report/capstone_project_report.pdf) — maintained Phase 2 Technical Paper source and rendered PDF
+- [`docs/capstone_report/capstone_project_report.md`](docs/capstone_report/capstone_project_report.md) — maintained Phase 2 Technical Paper source; [report instructions](docs/capstone_report/README.md) cover PDF generation and visual verification
 - [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research

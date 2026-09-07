@@ -2,12 +2,12 @@
 
 ## Status
 
-North Star Moment application code now covers onboarding and all five saved
+North Star Moment application code covers onboarding and all five saved
 Personas. After a closed-week review, it selects at most one exact quotation:
 a pre-onset reminder during Active Drift, specific encouragement for a verified
 current-week action without Active Drift, or a historical reminder for older
 supportive writing. Insufficient Evidence and failed or unsuitable reviews
-produce no card. The existing Coach Digest remains usable independently.
+produce no card. The Coach Digest remains usable independently.
 Saved replay uses Weekly Drift prompt v4 Run 1 and the full-history runtime
 outcomes from the [completed targeted NSM update](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md).
 The five selected Personas cover 27 reviewed weeks: 23 selected quotations,
@@ -29,16 +29,39 @@ available. A missing or invalid response does not remove the Weekly Drift
 Detection result.
 
 The five deterministic Persona replays load into the shared React session
-with manual next-step replay, previous-week navigation, optional automatic
-replay and pause, restart, named jumps to key weeks, reduced-motion behavior,
+with immediate selected-week Journal Entries, explicit result review, previous-
+and next-week navigation, restart, named jumps to key weeks, reduced-motion behavior,
 no-future-data projection, and browser-side scenario hash verification. The
 release quality gate is implemented. A saved Coach Digest response is available
 only when its source hash matches the current key-week Weekly Drift Detection
 output. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
 provides five accepted key-week responses using Luna at reasoning effort `none`
-and prompt `4.2`. All passed Coach Digest Validations. No new Coach Digest
-Evals or human review was performed; the [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
+and prompt `4.2`. All passed Coach Digest Validations. These responses have no
+Coach Digest Evals or human review; the [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
 remains historical evidence for the previous Persona roster and inputs.
+
+Saved Coach Digest coverage is limited to one curated key week per Persona.
+The remaining 22 of 27 weeks contain Weekly Drift Detection output but no
+saved Coach Digest response; this is missing generated content, not a browser
+display or input-hash mismatch. The five existing responses match the current
+inputs. The per-week product contract requires broader coverage than this
+saved sample currently supplies.
+
+| Persona | Coach Digest available | Coach Digest missing |
+| --- | --- | --- |
+| Noor Haddad | Week 6 | Weeks 1–5 |
+| Nisha Agarwal | Week 4 | Weeks 1–3, 5 |
+| Lim Sook Yin | Week 3 | Weeks 1–2, 4 |
+| Wei Jun Chen | Week 6 | Weeks 1–5 |
+| Henrik Larsson | Week 3 | Weeks 1–2, 4–6 |
+
+Completing coverage requires generating the 22 missing responses from their
+exact saved inputs, preserving the five compatible responses, and changing
+the exporter validation in [`src/demo/scenarios.py`](../../src/demo/scenarios.py)
+from one key-week Coach event to validation per week. The current generator
+also restricts scenario extraction and fixture writing to key weeks. This
+repair does not require new Weekly Drift Detection or North Star Moment runs.
+
 Current capstone work is
 Coach Digest feedback capture, longitudinal Core Value history, and the final
 professor walkthrough. The
@@ -74,6 +97,15 @@ Core Value contracts.
   persistence, and service-level commitments.
 
 ## 1. Purpose
+
+The entry page introduces Twinkl with a full-width inner-compass banner and a
+short product description adapted from the [README](../../README.md). A
+top-right GitHub link opens the project repository in a new tab. Below the
+introduction, Try the Demo and Try Onboarding lead into the two journeys;
+the Twinkl home link and a consistent top-right **Go home** button in both
+journeys return to this page while preserving session progress.
+The current Persona offers **Continue replay** in the picker to resume its
+selected week after returning home.
 
 The app presents the product experience and the AI architecture from the same
 session. A persistent two-option control switches between:
@@ -230,53 +262,36 @@ rather than attributing transport or routing failures to a product component.
 
 ### 5.3 Persona simulation
 
-Experience offers a curated **Try a demo persona** shortcut. Selecting a
-persona loads its Profile, Core Values, Journal Entries, displayed nudges and
-responses, saved Weekly Drift Reviewer Decisions, Drift states, and Coach
-Digest responses.
+The entry page offers **Try the Demo**. Selecting a Persona loads its Profile,
+Core Values, Journal Entries, displayed nudges and responses, saved Weekly
+Drift Reviewer Decisions, Drift states, and Coach Digest responses. **Go home**
+returns to the entry page from the Persona picker, replay, onboarding, or
+Inspect. A replay also offers **Choose another Persona** inside Profile details.
 
-Persona simulation is a week-by-week replay rather than an immediate dump of
-the final state. Controls provide:
+Persona simulation presents one week at a time. Each selected week immediately
+shows all its saved Journal Entries as compact excerpts, with available nudges
+and responses beneath their entries. **Review Weekly Drift Detection** opens
+that week's saved result. The replay makes no timed or automatic result reveal.
+**Next week** becomes available after this explicit review, while **Previous**,
+**Restart**, and the previously reviewed week markers provide navigation.
 
-- manual next-step movement as the default;
-- previous week;
-- optional automatic replay and pause;
-- direct selection of any already revealed week; and
-- restart scenario.
+Selecting a week projects only Journal Entries and evidence available by its
+cutoff. Later week markers remain disabled until reviewed. A named jump, such
+as **Show Active Drift — week 4**, offers explicit navigation to a key week;
+it opens that week's journals and still requires the review button to show its
+result. The Persona picker includes a collapsed **Professor guide: states by
+week**, derived from the saved catalog.
 
-Advancing a week reveals only the Journal Entries and results available by that
-week. This preserves the temporal meaning of Drift and lets the professor see
-the user experience change between Active Drift, No Active Drift, and
-Insufficient Evidence. Historical Drift Records remain available after the
-current state changes. Future weeks remain disabled. A named jump to a key week
-provides explicit fast navigation without making future results look available.
-The button names its destination and week, such as **Show Active Drift — week 4**
-or **Show independent Core Value states — week 9**. The Persona picker includes
-a collapsed **Professor guide: states by week**, derived from the saved catalog.
-It maps each Persona to the states shown by its weeks.
+The shared browser session preserves the selected week and furthest completed
+week across Experience and Inspect and after reload. Existing saved step
+progress remains readable, but does not hide Journal Entries. Initial load,
+reload, returning from Inspect, week navigation, and restart open the journals
+panel. Restart clears replay progress. Returning to an earlier week preserves
+access to later weeks that were already reviewed.
 
-The shared browser session preserves the revealed step and furthest completed
-week across Experience and Inspect and after reload. Returning to an earlier
-week does not lock weeks that were already revealed. Restart clears replay
-progress. Automatic replay pauses when Experience closes and does not resume
-automatically after reload.
-
-Manual next-step movement and automatic replay show Journal Entries one at a
-time as compact excerpts. **Reveal Weekly Drift Detection** completes the current
-week's saved sequence, pauses automatic replay, and opens its result; it never
-reveals a later week. The professor can use it after reading the Journal Entries
-or to move directly to that week's reflection. Once the entries and nudges have
-been shown, **Next step** is disabled until this explicit reveal. Optional
-automatic replay retains its timed result reveal. The next week starts with the
-Journal Entries panel. Opening a Journal
-Entry uses a desktop side panel or mobile bottom sheet so the timeline does not
-reflow, and pauses automatic replay while the professor reads.
-
-When a Journal Entry has a displayed Nudge, the Nudge appears 800 ms after the
-Journal Entry. An early **Next step** action reveals that pending Nudge before
-the replay advances. Automatic replay starts its next reading interval only
-after the Nudge appears. Reduced-motion mode keeps the delay and removes the
-horizontal movement.
+Opening a Journal Entry uses a desktop side panel or mobile bottom sheet so
+the reading area does not reflow. Saved nudges are available immediately with
+their entries; manual journaling retains its separate delayed Nudge reveal.
 
 When a saved Coach Digest response is present, it appears after the Weekly
 Drift Detection result in the same reading area. It does not replace the
@@ -291,22 +306,24 @@ Ambiguous matches and ellipses present in the source remain
 unchanged, with the complete Journal Entry available through its link.
 
 The desktop and phone Experience use one expanded panel in the fixed weekly
-workspace. Journal Entries occupy the full width first, with **Reveal Weekly
+workspace. Journal Entries occupy the full width first, with **Review Weekly
 Drift Detection** on the right (below the introduction on phones). Revealing the
 result minimizes the journals to a count and **Read Journal Entries** button.
 That button restores the journals and hides the result; **Read Weekly Drift
 Detection** returns to the completed result without changing its evidence.
-Switching panels pauses automatic replay. Key-week jumps and returning to a
-completed week open its result; a new week or restart opens Journal Entries.
+Every week change opens Journal Entries, including key-week jumps and returning
+to a completed week. The review button opens its result again.
 
-The result uses the full workspace width. **Why this state** keeps its detailed
-evidence collapsed until requested. On wide desktops, Coach Digest and North
-Star Moment appear beside each other beneath the state summary; phones stack
-them. Direct **Coach Digest** and **North Star Moment** buttons appear only when
-the corresponding card is available, scroll to that card and move keyboard
-focus to its heading. The active panel scrolls internally when necessary. Source
-links open the Journal Entry drawer without expanding the journals panel. The
-active week stays centered in the week rail.
+The result uses three columns on wide desktops: Drift state on the left,
+Coach Digest in the wider middle column, and North Star Moment on the right.
+Phones and narrower screens stack these in the same order. The result grows
+with its content and uses page scrolling instead of a fixed internal scroll
+box. **Why this state** keeps detailed evidence collapsed until requested;
+**Inspect decision** stays with the Drift state. Reflection jump buttons are
+unnecessary because the three sections are visible together. Missing saved
+Coach responses and absent eligible North Star Moment quotations have separate
+empty-state explanations. Source links open the Journal Entry drawer without
+expanding the journals panel. The active week stays centered in the week rail.
 
 Profile details remain collapsed by default and include a short Persona context.
 Each Core Value explanation names its state beside the Core Value. When a
@@ -330,7 +347,7 @@ shows these details when the evidence card is hovered or receives keyboard
 focus. An **AI review** action opens the same details. On a phone, that action
 opens a bottom sheet. The details are available for Active Drift, No Active
 Drift, and Insufficient Evidence. The replay identifies itself as
-saved synthetic evidence throughout. The staged reveal must not imply live
+saved synthetic evidence throughout. The explicit result review must not imply live
 model inference.
 
 Saved replay is the default because it is fast, deterministic, and free of
@@ -345,7 +362,9 @@ Experience shows:
 - the user's own Journal Entries, displayed nudges, and responses;
 - an ambient per-Core-Value Drift state; and
 - the Coach Digest response and question when valid, or a Coach Digest
-  unavailable state.
+  unavailable state; and
+- at most one North Star Moment with the exact quotation, source date, and
+  Journal Entry link when an eligible review selects a supportive action.
 
 Experience does not show the full Weekly Drift Reviewer prompt, provider
 payload, validation record, identifiers, or hashes. Those belong in Inspect.
@@ -457,6 +476,12 @@ Inspect represents these events when applicable:
      state.
 11. `weekly_coach_generated`
     - exact prompt, model, response, narrative validation, and latency.
+12. `nudge_response_recorded`
+    - the user response, linked Journal Entry and nudge, and independent
+      server-recorded availability timestamp used for North Star Moment sources.
+13. `north_star_reviewed`
+    - the frozen review record, source checks, selected quotation or no-card
+      outcome, model receipts, usage, and retry status.
 
 A `weekly_coach_generated` event with `complete` or `reused` status presents the
 Coach Digest response as available. A `refused`, `invalid`, or `failed` status
@@ -507,6 +532,7 @@ The Python side owns:
 - Drift Detector execution;
 - Weekly Drift Detection output storage;
 - Coach Digest generation after every Weekly Drift Detection result;
+- North Star Moment source eligibility, bounded model review, and record reuse;
 - forward-only assessment clock changes;
 - idempotent retry behavior; and
 - trace creation and retrieval.
@@ -651,7 +677,15 @@ closed Monday-through-Sunday week selected
 → Weekly Drift Detection output is stored
 → Coach Digest runs for the stored result
 → a valid Coach Digest response is attached, or the result remains available
+→ React requests North Star Moment review for the frozen closed-week snapshot
 ```
+
+`review_north_star` is a separate request. Its failure leaves Weekly Drift
+Detection and a valid Coach Digest available. Matching completed records are
+reused; eligible retryable failures expose an explicit retry. The live runtime
+requires a finalized integration budget before token counting or provider work.
+That budget is unavailable, so live North Star Moment generation fails closed.
+Saved Persona replay reads its prepared records without a provider or live budget.
 
 The nudge decision and question come from one structured
 `gpt-5.6-luna` reasoning-effort-`none` call after the deterministic suppression
@@ -744,6 +778,31 @@ text, and response, but not the original nudge provider prompt or raw response.
 Saved nudge trace events therefore retain the available fields and leave the
 unavailable provider fields null; they do not invent a receipt.
 
+### Reproduce the saved replay
+
+From the repository root:
+
+```sh
+source .venv/bin/activate
+uv run python -m scripts.export_demo_experiments
+```
+
+This command verifies the pinned completed North Star Moment experiment and
+projects its full-history runtime selections and no-card outcomes into
+`src/demo/north_star_replay_records.json`. It then writes the five scenario
+bundles and their SHA-256 catalog in `frontend/onboarding/public/scenarios/`
+using saved Weekly Drift v4 Run 1 requests, responses, attempts, and manifest.
+Source-bound Coach Digest responses come from
+`src/demo/coach_digest_responses.json`. The command takes no options and makes
+no provider calls; it does not generate or evaluate replacement responses.
+
+`uv run python -m src.demo.scenarios` exports only the bundles and catalog from
+the existing compact records. After changing a contract, regenerate its JSON
+Schema and canonical fixture with
+`uv run python -m src.demo.export_contract_schema`. The [saved demo reproduction
+record](../../logs/experiments/reports/demo_v4_run1_20260907/README.md) identifies
+the source files and separate provider-backed Coach Digest generation workflow.
+
 ## 10. Privacy and Safety
 
 - Inspect is a capstone and developer view, not a normal user destination.
@@ -790,8 +849,8 @@ unavailable provider fields null; they do not invent a receipt.
 - Status changes and nudge availability use appropriate live-region behavior.
 - Long prompts and responses wrap, preserve whitespace, and expand without
   horizontal page scrolling.
-- Reduced-motion preferences disable automatic replay while keeping the
-  explicit Previous and Next step controls.
+- Saved replay uses explicit Review Weekly Drift Detection and week navigation
+  controls. Reduced-motion preferences suppress decorative entry movement.
 
 ## 12. Non-Goals
 
@@ -870,6 +929,46 @@ walkthrough. `twinkl-rklc.8` can therefore move to future work without blocking
 the final walkthrough.
 
 ## 16. Verification Requirements
+
+The React checks run from `frontend/onboarding/`:
+
+```sh
+npm test
+npm run test:watch
+npm run typecheck
+npm run build
+```
+
+For controlled North Star Moment browser checks, run this Python boundary
+instead of `src.demo.api:app`, alongside the React development server:
+
+```sh
+source .venv/bin/activate
+uv run uvicorn scripts.demo_north_star_qc:app --port 8000
+```
+
+Select a response mode through its local control endpoint:
+
+```sh
+curl -X POST http://127.0.0.1:8000/qc/mode/failure
+curl -X POST http://127.0.0.1:8000/qc/mode/success
+```
+
+| Mode | Controlled behavior |
+|---|---|
+| `success` | Selects the fixture's exact supportive quotation when the source contains it and Benevolence is the reviewed Core Value |
+| `failure` | Returns a retryable provider-unavailable result |
+| `omission` | Reviews sources without accepting a supportive action |
+| `pending` | Holds North Star Moment completion until another mode releases it |
+| `long` | Supports the long fixture quotation when its complete text appears in the source |
+
+The fixture quotations are `QUOTE` and `LONG_QUOTE` in
+[`scripts/demo_north_star_qc.py`](../../scripts/demo_north_star_qc.py). This
+harness uses deterministic Weekly Drift Reviewer, nudge, Coach Digest, token
+counting, and North Star Moment test doubles. Its budget and count files live
+in a temporary directory, and it makes no paid provider calls. It is separate
+from the deployed app and provides browser behavior evidence, not model-quality
+or human-validation evidence.
 
 - Unit tests protect onboarding contracts, client state transitions, trace
   serialization, closed-week eligibility, affected-week selection, and

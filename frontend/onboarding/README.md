@@ -8,7 +8,8 @@ Experience state with the in-memory Python boundary. A separate host can also
 persist the Profile exposed by the handoff, and the batch runtime imports its
 Core Values from saved JSON.
 
-Fresh visits start with two choices: **Try the Demo** opens the current saved
+The entry page introduces the project with an inner-compass banner and a
+GitHub link. Fresh visits start with two choices: **Try the Demo** opens the current saved
 Persona catalog; **Try Onboarding** starts the personal assessment. The Twinkl
 wordmark returns to this choice without clearing progress. Existing sessions
 resume their current flow. Choosing Onboarding from a saved Persona starts a
@@ -39,22 +40,32 @@ Detection result remains available. The first partial week follows the same
 rule. Inspect reads the live trace events. Profile confirmation starts this
 trace when the Python boundary is available. Without it, Experience stays
 usable and Inspect shows zero events instead of fixture events. Retryable
-failures include a retry action. **Try demo** loads one of five saved synthetic
-personas into the same
-React session and replays Journal Entries, displayed nudges and responses,
-Drift, Coach Digest responses, and Inspect events one week at a time. **Next step** is
-the default. **Previous** returns to an earlier week. **Auto replay** and
-**Pause replay** provide optional automatic replay. **Restart** and named jumps
-such as **Show Active Drift — week 4** in Nisha's replay provide quick navigation. The Persona
-picker includes a collapsed professor guide mapping saved weeks to Drift
-states. Each Core Value explanation names its own state. These controls preserve
-the selected week, revealed step, and previously revealed weeks across Experience
-and Inspect and after reload. Automatic replay pauses when Experience closes.
-Reduced-motion preferences disable Auto replay. The browser verifies each
+failures include a retry action. **Go home** returns to the entry page from both
+journeys while preserving progress. **Try the Demo** loads one of five saved
+synthetic Personas into the same React session. Each selected week immediately
+shows its Journal Entries, displayed nudges, and responses. **Review Weekly
+Drift Detection** opens the saved result and Coach Digest; **Next week** then
+advances. **Previous**, **Restart**, and named jumps such as **Show Active Drift —
+week 4** in Nisha's replay provide navigation. Every week change, reload, and
+return from Inspect opens the journals first. The Persona picker includes a
+collapsed professor guide mapping saved weeks to Drift states. Each Core Value
+explanation names its own state. The selected week and previously reviewed
+weeks persist across Experience and Inspect and after reload. **Continue replay**
+in the picker resumes the current Persona after returning home. The browser verifies each
 scenario against the catalogued SHA-256 hash
 before displaying it. The Profile remains available through the
 `onStartJournal` callback and
 `twinkl:start-first-journal` browser event.
+
+The selected week has one expanded reading panel. **Review Weekly Drift
+Detection** gives the result the full workspace width and collapses the
+journals to a count and **Read Journal Entries** action. **Read Weekly Drift
+Detection** restores a reviewed result. **Why this state** keeps detailed
+evidence collapsed; source links open a desktop side panel or phone bottom
+sheet. Coach Digest and North Star Moment appear side by side on wide screens
+and stack on phones, with direct navigation to each available card. A uniquely
+matched abbreviated Coach Digest quotation expands to its full source below
+the paragraph, while Inspect preserves the original model response.
 
 After manual Journal Entries begin, Inspect retains **View Profile calculation**
 and **View recorded events** controls. The calculation uses the original 22
@@ -118,8 +129,8 @@ The live runtime does not make a separate evaluation call.
 Live NSM work is serialized in one worker thread. It uses the ignored
 `logs/exports/demo_tool_runs/north_star/` directory and requires a finalized
 integration budget. A missing or changed integration budget fails closed
-before counting or provider work. The reset removed the old budget artifacts;
-fresh budget setup remains pending, so live NSM generation is unavailable.
+before counting or provider work. A finalized integration budget is unavailable,
+so live NSM generation is unavailable.
 Saved replay does not require a live integration budget.
 
 The [experiment methodology](../../docs/north_star/nsm_experiment_methodology.md)
@@ -150,6 +161,35 @@ npm run typecheck
 npm run build
 ```
 
+The [controlled browser QC harness](../../docs/demo/experience_inspect_app.md#16-verification-requirements)
+uses `uv run uvicorn scripts.demo_north_star_qc:app --port 8000` from the
+repository root in place of the normal Python boundary. Its local
+`POST /qc/mode/{mode}` endpoint supports `success`, `failure`, `omission`,
+`pending`, and `long` with test doubles and no paid provider calls.
+
+## Shared contracts and saved replay export
+
+Run from the repository root with the Python environment active:
+
+```sh
+source .venv/bin/activate
+uv run python -m src.demo.export_contract_schema
+uv run python -m scripts.export_demo_experiments
+```
+
+The first command writes the JSON Schema and canonical fixture under
+`src/contracts/` in this frontend. The second verifies the pinned completed
+experiment, writes `src/demo/north_star_replay_records.json` at the repository
+root, then exports the five bundles and SHA-256 catalog to `public/scenarios/`.
+It preserves accepted Coach Digest responses only when they match the saved
+Weekly Drift Detection inputs. Both commands use repository inputs without
+provider calls and take no command-line options.
+
+To rebuild only scenario bundles from the existing compact North Star Moment
+records, run `uv run python -m src.demo.scenarios` from the repository root.
+See the [saved replay guide](../../docs/demo/experience_inspect_app.md#9-persona-scenario-bundles)
+for source provenance and the five-Persona roster.
+
 ## Railway deployment
 
 Create a Railway service from this repository with:
@@ -175,7 +215,9 @@ The scenario exporter verifies saved Coach Digest provenance against the
 current key-week Weekly Drift Detection output. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
 provides one accepted response for each of the five current key weeks, generated
 with Luna at reasoning effort `none` and prompt `4.2`. All five passed Coach
-Digest Validations; no new Coach Digest Evals or human review was performed.
+Digest Validations; these responses have no Coach Digest Evals or human review.
+The other 22 reviewed weeks contain Weekly Drift Detection output without a
+saved Coach Digest response.
 Incompatible responses remain unavailable. The August Coach Digest evaluation
 remains historical evidence. The browser requests
 the scenario catalog and bundles with
