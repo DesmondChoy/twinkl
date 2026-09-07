@@ -4,19 +4,28 @@
 after Coach Digest, source checks, and the supportive-action definition.
 
 **Status:** Application code supports North Star Moment in onboarding and all
-five saved Persona replays, for Active Drift and No Active Drift. Previous
-North Star Moment experiment results, findings, and generated review records
-have been removed for a fresh start. Saved weeks have no North Star Moment
-card until fresh records are exported. Live review fails closed without the
-removed integration budget; a fresh budget setup remains pending.
+five saved Persona replays, for Active Drift and No Active Drift. Saved weeks
+have no North Star Moment card until fresh records are exported. Live review
+fails closed without the removed integration budget; a fresh budget setup
+remains pending.
 
-The [fresh experiment methodology](nsm_experiment_methodology.md) records the
-reset and the completed 501-week AI comparison. Full history achieved higher
-Card precision and Opportunity recall than Nomic top-three retrieval in both
-partitions; human review remains deferred. It replaces the previous experimental
+The [experiment methodology](nsm_experiment_methodology.md) records the reset
+and the original 501-week AI comparison using Weekly Drift v2 repeat 1.
+Full history achieved higher Card precision and Opportunity recall than Nomic
+top-three retrieval in both partitions; human review remains deferred. It replaces the previous experimental
 protocols, cohort decisions, and acceptance gates. This specification describes
 the existing product behavior and reusable implementation contracts; it does
 not establish results or authorize a new experiment.
+
+A separate [targeted v4 Run 1 update](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
+is complete for both methods. It reassessed 38 affected weeks across 22
+Personas and retained observations for 463 unchanged cases, including failures
+and unresolved judgments. The original 105 Personas, 501 weeks, 81/24 partition,
+and 20-case evaluator consistency sample remain fixed. Full eligible history
+still achieved higher Card precision and Opportunity recall in both partitions.
+These are updated results with retained observations from the original v2
+repeat-1 study, not a wholly fresh independent experiment. Both records remain
+available; the update does not establish human validity or user benefit.
 
 **Current scope:** Both frontend paths: the demo with all five saved Personas
 and onboarding from scratch with the user's own writing. Each reviewed week
@@ -219,13 +228,18 @@ The linked Capstone Requirements describe the assessment criteria.
 
 ## 6. Evaluation status
 
-Previous North Star Moment results and derived findings have been retired.
-The [fresh experiment methodology](nsm_experiment_methodology.md) is the sole
-location for the reset and subsequent experimental decisions. The authorized
-Nomic and full-history comparison is complete across 105 Personas, with 81 in
-development and 24 in qualified final evaluation. Its results, uncertainty,
-scoring corrections, and evidence limits are documented there. This is AI
-assessment of synthetic histories; it does not establish human validity.
+Results from before the September 2026 reset remain retired. The
+[experiment methodology](nsm_experiment_methodology.md) documents the original
+Weekly Drift v2 repeat-1 comparison and the subsequent targeted v4 Run 1
+update. Both compare Nomic top-three retrieval plus Luna-low review with full
+eligible history plus Luna-low review, using shared Luna-xhigh AI evaluation
+across 105 Personas: 81 in development and 24 in qualified final evaluation.
+The [targeted report](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
+records new and retained evidence, paired metric exclusions, Persona-bootstrap
+intervals, failures, and incremental costs separately from historical costs
+and latency. The original record, frozen methodology, and correction history
+remain preserved. This is AI assessment of synthetic histories; it does not
+establish human validity.
 
 ## 7. Work status
 

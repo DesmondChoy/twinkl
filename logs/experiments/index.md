@@ -1,10 +1,19 @@
 # VIF Experiment Index
 
-North Star Moment evaluation is awaiting review of its
-[fresh methodology](../../docs/north_star/nsm_experiment_methodology.md).
-Its experiment outputs and derived conclusions have been cleared. No North
-Star Moment result is retained in this index; the other research records below
-are unchanged.
+**Latest NSM results to use:** the [targeted Weekly Drift v4 Run 1 update](reports/north_star_v4_run1_20260907/report.md), completed on 7 September 2026, is the current basis for NSM reporting and method comparisons. It supersedes the original v2 repeat-1 results for current reporting; the original record remains historical evidence. These results retain prior observations and remain AI assessments of synthetic histories.
+
+The original [North Star Moment 501-week AI comparison](../../docs/north_star/nsm_experiment_methodology.md#completed-results)
+is complete using Weekly Drift v2 repeat 1. The separate
+[targeted v4 Run 1 update](reports/north_star_v4_run1_20260907/report.md)
+is also complete: both methods reassessed 38 affected cases and retained
+observations for 463 unchanged cases, preserving the original 105 Personas,
+501 weeks, 81/24 partition, and historical record. Full eligible history still
+achieved higher Card precision and Opportunity recall than Nomic top-three
+retrieval in both partitions. These are AI assessments of synthetic histories
+with retained observations; human review and saved-card export remain pending.
+Incremental costs and failures are reported separately from historical costs
+and latency. See the
+[NSM experiment log](north_star_moment.md) for the evidence lineage.
 
 ## Weekly Drift Reviewer Core Value Definitions (2026-09-07)
 

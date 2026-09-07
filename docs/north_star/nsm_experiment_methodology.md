@@ -1,17 +1,124 @@
 # North Star Moment experiment methodology
 
-**Status, 7 September 2026:** Both controlled experiments and the fresh AI
-evaluation are complete: 501 weeks from 105 Personas, with the frozen 81/24
-development/final partition. Full history achieved higher Card precision and
-Opportunity recall; Nomic used fewer API dollars and had lower measured latency.
-The [consolidated record](../../logs/experiments/reports/north_star_20260906/nsm_experiment.json)
-contains all fresh judgments, attempts, scores, uncertainty, and validation.
-See [completed results](#completed-results). Human review remains deferred.
+**Latest NSM results to use:** the [targeted Weekly Drift v4 Run 1 update](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md), completed on 7 September 2026, is the current basis for NSM reporting and method comparisons. It supersedes the original v2 repeat-1 results for current reporting; the original record remains historical evidence. These results retain prior observations and remain AI assessments of synthetic histories.
+
+**Status, 7 September 2026:** the original paired AI comparison and its targeted
+Weekly Drift v4 Run 1 update are complete across 501 weeks from 105 Personas,
+with the unchanged 81/24 development/final Persona partition. Full eligible
+history achieved higher Card precision and Opportunity recall than Nomic
+top-three retrieval in both partitions. Human review remains deferred.
+
+The [targeted-update report](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
+and [versioned record](../../logs/experiments/reports/north_star_v4_run1_20260907/nsm_experiment.json)
+contain the current results with retained observations. The
+[original record](../../logs/experiments/reports/north_star_20260906/nsm_experiment.json)
+and [original completed results](#completed-results) remain intact as historical
+evidence using Weekly Drift v2 repeat 1.
+
+## Targeted update contract
+
+The follow-up under `twinkl-fz34.14` retains the original 105 Personas, 501
+weekly cases, 81/24 Persona partition, and 20-case evaluator consistency sample.
+It uses completed Weekly Drift **v4 Run 1** outputs without changing the
+Weekly Drift Reviewer's existing `definition` and `core_motivation` fields or
+rerunning detection. These fields supply Schwartz-based definitions plus
+project-specific elaborations; neither their separate effects nor harm from
+motivation prose is established by this NSM comparison.
+
+The persisted impact audit confirms 38 affected weeks across 22 Personas:
+29 development weeks and nine final weeks. It compares all effective request,
+eligibility, and priority inputs, including state, selected Core Values,
+definitions, source windows, ordered Journal Entries, eligible Persona responses,
+Profile, and chronology. The 463 unchanged effective contexts retain every
+observation and final grade, including failures and unresolved judgments.
+
+Both NSM methods were executed on affected contexts. Shared Luna-xhigh
+evaluation, selection priorities, contradiction handling, paired exclusions,
+and whole-Persona bootstrap settings remain unchanged. Individual request reuse
+requires an identical complete ordered input, method/role/repeat identity,
+model settings, prompts, schema, validation and evaluation contracts, and
+attempt limit. Source reviews are indivisible batches. Quotation reuse also
+requires the identical quotation, complete source, eligible response, and Core
+Value context. Retained receipts include their original hash and justification.
+
+The original consolidated record, generation hashes, methodology snapshot,
+receipts, and correction history remain unchanged. A separate manifest binds
+the update's inputs and current corrected evaluation code. Historical
+unnecessary rechecks remain historical protocol deviations; they were not
+scheduled as new work. The original 20-case consistency sample contains no
+affected week, so all repeat evidence was retained with its distinct identity.
+
+Preparation re-encoded 138 unique eligible documents locally with the original
+pinned Nomic configuration and response-inclusive serialization, then recomputed
+affected rankings. Ten changed cases had no eligible source batch. The remaining
+28 affected cases required 43 new Nomic source requests, one exact-compatible
+retained Nomic source request, 44 new full-history source requests, and 44 new
+primary reference requests. Quotation and recheck evidence followed the selected
+outputs. These batch counts differ from the number of cases and from generation
+attempts, which include the permitted retries.
+
+## Targeted update results
+
+The update regraded all 501 cases, recomputing reference opportunities,
+priorities, deterministic grades, paired exclusions, and 10,000 whole-Persona
+bootstrap resamples per split. It is a **targeted update with retained
+observations**, not a wholly fresh independent experiment.
+
+| Partition | Method | Card precision | Opportunity recall |
+| --- | --- | ---: | ---: |
+| Development | Nomic top three | 181/309 = 58.58% | 181/327 = 55.35% |
+| Development | Full eligible history | 244/323 = 75.54% | 244/327 = 74.62% |
+| Qualified final | Nomic top three | 49/85 = 57.65% | 49/86 = 56.98% |
+| Qualified final | Full eligible history | 70/85 = 82.35% | 70/86 = 81.40% |
+
+Paired differences are Nomic minus full history, in percentage points, with
+95% percentile intervals from the original seed `20260906`.
+
+| Partition | Card precision difference [95% interval] | Opportunity recall difference [95% interval] |
+| --- | ---: | ---: |
+| Development | -16.97 [-23.14, -10.72] | -19.27 [-25.45, -12.72] |
+| Qualified final | -24.71 [-36.18, -10.75] | -24.42 [-36.47, -9.88] |
+
+| Partition | Confirmed opportunities | Unresolved opportunities | Paired precision exclusions | Paired recall exclusions |
+| --- | ---: | ---: | ---: | ---: |
+| Development | 353 | 9 | 31 | 35 |
+| Qualified final | 96 | 1 | 10 | 11 |
+
+The updated record uses 2952 retained request receipts and
+190 new requests, comprising 202 new generation attempts.
+Incremental known API cost is **$0.90766631**, with
+5 new attempts lacking usage receipts. This is separate from the
+original historical known cost of $10.84758089 and its five unknown-cost
+attempts. The report itemizes incremental Nomic, full-history, and shared
+evaluation costs, along with retained costs and summed request durations.
+All-case runtime cost and latency comparisons mix retained and newly observed
+requests; they are not a fresh independent latency benchmark.
+
+Two new Nomic runtime requests exhausted validation attempts and remain
+failures; the original three Nomic and one full-history runtime failures remain
+retained. Runtime failure does not itself remove a known opportunity from
+recall. The report and linked record list reference and quotation failures,
+every affected metric exclusion, diagnostics, and undefined bootstrap resamples. Source-decision
+consistency remains 341/384 (88.80%), and quotation-acceptance consistency remains
+107/109 (98.17%) on the unchanged 20-case sample.
+
+These findings favour full history for the tested synthetic configuration,
+without establishing human validity, real-user benefit, Weekly Drift accuracy,
+or deployment approval. The original qualified-final exposure limitation
+remains: the final histories had prior upstream research use, including the
+broader Weekly Drift development comparison. Saved-card export and the final
+application walkthrough remain separate work.
+
+Validation passed 441 relevant tests, Ruff, scoped MyPy, and independent
+quality review. See the report for exact commands, frozen hashes, failure
+provenance, and verification details. The original study below retains its
+own design, results, timing observations, and correction history.
 
 ## Reset scope
 
-This is the first experiment in the fresh NSM record. Previous results,
-judgments, and conclusions will not be reused.
+The 6 September study was the first experiment after the NSM reset. It did
+not reuse pre-reset results, judgments, or conclusions. The targeted update
+above retains eligible observations from that completed post-reset study.
 
 - Removed old NSM reports, saved replay records, documentation findings,
   the dated protocol, stale capstone PDF, and obsolete experiment illustration.

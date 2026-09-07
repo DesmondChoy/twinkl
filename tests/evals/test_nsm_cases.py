@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
+import subprocess
 from collections import Counter
 from datetime import datetime
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -31,8 +34,34 @@ def record() -> dict:
 
 
 @pytest.fixture(scope="module")
-def prepared(record: dict) -> dict:
-    return build_cases(record)
+def frozen_root(record: dict, tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Reconstruct historical input artifacts without rebinding frozen hashes.
+
+    Current case-building code still runs; the reviewer file is provenance for
+    the saved v2 decisions, not code imported from this temporary source tree.
+    """
+    root = tmp_path_factory.mktemp("nsm-original-inputs")
+    execution = record["execution"]
+    revision = execution["freeze"]["code_revision"]
+    for name, expected in execution["case_provenance"]["source_hashes"].items():
+        content = (ROOT / name).read_bytes()
+        if hashlib.sha256(content).hexdigest() != expected:
+            assert name == "src/weekly_drift_reviewer.py", (
+                f"Unexpected change to historical NSM input: {name}"
+            )
+            content = subprocess.check_output(
+                ["git", "show", f"{revision}:{name}"], cwd=ROOT
+            )
+        assert hashlib.sha256(content).hexdigest() == expected, name
+        destination = root / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
+    return root
+
+
+@pytest.fixture(scope="module")
+def prepared(record: dict, frozen_root: Path) -> dict:
+    return build_cases(record, frozen_root)
 
 
 def test_complete_frozen_case_inventory_and_failed_reviews(prepared: dict) -> None:
@@ -147,13 +176,15 @@ def test_consistency_sample_is_stable_and_disjoint_by_persona(prepared: dict) ->
     )
 
 
-def test_modified_frozen_source_hash_fails_before_cases(record: dict) -> None:
+def test_modified_frozen_source_hash_fails_before_cases(
+    record: dict, frozen_root: Path
+) -> None:
     damaged = copy.deepcopy(record)
     damaged["audits"]["upstream_weekly_inputs"]["source_hashes"][
         "src/drift_detector.py"
     ] = "0" * 64
     with pytest.raises(ValueError, match="source hashes disagree|source hash mismatch"):
-        build_cases(damaged)
+        build_cases(damaged, frozen_root)
 
 
 def test_partition_overlap_is_rejected(record: dict) -> None:
