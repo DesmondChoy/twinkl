@@ -444,6 +444,8 @@ export default function ReplayTimeline({
                 headingId="replay-coach-digest-title"
                 headingLevel={3}
                 className="coach-digest--replay"
+                journalEntries={reviewedJournalEntries}
+                onOpenEntry={openJournalEntry}
               />
             ) : null}
             {resultVisible && typeof coachUnavailableReason === "string"

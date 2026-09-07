@@ -87,6 +87,8 @@ function chooseTwoCoreValuesIfNeeded() {
 }
 
 function enterPreferredName(name = "Casey") {
+  const onboarding = screen.queryByRole("button", { name: "Try Onboarding" });
+  if (onboarding) fireEvent.click(onboarding);
   fireEvent.change(screen.getByRole("textbox", { name: "Preferred name" }), {
     target: { value: name },
   });
@@ -189,6 +191,74 @@ afterEach(() => {
 });
 
 describe("onboarding app", () => {
+  it("starts with two keyboard-accessible paths and opens the current Persona catalog", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(
+      new Response(JSON.stringify(scenarioCatalogJson)),
+    ));
+    const user = userEvent.setup();
+    render(<App />);
+
+    expect(screen.getByRole("heading", { name: "Choose how to explore Twinkl." })).toBeTruthy();
+    expect(screen.queryByRole("textbox", { name: "Preferred name" })).toBeNull();
+    expect(createExperienceSession).not.toHaveBeenCalled();
+    const demo = screen.getByRole("button", { name: "Try the Demo" });
+    demo.focus();
+    await user.keyboard("{Enter}");
+    await screen.findByRole("heading", { name: "Choose what you want to observe." });
+    for (const persona of scenarioCatalogJson.scenarios) {
+      expect(await screen.findByText(persona.persona_name)).toBeTruthy();
+    }
+    expect(screen.queryByText("Lukas Vermeer")).toBeNull();
+    expect(screen.queryByText("Marc Vandenberghe")).toBeNull();
+    expect(screen.queryByText("Meera Krishnamurthy")).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Back" }));
+    expect(screen.getByRole("button", { name: "Try Onboarding" })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Try Onboarding" }));
+    expect(screen.getByRole("textbox", { name: "Preferred name" })).toBeTruthy();
+  });
+
+  it("preserves manual progress when returning home and choosing Onboarding", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    enterPreferredName("Casey");
+    fireEvent.click(screen.getAllByTestId("value-card")[0]);
+    const before = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+
+    await user.click(screen.getByRole("link", { name: "Twinkl home" }));
+    expect(screen.getByText("Continue your saved progress")).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Try Onboarding" }));
+
+    expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
+    const after = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    expect(after.session_id).toBe(before.session_id);
+    expect(after.preferred_name).toBe("Casey");
+    expect(after.draft_best).toBe(before.draft_best);
+    expect(deleteExperienceSession).not.toHaveBeenCalled();
+  });
+
+  it("starts a personal Profile from a saved replay without carrying over synthetic data", async () => {
+    saveReplayInInspect(activeReplayJson.scenario.persona_id);
+    vi.stubGlobal("fetch", vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(scenarioCatalogJson)))
+      .mockResolvedValueOnce(new Response(activeReplayRaw)));
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByText("Nisha Agarwal · saved replay");
+
+    await user.click(screen.getByRole("link", { name: "Twinkl home" }));
+    await user.click(screen.getByRole("button", { name: "Try Onboarding" }));
+
+    expect(screen.getByRole("textbox", { name: "Preferred name" })).toHaveProperty("value", "");
+    const stored = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    expect(stored.confirmed_profile).toBeNull();
+    expect(stored.responses).toHaveLength(0);
+    expect(stored.experience.selected_persona_id).toBeNull();
+    expect(stored.experience.journal_entries).toHaveLength(0);
+    expect(stored.experience.trace_events).toHaveLength(0);
+    expect(deleteExperienceSession).not.toHaveBeenCalled();
+    expect(createExperienceSession).not.toHaveBeenCalled();
+  });
+
   it("withholds persisted Inspect decisions until the current replay is validated and projected", async () => {
     saveReplayInInspect(activeReplayJson.scenario.persona_id);
     let resolveCatalog!: (response: Response) => void;
@@ -306,7 +376,7 @@ describe("onboarding app", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole("heading", { name: "What should Twinkl call you?" }),
+        screen.getByRole("heading", { name: "Choose how to explore Twinkl." }),
       ).toBeTruthy(),
     );
     expect(deleteExperienceSession).toHaveBeenCalledTimes(2);
@@ -346,6 +416,7 @@ describe("onboarding app", () => {
 
   it("asks for a preferred name before the first set", () => {
     render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: "Try Onboarding" }));
     const purpose = document.querySelector(".onboarding-purpose");
     expect(purpose).toBeTruthy();
     expect(purpose?.querySelector(".sr-only")?.textContent).toBe(

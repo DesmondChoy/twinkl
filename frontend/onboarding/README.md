@@ -8,7 +8,13 @@ Experience state with the in-memory Python boundary. A separate host can also
 persist the Profile exposed by the handoff, and the batch runtime imports its
 Core Values from saved JSON.
 
-The flow first asks what Twinkl should call the user, then presents 11
+Fresh visits start with two choices: **Try the Demo** opens the current saved
+Persona catalog; **Try Onboarding** starts the personal assessment. The Twinkl
+wordmark returns to this choice without clearing progress. Existing sessions
+resume their current flow. Choosing Onboarding from a saved Persona starts a
+new personal Profile without carrying over synthetic Journal Entries.
+
+The onboarding flow asks what Twinkl should call the user, then presents 11
 randomized groups of six neutral cards from the published balanced design.
 Each group uses six abstract backgrounds assigned by randomized display
 position rather than value identity. People can tap, drag, or use the keyboard

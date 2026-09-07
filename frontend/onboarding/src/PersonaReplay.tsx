@@ -188,6 +188,7 @@ export function PersonaReplayPicker({
   onLoad,
 }: PersonaReplayPickerProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const replayRequestGenerationRef = useRef(0);
   const [catalog, setCatalog] = useState<ScenarioCatalog | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -209,18 +210,23 @@ export function PersonaReplayPicker({
     headingRef.current?.focus({ preventScroll: true });
     return () => {
       cancelled = true;
+      replayRequestGenerationRef.current += 1;
     };
   }, [catalogAttempt, currentPersonaId]);
 
   const startReplay = async (selected: ScenarioCatalogItem) => {
     if (loadingId !== null || selected.persona_id === currentPersonaId) return;
+    const generation = ++replayRequestGenerationRef.current;
     setLoadingId(selected.scenario_id);
     setError(null);
     try {
-      if (!onLoad(await loadSavedScenario(selected))) {
+      const loaded = await loadSavedScenario(selected);
+      if (generation !== replayRequestGenerationRef.current) return;
+      if (!onLoad(loaded)) {
         setLoadingId(null);
       }
     } catch {
+      if (generation !== replayRequestGenerationRef.current) return;
       setError("This saved Persona replay could not be loaded.");
       setLoadingId(null);
     }

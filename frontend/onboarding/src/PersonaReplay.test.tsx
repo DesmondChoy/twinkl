@@ -58,6 +58,8 @@ function scenarioResponse(raw = activeReplayRaw) {
 }
 
 function enterPreferredName(name = "Casey") {
+  const onboarding = screen.queryByRole("button", { name: "Try Onboarding" });
+  if (onboarding) fireEvent.click(onboarding);
   fireEvent.change(screen.getByRole("textbox", { name: "Preferred name" }), {
     target: { value: name },
   });
@@ -159,7 +161,7 @@ async function startHenrikReplay() {
   }));
   const user = userEvent.setup();
   const view = render(<App />);
-  await user.click(screen.getByRole("button", { name: "Try demo" }));
+  await user.click(screen.getByRole("button", { name: /Try (?:the )?demo/i }));
   await screen.findByText("Henrik Larsson");
   await user.click(within(personaCard("Henrik Larsson")).getByRole("button", {
     name: "Start at week 1",
@@ -558,15 +560,19 @@ describe("persona replay", () => {
 
       render(<ScenarioReplayHarness scenarioJson={scenarioJson} />);
       expect(screen.queryByText("No saved Coach Digest for this result")).toBeNull();
-      expect(screen.queryByRole("heading", { name: savedResponse.narrative.weekly_mirror })).toBeNull();
+      expect(screen.queryByRole("heading", { name: "Your weekly reflection" })).toBeNull();
       await user.click(screen.getByRole("button", {
         name: /^Show .+ — week \d+$/,
       }));
 
       expect(screen.queryByText("No saved Coach Digest for this result")).toBeNull();
       expect(screen.getByText("Why this state")).toBeTruthy();
-      expect(screen.getByRole("heading", { name: savedResponse.narrative.weekly_mirror })).toBeTruthy();
-      expect(screen.getByText(savedResponse.narrative.tension_explanation)).toBeTruthy();
+      expect(screen.getByRole("heading", { name: "Your weekly reflection" })).toBeTruthy();
+      const tension = document.querySelector(".coach-digest > p:nth-of-type(3)");
+      expect(tension?.textContent).toContain(
+        savedResponse.narrative.tension_explanation.split("...")[0],
+      );
+      expect(tension?.textContent).not.toMatch(/(?:\.{3}|…)[”"]/);
       expect(document.querySelector(".coach-digest__question")?.textContent)
         .toBe(savedResponse.narrative.reflective_question);
       const saved = validateExperienceInspectFixture(scenarioJson);
@@ -590,7 +596,7 @@ describe("persona replay", () => {
       await user.click(screen.getByRole("button", { name: "Show week 1: no active drift" }));
       expect(screen.getByText("No saved Coach Digest for this result")).toBeTruthy();
       expect(document.querySelector(".coach-digest__question")).toBeNull();
-      expect(screen.queryByRole("heading", { name: savedResponse.narrative.weekly_mirror })).toBeNull();
+      expect(screen.queryByRole("heading", { name: "Your weekly reflection" })).toBeNull();
     },
   );
 
@@ -768,8 +774,9 @@ describe("persona replay", () => {
       name: "Insufficient Evidence",
     });
     const coachHeading = screen.getByRole("heading", {
-      name: narrative.weekly_mirror,
+      name: "Your weekly reflection",
     });
+    expect(screen.getByText(narrative.weekly_mirror)).toBeTruthy();
     const coachCard = coachHeading.closest(".coach-digest--replay");
     const resultScroll = result.closest(".replay-column__scroll--result");
 
@@ -987,7 +994,7 @@ describe("persona replay", () => {
     );
     const user = userEvent.setup();
 
-    await user.click(screen.getByRole("button", { name: "Try demo" }));
+    await user.click(screen.getByRole("button", { name: /Try (?:the )?demo/i }));
     await screen.findByText("Nisha Agarwal");
     const pickerSections = screen.getByRole("navigation", {
       name: "Experience sections",
@@ -1093,7 +1100,7 @@ describe("persona replay", () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole("button", { name: "Try demo" }));
+    await user.click(screen.getByRole("button", { name: /Try (?:the )?demo/i }));
     await screen.findByText("Nisha Agarwal");
     document.documentElement.scrollTop = 640;
     document.body.scrollTop = 640;

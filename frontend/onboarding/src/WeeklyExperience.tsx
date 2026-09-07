@@ -295,6 +295,13 @@ export default function WeeklyExperience({
         <CoachDigestCard
           weeklyDigest={weeklyDigest}
           headingId="weekly-coach-title"
+          journalEntries={journalEntries}
+          onOpenEntry={selectJournalEntry ? (entry) => {
+            selectJournalEntry(entry.journal_entry_id);
+            const target = document.getElementById(journalEntryAnchorId(entry.journal_entry_id));
+            target?.focus({ preventScroll: true });
+            target?.scrollIntoView?.({ block: "center", behavior: "smooth" });
+          } : undefined}
         />
 
         <NorthStarMoment

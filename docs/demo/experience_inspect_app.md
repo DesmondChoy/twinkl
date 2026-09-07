@@ -160,6 +160,13 @@ screen position and selection where practical.
 
 ## 5. Experience View
 
+Fresh visits open a two-choice screen. **Try the Demo** opens the current
+five-Persona catalog; **Try Onboarding** opens the personal assessment. Existing
+sessions resume their current flow. The Twinkl wordmark returns to the choice
+without clearing progress, and choosing Onboarding resumes manual work or
+starts a fresh personal Profile when leaving a synthetic Persona replay.
+Loading a Persona over manual work retains the existing replacement confirmation.
+
 ### 5.1 Manual onboarding
 
 Preserve the complete React onboarding flow:
@@ -269,7 +276,15 @@ horizontal movement.
 
 When a saved Coach Digest response is present, it appears after the Weekly
 Drift Detection result in the same scrollable column. It does not replace the
-Weekly Drift Detection result.
+Weekly Drift Detection result. The short heading **Your weekly reflection**
+precedes readable narrative paragraphs and links to the supporting Journal
+Entries. Ellipsis-ended quotations expand through the source sentence only
+when they match a unique occurrence in a cited Journal Entry available by the
+week's cutoff. If inline expansion would interrupt the surrounding sentence,
+the complete source quotation appears immediately below that paragraph.
+The card discloses expansion; Inspect retains the original model response.
+Ambiguous matches and ellipses present in the source remain
+unchanged, with the complete Journal Entry available through its link.
 
 The desktop Experience uses a fixed weekly workspace. The Journal Entry column
 and Weekly Drift Detection column stay in the same viewport. Each column scrolls
@@ -287,6 +302,10 @@ The Persona header always names the selected Schwartz Core Values. State-change
 evidence appears with the Weekly Drift Detection result. The first two Conflicts
 show where Drift started. Later Conflicts show that Drift continued. No Active
 Drift cites current Journal Entries and their Weekly Drift Reviewer Decisions.
+When a successful Not Conflict decision ended the latest Drift, the explanation
+also names and links that ending Journal Entry. It distinguishes an ending in
+the selected week from an earlier Historical Drift Record, without implying
+improvement or changing the current Drift state.
 Insufficient Evidence cites the blocking Journal Entry and its Abstain or
 failed review status when available.
 
