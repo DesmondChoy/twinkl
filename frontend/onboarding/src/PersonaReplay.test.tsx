@@ -1127,7 +1127,7 @@ describe("persona replay", () => {
     await user.click(screen.getByRole("button", { name: /Try (?:the )?demo/i }));
     await screen.findByRole("radio", { name: "Nisha Agarwal" });
     expect(screen.queryByRole("navigation", { name: "Experience sections" })).toBeNull();
-    expect(screen.getByRole("heading", { name: "Follow a story. Examine the evidence." })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "See how Twinkl works" })).toBeTruthy();
     await user.click(
       screen.getByRole("button", {
         name: "Start at week 1",
@@ -1139,7 +1139,7 @@ describe("persona replay", () => {
     );
     expect(
       screen.getByRole("heading", {
-        name: "See how Drift changes over time.",
+        name: "Explore five synthetic Personas, each with a different Drift profile.",
       }),
     ).toBeTruthy();
     expect(

@@ -208,7 +208,7 @@ describe("onboarding app", () => {
     const demo = screen.getByRole("button", { name: "Try the Demo" });
     demo.focus();
     await user.keyboard("{Enter}");
-    await screen.findByRole("heading", { name: "See how Drift changes over time." });
+    await screen.findByRole("heading", { name: "Explore five synthetic Personas, each with a different Drift profile." });
     expect(screen.queryByRole("navigation", { name: "Demo view" })).toBeNull();
     expect(screen.queryByText("After questions")).toBeNull();
     expect(screen.queryByRole("button", { name: "Start over" })).toBeNull();
@@ -255,7 +255,7 @@ describe("onboarding app", () => {
     const before = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
     await user.click(screen.getByRole("button", { name: "Go home" }));
     await user.click(screen.getByRole("button", { name: "Try the Demo" }));
-    await screen.findByRole("heading", { name: "See how Drift changes over time." });
+    await screen.findByRole("heading", { name: "Explore five synthetic Personas, each with a different Drift profile." });
 
     await user.click(screen.getByRole("button", { name: "Go home" }));
     expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
@@ -388,7 +388,7 @@ describe("onboarding app", () => {
     render(<App />);
 
     expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
-    await screen.findByRole("heading", { name: "See how Drift changes over time." });
+    await screen.findByRole("heading", { name: "Explore five synthetic Personas, each with a different Drift profile." });
     expect(await screen.findByRole("radio", { name: "Nisha Agarwal" })).toBeTruthy();
     expect(screen.queryByText("Stale saved experiment prompt")).toBeNull();
     expect(screen.queryByRole("button", { name: "Try loading again" })).toBeNull();

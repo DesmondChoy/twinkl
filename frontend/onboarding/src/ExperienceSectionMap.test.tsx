@@ -17,8 +17,10 @@ describe("Experience section map", () => {
     render(<ExperienceSectionMap view="persona-picker" />);
     expect(screen.queryByRole("navigation")).toBeNull();
     expect(screen.queryByRole("link")).toBeNull();
-    expect(screen.getByRole("heading", { name: "Follow a story. Examine the evidence." })).toBeTruthy();
-    expect(screen.getByText("Review Weekly Drift Detection and the Coach Digest.")).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "See how Twinkl works" })).toBeTruthy();
+    expect(screen.getByText("Read a Persona’s saved Journal Entries.")).toBeTruthy();
+    expect(screen.getByText("See the weekly results.")).toBeTruthy();
+    expect(screen.getByText("Open Inspect to check which entries support those results.")).toBeTruthy();
   });
 
   it.each(Object.entries(EXPECTED_LINKS))(

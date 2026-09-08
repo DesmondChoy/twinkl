@@ -278,12 +278,13 @@ The entry page offers **Try the Demo**. The chooser shows five selectable
 Persona rows in the same order as the saved catalog: Nisha, Noor, Lukas,
 Wei Jun, and Meera. Weekly states are visible without opening a guide, and
 Meera's row labels the states for Self-Direction and Tradition separately.
-The informational sidebar explains how to read Journal Entries, review Weekly
-Drift Detection and the Coach Digest, and open Inspect for supporting evidence.
+A **See how Twinkl works** banner explains how to read saved Journal Entries,
+see weekly results, and open Inspect to check which entries support them.
 The header identifies the saved Persona demo without the onboarding Inspect hint.
 
-On desktop, the comparison table spans the available content width and the
-chooser uses larger text. Selecting a row updates the explanation, replay
+On desktop, the comparison table spans the available content width. Compact
+rows and spacing that adapts to the window height keep the selected Persona
+panel visible without clipping content. Selecting a row updates the explanation, replay
 length, and key week in the detail panel below the table. A single
 **Start at week 1** action loads that Persona; selecting the current replay
 instead offers **Continue replay** with its saved week.
@@ -462,7 +463,7 @@ single-column Inspect layout and do not show the rail.
 
 The same 240-pixel section rail supports Profile confirmation, the first
 Journal Entry handoff, manual Journal Entry work, saved Persona replay, and
-saved-run Inspect. The Persona chooser uses an informational sidebar instead
+saved-run Inspect. The Persona chooser uses an informational banner instead
 of a section map. Each section map links only to sections in
 the current view. Content with a maximum width stays centered between the
 section rail and the outer page edge. The active values questions retain the

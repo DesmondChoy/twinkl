@@ -201,14 +201,12 @@ export default function ExperienceSectionMap({
 }: ExperienceSectionMapProps) {
   if (view === "persona-picker") {
     return <section className="persona-demo-guide" aria-labelledby="persona-demo-guide-title">
-      <p className="persona-demo-guide__label">How the demo works</p>
-      <h2 id="persona-demo-guide-title">Follow a story.<br />{" "}Examine the evidence.</h2>
-      <ol>
-        <li>Read saved Journal Entries.</li>
-        <li>Review Weekly Drift Detection and the Coach Digest.</li>
-        <li>Open Inspect during the replay to see supporting evidence.</li>
-      </ol>
-      <p className="persona-demo-guide__note">Synthetic Personas. No writing required.</p>
+      <h2 id="persona-demo-guide-title">See how Twinkl works</h2>
+      <ul className="persona-demo-guide__copy">
+        <li>Read a Persona’s saved Journal Entries.</li>
+        <li>See the weekly results.</li>
+        <li>Open Inspect to check which entries support those results.</li>
+      </ul>
     </section>;
   }
   let journalMap: keyof typeof JOURNAL_MAPS = "empty";

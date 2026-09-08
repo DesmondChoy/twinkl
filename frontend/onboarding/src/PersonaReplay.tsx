@@ -218,8 +218,7 @@ export function PersonaReplayPicker({
   return (
     <section className="persona-picker" aria-labelledby="persona-picker-title">
       <header className="persona-picker__header">
-        <h1 id="persona-picker-title" ref={headingRef} tabIndex={-1}>See how Drift changes over time.</h1>
-        <p className="lede">Choose a Persona to explore the Journal Entries and the recorded results each week.</p>
+        <h1 id="persona-picker-title" ref={headingRef} tabIndex={-1}>Explore five synthetic Personas, each with a different Drift profile.</h1>
       </header>
       {catalog ? (
         <div className="persona-picker__comparison">
@@ -227,7 +226,7 @@ export function PersonaReplayPicker({
             <table className="persona-comparison" aria-label="Choose a demo Persona: states by week">
               <colgroup><col className="persona-comparison__identity-column" /><col className="persona-comparison__value-column" />
                 {Array.from({ length: weekCount }, (_, index) => <col key={index} />)}</colgroup>
-              <thead><tr><th scope="col" colSpan={2}>Persona / demonstration</th>
+              <thead><tr><th scope="col" colSpan={2}>Synthetic Persona</th>
                 {Array.from({ length: weekCount }, (_, index) => <th scope="col" key={index}>Week {index + 1}</th>)}
               </tr></thead>
               {catalog.scenarios.map((item) => {
@@ -272,7 +271,6 @@ export function PersonaReplayPicker({
             </table>
             <div className="persona-picker__legend">
               <p><span aria-hidden="true">—</span> Replay ends before this week.</p>
-              <p>States are shown at each week’s close. Each Core Value has its own result in the replay.</p>
             </div>
           </div>
           {!compact ? detail : null}

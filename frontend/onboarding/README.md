@@ -49,15 +49,18 @@ advances. **Previous**, **Restart**, and named jumps such as **Show Active Drift
 week 4** in Nisha's replay provide navigation. Every week change, reload, and
 return from Inspect opens the journals first. The Persona picker shows all weekly
 states in one selectable comparison table. On desktop, the table spans the
-available content width, with larger chooser text and the selected Persona's
-explanation and single **Start at week 1** action below it. The order is Nisha
+available content width, with compact rows and spacing that adapts to the
+window height. The selected Persona's explanation and single **Start at week 1**
+action sit below it. The order is Nisha
 Agarwal (Drift emerges),
 Noor Haddad (no detected Drift), Lukas Vetter (one continuing Drift), Wei Jun
 Chen (Insufficient Evidence), and Meera Krishnamurthy (Drift affects one Core
 Value). Meera's Self-Direction and Tradition states occupy separate labelled
 subrows. On narrow screens, weeks wrap beneath each Persona and the selected
-explanation and action follow that Persona's row. The sidebar explains the
-demo; Experience and Inspect navigation begins inside the replay.
+explanation and action follow that Persona's row. A **See how Twinkl works**
+banner explains how to read the saved Journal Entries, see weekly results,
+and check supporting entries in Inspect. Experience and Inspect navigation
+begins inside the replay.
 
 Each Core Value explanation names its own state. The selected week and
 previously reviewed weeks persist across Experience and Inspect and after

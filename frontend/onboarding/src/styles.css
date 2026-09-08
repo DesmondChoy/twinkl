@@ -7672,11 +7672,13 @@ h2 {
 /* The chooser is a comparison surface; the replay keeps its own navigation. */
 .app-shell--persona {
   background: #fbfcfa;
+  --picker-row-padding: clamp(4px, calc(2dvh - 14px), 12px);
+  --picker-section-gap: clamp(10px, 1.4dvh, 20px);
 }
 
 .app-shell--persona .topbar {
   width: 100%;
-  height: 72px;
+  height: 64px;
   padding: 0 28px;
   background: #fbfcfa;
 }
@@ -7698,7 +7700,7 @@ h2 {
 
 .app-shell--persona .layout.layout--section-rail {
   width: 100%;
-  min-height: calc(100dvh - 72px);
+  min-height: calc(100dvh - 64px);
   grid-template-columns: clamp(220px, 17vw, 290px) minmax(0, 1fr);
   margin: 0;
   border: 0;
@@ -7722,45 +7724,29 @@ h2 {
 .persona-demo-guide {
   display: flex;
   flex-direction: column;
-  min-height: min(660px, calc(100dvh - 145px));
-}
-
-.persona-demo-guide__label {
-  margin-bottom: 26px;
-  color: #dce7ec;
-  font-size: 1rem;
 }
 
 .persona-demo-guide h2 {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   font-size: clamp(2rem, 2.3vw, 2.75rem);
   line-height: 1.15;
 }
 
-.persona-demo-guide ol {
+.persona-demo-guide__copy {
   display: grid;
-  gap: 23px;
+  gap: 18px;
   margin: 0;
-  padding: 0;
-  list-style: none;
+  padding-left: 1.15em;
+  list-style: disc;
   color: #e0e8ec;
   font-size: 1.06rem;
   line-height: 1.65;
 }
 
-.persona-demo-guide__note {
-  margin: auto 0 0;
-  border-top: 1px solid #718394;
-  padding-top: 19px;
-  color: #e0e8ec;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
 .app-shell--persona .flow-panel {
   min-width: 0;
   min-height: 0;
-  padding: 34px clamp(20px, 2.2vw, 38px) 26px;
+  padding: var(--picker-section-gap) clamp(20px, 2.2vw, 38px);
 }
 
 .persona-picker {
@@ -7771,24 +7757,16 @@ h2 {
 
 .persona-picker__header h1 {
   max-width: none;
-  margin: 0 0 12px;
-  font-size: clamp(2.1rem, 3.35vw, 3.45rem);
+  margin: 0 0 var(--picker-section-gap);
+  font-size: clamp(2rem, 2.6vw, 2.8rem);
   line-height: 1.1;
-}
-
-.persona-picker__header .lede {
-  max-width: 74ch;
-  margin: 0 0 32px;
-  color: #384b60;
-  font-size: clamp(1.1rem, 1.3vw, 1.35rem);
-  line-height: 1.5;
 }
 
 .persona-picker__comparison {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
-  gap: 28px;
+  gap: var(--picker-section-gap);
 }
 
 .persona-picker__matrix {
@@ -7799,8 +7777,8 @@ h2 {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: clamp(1rem, 1.05vw, 1.18rem);
-  line-height: 1.55;
+  font-size: clamp(1rem, 1.05vw, 1.12rem);
+  line-height: 1.4;
 }
 
 .persona-comparison__identity-column { width: 23%; }
@@ -7809,11 +7787,11 @@ h2 {
 .persona-comparison th,
 .persona-comparison td {
   border: 1px solid #cfd8de;
-  padding: 20px 14px;
+  padding: var(--picker-row-padding) 10px;
 }
 
 .persona-comparison thead th {
-  height: 68px;
+  height: 44px;
   background: #f3f6f7;
   font-weight: 700;
   text-align: center;
@@ -7837,9 +7815,9 @@ h2 {
 .persona-comparison__identity label {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
-  min-height: 78px;
-  padding: 4px 2px;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 2px;
   cursor: pointer;
 }
 
@@ -7852,18 +7830,21 @@ h2 {
 }
 
 .persona-comparison__identity label > span {
-  display: grid;
-  gap: 4px;
+  display: block;
   min-width: 0;
 }
 
 .persona-comparison__identity strong {
+  display: block;
+  margin-bottom: 2px;
   font-family: "Source Serif 4 Variable", Georgia, serif;
-  font-size: clamp(1.4rem, 1.65vw, 1.85rem);
+  font-size: clamp(1.3rem, 1.5vw, 1.65rem);
   line-height: 1.2;
 }
 
 .persona-comparison__identity small {
+  display: inline-block;
+  margin-left: 8px;
   color: #306c69;
   font-size: 0.9rem;
   font-weight: 650;
@@ -7909,19 +7890,19 @@ h2 {
 
 .persona-selection {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(240px, 23vw, 320px);
-  gap: 32px;
+  grid-template-columns: minmax(0, 1fr) clamp(190px, 17vw, 260px);
+  gap: 20px;
   min-width: 0;
   border: 1px solid #c5d0d6;
   border-radius: 5px;
-  padding: clamp(24px, 2.4vw, 38px);
+  padding: clamp(14px, 1.7dvh, 22px);
   background: #fffefb;
 }
 
 .persona-selection__overview {
   display: grid;
-  grid-template-columns: minmax(190px, 0.7fr) minmax(0, 1.3fr);
-  gap: 32px;
+  grid-template-columns: minmax(150px, 0.65fr) minmax(0, 1.35fr);
+  gap: 20px;
 }
 
 .persona-selection__story {
@@ -7929,7 +7910,7 @@ h2 {
 }
 
 .persona-selection__label {
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   color: #41556a;
   font-size: 0.96rem;
   font-weight: 650;
@@ -7937,27 +7918,28 @@ h2 {
 
 .persona-selection h2 {
   margin-bottom: 9px;
-  font-size: clamp(1.9rem, 2.1vw, 2.5rem);
+  font-size: clamp(1.5rem, 1.8vw, 2rem);
   line-height: 1.12;
 }
 
 .persona-selection__length {
   margin-bottom: 0;
-  font-size: 1.15rem;
+  font-size: 1rem;
 }
 
 .persona-selection__description {
-  margin-bottom: 18px;
-  font-size: 1.1rem;
-  line-height: 1.6;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
 .persona-selection__key {
-  display: grid;
-  gap: 7px;
-  margin: 20px 0 0;
-  font-size: 1.05rem;
-  line-height: 1.55;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 10px 0 0;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .persona-selection__key strong {
@@ -7967,9 +7949,10 @@ h2 {
 .persona-selection__values {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 13px;
-  font-size: 0.98rem;
-  line-height: 1.45;
+  gap: 10px;
+  margin: 10px 0;
+  font-size: 0.95rem;
+  line-height: 1.35;
 }
 
 .persona-selection__values div {
@@ -7988,47 +7971,47 @@ h2 {
 }
 
 .persona-selection__recommendation {
-  margin: 16px 0 0;
+  margin: 10px 0 0;
   color: #41556a;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .persona-selection__start {
   align-self: center;
   border-left: 1px solid #cfd8de;
-  padding-left: 28px;
+  padding-left: 20px;
 }
 
 .persona-selection__start p {
-  margin-bottom: 20px;
-  font-size: 1.05rem;
-  line-height: 1.6;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
 .persona-selection__start .button {
   width: 100%;
-  min-height: 58px;
+  min-height: 48px;
   border-radius: 5px;
-  padding: 12px 14px;
-  font-size: 1.05rem;
-  line-height: 1.5;
+  padding: 10px 12px;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .persona-picker__legend {
-  margin-top: 22px;
+  margin-top: 8px;
   color: #455b70;
   font-size: 0.98rem;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
-.persona-picker__legend p { margin-bottom: 5px; }
+.persona-picker__legend p { margin-bottom: 0; }
 
 .persona-picker__source {
-  margin: 23px 0 0;
+  margin: 10px 0 0;
   color: #617184;
   font-size: 0.88rem;
-  line-height: 1.6;
+  line-height: 1.4;
   text-align: right;
 }
 
@@ -8044,10 +8027,16 @@ h2 {
 
   .app-shell--persona .layout--section-rail .instrument-panel { padding: 28px 19px; }
   .persona-comparison th,
-  .persona-comparison td { padding: 16px 8px; }
-  .persona-selection { grid-template-columns: minmax(0, 1fr) 230px; gap: 24px; }
-  .persona-selection__overview { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .persona-selection__values { grid-template-columns: minmax(0, 1fr); }
+  .persona-comparison td { padding: var(--picker-row-padding) 8px; }
+  .persona-selection { gap: 16px; }
+  .persona-selection__overview { gap: 16px; }
+}
+
+@media (min-width: 1191px) and (max-height: 820px) {
+  .persona-selection { padding: 12px; }
+  .persona-selection__overview { grid-template-columns: clamp(180px, 14vw, 230px) minmax(0, 1fr); }
+  .persona-selection__values { margin-block: 8px; }
+  .persona-selection__key { margin-top: 8px; }
 }
 
 @media (max-width: 1190px) {
@@ -8058,15 +8047,10 @@ h2 {
   .persona-demo-location span { font-size: 0.75rem; }
   .app-shell--persona .layout.layout--section-rail { display: block; }
   .app-shell--persona .layout--section-rail .instrument-panel { display: block; padding: 20px; }
-  .persona-demo-guide { min-height: 0; }
-  .persona-demo-guide__label { margin-bottom: 8px; font-size: 0.85rem; }
   .persona-demo-guide h2 { margin-bottom: 14px; font-size: 1.6rem; }
-  .persona-demo-guide h2 br { display: none; }
-  .persona-demo-guide ol { gap: 7px; font-size: 0.95rem; line-height: 1.55; }
-  .persona-demo-guide__note { margin-top: 14px; padding-top: 12px; font-size: 0.85rem; }
+  .persona-demo-guide__copy { gap: 12px; font-size: 0.95rem; line-height: 1.55; }
   .app-shell--persona .flow-panel { padding: 24px 16px; }
   .persona-picker__header h1 { margin-bottom: 12px; font-size: clamp(1.95rem, 6vw, 2.5rem); }
-  .persona-picker__header .lede { margin-bottom: 21px; font-size: 1rem; }
   .persona-picker__comparison { display: block; }
   .persona-comparison,
   .persona-comparison tbody { display: block; }
@@ -8081,7 +8065,8 @@ h2 {
   .persona-comparison__identity label { align-items: center; min-height: 0; }
   .persona-comparison__identity input { margin-top: 0; }
   .persona-comparison__identity strong { font-size: 1.45rem; }
-  .persona-comparison__identity label > span { gap: 5px; }
+  .persona-comparison__identity label > span { display: grid; gap: 5px; }
+  .persona-comparison__identity small { margin-left: 0; }
   .persona-comparison__value { grid-column: 1 / -1; padding: 9px 15px; font-size: 0.9rem; }
   .persona-comparison__state { min-height: 88px; padding: 10px 8px; border: 1px solid #fbfcfa !important; font-size: 0.9rem; }
   .persona-comparison__state::before { display: block; margin-bottom: 5px; content: attr(data-week); font-size: 0.82rem; font-weight: 700; }
