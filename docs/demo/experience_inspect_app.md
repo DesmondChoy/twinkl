@@ -17,6 +17,13 @@ inspectable. Live NSM uses a separately authorized US$1 allowance shared across
 sessions and restarts; offline replay does not use that budget. The [methodology](../north_star/nsm_experiment_methodology.md)
 discloses retained observations and the limits of AI assessment.
 
+North Star Moment implementation, evaluation, and integration are complete
+for the capstone (`twinkl-fz34` and `twinkl-fz34.8`). The final source-level
+walkthrough, reconciliation of affected capstone documentation, and report
+PDF/figure generation with visual verification belong to `twinkl-rklc.10`.
+The integrated Coach Digest semantic concerns remain a separate follow-up in
+`twinkl-rklc.39`.
+
 This document specifies the capstone assessment experience. The shared React
 Experience and Inspect shell, resumable client session, view selector, and
 focused Inspect navigation are implemented. Manual Journal Entry processing,
