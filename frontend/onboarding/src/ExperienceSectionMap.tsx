@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import SectionMap, { type SectionMapItem } from "./SectionMap";
 
 export type ExperienceSectionMapView =
@@ -8,6 +9,7 @@ export type ExperienceSectionMapView =
   | "inspect";
 
 interface ExperienceSectionMapProps {
+  hasJournalComposer?: boolean;
   hasJournalEntries?: boolean;
   hasWeeklyResult?: boolean;
   view: ExperienceSectionMapView;
@@ -66,12 +68,12 @@ const MAPS: Record<
       {
         id: "inspect-overview-section",
         label: "Summary",
-        description: "Selected run and filters",
+        description: "Selected run",
       },
       {
         id: "inspect-events-section",
         label: "Recorded work",
-        description: "Events and details",
+        description: "Filters, events, and details",
       },
     ],
   },
@@ -172,20 +174,11 @@ const JOURNAL_MAPS: Record<
 };
 
 export default function ExperienceSectionMap({
+  hasJournalComposer = false,
   hasJournalEntries = false,
   hasWeeklyResult = false,
   view,
 }: ExperienceSectionMapProps) {
-  if (view === "persona-picker") {
-    return <section className="persona-demo-guide" aria-labelledby="persona-demo-guide-title">
-      <h2 id="persona-demo-guide-title">See how Twinkl works</h2>
-      <ul className="persona-demo-guide__copy">
-        <li>Read a Persona’s saved Journal Entries.</li>
-        <li>See the weekly results.</li>
-        <li>Open Inspect to check which entries support those results.</li>
-      </ul>
-    </section>;
-  }
   let journalMap: keyof typeof JOURNAL_MAPS = "empty";
   if (hasJournalEntries && hasWeeklyResult) {
     journalMap = "withEntriesAndResult";
@@ -196,11 +189,30 @@ export default function ExperienceSectionMap({
   }
   const configuration = view === "journal"
     ? JOURNAL_MAPS[journalMap]
-    : MAPS[view];
+    : view === "persona-picker" ? null : MAPS[view];
+  const sections = useMemo(() => {
+    const availableSections = configuration?.sections ?? [];
+    return view === "journal" && !hasJournalComposer
+      ? availableSections.filter((section) => section.id !== "experience-journal-compose")
+      : availableSections;
+  }, [configuration, hasJournalComposer, view]);
+
+  if (view === "persona-picker") {
+    return <section className="persona-demo-guide" aria-labelledby="persona-demo-guide-title">
+      <h2 id="persona-demo-guide-title">See how Twinkl works</h2>
+      <ul className="persona-demo-guide__copy">
+        <li>Read a Persona’s saved Journal Entries.</li>
+        <li>See the weekly results.</li>
+        <li>Open Inspect to check which entries support those results.</li>
+      </ul>
+    </section>;
+  }
+  if (!configuration) return null;
 
   return (
     <SectionMap
       {...configuration}
+      sections={sections}
       navigationLabel="Experience sections"
     />
   );

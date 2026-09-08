@@ -1,5 +1,4 @@
 import {
-  useEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -15,6 +14,7 @@ import type {
   TraceEventContract,
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
+import useModalFocus from "./useModalFocus";
 
 type JsonObject = Record<string, unknown>;
 type CoreValueState =
@@ -249,26 +249,14 @@ function ReviewDetailsDrawer({
   onClose,
 }: ReviewDetailsDrawerProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!selection) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeRef.current?.focus({ preventScroll: true });
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [onClose, selection]);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  useModalFocus(selection !== null, overlayRef, closeRef, onClose);
 
   if (!selection) return null;
 
   return createPortal(
     <div
+      ref={overlayRef}
       className="review-evidence-drawer"
       role="presentation"
       onMouseDown={(event) => {

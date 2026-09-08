@@ -17,6 +17,7 @@ import type {
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 import { isDisplayableNudge } from "./nudgeReveal";
+import useModalFocus from "./useModalFocus";
 
 type JsonObject = Record<string, unknown>;
 
@@ -105,26 +106,14 @@ function JournalEntryDrawer({
   onClose,
 }: JournalEntryDrawerProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!entry) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeRef.current?.focus({ preventScroll: true });
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [entry, onClose]);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  useModalFocus(entry !== null, overlayRef, closeRef, onClose);
 
   if (!entry) return null;
 
   return createPortal(
     <div
+      ref={overlayRef}
       className="replay-entry-drawer"
       role="presentation"
       onMouseDown={(event) => {

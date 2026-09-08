@@ -40,7 +40,7 @@ import {
   SESSION_STORAGE_KEY,
   type ExperienceState,
 } from "./session";
-import { northStarProfileRef, type NorthStarRecord } from "./northStar";
+import type { NorthStarRecord } from "./northStar";
 
 const fixture = validateExperienceInspectFixture(activeReplayJson);
 const catalog = validateScenarioCatalog(scenarioCatalogJson);
@@ -118,7 +118,6 @@ function ScenarioReplayHarness({
         setExperience((current) => ({ ...current, ...patch }))
       }
       inspectRun={inspectRun}
-      onChoosePersona={() => undefined}
       onWeekChange={changeWeek}
     />
   );
@@ -222,6 +221,31 @@ describe("persona replay", () => {
     expect(screen.getAllByRole("radio")).toHaveLength(5);
   });
 
+  it("uses the catalogued key week in both chooser guidance and replay navigation", async () => {
+    matchMedia(false);
+    const user = userEvent.setup();
+    const saved = validateExperienceInspectFixture(uncertainReplayJson);
+    const originalItem = catalog.scenarios.find((item) => item.scenario_id === saved.scenario.scenario_id)!;
+    // Moving the catalogue key must update both controls without new copy or data fields.
+    const item = { ...originalItem, key_week_start: saved.scenario.weeks[4].week_start };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({
+      ...scenarioCatalogJson,
+      scenarios: catalog.scenarios.map((candidate) => candidate.scenario_id === item.scenario_id ? item : candidate),
+    }) }));
+    const picker = render(<PersonaReplayPicker onLoad={() => true} />);
+    await user.click(await screen.findByRole("radio", { name: "Wei Jun Chen" }));
+    expect(screen.getByRole("region", { name: "Wei Jun Chen" }).querySelector("time")
+      ?.getAttribute("datetime")).toBe(saved.scenario.weeks[4].week_start);
+    picker.unmount();
+
+    const changeWeek = vi.fn();
+    render(<PersonaReplayExperience loaded={{ catalogItem: item, fixture: saved }} weekIndex={0}
+      profile={saved.scenario.profile} experience={experienceForWeek(0, saved, item)}
+      updateExperience={() => undefined} inspectRun={() => undefined} onWeekChange={changeWeek} />);
+    await user.click(screen.getByRole("button", { name: "Show Insufficient Evidence — week 5" }));
+    expect(changeWeek).toHaveBeenCalledWith(4);
+  });
+
   it("keeps revealed later weeks after returning from Inspect and reloading an earlier week", async () => {
     const { user, view } = await startMeeraReplay();
     for (let week = 0; week < 2; week += 1) {
@@ -275,7 +299,7 @@ describe("persona replay", () => {
     await user.click(screen.getByRole("button", { name: "Return to Experience" }));
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ })).toHaveLength(firstWeekCount);
     expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
-    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
 
     view.unmount();
     const restored = render(<App />);
@@ -419,7 +443,7 @@ describe("persona replay", () => {
     expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
     expect(screen.queryByRole("button", { name: "Next step" })).toBeNull();
     expect(screen.queryByRole("button", { name: /Auto replay|Pause replay/ })).toBeNull();
-    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
   });
 
   it.each([0, 1, 2])("ignores legacy partial reveal stage %s when displaying a saved week", (stage) => {
@@ -432,21 +456,23 @@ describe("persona replay", () => {
     render(<PersonaReplayExperience loaded={loaded} weekIndex={0}
       profile={fixture.scenario.profile} experience={experience}
       updateExperience={() => undefined} inspectRun={() => undefined}
-      onChoosePersona={() => undefined} onWeekChange={() => undefined} />);
+      onWeekChange={() => undefined} />);
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ })).toHaveLength(2);
     expect(screen.getByRole("button", { name: "Review Weekly Drift Detection" })).toBeTruthy();
     expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
   });
 
-  it("requires review before advancing and returns to journals for new weeks and restart", async () => {
+  it("advances without review and returns to journals for new weeks and restart", async () => {
     matchMedia(false);
     const user = userEvent.setup();
     render(<ReplayHarness />);
     expect(screen.queryByRole("button", { name: "Previous" })).toBeNull();
-    expect((screen.getByRole("button", { name: "Show week 2, outcome hidden" }) as HTMLButtonElement).disabled).toBe(true);
-    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "Show week 2, outcome hidden" }) as HTMLButtonElement).disabled).toBe(false);
+    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
     await user.click(screen.getByRole("button", { name: "Next week" }));
-    expect(screen.getByText("Week 1 of 5")).toBeTruthy();
+    expect(screen.getByText("Week 2 of 5")).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Show week 1, outcome hidden" }));
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     expect(screen.getByRole("heading", { name: "No Active Drift" })).toBeTruthy();
     expect(screen.getByRole("heading", {
@@ -460,7 +486,7 @@ describe("persona replay", () => {
     expect(document.body.scrollTop).toBe(0);
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
     expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
-    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
     await user.click(screen.getByRole("button", { name: "Show week 1: no active drift" }));
     expect(screen.getByText("Week 1 of 5")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
@@ -476,6 +502,21 @@ describe("persona replay", () => {
     expect(screen.getByRole("button", { name: "Review Weekly Drift Detection" })).toBeTruthy();
     expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
     expect(screen.getByRole("listitem", { name: "Week 1, not yet replayed" })).toBeTruthy();
+  });
+
+  it("allows sequential navigation without review and stops at the final week", async () => {
+    matchMedia(false);
+    const user = userEvent.setup();
+    render(<ReplayHarness />);
+    for (let week = 2; week <= fixture.scenario.weeks.length; week += 1) {
+      await user.click(screen.getByRole("button", { name: "Next week" }));
+      expect(screen.getByText(`Week ${week} of ${fixture.scenario.weeks.length}`)).toBeTruthy();
+      expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
+      expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    }
+    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(true);
+    await user.click(screen.getByRole("button", { name: "Next week" }));
+    expect(screen.getByText(`Week ${fixture.scenario.weeks.length} of ${fixture.scenario.weeks.length}`)).toBeTruthy();
   });
 
   it.each([false, true])("keeps the saved week unchanged without timer-driven replay (reduced motion: %s)", (reducedMotion) => {
@@ -561,10 +602,8 @@ describe("persona replay", () => {
     const futureWeek = screen.getByRole("button", {
       name: "Show week 4, outcome hidden",
     }) as HTMLButtonElement;
-    expect(futureWeek.disabled).toBe(true);
-    await user.click(screen.getByRole("button", {
-      name: "Show Active Drift — week 4",
-    }));
+    expect(futureWeek.disabled).toBe(false);
+    await user.click(futureWeek);
     expect(screen.getByText("Week 4 of 5")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
     expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
@@ -592,6 +631,48 @@ describe("persona replay", () => {
     expect(screen.getByRole("button", {
       name: "Show week 4: active drift",
     })).toBeTruthy();
+  });
+
+  it.each([
+    ["Nisha", activeReplayJson],
+    ["Noor", stableReplayJson],
+    ["Lukas", persistentReplayJson],
+    ["Wei Jun", uncertainReplayJson],
+    ["Meera", twoValuesReplayJson],
+  ])("lets every %s week open directly without reviewing another week", async (_name, scenarioJson) => {
+    matchMedia(false);
+    const user = userEvent.setup();
+    const saved = validateExperienceInspectFixture(scenarioJson);
+    const weeks = saved.scenario.weeks;
+    render(<ScenarioReplayHarness scenarioJson={scenarioJson} />);
+
+    for (let index = weeks.length - 1; index >= 0; index -= 1) {
+      const weekButton = screen.getByRole("button", {
+        name: `Show week ${index + 1}, outcome hidden`,
+      }) as HTMLButtonElement;
+      expect(weekButton.disabled).toBe(false);
+      await user.click(weekButton);
+      expect(screen.getByText(`Week ${index + 1} of ${weeks.length}`)).toBeTruthy();
+      expect(weekButton.getAttribute("aria-current")).toBe("step");
+      expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
+      expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+      for (const entryId of weeks[index].journal_entry_ids) {
+        expect(document.getElementById(`replay-entry-button-${entryId}`)).not.toBeNull();
+      }
+      for (const laterWeek of weeks.slice(index + 1)) {
+        for (const entryId of laterWeek.journal_entry_ids) {
+          expect(document.getElementById(`replay-entry-button-${entryId}`)).toBeNull();
+        }
+      }
+      expect(within(screen.getByRole("navigation", { name: "Replay weeks" }))
+        .queryAllByRole("listitem", { name: /^Week \d+: / })).toHaveLength(0);
+    }
+
+    await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
+    expect(screen.getByRole("heading", { name: /^Weekly Drift Detection/ })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: /^Show week 1:/ }));
+    expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
   });
 
   it("opens an earlier unreviewed week after a key-week jump without revealing outcomes", async () => {
@@ -628,9 +709,9 @@ describe("persona replay", () => {
     for (const week of [4, 5]) {
       expect((within(weekNavigation).getByRole("button", {
         name: `Show week ${week}, outcome hidden`,
-      }) as HTMLButtonElement).disabled).toBe(true);
+      }) as HTMLButtonElement).disabled).toBe(false);
     }
-    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
   });
 
   it.each([
@@ -726,8 +807,7 @@ describe("persona replay", () => {
         experience={experienceForWeek(4)}
         updateExperience={() => undefined}
         inspectRun={() => undefined}
-        onChoosePersona={() => undefined}
-        onWeekChange={() => undefined}
+          onWeekChange={() => undefined}
       />,
     );
 
@@ -758,8 +838,7 @@ describe("persona replay", () => {
         experience={experienceForWeek(weekIndex, scenarioFixture, item)}
         updateExperience={() => undefined}
         inspectRun={() => undefined}
-        onChoosePersona={() => undefined}
-        onWeekChange={() => undefined}
+          onWeekChange={() => undefined}
       />,
     );
 
@@ -788,8 +867,7 @@ describe("persona replay", () => {
         experience={experienceForWeek(1, scenarioFixture, item)}
         updateExperience={() => undefined}
         inspectRun={() => undefined}
-        onChoosePersona={() => undefined}
-        onWeekChange={() => undefined}
+          onWeekChange={() => undefined}
       />,
     );
 
@@ -820,8 +898,7 @@ describe("persona replay", () => {
         experience={experienceForWeek(2, scenarioFixture, item)}
         updateExperience={() => undefined}
         inspectRun={() => undefined}
-        onChoosePersona={() => undefined}
-        onWeekChange={() => undefined}
+          onWeekChange={() => undefined}
       />,
     );
 
@@ -845,8 +922,7 @@ describe("persona replay", () => {
         experience={experienceForWeek(weekIndex, scenarioFixture, item)}
         updateExperience={() => undefined}
         inspectRun={() => undefined}
-        onChoosePersona={() => undefined}
-        onWeekChange={() => undefined}
+          onWeekChange={() => undefined}
       />,
     );
 
@@ -913,8 +989,7 @@ describe("persona replay", () => {
         experience={experience}
         updateExperience={() => undefined}
         inspectRun={inspectRun}
-        onChoosePersona={() => undefined}
-        onWeekChange={() => undefined}
+          onWeekChange={() => undefined}
       />,
     );
 
@@ -940,16 +1015,15 @@ describe("persona replay", () => {
     expect(within(result).getByText("Why this state")).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "Inspect decision" }));
-    const northStarEvent = [...experience.trace_events]
+    const driftEvent = [...experience.trace_events]
       .reverse()
-      .find((event) => event.event_type === "north_star_reviewed");
-    expect(northStarEvent).toBeTruthy();
-    expect(inspectRun).toHaveBeenCalledWith(northStarEvent!.event_id);
+      .find((event) => event.event_type === "drift_detected");
+    expect(driftEvent).toBeTruthy();
+    expect(inspectRun).toHaveBeenCalledWith(driftEvent!.event_id);
     expect(screen.queryByText("No saved Coach Digest for this result")).toBeNull();
   });
 
   it.each([
-    { scenarioId: "uncertain-wei-jun", scenarioJson: uncertainReplayJson, eventType: "north_star_reviewed" },
     { scenarioId: "uncertain-wei-jun", scenarioJson: uncertainReplayJson, eventType: "drift_detected" },
     { scenarioId: "two-values-meera", scenarioJson: twoValuesReplayJson, eventType: "weekly_digest_built" },
   ])("focuses the current $scenarioId week through $eventType instead of earlier events", async ({ scenarioId, scenarioJson, eventType }) => {
@@ -962,34 +1036,9 @@ describe("persona replay", () => {
     const currentIds = new Set(saved.scenario.weeks[weekIndex].event_ids);
     const experience = experienceForWeek(weekIndex, saved, item);
     // Exercise each priority fallback while retaining earlier higher-priority events.
-    const higherPriorityTypes = eventType === "drift_detected"
-      ? ["north_star_reviewed", "weekly_coach_generated"]
-      : eventType === "weekly_digest_built"
-        ? ["north_star_reviewed", "weekly_coach_generated", "drift_detected"]
-        : [];
+    const higherPriorityTypes = eventType === "weekly_digest_built" ? ["drift_detected"] : [];
     experience.trace_events = experience.trace_events.filter((event) =>
       !currentIds.has(event.event_id) || !higherPriorityTypes.includes(event.event_type));
-    if (eventType === "north_star_reviewed") {
-      const week = saved.scenario.weeks[weekIndex];
-      const baseEvent = experience.trace_events.at(-1)!;
-      const record: NorthStarRecord = {
-        schema_version: "north-star-record-v1", session_id: saved.session.session_id,
-        owner_id: saved.scenario.profile.user_id, profile_ref: await northStarProfileRef(saved.scenario.profile),
-        week_start: week.week_start, week_end: week.week_end, cutoff_at: baseEvent.started_at,
-        input_hash: "a".repeat(64), status: "failed", mode: null, reason: "budget_unavailable",
-        core_value: null, value_phrase: null, selected: null, sources: [], reviews: [],
-        onset_t_index: null, onset_date: null, onset_available_at: null, attempts: 0, retryable: false,
-      };
-      const event = { ...baseEvent, event_id: `${scenarioId}:test-north-star`,
-        event_type: "north_star_reviewed" as const, input_hash: record.input_hash, details: { record } };
-      experience.trace_events = experience.trace_events.filter((candidate) =>
-        !currentIds.has(candidate.event_id) || candidate.event_type !== "north_star_reviewed");
-      experience.trace_events.push(event);
-      experience.trace_event_ids.push(event.event_id);
-      saved.trace_events.push(event);
-      week.event_ids.push(event.event_id);
-      currentIds.add(event.event_id);
-    }
     const expected = experience.trace_events.find((event) =>
       currentIds.has(event.event_id) && event.event_type === eventType);
     expect(expected).toBeTruthy();
@@ -998,7 +1047,7 @@ describe("persona replay", () => {
     render(<PersonaReplayExperience loaded={{ catalogItem: item, fixture: saved }}
       weekIndex={weekIndex} profile={saved.scenario.profile} experience={experience}
       updateExperience={() => undefined} inspectRun={inspectRun}
-      onChoosePersona={() => undefined} onWeekChange={() => undefined} />);
+      onWeekChange={() => undefined} />);
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     await user.click(screen.getByRole("button", { name: "Inspect decision" }));
     expect(inspectRun).toHaveBeenCalledWith(expected!.event_id);
@@ -1018,8 +1067,7 @@ describe("persona replay", () => {
         experience={experienceForWeek(weekIndex)}
         updateExperience={() => undefined}
         inspectRun={() => undefined}
-        onChoosePersona={() => undefined}
-        onWeekChange={() => undefined}
+          onWeekChange={() => undefined}
       />,
     );
 
@@ -1096,8 +1144,7 @@ describe("persona replay", () => {
           experience={experienceForWeek(weekIndex, scenarioFixture, item)}
           updateExperience={() => undefined}
           inspectRun={() => undefined}
-          onChoosePersona={() => undefined}
-          onWeekChange={() => undefined}
+              onWeekChange={() => undefined}
         />,
       );
 
@@ -1124,7 +1171,7 @@ describe("persona replay", () => {
     expect(screen.queryByRole("button", { name: /Open Journal Entry/ })).toBeNull();
     await waitFor(() => expect(document.activeElement).toBe(resultHeading));
     expect((screen.getByRole("button", { name: "Show week 2, outcome hidden" }) as HTMLButtonElement).disabled)
-      .toBe(true);
+      .toBe(false);
 
     await user.click(screen.getByRole("button", { name: "Read Journal Entries" }));
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
@@ -1137,7 +1184,7 @@ describe("persona replay", () => {
     expect(screen.getByRole("heading", { name: "No Active Drift" })).toBeTruthy();
     expect(screen.queryByRole("heading", { name: "Journal Entries" })).toBeNull();
     expect((screen.getByRole("button", { name: "Show week 2, outcome hidden" }) as HTMLButtonElement).disabled)
-      .toBe(true);
+      .toBe(false);
   });
 
   it("confirms before a saved persona replaces manual progress", async () => {

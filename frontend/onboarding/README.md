@@ -40,12 +40,15 @@ Detection result remains available. The first partial week follows the same
 rule. Inspect reads the live trace events. Profile confirmation starts this
 trace when the Python boundary is available. Without it, Experience stays
 usable and Inspect shows zero events instead of fixture events. Retryable
-failures include a retry action. **Go home** returns to the entry page from both
-journeys while preserving progress. **Try the Demo** loads one of five saved
+failures include a retry action. The Twinkl wordmark returns to the entry page
+while preserving progress. Saved replay Experience and Inspect offer
+**Choose another Persona** to return to the chooser; **Go home** remains in the
+chooser, onboarding, and manual Experience and Inspect. **Try the Demo** loads one of five saved
 synthetic Personas into the same React session. Each selected week immediately
 shows its Journal Entries, displayed nudges, and responses. **Review Weekly
-Drift Detection** opens the saved result and Coach Digest; **Next week** then
-advances. Previously reviewed weeks, **Restart**, and named jumps such as
+Drift Detection** opens the saved result and Coach Digest. **Next week** advances
+without requiring review and is disabled only at the final week. Every week is
+directly selectable before review. **Restart** and named jumps such as
 **Show Active Drift — week 4** in Nisha's replay provide navigation. Every week change, reload, and
 return from Inspect opens the journals first. The Persona picker shows all weekly
 states in one selectable comparison table. On desktop, the table spans the
@@ -67,7 +70,8 @@ banner. It shows week numbers and dates, highlights the selection, and keeps
 future outcomes hidden. Restart and the key-week shortcut sit below it. A
 collapsed Profile row and compact week heading leave the main area for reading;
 Next week stays beside the week heading. At widths up to 900px, the weeks form
-a horizontal strip instead.
+a horizontal strip instead. At widths up to 620px, **Choose another Persona**
+occupies a separate header row so the full label remains visible.
 
 The saved demo uses the chooser's typography throughout: Source Serif 4
 headings, Manrope body text and actions at 16px, and secondary labels at 14.4px.
@@ -97,10 +101,18 @@ Detection** sits beside the Journal Entries heading and opens the result in
 the same content area, with **Read Journal Entries** beside its heading. **Read Weekly Drift
 Detection** restores a reviewed result. **Why this state** keeps detailed
 evidence collapsed; source links open a desktop side panel or phone bottom
-sheet. The Drift state and Coach Digest appear side by side on wide screens
+sheet. Journal Entry and AI review dialogs retain keyboard focus and make the
+background inactive until dismissal. The Drift state and Coach Digest appear side by side on wide screens
 and stack on phones. The North Star Moment remains within the Coach Digest. A uniquely
 matched abbreviated Coach Digest quotation expands to its full source below
 the paragraph, while Inspect preserves the original model response.
+
+**Inspect decision** opens the weekly explanation linked to the current Drift
+Detector event, falling back to the saved Weekly Drift Detection output.
+**Inspect this moment** focuses the North Star Moment event. Inspect filters
+sit beside Recorded work with live matching counts for current and earlier events.
+The manual **Write** link appears only when the Journal Entry form is present,
+after the first-use notice and outside a pending Nudge response.
 
 After manual Journal Entries begin, Inspect retains **View Profile calculation**
 and **View recorded events** controls. The calculation uses the original 22

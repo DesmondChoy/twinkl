@@ -741,21 +741,6 @@ export default function InspectView({
         )}
       </div>
 
-      {!onboarding && events.length > 0 ? (
-        <nav className="inspect-filters" aria-label="Filter Inspect events">
-          {(Object.keys(FILTER_LABELS) as InspectFilter[]).map((filter) => (
-            <button
-              type="button"
-              aria-pressed={activeFilter === filter}
-              onClick={() => setActiveFilter(filter)}
-              key={filter}
-            >
-              {FILTER_LABELS[filter]}
-            </button>
-          ))}
-        </nav>
-      ) : null}
-
       {weeklyFocus ? (
         <section className="inspect-focus" aria-labelledby="inspect-focus-title">
           <div className="inspect-focus__heading">
@@ -896,6 +881,32 @@ export default function InspectView({
             Recorded events
           </h2>
         )}
+
+        {!onboarding && events.length > 0 ? (
+          <>
+            <nav className="inspect-filters" aria-label="Filter Inspect events">
+              {(Object.keys(FILTER_LABELS) as InspectFilter[]).map((filter) => (
+                <button
+                  type="button"
+                  aria-pressed={activeFilter === filter}
+                  onClick={() => setActiveFilter(filter)}
+                  key={filter}
+                >
+                  {FILTER_LABELS[filter]}
+                </button>
+              ))}
+            </nav>
+            <p className="inspect-filter-count" role="status" aria-label="Filtered event count">
+              {filteredCurrentEvents.length} of {countLabel(
+                currentEvents.length,
+                currentWeekEventIdSet ? "current week event" : "recorded event",
+              )}
+              {historyEvents.length > 0
+                ? ` · ${filteredHistoryEvents.length} of ${countLabel(historyEvents.length, "earlier event")}`
+                : ""}
+            </p>
+          </>
+        ) : null}
 
         {events.length === 0 ? (
           <div className="inspect-empty">

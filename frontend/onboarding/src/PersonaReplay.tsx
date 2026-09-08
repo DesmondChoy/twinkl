@@ -40,31 +40,31 @@ function personaLesson(item: ScenarioCatalogItem): { label: string; copy: string
       return {
         label: "A Drift emerges",
         copy: "Active Drift appears in week 4, after three weeks without it. By week 5, the recorded pattern no longer continues.",
-        key: "Week 4 · Active Drift appears",
+        key: "Active Drift appears",
       };
     case "persistent_drift":
       return {
         label: "Drift continues across weeks",
         copy: "The same Drift stays active through weeks 1–4. Repeated conflicts keep the pattern going; by week 5, it is no longer active.",
-        key: "Week 4 · The Drift is still active",
+        key: "The Drift is still active",
       };
     case "insufficient_evidence":
       return {
         label: "Evidence limits a Drift claim",
         copy: "The first four weeks have No Active Drift. In weeks 5–6, the evidence is insufficient to determine the state; uncertainty does not become a Drift claim.",
-        key: "Week 5 · Insufficient Evidence",
+        key: "Insufficient Evidence",
       };
     case "two_core_values":
       return {
         label: "Drift affects one Core Value",
         copy: "In week 1, choices under social pressure conflict with Self-Direction, while Tradition has No Active Drift. The two Core Values have different results in the same week.",
-        key: "Week 1 · Two different results",
+        key: "Two different results",
       };
     default:
       return {
         label: `${item.progression.length} weeks without Active Drift`,
         copy: "A baseline for comparison: no Active Drift is detected across the saved history. This does not mean every individual choice aligns with a Core Value.",
-        key: `Week ${item.progression.length} · No Active Drift throughout`,
+        key: "No Active Drift throughout",
       };
   }
 }
@@ -195,7 +195,14 @@ export function PersonaReplayPicker({
               <div><dt>Honoring traditions <small>Tradition</small></dt><dd>No Active Drift</dd></div>
             </dl>
           ) : null}
-          <p className="persona-selection__key"><strong>Key week</strong>{lesson.key}</p>
+          <p className="persona-selection__key"><strong>Key week</strong><span>
+            {selected.key_week_start ? <>
+              <time dateTime={selected.key_week_start}>Week of {new Intl.DateTimeFormat(undefined, {
+                day: "numeric", month: "short", year: "numeric",
+              }).format(new Date(`${selected.key_week_start}T00:00:00`))}</time>{" · "}
+            </> : null}
+            {lesson.key}
+          </span></p>
           {selected.recommended ? (
             <p className="persona-selection__recommendation">A good first walkthrough: the earlier weeks make the change easy to follow.</p>
           ) : null}
@@ -291,7 +298,6 @@ interface PersonaReplayExperienceProps {
   experience: ExperienceState;
   updateExperience: (patch: Partial<ExperienceState>) => void;
   inspectRun: (eventId: string) => void;
-  onChoosePersona: () => void;
   onWeekChange: (weekIndex: number) => void;
   headingRef?: RefObject<HTMLHeadingElement | null>;
 }
@@ -303,7 +309,6 @@ export function PersonaReplayExperience({
   experience,
   updateExperience,
   inspectRun,
-  onChoosePersona,
   onWeekChange,
   headingRef,
 }: PersonaReplayExperienceProps) {
@@ -355,7 +360,7 @@ export function PersonaReplayExperience({
     (event) => currentWeekEventIds.has(event.event_id),
   );
   const inspectEventId = [
-    "north_star_reviewed", "weekly_coach_generated", "drift_detected", "weekly_digest_built",
+    "drift_detected", "weekly_digest_built",
   ].map((eventType) => currentWeekEvents.find((event) => event.event_type === eventType))
     .find((event) => event !== undefined)?.event_id ?? null;
 
@@ -455,15 +460,6 @@ export function PersonaReplayExperience({
             This Persona Profile is a synthetic projection. It does not
             represent a completed SVBWS assessment.
           </p>
-          <button
-            className="inspect-run-link"
-            type="button"
-            onClick={() => {
-              onChoosePersona();
-            }}
-          >
-            Choose another Persona
-          </button>
         </div>
       </details>
 
@@ -478,7 +474,6 @@ export function PersonaReplayExperience({
             const revealed =
               index <= furthestCompletedWeek
               || (index === safeWeekIndex && resultVisible);
-            const selectable = revealed || index < safeWeekIndex;
             const label = revealed
               ? `Week ${index + 1}: ${
                 replayStateLabel(week.expected_delivery_state)
@@ -498,7 +493,6 @@ export function PersonaReplayExperience({
                 <button
                   type="button"
                   className="week-rail__button"
-                  disabled={!selectable || (index === safeWeekIndex && !resultVisible)}
                   aria-current={
                     index === safeWeekIndex ? "step" : undefined
                   }
@@ -507,12 +501,7 @@ export function PersonaReplayExperience({
                       ? `Show ${label.toLowerCase()}`
                       : `Show week ${index + 1}, outcome hidden`
                   }
-                  onClick={() => {
-                    if (!selectable || (index === safeWeekIndex && !resultVisible)) {
-                      return;
-                    }
-                    showWeek(index);
-                  }}
+                  onClick={() => showWeek(index)}
                 >
                   <span>Week {index + 1}</span>
                   <small className="replay-week-nav__dates">
@@ -559,7 +548,7 @@ export function PersonaReplayExperience({
         <button
           className="button button--primary"
           type="button"
-          disabled={isLast || !resultVisible}
+          disabled={isLast}
           onClick={() => showWeek(safeWeekIndex + 1)}
         >
           Next week

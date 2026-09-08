@@ -302,14 +302,21 @@ describe("onboarding app", () => {
     expect(screen.getByRole("main").classList.contains("layout--section-rail")).toBe(true);
     expect(screen.getByRole("main").classList.contains("layout--replay")).toBe(false);
 
-    await user.click(screen.getByRole("button", { name: "Go home" }));
-    await user.click(screen.getByRole("button", { name: "Try the Demo" }));
+    const banner = within(screen.getByRole("link", { name: "Twinkl home" }).closest("header")!);
+    await user.click(banner.getByRole("button", {
+      name: "Choose another Persona",
+    }));
     await screen.findByRole("heading", { name: "See how Twinkl works" });
     expect(screen.getByRole("main").classList.contains("layout--section-rail")).toBe(true);
     expect(screen.getByRole("main").classList.contains("layout--replay")).toBe(false);
   });
 
-  it.each(["Experience", "Inspect"])("returns home from saved replay %s and continues the selected week without changing saved evidence or progress", async (view) => {
+  it.each([
+    ["Experience", "wordmark"],
+    ["Inspect", "wordmark"],
+    ["Experience", "Choose another Persona"],
+    ["Inspect", "Choose another Persona"],
+  ])("navigates from saved replay %s through %s and resumes without changing saved evidence or progress", async (view, control) => {
     saveReplayInInspect(activeReplayJson.scenario.persona_id);
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(new Response(JSON.stringify(scenarioCatalogJson)))
@@ -327,11 +334,26 @@ describe("onboarding app", () => {
     }
     const before = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
 
-    await user.click(screen.getByRole("button", { name: "Go home" }));
-    expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
-    expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))).toEqual(before);
-    await user.click(screen.getByRole("button", { name: "Try the Demo" }));
+    const banner = within(screen.getByRole("link", { name: "Twinkl home" }).closest("header")!);
+    expect(banner.queryByRole("button", { name: "Go home" })).toBeNull();
+    await user.click(control === "wordmark"
+      ? banner.getByRole("link", { name: "Twinkl home" })
+      : banner.getByRole("button", { name: "Choose another Persona" }));
+    if (control === "wordmark") {
+      expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
+      expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))).toEqual(before);
+      await user.click(screen.getByRole("button", { name: "Try the Demo" }));
+    } else {
+      expect(screen.queryByRole("heading", { name: "Your inner compass." })).toBeNull();
+      expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))).toEqual({
+        ...before,
+        experience: { ...before.experience, active_view: "experience" },
+      });
+    }
     const resume = await screen.findByRole("button", { name: "Continue replay · Week 4" });
+    expect(screen.getAllByRole("radio")).toHaveLength(5);
+    expect(banner.getByRole("button", { name: "Go home" })).toBeTruthy();
+    expect(banner.queryByRole("button", { name: "Choose another Persona" })).toBeNull();
     const requestsBeforeResume = fetchMock.mock.calls.length;
     await user.click(resume);
 
@@ -999,6 +1021,8 @@ describe("onboarding app", () => {
     expect(
       screen.getByRole("heading", { name: "Know where your text goes." }),
     ).toBeTruthy();
+    expect(screen.queryByRole("link", { name: "Write" })).toBeNull();
+    expect(document.getElementById("experience-journal-compose")).toBeNull();
     fireEvent.click(
       screen.getByRole("button", { name: "Continue with manual demo" }),
     );
@@ -1010,6 +1034,8 @@ describe("onboarding app", () => {
         within(journalSections).getByRole("link", { name: label }),
       ).toBeTruthy();
     });
+    expect(document.getElementById("experience-journal-compose"))
+      .toBe(screen.getByRole("textbox", { name: "First Journal Entry" }).closest("form"));
     expect(
       within(journalSections).queryByRole("link", { name: "Weekly Drift" }),
     ).toBeNull();
@@ -1070,6 +1096,72 @@ describe("onboarding app", () => {
     expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
       .toBe("A quiet walk helped me think clearly.");
     expect(onStartJournal).toHaveBeenCalledTimes(1);
+  });
+
+  it("hides Write while a pending Nudge replaces the Journal Entry composer", async () => {
+    vi.useFakeTimers();
+    vi.mocked(submitJournalEntry).mockImplementation(async ({ sessionId, entry }) => ({
+      schema_version: canonicalInspectFixture.schema_version,
+      operation: "submit_journal_entry",
+      request_id: "submit-pending-nudge",
+      status: "ok",
+      session: {
+        ...canonicalInspectFixture.session,
+        session_id: sessionId,
+        revision: 1,
+        journal_entries: [entry],
+        nudges: [{
+          ...canonicalInspectFixture.session.nudges[0],
+          nudge_id: "pending-nudge",
+          journal_entry_id: entry.journal_entry_id,
+          outcome: "displayed",
+          text: "What stood out about that moment?",
+          response: null,
+        }],
+        drift_result: null,
+        weekly_digest: null,
+        trace_event_ids: [profileEvents.get(sessionId)!.event_id],
+      },
+      event_ids: [],
+    } as JournalEntrySubmittedResponseContract));
+
+    render(<App />);
+    enterPreferredName();
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) answerSet();
+    chooseTwoCoreValuesIfNeeded();
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    await act(async () => undefined);
+    fireEvent.click(screen.getByRole("button", { name: "Start my first Journal Entry" }));
+    fireEvent.click(screen.getByRole("button", { name: "Continue with manual demo" }));
+    expect(screen.getByRole("link", { name: "Write" })).toBeTruthy();
+    fireEvent.change(screen.getByRole("textbox", { name: "First Journal Entry" }), {
+      target: { value: "A quiet walk helped me think clearly." },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Save Journal Entry" }));
+    });
+
+    expect(submitJournalEntry).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("link", { name: "Write" })).toBeNull();
+    expect(document.getElementById("experience-journal-compose")).toBeNull();
+    act(() => vi.advanceTimersByTime(800));
+    expect(screen.getByRole("textbox", { name: "Your response" })).toBeTruthy();
+    expect(screen.queryByRole("link", { name: "Write" })).toBeNull();
+
+    vi.mocked(createExperienceSession).mockImplementation(async (profile, resumeState) => ({
+      schema_version: canonicalInspectFixture.schema_version,
+      operation: "create_session",
+      request_id: "finish-pending-nudge",
+      status: "ok",
+      session: { ...canonicalInspectFixture.session, ...resumeState, profile },
+    } as SessionCreatedResponseContract));
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Skip for now" }));
+    });
+    expect(screen.queryByRole("textbox", { name: "Your response" })).toBeNull();
+    expect(screen.getByRole("link", { name: "Write" })).toBeTruthy();
+    expect(document.getElementById("experience-journal-compose"))
+      .toBe(screen.getByRole("textbox", { name: "Journal Entry" }).closest("form"));
   });
 
   it("keeps an open-week Journal Entry and Inspect at the same event boundary", async () => {

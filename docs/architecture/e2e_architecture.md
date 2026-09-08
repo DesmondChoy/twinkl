@@ -41,8 +41,10 @@ The React app owns onboarding, Experience, Inspect, and saved Persona replay.
 Onboarding creates the confirmed Profile and its Core Values. Experience accepts
 manual Journal Entries and shows nudges, Weekly Drift Detection results, and
 Coach Digest responses with an optional North Star Moment. The entry page
-offers **Try Onboarding** and **Try the Demo**. **Go home** preserves progress
-when returning to that page.
+offers **Try Onboarding** and **Try the Demo**. The Twinkl wordmark preserves
+progress when returning to that page. Saved replay Experience and Inspect use
+**Choose another Persona** to return to the chooser; **Go home** remains in the
+chooser, onboarding, and manual Experience and Inspect.
 
 The React app sends versioned requests to the same-origin Python API. The Python
 Experience service validates the Profile, processes Journal Entries, selects
@@ -137,9 +139,9 @@ establish human validity; their follow-up is tracked in `twinkl-rklc.39`.
 
 The selected week shows all its Journal Entries immediately. **Review Weekly
 Drift Detection** opens the saved result in the full reading workspace;
-**Next week** becomes available after review. Week navigation, reload, and
-returning from Inspect open Journal Entries first. Saved progress retains access
-to reviewed weeks, while projections exclude writing beyond the selected cutoff.
+**Next week** advances without review and stops at the final week. Week navigation, reload, and
+returning from Inspect open Journal Entries first. All weeks are directly
+selectable before review, while projections exclude writing beyond the selected cutoff.
 Replay makes no provider calls or timed result reveals.
 
 Saved Persona replay is an assessment input. It is not the only Experience

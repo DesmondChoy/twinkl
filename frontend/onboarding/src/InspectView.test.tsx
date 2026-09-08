@@ -158,19 +158,28 @@ describe("Inspect view", () => {
     expect(screen.queryByText("Coach Digest response unavailable")).toBeNull();
   });
 
-  it("filters the current week by component", async () => {
+  it("places filters beside event history and reports matches without changing the focused explanation", async () => {
     const user = userEvent.setup();
     render(
       <InspectView
         events={events}
         currentWeekEventIds={events.slice(6, 11).map((event) => event.event_id)}
-        selectedEventId={null}
+        selectedEventId="event-09"
         traceLabel="Canonical contract fixture"
         onReturn={() => undefined}
       />,
     );
 
-    await user.click(screen.getByRole("button", {
+    const history = screen.getByRole("region", { name: "Current week first." });
+    const filters = within(history).getByRole("navigation", { name: "Filter Inspect events" });
+    const count = within(history).getByRole("status", { name: "Filtered event count" });
+    const explanation = screen.getByRole("region", { name: "How Twinkl reached this result." });
+    const explanationText = explanation.textContent;
+    expect(explanation.compareDocumentPosition(filters) & Node.DOCUMENT_POSITION_FOLLOWING)
+      .toBeTruthy();
+    expect(count.textContent).toBe("5 of 5 current week events · 10 of 10 earlier events");
+
+    await user.click(within(filters).getByRole("button", {
       name: "Weekly Drift Reviewer",
     }));
 
@@ -182,6 +191,44 @@ describe("Inspect view", () => {
       screen.getByRole("button", { name: "Weekly Drift Reviewer" })
         .getAttribute("aria-pressed"),
     ).toBe("true");
+    expect(count.textContent).toBe("2 of 5 current week events · 1 of 10 earlier events");
+    expect(explanation.textContent).toBe(explanationText);
+    const earlierHistory = screen.getByText("Complete Inspect history").closest("details")!;
+    expect(earlierHistory.open).toBe(false);
+    await user.click(screen.getByText("Complete Inspect history"));
+    expect(within(screen.getByRole("list", { name: "Earlier events" }))
+      .getAllByRole("listitem")).toHaveLength(1);
+
+    await user.click(within(filters).getByRole("button", { name: "Journal Entries" }));
+    expect(count.textContent).toBe("0 of 5 current week events · 8 of 10 earlier events");
+    expect(screen.getByText("This week has no Journal Entries events.")).toBeTruthy();
+    expect(within(screen.getByRole("list", { name: "Earlier events" }))
+      .getAllByRole("listitem")).toHaveLength(8);
+
+    await user.click(within(filters).getByRole("button", { name: "All steps" }));
+    expect(count.textContent).toBe("5 of 5 current week events · 10 of 10 earlier events");
+    expect(within(screen.getByRole("list", { name: "Current week events" }))
+      .getAllByRole("listitem")).toHaveLength(5);
+  });
+
+  it("reports filtered recorded events when there is no selected week", async () => {
+    const user = userEvent.setup();
+    render(
+      <InspectView
+        events={events}
+        selectedEventId={null}
+        traceLabel="Current Experience session"
+        onReturn={() => undefined}
+      />,
+    );
+
+    const count = screen.getByRole("status", { name: "Filtered event count" });
+    expect(count.textContent).toBe("15 of 15 recorded events");
+    await user.click(screen.getByRole("button", { name: "Drift Detector" }));
+    expect(count.textContent).toBe("3 of 15 recorded events");
+    expect(within(screen.getByRole("list", { name: "Recorded events" }))
+      .getAllByRole("listitem")).toHaveLength(3);
+    expect(screen.queryByText("Complete Inspect history")).toBeNull();
   });
 
   it("redacts sensitive fields before rendering provider data", () => {

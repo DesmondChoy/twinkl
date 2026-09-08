@@ -25,8 +25,10 @@ capstone.
 ## Experience and Inspect React App — 🚧 In Progress
 
 The entry page offers **Try the Demo** for five saved synthetic Persona stories
-and **Try Onboarding** for the personal assessment. The Twinkl wordmark and
-**Go home** return to this page while preserving progress. **Continue replay**
+and **Try Onboarding** for the personal assessment. The Twinkl wordmark returns
+to this page while preserving progress. Saved replay Experience and Inspect use
+**Choose another Persona** to return to the chooser; **Go home** remains in the
+chooser, onboarding, and manual Experience and Inspect. **Continue replay**
 resumes the current Persona from the picker.
 
 The manual Experience submits Journal Entries to the versioned Python
@@ -43,9 +45,9 @@ synthetic projection.
 
 Saved Persona replay shows all Journal Entries, displayed nudges, and responses
 for the selected week immediately. **Review Weekly Drift Detection** opens the
-result in the full weekly workspace; **Next week** becomes available after
-review. **Previous**, **Restart**, reviewed week markers, and named key-week
-jumps provide navigation. Week changes, reload, and returning from Inspect
+result in the full weekly workspace; **Next week** advances until the final
+week without requiring review. Every week is directly selectable before review; **Restart** and named
+key-week jumps provide additional navigation. Week changes, reload, and returning from Inspect
 open Journal Entries first. Results keep **Why this state** collapsed until
 requested, with source links and per-Core-Value AI review details. Coach Digest
 and North Star Moment cards have direct navigation when available.

@@ -400,6 +400,9 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   } | null>(null);
   const milestone = milestoneFor(session);
   const journalStarted = session.experience.journal_started;
+  const journalComposerAvailable = session.experience.data_notice_acknowledged
+    && !(session.experience.run_state === "awaiting_response"
+      && session.experience.nudges.some((nudge) => nudge.outcome === "displayed"));
   const activeView = session.experience.active_view;
   const selectedPersonaId = session.experience.selected_persona_id;
   const inspectAvailable = session.stage !== "set"
@@ -1063,9 +1066,16 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             className="restart"
             type="button"
             disabled={deletingSession}
-            onClick={() => setEntryChoiceOpen(true)}
+            onClick={() => {
+              if (showSavedPersonaReplay) {
+                setPersonaPickerOpen(true);
+                showView("experience");
+              } else {
+                setEntryChoiceOpen(true);
+              }
+            }}
           >
-            Go home
+            {showSavedPersonaReplay ? "Choose another Persona" : "Go home"}
           </button>
           {!personaPickerOpen ? <button
             className="restart"
@@ -1134,6 +1144,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                   />
                 ) : null}
                 <ExperienceSectionMap
+                  hasJournalComposer={journalComposerAvailable}
                   hasJournalEntries={
                     session.experience.journal_entries.length > 0
                   }
@@ -1189,7 +1200,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 experience={session.experience}
                 updateExperience={updateExperience}
                 inspectRun={inspectRun}
-                onChoosePersona={() => setPersonaPickerOpen(true)}
                 onWeekChange={(weekIndex) =>
                   applyScenarioWeek(loadedScenario, weekIndex)
                 }

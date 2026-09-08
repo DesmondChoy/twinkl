@@ -6808,6 +6808,11 @@ h2 {
   background: var(--ink);
 }
 
+.inspect-filter-count {
+  margin: 8px 0 16px;
+  color: rgba(20, 34, 59, 0.67);
+}
+
 .inspect-focus__technical {
   align-self: start;
   border: 1px solid rgba(20, 34, 59, 0.12);
@@ -8030,6 +8035,13 @@ h2 {
 }
 
 @media (max-width: 620px) {
+  .app-shell.app-shell--saved-persona:not(.app-shell--persona) {
+    & .topbar { height: auto; min-height: 68px; grid-template-columns: auto minmax(0, 1fr); padding-block: 8px; }
+    & .topbar .view-switcher { justify-self: end; }
+    & .topbar-actions { grid-column: 1 / -1; }
+    & .topbar-actions .restart { white-space: normal; }
+  }
+
   .app-shell.app-shell--journal.app-shell--saved-persona {
     & .layout--replay .flow-panel { padding: 10px; }
     & .replay-column__header { padding: 12px; }

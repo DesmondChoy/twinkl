@@ -26,7 +26,7 @@ describe("Experience section map", () => {
     "shows the %s sections",
     (view, labels) => {
       render(
-        <ExperienceSectionMap view={view as ExperienceSectionMapView} />,
+        <ExperienceSectionMap hasJournalComposer view={view as ExperienceSectionMapView} />,
       );
 
       const navigation = screen.getByRole("navigation", {
@@ -51,6 +51,22 @@ describe("Experience section map", () => {
         "href",
       ),
     ).toBe("#journal-thread-title");
+  });
+
+  it("shows Write only while the Journal Entry composer is available", () => {
+    const { rerender } = render(
+      <ExperienceSectionMap hasJournalEntries hasWeeklyResult view="journal" />,
+    );
+    expect(screen.queryByRole("link", { name: "Write" })).toBeNull();
+    expect(screen.getByRole("link", { name: "Journal Entries" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Weekly Drift" })).toBeTruthy();
+
+    rerender(<ExperienceSectionMap hasJournalComposer hasJournalEntries hasWeeklyResult view="journal" />);
+    expect(screen.getByRole("link", { name: "Write" }).getAttribute("href"))
+      .toBe("#experience-journal-compose");
+
+    rerender(<ExperienceSectionMap hasJournalEntries hasWeeklyResult view="journal" />);
+    expect(screen.queryByRole("link", { name: "Write" })).toBeNull();
   });
 
   it("adds Weekly Drift only when the result is present", () => {

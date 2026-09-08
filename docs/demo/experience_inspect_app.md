@@ -112,8 +112,10 @@ The entry page introduces Twinkl with a full-width inner-compass banner and a
 short product description adapted from the [README](../../README.md). A
 top-right GitHub link opens the project repository in a new tab. Below the
 introduction, Try the Demo and Try Onboarding lead into the two journeys;
-the Twinkl home link and a consistent top-right **Go home** button in both
-journeys return to this page while preserving session progress.
+the Twinkl home link returns to this page while preserving session progress.
+The top-right action is **Choose another Persona** in saved replay Experience
+and Inspect, returning to the five-Persona chooser. **Go home** remains available
+in the chooser, onboarding, and manual Experience and Inspect.
 The current Persona offers **Continue replay** in the picker to resume its
 selected week after returning home.
 
@@ -285,15 +287,18 @@ The header identifies the saved Persona demo without the onboarding Inspect hint
 On desktop, the comparison table spans the available content width. Compact
 rows and spacing that adapts to the window height keep the selected Persona
 panel visible without clipping content. Selecting a row updates the explanation, replay
-length, and key week in the detail panel below the table. A single
+length, and key week in the detail panel below the table. The key-week date
+comes from the same catalogue field used by the replay shortcut. A single
 **Start at week 1** action loads that Persona; selecting the current replay
 instead offers **Continue replay** with its saved week.
 On narrow screens, each Persona's weekly cells form a labelled grid, with the
 selected details and the same action immediately below that Persona. The action loads the Profile,
 Core Values, Journal Entries, displayed nudges and responses, saved Weekly
-Drift Reviewer Decisions, Drift states, and Coach Digest responses. **Go home**
-returns to the entry page from the Persona picker, replay, onboarding, or
-Inspect. A replay also offers **Choose another Persona** inside Profile details.
+Drift Reviewer Decisions, Drift states, and Coach Digest responses.
+**Choose another Persona** returns from saved replay Experience or Inspect to
+the picker while preserving replay progress. Profile details contain only
+the Persona context. The Twinkl wordmark always returns to the entry page;
+**Go home** does so from the picker, onboarding, and manual Experience or Inspect.
 
 The chooser and subsequent saved replay screens share Source Serif 4 headings
 and Manrope body text, with a consistent heading scale, 16px body text and
@@ -306,19 +311,20 @@ Persona simulation presents one week at a time. Each selected week immediately
 shows all its saved Journal Entries as compact excerpts, with available nudges
 and responses beneath their entries. **Review Weekly Drift Detection** opens
 that week's saved result. The replay makes no timed or automatic result reveal.
-**Next week** becomes available after this explicit review. Previously reviewed
-weeks remain selectable; **Restart** returns to week one and clears replay progress.
+**Next week** advances without requiring result review and is disabled only
+at the final week. Every week is directly selectable without reviewing earlier weeks;
+**Restart** returns to week one and clears replay progress.
 
 On desktop, a quiet 170-pixel week navigator replaces the section-link banner.
 It shows each week's number and dates, highlights the selected week, and reveals
-states through the furthest reviewed week. Earlier weeks remain accessible after a key-week
-jump even when their outcomes have not been revealed. **Restart** and the named key-week shortcut sit
+states through the furthest reviewed week. Selecting an unreviewed week opens
+its Journal Entries without revealing its outcome. **Restart** and the named key-week shortcut sit
 below the list. The content area begins with a collapsed Profile row and a
 compact selected-week heading beside **Next week**. At widths up to 900 pixels,
 the weeks form a horizontally scrollable strip above the reading area.
 
 Selecting a week projects only Journal Entries and evidence available by its
-cutoff. Later week markers remain disabled until reviewed. A named jump, such
+cutoff. All week markers remain selectable regardless of review progress. A named jump, such
 as **Show Active Drift — week 4**, offers explicit navigation to a key week;
 it opens that week's journals and still requires the review button to show its
 result. The chooser's weekly comparison is derived from the same saved catalog
@@ -328,13 +334,16 @@ The shared browser session preserves the selected week and furthest completed
 week across Experience and Inspect and after reload. Existing saved step
 progress remains readable, but does not hide Journal Entries. Initial load,
 reload, returning from Inspect, week navigation, and restart open the journals
-panel. Restart clears replay progress. Returning to an earlier week preserves
-access to later weeks that were already reviewed.
+panel. Restart clears replay progress. Every week remains selectable regardless
+of which results have been reviewed.
 Sessions holding a retired Persona return safely to the current chooser rather
 than attempting to load a removed bundle.
 
 Opening a Journal Entry uses a desktop side panel or mobile bottom sheet so
-the reading area does not reflow. Saved nudges are available immediately with
+the reading area does not reflow. Journal Entry and AI review dialogs keep
+keyboard focus inside and make the background inactive until dismissal;
+Escape, Close, or a backdrop click restores focus to the triggering control.
+Saved nudges are available immediately with
 their entries; manual journaling retains its separate delayed Nudge reveal.
 
 When a saved Coach Digest response is present, it appears after the Weekly
@@ -363,6 +372,13 @@ left and one integrated Coach Digest on the right. Phones and narrower screens
 stack these in the same order. The Coach Digest presents its original narrative,
 then an optional validated North Star Moment passage, and ends with its one
 original reflective question. No additional model rewrites the response.
+
+**Inspect decision** beneath the Drift state opens the weekly explanation,
+linked to the current week's Drift Detector event (or its saved Weekly Drift
+Detection output when that event is unavailable). **Inspect this moment**
+continues to focus the exact North Star Moment event. Inspect filters sit with
+Recorded work, directly above the affected lists, and show matching current-week
+and earlier-event counts beside the results.
 Onboarding presents the passage without a North Star Moment label; Persona
 replay adds a discreet attribution and **Inspect this moment**, which opens
 that exact backend event. Inspect distinguishes deterministic framing from
@@ -901,10 +917,12 @@ the source files and separate provider-backed Coach Digest generation workflow.
 - Primary actions, Journal Entry composition, persona replay, Coach Digest
   reading, and event inspection remain usable without hover or precision
   pointer input.
-- Persona replay controls and available week markers remain operable with touch
-  and keyboard input. Earlier weeks remain accessible without exposing their
-  unrevealed outcomes; future weeks remain inert until reached through review
-  and **Next week**, or through a named key-week jump.
+- Persona replay controls and all week markers remain operable with touch
+  and keyboard input. Week selection and **Next week** open Journal Entries
+  without revealing the result; explicit review reveals that selected result.
+- Manual **Write** navigation appears only while the Journal Entry composer
+  exists. It is omitted before the first-use notice is acknowledged and while
+  a displayed Nudge awaits a response.
 - A context-specific weekly Inspect action moves focus to the weekly
   explanation. It keeps the linked event selected and expanded. Other Inspect
   actions move focus to the selected event.
