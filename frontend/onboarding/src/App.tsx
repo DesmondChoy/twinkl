@@ -55,6 +55,7 @@ import {
 } from "./PersonaReplay";
 import {
   loadSavedScenarioById,
+  SavedPersonaUnavailableError,
   projectScenarioWeek,
   type LoadedScenario,
 } from "./scenarioReplay";
@@ -376,7 +377,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     () => session.stage === "name" && !session.preferred_name.trim(),
   );
   const [personaPickerOpen, setPersonaPickerOpen] = useState(false);
-  const [pickerReturnsToChoice, setPickerReturnsToChoice] = useState(false);
   const [inspectCalculation, setInspectCalculation] = useState(false);
   const [loadedScenario, setLoadedScenario] = useState<LoadedScenario | null>(
     null,
@@ -746,7 +746,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     setLoadedScenario(loaded);
     setScenarioLoadError(null);
     setPersonaPickerOpen(false);
-    setPickerReturnsToChoice(false);
     applyScenarioWeek(loaded, 0);
     updateExperience({ replay_progress: null });
     return true;
@@ -772,8 +771,19 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
         applyScenarioWeek(loaded, safeWeek);
         setLoadedScenario(loaded);
       })
-      .catch(() => {
+      .catch((error: unknown) => {
         if (!cancelled) {
+          if (error instanceof SavedPersonaUnavailableError) {
+            // A successfully loaded catalog no longer contains this synthetic replay.
+            profileSyncGenerationRef.current += 1;
+            profileSyncInFlightRef.current = null;
+            updateSession(createSession());
+            setLoadedScenario(null);
+            setEntryChoiceOpen(false);
+            setPersonaPickerOpen(true);
+            setScenarioLoadError(null);
+            return;
+          }
           setScenarioLoadError(
             "The saved Persona replay could not be restored.",
           );
@@ -1020,6 +1030,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           </a>
         ) : null}
         {!entryChoiceOpen ? <>
+        {personaPickerOpen ? <p className="persona-demo-location">Saved Persona demo <span>Choose a Persona</span></p> : (
         <nav className="view-switcher" aria-label="Demo view">
           <button
             className={activeView === "experience" ? "view-switcher__option view-switcher__option--active" : "view-switcher__option"}
@@ -1047,6 +1058,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </span>
           ) : null}
         </nav>
+        )}
         <div className="topbar-actions">
           <button
             className="restart"
@@ -1056,7 +1068,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           >
             Go home
           </button>
-          <button
+          {!personaPickerOpen ? <button
             className="restart"
             type="button"
             disabled={deletingSession}
@@ -1067,7 +1079,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               : session.confirmed_profile
                 ? "Delete session"
                 : "Start over"}
-          </button>
+          </button> : null}
         </div>
         </> : null}
       </header>
@@ -1092,7 +1104,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           )}
           onDemo={() => {
             setEntryChoiceOpen(false);
-            setPickerReturnsToChoice(true);
             setPersonaPickerOpen(true);
             showView("experience");
           }}
@@ -1156,14 +1167,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           {personaPickerOpen ? (
             <PersonaReplayPicker
               currentPersonaId={selectedPersonaId}
-              onBack={() => {
-                setPersonaPickerOpen(false);
-                if (pickerReturnsToChoice) setEntryChoiceOpen(true);
-              }}
+              currentWeekIndex={session.experience.selected_week}
               onLoad={activateScenario}
               onResume={() => {
                 setPersonaPickerOpen(false);
-                setPickerReturnsToChoice(false);
               }}
             />
           ) : null}

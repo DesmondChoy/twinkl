@@ -249,6 +249,9 @@ function eventSummary(
         : savedLabel;
     }
     case "nudge_suppression_checked":
+      if (details.policy_applied === false) {
+        return `Saved nudge history; current spacing rule would ${details.suppressed === true ? "suppress" : "allow"} a nudge`;
+      }
       return details.suppressed === true
         ? "Nudge suppressed by the anti-annoyance rule"
         : "Nudge allowed after the suppression check";

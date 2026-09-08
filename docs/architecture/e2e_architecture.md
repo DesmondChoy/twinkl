@@ -118,15 +118,20 @@ Saved Persona replay loads committed scenario bundles into the shared React
 session. It uses saved Weekly Drift Reviewer Decisions by default. The app marks
 each result as saved or live and verifies its recorded source data.
 
-The catalog contains Noor, Nisha, Sook Yin, Wei Jun, and Henrik across 27 weeks.
+The catalog contains Nisha, Noor, Lukas, Wei Jun, and Meera across 27 weeks.
 Bundles use Weekly Drift prompt v4 Run 1 and completed full-history North Star
 Moment outcomes. All 27 weeks have validated Coach Digest responses with matching
-input hashes: the five original key-week responses are preserved and 22 were
-added. Original trace IDs and NSM records remain unchanged. Browser requests
-bypass the cache and verify each bundle's catalogued SHA-256 hash.
+input hashes: 17 compatible responses are retained for Nisha, Noor, and Wei Jun,
+and ten were generated for Lukas and Meera in the
+[Persona replacement run](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md).
+The replacement North Star Moment records reuse the pinned study's completed
+full-history outcomes and original receipts. Retired Persona replay files are
+removed; their source datasets and historical studies remain unchanged.
+Browser requests bypass the cache and verify each bundle's catalogued SHA-256 hash.
 
 The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
-records tests, a live NSM smoke, and five unresolved AI editorial findings.
+records tests, a live NSM smoke, and five AI editorial findings for the previous
+roster.
 Mechanical checks and exact provenance do not resolve those semantic issues or
 establish human validity; their follow-up is tracked in `twinkl-rklc.39`.
 

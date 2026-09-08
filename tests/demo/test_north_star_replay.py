@@ -134,6 +134,38 @@ def test_every_export_matches_completed_experiment_without_provider_calls(
 
 
 @pytest.mark.parametrize(
+    ("owner_id", "first_status", "first_reason"),
+    [
+        ("a24b8d8f", "complete", "no_supportive_source"),
+        ("961a4e3f", "not_eligible", "no_eligible_writing"),
+    ],
+)
+def test_replacement_replays_preserve_first_week_omissions_and_later_cards(
+    replay_records, owner_id, first_status, first_reason
+):
+    weeks = sorted(
+        (
+            (request, record)
+            for request, record in replay_records
+            if request.owner_id == owner_id
+        ),
+        key=lambda row: row[0].week_start,
+    )
+    assert len(weeks) == 5
+    first = weeks[0][1]
+    assert (first.status, first.reason, first.selected) == (
+        first_status,
+        first_reason,
+        None,
+    )
+    assert len(first.experiment.receipts) == (1 if owner_id == "a24b8d8f" else 0)
+    for request, record in weeks[1:]:
+        assert record.status == "complete"
+        assert record.selected is not None
+        assert validate_saved_record(record, request) == record
+
+
+@pytest.mark.parametrize(
     "mutation",
     ["quote", "source", "receipt", "state", "model", "source_hash", "source_path"],
 )

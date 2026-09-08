@@ -48,7 +48,9 @@ from src.demo.scenarios import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_OUTPUT = Path("logs/experiments/reports/demo_coach_all_weeks_20260908")
+DEFAULT_OUTPUT = Path(
+    "logs/experiments/reports/demo_persona_replacement_20260908/current"
+)
 
 
 def _hash(value: Any) -> str:
@@ -109,8 +111,26 @@ def collect_cases(root: Path) -> dict[str, dict[str, Any]]:
     return cases
 
 
-def prepare(root: Path, output: Path) -> dict[str, Any]:
+def prepare(
+    root: Path,
+    output: Path,
+    *,
+    repair_requirements: dict[str, list[str]] | None = None,
+) -> dict[str, Any]:
     cases = collect_cases(root)
+    if repair_requirements is not None and (
+        not isinstance(repair_requirements, dict)
+        or any(
+            key not in cases
+            or not isinstance(requirements, list)
+            or not requirements
+            or any(
+                not isinstance(item, str) or not item.strip() for item in requirements
+            )
+            for key, requirements in repair_requirements.items()
+        )
+    ):
+        raise ValueError("Repair requirements must map current case keys to text lists")
     fixture = load_saved_coach_responses(root)
     for key, response in fixture.responses.items():
         if key not in cases:
@@ -137,6 +157,8 @@ def prepare(root: Path, output: Path) -> dict[str, Any]:
             ]
         },
     }
+    if repair_requirements:
+        policy["repair_requirements"] = repair_requirements
     plan_path = output / "plan.json"
     if plan_path.exists():
         plan: dict[str, Any] = json.loads(plan_path.read_bytes())
@@ -245,7 +267,8 @@ async def generate(
             continue
         if key in load_saved_coach_responses(root).responses:
             raise ValueError(f"Untracked saved response appeared: {key}")
-        repair = None
+        initial_repair = plan["policy"].get("repair_requirements", {}).get(key, [])
+        repair = initial_repair
         diagnostic = None
         accepted_prompt = ""
         while True:
@@ -268,7 +291,7 @@ async def generate(
                     raise RuntimeError(
                         f"Terminal Coach failure: {key}: {diagnostic.failure_stage}"
                     )
-                repair = diagnostic.failure_details
+                repair = [*initial_repair, *diagnostic.failure_details]
             attempt = len(state["attempts"]) + 1
             diagnostic_path = output / "diagnostics" / f"{stem}_{attempt}.json"
             relative = str(diagnostic_path.relative_to(root))
@@ -369,11 +392,21 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument(
+        "--repair-requirements",
+        type=Path,
+        help="JSON mapping of case keys to repair instructions, frozen in the plan",
+    )
     args = parser.parse_args()
     load_dotenv()
     output = (ROOT / args.output).resolve()
     output.relative_to(ROOT)
-    plan = prepare(ROOT, output)
+    repair_requirements = (
+        json.loads(args.repair_requirements.read_bytes())
+        if args.repair_requirements
+        else None
+    )
+    plan = prepare(ROOT, output, repair_requirements=repair_requirements)
     print(
         f"Frozen {len(plan['cases'])} weeks; retain {len(plan['retained_responses'])}; "
         f"generate {len(plan['missing_keys'])} missing responses."

@@ -1,8 +1,8 @@
 import activeReplayJson from "../public/scenarios/active-nisha.json";
-import recoveredReplayJson from "../public/scenarios/ended-sook-yin.json";
+import persistentReplayJson from "../public/scenarios/persistent-lukas.json";
 import scenarioCatalogJson from "../public/scenarios/index.json";
 import stableReplayJson from "../public/scenarios/stable-noor.json";
-import twoValuesReplayJson from "../public/scenarios/two-values-henrik.json";
+import twoValuesReplayJson from "../public/scenarios/two-values-meera.json";
 import uncertainReplayJson from "../public/scenarios/uncertain-wei-jun.json";
 import savedCoachResponses from "../../../src/demo/coach_digest_responses.json";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -42,7 +42,7 @@ describe("saved persona replay", () => {
       new Set([
         "no_active_drift",
         "active_drift",
-        "drift_ended",
+        "persistent_drift",
         "insufficient_evidence",
         "two_core_values",
       ]),
@@ -61,6 +61,20 @@ describe("saved persona replay", () => {
       cache: "no-store",
     });
   });
+
+  it.each(["missing_value", "unknown_value", "missing_week", "invalid_state", "wrong_aggregate"])(
+    "rejects a catalog whose Core Value progression has %s", (mutation) => {
+      const invalid = structuredClone(scenarioCatalogJson);
+      const meera = invalid.scenarios.find((item) => item.scenario_id === "two-values-meera")!;
+      const states = meera.core_value_progression as unknown as Record<string, string[]>;
+      if (mutation === "missing_value") delete states.tradition;
+      if (mutation === "unknown_value") states.unknown = [...states.tradition];
+      if (mutation === "missing_week") states.tradition.pop();
+      if (mutation === "invalid_state") states.tradition[0] = "drifting";
+      if (mutation === "wrong_aggregate") states.self_direction[0] = "no_active_drift";
+      expect(() => validateScenarioCatalog(invalid)).toThrow(/progression/);
+    },
+  );
 
   it("projects only information available through the selected week", () => {
     const first = projectScenarioWeek(fixture, 0);
@@ -104,7 +118,7 @@ describe("saved persona replay", () => {
   });
 
   it("preserves strict microsecond chronology for same-day North Star Moment sources", async () => {
-    const saved = validateExperienceInspectFixture(recoveredReplayJson);
+    const saved = validateExperienceInspectFixture(persistentReplayJson);
     const projected = projectScenarioWeek(saved, 1);
     const profile = saved.scenario.profile;
     const result = currentNorthStarEvent({
@@ -120,21 +134,25 @@ describe("saved persona replay", () => {
     const availableAt = source.available_at as string;
     expect(display({ ...result, record: { ...result.record, onset_available_at: availableAt } })).toBeNull();
 
-    const laterSource = structuredClone(result);
-    laterSource.record.sources[0].available_at = "2025-02-02T00:00:00.000004Z";
+    const sameDay = structuredClone(result);
+    sameDay.record.onset_available_at = "2025-06-11T00:00:00.000003Z";
+    sameDay.record.sources[0].available_at = "2025-06-11T00:00:00.000002Z";
+    expect(display(sameDay)).toEqual(sameDay.record.selected);
+    const laterSource = structuredClone(sameDay);
+    laterSource.record.sources[0].available_at = "2025-06-11T00:00:00.000004Z";
     expect(display(laterSource)).toBeNull();
 
     const beyondCutoff = structuredClone(result);
-    beyondCutoff.record.cutoff_at = "2025-02-02T00:00:00.000001Z";
-    beyondCutoff.record.sources[0].available_at = "2025-02-02T00:00:00.000002Z";
+    beyondCutoff.record.cutoff_at = "2025-06-11T00:00:00.000001Z";
+    beyondCutoff.record.sources[0].available_at = "2025-06-11T00:00:00.000002Z";
     expect(display(beyondCutoff)).toBeNull();
   });
 
   it.each([
-    ["two-values-henrik", twoValuesReplayJson],
+    ["two-values-meera", twoValuesReplayJson],
     ["stable-noor", stableReplayJson],
     ["active-nisha", activeReplayJson],
-    ["ended-sook-yin", recoveredReplayJson],
+    ["persistent-lukas", persistentReplayJson],
     ["uncertain-wei-jun", uncertainReplayJson],
   ])(
     "projects a source-bound Coach Digest for every %s week without future responses",
@@ -177,7 +195,7 @@ describe("saved persona replay", () => {
 
   it.each([
     activeReplayJson,
-    recoveredReplayJson,
+    persistentReplayJson,
     stableReplayJson,
     twoValuesReplayJson,
     uncertainReplayJson,
@@ -190,8 +208,8 @@ describe("saved persona replay", () => {
   });
 
   it.each([
-    ["Nisha", activeReplayJson], ["Lim Sook Yin", recoveredReplayJson],
-    ["Noor", stableReplayJson], ["Henrik", twoValuesReplayJson],
+    ["Nisha", activeReplayJson], ["Lukas Vetter", persistentReplayJson],
+    ["Noor", stableReplayJson], ["Meera", twoValuesReplayJson],
     ["Wei Jun", uncertainReplayJson],
   ])("preserves %s completed experiment evidence without future-week leakage", async (_name, scenarioJson) => {
     const saved = validateExperienceInspectFixture(scenarioJson);

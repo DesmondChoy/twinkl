@@ -21,7 +21,7 @@ makes no calls.
 
 Run:
     .venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-        --personas 02fb94f3 5fa8b540 ed67c9cc 8f83c818 2d928d8a \
+        --personas 5fa8b540 02fb94f3 a24b8d8f 8f83c818 961a4e3f \
         --reuse-scenario-key-weeks --execute
 """
 

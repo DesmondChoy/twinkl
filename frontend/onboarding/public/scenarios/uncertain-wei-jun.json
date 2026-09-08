@@ -1547,7 +1547,7 @@
     "manifest": {
       "bundle_version": "scenario-bundle-v1",
       "created_at": "2026-09-07T01:48:01.163525+00:00",
-      "input_hash": "5976f07d60705a92ce9f5ab61f837e0893f49009224540c6be9fc70b52004075",
+      "input_hash": "43f9f5f6a89f90471067f583a39e715b664bc45acff89e1ed2b502bc16acbee4",
       "source_files": [
         "logs/wrangled/persona_8f83c818.md",
         "logs/synthetic_data/persona_8f83c818.md",
@@ -3127,7 +3127,7 @@
         "manifest": {
           "bundle_version": "scenario-bundle-v1",
           "created_at": "2026-09-07T01:48:01.163525+00:00",
-          "input_hash": "5976f07d60705a92ce9f5ab61f837e0893f49009224540c6be9fc70b52004075",
+          "input_hash": "43f9f5f6a89f90471067f583a39e715b664bc45acff89e1ed2b502bc16acbee4",
           "source_files": [
             "logs/wrangled/persona_8f83c818.md",
             "logs/synthetic_data/persona_8f83c818.md",
@@ -3635,12 +3635,13 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "86c3e923648d870d6f95668c848fd53d87931392009397f20bffd740c84a743a",
+      "input_hash": "910ca7ed3a5a9912e69bb008d2e71a37a8216f611c4b521f5733f3d05d6f9a1c",
       "error": null,
       "details": {
         "previous_entry_ids": [],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -4850,7 +4851,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "0a6560fae997c93ddf1961736b54c60423c988de516238daa21d095a38348fba",
+      "input_hash": "9bff6b3aca3817a3dafab6f4f1300283f333cc05b6eb1f328cb8b520ab34be2b",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -4858,6 +4859,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -6237,7 +6239,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "fbf844385cefca93187c8fadefd4bfc3df2c19c6cae4af42372550f76a07057f",
+      "input_hash": "d519230511a2d58675966a42b0bfca2ffc13c4f3846284dbc394882d1546fc4a",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -6246,6 +6248,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": true
       }
     },
@@ -6353,7 +6356,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "73407548a5809130ec28ab6fe3f9f5b7765c371246cc671837272699b15d4d42",
+      "input_hash": "28679b91727a79f458971d19bc28f94894aeea7916bac34346e2fc9296844a79",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -6363,6 +6366,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": true
       }
     },
@@ -6470,7 +6474,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "29487f7803b9bbeb1dbc97459a633a22d3290b346fea07dacc0e1d59d1564a63",
+      "input_hash": "60e280af80732f964ab43510552ae488a46d03b232d81e5e58420b103d877ffc",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -6480,6 +6484,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -6587,7 +6592,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "e5a9abad7f20ab869bed28f4da881281920a1a6e0b479b5e8cc774368bcacb89",
+      "input_hash": "e4a4ea1a57e90e02f1fd881d09a00177a6d0709a03c87fa0369a517ca53c25d9",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -6597,6 +6602,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -8655,7 +8661,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "6f7d2c59ece91c15803e8d13c646d1ac704667cdc7c0204741ef3a6c78414b74",
+      "input_hash": "b1bdac7e97b8551895d4de9e27316a3e96d677d6d13b8bfd81bfaf99ddca8424",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -8665,6 +8671,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -8819,7 +8826,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "01e3a3175321efff22d87f3eaf98e75a9f0467954ecf431473a2e5779eb4dfd7",
+      "input_hash": "837e7021769711812f5419fa02be42e938112d23b1af1abeeb41fd1d52e7d555",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -8829,6 +8836,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": true
       }
     },
@@ -10963,7 +10971,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "bb0b2886abcdc2a2dbf8333b59007aac44e1c7a8afc574776a26a30992a3dd97",
+      "input_hash": "ea3b0995dc4bdbdbb31f3cdc21475aefdd74517fb3a983cdd332097b089f8d66",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -10973,6 +10981,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": true
       }
     },
@@ -12302,7 +12311,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "f8440149c804d8fb4e331a36f9f5ad03447889a80e7c4f2fe4edc5e2a1b682cc",
+      "input_hash": "eb093465cea092fbe6874331c95880b10865a895f6adf7d98db3128629906860",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -12312,6 +12321,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -12466,7 +12476,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "a5b61388498b4e0673360a0c9b5ff5cbb5c59f246251940421ed9ccab72ca321",
+      "input_hash": "1862adbe35b6a790847a9ed692e39ad5eadfc23c6057668a307d4c740884cdb7",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -12476,6 +12486,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },

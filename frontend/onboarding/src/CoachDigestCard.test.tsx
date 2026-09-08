@@ -2,9 +2,9 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import activeReplay from "../public/scenarios/active-nisha.json";
-import endedReplay from "../public/scenarios/ended-sook-yin.json";
+import persistentReplay from "../public/scenarios/persistent-lukas.json";
 import stableReplay from "../public/scenarios/stable-noor.json";
-import twoValuesReplay from "../public/scenarios/two-values-henrik.json";
+import twoValuesReplay from "../public/scenarios/two-values-meera.json";
 import uncertainReplay from "../public/scenarios/uncertain-wei-jun.json";
 import catalog from "../public/scenarios/index.json";
 import CoachDigestCard from "./CoachDigestCard";
@@ -90,7 +90,7 @@ describe("Coach Digest quotations", () => {
     expect(screen.getByText('You said “five more...”')).toBeTruthy();
   });
 
-  it.each([activeReplay, endedReplay, stableReplay, twoValuesReplay, uncertainReplay])(
+  it.each([activeReplay, persistentReplay, stableReplay, twoValuesReplay, uncertainReplay])(
     "shows complete quotations for each current catalog key week ($scenario.scenario_id)",
     (raw) => {
       const fixture = validateExperienceInspectFixture(raw);

@@ -501,6 +501,7 @@ class NudgeSuppressionDetails(ContractModel):
     previous_entry_ids: list[str]
     window_size: Literal[3] = 3
     max_nudges: Literal[2] = 2
+    policy_applied: bool = True
     suppressed: bool
 
 

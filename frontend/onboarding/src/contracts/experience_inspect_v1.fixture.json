@@ -3379,6 +3379,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": true,
         "suppressed": false
       }
     },

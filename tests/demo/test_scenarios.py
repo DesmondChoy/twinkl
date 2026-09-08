@@ -43,9 +43,6 @@ def test_catalog_covers_five_diverse_personas(loaded_scenarios) -> None:
         "active-nisha"
     )
     assert {value for item in catalog.scenarios for value in item.core_values} == {
-        "hedonism",
-        "stimulation",
-        "security",
         "self_direction",
         "tradition",
         "universalism",
@@ -79,6 +76,83 @@ def test_catalog_covers_five_diverse_personas(loaded_scenarios) -> None:
     )
 
 
+def test_catalog_weekly_states_match_each_replay_value(loaded_scenarios) -> None:
+    catalog, fixtures = loaded_scenarios
+    assert [item.scenario_id for item in catalog.scenarios] == [
+        "active-nisha",
+        "stable-noor",
+        "persistent-lukas",
+        "uncertain-wei-jun",
+        "two-values-meera",
+    ]
+    for item in catalog.scenarios:
+        for index, week in enumerate(fixtures[item.scenario_id].scenario.weeks):
+            session, _ = project_scenario_week(fixtures[item.scenario_id], week.week_id)
+            assert {
+                value: states[index]
+                for value, states in item.core_value_progression.items()
+            } == session.drift_result.core_value_states
+    meera = next(
+        item for item in catalog.scenarios if item.scenario_id == "two-values-meera"
+    )
+    assert meera.core_value_progression == {
+        "self_direction": ["active_drift", *["no_active_drift"] * 4],
+        "tradition": ["no_active_drift"] * 5,
+    }
+
+
+def test_catalog_rejects_forged_core_value_states(tmp_path, monkeypatch) -> None:
+    from src.demo import scenarios
+
+    payload = json.loads((ROOT / CATALOG_PATH).read_bytes())
+    meera = next(
+        item for item in payload["scenarios"]
+        if item["scenario_id"] == "two-values-meera"
+    )
+    meera["core_value_progression"]["tradition"][0] = "active_drift"
+    catalog_path = tmp_path / "index.json"
+    catalog_path.write_text(json.dumps(payload))
+    monkeypatch.setattr(scenarios, "CATALOG_PATH", catalog_path)
+    with pytest.raises(ValueError, match="catalog identity mismatch"):
+        load_scenario_catalog(ROOT)
+
+
+def test_retired_personas_have_no_bundled_fallbacks(loaded_scenarios) -> None:
+    catalog, _ = loaded_scenarios
+    assert {path.name for path in (ROOT / SCENARIO_DIRECTORY).glob("*.json")} == {
+        "index.json", *(item.file for item in catalog.scenarios)
+    }
+    current_ids = {item.scenario_id for item in catalog.scenarios}
+    assert {
+        response.scenario_id
+        for response in load_saved_coach_responses(ROOT).responses.values()
+    } == current_ids
+    nsm = json.loads((ROOT / "src/demo/north_star_replay_records.json").read_bytes())
+    assert {case["scenario_id"] for case in nsm["cases"]} == current_ids
+
+
+def test_saved_nudges_preserve_sources_without_claiming_live_policy(
+    loaded_scenarios,
+) -> None:
+    _, fixtures = loaded_scenarios
+    meera = fixtures["two-values-meera"]
+    checks = [
+        event for event in meera.trace_events
+        if event.event_type == "nudge_suppression_checked"
+    ]
+    assert all(event.details.policy_applied is False for event in checks)
+    recorded_check = next(
+        event for event in checks if event.input_refs[0].id == "961a4e3f:entry:3"
+    )
+    assert recorded_check.details.suppressed is True
+    recorded_nudge = next(
+        event.details.nudge for event in meera.trace_events
+        if event.event_type == "nudge_generated"
+        and event.details.nudge.journal_entry_id == "961a4e3f:entry:3"
+    )
+    assert recorded_nudge.text == "Which part of the day stuck with you more?"
+
+
 def test_required_drift_progressions_are_preserved(loaded_scenarios) -> None:
     _, fixtures = loaded_scenarios
     assert all(
@@ -97,18 +171,26 @@ def test_required_drift_progressions_are_preserved(loaded_scenarios) -> None:
         (d.core_value, d.onset_t_index, d.confirmation_t_index)
         for d in nisha.scenario.drift_result.drifts
     ] == [("universalism", 5, 6)]
-    ended = fixtures["ended-sook-yin"].scenario.drift_result
-    assert ended.delivery_state == "no_active_drift"
-    assert ended.drifts[0].termination_verdict == "not_conflict"
+    lukas = fixtures["persistent-lukas"]
+    assert [week.expected_delivery_state for week in lukas.scenario.weeks] == [
+        "active_drift",
+        "active_drift",
+        "active_drift",
+        "active_drift",
+        "no_active_drift",
+    ]
+    assert len(lukas.scenario.drift_result.drifts) == 1
+    assert lukas.scenario.drift_result.drifts[0].supporting_t_indices == [1, 2, 3, 4, 5]
+    assert lukas.scenario.drift_result.drifts[0].termination_verdict == "not_conflict"
     uncertain = fixtures["uncertain-wei-jun"].scenario.drift_result
     assert uncertain.delivery_state == "insufficient_evidence"
     assert uncertain.drifts == []
-    henrik = fixtures["two-values-henrik"]
-    key = next(w for w in henrik.scenario.weeks if w.week_start == "2025-02-17")
-    session, _ = project_scenario_week(henrik, key.week_id)
+    meera = fixtures["two-values-meera"]
+    key = next(w for w in meera.scenario.weeks if w.week_start == "2025-11-10")
+    session, _ = project_scenario_week(meera, key.week_id)
     assert session.drift_result.core_value_states == {
-        "security": "no_active_drift",
-        "stimulation": "insufficient_evidence",
+        "self_direction": "active_drift",
+        "tradition": "no_active_drift",
     }
 
 
@@ -117,9 +199,9 @@ def test_deployed_persona_roster_and_key_week_rules(loaded_scenarios) -> None:
     expected = {
         "stable-noor": ("02fb94f3", "2025-05-19", "no_active_drift"),
         "active-nisha": ("5fa8b540", "2025-03-03", "active_drift"),
-        "ended-sook-yin": ("ed67c9cc", "2025-02-10", "no_active_drift"),
+        "persistent-lukas": ("a24b8d8f", "2025-06-30", "active_drift"),
         "uncertain-wei-jun": ("8f83c818", "2025-06-30", "insufficient_evidence"),
-        "two-values-henrik": ("2d928d8a", "2025-02-17", "insufficient_evidence"),
+        "two-values-meera": ("961a4e3f", "2025-11-10", "active_drift"),
     }
     assert set(fixtures) == set(expected)
     assert sum(len(f.scenario.weeks) for f in fixtures.values()) == 27
@@ -208,14 +290,15 @@ def test_all_weeks_reuse_exact_source_bound_coach_digests(loaded_scenarios) -> N
             assert digest_event.details.coach_unavailable_reason is None
 
 
-def test_original_five_coach_responses_remain_exactly_preserved() -> None:
+def test_retained_coach_responses_remain_exactly_preserved() -> None:
     plan = json.loads(
         (
-            ROOT / ("logs/experiments/reports/demo_coach_all_weeks_20260908/plan.json")
+            ROOT
+            / "logs/experiments/reports/demo_persona_replacement_20260908/plan.json"
         ).read_text()
     )
     responses = load_saved_coach_responses(ROOT).responses
-    assert len(plan["retained_responses"]) == 5
+    assert len(plan["retained_responses"]) == 17
     for key, original in plan["retained_responses"].items():
         assert responses[key].model_dump(mode="json") == original
 

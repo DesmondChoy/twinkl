@@ -13,8 +13,8 @@ and restarts. Both Experience paths place a selected quotation within a valid
 Coach Digest before its original reflective question.
 
 The [8 September integration check](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
-records five unresolved AI editorial concerns across the saved combined
-reflections, including a Coach/quotation contradiction caused by differing
+records five unresolved AI editorial concerns across the previous roster's
+combined reflections, including a Coach/quotation contradiction caused by differing
 source context. These observations do not change the frozen experiment results
 or constitute human validation.
 
@@ -61,7 +61,7 @@ Code checks confirm that the quotation is exact, belongs to the same user or
 Persona, and satisfies the source window for the selected treatment. If no example passes, no card
 appears.
 
-The demo uses offline records for Noor, Nisha, Sook Yin, Wei Jun, and Henrik,
+The demo uses offline records for Nisha, Noor, Lukas, Wei Jun, and Meera,
 covering 27 reviewed weeks from the completed targeted experiment. The
 onboarding path supports generation during the user's session after an
 eligible closed-week review when its runtime budget is available. Both paths

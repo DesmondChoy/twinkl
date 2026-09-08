@@ -27,7 +27,7 @@ from src.demo.contracts import (
     build_drift_rule_steps,
 )
 from src.demo.profile_projection import build_projected_profile
-from src.drift_detector import detect_drift
+from src.drift_detector import CoreValueDriftState, detect_drift
 from src.drift_review_app.data import ReviewData, load_review_data
 from src.nudge.decision import should_suppress_nudge
 from src.prompt_boundary import render_live_prompt_receipt
@@ -66,7 +66,7 @@ LUNA_LOW = ModelContract(
 ScenarioRole = Literal[
     "no_active_drift",
     "active_drift",
-    "drift_ended",
+    "persistent_drift",
     "insufficient_evidence",
     "two_core_values",
 ]
@@ -89,18 +89,6 @@ class ScenarioSelection:
 
 SELECTIONS = (
     ScenarioSelection(
-        scenario_id="stable-noor",
-        persona_id="02fb94f3",
-        role="no_active_drift",
-        title="Noor — autonomy, family, and steady priorities",
-        description=(
-            "A young parent navigates Self-Direction and Tradition with "
-            "No Active Drift across six reviewed weeks."
-        ),
-        summary="A baseline with no detected Drift across the saved history.",
-        coach_week_start="2025-05-19",
-    ),
-    ScenarioSelection(
         scenario_id="active-nisha",
         persona_id="5fa8b540",
         role="active_drift",
@@ -114,16 +102,28 @@ SELECTIONS = (
         recommended=True,
     ),
     ScenarioSelection(
-        scenario_id="ended-sook-yin",
-        persona_id="ed67c9cc",
-        role="drift_ended",
-        title="Sook Yin — making room for enjoyment",
+        scenario_id="stable-noor",
+        persona_id="02fb94f3",
+        role="no_active_drift",
+        title="Noor — autonomy, family, and steady priorities",
         description=(
-            "A stay-at-home mother's Hedonism Drift ends after a later "
-            "Not Conflict decision; the Historical Drift Record remains visible."
+            "A young parent navigates Self-Direction and Tradition with "
+            "No Active Drift across six reviewed weeks."
         ),
-        summary="A closed Hedonism Drift episode with its supporting Journal Entries.",
-        coach_week_start="2025-02-10",
+        summary="A baseline with no detected Drift across the saved history.",
+        coach_week_start="2025-05-19",
+    ),
+    ScenarioSelection(
+        scenario_id="persistent-lukas",
+        persona_id="a24b8d8f",
+        role="persistent_drift",
+        title="Lukas — a pattern that continues across weeks",
+        description=(
+            "A software engineer's Universalism Drift stays active across four "
+            "weekly cutoffs, before a later Not Conflict decision ends the run."
+        ),
+        summary="One continuing Drift remains active in weeks 1–4.",
+        coach_week_start="2025-06-30",
     ),
     ScenarioSelection(
         scenario_id="uncertain-wei-jun",
@@ -138,16 +138,16 @@ SELECTIONS = (
         coach_week_start="2025-06-30",
     ),
     ScenarioSelection(
-        scenario_id="two-values-henrik",
-        persona_id="2d928d8a",
+        scenario_id="two-values-meera",
+        persona_id="961a4e3f",
         role="two_core_values",
-        title="Henrik — security alongside new experiences",
+        title="Meera — choosing her own path alongside tradition",
         description=(
-            "Security has No Active Drift while Stimulation has Insufficient "
-            "Evidence in the key week, with independent Core Value histories."
+            "Early choices under social pressure form Active Drift for "
+            "Self-Direction, while Tradition has No Active Drift."
         ),
-        summary="Two Core Values with different current states at the same cutoff.",
-        coach_week_start="2025-02-17",
+        summary="Drift affects one Core Value while another has No Active Drift.",
+        coach_week_start="2025-11-10",
     ),
 )
 
@@ -227,10 +227,22 @@ class ScenarioCatalogItem(CatalogModel):
     culture: str
     core_values: list[str] = Field(min_length=1)
     role: ScenarioRole
-    progression: list[str] = Field(min_length=1)
+    progression: list[CoreValueDriftState] = Field(min_length=1)
+    core_value_progression: dict[str, list[CoreValueDriftState]]
     summary: str
     recommended: bool
     key_week_start: str | None = None
+
+    @model_validator(mode="after")
+    def validate_progression(self) -> ScenarioCatalogItem:
+        if set(self.core_value_progression) != set(self.core_values):
+            raise ValueError("Weekly states must cover exactly the Persona Core Values")
+        if any(
+            len(states) != len(self.progression)
+            for states in self.core_value_progression.values()
+        ):
+            raise ValueError("Core Value weekly states must match the replay length")
+        return self
 
 
 class ScenarioCatalog(CatalogModel):
@@ -249,7 +261,7 @@ class ScenarioCatalog(CatalogModel):
         if {item.role for item in self.scenarios} != {
             "no_active_drift",
             "active_drift",
-            "drift_ended",
+            "persistent_drift",
             "insufficient_evidence",
             "two_core_values",
         }:
@@ -887,25 +899,15 @@ def build_scenario_fixture(
                         "window_size": 3,
                         "max_nudges": 2,
                         "suppressed": suppressed,
+                        "policy_applied": False,
                     },
                 )
             )
             saved_nudge = raw_nudges.get(index)
-            if suppressed and saved_nudge is not None:
-                raise ValueError(
-                    f"Saved nudge violates anti-annoyance rule: "
-                    f"{selection.persona_id} t_index={index}"
-                )
-            decision_category = (
-                saved_nudge["category"]
-                if saved_nudge is not None and not suppressed
-                else None
-            )
-            decision_reason = (
-                saved_nudge["reason"]
-                if saved_nudge is not None and not suppressed
-                else None
-            )
+            # Preserve the history reviewed by the frozen model receipts. The
+            # current spacing check is reference-only for these saved nudges.
+            decision_category = saved_nudge["category"] if saved_nudge else None
+            decision_reason = saved_nudge["reason"] if saved_nudge else None
             should_nudge = decision_category is not None
             week_event_ids.append(
                 append_event(
@@ -1606,12 +1608,35 @@ def load_scenario_catalog(
             fixture.scenario.scenario_id != item.scenario_id
             or fixture.scenario.persona_id != item.persona_id
             or fixture.scenario.profile.top_values != item.core_values
+            or item.progression
+            != [week.expected_delivery_state for week in fixture.scenario.weeks]
+            or item.core_value_progression != _core_value_progression(fixture)
             or item.key_week_start
             != _selection_by_scenario_id(item.scenario_id).coach_week_start
         ):
             raise ValueError(f"Scenario catalog identity mismatch: {item.scenario_id}")
         fixtures[item.scenario_id] = fixture
     return catalog, fixtures
+
+
+def _core_value_progression(
+    fixture: ContractFixtureSet,
+) -> dict[str, list[CoreValueDriftState]]:
+    """Read each Core Value's states from the same weekly results as the replay."""
+    weekly_results = []
+    for week in fixture.scenario.weeks:
+        results = [
+            event.details.result
+            for event in fixture.trace_events
+            if event.event_type == "drift_detected" and event.event_id in week.event_ids
+        ]
+        if len(results) != 1:
+            raise ValueError(f"Expected one Drift Detector result: {week.week_id}")
+        weekly_results.append(results[0])
+    return {
+        str(value): [result.core_value_states[value] for result in weekly_results]
+        for value in fixture.scenario.profile.top_values
+    }
 
 
 def export_scenarios(root: Path) -> ScenarioCatalog:
@@ -1661,6 +1686,7 @@ def export_scenarios(root: Path) -> ScenarioCatalog:
                 progression=[
                     week.expected_delivery_state for week in fixture.scenario.weeks
                 ],
+                core_value_progression=_core_value_progression(fixture),
                 summary=selection.summary,
                 recommended=selection.recommended,
                 key_week_start=selection.coach_week_start,

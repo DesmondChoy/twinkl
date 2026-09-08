@@ -208,14 +208,17 @@ describe("onboarding app", () => {
     const demo = screen.getByRole("button", { name: "Try the Demo" });
     demo.focus();
     await user.keyboard("{Enter}");
-    await screen.findByRole("heading", { name: "Choose what you want to observe." });
+    await screen.findByRole("heading", { name: "See how Drift changes over time." });
+    expect(screen.queryByRole("navigation", { name: "Demo view" })).toBeNull();
+    expect(screen.queryByText("After questions")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Start over" })).toBeNull();
     for (const persona of scenarioCatalogJson.scenarios) {
-      expect(await screen.findByText(persona.persona_name)).toBeTruthy();
+      expect(await screen.findByRole("radio", { name: persona.persona_name })).toBeTruthy();
     }
     expect(screen.queryByText("Lukas Vermeer")).toBeNull();
     expect(screen.queryByText("Marc Vandenberghe")).toBeNull();
-    expect(screen.queryByText("Meera Krishnamurthy")).toBeNull();
-    await user.click(screen.getByRole("button", { name: "Back" }));
+    expect(screen.queryByText("Henrik Larsson")).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Go home" }));
     expect(screen.getByRole("button", { name: "Try Onboarding" })).toBeTruthy();
     await user.click(screen.getByRole("button", { name: "Try Onboarding" }));
     expect(screen.getByRole("textbox", { name: "Preferred name" })).toBeTruthy();
@@ -252,7 +255,7 @@ describe("onboarding app", () => {
     const before = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
     await user.click(screen.getByRole("button", { name: "Go home" }));
     await user.click(screen.getByRole("button", { name: "Try the Demo" }));
-    await screen.findByRole("heading", { name: "Choose what you want to observe." });
+    await screen.findByRole("heading", { name: "See how Drift changes over time." });
 
     await user.click(screen.getByRole("button", { name: "Go home" }));
     expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
@@ -287,7 +290,7 @@ describe("onboarding app", () => {
     expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
     expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))).toEqual(before);
     await user.click(screen.getByRole("button", { name: "Try the Demo" }));
-    const resume = await screen.findByRole("button", { name: "Continue replay" });
+    const resume = await screen.findByRole("button", { name: "Continue replay · Week 4" });
     const requestsBeforeResume = fetchMock.mock.calls.length;
     await user.click(resume);
 
@@ -356,25 +359,47 @@ describe("onboarding app", () => {
     expect(stored.experience.trace_events[0].prompt).toBe(activeReplayJson.trace_events[0].prompt);
   });
 
-  it("never shows retired Persona decisions in Inspect and offers replay recovery controls", async () => {
-    saveReplayInInspect("11de77e8");
-    const fetchMock = vi.fn().mockImplementation(async () =>
-      new Response(JSON.stringify(scenarioCatalogJson)));
+  it("keeps retained replay progress when the catalog is temporarily unavailable and retries safely", async () => {
+    saveReplayInInspect(activeReplayJson.scenario.persona_id);
+    const before = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    const fetchMock = vi.fn()
+      .mockRejectedValueOnce(new Error("offline"))
+      .mockResolvedValueOnce(new Response(JSON.stringify(scenarioCatalogJson)))
+      .mockResolvedValueOnce(new Response(activeReplayRaw));
     vi.stubGlobal("fetch", fetchMock);
     const user = userEvent.setup();
     render(<App />);
 
-    expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
     await screen.findByRole("heading", { name: "The replay needs another try." });
+    expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))).toEqual(before);
     expect(screen.queryByText("Stale saved experiment prompt")).toBeNull();
     await user.click(screen.getByRole("button", { name: "Try loading again" }));
-    await screen.findByRole("heading", { name: "The replay needs another try." });
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(await screen.findByText("Nisha Agarwal · saved replay")).toBeTruthy();
+    expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!.experience.selected_persona_id)
+      .toBe(activeReplayJson.scenario.persona_id);
+    expect(deleteExperienceSession).not.toHaveBeenCalled();
+  });
+
+  it.each(["ed67c9cc", "2d928d8a"])("returns a retired Persona %s to the chooser and discards only its synthetic browser session", async (personaId) => {
+    saveReplayInInspect(personaId);
+    const fetchMock = vi.fn().mockImplementation(async () =>
+      new Response(JSON.stringify(scenarioCatalogJson)));
+    vi.stubGlobal("fetch", fetchMock);
+    render(<App />);
+
     expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
-    await user.click(screen.getByRole("button", { name: "Go home" }));
-    await user.click(screen.getByRole("button", { name: "Try the Demo" }));
-    await screen.findByRole("heading", { name: "Choose what you want to observe." });
-    expect(await screen.findByText("Nisha Agarwal")).toBeTruthy();
+    await screen.findByRole("heading", { name: "See how Drift changes over time." });
+    expect(await screen.findByRole("radio", { name: "Nisha Agarwal" })).toBeTruthy();
+    expect(screen.queryByText("Stale saved experiment prompt")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Try loading again" })).toBeNull();
+    const stored = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    expect(stored.experience.selected_persona_id).toBeNull();
+    expect(stored.experience.trace_events).toEqual([]);
+    expect(stored.experience.journal_entries).toEqual([]);
+    expect(stored.confirmed_profile).toBeNull();
+    expect(fetchMock.mock.calls.every(([path]) => path === "/scenarios/index.json")).toBe(true);
+    expect(deleteExperienceSession).not.toHaveBeenCalled();
+    expect(createExperienceSession).not.toHaveBeenCalled();
   });
 
   it("keeps Start over reachable after an unexpected render failure", () => {

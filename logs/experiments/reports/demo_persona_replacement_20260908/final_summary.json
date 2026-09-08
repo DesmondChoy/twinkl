@@ -1,0 +1,137 @@
+{
+  "retained_coach_responses": 17,
+  "new_coach_responses": 10,
+  "total_coach_responses": 27,
+  "new_coach_attempts": 12,
+  "accepted_attempts": 10,
+  "rejected_attempts_preserved": 2,
+  "usage": {
+    "n_calls": 12,
+    "n_calls_with_usage": 12,
+    "input_tokens": 21160,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 20131,
+    "output_tokens": 2138,
+    "total_tokens": 23298,
+    "calculated_cost_usd": 0.00780415,
+    "total_latency_seconds": 52.93810495809885,
+    "mean_latency_seconds": 4.411508746508237,
+    "median_latency_seconds": 4.016241437013377,
+    "max_latency_seconds": 10.274994542007335
+  },
+  "nsm_statuses": {
+    "complete": 24,
+    "not_eligible": 3
+  },
+  "nsm_reasons": {
+    "supportive_action_selected": 22,
+    "no_supportive_source": 2,
+    "insufficient_evidence": 2,
+    "no_eligible_writing": 1
+  },
+  "new_nsm_calls": 0,
+  "scenarios": [
+    {
+      "scenario_id": "active-nisha",
+      "persona_id": "5fa8b540",
+      "weeks": 5,
+      "journal_entries": 8,
+      "core_value_progression": {
+        "universalism": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "active_drift",
+          "no_active_drift"
+        ]
+      },
+      "content_sha256": "0bb065f3ffd71ee0365e49c258c7ac5ef8cbcb8d339588ce738d31b46b95c760"
+    },
+    {
+      "scenario_id": "stable-noor",
+      "persona_id": "02fb94f3",
+      "weeks": 6,
+      "journal_entries": 12,
+      "core_value_progression": {
+        "self_direction": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift"
+        ],
+        "tradition": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift"
+        ]
+      },
+      "content_sha256": "5b6022e99b684dc6abb6fa3006468bfdffd8e43737ed700401fafebb4d1527c6"
+    },
+    {
+      "scenario_id": "persistent-lukas",
+      "persona_id": "a24b8d8f",
+      "weeks": 5,
+      "journal_entries": 10,
+      "core_value_progression": {
+        "universalism": [
+          "active_drift",
+          "active_drift",
+          "active_drift",
+          "active_drift",
+          "no_active_drift"
+        ]
+      },
+      "content_sha256": "e3ec28aa786a9e8e90f85a6578f041447d3419948c26c95a538f8d48b9bbaf44"
+    },
+    {
+      "scenario_id": "uncertain-wei-jun",
+      "persona_id": "8f83c818",
+      "weeks": 6,
+      "journal_entries": 11,
+      "core_value_progression": {
+        "universalism": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "insufficient_evidence",
+          "insufficient_evidence"
+        ]
+      },
+      "content_sha256": "4af00f6c3f7b9aa47d042e1c28bfd8aa1a06da5e920068a937d4b5e3406d61b1"
+    },
+    {
+      "scenario_id": "two-values-meera",
+      "persona_id": "961a4e3f",
+      "weeks": 5,
+      "journal_entries": 12,
+      "core_value_progression": {
+        "self_direction": [
+          "active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift"
+        ],
+        "tradition": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift"
+        ]
+      },
+      "content_sha256": "59d6363b455af99ac5867efbdc229149477a4ecdc8a32abf0c7e250dbccc0f1e"
+    }
+  ],
+  "final_runtime_sha256": {
+    "src/demo/coach_digest_responses.json": "22f3781a5ca74b20efbe53c61f2bfdd6994da5ebbb2b5886e6ad3cf495be6a9f",
+    "src/demo/north_star_replay_records.json": "795f8f9a954f5477b1d7ec2b293bf9c1f435b6d2dc6c38740abfb83c04692d3a",
+    "frontend/onboarding/public/scenarios/index.json": "e9da16dc785d3102b197c90e5608e8f52d6a9bf4879a552a080983063734bdfa"
+  }
+}

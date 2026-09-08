@@ -374,7 +374,7 @@ The React application connects the confirmed Profile, manual Journal Entry captu
 
 ![Historical Active Drift walkthrough from the saved Wei Jun Experience before the September v4 Run 1 update. The screenshot demonstrates the earlier implementation, not the current saved result or validation.](images/active-drift-experience.png){#fig-active-drift width=82% fig-alt="Twinkl saved Wei Jun replay at week six, showing Journal Entries and displayed nudges beside an Active Drift result with cited Conflict evidence."}
 
-@fig-active-drift and the following table preserve the earlier Active Drift walkthrough as historical implementation evidence. The September v4 Run 1 update changes Wei Jun's final two weeks to Insufficient Evidence, so this screenshot and table do not describe the current replay. The current roster uses Nisha for the Active Drift walkthrough, Sook Yin for an ended Historical Drift Record, Wei Jun for Insufficient Evidence, Noor for the No Active Drift baseline, and Henrik for independent Core Value states. In the historical example, Wei Jun's confirmed Profile contains Universalism as a Core Value. The saved history records three consecutive Conflicts: he accepted skipped safeguards for a remittance feature, delayed escalation after transfer failures emerged, and acknowledged repeatedly choosing convenience despite the harm to customers. The Drift Detector records onset at Journal Entry 8 (`t8`), confirmation and the first Active Drift state at `t9`, and a run length of three at the `t10` cutoff. Because `t8` and `t9` fall in different weeks, the example also demonstrates that the consecutive-Conflict rule crosses a weekly boundary. The resulting Coach Digest then cites the relevant Journal Entries and asks an open question without prescribing action.
+@fig-active-drift and the following table preserve the earlier Active Drift walkthrough as historical implementation evidence. The September v4 Run 1 update changes Wei Jun's final two weeks to Insufficient Evidence, so this screenshot and table do not describe the current replay. The current roster uses Nisha to demonstrate a Drift emerging, Noor for six weeks without Active Drift, Lukas for one Drift that remains active across four weekly cutoffs, Wei Jun for Insufficient Evidence, and Meera for Active Drift in Self-Direction alongside No Active Drift in Tradition. In the historical example, Wei Jun's confirmed Profile contains Universalism as a Core Value. The saved history records three consecutive Conflicts: he accepted skipped safeguards for a remittance feature, delayed escalation after transfer failures emerged, and acknowledged repeatedly choosing convenience despite the harm to customers. The Drift Detector records onset at Journal Entry 8 (`t8`), confirmation and the first Active Drift state at `t9`, and a run length of three at the `t10` cutoff. Because `t8` and `t9` fall in different weeks, the example also demonstrates that the consecutive-Conflict rule crosses a weekly boundary. The resulting Coach Digest then cites the relevant Journal Entries and asks an open question without prescribing action.
 
 \begingroup
 \small
@@ -624,12 +624,15 @@ The five accepted August Persona key-week responses required seven generation ca
 
 ## Appendix C. NSM Saved Replay and Walkthrough Status
 
-The [NSM evaluation and targeted update](../north_star/nsm_experiment_methodology.md) are complete. Saved replay uses full-history runtime outcomes for Noor, Nisha, Sook Yin, Wei Jun, and Henrik across 27 reviewed weeks: 23 selected quotations, three ineligible outcomes, and one completed review with no supportive source. Original provider receipts and source-availability conventions remain inspectable. The roster was selected for current Drift-state coverage and coherent source histories, not AI evaluation grades. The final source-level capstone walkthrough remains separate work, and live generation requires a fresh budget. Historical application screenshots and Coach Digest scores in Section 4.4 retain their original scope.
+The [NSM evaluation and targeted update](../north_star/nsm_experiment_methodology.md) are complete. Saved replay uses full-history runtime outcomes for Nisha, Noor, Lukas, Wei Jun, and Meera across 27 reviewed weeks: 22 selected quotations, three ineligible outcomes, and two completed reviews with no supportive source. Original provider receipts and source-availability conventions remain inspectable. The roster was selected for current Drift-state coverage and coherent source histories, not AI evaluation grades. The final source-level capstone walkthrough remains separate work, and live generation requires a fresh budget. Historical application screenshots and Coach Digest scores in Section 4.4 retain their original scope.
 
 
-A local browser check on 7 September 2026 verified the revised Persona picker,
-Nisha's Active Drift key week with its NSM quotation and source drawer, and
-Sook Yin's ended Historical Drift Record with a No Active Drift card. Automated
-React projection checks covered all 27 reviewed weeks. These checks establish
-the exercised replay behaviour; they do not constitute an all-Persona browser
-walkthrough, human evaluation, or the final professor assessment.
+A local browser check on 7 September 2026 verified the then-current Persona
+picker, Nisha's Active Drift key week with its NSM quotation and source drawer,
+and Sook Yin's ended Historical Drift Record with a No Active Drift card.
+Automated React projection checks covered that roster's 27 reviewed weeks.
+These observations precede the replacement of Sook Yin and Henrik with Lukas
+and Meera on 8 September and therefore do not establish browser verification
+of the new chooser or replacement replays. They remain evidence of the
+exercised behaviour, rather than an all-Persona browser walkthrough, human
+evaluation, or the final professor assessment.

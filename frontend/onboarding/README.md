@@ -47,15 +47,34 @@ shows its Journal Entries, displayed nudges, and responses. **Review Weekly
 Drift Detection** opens the saved result and Coach Digest; **Next week** then
 advances. **Previous**, **Restart**, and named jumps such as **Show Active Drift —
 week 4** in Nisha's replay provide navigation. Every week change, reload, and
-return from Inspect opens the journals first. The Persona picker includes a
-collapsed professor guide mapping saved weeks to Drift states. Each Core Value
-explanation names its own state. The selected week and previously reviewed
-weeks persist across Experience and Inspect and after reload. **Continue replay**
-in the picker resumes the current Persona after returning home. The browser verifies each
-scenario against the catalogued SHA-256 hash
-before displaying it. The Profile remains available through the
+return from Inspect opens the journals first. The Persona picker shows all weekly
+states in one selectable comparison table. On desktop, the table spans the
+available content width, with larger chooser text and the selected Persona's
+explanation and single **Start at week 1** action below it. The order is Nisha
+Agarwal (Drift emerges),
+Noor Haddad (no detected Drift), Lukas Vetter (one continuing Drift), Wei Jun
+Chen (Insufficient Evidence), and Meera Krishnamurthy (Drift affects one Core
+Value). Meera's Self-Direction and Tradition states occupy separate labelled
+subrows. On narrow screens, weeks wrap beneath each Persona and the selected
+explanation and action follow that Persona's row. The sidebar explains the
+demo; Experience and Inspect navigation begins inside the replay.
+
+Each Core Value explanation names its own state. The selected week and
+previously reviewed weeks persist across Experience and Inspect and after
+reload. **Continue replay · Week N** resumes the current Persona after returning
+home. The browser verifies each scenario against the catalogued SHA-256 hash
+and checks its weekly Core Value states against the catalog before displaying
+it. A synthetic Persona removed from the current catalog returns to the
+chooser and its stale browser replay is cleared; a transient loading failure
+remains retryable. Personal onboarding progress is preserved. The Profile remains available through the
 `onStartJournal` callback and
 `twinkl:start-first-journal` browser event.
+
+Saved replay retains source Journal Entries, historical nudges, and responses
+unchanged. Inspect marks saved-history spacing checks with `policy_applied:
+false`: the result describes what the current rule would do, without claiming
+that the current rule generated the historical nudges. Live Experience still
+enforces the anti-annoyance rule.
 
 The selected week has one expanded reading panel. **Review Weekly Drift
 Detection** gives the result the full workspace width and collapses the
@@ -93,8 +112,8 @@ record, source checks, model settings, usage and review outcome. All five
 saved Personas support prepared per-week records; normal replay never calls a
 provider. The replay uses Weekly Drift prompt v4 Run 1 and the full-history
 runtime outcomes from the [completed targeted NSM update](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md).
-The five selected Personas cover 27 reviewed weeks: 23 selected quotations,
-three ineligible outcomes, and one completed review with no supportive source.
+The five selected Personas cover 27 reviewed weeks: 22 selected quotations,
+three ineligible outcomes, and two completed reviews with no supportive source.
 Records preserve original model receipts and synthetic source availability;
 they do not substitute AI evaluation grades for runtime decisions.
 

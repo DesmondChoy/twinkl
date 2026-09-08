@@ -7,6 +7,7 @@ import type {
   TraceEventContract,
 } from "./demoContracts";
 import { validateExperienceInspectFixture } from "./demoContracts";
+import { isValueKey } from "./domain";
 
 const HASH_PATTERN = /^[0-9a-f]{64}$/;
 const SCENARIO_FILE_PATTERN = /^[a-z0-9-]+\.json$/;
@@ -24,10 +25,11 @@ export interface ScenarioCatalogItem {
   role:
     | "no_active_drift"
     | "active_drift"
-    | "drift_ended"
+    | "persistent_drift"
     | "insufficient_evidence"
     | "two_core_values";
   progression: ScenarioDeliveryState[];
+  core_value_progression: Record<string, ScenarioDeliveryState[]>;
   key_week_start?: string | null;
   summary: string;
   recommended: boolean;
@@ -90,7 +92,7 @@ function validateCatalogItem(
   if (![
     "no_active_drift",
     "active_drift",
-    "drift_ended",
+    "persistent_drift",
     "insufficient_evidence",
     "two_core_values",
   ].includes(role)) {
@@ -106,6 +108,23 @@ function validateCatalogItem(
       throw new Error(`${name}.progression[${stateIndex}] is incompatible`);
     }
     return state as ScenarioDeliveryState;
+  });
+  const coreValues = textList(item.core_values, `${name}.core_values`);
+  const valueProgression = record(item.core_value_progression, `${name}.core_value_progression`);
+  if (coreValues.length === 0 || new Set(coreValues).size !== coreValues.length
+    || coreValues.some((value) => !isValueKey(value))
+    || Object.keys(valueProgression).length !== coreValues.length
+    || coreValues.some((value) => !Array.isArray(valueProgression[value])
+      || valueProgression[value].length !== progression.length
+      || valueProgression[value].some((state: unknown) =>
+        !["active_drift", "no_active_drift", "insufficient_evidence"].includes(String(state))))) {
+    throw new Error(`${name}.core_value_progression is incompatible`);
+  }
+  progression.forEach((state, weekIndex) => {
+    const states = coreValues.map((value) => (valueProgression[value] as string[])[weekIndex]);
+    const aggregate = states.includes("active_drift") ? "active_drift"
+      : states.includes("insufficient_evidence") ? "insufficient_evidence" : "no_active_drift";
+    if (state !== aggregate) throw new Error(`${name}.progression differs from its Core Values`);
   });
   if (typeof item.recommended !== "boolean") {
     throw new Error(`${name}.recommended must be a boolean`);
@@ -123,9 +142,10 @@ function validateCatalogItem(
     age: text(item.age, `${name}.age`),
     profession: text(item.profession, `${name}.profession`),
     culture: text(item.culture, `${name}.culture`),
-    core_values: textList(item.core_values, `${name}.core_values`),
+    core_values: coreValues,
     role: role as ScenarioCatalogItem["role"],
     progression,
+    core_value_progression: valueProgression as Record<string, ScenarioDeliveryState[]>,
     ...(item.key_week_start !== undefined ? { key_week_start: item.key_week_start as string | null } : {}),
     summary: text(item.summary, `${name}.summary`),
     recommended: item.recommended,
@@ -210,8 +230,22 @@ export async function loadSavedScenario(
   ) {
     throw new Error("The saved persona replay does not match its catalog.");
   }
+  fixture.scenario.weeks.forEach((week, index) => {
+    const drift = fixture.trace_events.find((event) =>
+      week.event_ids.includes(event.event_id) && event.event_type === "drift_detected");
+    const result = drift?.details.result as Record<string, unknown> | undefined;
+    const states = result?.core_value_states as Record<string, unknown> | undefined;
+    if (week.expected_delivery_state !== catalogItem.progression[index]
+      || !states || Object.keys(states).length !== catalogItem.core_values.length
+      || catalogItem.core_values.some((value) =>
+        states[value] !== catalogItem.core_value_progression[value][index])) {
+      throw new Error("The saved persona weekly states do not match its catalog.");
+    }
+  });
   return { catalogItem, fixture };
 }
+
+export class SavedPersonaUnavailableError extends Error {}
 
 export async function loadSavedScenarioById(
   scenarioOrPersonaId: string,
@@ -222,7 +256,7 @@ export async function loadSavedScenarioById(
       scenario.scenario_id === scenarioOrPersonaId ||
       scenario.persona_id === scenarioOrPersonaId,
   );
-  if (!item) throw new Error("The selected saved persona is unavailable.");
+  if (!item) throw new SavedPersonaUnavailableError("The selected saved persona is unavailable.");
   return loadSavedScenario(item);
 }
 

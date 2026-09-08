@@ -1,0 +1,112 @@
+{
+  "persona_id": "a24b8d8f",
+  "persona_name": "Lukas Vetter",
+  "week_start": "2025-06-09",
+  "week_end": "2025-06-15",
+  "response_mode": "active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "At least one Core Value has active Drift.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 3,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "active_drift",
+      "current_run_length": 2,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 2,
+      "last_date": "2025-06-14"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [
+    "a24b8d8f:universalism:1:open"
+  ],
+  "top_tensions": [
+    "universalism"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-06-10",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Helped Amira debug the intake form tonight at the nonprofit. She'd been stuck on a date-parsing issue for two days and we sorted it in twenty minutes. Small thing, but it felt like the right use of a Tuesday evening...."
+    },
+    {
+      "date": "2025-06-11",
+      "t_index": 1,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I sat there and said nothing."
+    },
+    {
+      "date": "2025-06-14",
+      "t_index": 2,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I picked convenience and cost"
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week held a contrast between helping Amira debug the nonprofit intake form—“the right use of a Tuesday evening”—and two moments where your choices felt further from making the world a fairer, better place: “I sat there and said nothing” and “I picked convenience and cost.”",
+    "tension_explanation": "The tension seems to sit between a concrete act of support and later moments of silence and choosing what was easiest or least costly. What those situations involved, and what made speaking or choosing differently difficult, remains open.",
+    "reflective_question": "When you look at these three moments together, what feels most important to understand about the gap between helping Amira and the times you “said nothing” or “picked convenience and cost”?."
+  },
+  "validation": {
+    "grounded_quotes": [
+      "the right use of a Tuesday evening",
+      "I sat there and said nothing",
+      "said nothing",
+      "picked convenience and cost"
+    ],
+    "word_count": 115,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 4 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 115 words (target 25-180)."
+      }
+    ]
+  }
+}

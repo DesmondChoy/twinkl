@@ -23,7 +23,7 @@ afterEach(() => {
 });
 
 describe("leaving a loading Persona replay", () => {
-  it.each(["home", "back"])(
+  it.each(["wordmark", "home"])(
     "preserves new onboarding after leaving through %s before the replay loads",
     async (exit) => {
       const user = userEvent.setup();
@@ -41,9 +41,9 @@ describe("leaving a loading Persona replay", () => {
       const starts = await screen.findAllByRole("button", { name: "Start at week 1" });
       await user.click(starts[0]);
       expect(screen.getByRole("button", { name: "Loading saved replay…" })).toBeTruthy();
-      await user.click(exit === "home"
+      await user.click(exit === "wordmark"
         ? screen.getByRole("link", { name: "Twinkl home" })
-        : screen.getByRole("button", { name: "Back" }));
+        : screen.getByRole("button", { name: "Go home" }));
       await user.click(screen.getByRole("button", { name: "Try Onboarding" }));
       fireEvent.change(screen.getByRole("textbox", { name: "Preferred name" }), {
         target: { value: "Casey" },

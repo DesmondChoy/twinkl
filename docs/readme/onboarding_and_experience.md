@@ -50,21 +50,26 @@ open Journal Entries first. Results keep **Why this state** collapsed until
 requested, with source links and per-Core-Value AI review details. Coach Digest
 and North Star Moment cards have direct navigation when available.
 
-The five Personas are Noor (No Active Drift), Nisha (Active Drift), Sook Yin
-(an ended Historical Drift Record), Wei Jun (Insufficient Evidence), and Henrik
-(independent Core Value states). Their saved Weekly Drift prompt v4 Run 1
-results cover 27 reviewed weeks and 52 Journal Entries.
-Saved Coach Digest responses cover one key week per Persona; the other 22
-weeks retain Weekly Drift Detection output without a saved Coach Digest response.
+The chooser compares Nisha (a Drift emerges), Noor (six weeks without Active
+Drift), Lukas (one Drift continues across four weeks), Wei Jun (Insufficient
+Evidence), and Meera (Drift affects Self-Direction while Tradition has No Active
+Drift). The five selectable rows show weekly states by default, with separate
+Core Value labels for Meera. Selecting a row updates its explanation, replay
+length, and key week beside one action to start or continue that replay.
+An informational sidebar explains the demo; the Experience/Inspect switch
+appears after a replay opens. Retired Persona sessions return to this chooser.
+Saved Weekly Drift prompt v4 Run 1 results cover 27 reviewed weeks and 53
+Journal Entries. All 27 weeks have source-compatible Coach Digest responses.
 
 North Star Moment displays at most one exact quotation beneath the Coach
 Digest, with its source date and Journal Entry link. Active Drift uses a
 supportive action from before onset; No Active Drift prefers a verified
 current-week action and otherwise uses a historical reminder. Insufficient
-Evidence produces no card. The saved replay preserves 23 selected quotations,
-three ineligible outcomes, and one completed review without a supportive
-source. These are AI assessments of synthetic writing, with human review
-deferred. Live review uses the separate `review_north_star` operation and fails
+Evidence produces no card. The saved replay preserves 22 selected quotations,
+three ineligible outcomes, and two completed reviews without a supportive
+source from the pinned full-history study. These are AI assessments of
+synthetic writing, with human review deferred. Live review uses the separate
+`review_north_star` operation and fails
 closed without a finalized integration budget; the live budget is unavailable.
 
 Saved Persona replay is deterministic and does not require a provider key. The

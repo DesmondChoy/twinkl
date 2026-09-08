@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 from pathlib import Path
 
@@ -106,6 +107,53 @@ def test_validation_retry_is_bounded_and_keeps_both_receipts(tmp_path: Path):
     assert response.generation.attempt_count == 2
     assert len(response.generation.diagnostic_paths) == 2
     assert len(metrics) == 2
+
+
+def test_frozen_case_repairs_reach_both_attempts_and_prompt_receipt(tmp_path: Path):
+    key, output, plan = _setup(tmp_path)
+    requirement = "Copy quotation punctuation exactly from the supplied excerpt."
+    plan["policy"]["repair_requirements"] = {key: [requirement]}
+    metrics = []
+    invalid = json.loads(_valid_response())
+    invalid["weekly_mirror"] = "You had a week."
+    complete = _completion(metrics, [json.dumps(invalid), _valid_response()])
+    instructions_seen = []
+
+    async def capture(prompt, response_format, instructions=None):
+        instructions_seen.append(instructions)
+        return await complete(prompt, response_format, instructions)
+
+    asyncio.run(
+        runner.generate(tmp_path, output, plan, llm_complete=capture, metrics=metrics)
+    )
+    assert len(instructions_seen) == 2
+    assert all(requirement in instructions for instructions in instructions_seen)
+    response = load_saved_coach_responses(tmp_path).responses[key]
+    assert requirement in response.generation.prompt
+    assert response.generation.prompt_sha256 == hashlib.sha256(
+        response.generation.prompt.encode()
+    ).hexdigest()
+
+
+def test_case_repair_policy_cannot_change_when_resuming(tmp_path: Path, monkeypatch):
+    key, output, plan = _setup(tmp_path)
+    monkeypatch.setattr(runner, "collect_cases", lambda root: plan["cases"])
+    for relative in (
+        "src/coach/weekly_digest.py",
+        "src/coach/llm_client.py",
+        "src/coach/schemas.py",
+        "prompts/weekly_digest_coach.yaml",
+    ):
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("frozen source")
+    requirements = {key: ["Keep quoted text exact."]}
+    frozen = runner.prepare(tmp_path, output, repair_requirements=requirements)
+    assert runner.prepare(tmp_path, output, repair_requirements=requirements) == frozen
+    with pytest.raises(ValueError, match="Frozen generation policy"):
+        runner.prepare(tmp_path, output, repair_requirements={key: ["Changed repair"]})
+    with pytest.raises(ValueError, match="current case keys"):
+        runner.prepare(tmp_path, output, repair_requirements={"unknown": ["Repair"]})
 
 
 def test_terminal_failure_does_not_gain_attempts_on_resume(tmp_path: Path):

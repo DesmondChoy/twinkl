@@ -1597,9 +1597,9 @@ def test_http_adapter_loads_each_saved_persona_at_its_first_week() -> None:
     scenario_ids = [
         "stable-noor",
         "active-nisha",
-        "ended-sook-yin",
+        "persistent-lukas",
         "uncertain-wei-jun",
-        "two-values-henrik",
+        "two-values-meera",
     ]
 
     with TestClient(create_app(service, scenario_root=ROOT)) as client:

@@ -22,7 +22,7 @@ interface SectionMapConfiguration {
 }
 
 const MAPS: Record<
-  Exclude<ExperienceSectionMapView, "journal">,
+  Exclude<ExperienceSectionMapView, "journal" | "persona-picker">,
   SectionMapConfiguration
 > = {
   summary: {
@@ -56,28 +56,6 @@ const MAPS: Record<
         id: "experience-journal-handoff",
         label: "Journal Entry",
         description: "Continue into Experience",
-      },
-    ],
-  },
-  "persona-picker": {
-    eyebrow: "Experience trail",
-    title: "Choose a replay.",
-    description: "Compare the saved Persona stories and their purpose.",
-    sections: [
-      {
-        id: "persona-picker-title",
-        label: "Introduction",
-        description: "What each replay shows",
-      },
-      {
-        id: "experience-persona-options",
-        label: "Personas",
-        description: "Five saved stories",
-      },
-      {
-        id: "experience-persona-source",
-        label: "Evidence",
-        description: "Source and limitation",
       },
     ],
   },
@@ -221,6 +199,18 @@ export default function ExperienceSectionMap({
   hasWeeklyResult = false,
   view,
 }: ExperienceSectionMapProps) {
+  if (view === "persona-picker") {
+    return <section className="persona-demo-guide" aria-labelledby="persona-demo-guide-title">
+      <p className="persona-demo-guide__label">How the demo works</p>
+      <h2 id="persona-demo-guide-title">Follow a story.<br />{" "}Examine the evidence.</h2>
+      <ol>
+        <li>Read saved Journal Entries.</li>
+        <li>Review Weekly Drift Detection and the Coach Digest.</li>
+        <li>Open Inspect during the replay to see supporting evidence.</li>
+      </ol>
+      <p className="persona-demo-guide__note">Synthetic Personas. No writing required.</p>
+    </section>;
+  }
   let journalMap: keyof typeof JOURNAL_MAPS = "empty";
   if (hasJournalEntries && hasWeeklyResult) {
     journalMap = "withEntriesAndResult";

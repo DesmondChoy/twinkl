@@ -96,10 +96,14 @@ Runs `validate_weekly_digest_narrative()` over the exact responses in the public
 scenario sample manifest and reports per-check pass rates against the targets in
 [`explanation_quality_eval.md`](./explanation_quality_eval.md).
 The [September manifest](../../logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json)
-contains the five accepted 7 September key-week responses, which remain unchanged.
+preserves the five accepted 7 September key-week responses from the previous
+Persona roster.
 The [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
-adds 22 validated responses, covering all 27 saved replay weeks. The command below
-checks only the preserved five-response subset; it is not an all-week report.
+added 22 validated responses for that roster. The
+[Persona replacement run](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md)
+retains 17 compatible responses and adds ten for Lukas and Meera, covering all
+27 current replay weeks. The command below checks only the historical
+five-response sample; it is not a report of the current roster or all weeks.
 Section 3a documents missing-week completion. The August manifest remains
 available for reproducing the historical sample.
 
@@ -116,7 +120,7 @@ uv run python -m src.evals.coach_digest_validations \
   `skipped_persona_weeks`.
 
 Verify all 27 exported responses, current input hashes, exact generation-source
-event IDs, and preservation of the original five receipts without provider calls:
+event IDs, and preservation of compatible retained receipts without provider calls:
 
 ```sh
 uv run pytest tests/demo/test_scenarios.py
@@ -148,7 +152,7 @@ Journal Entries with dates, evidence roles, Core Value mappings, and excerpts.
 It does not use the legacy
 `top_tensions` field as a substitute for these facts.
 
-### 3a. Complete saved replay weeks and retain the evaluated sample
+### 3a. Complete saved replay weeks and retain compatible responses
 
 All 27 saved replay weeks now contain a validated Coach Digest. The completion
 runner reads each week's exact saved `weekly_digest_built` input, preserves
@@ -169,9 +173,13 @@ uv run python -m scripts.export_demo_experiments
 ```
 
 `--output` selects the checkpoint/report directory; the default is
-`logs/experiments/reports/demo_coach_all_weeks_20260908`. The completed run added
-22 responses with 26 calls and retained the original five exactly. Each attempt
-preserves its input, complete prompt, raw response, usage, and validation result.
+`logs/experiments/reports/demo_persona_replacement_20260908/current`. Its saved
+plan verifies all 27 current responses, with none missing. When the roster,
+inputs, or generation policy change, select a new `--output` directory to
+preserve earlier frozen plans. The historical all-week completion added 22
+responses with 26 calls; the Persona replacement run retained 17 responses
+exactly and added ten with 12 calls. Each generation attempt preserves its
+input, complete prompt, raw response, usage, and validation result.
 Completed checkpoints resume without new calls. Unknown interrupted attempts
 stop for inspection; terminal failures do not gain retries. Existing responses
 with changed inputs are rejected instead of silently overwritten. Ordinary
@@ -179,16 +187,16 @@ replay and verification need no generation.
 
 The [7 September generator and report](../../logs/experiments/reports/demo_v4_run1_20260907/README.md)
 document the historical five-key-week sample and its seven Luna-none calls.
-`generate_approved_judge_sample.py --reuse-scenario-key-weeks` still targets only
-those five weeks and replaces its response fixture; do not use its default
+`generate_approved_judge_sample.py --reuse-scenario-key-weeks` targets only
+the current five key weeks and replaces its response fixture; do not use its default
 fixture path to maintain the completed 27-week replay. The preserved September
-manifest remains a five-response subset for the evaluator below. The August
+manifest remains a historical five-response sample for the evaluator below. The August
 manifest and its AI scores remain historical, separate evidence.
 
 The completion runner does not create an all-week Coach Digest Evals manifest
 or perform semantic judging. A future all-week AI evaluation must first build
 a source-bound manifest of the exact displayed responses. Historical scores
-must not be assigned to the 22 new responses. The NSM live allowance is separate
+must not be assigned to newly generated responses. The NSM live allowance is separate
 from Coach generation: its pinned US$1 budget is shared across sessions and
 restarts and is not spent by offline scenario export.
 

@@ -82,4 +82,15 @@ describe("Experience and Inspect v1 contract", () => {
 
     expect(() => validateExperienceInspectFixture(fixture)).toThrow("Luna-low");
   });
+
+  it("accepts explicit saved-history spacing checks and legacy enforced checks, but rejects non-boolean policy flags", () => {
+    const fixture = validateExperienceInspectFixture(fixtureCopy());
+    const event = fixture.trace_events.find((item) => item.event_type === "nudge_suppression_checked")!;
+    event.details.policy_applied = false;
+    expect(validateExperienceInspectFixture(fixture)).toBeTruthy();
+    delete event.details.policy_applied;
+    expect(validateExperienceInspectFixture(fixture)).toBeTruthy();
+    event.details.policy_applied = "false";
+    expect(() => validateExperienceInspectFixture(fixture)).toThrow("policy_applied");
+  });
 });

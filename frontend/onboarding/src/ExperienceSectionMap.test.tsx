@@ -4,16 +4,23 @@ import ExperienceSectionMap, {
   type ExperienceSectionMapView,
 } from "./ExperienceSectionMap";
 
-const EXPECTED_LINKS: Record<ExperienceSectionMapView, string[]> = {
+const EXPECTED_LINKS: Partial<Record<ExperienceSectionMapView, string[]>> = {
   summary: ["Profile", "Confirm"],
   complete: ["Profile", "Journal Entry"],
   journal: ["Prompt", "Write"],
-  "persona-picker": ["Introduction", "Personas", "Evidence"],
   "persona-replay": ["Persona", "Week", "This week"],
   inspect: ["Summary", "Recorded work"],
 };
 
 describe("Experience section map", () => {
+  it("explains the Persona demo without inactive navigation links", () => {
+    render(<ExperienceSectionMap view="persona-picker" />);
+    expect(screen.queryByRole("navigation")).toBeNull();
+    expect(screen.queryByRole("link")).toBeNull();
+    expect(screen.getByRole("heading", { name: "Follow a story. Examine the evidence." })).toBeTruthy();
+    expect(screen.getByText("Review Weekly Drift Detection and the Coach Digest.")).toBeTruthy();
+  });
+
   it.each(Object.entries(EXPECTED_LINKS))(
     "shows the %s sections",
     (view, labels) => {

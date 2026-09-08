@@ -158,9 +158,27 @@ def test_saved_attachment_rejects_stale_profile(base_fixtures, tmp_path):
         attach_saved_north_star(base_fixtures[0], root=tmp_path)
 
 
-def test_legacy_paid_preparation_rejects_experiment_response_availability(tmp_path):
+def test_legacy_paid_preparation_preserves_reserved_persona_guard(tmp_path):
+    with pytest.raises(ValueError, match="must not use reserved Personas"):
+        integration.prepare(tmp_path)
+    assert not (tmp_path / "manifest.json").exists()
+
+
+def test_legacy_paid_preparation_rejects_experiment_response_availability(
+    tmp_path, monkeypatch
+):
     # This helper used the pre-reset Journal-Entry-only policy. The current
     # experiment export must never silently become a fresh live budget setup.
+    cohort = json.loads((ROOT / "config/evals/north_star_cohort.json").read_text())
+    monkeypatch.setattr(
+        integration,
+        "SELECTIONS",
+        tuple(
+            selection
+            for selection in SELECTIONS
+            if selection.persona_id not in cohort["reserved_persona_ids"]
+        ),
+    )
     with pytest.raises(
         ValueError, match="Legacy responses lack independent availability"
     ):

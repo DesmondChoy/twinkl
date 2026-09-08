@@ -1932,7 +1932,7 @@
     "manifest": {
       "bundle_version": "scenario-bundle-v1",
       "created_at": "2026-09-07T01:48:01.163525+00:00",
-      "input_hash": "05bc9142130a72b4a7b7bbf78e20d2d9942d50c5104dcfd6d15762cf1b1f7932",
+      "input_hash": "8dc34751a62128dc8924ac9e8533114f488bd38dd1df9767df23c27cc1cad65c",
       "source_files": [
         "logs/wrangled/persona_02fb94f3.md",
         "logs/synthetic_data/persona_02fb94f3.md",
@@ -3897,7 +3897,7 @@
         "manifest": {
           "bundle_version": "scenario-bundle-v1",
           "created_at": "2026-09-07T01:48:01.163525+00:00",
-          "input_hash": "05bc9142130a72b4a7b7bbf78e20d2d9942d50c5104dcfd6d15762cf1b1f7932",
+          "input_hash": "8dc34751a62128dc8924ac9e8533114f488bd38dd1df9767df23c27cc1cad65c",
           "source_files": [
             "logs/wrangled/persona_02fb94f3.md",
             "logs/synthetic_data/persona_02fb94f3.md",
@@ -4409,12 +4409,13 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "6f227315c52e3738f2a6672de108cb28035045d3f31b2e6a9cb9d903f2f04f01",
+      "input_hash": "3dd2089ceb689338cc5ca65e8501afd1d87f9574c9296d2ace18fd35903bb5f2",
       "error": null,
       "details": {
         "previous_entry_ids": [],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -4569,7 +4570,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "f580fa950f1844c640e7721d3da76aaae55b808b614bef148bc6644684b309fe",
+      "input_hash": "78caad994ca4df792979450bb94656b7f4d4647b91152da8a6794d623c5e0ac7",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -4577,6 +4578,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -6524,7 +6526,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "dd45f5d95a614979999fb4a3cca9c32e7933836d63736cc728e34a20dc46e387",
+      "input_hash": "4812d5a308578bbac1c28297f0b44bb8050a97ec214e5a85980ed3dc9932882e",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -6533,6 +6535,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": true
       }
     },
@@ -6640,7 +6643,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "1276c5580c58358b6632c71334aff82c5f67536a118b832f525668c5e71609eb",
+      "input_hash": "9678da50d250d7c505ead909febb147b93557aa3f5a3e5d30326c43ab831346e",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -6650,6 +6653,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": true
       }
     },
@@ -9083,7 +9087,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "5612b6f416f42e7d41fd13c426bd0808e16f8c5b0915ba69e3fa4ce450211e78",
+      "input_hash": "a4e2faa9eb8c2dc4807013a1fd15884441d935cdf6b6b4283d8e2a0b6e99264a",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -9093,6 +9097,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -9247,7 +9252,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "8360837c952a905ef3f2fff5eb77a1e14d394165714588e601477f5915fcb644",
+      "input_hash": "73aa525e49bf5512ff2f3e2d9e3bb858092c8cc0b71af65911270edeceeb8c66",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -9257,6 +9262,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -12066,7 +12072,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "157b67e8d6ce5a62038a702ee786ecb07a6006977c8153cae8c1faa43a529c5a",
+      "input_hash": "26c3dad8e2e9354332ee6eb4a0b01b615abb49b7c6ba38323625a98c161ba816",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -12076,6 +12082,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -12230,7 +12237,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "fee4a7ca38d7bc72de6afa6d3dee16f22321f1f8d7866e6cef966b2ac6268f09",
+      "input_hash": "fffa31c8761326f8dfd51510a74f05ae869c1514643db969d5bb1f787c62301d",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -12240,6 +12247,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": true
       }
     },
@@ -12347,7 +12355,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "f8eff5fea00672f8c462d9718ef49dad787b1be1a560965b3ac0505d2c6cb581",
+      "input_hash": "4b41798be7cb397b2fe3a1ddff3eb4803c5c5b7b9577014c9a91f31d1a900606",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -12357,6 +12365,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -15890,7 +15899,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "7a71232b38a5444a3a8ede26b9e565e8fb3f2b72bd41f0be7802e95f3972c840",
+      "input_hash": "230386ca45643ee381bfa4a5e5efe62c6b328de889c349299c75527715fe3dad",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -15900,6 +15909,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -19386,7 +19396,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "bf9b037fe733e7ead1fb8e6265e03485109162d647697281a5a13e67e6d8e585",
+      "input_hash": "b6b7cff94854763ad278cbaff37ef3d85c321269d501ead1716b95488dbae86f",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -19396,6 +19406,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": false
       }
     },
@@ -19550,7 +19561,7 @@
         "errors": []
       },
       "result_refs": [],
-      "input_hash": "af271adb9e66fb1198abed0fde3cce375c8f10537282d461aac59124b4b6043f",
+      "input_hash": "5980e8b275a32fa784ece766eb05ea79ca913692c03389e408d9993f2f9c8c31",
       "error": null,
       "details": {
         "previous_entry_ids": [
@@ -19560,6 +19571,7 @@
         ],
         "window_size": 3,
         "max_nudges": 2,
+        "policy_applied": false,
         "suppressed": true
       }
     },

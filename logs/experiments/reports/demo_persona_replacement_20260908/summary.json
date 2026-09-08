@@ -1,0 +1,19 @@
+{
+  "retained": 17,
+  "generated": 7,
+  "total": 24,
+  "usage": {
+    "n_calls": 9,
+    "n_calls_with_usage": 9,
+    "input_tokens": 13612,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 12592,
+    "output_tokens": 1586,
+    "total_tokens": 15198,
+    "calculated_cost_usd": 0.0052552,
+    "total_latency_seconds": 41.74897050007712,
+    "mean_latency_seconds": 4.638774500008569,
+    "median_latency_seconds": 4.072911208000733,
+    "max_latency_seconds": 10.274994542007335
+  }
+}

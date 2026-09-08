@@ -8,6 +8,15 @@ import styles from "./styles.css?raw";
 const events = canonicalInspectFixture.trace_events;
 
 describe("Inspect view", () => {
+  it.each([true, false])("distinguishes saved nudge history from an enforced spacing decision (would suppress: %s)", (suppressed) => {
+    const event = structuredClone(events.find((item) => item.event_type === "nudge_suppression_checked")!);
+    event.details.policy_applied = false;
+    event.details.suppressed = suppressed;
+    render(<InspectView events={[event]} selectedEventId={event.event_id}
+      traceLabel="Saved Persona replay" onReturn={() => undefined} />);
+    expect(screen.getByText(`Saved nudge history; current spacing rule would ${suppressed ? "suppress" : "allow"} a nudge`)).toBeTruthy();
+    expect(screen.queryByText("Nudge suppressed by the anti-annoyance rule")).toBeNull();
+  });
   it("shows an honest empty state without rendering fixture events", () => {
     render(
       <InspectView

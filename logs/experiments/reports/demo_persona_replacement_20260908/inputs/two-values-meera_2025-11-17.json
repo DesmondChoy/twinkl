@@ -1,0 +1,242 @@
+{
+  "persona_id": "961a4e3f",
+  "persona_name": "Meera Krishnamurthy",
+  "week_start": "2025-11-17",
+  "week_end": "2025-11-23",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "self_direction",
+    "tradition"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "self_direction": "no_active_drift",
+    "tradition": "no_active_drift"
+  },
+  "drift_details": {
+    "self_direction": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 3,
+      "last_date": "2025-11-23"
+    },
+    "tradition": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 3,
+      "last_date": "2025-11-23"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "self_direction",
+      "previous_week_start": "2025-11-10",
+      "previous_week_end": "2025-11-16",
+      "current_week_start": "2025-11-17",
+      "current_week_end": "2025-11-23",
+      "previous_state": "active_drift",
+      "current_state": "no_active_drift",
+      "change": "active_drift_ended",
+      "end_reason": "not_conflict",
+      "previous_evidence": [
+        {
+          "date": "2025-11-14",
+          "t_index": 0,
+          "direction": "misaligned",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "I scrubbed the indigo off after lunch."
+        },
+        {
+          "date": "2025-11-15",
+          "t_index": 1,
+          "direction": "misaligned",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "I smiled and nodded and said I'd encourage him to be more social."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-11-20",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out,..."
+        },
+        {
+          "date": "2025-11-23",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Spent the whole morning at the Diwali mela helping set up the community puja. I did the rangoli at the entrance the way my grandmother taught me, rice flour with turmeric borders, none of the acrylic paint shortcuts the younger..."
+        }
+      ]
+    },
+    {
+      "core_value": "tradition",
+      "previous_week_start": "2025-11-10",
+      "previous_week_end": "2025-11-16",
+      "current_week_start": "2025-11-17",
+      "current_week_end": "2025-11-23",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-11-14",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Mummyji made a comment at lunch about the indigo stains on my fingernails. She didn't say anything directly, just that thing she does where she looks at my hands and then looks at the dal and raises her eyebrows. Ravi..."
+        },
+        {
+          "date": "2025-11-15",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Arjun's parent-teacher meeting today. The class teacher mentioned he draws during free period instead of playing cricket with the other boys and asked if everything is okay at home. I wanted to say, yes, everything is fine, my son likes..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-11-20",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out,..."
+        },
+        {
+          "date": "2025-11-23",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Spent the whole morning at the Diwali mela helping set up the community puja. I did the rangoli at the entrance the way my grandmother taught me, rice flour with turmeric borders, none of the acrylic paint shortcuts the younger..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "961a4e3f:self_direction:0:not_conflict"
+  ],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-11-14",
+      "t_index": 0,
+      "direction": "misaligned",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "I scrubbed the indigo off after lunch."
+    },
+    {
+      "date": "2025-11-14",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Mummyji made a comment at lunch about the indigo stains on my fingernails. She didn't say anything directly, just that thing she does where she looks at my hands and then looks at the dal and raises her eyebrows. Ravi..."
+    },
+    {
+      "date": "2025-11-15",
+      "t_index": 1,
+      "direction": "misaligned",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "I smiled and nodded and said I'd encourage him to be more social."
+    },
+    {
+      "date": "2025-11-15",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Arjun's parent-teacher meeting today. The class teacher mentioned he draws during free period instead of playing cricket with the other boys and asked if everything is okay at home. I wanted to say, yes, everything is fine, my son likes..."
+    },
+    {
+      "date": "2025-11-20",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out,..."
+    },
+    {
+      "date": "2025-11-20",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out,..."
+    },
+    {
+      "date": "2025-11-23",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the whole morning at the Diwali mela helping set up the community puja. I did the rangoli at the entrance the way my grandmother taught me, rice flour with turmeric borders, none of the acrylic paint shortcuts the younger..."
+    },
+    {
+      "date": "2025-11-23",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the whole morning at the Diwali mela helping set up the community puja. I did the rangoli at the entrance the way my grandmother taught me, rice flour with turmeric borders, none of the acrylic paint shortcuts the younger..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

@@ -10,8 +10,8 @@ supportive writing. Insufficient Evidence and failed or unsuitable reviews
 produce no card. The Coach Digest remains usable independently.
 Saved replay uses Weekly Drift prompt v4 Run 1 and the full-history runtime
 outcomes from the [completed targeted NSM update](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md).
-The five selected Personas cover 27 reviewed weeks: 23 selected quotations,
-three ineligible outcomes, and one completed review with no supportive source.
+The five selected Personas cover 27 reviewed weeks: 22 selected quotations,
+three ineligible outcomes, and two completed reviews with no supportive source.
 Original model receipts and synthetic source availability remain
 inspectable. Live NSM uses a separately authorized US$1 allowance shared across
 sessions and restarts; offline replay does not use that budget. The [methodology](../north_star/nsm_experiment_methodology.md)
@@ -41,33 +41,36 @@ and next-week navigation, restart, named jumps to key weeks, reduced-motion beha
 no-future-data projection, and browser-side scenario hash verification. The
 release quality gate is implemented. Every saved week has a Coach Digest whose
 source hash matches that week's current Weekly Drift Detection output. The
-[September completion run](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
-adds 22 accepted responses and preserves the five compatible responses from the
-[September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md).
+[Persona replacement run](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md)
+adds ten responses for Lukas and Meera and retains 17 compatible responses for
+Nisha, Noor, and Wei Jun from the
+[September completion run](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md).
 All 27 use Luna at reasoning effort `none`, prompt `4.2`, and pass Coach Digest
-Validations. This run adds no Coach Digest Evals or human validation; the
+Validations. These generation runs add no Coach Digest Evals or human
+validation; the
 [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
 remains historical evidence for a different Persona roster and inputs.
 
 | Persona | Weeks with source-compatible Coach Digests |
 | --- | --- |
-| Noor Haddad | 1–6 |
 | Nisha Agarwal | 1–5 |
-| Lim Sook Yin | 1–4 |
+| Noor Haddad | 1–6 |
+| Lukas Vetter | 1–5 |
 | Wei Jun Chen | 1–6 |
-| Henrik Larsson | 1–6 |
+| Meera Krishnamurthy | 1–5 |
 
-The completion uses exact saved weekly inputs, preserves existing response
-receipts, and validates one Coach event per week. Weekly Drift Detection and
-North Star Moment records remain unchanged. The resumable generation command
-and raw receipts are recorded with the completion report.
+The replacement uses exact saved weekly inputs, preserves compatible response
+receipts, and validates one Coach event per week. It reuses Weekly Drift
+Detection and full-history North Star Moment outcomes from the pinned studies.
+The generation command and raw receipts are recorded with the replacement report.
+The active replay files no longer include the two retired Personas; their
+source datasets and historical experiment records remain intact.
 
 The [integration validation](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
-records passing application checks and five AI editorial concerns, tracked in
-`twinkl-rklc.39`. These include a direct contradiction in Sook Yin's final week:
-Coach excerpts omit a completed action that the full-entry North Star Moment
-quotes. Source compatibility and deterministic validation do not establish
-semantic agreement between the two components.
+records passing application checks and five AI editorial concerns in the
+previous roster, tracked in `twinkl-rklc.39`. It remains historical evidence;
+replacing two Personas does not resolve the retained Personas' concerns or
+establish semantic agreement between the Coach Digest and North Star Moment.
 
 Current capstone work is
 Coach Digest feedback capture, longitudinal Core Value history, and the final
@@ -115,7 +118,8 @@ The current Persona offers **Continue replay** in the picker to resume its
 selected week after returning home.
 
 The app presents the product experience and the AI architecture from the same
-session. A persistent two-option control switches between:
+session. After a Persona replay opens, or during onboarding and the manual
+Experience, a two-option control switches between:
 
 - **Experience** — the user-facing journey through onboarding, Journal Entries,
   displayed nudges and responses, Drift, and the Coach Digest response.
@@ -161,6 +165,7 @@ information hierarchy, interaction order, or acceptance of the mobile flow.
 
 | Session stage | Experience | Inspect |
 |---|---|---|
+| Persona chooser | Enabled; shows the saved weekly comparison | No view switch; Inspect becomes available after opening a replay |
 | Active SVBWS card selection | Enabled | Disabled with “Available after all 11 questions” |
 | Value summary before confirmation | Enabled | Enabled; shows the complete browser calculation and highest-scoring values |
 | Confirmed Profile handoff | Enabled | Enabled; shows the Profile handoff and validation |
@@ -269,7 +274,21 @@ rather than attributing transport or routing failures to a product component.
 
 ### 5.3 Persona simulation
 
-The entry page offers **Try the Demo**. Selecting a Persona loads its Profile,
+The entry page offers **Try the Demo**. The chooser shows five selectable
+Persona rows in the same order as the saved catalog: Nisha, Noor, Lukas,
+Wei Jun, and Meera. Weekly states are visible without opening a guide, and
+Meera's row labels the states for Self-Direction and Tradition separately.
+The informational sidebar explains how to read Journal Entries, review Weekly
+Drift Detection and the Coach Digest, and open Inspect for supporting evidence.
+The header identifies the saved Persona demo without the onboarding Inspect hint.
+
+On desktop, the comparison table spans the available content width and the
+chooser uses larger text. Selecting a row updates the explanation, replay
+length, and key week in the detail panel below the table. A single
+**Start at week 1** action loads that Persona; selecting the current replay
+instead offers **Continue replay** with its saved week.
+On narrow screens, each Persona's weekly cells form a labelled grid, with the
+selected details and the same action immediately below that Persona. The action loads the Profile,
 Core Values, Journal Entries, displayed nudges and responses, saved Weekly
 Drift Reviewer Decisions, Drift states, and Coach Digest responses. **Go home**
 returns to the entry page from the Persona picker, replay, onboarding, or
@@ -286,8 +305,8 @@ Selecting a week projects only Journal Entries and evidence available by its
 cutoff. Later week markers remain disabled until reviewed. A named jump, such
 as **Show Active Drift — week 4**, offers explicit navigation to a key week;
 it opens that week's journals and still requires the review button to show its
-result. The Persona picker includes a collapsed **Professor guide: states by
-week**, derived from the saved catalog.
+result. The chooser's weekly comparison is derived from the same saved catalog
+and labels weeks beyond a Persona's replay as unavailable.
 
 The shared browser session preserves the selected week and furthest completed
 week across Experience and Inspect and after reload. Existing saved step
@@ -295,6 +314,8 @@ progress remains readable, but does not hide Journal Entries. Initial load,
 reload, returning from Inspect, week navigation, and restart open the journals
 panel. Restart clears replay progress. Returning to an earlier week preserves
 access to later weeks that were already reviewed.
+Sessions holding a retired Persona return safely to the current chooser rather
+than attempting to load a removed bundle.
 
 Opening a Journal Entry uses a desktop side panel or mobile bottom sheet so
 the reading area does not reflow. Saved nudges are available immediately with
@@ -440,8 +461,9 @@ map highlights the section at the reading position. Narrow screens keep the
 single-column Inspect layout and do not show the rail.
 
 The same 240-pixel section rail supports Profile confirmation, the first
-Journal Entry handoff, manual Journal Entry work, saved Persona selection,
-saved Persona replay, and saved-run Inspect. Each map links only to sections in
+Journal Entry handoff, manual Journal Entry work, saved Persona replay, and
+saved-run Inspect. The Persona chooser uses an informational sidebar instead
+of a section map. Each section map links only to sections in
 the current view. Content with a maximum width stays centered between the
 section rail and the outer page edge. The active values questions retain the
 compass because it shows assessment progress. Narrow screens do not show a
@@ -739,23 +761,23 @@ The capstone demo uses these five curated scenarios:
 
 | Scenario | Persona | Core Values | Saved progression |
 |---|---|---|---|
-| No Active Drift | Noor Haddad, Middle Eastern stay-at-home parent, 18–24 | Self-Direction, Tradition | No Active Drift in all six weeks |
-| Active Drift | Nisha Agarwal, South Asian teacher, 18–24 | Universalism | No Active Drift in weeks 1–3 → Active Drift in week 4 → No Active Drift in week 5 |
-| Drift ended | Lim Sook Yin, East Asian stay-at-home parent, 55+ | Hedonism | No Active Drift → Active Drift → No Active Drift in weeks 3–4 |
+| A Drift emerges | Nisha Agarwal, South Asian teacher, 18–24 | Universalism | No Active Drift in weeks 1–3 → Active Drift in week 4 → No Active Drift in week 5 |
+| Six weeks without Active Drift | Noor Haddad, Middle Eastern stay-at-home parent, 18–24 | Self-Direction, Tradition | No Active Drift in all six weeks |
+| Drift continues across weeks | Lukas Vetter, Western European software engineer, 25–34 | Universalism | Active Drift in weeks 1–4 → No Active Drift in week 5; this is one continuing Drift, not four separate Drifts |
 | Insufficient Evidence | Wei Jun Chen, East Asian software engineer, 35–44 | Universalism | No Active Drift in weeks 1–4 → Insufficient Evidence in weeks 5–6 |
-| Two Core Values | Henrik Larsson, Western European entrepreneur, 45–54 | Stimulation, Security | In week 3, Security has No Active Drift while Stimulation has Insufficient Evidence; both have No Active Drift in the other weeks |
+| Drift affects one Core Value | Meera Krishnamurthy, South Asian stay-at-home parent, 45–54 | Self-Direction, Tradition | Week 1 has Active Drift for Self-Direction and No Active Drift for Tradition; both have No Active Drift in weeks 2–5 |
 
 Nisha is the recommended professor walkthrough: her five-week replay shows
 how two consecutive Conflicts produce Active Drift and how a later Not Conflict
-decision ends that pattern. Her key week starts on 3 March 2025. Sook Yin's
-week starting 10 February demonstrates an ended Historical Drift Record;
+decision ends that pattern. Her key week starts on 3 March 2025. Lukas's
+week starting 30 June shows that the same Drift remains active in week 4;
 Wei Jun's week starting 30 June demonstrates a failed review that blocks a
-current claim; Henrik's week starting 17 February demonstrates independent
+current claim; Meera's week starting 10 November demonstrates contrasting
 Core Value states. Noor's week starting 19 May closes the No Active Drift
 baseline without implying that this state proves alignment.
 
-This menu covers six Schwartz Core Values, four cultural backgrounds, four
-age bands, 52 Journal Entries, and 27 reviewed weeks. Selection used saved
+This menu covers three Schwartz Core Values, four cultural backgrounds, four
+age bands, 53 Journal Entries, and 27 reviewed weeks. Selection used saved
 v4 Run 1 Drift patterns, coherent histories, completed NSM source coverage,
 and compatibility with the existing displayed-nudge anti-annoyance rule.
 It did not use AI evaluation grades to select successful-looking cards.

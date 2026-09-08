@@ -3535,6 +3535,11 @@
           "title": "Max Nudges",
           "type": "integer"
         },
+        "policy_applied": {
+          "default": true,
+          "title": "Policy Applied",
+          "type": "boolean"
+        },
         "previous_entry_ids": {
           "items": {
             "type": "string"

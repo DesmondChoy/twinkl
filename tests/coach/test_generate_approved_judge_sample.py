@@ -73,7 +73,7 @@ def test_sample_generator_requires_explicit_personas():
 
 
 def test_extracts_only_deployed_key_week_digests(tmp_path: Path):
-    personas = ["02fb94f3", "5fa8b540", "ed67c9cc", "8f83c818", "2d928d8a"]
+    personas = ["5fa8b540", "02fb94f3", "a24b8d8f", "8f83c818", "961a4e3f"]
 
     sources = _extract_scenario_key_week_digests(personas, tmp_path)
 
@@ -83,9 +83,9 @@ def test_extracts_only_deployed_key_week_digests(tmp_path: Path):
     } == {
         "02fb94f3": ("stable-noor", "2025-05-19"),
         "5fa8b540": ("active-nisha", "2025-03-03"),
-        "ed67c9cc": ("ended-sook-yin", "2025-02-10"),
+        "a24b8d8f": ("persistent-lukas", "2025-06-30"),
         "8f83c818": ("uncertain-wei-jun", "2025-06-30"),
-        "2d928d8a": ("two-values-henrik", "2025-02-17"),
+        "961a4e3f": ("two-values-meera", "2025-11-10"),
     }
     for persona_id in personas:
         paths = list(tmp_path.glob(f"{persona_id}_*.json"))

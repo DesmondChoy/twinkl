@@ -689,7 +689,9 @@ function validateEventDetails(event: JsonObject, name: string): void {
       boolean(details.ordering_valid, `${name}.details.ordering_valid`);
       break;
     case "nudge_suppression_checked":
-      exactKeys(details, ["previous_entry_ids", "window_size", "max_nudges", "suppressed"], `${name}.details`);
+      exactKeys(details, ["previous_entry_ids", "window_size", "max_nudges", "suppressed",
+        ...("policy_applied" in details ? ["policy_applied"] : [])], `${name}.details`);
+      if ("policy_applied" in details) boolean(details.policy_applied, `${name}.details.policy_applied`);
       stringArray(details.previous_entry_ids, `${name}.details.previous_entry_ids`);
       if (details.window_size !== 3 || details.max_nudges !== 2) {
         throw new Error(`${name}.details changes the anti-annoyance contract`);

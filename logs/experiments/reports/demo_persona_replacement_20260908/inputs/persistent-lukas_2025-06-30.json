@@ -1,0 +1,99 @@
+{
+  "persona_id": "a24b8d8f",
+  "persona_name": "Lukas Vetter",
+  "week_start": "2025-06-30",
+  "week_end": "2025-07-06",
+  "response_mode": "active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "At least one Core Value has active Drift.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "active_drift",
+      "current_run_length": 5,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 5,
+      "last_date": "2025-07-01"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-06-23",
+      "previous_week_end": "2025-06-29",
+      "current_week_start": "2025-06-30",
+      "current_week_end": "2025-07-06",
+      "previous_state": "active_drift",
+      "current_state": "active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-06-25",
+          "t_index": 4,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I chose the easier path — I got my answer, I can file it away, and nobody has to be uncomfortable."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-07-01",
+          "t_index": 5,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "During onboarding someone made a joke about Eastern European work ethic — meant as a compliment, apparently. Tomasz laughed it off. I didn't say anything."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "a24b8d8f:universalism:1:open"
+  ],
+  "top_tensions": [
+    "universalism"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-06-25",
+      "t_index": 4,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I chose the easier path — I got my answer, I can file it away, and nobody has to be uncomfortable."
+    },
+    {
+      "date": "2025-07-01",
+      "t_index": 5,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "During onboarding someone made a joke about Eastern European work ethic — meant as a compliment, apparently. Tomasz laughed it off. I didn't say anything."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

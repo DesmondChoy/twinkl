@@ -12,9 +12,11 @@ POC keeps the Profile fixed. Profile evolution is future work.
 
 ## Experience
 
-- **Try the Demo** explores five saved synthetic Personas: Noor, Nisha, Sook
-  Yin, Wei Jun, and Henrik. Each week shows its Journal Entries, nudges, and
-  responses; **Review Weekly Drift Detection** opens the saved weekly result.
+- **Try the Demo** compares five saved synthetic Personas: Nisha, Noor, Lukas,
+  Wei Jun, and Meera. A selectable table shows their weekly Drift states, with
+  a short explanation and one action to start or continue the selected replay.
+  Each week shows its Journal Entries, nudges, and responses;
+  **Review Weekly Drift Detection** opens the saved weekly result.
   The 27-week replay uses recorded model responses and requires no provider key.
 - **Try Onboarding** begins the values assessment and manual Experience.
   A confirmed Profile holds at most two Core Values. Manual Journal Entries

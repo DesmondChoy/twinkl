@@ -1,0 +1,11 @@
+{
+  "input_sha256": "3befd4d5b083b84ab21e196364bbd130399f3a6623c1dbd7c890fb7373f08507",
+  "attempts": [
+    {
+      "diagnostic_path": "logs/experiments/reports/demo_persona_replacement_20260908/diagnostics/two-values-meera_2025-11-24_1.json"
+    },
+    {
+      "diagnostic_path": "logs/experiments/reports/demo_persona_replacement_20260908/diagnostics/two-values-meera_2025-11-24_2.json"
+    }
+  ]
+}

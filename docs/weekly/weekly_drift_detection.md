@@ -519,21 +519,21 @@ learned routing policies.
 
 ## Current Coach Digest Batch Status
 
-The [September v4 Run 1 replay refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
-provides five accepted key-week responses for Noor, Nisha, Sook Yin, Wei Jun,
-and Henrik. Generation used Luna at reasoning effort `none` and prompt `4.2`:
-seven calls including validation-guided retries for Noor and Wei Jun. All five
-responses passed Coach Digest Validations and match the current saved Weekly
-Drift Detection inputs. No Weekly Drift Reviewer or NSM calls were made, and
-no new Coach Digest Evals or human review was performed.
+The [Persona replacement run](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md)
+provides ten accepted responses for Lukas and Meera. Together with 17 retained
+responses for Nisha, Noor, and Wei Jun, all 27 current replay weeks have
+source-compatible Coach Digest responses. Generation uses Luna at reasoning
+effort `none` and prompt `4.2`; every response passes Coach Digest Validations.
+Weekly Drift Reviewer and North Star Moment outputs are reused from the pinned
+studies. No new Coach Digest Evals or human review was performed.
 
-The [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
-retains those five responses and adds 22, covering all 27 saved replay weeks.
-All use Luna-none and prompt `4.2`, pass Coach Digest Validations, and match
-current input hashes. The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
-records application checks and five unresolved AI editorial findings under
-`twinkl-rklc.39`; these checks do not establish human validity or resolve the
-flagged semantic issues.
+The [September v4 Run 1 replay refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+and [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
+document the earlier five-Persona roster and retain its generation provenance.
+The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
+records application checks and five AI editorial findings for that roster under
+`twinkl-rklc.39`. Replacing two Personas does not resolve the retained Personas'
+semantic concerns or establish human validity.
 
 The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
 preserves five key-week responses from the August Persona roster and inputs.

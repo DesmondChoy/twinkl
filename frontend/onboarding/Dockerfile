@@ -29,16 +29,16 @@ COPY --chown=twinkl:twinkl frontend/onboarding/public/scenarios/ \
 COPY --chown=twinkl:twinkl \
     logs/wrangled/persona_5fa8b540.md \
     logs/wrangled/persona_8f83c818.md \
-    logs/wrangled/persona_ed67c9cc.md \
+    logs/wrangled/persona_a24b8d8f.md \
     logs/wrangled/persona_02fb94f3.md \
-    logs/wrangled/persona_2d928d8a.md \
+    logs/wrangled/persona_961a4e3f.md \
     ./logs/wrangled/
 COPY --chown=twinkl:twinkl \
     logs/synthetic_data/persona_5fa8b540.md \
     logs/synthetic_data/persona_8f83c818.md \
-    logs/synthetic_data/persona_ed67c9cc.md \
+    logs/synthetic_data/persona_a24b8d8f.md \
     logs/synthetic_data/persona_02fb94f3.md \
-    logs/synthetic_data/persona_2d928d8a.md \
+    logs/synthetic_data/persona_961a4e3f.md \
     ./logs/synthetic_data/
 COPY --chown=twinkl:twinkl \
     logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/requests.jsonl \

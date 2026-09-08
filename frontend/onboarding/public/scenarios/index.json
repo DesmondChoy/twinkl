@@ -3,9 +3,42 @@
   "evidence_source": "ai_reviewed_synthetic_development",
   "scenarios": [
     {
+      "scenario_id": "active-nisha",
+      "file": "active-nisha.json",
+      "content_sha256": "0bb065f3ffd71ee0365e49c258c7ac5ef8cbcb8d339588ce738d31b46b95c760",
+      "persona_id": "5fa8b540",
+      "persona_name": "Nisha Agarwal",
+      "age": "18-24",
+      "profession": "Teacher",
+      "culture": "South Asian",
+      "core_values": [
+        "universalism"
+      ],
+      "role": "active_drift",
+      "progression": [
+        "no_active_drift",
+        "no_active_drift",
+        "no_active_drift",
+        "active_drift",
+        "no_active_drift"
+      ],
+      "core_value_progression": {
+        "universalism": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "active_drift",
+          "no_active_drift"
+        ]
+      },
+      "summary": "Recommended: a complete progression into and out of Active Drift.",
+      "recommended": true,
+      "key_week_start": "2025-03-03"
+    },
+    {
       "scenario_id": "stable-noor",
       "file": "stable-noor.json",
-      "content_sha256": "5d7ab169dd27cd6f25ced4d37031ae72d67e76b23e748e8f06e8bc49cdbdc8b4",
+      "content_sha256": "5b6022e99b684dc6abb6fa3006468bfdffd8e43737ed700401fafebb4d1527c6",
       "persona_id": "02fb94f3",
       "persona_name": "Noor Haddad",
       "age": "18-24",
@@ -24,61 +57,65 @@
         "no_active_drift",
         "no_active_drift"
       ],
+      "core_value_progression": {
+        "self_direction": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift"
+        ],
+        "tradition": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift"
+        ]
+      },
       "summary": "A baseline with no detected Drift across the saved history.",
       "recommended": false,
       "key_week_start": "2025-05-19"
     },
     {
-      "scenario_id": "active-nisha",
-      "file": "active-nisha.json",
-      "content_sha256": "377b2965e18884a8518a7cfad3c3f85daf4f0c94b683c1e7e01c830f86578bb0",
-      "persona_id": "5fa8b540",
-      "persona_name": "Nisha Agarwal",
-      "age": "18-24",
-      "profession": "Teacher",
-      "culture": "South Asian",
+      "scenario_id": "persistent-lukas",
+      "file": "persistent-lukas.json",
+      "content_sha256": "e3ec28aa786a9e8e90f85a6578f041447d3419948c26c95a538f8d48b9bbaf44",
+      "persona_id": "a24b8d8f",
+      "persona_name": "Lukas Vetter",
+      "age": "25-34",
+      "profession": "Software Engineer",
+      "culture": "Western European",
       "core_values": [
         "universalism"
       ],
-      "role": "active_drift",
+      "role": "persistent_drift",
       "progression": [
-        "no_active_drift",
-        "no_active_drift",
-        "no_active_drift",
+        "active_drift",
+        "active_drift",
+        "active_drift",
         "active_drift",
         "no_active_drift"
       ],
-      "summary": "Recommended: a complete progression into and out of Active Drift.",
-      "recommended": true,
-      "key_week_start": "2025-03-03"
-    },
-    {
-      "scenario_id": "ended-sook-yin",
-      "file": "ended-sook-yin.json",
-      "content_sha256": "e86adcef706a3d8449cecdaf590aa6d2aff5eb23d4561b95136fa549e0d4f9c1",
-      "persona_id": "ed67c9cc",
-      "persona_name": "Lim Sook Yin",
-      "age": "55+",
-      "profession": "Parent (Stay-at-home)",
-      "culture": "East Asian",
-      "core_values": [
-        "hedonism"
-      ],
-      "role": "drift_ended",
-      "progression": [
-        "no_active_drift",
-        "active_drift",
-        "no_active_drift",
-        "no_active_drift"
-      ],
-      "summary": "A closed Hedonism Drift episode with its supporting Journal Entries.",
+      "core_value_progression": {
+        "universalism": [
+          "active_drift",
+          "active_drift",
+          "active_drift",
+          "active_drift",
+          "no_active_drift"
+        ]
+      },
+      "summary": "One continuing Drift remains active in weeks 1–4.",
       "recommended": false,
-      "key_week_start": "2025-02-10"
+      "key_week_start": "2025-06-30"
     },
     {
       "scenario_id": "uncertain-wei-jun",
       "file": "uncertain-wei-jun.json",
-      "content_sha256": "1caa049d62370ce453f297599f8ce0097d48110c10d051fa10a0fd17e67f6952",
+      "content_sha256": "4af00f6c3f7b9aa47d042e1c28bfd8aa1a06da5e920068a937d4b5e3406d61b1",
       "persona_id": "8f83c818",
       "persona_name": "Wei Jun Chen",
       "age": "35-44",
@@ -96,35 +133,60 @@
         "insufficient_evidence",
         "insufficient_evidence"
       ],
+      "core_value_progression": {
+        "universalism": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "insufficient_evidence",
+          "insufficient_evidence"
+        ]
+      },
       "summary": "A failed Weekly Drift review prevents an unsupported Drift claim.",
       "recommended": false,
       "key_week_start": "2025-06-30"
     },
     {
-      "scenario_id": "two-values-henrik",
-      "file": "two-values-henrik.json",
-      "content_sha256": "f1e3d0d25921616ad822e063abc56ee47c403cd83f2cf57f819f541937dc396e",
-      "persona_id": "2d928d8a",
-      "persona_name": "Henrik Larsson",
+      "scenario_id": "two-values-meera",
+      "file": "two-values-meera.json",
+      "content_sha256": "59d6363b455af99ac5867efbdc229149477a4ecdc8a32abf0c7e250dbccc0f1e",
+      "persona_id": "961a4e3f",
+      "persona_name": "Meera Krishnamurthy",
       "age": "45-54",
-      "profession": "Entrepreneur",
-      "culture": "Western European",
+      "profession": "Parent (Stay-at-home)",
+      "culture": "South Asian",
       "core_values": [
-        "stimulation",
-        "security"
+        "self_direction",
+        "tradition"
       ],
       "role": "two_core_values",
       "progression": [
+        "active_drift",
         "no_active_drift",
-        "no_active_drift",
-        "insufficient_evidence",
         "no_active_drift",
         "no_active_drift",
         "no_active_drift"
       ],
-      "summary": "Two Core Values with different current states at the same cutoff.",
+      "core_value_progression": {
+        "self_direction": [
+          "active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift"
+        ],
+        "tradition": [
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift",
+          "no_active_drift"
+        ]
+      },
+      "summary": "Drift affects one Core Value while another has No Active Drift.",
       "recommended": false,
-      "key_week_start": "2025-02-17"
+      "key_week_start": "2025-11-10"
     }
   ]
 }
