@@ -10,3 +10,7 @@
 - Visual Aids, Clarity of explanation
 - Personal style
 - Handling of Q&A
+
+### Tools
+- Gamma
+- Marp
