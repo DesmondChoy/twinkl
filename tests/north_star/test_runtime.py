@@ -15,6 +15,7 @@ from src.north_star import assessment, input_budget
 from src.north_star.provider import BudgetedProvider, BudgetLedger, stable_hash
 from src.north_star.runtime import (
     INTEGRATION_POLICY_PATH,
+    LIVE_POLICY_PATH,
     NorthStarRequest,
     OpenAINorthStarRuntime,
     SourceWriting,
@@ -453,16 +454,66 @@ async def test_cached_completed_invalid_response_is_invalidated_then_retried(tmp
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("policy_path", [INTEGRATION_POLICY_PATH, LIVE_POLICY_PATH])
 async def test_invalid_response_stops_at_two_attempts_and_reuses_terminal_failure(
-    tmp_path,
+    tmp_path, policy_path,
 ):
-    runner = runtime(tmp_path, invalid=True)
+    runner = OpenAINorthStarRuntime(
+        provider=FakeProvider(
+            tmp_path, invalid=True,
+            ledger=BudgetLedger(tmp_path / "budget.json", policy_path),
+        ),
+        count_requests=count_requests,
+        policy_path=policy_path,
+    )
     first = await runner(request())
     assert first.status == "failed" and not first.retryable
     assert runner.provider.generated == 2
     repeated = await runner(request(), retry=True)
     assert repeated.status == "failed"
     assert runner.provider.generated == 2
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("policy_path", [INTEGRATION_POLICY_PATH, LIVE_POLICY_PATH])
+async def test_completed_record_accepts_only_its_pinned_budget_policy(
+    tmp_path, policy_path,
+):
+    value = request(values=["benevolence", "security"])
+    provider = FakeProvider(
+        tmp_path, supportive={("benevolence", "entry:1")},
+        ledger=BudgetLedger(tmp_path / "budget.json", policy_path),
+    )
+    runner = OpenAINorthStarRuntime(
+        provider=provider, count_requests=count_requests, policy_path=policy_path,
+    )
+    record = await runner(value)
+    assert record.status == "complete"
+    assert record.selected.entry_id == "entry:1"
+    assert validate_north_star_record(record, value) == record
+    for review, item in zip(record.reviews, source_review_requests(value), strict=True):
+        assert review.provider_attempts[-1].request_hash == stable_hash({
+            **item, "policy_hash": stable_hash(provider.ledger.policy),
+        })
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("policy_change", ["unknown", "mixed"])
+async def test_completed_record_rejects_unapproved_or_mixed_policies(
+    tmp_path, policy_change,
+):
+    value = request(values=["benevolence", "security"])
+    record = await runtime(tmp_path, supportive={("benevolence", "entry:1")})(value)
+    changed = record.model_copy(deep=True)
+    policy = json.loads(LIVE_POLICY_PATH.read_text())
+    if policy_change == "unknown":
+        policy["budget_usd"] = 0.75
+    items = source_review_requests(value)
+    changed.reviews[0].provider_attempts[-1].request_hash = stable_hash({
+        **items[0], "policy_hash": stable_hash(policy),
+    })
+    with pytest.raises(ValueError, match="provider receipt policy changed"):
+        validate_north_star_record(changed, value)
 
 
 @pytest.mark.asyncio

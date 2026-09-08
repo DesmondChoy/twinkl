@@ -1,13 +1,22 @@
 # North Star Moment
 
-[Workflow infographic](assets/north-star-moment-workflow.png): decision paths
-after Coach Digest, source checks, and the supportive-action definition.
+[Workflow infographic](assets/north-star-moment-workflow.png): selection paths,
+source checks, and the supportive-action definition. The integrated reading
+order is specified below.
 
 **Status:** Application code supports North Star Moment in onboarding and all
 five saved Persona replays, for Active Drift and No Active Drift. The saved
 replay uses the completed full-history outcomes from the targeted Weekly Drift
 v4 Run 1 update, preserving no-card outcomes and original receipt provenance.
-Live review fails closed without a fresh integration budget.
+Live review uses a separately authorized US$1 allowance shared across sessions
+and restarts. Both Experience paths place a selected quotation within a valid
+Coach Digest before its original reflective question.
+
+The [8 September integration check](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
+records five unresolved AI editorial concerns across the saved combined
+reflections, including a Coach/quotation contradiction caused by differing
+source context. These observations do not change the frozen experiment results
+or constitute human validation.
 
 The [experiment methodology](nsm_experiment_methodology.md) records the reset
 and the original 501-week AI comparison using Weekly Drift v2 repeat 1.
@@ -29,8 +38,9 @@ available; the update does not establish human validity or user benefit.
 
 **Current scope:** Both frontend paths: the demo with all five saved Personas
 and onboarding from scratch with the user's own writing. Each reviewed week
-can show at most one optional card. Active Drift uses pre-onset supportive
-writing. No Active Drift prefers current-week encouragement, then an older
+can include at most one optional passage within a valid Coach Digest. Active
+Drift uses pre-onset supportive writing. No Active Drift prefers current-week
+encouragement, then an older
 historical reminder. No Active Drift alone never establishes alignment.
 Insufficient Evidence produces no card.
 
@@ -55,9 +65,10 @@ The demo uses offline records for Noor, Nisha, Sook Yin, Wei Jun, and Henrik,
 covering 27 reviewed weeks from the completed targeted experiment. The
 onboarding path supports generation during the user's session after an
 eligible closed-week review when its runtime budget is available. Both paths
-use the same selection and validation rules. Experience displays the quotation beneath the
-Coach Digest. Inspect shows why it was selected. The personal example
-accompanies the reflection without generating advice or a second question.
+use the same selection and validation rules. Experience places the quotation
+after the existing Coach Digest narrative and before its original reflective
+question, within one reading area. Inspect shows why it was selected. The
+personal example adds no advice, second question, or model rewrite.
 
 A Persona or user need not receive a card. Weeks without an eligible trigger
 or a suitable earlier action correctly show none. The onboarding path uses
@@ -127,11 +138,13 @@ the implementation, research documentation, and developer-facing Inspect.
 This wording rule does not change detection decisions or permit rewriting
 the user's quoted words.
 
-Experience shows at most one card per reviewed week, in either path. The
-Coach-facing introduction is deterministic and based on the accepted record:
+Experience adds at most one North Star Moment passage to a valid Coach Digest
+per reviewed week. It preserves the generated narrative fields and exact selected
+quotation, with the original reflective question at the end. The introduction
+is deterministic and based on the accepted record:
 reflection for Active Drift, specific acknowledgment for a current-week
 action, or historical reminder for older writing. It does not add a second
-question or infer overall alignment, improvement, or recovery. The card contains:
+question or infer overall alignment, improvement, or recovery. The passage contains:
 
 - **A moment in your own words** for current-week encouragement, or
   **A past moment in your own words** for reflection and historical reminders;
@@ -148,13 +161,20 @@ reveal the complete accepted quotation without paraphrasing or joining
 separate passages. The card must remain usable on a narrow screen and with a
 keyboard or screen reader.
 
+Onboarding uses these plain headings without the feature name. Persona replay
+adds discreet **North Star Moment** attribution and **Inspect this moment**,
+linked to the exact selected backend event. Inspect labels the introduction as
+deterministic application wording and the quotation as exact source text.
+
 Inspect links the reviewed state and selected treatment to eligible writing, source order,
 AI review, code checks, and selected quotation. A **saved review
 record** contains these inputs and decisions, their versions, and model details.
 It lets teammates inspect why a card appeared or why it was omitted.
 
-Pending, missing, invalid, or failed records produce no card and leave Weekly
-Drift Detection and any valid Coach Digest available. Inspect distinguishes
+Pending, missing, invalid, or failed records omit the passage and leave Weekly
+Drift Detection and any valid Coach Digest available. An absent or invalid Coach
+Digest also suppresses augmentation; Experience does not show an empty moment
+card. Inspect distinguishes
 not evaluated, not eligible, pending, completed with or without a quotation,
 and failed results, with reasons. Older results without a record remain
 **not evaluated**. Onboarding sessions support live generation and bounded
@@ -402,11 +422,15 @@ source availability; do not borrow dates from a parent entry or treat
 backdated writing as available at an earlier cutoff.
 
 Full-history review does not require an embedding service. Provider credentials
-remain server-side. The live runtime depends on a finalized integration
-budget and fails closed before counting or provider work when it is missing.
-That budget was removed with the old artifacts, so fresh budget setup is
-required before live North Star Moment generation can resume. This reset does
-not authorize paid calls.
+remain server-side. Under the user's 8 September 2026 authorization, live
+requests use a fresh, conservative US$1 allowance in
+[`north_star_live_v1.json`](../../config/evals/north_star_live_v1.json), with zero
+prior spend and the existing Luna-low request and retry limits. The fixed ledger
+persists accounting across sessions and restarts; session deletion does not
+reset it. This allowance does not reconstruct the removed integration budget.
+Saved records keep their original policy and provenance. Revalidation accepts
+only the repository-pinned integration and live policy hashes, with one policy
+across every value review. Corrupt, mismatched, or exhausted budgets fail closed.
 
 Add optional records compatibly to existing session and scenario contracts.
 Older weeks remain usable with a **not evaluated** status and no card. Bind

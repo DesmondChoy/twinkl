@@ -1,0 +1,160 @@
+{
+  "persona_id": "2d928d8a",
+  "persona_name": "Henrik Larsson",
+  "week_start": "2025-02-24",
+  "week_end": "2025-03-02",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "stimulation",
+    "security"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "security": "no_active_drift",
+    "stimulation": "no_active_drift"
+  },
+  "drift_details": {
+    "security": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 5,
+      "last_date": "2025-02-27"
+    },
+    "stimulation": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 5,
+      "last_date": "2025-02-27"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "stimulation",
+      "previous_week_start": "2025-02-17",
+      "previous_week_end": "2025-02-23",
+      "current_week_start": "2025-02-24",
+      "current_week_end": "2025-03-02",
+      "previous_state": "insufficient_evidence",
+      "current_state": "no_active_drift",
+      "change": "evidence_resolved",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-22",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "One of our portfolio companies, the cold storage outfit in Antwerp, just lost their anchor client. Found out this morning from a panicked call from the founder who I could barely understand because he was speaking so fast. This is..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-02-27",
+          "t_index": 5,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Antwerp situation is stabilizing. We found a replacement client, not as big but enough to keep the operation running while we diversify the pipeline. I spent three days in Antwerp this week working on-site with the team and it reminded..."
+        }
+      ]
+    },
+    {
+      "core_value": "security",
+      "previous_week_start": "2025-02-17",
+      "previous_week_end": "2025-02-23",
+      "current_week_start": "2025-02-24",
+      "current_week_end": "2025-03-02",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-22",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "One of our portfolio companies, the cold storage outfit in Antwerp, just lost their anchor client. Found out this morning from a panicked call from the founder who I could barely understand because he was speaking so fast. This is..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-02-27",
+          "t_index": 5,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Antwerp situation is stabilizing. We found a replacement client, not as big but enough to keep the operation running while we diversify the pipeline. I spent three days in Antwerp this week working on-site with the team and it reminded..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-22",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "One of our portfolio companies, the cold storage outfit in Antwerp, just lost their anchor client. Found out this morning from a panicked call from the founder who I could barely understand because he was speaking so fast. This is..."
+    },
+    {
+      "date": "2025-02-22",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "One of our portfolio companies, the cold storage outfit in Antwerp, just lost their anchor client. Found out this morning from a panicked call from the founder who I could barely understand because he was speaking so fast. This is..."
+    },
+    {
+      "date": "2025-02-27",
+      "t_index": 5,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Antwerp situation is stabilizing. We found a replacement client, not as big but enough to keep the operation running while we diversify the pipeline. I spent three days in Antwerp this week working on-site with the team and it reminded..."
+    },
+    {
+      "date": "2025-02-27",
+      "t_index": 5,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Antwerp situation is stabilizing. We found a replacement client, not as big but enough to keep the operation running while we diversify the pipeline. I spent three days in Antwerp this week working on-site with the team and it reminded..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

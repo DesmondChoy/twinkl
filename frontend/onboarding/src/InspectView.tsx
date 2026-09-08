@@ -8,6 +8,7 @@ import {
 import type { TraceEventContract } from "./demoContracts";
 import type { BwsResponse, ScoreBundle, ValueKey } from "./domain";
 import OnboardingScoreInspection from "./OnboardingScoreInspection";
+import { northStarFraming } from "./northStar";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -373,6 +374,63 @@ function TraceFacts({ event }: { event: TraceEventContract }) {
   );
 }
 
+function NorthStarInspection({ event }: { event: TraceEventContract }) {
+  const result = record(event.details.record);
+  if (!result) return null;
+  const selected = record(result.selected);
+  const selectedSource = array(result.sources).map(record)
+    .find((source) => source?.entry_id === selected?.entry_id);
+  const experiment = record(result.experiment);
+  const savedOutput = record(experiment?.output);
+  const framing = result.status === "complete" && selected
+    ? northStarFraming(result.mode) : null;
+  return (
+    <section className="inspect-north-star" aria-labelledby={`moment-inspect-${event.event_id}`}>
+      <h3 id={`moment-inspect-${event.event_id}`}>Moment source and composition</h3>
+      <dl className="trace-facts">
+        <div><dt>Eligibility outcome</dt><dd>{titleCase(string(result.reason) ?? "unavailable")}</dd></div>
+        <div><dt>Recorded status</dt><dd>{titleCase(string(result.status) ?? "unavailable")}</dd></div>
+        <div><dt>Mode</dt><dd>{string(result.mode) ?? "No moment selected"}</dd></div>
+        <div><dt>Core Value</dt><dd>{string(result.value_phrase) ?? string(result.core_value) ?? "None"}</dd></div>
+        {selected ? (
+          <>
+            <div><dt>Journal Entry</dt><dd><code>{string(selected.entry_id)}</code> · {string(selected.date)}</dd></div>
+            <div><dt>Quote source</dt><dd>{titleCase(string(selected.quote_source) ?? "unavailable")}</dd></div>
+          </>
+        ) : null}
+      </dl>
+      {framing ? (
+        <>
+          <TextBlock label="Deterministic introduction" value={framing} />
+          <p>The interface inserts this fixed introduction and the exact quotation into an available Coach Digest before its existing reflective question. It does not rewrite the generated response.</p>
+        </>
+      ) : null}
+      {typeof selected?.evidence_quote === "string" ? (
+        <TextBlock label="Exact selected quotation" value={selected.evidence_quote} />
+      ) : null}
+      <details className="inspect-technical">
+        <summary>Source checks and AI assessment</summary>
+        <p>Recorded AI assessment is not human validation. Experience also checks the current Profile, Journal Entry text, weekly result, ownership, and chronology before displaying this passage.</p>
+        <JsonBlock label="Source checks" value={{
+          validation: event.validation,
+          evidence: result.validation_evidence ?? [],
+          owner_id: result.owner_id,
+          profile_ref: result.profile_ref,
+          input_hash: result.input_hash,
+          week_start: result.week_start,
+          week_end: result.week_end,
+          cutoff_at: result.cutoff_at,
+          source_available_at: selected?.quote_source === "nudge_response"
+            ? selectedSource?.response_available_at : selectedSource?.available_at,
+          onset_available_at: result.onset_available_at,
+        }} />
+        <JsonBlock label="AI assessment" value={array(result.reviews).length > 0
+          ? result.reviews : savedOutput?.source_reviews ?? []} />
+      </details>
+    </section>
+  );
+}
+
 function EventDetails({ event }: { event: TraceEventContract }) {
   const disclosure = (
     label: string,
@@ -395,6 +453,7 @@ function EventDetails({ event }: { event: TraceEventContract }) {
       {event.error !== null ? (
         <JsonBlock label="Safe error" value={event.error} />
       ) : null}
+      {event.event_type === "north_star_reviewed" ? <NorthStarInspection event={event} /> : null}
       <details className="inspect-technical inspect-technical--group">
         <summary>Technical details</summary>
         <p className="inspect-technical__help">
@@ -514,7 +573,8 @@ export default function InspectView({
   const reviewerEvent = latestWeeklyEvent("weekly_review_completed");
   const driftEvent = latestWeeklyEvent("drift_detected");
   const coachEvent = latestWeeklyEvent("weekly_coach_generated");
-  const northStarEvent = latestWeeklyEvent("north_star_reviewed");
+  const northStarEvent = selectedEvent?.event_type === "north_star_reviewed"
+    ? selectedEvent : latestWeeklyEvent("north_star_reviewed");
   const reviewerModel = record(reviewerEvent?.model_contract);
   const reviewerModelName = string(reviewerModel?.model);
   const reviewerEffort = string(reviewerModel?.reasoning_effort);
@@ -524,7 +584,7 @@ export default function InspectView({
       headingRef.current?.focus({ preventScroll: true });
       return;
     }
-    if (weeklyFocus) {
+    if (weeklyFocus && selectedEvent?.event_type !== "north_star_reviewed") {
       headingRef.current?.focus({ preventScroll: true });
       return;
     }
@@ -535,7 +595,7 @@ export default function InspectView({
     const target = eventRefs.current.get(selectedEventId);
     target?.focus({ preventScroll: true });
     target?.scrollIntoView?.({ block: "center" });
-  }, [selectedEventId, weeklyFocus]);
+  }, [selectedEventId, selectedEvent?.event_type, weeklyFocus]);
 
   const setEventExpanded = (eventId: string, open: boolean) => {
     setExpandedEvents((current) => {

@@ -1,8 +1,8 @@
 """Live NSM execution isolated from experiment artifacts and the app event loop.
 
-The POC serializes live NSM work in one worker thread. Its private ledger starts
-with the finalized integration run's charged receipts, so separating file paths
-does not create another US$20 allowance. A changed source ledger fails closed.
+The POC serializes live NSM work in one worker thread. The default private ledger
+uses a separately authorized, fixed live budget across sessions and restarts.
+Explicit legacy callers can still carry finalized integration spend forward.
 """
 
 from __future__ import annotations
@@ -28,8 +28,8 @@ from src.north_star.provider import (
     stable_hash,
 )
 from src.north_star.runtime import (
-    DEFAULT_DIRECTORY,
     INTEGRATION_POLICY_PATH,
+    LIVE_POLICY_PATH,
     ROOT,
     CountRequests,
     NorthStarRecord,
@@ -137,12 +137,14 @@ class LiveNorthStarRuntime:
         self,
         *,
         directory: Path = DEFAULT_LIVE_DIRECTORY,
-        source_directory: Path = DEFAULT_DIRECTORY,
+        source_directory: Path | None = None,
         provider_factory: Callable[[BudgetLedger], RuntimeProvider] = BudgetedProvider,
         measure: CountRequests = input_budget.measure_requests,
     ):
         self.directory = directory.resolve()
-        self.source_directory = source_directory.resolve()
+        self.source_directory = (
+            source_directory.resolve() if source_directory is not None else None
+        )
         self._provider_factory = provider_factory
         self._measure = measure
         self._runtime: OpenAINorthStarRuntime | None = None
@@ -161,16 +163,26 @@ class LiveNorthStarRuntime:
 
     def _run(self, request: NorthStarRequest, retry: bool) -> NorthStarRecord:
         if self._runtime is None:
-            ledger = _SeededLiveLedger(
-                self.directory / "budget.json", source_directory=self.source_directory
-            )
-            # Verify and seed accounting before counting or generating an input.
+            policy_path = LIVE_POLICY_PATH
+            ledger: _PrivateResponseLedger
+            if self.source_directory is None:
+                ledger = _PrivateResponseLedger(
+                    self.directory / "budget.json", policy_path
+                )
+            else:
+                policy_path = INTEGRATION_POLICY_PATH
+                ledger = _SeededLiveLedger(
+                    self.directory / "budget.json",
+                    source_directory=self.source_directory,
+                )
+            # Verify accounting before counting or generating an input.
             ledger.snapshot()
             self._runtime = OpenAINorthStarRuntime(
                 provider=self._provider_factory(ledger),
                 count_requests=self._measure_locked,
                 ledger_path=ledger.path,
                 counts_path=self.directory / "input-counts.json",
+                policy_path=policy_path,
             )
         return asyncio.run(self._runtime(request, retry=retry))
 

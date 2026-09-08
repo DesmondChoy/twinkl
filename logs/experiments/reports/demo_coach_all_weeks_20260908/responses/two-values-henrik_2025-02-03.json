@@ -1,0 +1,105 @@
+{
+  "persona_id": "2d928d8a",
+  "persona_name": "Henrik Larsson",
+  "week_start": "2025-02-03",
+  "week_end": "2025-02-09",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "stimulation",
+    "security"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "security": "no_active_drift",
+    "stimulation": "no_active_drift"
+  },
+  "drift_details": {
+    "security": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "ok",
+      "last_t_index": 0,
+      "last_date": "2025-02-07"
+    },
+    "stimulation": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "ok",
+      "last_t_index": 0,
+      "last_date": "2025-02-07"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-07",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the last two hours staring at a term sheet from a Lisbon-based startup that wants us to come in as operational partners. The numbers are solid enough but what actually caught me was the founder, this woman who walked..."
+    },
+    {
+      "date": "2025-02-07",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the last two hours staring at a term sheet from a Lisbon-based startup that wants us to come in as operational partners. The numbers are solid enough but what actually caught me was the founder, this woman who walked..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week, you found yourself absorbed in “a term sheet from a Lisbon-based startup” and spent two hours considering the possibility of becoming operational partners. What caught you was not only that “the numbers are solid enough,” but also the founder and the story behind the opportunity—suggesting that novelty and human connection were both present in the moment.",
+    "tension_explanation": "There is no clear indication here of a difficult trade-off between seeking new experiences and challenges and feeling calm and secure in your life. The excerpt leaves open whether the opportunity felt energising, unsettling, or some mixture of both.",
+    "reflective_question": "As you stayed with the Lisbon opportunity, what did you notice about the relationship between your curiosity about something new and your need to feel secure?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "a term sheet from a Lisbon-based startup"
+    ],
+    "word_count": 123,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 123 words (target 25-180)."
+      }
+    ]
+  }
+}

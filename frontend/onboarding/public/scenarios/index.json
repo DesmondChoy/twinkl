@@ -5,7 +5,7 @@
     {
       "scenario_id": "stable-noor",
       "file": "stable-noor.json",
-      "content_sha256": "71c320f8d1f7a4a28eb65a037ecb16674eb60a7aaadd55449f896b1aa1cb9592",
+      "content_sha256": "5d7ab169dd27cd6f25ced4d37031ae72d67e76b23e748e8f06e8bc49cdbdc8b4",
       "persona_id": "02fb94f3",
       "persona_name": "Noor Haddad",
       "age": "18-24",
@@ -31,7 +31,7 @@
     {
       "scenario_id": "active-nisha",
       "file": "active-nisha.json",
-      "content_sha256": "c480b75b4f836983574b0a55907a62f787db052e30972cec40cd96781b025801",
+      "content_sha256": "377b2965e18884a8518a7cfad3c3f85daf4f0c94b683c1e7e01c830f86578bb0",
       "persona_id": "5fa8b540",
       "persona_name": "Nisha Agarwal",
       "age": "18-24",
@@ -55,7 +55,7 @@
     {
       "scenario_id": "ended-sook-yin",
       "file": "ended-sook-yin.json",
-      "content_sha256": "293d85e198c0a820c11872f5128d39e36eba2ecca00ef047044394e69f46bf95",
+      "content_sha256": "e86adcef706a3d8449cecdaf590aa6d2aff5eb23d4561b95136fa549e0d4f9c1",
       "persona_id": "ed67c9cc",
       "persona_name": "Lim Sook Yin",
       "age": "55+",
@@ -78,7 +78,7 @@
     {
       "scenario_id": "uncertain-wei-jun",
       "file": "uncertain-wei-jun.json",
-      "content_sha256": "5d257049efeac02b3435842dc0910562fc2e6ce57a2cbc11d0610108295f9aee",
+      "content_sha256": "1caa049d62370ce453f297599f8ce0097d48110c10d051fa10a0fd17e67f6952",
       "persona_id": "8f83c818",
       "persona_name": "Wei Jun Chen",
       "age": "35-44",
@@ -103,7 +103,7 @@
     {
       "scenario_id": "two-values-henrik",
       "file": "two-values-henrik.json",
-      "content_sha256": "63f5fb4129cc357df1d68a65793b335c67e375101d50880b14a5e604bd1e3086",
+      "content_sha256": "f1e3d0d25921616ad822e063abc56ee47c403cd83f2cf57f819f541937dc396e",
       "persona_id": "2d928d8a",
       "persona_name": "Henrik Larsson",
       "age": "45-54",

@@ -18,7 +18,7 @@ flowchart TD
     Output --> Coach["Coach Digest: validated reflection"]
     Output --> NSM["North Star Moment: eligible writing, AI review, source checks"]
     Coach --> Experience
-    NSM -->|"At most one exact quotation; live budget required"| Experience
+    NSM -->|"Optional passage within valid Coach Digest"| Experience
     API -.->|"Shared evidence and trace events"| Experience
     Synthetic["Synthetic Journal Entries"] --> Labels["LLM-Judge VIF Labels"]
     Labels --> VIF["VIF Critic (Offline)"]
@@ -101,14 +101,16 @@ Evidence produces no card.
 The full-history review uses `gpt-5.6-luna` with reasoning effort `low`.
 Application checks enforce source ownership, exact quotation, chronology, and
 independent availability evidence for user nudge responses. The AI-written
-nudge is not a source. Experience displays an accepted quotation beneath the
-Coach Digest; Inspect exposes the review, source, checks, and no-card reason.
+nudge is not a source. Experience places an accepted quotation within a valid
+Coach Digest, after its unchanged narrative and before the original reflective
+question. Inspect exposes the review, source, checks, and omission reason.
 North Star Moment does not change Drift states or generate a second question.
 
 Saved replay reads completed selections and no-card outcomes. Manual Experience
-supports a separate, serialized live runtime whose private budget ledger depends
-on a finalized integration budget. Without that valid budget, live review fails
-closed and the weekly result remains available.
+supports a separate, serialized live runtime with a pinned US$1 allowance in a
+fixed private ledger shared across sessions and restarts. It permits two attempts
+per exact request with no SDK retries; invalid or exhausted budgets fail closed
+and the weekly result remains available.
 
 ## Saved Persona Replay
 
@@ -118,8 +120,15 @@ each result as saved or live and verifies its recorded source data.
 
 The catalog contains Noor, Nisha, Sook Yin, Wei Jun, and Henrik across 27 weeks.
 Bundles use Weekly Drift prompt v4 Run 1 and completed full-history North Star
-Moment outcomes. Coach Digest responses require matching input hashes. Browser
-requests bypass the cache and verify each bundle's catalogued SHA-256 hash.
+Moment outcomes. All 27 weeks have validated Coach Digest responses with matching
+input hashes: the five original key-week responses are preserved and 22 were
+added. Original trace IDs and NSM records remain unchanged. Browser requests
+bypass the cache and verify each bundle's catalogued SHA-256 hash.
+
+The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
+records tests, a live NSM smoke, and five unresolved AI editorial findings.
+Mechanical checks and exact provenance do not resolve those semantic issues or
+establish human validity; their follow-up is tracked in `twinkl-rklc.39`.
 
 The selected week shows all its Journal Entries immediately. **Review Weekly
 Drift Detection** opens the saved result in the full reading workspace;

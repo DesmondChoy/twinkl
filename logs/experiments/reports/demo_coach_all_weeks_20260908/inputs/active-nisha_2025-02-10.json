@@ -1,0 +1,59 @@
+{
+  "persona_id": "5fa8b540",
+  "persona_name": "Nisha Agarwal",
+  "week_start": "2025-02-10",
+  "week_end": "2025-02-16",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "no_active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-02-16"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-12",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Parent-teacher meeting ran late. Most parents didn't show up, same as last month. Spent the rest of the evening marking notebooks and helping Amma sort the kitchen."
+    },
+    {
+      "date": "2025-02-16",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Went to the literacy camp in Sultanpur today and I keep thinking about this one girl, maybe seven or eight, who was holding the pencil like she'd never held one before. And honestly she probably hadn't. She was gripping it..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

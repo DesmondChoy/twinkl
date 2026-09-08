@@ -1,0 +1,175 @@
+{
+  "persona_id": "ed67c9cc",
+  "persona_name": "Lim Sook Yin",
+  "week_start": "2025-02-03",
+  "week_end": "2025-02-09",
+  "response_mode": "active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "At least one Core Value has active Drift.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "hedonism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "hedonism": "active_drift"
+  },
+  "drift_details": {
+    "hedonism": {
+      "state": "active_drift",
+      "current_run_length": 3,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 3,
+      "last_date": "2025-02-09"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "hedonism",
+      "previous_week_start": "2025-01-27",
+      "previous_week_end": "2025-02-02",
+      "current_week_start": "2025-02-03",
+      "current_week_end": "2025-02-09",
+      "previous_state": "no_active_drift",
+      "current_state": "active_drift",
+      "change": "active_drift_started",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-02",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up. It was nice.\n\nResponse: Everything becomes about what needs doing next."
+        },
+        {
+          "date": "2025-02-02",
+          "t_index": 1,
+          "direction": "misaligned",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "I said yes obviously. But it means I'll miss the CNY market at Chinatown with Mei and Hwee Leng."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-02-08",
+          "t_index": 2,
+          "direction": "misaligned",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "I wanted to take a long bath — the kind with the lavender salts my friend gave me for my birthday — but the bathroom still needed cleaning from the kids using it, and by the time I finished scrubbing..."
+        },
+        {
+          "date": "2025-02-09",
+          "t_index": 3,
+          "direction": "misaligned",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "I know a massage would help. I know lying down with a heat pad for an hour would help. But I keep hearing my mother's voice in my head telling me not to be so pampered, that at her age..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "ed67c9cc:hedonism:1:open"
+  ],
+  "top_tensions": [
+    "hedonism"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-02",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up. It was nice.\n\nResponse: Everything becomes about what needs doing next."
+    },
+    {
+      "date": "2025-02-02",
+      "t_index": 1,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I said yes obviously. But it means I'll miss the CNY market at Chinatown with Mei and Hwee Leng."
+    },
+    {
+      "date": "2025-02-08",
+      "t_index": 2,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I wanted to take a long bath — the kind with the lavender salts my friend gave me for my birthday — but the bathroom still needed cleaning from the kids using it, and by the time I finished scrubbing..."
+    },
+    {
+      "date": "2025-02-09",
+      "t_index": 3,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I know a massage would help. I know lying down with a heat pad for an hour would help. But I keep hearing my mother's voice in my head telling me not to be so pampered, that at her age..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "You noticed moments that could have brought enjoyment—a long bath with lavender salts, a massage, or lying down with a heat pad—but they kept being displaced by cleaning, the next task, or an inherited warning about being “pampered.” This also echoes the missed CNY market with Mei and Hwee Leng, even alongside the pleasure of pandan chiffon cake and hot Milo before anyone else was up.",
+    "tension_explanation": "This week, enjoying life and having fun appears to have been repeatedly set aside when other responsibilities or self-denying expectations came forward. The tension is especially clear in “Everything becomes about what needs doing next” and in hearing your mother’s voice when you considered rest; it remains unclear how much choice felt available in those moments.",
+    "reflective_question": "When you look at the bath, massage, heat pad, and CNY market together, what do you notice about what makes enjoyment feel possible or difficult to claim?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "Everything becomes about what needs doing next"
+    ],
+    "word_count": 149,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 149 words (target 25-180)."
+      }
+    ]
+  }
+}

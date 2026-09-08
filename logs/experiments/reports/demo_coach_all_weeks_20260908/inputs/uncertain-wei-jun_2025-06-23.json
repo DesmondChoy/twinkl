@@ -1,0 +1,117 @@
+{
+  "persona_id": "8f83c818",
+  "persona_name": "Wei Jun Chen",
+  "week_start": "2025-06-23",
+  "week_end": "2025-06-29",
+  "response_mode": "insufficient_evidence",
+  "mode_source": "drift_detector",
+  "mode_rationale": "The Weekly Drift Reviewer could not return usable evidence for this week.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "insufficient_evidence"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "insufficient_evidence",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "invalid",
+      "last_t_index": 8,
+      "last_date": "2025-06-25"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-06-16",
+      "previous_week_end": "2025-06-22",
+      "current_week_start": "2025-06-23",
+      "current_week_end": "2025-06-29",
+      "previous_state": "no_active_drift",
+      "current_state": "insufficient_evidence",
+      "change": "evidence_became_insufficient",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-06-16",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+        },
+        {
+          "date": "2025-06-22",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-06-25",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Sprint deadline tomorrow and I'm at the office late. The PM asked me to cut corners on the data validation layer for the remittance feature, the same one Ravi flagged weeks ago. She said we'll circle back to it after..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [
+    "universalism"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-06-16",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+    },
+    {
+      "date": "2025-06-22",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+    },
+    {
+      "date": "2025-06-25",
+      "t_index": 8,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Sprint deadline tomorrow and I'm at the office late. The PM asked me to cut corners on the data validation layer for the remittance feature, the same one Ravi flagged weeks ago. She said we'll circle back to it after..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

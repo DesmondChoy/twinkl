@@ -13,8 +13,8 @@ outcomes from the [completed targeted NSM update](../../logs/experiments/reports
 The five selected Personas cover 27 reviewed weeks: 23 selected quotations,
 three ineligible outcomes, and one completed review with no supportive source.
 Original model receipts and synthetic source availability remain
-inspectable. Live NSM fails closed without a fresh integration budget; offline
-replay does not require that budget. The [methodology](../north_star/nsm_experiment_methodology.md)
+inspectable. Live NSM uses a separately authorized US$1 allowance shared across
+sessions and restarts; offline replay does not use that budget. The [methodology](../north_star/nsm_experiment_methodology.md)
 discloses retained observations and the limits of AI assessment.
 
 This document specifies the capstone assessment experience. The shared React
@@ -32,35 +32,35 @@ The five deterministic Persona replays load into the shared React session
 with immediate selected-week Journal Entries, explicit result review, previous-
 and next-week navigation, restart, named jumps to key weeks, reduced-motion behavior,
 no-future-data projection, and browser-side scenario hash verification. The
-release quality gate is implemented. A saved Coach Digest response is available
-only when its source hash matches the current key-week Weekly Drift Detection
-output. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
-provides five accepted key-week responses using Luna at reasoning effort `none`
-and prompt `4.2`. All passed Coach Digest Validations. These responses have no
-Coach Digest Evals or human review; the [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
-remains historical evidence for the previous Persona roster and inputs.
+release quality gate is implemented. Every saved week has a Coach Digest whose
+source hash matches that week's current Weekly Drift Detection output. The
+[September completion run](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
+adds 22 accepted responses and preserves the five compatible responses from the
+[September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md).
+All 27 use Luna at reasoning effort `none`, prompt `4.2`, and pass Coach Digest
+Validations. This run adds no Coach Digest Evals or human validation; the
+[August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
+remains historical evidence for a different Persona roster and inputs.
 
-Saved Coach Digest coverage is limited to one curated key week per Persona.
-The remaining 22 of 27 weeks contain Weekly Drift Detection output but no
-saved Coach Digest response; this is missing generated content, not a browser
-display or input-hash mismatch. The five existing responses match the current
-inputs. The per-week product contract requires broader coverage than this
-saved sample currently supplies.
+| Persona | Weeks with source-compatible Coach Digests |
+| --- | --- |
+| Noor Haddad | 1–6 |
+| Nisha Agarwal | 1–5 |
+| Lim Sook Yin | 1–4 |
+| Wei Jun Chen | 1–6 |
+| Henrik Larsson | 1–6 |
 
-| Persona | Coach Digest available | Coach Digest missing |
-| --- | --- | --- |
-| Noor Haddad | Week 6 | Weeks 1–5 |
-| Nisha Agarwal | Week 4 | Weeks 1–3, 5 |
-| Lim Sook Yin | Week 3 | Weeks 1–2, 4 |
-| Wei Jun Chen | Week 6 | Weeks 1–5 |
-| Henrik Larsson | Week 3 | Weeks 1–2, 4–6 |
+The completion uses exact saved weekly inputs, preserves existing response
+receipts, and validates one Coach event per week. Weekly Drift Detection and
+North Star Moment records remain unchanged. The resumable generation command
+and raw receipts are recorded with the completion report.
 
-Completing coverage requires generating the 22 missing responses from their
-exact saved inputs, preserving the five compatible responses, and changing
-the exporter validation in [`src/demo/scenarios.py`](../../src/demo/scenarios.py)
-from one key-week Coach event to validation per week. The current generator
-also restricts scenario extraction and fixture writing to key weeks. This
-repair does not require new Weekly Drift Detection or North Star Moment runs.
+The [integration validation](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
+records passing application checks and five AI editorial concerns, tracked in
+`twinkl-rklc.39`. These include a direct contradiction in Sook Yin's final week:
+Coach excerpts omit a completed action that the full-entry North Star Moment
+quotes. Source compatibility and deterministic validation do not establish
+semantic agreement between the two components.
 
 Current capstone work is
 Coach Digest feedback capture, longitudinal Core Value history, and the final
@@ -314,16 +314,23 @@ Detection** returns to the completed result without changing its evidence.
 Every week change opens Journal Entries, including key-week jumps and returning
 to a completed week. The review button opens its result again.
 
-The result uses three columns on wide desktops: Drift state on the left,
-Coach Digest in the wider middle column, and North Star Moment on the right.
-Phones and narrower screens stack these in the same order. The result grows
-with its content and uses page scrolling instead of a fixed internal scroll
-box. **Why this state** keeps detailed evidence collapsed until requested;
-**Inspect decision** stays with the Drift state. Reflection jump buttons are
-unnecessary because the three sections are visible together. Missing saved
-Coach responses and absent eligible North Star Moment quotations have separate
-empty-state explanations. Source links open the Journal Entry drawer without
-expanding the journals panel. The active week stays centered in the week rail.
+The result uses two columns on wide desktops: a compact Drift state on the
+left and one integrated Coach Digest on the right. Phones and narrower screens
+stack these in the same order. The Coach Digest presents its original narrative,
+then an optional validated North Star Moment passage, and ends with its one
+original reflective question. No additional model rewrites the response.
+Onboarding presents the passage without a North Star Moment label; Persona
+replay adds a discreet attribution and **Inspect this moment**, which opens
+that exact backend event. Inspect distinguishes deterministic framing from
+the exact source quotation and the AI assessment.
+
+The result grows with its content and uses page scrolling. **Why this state**
+keeps detailed evidence collapsed until requested; **Inspect decision** stays
+with the Drift state. Missing or invalid Coach responses show their existing
+status and suppress the passage. Missing, pending, failed, or unsuitable North
+Star Moment results leave a valid Coach Digest intact, without an empty moment
+card. Source links open the Journal Entry drawer without expanding the journals
+panel. The active week stays centered in the week rail.
 
 Profile details remain collapsed by default and include a short Persona context.
 Each Core Value explanation names its state beside the Core Value. When a
@@ -362,9 +369,10 @@ Experience shows:
 - the user's own Journal Entries, displayed nudges, and responses;
 - an ambient per-Core-Value Drift state; and
 - the Coach Digest response and question when valid, or a Coach Digest
-  unavailable state; and
-- at most one North Star Moment with the exact quotation, source date, and
-  Journal Entry link when an eligible review selects a supportive action.
+  unavailable state;
+- within a valid Coach Digest, at most one North Star Moment with the exact
+  quotation, source date, and Journal Entry link when an eligible review selects
+  a supportive action, followed by the original reflective question.
 
 Experience does not show the full Weekly Drift Reviewer prompt, provider
 payload, validation record, identifiers, or hashes. Those belong in Inspect.
@@ -683,8 +691,14 @@ closed Monday-through-Sunday week selected
 `review_north_star` is a separate request. Its failure leaves Weekly Drift
 Detection and a valid Coach Digest available. Matching completed records are
 reused; eligible retryable failures expose an explicit retry. The live runtime
-requires a finalized integration budget before token counting or provider work.
-That budget is unavailable, so live North Star Moment generation fails closed.
+uses the pinned `config/evals/north_star_live_v1.json` policy and fixed
+`logs/exports/demo_tool_runs/north_star/` ledger. The US$1 allowance is shared
+across sessions and restarts, with two attempts at most per request, no SDK
+retries, a 16,000-token input limit, and a US$0.25 per-attempt cap. It does not
+recreate the removed integration experiment budget. Corrupt or changed ledger
+policies and exhausted budgets fail closed. Saved replay retains its original
+integration-policy receipts; validation accepts only the two repository-pinned
+policies and requires one consistent policy across a record's reviews.
 Saved Persona replay reads its prepared records without a provider or live budget.
 
 The nudge decision and question come from one structured

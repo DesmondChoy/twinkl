@@ -1,0 +1,277 @@
+{
+  "persona_id": "02fb94f3",
+  "persona_name": "Noor Haddad",
+  "week_start": "2025-04-21",
+  "week_end": "2025-04-27",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "self_direction",
+    "tradition"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "self_direction": "no_active_drift",
+    "tradition": "no_active_drift"
+  },
+  "drift_details": {
+    "self_direction": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 3,
+      "last_date": "2025-04-27"
+    },
+    "tradition": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 3,
+      "last_date": "2025-04-27"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "self_direction",
+      "previous_week_start": "2025-04-14",
+      "previous_week_end": "2025-04-20",
+      "current_week_start": "2025-04-21",
+      "current_week_end": "2025-04-27",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-04-15",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+        },
+        {
+          "date": "2025-04-20",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-04-21",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+        },
+        {
+          "date": "2025-04-27",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+        }
+      ]
+    },
+    {
+      "core_value": "tradition",
+      "previous_week_start": "2025-04-14",
+      "previous_week_end": "2025-04-20",
+      "current_week_start": "2025-04-21",
+      "current_week_end": "2025-04-27",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-04-15",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+        },
+        {
+          "date": "2025-04-20",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-04-21",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+        },
+        {
+          "date": "2025-04-27",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-04-15",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+    },
+    {
+      "date": "2025-04-15",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+    },
+    {
+      "date": "2025-04-20",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+    },
+    {
+      "date": "2025-04-20",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+    },
+    {
+      "date": "2025-04-21",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+    },
+    {
+      "date": "2025-04-21",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+    },
+    {
+      "date": "2025-04-27",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+    },
+    {
+      "date": "2025-04-27",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "Noor, this week held both the ordinary work of caring for your home and the strain of being stretched beyond your limits: “Did laundry, made lentil soup, swept the hallway because nobody else notices the dust,” while Sami’s teething brought “three nights of broken sleep.” You also asked a client for more time, writing that it “felt pathetic,” and described how decisions around Sami and the household were often made without asking what you thought.",
+    "tension_explanation": "There is no confirmed active tension this week, though the entries carry a clear sense of your choices and voice being crowded out. Earlier, your mother-in-law changed Sami’s schedule without consulting you; later, when she took over after his fever, you wrote, “I should be grateful but it felt like being dismissed.” What remains less clear is how much room you felt you had to choose your own path while also carrying family customs and expectations.",
+    "reflective_question": "When you look across these moments, where did you feel most able—or least able—to have your own say?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "three nights of broken sleep.",
+      "I should be grateful but it felt like being dismissed."
+    ],
+    "word_count": 169,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 2 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 169 words (target 25-180)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "persona_id": "8f83c818",
+  "persona_name": "Wei Jun Chen",
+  "week_start": "2025-05-26",
+  "week_end": "2025-06-01",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "no_active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "no_active_drift",
+      "current_run_length": 1,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 0,
+      "last_date": "2025-05-31"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-05-31",
+      "t_index": 0,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

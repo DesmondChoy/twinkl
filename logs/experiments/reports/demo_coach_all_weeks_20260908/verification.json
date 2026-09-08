@@ -1,0 +1,51 @@
+{
+  "nsm_records_sha256": "a33b7de111bcc5d8f54c8132c9ae2d82897f60d230aa62c92a47eb188d23ea43",
+  "nsm_records_identical_to_head": true,
+  "retained_coach_responses_identical": 5,
+  "coverage": [
+    {
+      "scenario_id": "active-nisha",
+      "weeks": 5,
+      "coach_responses": 5,
+      "north_star_records": 5
+    },
+    {
+      "scenario_id": "ended-sook-yin",
+      "weeks": 4,
+      "coach_responses": 4,
+      "north_star_records": 4
+    },
+    {
+      "scenario_id": "stable-noor",
+      "weeks": 6,
+      "coach_responses": 6,
+      "north_star_records": 6
+    },
+    {
+      "scenario_id": "two-values-henrik",
+      "weeks": 6,
+      "coach_responses": 6,
+      "north_star_records": 6
+    },
+    {
+      "scenario_id": "uncertain-wei-jun",
+      "weeks": 6,
+      "coach_responses": 6,
+      "north_star_records": 6
+    }
+  ],
+  "final_code_sha256": {
+    "scripts/coach/complete_scenario_coach.py": "264dac113a6b4230c5dc1c930a9e695b0a151f2da9203665b35aa6f0a3ce585a",
+    "src/demo/scenarios.py": "65339e271bd971d1d9e86933f60a3dff948bcf9592d3ee9ae5ff4ae65ec28cae",
+    "tests/demo/test_scenarios.py": "22319e7600198579ed1dabcf67b9aa12de434a23c20b89f2fce470d05161cbf6",
+    "tests/coach/test_complete_scenario_coach.py": "7c780148eaa996332d560203947861e8680e348b2efb96a7fe7c60659d8230ff"
+  },
+  "original_trace_ids_preserved": {
+    "active-nisha": 55,
+    "ended-sook-yin": 54,
+    "stable-noor": 74,
+    "two-values-henrik": 74,
+    "uncertain-wei-jun": 71
+  },
+  "current_digest_ids_matching_generation_source_ids": 27
+}

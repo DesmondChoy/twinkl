@@ -1,0 +1,69 @@
+{
+  "persona_id": "2d928d8a",
+  "persona_name": "Henrik Larsson",
+  "week_start": "2025-02-03",
+  "week_end": "2025-02-09",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "stimulation",
+    "security"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "security": "no_active_drift",
+    "stimulation": "no_active_drift"
+  },
+  "drift_details": {
+    "security": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "ok",
+      "last_t_index": 0,
+      "last_date": "2025-02-07"
+    },
+    "stimulation": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "ok",
+      "last_t_index": 0,
+      "last_date": "2025-02-07"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-07",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the last two hours staring at a term sheet from a Lisbon-based startup that wants us to come in as operational partners. The numbers are solid enough but what actually caught me was the founder, this woman who walked..."
+    },
+    {
+      "date": "2025-02-07",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the last two hours staring at a term sheet from a Lisbon-based startup that wants us to come in as operational partners. The numbers are solid enough but what actually caught me was the founder, this woman who walked..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

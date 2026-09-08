@@ -1,0 +1,96 @@
+{
+  "persona_id": "5fa8b540",
+  "persona_name": "Nisha Agarwal",
+  "week_start": "2025-02-10",
+  "week_end": "2025-02-16",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "no_active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-02-16"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-12",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Parent-teacher meeting ran late. Most parents didn't show up, same as last month. Spent the rest of the evening marking notebooks and helping Amma sort the kitchen."
+    },
+    {
+      "date": "2025-02-16",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Went to the literacy camp in Sultanpur today and I keep thinking about this one girl, maybe seven or eight, who was holding the pencil like she'd never held one before. And honestly she probably hadn't. She was gripping it..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week held both the uneven reach of your work and the care you continue to offer close to home: “Most parents didn't show up, same as last month,” while you spent the evening “helping Amma sort the kitchen.” At the literacy camp in Sultanpur, one child stayed with you in particular—“holding the pencil like she'd never held one before”—bringing the wider importance of your efforts into sharp focus.",
+    "tension_explanation": "There is no confirmed current tension here, though the week contains a quiet contrast: your wish to make the world a fairer, better place met the discouragement of parents not attending, alongside a vivid moment of connection with a child who may have been holding a pencil for the first time.",
+    "reflective_question": "What does the contrast between the empty parent-teacher meeting and the girl at the literacy camp bring up for you about where your care feels most tangible?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "helping Amma sort the kitchen.",
+      "holding the pencil like she'd never held one before"
+    ],
+    "word_count": 147,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 2 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 147 words (target 25-180)."
+      }
+    ]
+  }
+}

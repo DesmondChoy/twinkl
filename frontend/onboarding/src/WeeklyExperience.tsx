@@ -4,7 +4,6 @@ import {
   type ValueKey,
 } from "./domain";
 import CoachDigestCard from "./CoachDigestCard";
-import NorthStarMoment from "./NorthStarMoment";
 import {
   displayWeekRange,
 } from "./displayFormatters";
@@ -296,6 +295,9 @@ export default function WeeklyExperience({
           weeklyDigest={weeklyDigest}
           headingId="weekly-coach-title"
           journalEntries={journalEntries}
+          northStar={northStarReview?.pending || northStarReview?.failed ? undefined : {
+            profile, driftResult, traceEvents,
+          }}
           onOpenEntry={selectJournalEntry ? (entry) => {
             selectJournalEntry(entry.journal_entry_id);
             const target = document.getElementById(journalEntryAnchorId(entry.journal_entry_id));
@@ -303,28 +305,6 @@ export default function WeeklyExperience({
             target?.scrollIntoView?.({ block: "center", behavior: "smooth" });
           } : undefined}
         />
-
-        <NorthStarMoment
-          profile={profile}
-          journalEntries={journalEntries}
-          weeklyDigest={weeklyDigest}
-          driftResult={driftResult}
-          traceEvents={traceEvents}
-          selectJournalEntry={selectJournalEntry}
-        />
-
-        {northStarReview?.pending || northStarReview?.failed ? (
-          <div className="north-star-status" role="status">
-            <p>{northStarReview.pending
-              ? "Looking through your writing for a North Star Moment…"
-              : "Your weekly result remains available. A North Star Moment could not be prepared."}</p>
-            {!northStarReview.pending && northStarReview.retryable ? (
-              <button className="button button--quiet" type="button" onClick={northStarReview.retry}>
-                Retry North Star Moment
-              </button>
-            ) : null}
-          </div>
-        ) : null}
 
         {coachUnavailable ? (
           <aside

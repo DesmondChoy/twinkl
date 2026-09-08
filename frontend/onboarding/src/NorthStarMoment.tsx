@@ -2,10 +2,11 @@ import { useId, useState } from "react";
 import { VALUES, type OnboardingProfile, type ValueKey } from "./domain";
 import type { JournalEntryContract, TraceEventContract } from "./demoContracts";
 import { journalEntryAnchorId } from "./journalEntryAnchor";
-import { currentNorthStarEvent, displayableNorthStarSelection, useNorthStarProfileRef } from "./northStar";
+import { currentNorthStarEvent, displayableNorthStarSelection, northStarFraming, useNorthStarProfileRef } from "./northStar";
 
 export default function NorthStarMoment({
-  profile, journalEntries, weeklyDigest, driftResult, traceEvents, selectJournalEntry, openJournalEntry, headingLevel = 2,
+  profile, journalEntries, weeklyDigest, driftResult, traceEvents, selectJournalEntry, openJournalEntry,
+  headingLevel = 3, presentation = "personal", inspectMoment,
 }: {
   profile: OnboardingProfile;
   journalEntries: JournalEntryContract[];
@@ -14,7 +15,9 @@ export default function NorthStarMoment({
   traceEvents: TraceEventContract[];
   selectJournalEntry?: (journalEntryId: string) => void;
   openJournalEntry?: (entry: JournalEntryContract) => void;
-  headingLevel?: 2 | 3;
+  headingLevel?: 3 | 4;
+  presentation?: "personal" | "demo";
+  inspectMoment?: (eventId: string) => void;
 }) {
   const id = useId();
   const [expandedEventId, setExpandedEventId] = useState<string | null>(null);
@@ -25,20 +28,16 @@ export default function NorthStarMoment({
   const { record } = result;
   const valuePhrase = VALUES[record.core_value as ValueKey]?.phrase;
   if (!valuePhrase) return null;
-  const Heading = headingLevel === 2 ? "h2" : "h3";
+  const Heading = headingLevel === 3 ? "h3" : "h4";
   const date = new Intl.DateTimeFormat(undefined, {
     day: "numeric", month: "short", year: "numeric",
   }).format(new Date(`${selected.date}T00:00:00`));
   const longQuote = selected.evidence_quote.length > 320;
   const expanded = expandedEventId === result.event.event_id;
-  const framing = record.mode === "reflection"
-    ? "This earlier action expressed a priority that has felt harder to make room for in the week reviewed."
-    : record.mode === "encouragement"
-      ? "This action from the week reviewed is one way you put this priority into practice."
-      : "This earlier action is a reminder of how you have expressed this priority. It offers perspective on the week reviewed.";
+  const framing = northStarFraming(record.mode);
   return (
-    <aside className="north-star-moment" aria-labelledby={`${id}-title`}>
-      <p className="eyebrow">North Star Moment</p>
+    <section className={`north-star-moment north-star-moment--${presentation}`} aria-labelledby={`${id}-title`}>
+      {presentation === "demo" ? <p className="eyebrow">North Star Moment</p> : null}
       <Heading id={`${id}-title`}>{record.mode === "encouragement"
         ? "A moment in your own words"
         : "A past moment in your own words"}</Heading>
@@ -67,6 +66,12 @@ export default function NorthStarMoment({
       {record.mode !== "encouragement" ? (
         <p className="north-star-moment__reference">This earlier writing is a reference point for your Core Value.</p>
       ) : null}
-    </aside>
+      {presentation === "demo" && inspectMoment ? (
+        <button className="inspect-run-link north-star-moment__inspect" type="button"
+          onClick={() => inspectMoment(result.event.event_id)}>
+          Inspect this moment
+        </button>
+      ) : null}
+    </section>
   );
 }

@@ -1,0 +1,14 @@
+{
+  "source": "real OpenAI NSM on synthetic input; nudge, Weekly Drift Reviewer and Coach are deterministic test doubles",
+  "status": "complete",
+  "reason": "supportive_action_selected",
+  "new_generation_attempts": 1,
+  "calculated_cost_usd": 0.0004974,
+  "unmetered_attempts": 0,
+  "repeat_added_attempts": 0,
+  "weekly_digest_unchanged": true,
+  "live_budget_policy": "config/evals/north_star_live_v1.json",
+  "ledger": "logs/exports/demo_tool_runs/north_star/budget.json",
+  "pricing": "repository configured rates, not a billing statement",
+  "not_human_validation": true
+}

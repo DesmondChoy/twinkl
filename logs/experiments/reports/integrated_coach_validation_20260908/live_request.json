@@ -1,0 +1,56 @@
+{
+  "schema_version": "north-star-request-v1",
+  "protocol_version": "north-star-integration-v1",
+  "prompt_version": "north-star-source-assessment-prompt-v1",
+  "assessment_schema_version": "north-star-source-assessment-v1",
+  "session_id": "integrated-coach-live-smoke-20260908",
+  "owner_id": "persona-demo",
+  "profile_ref": "302a59e42c71652e073c07f8dd3d198e4717892eab37b8877403490940ad4d28",
+  "core_values": [
+    "benevolence"
+  ],
+  "value_definitions": {
+    "benevolence": {
+      "core_value": "benevolence",
+      "user_phrase": "Being there for the people closest to me",
+      "approved_definition": "Preserving and enhancing the welfare of those with whom one is in frequent personal contact (the \"in-group\"). Derives from the basic requirement for smooth group functioning (cf. Kluckhohn, 1951; Williams, 1968) and from the organismic need for affiliation (cf. Korman, 1974; Maslow, 1965)."
+    }
+  },
+  "week_start": "2026-07-20",
+  "week_end": "2026-07-26",
+  "cutoff_at": "2026-07-25T08:30:00+00:00",
+  "drift_result": {
+    "schema_version": "drift-detector-result-v2",
+    "persona_id": "persona-demo",
+    "cutoff_t_index": 0,
+    "cutoff_date": "2026-07-25",
+    "delivery_state": "no_active_drift",
+    "core_value_states": {
+      "benevolence": "no_active_drift"
+    },
+    "core_value_details": {
+      "benevolence": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 0,
+        "last_date": "2026-07-25"
+      }
+    },
+    "drifts": []
+  },
+  "writing": [
+    {
+      "owner_id": "persona-demo",
+      "entry_id": "manual-entry-0",
+      "t_index": 0,
+      "date": "2026-07-25",
+      "journal_entry": "I helped my sister carry the groceries upstairs and stayed to cook dinner with her.",
+      "nudge_response": null,
+      "available_at": "2026-07-25T08:30:00+00:00",
+      "response_available_at": null
+    }
+  ],
+  "input_hash": "008fe92ddef8a34cb2525b5f316ed95c3ce5575100ca111ffb24c3f0714b4d0c"
+}

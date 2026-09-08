@@ -130,101 +130,94 @@ def test_deployed_persona_roster_and_key_week_rules(loaded_scenarios) -> None:
         assert key.expected_delivery_state == state
 
 
-def test_five_key_weeks_reuse_exact_fresh_coach_digests(loaded_scenarios) -> None:
+def test_all_weeks_reuse_exact_source_bound_coach_digests(loaded_scenarios) -> None:
     from src.coach.schemas import WeeklyDigest
 
     _, fixtures = loaded_scenarios
     saved_responses = load_saved_coach_responses(ROOT)
-    assert set(saved_responses.responses) == {
-        f"{selection.scenario_id}::{selection.coach_week_start}"
-        for selection in SELECTIONS
+    expected_keys = {
+        f"{fixture.scenario.scenario_id}::{week.week_start}"
+        for fixture in fixtures.values()
+        for week in fixture.scenario.weeks
     }
-    assert (
-        sum(
-            response.generation.attempt_count
-            for response in saved_responses.responses.values()
-        )
-        == 7
+    assert len(expected_keys) == 27
+    assert set(saved_responses.responses) == expected_keys
+    for fixture in fixtures.values():
+        for week in fixture.scenario.weeks:
+            saved = saved_responses.responses[
+                f"{fixture.scenario.scenario_id}::{week.week_start}"
+            ]
+            generation = saved.generation
+            assert generation is not None
+            assert generation.prompt_version == "4.2"
+            assert generation.model_contract.provider == "openai"
+            assert generation.model_contract.model == "gpt-5.6-luna"
+            assert generation.model_contract.reasoning_effort == "none"
+            assert (
+                generation.prompt_sha256
+                == hashlib.sha256(generation.prompt.encode("utf-8")).hexdigest()
+            )
+            assert json.loads(generation.raw_output) == saved.narrative.model_dump(
+                mode="json"
+            )
+            assert generation.response_sha256 == _coach_response_sha256(saved.narrative)
+            assert 1 <= generation.attempt_count <= 2
+            assert len(generation.call_metrics) == len(generation.diagnostic_paths)
+            assert len(generation.call_metrics) == generation.attempt_count
+            for metric, path in zip(
+                generation.call_metrics, generation.diagnostic_paths, strict=True
+            ):
+                diagnostic = json.loads((ROOT / path).read_text())
+                assert diagnostic["llm_call"] == metric.model_dump(mode="json")
+                assert metric.model == "gpt-5.6-luna"
+                assert metric.reasoning_effort == "none"
+                assert metric.status == "completed"
+                assert metric.response_id
+                assert metric.input_tokens > 0
+                assert metric.output_tokens > 0
+            accepted = json.loads((ROOT / generation.diagnostic_paths[-1]).read_text())
+            assert accepted["accepted"] is True
+            assert accepted["raw_output"] == generation.raw_output
+            assert all(check["passed"] for check in accepted["validation"]["checks"])
+            coach_events = [
+                event
+                for event in fixture.trace_events
+                if event.event_type == "weekly_coach_generated"
+                and event.event_id in week.event_ids
+            ]
+            assert len(coach_events) == 1
+            event = coach_events[0]
+            assert event.prompt == generation.prompt
+            assert event.raw_response == generation.raw_output
+            assert event.details.narrative == saved.narrative
+            assert event.model_contract == generation.model_contract
+            generated_digest = WeeklyDigest.model_validate_json(
+                (ROOT / generation.generated_response_path).read_bytes()
+            )
+            digest_event = next(
+                event
+                for event in fixture.trace_events
+                if event.event_type == "weekly_digest_built"
+                and event.event_id in week.event_ids
+            )
+            assert digest_event.details.digest == generated_digest
+            assert digest_event.event_id == generation.weekly_digest_event_id
+            assert _weekly_drift_input_sha256(generated_digest) == (
+                generation.weekly_drift_input_sha256
+            )
+            assert digest_event.details.coach_unavailable_reason is None
+
+
+def test_original_five_coach_responses_remain_exactly_preserved() -> None:
+    plan = json.loads(
+        (
+            ROOT / ("logs/experiments/reports/demo_coach_all_weeks_20260908/plan.json")
+        ).read_text()
     )
-    for selection in SELECTIONS:
-        fixture = fixtures[selection.scenario_id]
-        key_week = next(
-            week
-            for week in fixture.scenario.weeks
-            if week.week_start == selection.coach_week_start
-        )
-        saved = saved_responses.responses[
-            f"{selection.scenario_id}::{selection.coach_week_start}"
-        ]
-        generation = saved.generation
-        assert generation is not None
-        assert generation.prompt_version == "4.2"
-        assert generation.model_contract.provider == "openai"
-        assert generation.model_contract.model == "gpt-5.6-luna"
-        assert generation.model_contract.reasoning_effort == "none"
-        assert (
-            generation.prompt_sha256
-            == hashlib.sha256(generation.prompt.encode("utf-8")).hexdigest()
-        )
-        assert json.loads(generation.raw_output) == saved.narrative.model_dump(
-            mode="json"
-        )
-        assert generation.response_sha256 == _coach_response_sha256(saved.narrative)
-        assert 1 <= generation.attempt_count <= 2
-        assert (
-            len(generation.call_metrics)
-            == len(generation.diagnostic_paths)
-            == (generation.attempt_count)
-        )
-        for metric, diagnostic_path in zip(
-            generation.call_metrics, generation.diagnostic_paths, strict=True
-        ):
-            diagnostic = json.loads((ROOT / diagnostic_path).read_text())
-            assert diagnostic["llm_call"] == metric.model_dump(mode="json")
-            assert metric.provider == "openai"
-            assert metric.model == "gpt-5.6-luna"
-            assert metric.reasoning_effort == "none"
-            assert metric.status == "completed"
-            assert metric.response_id
-            assert metric.input_tokens > 0
-            assert metric.output_tokens > 0
-        accepted = json.loads((ROOT / generation.diagnostic_paths[-1]).read_text())
-        assert accepted["accepted"] is True
-        assert accepted["raw_output"] == generation.raw_output
-        assert accepted["narrative"] == saved.narrative.model_dump(mode="json")
-        assert all(check["passed"] for check in accepted["validation"]["checks"])
-        coach_events = [
-            event
-            for event in fixture.trace_events
-            if event.event_type == "weekly_coach_generated"
-        ]
-        assert len(coach_events) == 1
-        event = coach_events[0]
-        assert event.event_id in key_week.event_ids
-        assert event.prompt == generation.prompt
-        assert event.raw_response == generation.raw_output
-        assert event.details.narrative == saved.narrative
-        assert event.model_contract == generation.model_contract
-        assert event.source == "saved_replay"
-        generated_digest = WeeklyDigest.model_validate_json(
-            (ROOT / generation.generated_response_path).read_bytes()
-        )
-        for digest_event in fixture.trace_events:
-            if digest_event.event_type != "weekly_digest_built":
-                continue
-            digest = digest_event.details.digest
-            if digest_event.event_id in key_week.event_ids:
-                assert digest == generated_digest
-                assert digest_event.event_id == generation.weekly_digest_event_id
-                assert _weekly_drift_input_sha256(digest) == (
-                    generation.weekly_drift_input_sha256
-                )
-                assert digest_event.details.coach_unavailable_reason is None
-            else:
-                assert digest.coach_narrative is None
-                assert digest_event.details.coach_unavailable_reason == (
-                    "No saved Coach Digest response exists for this replay week."
-                )
+    responses = load_saved_coach_responses(ROOT).responses
+    assert len(plan["retained_responses"]) == 5
+    for key, original in plan["retained_responses"].items():
+        assert responses[key].model_dump(mode="json") == original
 
 
 def test_checked_in_scenarios_match_deterministic_builder(
@@ -427,8 +420,15 @@ def test_incompatible_coach_source_is_omitted(
         **weekly_sources,
         coach_responses=SavedCoachResponseFixture.model_validate(payload),
     )
+    key_week = next(
+        week
+        for week in fixture.scenario.weeks
+        if week.week_start == selection.coach_week_start
+    )
     assert not any(
-        event.event_type == "weekly_coach_generated" for event in fixture.trace_events
+        event.event_type == "weekly_coach_generated"
+        and event.event_id in key_week.event_ids
+        for event in fixture.trace_events
     )
     digest_event = next(
         event

@@ -1,5 +1,7 @@
 import { Fragment, type MouseEvent } from "react";
-import type { JournalEntryContract } from "./demoContracts";
+import type { JournalEntryContract, TraceEventContract } from "./demoContracts";
+import type { OnboardingProfile } from "./domain";
+import NorthStarMoment from "./NorthStarMoment";
 import { expandCoachQuotations } from "./coachQuotes";
 import { journalEntryAnchorId } from "./journalEntryAnchor";
 
@@ -12,6 +14,13 @@ interface CoachDigestCardProps {
   className?: string;
   journalEntries?: JournalEntryContract[];
   onOpenEntry?: (entry: JournalEntryContract) => void;
+  northStar?: {
+    profile: OnboardingProfile;
+    driftResult: JsonObject;
+    traceEvents: TraceEventContract[];
+    presentation?: "personal" | "demo";
+    inspectMoment?: (eventId: string) => void;
+  };
 }
 
 function object(value: unknown): JsonObject | null {
@@ -33,6 +42,7 @@ export default function CoachDigestCard({
   className,
   journalEntries = [],
   onOpenEntry,
+  northStar,
 }: CoachDigestCardProps) {
   const narrative = object(weeklyDigest?.coach_narrative);
   const weeklyMirror = nonEmptyText(narrative?.weekly_mirror);
@@ -71,27 +81,29 @@ export default function CoachDigestCard({
   const entryDate = (entry: JournalEntryContract) => new Intl.DateTimeFormat(undefined, {
     day: "numeric", month: "short",
   }).format(new Date(`${entry.date}T00:00:00`));
+  const fullQuotations = (paragraph: typeof expanded[number]) =>
+    paragraph.fullQuotations.map((row, quoteIndex) => {
+      const entry = sourceEntries.find((item) => item.content === row.source)!;
+      return (
+        <figure className="coach-digest__full-quote" key={quoteIndex}>
+          <figcaption>
+            Full quotation from{" "}
+            <a href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
+              onClick={(event) => openEntry(event, entry)}>{entryDate(entry)}</a>
+          </figcaption>
+          <blockquote>{row.quotation}</blockquote>
+        </figure>
+      );
+    });
 
   return (
     <aside className={classes} aria-labelledby={headingId}>
       <p className="eyebrow">Coach Digest</p>
       <Heading id={headingId}>Your weekly reflection</Heading>
-      {expanded.map((paragraph, index) => (
+      {expanded.slice(0, 2).map((paragraph, index) => (
         <Fragment key={index}>
-          <p className={index === 2 ? "coach-digest__question" : undefined}>{paragraph.text}</p>
-          {paragraph.fullQuotations.map((row, quoteIndex) => {
-            const entry = sourceEntries.find((item) => item.content === row.source)!;
-            return (
-              <figure className="coach-digest__full-quote" key={quoteIndex}>
-                <figcaption>
-                  Full quotation from{" "}
-                  <a href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
-                    onClick={(event) => openEntry(event, entry)}>{entryDate(entry)}</a>
-                </figcaption>
-                <blockquote>{row.quotation}</blockquote>
-              </figure>
-            );
-          })}
+          <p>{paragraph.text}</p>
+          {fullQuotations(paragraph)}
         </Fragment>
       ))}
       {sourceEntries.length > 0 ? (
@@ -114,6 +126,17 @@ export default function CoachDigestCard({
           ) : null}
         </nav>
       ) : null}
+      {northStar ? (
+        <NorthStarMoment
+          {...northStar}
+          weeklyDigest={weeklyDigest!}
+          journalEntries={journalEntries}
+          openJournalEntry={onOpenEntry}
+          headingLevel={headingLevel === 2 ? 3 : 4}
+        />
+      ) : null}
+      {fullQuotations(expanded[2])}
+      <p className="coach-digest__question">{expanded[2].text}</p>
     </aside>
   );
 }

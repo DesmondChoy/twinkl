@@ -1,0 +1,86 @@
+{
+  "persona_id": "8f83c818",
+  "persona_name": "Wei Jun Chen",
+  "week_start": "2025-05-26",
+  "week_end": "2025-06-01",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "no_active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "no_active_drift",
+      "current_run_length": 1,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 0,
+      "last_date": "2025-05-31"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-05-31",
+      "t_index": 0,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "Wei Jun Chen, this week included a moment where making the world a fairer, better place felt close to speaking up: “I could have pushed. I had the context, the stories, the data to make a case.” Instead, you “just nodded” and suggested checking the logs. The choice seems to have left some distance between what you knew you could contribute and what you actually voiced.",
+    "tension_explanation": "There is no confirmed ongoing pattern here, and it remains unclear what made holding back feel right or necessary in that moment. Still, your words point to a tension between having evidence that could shape the conversation and choosing a quieter response.",
+    "reflective_question": "What was happening for you in that moment when you decided to nod and suggest checking the logs instead of making the case?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I could have pushed. I had the context, the stories, the data to make a case.",
+      "just nodded"
+    ],
+    "word_count": 131,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 2 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 131 words (target 25-180)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "persona_id": "5fa8b540",
+  "persona_name": "Nisha Agarwal",
+  "week_start": "2025-03-10",
+  "week_end": "2025-03-16",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "no_active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 7,
+      "last_date": "2025-03-16"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-03-03",
+      "previous_week_end": "2025-03-09",
+      "current_week_start": "2025-03-10",
+      "current_week_end": "2025-03-16",
+      "previous_state": "active_drift",
+      "current_state": "no_active_drift",
+      "change": "active_drift_ended",
+      "end_reason": "not_conflict",
+      "previous_evidence": [
+        {
+          "date": "2025-03-07",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Finished compiling the mid-term attendance data. Our school's retention rate is up from last year, which the principal seemed happy about. Stayed back to help the peon uncle fix a broken desk in my classroom."
+        },
+        {
+          "date": "2025-03-08",
+          "t_index": 5,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "But I kept quiet because Sharma sir is senior and it was the end of a long day and I didn't have the energy to start something."
+        },
+        {
+          "date": "2025-03-09",
+          "t_index": 6,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "But today I was tired and the Hazratganj shop was right there and I just wanted to get it done fast. So I spent probably twice as much at a chain store when I could have waited one more day..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-03-16",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Week went by fast. Exams are coming so the classroom mood has shifted—less exploration, more revision. I don't love exam season but it's part of the deal. Spent most of the week drilling multiplication tables and grammar rules, which is..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "5fa8b540:universalism:5:not_conflict"
+  ],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-03-07",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Finished compiling the mid-term attendance data. Our school's retention rate is up from last year, which the principal seemed happy about. Stayed back to help the peon uncle fix a broken desk in my classroom."
+    },
+    {
+      "date": "2025-03-08",
+      "t_index": 5,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "But I kept quiet because Sharma sir is senior and it was the end of a long day and I didn't have the energy to start something."
+    },
+    {
+      "date": "2025-03-09",
+      "t_index": 6,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "But today I was tired and the Hazratganj shop was right there and I just wanted to get it done fast. So I spent probably twice as much at a chain store when I could have waited one more day..."
+    },
+    {
+      "date": "2025-03-16",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Week went by fast. Exams are coming so the classroom mood has shifted—less exploration, more revision. I don't love exam season but it's part of the deal. Spent most of the week drilling multiplication tables and grammar rules, which is..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

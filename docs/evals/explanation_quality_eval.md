@@ -73,6 +73,16 @@ prompt `4.2`, made seven generation calls, including retries for Noor and Wei
 Jun. No new Coach Digest Evals or human review was performed, so these
 responses have no new semantic-quality scores.
 
+The [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
+preserves those five responses and adds 22, covering all 27 saved replay weeks.
+All pass Coach Digest Validations with matching current input hashes. A selected
+North Star Moment passage appears within a valid Coach Digest before its original
+question, preserving both components' raw output. The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
+records application checks and five unresolved AI editorial findings, including
+a contradiction between the Coach's selected excerpts and the fuller NSM source.
+These observations are not new Coach Digest Evals scores or human validation;
+`twinkl-rklc.39` tracks the semantic follow-up.
+
 The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
 preserves one key-week response for each Persona deployed in August. Its
 evaluation manifest records the exact responses from those scenario bundles.
@@ -105,11 +115,12 @@ result.
 - **Human calibration:** No protocol or κ calculation for either explanation type
 
 ### Blocking Dependencies
-Coach Digest Validations, Coach Digest Evals, the five-response replacement,
+Coach Digest Validations, Coach Digest Evals, the historical five-response replacement,
 and approved-path evidence provenance are complete. The cross-provider and
 Drift/control commands are available, but their paid result is not part of the
-committed evidence. The five-response synthetic sample does not establish
-product usefulness. Deeper end-to-end explanation evaluation still requires
+committed evidence. Neither the historical five-response sample nor the 27-week
+synthetic replay establishes product usefulness. Deeper end-to-end explanation
+evaluation still requires
 future human calibration. VIF Critic Predictions belong to offline research.
 
 ### Implementation Scope
@@ -373,11 +384,13 @@ LLM-Judge produces rationales for N Journal Entries
 2. **Small sample**: 5-10 users limits statistical power
 3. **Hawthorne effect**: Users may rate higher knowing researchers will see
 4. **Same-model committed result**: Luna-none generated and evaluated the five
-   saved responses. Correlated errors can make those scores too favorable. The
-   evaluator supports provider separation, but no paid cross-provider result is
+   historical August responses. Correlated errors can make those scores too
+   favorable. The evaluator supports provider separation, but no paid cross-provider result is
    committed.
-5. **Synthetic sample**: The replacement covers five selected synthetic
-   responses. It is not a fresh final test or evidence of user usefulness.
+5. **Synthetic sample**: The historical evaluation covers five selected
+   responses. The current 27-week replay has code validation and qualitative
+   AI editorial review, with five unresolved findings. Neither establishes a
+   fresh final test, human validity, or user usefulness.
 6. **Drift/control reference source**: Known Drifts and no-known-Drift controls
    come from AI-reviewed synthetic development evidence, not human ground truth.
 

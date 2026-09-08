@@ -96,10 +96,12 @@ Runs `validate_weekly_digest_narrative()` over the exact responses in the public
 scenario sample manifest and reports per-check pass rates against the targets in
 [`explanation_quality_eval.md`](./explanation_quality_eval.md).
 The [September manifest](../../logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json)
-contains the five accepted current key-week responses. All passed Coach Digest
-Validations; no new Coach Digest Evals or human review was performed. Section
-3a documents generation when a future input change requires a new sample.
-The August manifest remains available for reproducing the historical sample.
+contains the five accepted 7 September key-week responses, which remain unchanged.
+The [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
+adds 22 validated responses, covering all 27 saved replay weeks. The command below
+checks only the preserved five-response subset; it is not an all-week report.
+Section 3a documents missing-week completion. The August manifest remains
+available for reproducing the historical sample.
 
 ```sh
 uv run python -m src.evals.coach_digest_validations \
@@ -112,6 +114,19 @@ uv run python -m src.evals.coach_digest_validations \
   summary.
 - Rows with no response are skipped; unparseable responses are reported under
   `skipped_persona_weeks`.
+
+Verify all 27 exported responses, current input hashes, exact generation-source
+event IDs, and preservation of the original five receipts without provider calls:
+
+```sh
+uv run pytest tests/demo/test_scenarios.py
+```
+
+The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
+records application checks and five unresolved AI editorial findings under
+`twinkl-rklc.39`. A selected NSM passage now appears within a valid Coach Digest,
+before its original question. Code checks do not resolve the reported semantic
+issues and are not human validation or new Coach Digest Evals scores.
 
 Pass-rate targets: groundedness > 70%, non-circularity > 95%, length > 90%.
 Raw value leakage and current-state claims have no published targets. The
@@ -133,66 +148,49 @@ Journal Entries with dates, evidence roles, Core Value mappings, and excerpts.
 It does not use the legacy
 `top_tensions` field as a substitute for these facts.
 
-### 3a. Build the sample (approved path)
+### 3a. Complete saved replay weeks and retain the evaluated sample
 
-The evaluator must score the same responses that the React app shows. Read the
-stored Weekly Drift Detection output from each scenario key week, generate the
-five responses, rebuild the public bundles, and then build the manifest from
-those bundles:
+All 27 saved replay weeks now contain a validated Coach Digest. The completion
+runner reads each week's exact saved `weekly_digest_built` input, preserves
+compatible existing responses, and generates only missing weeks. It uses Luna
+at reasoning effort `none`, prompt `4.2`, no SDK automatic retries, and at most
+one validation-guided retry per case. It makes no Weekly Drift Reviewer or NSM
+calls. `OPENAI_API_KEY` is read through the existing environment setup.
 
 ```sh
-# Dry run — prints the plan, makes no calls:
-.venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-  --personas 02fb94f3 5fa8b540 ed67c9cc 8f83c818 2d928d8a \
-  --reuse-scenario-key-weeks \
-  --manifest-out logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json \
-  --parquet-path logs/experiments/reports/demo_v4_run1_20260907/weekly_digests.parquet
+# Prepare or verify the saved plan; no provider calls:
+uv run python -m scripts.coach.complete_scenario_coach
 
-# Real run — one paid Coach Digest call per Persona plus validation-guided
-# retries. This command makes zero Weekly Drift Reviewer calls:
-.venv/bin/python scripts/coach/generate_approved_judge_sample.py \
-  --personas 02fb94f3 5fa8b540 ed67c9cc 8f83c818 2d928d8a \
-  --reuse-scenario-key-weeks --execute \
-  --manifest-out logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json \
-  --parquet-path logs/experiments/reports/demo_v4_run1_20260907/weekly_digests.parquet
+# Complete missing responses within authorized paid scope:
+uv run python -m scripts.coach.complete_scenario_coach --execute
+
+# Rebuild the public scenario bundles without provider calls:
+uv run python -m scripts.export_demo_experiments
 ```
 
-The runner requires an explicit Persona roster. It has no default roster.
-`--reuse-scenario-key-weeks` selects the exact `weekly_digest_built` input at
-each public scenario's key week. `--reuse-weekly-drift-output` instead reads
-saved outputs under `--weekly-drift-output-dir`. These options are mutually
-exclusive and both skip Weekly Drift Reviewer calls. Without either reuse
-option, `--execute` runs paid Weekly Drift Detection as well as Coach Digest
-generation. Omitting `--execute` prints the selected plan without provider calls.
+`--output` selects the checkpoint/report directory; the default is
+`logs/experiments/reports/demo_coach_all_weeks_20260908`. The completed run added
+22 responses with 26 calls and retained the original five exactly. Each attempt
+preserves its input, complete prompt, raw response, usage, and validation result.
+Completed checkpoints resume without new calls. Unknown interrupted attempts
+stop for inspection; terminal failures do not gain retries. Existing responses
+with changed inputs are rejected instead of silently overwritten. Ordinary
+replay and verification need no generation.
 
-`--manifest-out` selects the sample manifest, `--parquet-path` selects the
-persisted Weekly Drift Detection dataset, and `--response-fixture-out` selects
-the generated response fixture (default `src/demo/coach_digest_responses.json`).
-Scenario reuse also rebuilds the public scenario bundles and derives the
-manifest from their displayed responses. A saved response must match the
-current Weekly Drift Detection input hash before the exporter accepts it.
+The [7 September generator and report](../../logs/experiments/reports/demo_v4_run1_20260907/README.md)
+document the historical five-key-week sample and its seven Luna-none calls.
+`generate_approved_judge_sample.py --reuse-scenario-key-weeks` still targets only
+those five weeks and replaces its response fixture; do not use its default
+fixture path to maintain the completed 27-week replay. The preserved September
+manifest remains a five-response subset for the evaluator below. The August
+manifest and its AI scores remain historical, separate evidence.
 
-Use a new output directory and a separate Parquet path for refreshed inputs
-so the August sample, its AI evaluation, and the historical persisted corpus
-remain reproducible. The [completed September generation report](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
-records seven Luna-none calls, including two validation-guided retries. Its
-accepted responses and diagnostics are already saved; generation is unnecessary
-for ordinary replay or validation.
-
-Each Coach Digest call writes a separate timestamped
-`*.coach_diagnostic.json` file under the sample report directory. A new attempt
-creates a new file. The file keeps raw rejected output and names the failed
-parse, schema, or Coach Digest Validations stage. For OpenAI calls, it also
-keeps token usage, calculated published-rate cost, request latency, and the
-response ID. Rejected output does not enter the React fixtures or evaluation
-manifest.
-
-The Coach Digest provider comes from `TWINKL_COACH_PROVIDER` (`openai` or
-`gemini`; default `openai`). Set the matching API key in `.env`
-(`OPENAI_API_KEY` and/or `GEMINI_API_KEY`; Gemini also accepts
-`GOOGLE_API_KEY`). OpenAI Coach Digest calls use
-`gpt-5.6-luna` at reasoning effort `none` by default. The Weekly Drift Reviewer
-uses `gpt-5.6-luna` at reasoning effort `low`.
+The completion runner does not create an all-week Coach Digest Evals manifest
+or perform semantic judging. A future all-week AI evaluation must first build
+a source-bound manifest of the exact displayed responses. Historical scores
+must not be assigned to the 22 new responses. The NSM live allowance is separate
+from Coach generation: its pinned US$1 budget is shared across sessions and
+restarts and is not spent by offline scenario export.
 
 ### 3b. Run the AI review
 

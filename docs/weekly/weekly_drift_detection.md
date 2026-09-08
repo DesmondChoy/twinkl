@@ -485,15 +485,17 @@ generation report reads the prompt version from saved generation provenance
 for both JSON and Markdown output; empty or mixed-version manifests are
 rejected rather than assigned a misleading version.
 
-In Experience, an eligible closed-week result can also show a
-[North Star Moment](../north_star/north_star_moment.md) beneath the Coach Digest.
-This separate review selects at most one exact quotation of a supportive action;
-it does not alter Weekly Drift Detection or the Coach Digest response contract.
+In Experience, an eligible closed-week result with a valid Coach Digest can
+include a [North Star Moment](../north_star/north_star_moment.md) passage
+between the unchanged narrative and its original reflective question. A
+separate review selects at most one exact quotation of a supportive action;
+it does not alter Weekly Drift Detection or generate a second question.
 Active Drift restricts sources to pre-onset writing, No Active Drift permits
 current-week encouragement or an older reminder, and Insufficient Evidence
-produces no card. Saved replay supplies completed records; live review requires
-a valid integration budget. The batch Weekly Drift Detection CLI renders the
-Coach Digest prompt and does not run North Star Moment.
+omits the passage. Saved replay supplies completed records; live review uses
+a pinned US$1 allowance shared across sessions and restarts. Invalid or
+exhausted budgets fail closed. The batch Weekly Drift Detection CLI renders
+the Coach Digest prompt and does not run North Star Moment.
 
 ---
 
@@ -524,6 +526,14 @@ seven calls including validation-guided retries for Noor and Wei Jun. All five
 responses passed Coach Digest Validations and match the current saved Weekly
 Drift Detection inputs. No Weekly Drift Reviewer or NSM calls were made, and
 no new Coach Digest Evals or human review was performed.
+
+The [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
+retains those five responses and adds 22, covering all 27 saved replay weeks.
+All use Luna-none and prompt `4.2`, pass Coach Digest Validations, and match
+current input hashes. The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
+records application checks and five unresolved AI editorial findings under
+`twinkl-rklc.39`; these checks do not establish human validity or resolve the
+flagged semantic issues.
 
 The [replacement sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md)
 preserves five key-week responses from the August Persona roster and inputs.

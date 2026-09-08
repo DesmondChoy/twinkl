@@ -52,7 +52,8 @@ describe("North Star Moment", () => {
     const user = userEvent.setup();
     const selectJournalEntry = vi.fn();
     await renderCard({}, { selectJournalEntry });
-    expect(await screen.findByText("North Star Moment")).toBeTruthy();
+    expect(await screen.findByText(quote)).toBeTruthy();
+    expect(screen.queryByText("North Star Moment")).toBeNull();
     expect(screen.getByText(/earlier action expressed a priority/)).toBeTruthy();
     expect(screen.getByText(quote).tagName).toBe("BLOCKQUOTE");
     expect(screen.getByRole("heading", { name: "A past moment in your own words" })).toBeTruthy();
@@ -101,19 +102,19 @@ describe("North Star Moment", () => {
     { mode: "encouragement" }, { sources: [] },
   ] as Partial<NorthStarRecord>[])("omits unsafe or unavailable record %j", async (overrides) => {
     await renderCard(overrides);
-    expect(screen.queryByText("North Star Moment")).toBeNull();
+    expect(document.querySelector(".north-star-moment")).toBeNull();
   });
 
   it("omits a quotation whose current source was changed", async () => {
     await renderCard({}, { journalEntries: [{ ...entry, content: "I stayed late instead." }] });
-    expect(screen.queryByText("North Star Moment")).toBeNull();
+    expect(document.querySelector(".north-star-moment")).toBeNull();
   });
 
   it("omits a source at or after the current conflict onset", async () => {
     await renderCard({}, { driftResult: { ...activeDrift, drifts: [{
       core_value: "benevolence", onset_t_index: 0, onset_date: entry.date, termination_reason: null,
     }] } });
-    expect(screen.queryByText("North Star Moment")).toBeNull();
+    expect(document.querySelector(".north-star-moment")).toBeNull();
   });
 
   it("keeps simulated Journal Entry dates separate from server availability timestamps", async () => {
@@ -144,7 +145,7 @@ describe("North Star Moment", () => {
       weeklyDigest: { week_start: "2026-06-29", week_end: "2026-07-05" },
       driftResult: { delivery_state: "insufficient_evidence" },
     });
-    expect(screen.queryByText("North Star Moment")).toBeNull();
+    expect(document.querySelector(".north-star-moment")).toBeNull();
   });
 
   it("rejects a Nudge response that was recorded after the conflict began", async () => {
@@ -156,6 +157,6 @@ describe("North Star Moment", () => {
     render(<NorthStarMoment profile={profile} journalEntries={[{ ...entry, nudge_response: quote }]}
       weeklyDigest={digest} driftResult={activeDrift} traceEvents={[selectedEvent]} />);
     await new Promise((resolve) => setTimeout(resolve, 20));
-    expect(screen.queryByText("North Star Moment")).toBeNull();
+    expect(document.querySelector(".north-star-moment")).toBeNull();
   });
 });

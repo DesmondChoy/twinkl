@@ -1,0 +1,89 @@
+{
+  "persona_id": "02fb94f3",
+  "persona_name": "Noor Haddad",
+  "week_start": "2025-04-14",
+  "week_end": "2025-04-20",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "self_direction",
+    "tradition"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "self_direction": "no_active_drift",
+    "tradition": "no_active_drift"
+  },
+  "drift_details": {
+    "self_direction": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-04-20"
+    },
+    "tradition": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-04-20"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-04-15",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+    },
+    {
+      "date": "2025-04-15",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+    },
+    {
+      "date": "2025-04-20",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+    },
+    {
+      "date": "2025-04-20",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

@@ -1,0 +1,200 @@
+{
+  "persona_id": "2d928d8a",
+  "persona_name": "Henrik Larsson",
+  "week_start": "2025-03-03",
+  "week_end": "2025-03-09",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "stimulation",
+    "security"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "security": "no_active_drift",
+    "stimulation": "no_active_drift"
+  },
+  "drift_details": {
+    "security": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 7,
+      "last_date": "2025-03-08"
+    },
+    "stimulation": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 7,
+      "last_date": "2025-03-08"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "stimulation",
+      "previous_week_start": "2025-02-24",
+      "previous_week_end": "2025-03-02",
+      "current_week_start": "2025-03-03",
+      "current_week_end": "2025-03-09",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-27",
+          "t_index": 5,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Antwerp situation is stabilizing. We found a replacement client, not as big but enough to keep the operation running while we diversify the pipeline. I spent three days in Antwerp this week working on-site with the team and it reminded..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-03-03",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Got an email from the Lisbon founder today. She closed the round without us, brought in a Madrid-based firm instead. Good for her. But I would be lying if I said it did not sting. Not because we lost the..."
+        },
+        {
+          "date": "2025-03-08",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Did the Kinderdijk trip. Walked for hours, barely talked, ate pannenkoeken at that place near the windmills. It was exactly what I needed and I managed to leave my phone in the car for most of it."
+        }
+      ]
+    },
+    {
+      "core_value": "security",
+      "previous_week_start": "2025-02-24",
+      "previous_week_end": "2025-03-02",
+      "current_week_start": "2025-03-03",
+      "current_week_end": "2025-03-09",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-27",
+          "t_index": 5,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Antwerp situation is stabilizing. We found a replacement client, not as big but enough to keep the operation running while we diversify the pipeline. I spent three days in Antwerp this week working on-site with the team and it reminded..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-03-03",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Got an email from the Lisbon founder today. She closed the round without us, brought in a Madrid-based firm instead. Good for her. But I would be lying if I said it did not sting. Not because we lost the..."
+        },
+        {
+          "date": "2025-03-08",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Did the Kinderdijk trip. Walked for hours, barely talked, ate pannenkoeken at that place near the windmills. It was exactly what I needed and I managed to leave my phone in the car for most of it."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-27",
+      "t_index": 5,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Antwerp situation is stabilizing. We found a replacement client, not as big but enough to keep the operation running while we diversify the pipeline. I spent three days in Antwerp this week working on-site with the team and it reminded..."
+    },
+    {
+      "date": "2025-02-27",
+      "t_index": 5,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Antwerp situation is stabilizing. We found a replacement client, not as big but enough to keep the operation running while we diversify the pipeline. I spent three days in Antwerp this week working on-site with the team and it reminded..."
+    },
+    {
+      "date": "2025-03-03",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Got an email from the Lisbon founder today. She closed the round without us, brought in a Madrid-based firm instead. Good for her. But I would be lying if I said it did not sting. Not because we lost the..."
+    },
+    {
+      "date": "2025-03-03",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Got an email from the Lisbon founder today. She closed the round without us, brought in a Madrid-based firm instead. Good for her. But I would be lying if I said it did not sting. Not because we lost the..."
+    },
+    {
+      "date": "2025-03-08",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Did the Kinderdijk trip. Walked for hours, barely talked, ate pannenkoeken at that place near the windmills. It was exactly what I needed and I managed to leave my phone in the car for most of it."
+    },
+    {
+      "date": "2025-03-08",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Did the Kinderdijk trip. Walked for hours, barely talked, ate pannenkoeken at that place near the windmills. It was exactly what I needed and I managed to leave my phone in the car for most of it."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

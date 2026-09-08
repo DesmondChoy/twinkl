@@ -1,0 +1,95 @@
+{
+  "persona_id": "ed67c9cc",
+  "persona_name": "Lim Sook Yin",
+  "week_start": "2025-01-27",
+  "week_end": "2025-02-02",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "hedonism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "hedonism": "no_active_drift"
+  },
+  "drift_details": {
+    "hedonism": {
+      "state": "no_active_drift",
+      "current_run_length": 1,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-02-02"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-02",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up. It was nice.\n\nResponse: Everything becomes about what needs doing next."
+    },
+    {
+      "date": "2025-02-02",
+      "t_index": 1,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I said yes obviously. But it means I'll miss the CNY market at Chinatown with Mei and Hwee Leng."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week held a small, vivid moment of enjoyment: “The kitchen smelled good for hours,” and you had pandan chiffon cake with hot Milo before anyone else was up. At the same time, saying yes to something meant missing the CNY market at Chinatown with Mei and Hwee Leng, while the thought that “Everything becomes about what needs doing next” stayed present.",
+    "tension_explanation": "There is no confirmed current pattern to name here, but these moments show enjoyment alongside the pull of obligation. What remains unclear is how much space those practical demands are taking from the experiences you want to share and savour.",
+    "reflective_question": "When you think about the cake-and-Milo morning and missing the Chinatown market, what do they reveal about the kinds of enjoyment you most want to notice or make room for?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "Everything becomes about what needs doing next"
+    ],
+    "word_count": 132,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 132 words (target 25-180)."
+      }
+    ]
+  }
+}

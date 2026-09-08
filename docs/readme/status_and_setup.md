@@ -9,10 +9,10 @@
 | Capability | Status | Note |
 |---|---|---|
 | Onboarding (SVBWS Values Assessment) | 🧪 Experimental | The React POC implements the complete local, user-facing flow and a versioned Profile. Manual Experience synchronizes the confirmed Profile with the in-memory Python boundary. Production multi-user storage and generalized persistence remain outside the capstone. |
-| Coach Digest validation depth | ⚠️ Partial | The [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json) preserves five accepted key-week responses from the previous Persona roster and inputs. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md) supplies five accepted current key-week responses using Luna-none and prompt `4.2`, with matching current input hashes and passing Coach Digest Validations. No new Coach Digest Evals or human review was performed. The five historical August responses passed all Coach Digest Validations; their Coach Digest Evals scored mean correctness `4.80`, specificity `5.00`, non-prescriptive tone `5.00`, and tension honesty `4.60`; all reflective questions passed, with no failed verdicts or review flags. These scores are same-model AI review, not human validation. Cross-provider evaluator options and the deterministic 42-Drift/42-control study are implemented, but no paid independent-provider result is committed. Future human calibration of the AI review remains incomplete. |
+| Coach Digest validation depth | ⚠️ Partial | The [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json) preserves five accepted key-week responses from the previous Persona roster and inputs. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md) supplies five accepted current key-week responses using Luna-none and prompt `4.2`, with matching current input hashes and passing Coach Digest Validations. The [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md) preserves these five and adds 22 validated responses, covering all 27 replay weeks. No new Coach Digest Evals or human validation was performed. The five historical August responses passed all Coach Digest Validations; their Coach Digest Evals scored mean correctness `4.80`, specificity `5.00`, non-prescriptive tone `5.00`, and tension honesty `4.60`; all reflective questions passed, with no failed verdicts or review flags. These scores are same-model AI review, not human validation. Cross-provider evaluator options and the deterministic 42-Drift/42-control study are implemented, but no paid independent-provider result is committed. Future human calibration of the AI review remains incomplete. |
 | Experience and Inspect completion | 🚧 In Progress | The shared app, five saved Persona replays, manual Journal Entries, displayed nudges, Weekly Drift Detection, Coach Digest, Inspect, privacy notice, confirmed session deletion, and release checks are implemented. Coach Digest feedback, longitudinal Core Value history, and the final professor walkthrough evidence remain open. |
 | Displayed nudge user evidence | ⚠️ Not collected | Displayed nudge implementation is complete. A future external pilot can measure response rate, continued journaling, and perceived relevance. Saved replays and regression tests do not establish those user outcomes. |
-| North Star Moment | 🧪 AI evaluation and saved replay | Full eligible history supplies exact supportive-action quotations and no-card outcomes across all five saved Persona replays. The [v4 Run 1 comparison](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md) covers 501 weeks from 105 synthetic Personas, with 38 reassessed cases and 463 retained observations. Human review and real-user benefit remain unestablished. Live execution fails closed without a finalized integration budget. |
+| North Star Moment | 🧪 AI evaluation and saved replay | Full eligible history supplies exact supportive-action quotations and no-card outcomes across all five saved Persona replays. The [v4 Run 1 comparison](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md) covers 501 weeks from 105 synthetic Personas, with 38 reassessed cases and 463 retained observations. Human review and real-user benefit remain unestablished. A valid Coach Digest includes a selected passage before its original question. Live execution uses a pinned US$1 allowance shared across sessions and restarts; invalid or exhausted budgets fail closed. The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md) records tests and five unresolved AI editorial findings under `twinkl-rklc.39`, not human validation. |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic (Offline) embeddings |
 | Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. Prompt `4.0` includes the selected Core Values' definitions and core motivations. Its [comparison with v3](../../logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md) measures changes in detections across three Runs per variant; it does not establish accuracy. Evidence remains AI-reviewed synthetic development evidence without a fresh final test or deployment approval. |
 | Journaling anomaly radar | ❌ Not Started | Cadence/gap detection beyond the current prototype-router tooling |
@@ -48,8 +48,9 @@ where a frontend directory is specified. `uv run` uses the project environment.
 - Re-score the frozen Weekly Drift Reviewer model comparison: `uv run python -m scripts.experiments.compare_twinkl_52zz_models score`
 - Re-score the Luna higher-reasoning comparison: `uv run python -m scripts.experiments.compare_twinkl_ck3w_luna_higher_reasoning score`
 - Replay recall-aware checkpoint selection from saved traces without retraining: `uv run python scripts/experiments/replay_recall_aware_checkpoint_selection.py`
+- Inspect the saved per-week Coach completion plan without provider calls: `uv run python -m scripts.coach.complete_scenario_coach`
 - Build the deterministic Coach Digest Drift/control target catalog without provider calls: `uv run python scripts/experiments/run_coach_drift_control_eval.py`
-- Dry-run cross-provider Coach Digest Evals over the committed five-response manifest: `uv run python -m src.evals.coach_narrative_judge --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json --judge-provider gemini`
+- Dry-run cross-provider Coach Digest Evals over the historical August five-response manifest: `uv run python -m src.evals.coach_narrative_judge --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json --judge-provider gemini`
 - After paid Drift/control generation and Coach Digest Evals, build the saved comparison report: `uv run python -m src.evals.coach_drift_control_report --manifest logs/experiments/reports/coach_digest_drift_control/judge_sample_manifest.json --eval-metrics logs/experiments/reports/coach_digest_drift_control/evals/metrics.json --out logs/experiments/reports/coach_digest_drift_control/comparison`
 - Regenerate the capstone report figures: `MPLCONFIGDIR=/tmp/twinkl-matplotlib uv run python scripts/capstone/generate_report_figures.py`
 - Render the capstone report PDF: `quarto render docs/capstone_report/capstone_project_report.md --to pdf`
@@ -121,34 +122,27 @@ NSM comparison; use the two `nsm_*` runners and linked frozen records above.
 
 ### Saved Persona Coach Digest responses
 
-The sample generator requires an explicit `--personas` roster. Preview the
-current five-Persona key-week regeneration without provider calls:
+All 27 replay weeks have saved responses. Verify the completion plan and
+rebuild the public scenarios without provider calls:
 
 ```sh
-uv run python -m scripts.coach.generate_approved_judge_sample \
-  --personas 02fb94f3 5fa8b540 ed67c9cc 8f83c818 2d928d8a \
-  --reuse-scenario-key-weeks \
-  --manifest-out logs/exports/coach_digest_refresh/judge_sample_manifest.json \
-  --parquet-path logs/exports/coach_digest_refresh/weekly_digests.parquet
+uv run python -m scripts.coach.complete_scenario_coach
+uv run python -m scripts.export_demo_experiments
 ```
 
-`--execute` performs the generation. With `--reuse-scenario-key-weeks`, the
-runner requires exactly those five deployed Persona IDs, reads each public
-scenario's key-week Weekly Drift Detection output, generates and validates
-Coach Digest responses, writes the response fixture, rebuilds the public
-scenario bundles, and derives the evaluation manifest from their displayed
-responses. It makes no Weekly Drift Reviewer calls. Diagnostic records preserve
-generation failures and validation-guided retries.
+Adding `--execute` to the completion runner generates only missing responses
+within authorized paid scope. It preserves compatible existing receipts, uses
+Luna-none with at most one validation-guided retry, and records every attempt.
+It makes no Weekly Drift Reviewer or NSM calls. Its `--output` argument selects
+the checkpoint/report directory; incompatible existing inputs stop the run.
 
-The mutually exclusive `--reuse-weekly-drift-output` mode reads stored output
-from `--weekly-drift-output-dir` and generates only Coach Digest responses.
-Without either reuse mode, execution runs the Weekly Drift Reviewer and Drift
-Detector before Coach Digest generation. `--manifest-out`, `--parquet-path`,
-and `--response-fixture-out` select output files; changing the manifest or
-Parquet path alone does not redirect the checked-in response fixture or public
-scenario rebuild. See the
+The historical `generate_approved_judge_sample.py --reuse-scenario-key-weeks`
+command still targets only five key weeks and replaces its response fixture.
+Its default fixture path is unsuitable for maintaining the completed 27-week
+replay. The preserved five-response manifest remains an evaluation subset;
+it does not cover the 22 added responses. See the
 [Coach Digest test and eval guide](../evals/coach_narrative_test_and_eval_guide.md)
-for evaluation commands and generation/evaluator provenance.
+for commands and generation/evaluator provenance.
 
 ## Setup
 

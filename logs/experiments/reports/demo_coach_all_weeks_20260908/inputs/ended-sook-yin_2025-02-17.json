@@ -1,0 +1,157 @@
+{
+  "persona_id": "ed67c9cc",
+  "persona_name": "Lim Sook Yin",
+  "week_start": "2025-02-17",
+  "week_end": "2025-02-23",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "hedonism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "hedonism": "no_active_drift"
+  },
+  "drift_details": {
+    "hedonism": {
+      "state": "no_active_drift",
+      "current_run_length": 1,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 8,
+      "last_date": "2025-02-21"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "hedonism",
+      "previous_week_start": "2025-02-10",
+      "previous_week_end": "2025-02-16",
+      "current_week_start": "2025-02-17",
+      "current_week_end": "2025-02-23",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-11",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "Finished the grocery run this morning and treated myself to a bowl of laksa at the hawker centre after. I almost didn't — the queue was long and I had frozen things in the bag. But I thought, five more..."
+        },
+        {
+          "date": "2025-02-14",
+          "t_index": 5,
+          "direction": "misaligned",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "I wanted to sit down and have one with tea and just enjoy it, the way you see people do in those café videos online. But I was in the middle of folding the laundry and then I remembered I..."
+        },
+        {
+          "date": "2025-02-16",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "Went to Ma's nursing home today, usual Sunday visit. Brought her the dried tangerine peel she asked for and sat with her for two hours. She complained the aircon was too cold, same as always. I adjusted it, brought her..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-02-19",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "Mei asked me last week if I wanted to join her for a foot reflexology session — the new place near Bishan that has the herbal soak. I said I'd think about it and I've been thinking about it for..."
+        },
+        {
+          "date": "2025-02-21",
+          "t_index": 8,
+          "direction": "misaligned",
+          "dimensions": [
+            "hedonism"
+          ],
+          "score_mean": null,
+          "excerpt": "I realised I'd chosen the useful thing to worry about instead of just sitting with the fact that I'd had a nice afternoon."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "ed67c9cc:hedonism:1:not_conflict"
+  ],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-11",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "Finished the grocery run this morning and treated myself to a bowl of laksa at the hawker centre after. I almost didn't — the queue was long and I had frozen things in the bag. But I thought, five more..."
+    },
+    {
+      "date": "2025-02-14",
+      "t_index": 5,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I wanted to sit down and have one with tea and just enjoy it, the way you see people do in those café videos online. But I was in the middle of folding the laundry and then I remembered I..."
+    },
+    {
+      "date": "2025-02-16",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "Went to Ma's nursing home today, usual Sunday visit. Brought her the dried tangerine peel she asked for and sat with her for two hours. She complained the aircon was too cold, same as always. I adjusted it, brought her..."
+    },
+    {
+      "date": "2025-02-19",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "Mei asked me last week if I wanted to join her for a foot reflexology session — the new place near Bishan that has the herbal soak. I said I'd think about it and I've been thinking about it for..."
+    },
+    {
+      "date": "2025-02-21",
+      "t_index": 8,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I realised I'd chosen the useful thing to worry about instead of just sitting with the fact that I'd had a nice afternoon."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

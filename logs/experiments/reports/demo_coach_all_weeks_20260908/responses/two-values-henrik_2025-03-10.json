@@ -1,0 +1,318 @@
+{
+  "persona_id": "2d928d8a",
+  "persona_name": "Henrik Larsson",
+  "week_start": "2025-03-10",
+  "week_end": "2025-03-16",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 4,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "stimulation",
+    "security"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "security": "no_active_drift",
+    "stimulation": "no_active_drift"
+  },
+  "drift_details": {
+    "security": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 11,
+      "last_date": "2025-03-14"
+    },
+    "stimulation": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 11,
+      "last_date": "2025-03-14"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "stimulation",
+      "previous_week_start": "2025-03-03",
+      "previous_week_end": "2025-03-09",
+      "current_week_start": "2025-03-10",
+      "current_week_end": "2025-03-16",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-03-03",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Got an email from the Lisbon founder today. She closed the round without us, brought in a Madrid-based firm instead. Good for her. But I would be lying if I said it did not sting. Not because we lost the..."
+        },
+        {
+          "date": "2025-03-08",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Did the Kinderdijk trip. Walked for hours, barely talked, ate pannenkoeken at that place near the windmills. It was exactly what I needed and I managed to leave my phone in the car for most of it."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-03-14",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Stayed up too late reading the drone deck. It is actually well put together. The unit economics make sense for the regions they are targeting and the regulatory window is real. I caught myself building a financial model in a..."
+        },
+        {
+          "date": "2025-03-14",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Looked at the drone deck again over lunch. Found one real concern around the supply chain for replacement parts but the other issues I expected to find were not there. The founder has thought through most of the obvious failure..."
+        },
+        {
+          "date": "2025-03-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "stimulation"
+          ],
+          "score_mean": null,
+          "excerpt": "Called my Stockholm friend back and told him I need two weeks to think. He said fine. I keep going back and forth and I hate that I cannot just pick a lane and stay in it. Response: Then I..."
+        }
+      ]
+    },
+    {
+      "core_value": "security",
+      "previous_week_start": "2025-03-03",
+      "previous_week_end": "2025-03-09",
+      "current_week_start": "2025-03-10",
+      "current_week_end": "2025-03-16",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-03-03",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Got an email from the Lisbon founder today. She closed the round without us, brought in a Madrid-based firm instead. Good for her. But I would be lying if I said it did not sting. Not because we lost the..."
+        },
+        {
+          "date": "2025-03-08",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Did the Kinderdijk trip. Walked for hours, barely talked, ate pannenkoeken at that place near the windmills. It was exactly what I needed and I managed to leave my phone in the car for most of it."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-03-14",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Stayed up too late reading the drone deck. It is actually well put together. The unit economics make sense for the regions they are targeting and the regulatory window is real. I caught myself building a financial model in a..."
+        },
+        {
+          "date": "2025-03-14",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Looked at the drone deck again over lunch. Found one real concern around the supply chain for replacement parts but the other issues I expected to find were not there. The founder has thought through most of the obvious failure..."
+        },
+        {
+          "date": "2025-03-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "security"
+          ],
+          "score_mean": null,
+          "excerpt": "Called my Stockholm friend back and told him I need two weeks to think. He said fine. I keep going back and forth and I hate that I cannot just pick a lane and stay in it. Response: Then I..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-03-03",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Got an email from the Lisbon founder today. She closed the round without us, brought in a Madrid-based firm instead. Good for her. But I would be lying if I said it did not sting. Not because we lost the..."
+    },
+    {
+      "date": "2025-03-03",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Got an email from the Lisbon founder today. She closed the round without us, brought in a Madrid-based firm instead. Good for her. But I would be lying if I said it did not sting. Not because we lost the..."
+    },
+    {
+      "date": "2025-03-08",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Did the Kinderdijk trip. Walked for hours, barely talked, ate pannenkoeken at that place near the windmills. It was exactly what I needed and I managed to leave my phone in the car for most of it."
+    },
+    {
+      "date": "2025-03-08",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Did the Kinderdijk trip. Walked for hours, barely talked, ate pannenkoeken at that place near the windmills. It was exactly what I needed and I managed to leave my phone in the car for most of it."
+    },
+    {
+      "date": "2025-03-14",
+      "t_index": 9,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Stayed up too late reading the drone deck. It is actually well put together. The unit economics make sense for the regions they are targeting and the regulatory window is real. I caught myself building a financial model in a..."
+    },
+    {
+      "date": "2025-03-14",
+      "t_index": 9,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Stayed up too late reading the drone deck. It is actually well put together. The unit economics make sense for the regions they are targeting and the regulatory window is real. I caught myself building a financial model in a..."
+    },
+    {
+      "date": "2025-03-14",
+      "t_index": 10,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Looked at the drone deck again over lunch. Found one real concern around the supply chain for replacement parts but the other issues I expected to find were not there. The founder has thought through most of the obvious failure..."
+    },
+    {
+      "date": "2025-03-14",
+      "t_index": 10,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Looked at the drone deck again over lunch. Found one real concern around the supply chain for replacement parts but the other issues I expected to find were not there. The founder has thought through most of the obvious failure..."
+    },
+    {
+      "date": "2025-03-14",
+      "t_index": 11,
+      "direction": "context",
+      "dimensions": [
+        "security"
+      ],
+      "score_mean": null,
+      "excerpt": "Called my Stockholm friend back and told him I need two weeks to think. He said fine. I keep going back and forth and I hate that I cannot just pick a lane and stay in it. Response: Then I..."
+    },
+    {
+      "date": "2025-03-14",
+      "t_index": 11,
+      "direction": "context",
+      "dimensions": [
+        "stimulation"
+      ],
+      "score_mean": null,
+      "excerpt": "Called my Stockholm friend back and told him I need two weeks to think. He said fine. I keep going back and forth and I hate that I cannot just pick a lane and stay in it. Response: Then I..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "This week held both careful scrutiny and a pull toward something new: the drone opportunity kept your attention late into the night, with “the unit economics” making sense while one supply-chain concern remained. You also gave yourself a quieter Kinderdijk day—“walked for hours, barely talked”—and stayed honest about uncertainty, telling your Stockholm friend you needed two weeks rather than forcing a decision.",
+    "tension_explanation": "There is no confirmed current tension in the material from this week. What does come through is an unresolved movement between wanting to explore the drone opportunity and wanting enough certainty to feel settled: “I keep going back and forth and I hate that I cannot just pick a lane and stay in it.”",
+    "reflective_question": "When you notice yourself going back and forth, what feels most important to protect: the possibility of a new challenge, or the feeling of being calm and secure?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "the unit economics",
+      "walked for hours, barely talked",
+      "I keep going back and forth and I hate that I cannot just pick a lane and stay in it."
+    ],
+    "word_count": 144,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 3 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 144 words (target 25-180)."
+      }
+    ]
+  }
+}

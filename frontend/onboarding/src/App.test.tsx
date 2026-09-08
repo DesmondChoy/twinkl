@@ -198,6 +198,10 @@ describe("onboarding app", () => {
     const user = userEvent.setup();
     render(<App />);
 
+    expect(screen.getByRole("heading", { level: 1, name: "Your inner compass." })).toBeTruthy();
+    const repository = screen.getByRole("link", { name: "GitHub repository (opens in a new tab)" });
+    expect(repository.getAttribute("href")).toBe("https://github.com/DesmondChoy/twinkl");
+    expect(repository.getAttribute("target")).toBe("_blank");
     expect(screen.getByRole("heading", { name: "Choose how to explore Twinkl." })).toBeTruthy();
     expect(screen.queryByRole("textbox", { name: "Preferred name" })).toBeNull();
     expect(createExperienceSession).not.toHaveBeenCalled();
@@ -217,14 +221,16 @@ describe("onboarding app", () => {
     expect(screen.getByRole("textbox", { name: "Preferred name" })).toBeTruthy();
   });
 
-  it("preserves manual progress when returning home and choosing Onboarding", async () => {
+  it.each(["wordmark", "Go home"])("preserves manual progress when returning through %s and choosing Onboarding", async (control) => {
     const user = userEvent.setup();
     render(<App />);
     enterPreferredName("Casey");
     fireEvent.click(screen.getAllByTestId("value-card")[0]);
     const before = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
 
-    await user.click(screen.getByRole("link", { name: "Twinkl home" }));
+    await user.click(control === "wordmark"
+      ? screen.getByRole("link", { name: "Twinkl home" })
+      : screen.getByRole("button", { name: "Go home" }));
     expect(screen.getByText("Continue your saved progress")).toBeTruthy();
     await user.click(screen.getByRole("button", { name: "Try Onboarding" }));
 
@@ -234,6 +240,70 @@ describe("onboarding app", () => {
     expect(after.preferred_name).toBe("Casey");
     expect(after.draft_best).toBe(before.draft_best);
     expect(deleteExperienceSession).not.toHaveBeenCalled();
+  });
+
+  it("offers Go home in the Persona picker without clearing onboarding progress", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async () =>
+      new Response(JSON.stringify(scenarioCatalogJson))));
+    const user = userEvent.setup();
+    render(<App />);
+    enterPreferredName("Casey");
+    fireEvent.click(screen.getAllByTestId("value-card")[0]);
+    const before = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    await user.click(screen.getByRole("button", { name: "Go home" }));
+    await user.click(screen.getByRole("button", { name: "Try the Demo" }));
+    await screen.findByRole("heading", { name: "Choose what you want to observe." });
+
+    await user.click(screen.getByRole("button", { name: "Go home" }));
+    expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Go home" })).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Try Onboarding" }));
+    const after = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
+    expect(after.session_id).toBe(before.session_id);
+    expect(after.draft_best).toBe(before.draft_best);
+    expect(deleteExperienceSession).not.toHaveBeenCalled();
+  });
+
+  it.each(["Experience", "Inspect"])("returns home from saved replay %s and continues the selected week without changing saved evidence or progress", async (view) => {
+    saveReplayInInspect(activeReplayJson.scenario.persona_id);
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(scenarioCatalogJson)))
+      .mockResolvedValueOnce(new Response(activeReplayRaw))
+      .mockImplementation(async () => new Response(JSON.stringify(scenarioCatalogJson)));
+    vi.stubGlobal("fetch", fetchMock);
+    const user = userEvent.setup();
+    render(<App />);
+    await screen.findByText("Nisha Agarwal · saved replay");
+    await user.click(screen.getByRole("button", { name: "Experience" }));
+    await user.click(screen.getByRole("button", { name: "Show Active Drift — week 4" }));
+    await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
+    if (view === "Inspect") {
+      await user.click(screen.getByRole("button", { name: "Inspect" }));
+    }
+    const before = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+
+    await user.click(screen.getByRole("button", { name: "Go home" }));
+    expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
+    expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))).toEqual(before);
+    await user.click(screen.getByRole("button", { name: "Try the Demo" }));
+    const resume = await screen.findByRole("button", { name: "Continue replay" });
+    const requestsBeforeResume = fetchMock.mock.calls.length;
+    await user.click(resume);
+
+    expect(screen.getByText("Week 4 of 5")).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    const after = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    expect(after.session_id).toBe(before.session_id);
+    expect(after.experience.selected_persona_id).toBe(before.experience.selected_persona_id);
+    expect(after.experience.selected_week).toBe(before.experience.selected_week);
+    expect(after.experience.replay_progress).toEqual(before.experience.replay_progress);
+    expect(after.experience.journal_entries).toEqual(before.experience.journal_entries);
+    expect(after.experience.trace_events).toEqual(before.experience.trace_events);
+    expect(fetchMock).toHaveBeenCalledTimes(requestsBeforeResume);
+    expect(deleteExperienceSession).not.toHaveBeenCalled();
+    expect(createExperienceSession).not.toHaveBeenCalled();
   });
 
   it("starts a personal Profile from a saved replay without carrying over synthetic data", async () => {
@@ -301,7 +371,8 @@ describe("onboarding app", () => {
     await screen.findByRole("heading", { name: "The replay needs another try." });
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
-    await user.click(screen.getByRole("button", { name: "Change Persona" }));
+    await user.click(screen.getByRole("button", { name: "Go home" }));
+    await user.click(screen.getByRole("button", { name: "Try the Demo" }));
     await screen.findByRole("heading", { name: "Choose what you want to observe." });
     expect(await screen.findByText("Nisha Agarwal")).toBeTruthy();
   });

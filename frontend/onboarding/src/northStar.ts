@@ -36,6 +36,19 @@ export interface NorthStarRecord extends JsonObject {
   retryable: boolean;
 }
 
+export function northStarFraming(mode: unknown): string | null {
+  switch (mode) {
+    case "reflection":
+      return "This earlier action expressed a priority that has felt harder to make room for in the week reviewed.";
+    case "encouragement":
+      return "This action from the week reviewed is one way you put this priority into practice.";
+    case "reminder":
+      return "This earlier action is a reminder of how you have expressed this priority. It offers perspective on the week reviewed.";
+    default:
+      return null;
+  }
+}
+
 function object(value: unknown): JsonObject | null {
   return value !== null && typeof value === "object" && !Array.isArray(value)
     ? value as JsonObject
@@ -99,13 +112,21 @@ export function currentNorthStarEvent({
 }): { event: TraceEventContract; record: NorthStarRecord } | null {
   if (!profileRef || !weeklyDigest) return null;
   for (const event of [...events].reverse()) {
-    if (event.event_type !== "north_star_reviewed" || event.session_id !== profile.session_id) continue;
+    if (event.session_id !== profile.session_id) continue;
+    if (event.event_type === "weekly_digest_built") {
+      const digest = object(event.details.digest);
+      if (digest && digest.week_start === weeklyDigest.week_start && digest.week_end === weeklyDigest.week_end) {
+        return null;
+      }
+    }
+    if (event.event_type !== "north_star_reviewed") continue;
     const record = object(event.details.record);
-    if (!record || record.schema_version !== "north-star-record-v1"
-      || record.session_id !== profile.session_id || record.owner_id !== profile.user_id
+    if (!record || record.session_id !== profile.session_id || record.owner_id !== profile.user_id
       || record.profile_ref !== profileRef || record.week_start !== weeklyDigest.week_start
-      || record.week_end !== weeklyDigest.week_end || record.input_hash !== event.input_hash) continue;
-    if (!Array.isArray(record.sources)) continue;
+      || record.week_end !== weeklyDigest.week_end) continue;
+    // A newer applicable review supersedes earlier selections even if its binding fails.
+    if (record.schema_version !== "north-star-record-v1"
+      || record.input_hash !== event.input_hash || !Array.isArray(record.sources)) return null;
     const sources = record.sources;
     const sourcesMatch = sources.every((value) => {
       const source = object(value);
@@ -115,7 +136,7 @@ export function currentNorthStarEvent({
         && entry.content === source.journal_entry
         && (source.nudge_response === null || entry.nudge_response === source.nudge_response);
     });
-    if (!sourcesMatch) continue;
+    if (!sourcesMatch) return null;
     return { event, record: record as NorthStarRecord };
   }
   return null;

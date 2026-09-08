@@ -201,7 +201,7 @@ class SavedCoachResponse(CatalogModel):
 
 
 class SavedCoachResponseFixture(CatalogModel):
-    """Five Coach Digest responses keyed by Scenario ID and week start."""
+    """Coach Digest responses keyed by Scenario ID and week start."""
 
     schema_version: Literal["coach-digest-scenario-fixture-v1"] = (
         "coach-digest-scenario-fixture-v1"
@@ -815,10 +815,11 @@ def build_scenario_fixture(
     sequence = 0
     parent_event_id: str | None = None
 
-    def append_event(**kwargs: Any) -> str:
+    def append_event(*, event_id: str | None = None, **kwargs: Any) -> str:
         nonlocal sequence, parent_event_id
-        sequence += 1
-        event_id = _make_event_id(selection.scenario_id, sequence)
+        if event_id is None:
+            sequence += 1
+            event_id = _make_event_id(selection.scenario_id, sequence)
         event_rows.append(
             _event(
                 event_id=event_id,
@@ -1112,6 +1113,12 @@ def build_scenario_fixture(
             week_event_ids.append(
                 append_event(
                     event_type="weekly_coach_generated",
+                    # Additional Coach events must not renumber source receipt IDs.
+                    event_id=(
+                        None
+                        if boundary.week_start == selection.coach_week_start
+                        else f"{selection.scenario_id}:coach:{boundary.week_start}"
+                    ),
                     started_at=_simulated_at(boundary.week_end, hour=21, sequence=200),
                     duration_ms=(
                         round(accepted_call.latency_seconds * 1000)
@@ -1141,6 +1148,9 @@ def build_scenario_fixture(
                     ),
                 )
             )
+        elif boundary.week_start == selection.coach_week_start:
+            # Reserve the original Coach slot even if its response is unavailable.
+            sequence += 1
         week_rows.append(
             {
                 "week_id": week_id,
@@ -1460,45 +1470,49 @@ def _validate_fixture_semantics(
             )
 
     coach_responses = load_saved_coach_responses(root)
-    expected_coach_key = f"{selection.scenario_id}::{selection.coach_week_start}"
-    expected_coach = coach_responses.responses.get(expected_coach_key)
-    coach_events = [
-        event
-        for event in fixture.trace_events
-        if event.event_type == "weekly_coach_generated"
-    ]
-    key_week = next(
-        week for week in scenario.weeks if week.week_start == selection.coach_week_start
-    )
-    key_digest_event = next(
-        event
-        for event in fixture.trace_events
-        if event.event_type == "weekly_digest_built"
-        and event.event_id in key_week.event_ids
-    )
-    unavailable_reason = _coach_unavailable_reason(
-        expected_coach, key_digest_event.details.digest
-    )
-    if unavailable_reason is not None:
-        if coach_events or key_digest_event.details.digest.coach_narrative is not None:
-            raise ValueError(
-                "Scenario has an incompatible historical Coach Digest response"
-            )
-        if key_digest_event.details.coach_unavailable_reason != unavailable_reason:
-            raise ValueError("Scenario Coach Digest source diagnostic differs")
-    else:
-        if len(coach_events) != 1:
-            raise ValueError(
-                "Scenario must have one compatible key-week Coach Digest response"
-            )
-        coach_event = coach_events[0]
-        if coach_event.event_id not in key_week.event_ids:
-            raise ValueError("Coach Digest response is attached to the wrong week")
-        if (
-            expected_coach is None
-            or coach_event.details.narrative != expected_coach.narrative
-        ):
-            raise ValueError("Coach Digest event differs from the saved response")
+    for week in scenario.weeks:
+        expected_coach = coach_responses.responses.get(
+            f"{selection.scenario_id}::{week.week_start}"
+        )
+        coach_events = [
+            event
+            for event in fixture.trace_events
+            if event.event_type == "weekly_coach_generated"
+            and event.event_id in week.event_ids
+        ]
+        digest_event = next(
+            event
+            for event in fixture.trace_events
+            if event.event_type == "weekly_digest_built"
+            and event.event_id in week.event_ids
+        )
+        digest = digest_event.details.digest
+        unavailable_reason = _coach_unavailable_reason(expected_coach, digest)
+        if unavailable_reason is not None:
+            if coach_events or digest.coach_narrative is not None:
+                raise ValueError(
+                    "Scenario has an incompatible historical Coach Digest response"
+                )
+            if digest_event.details.coach_unavailable_reason != unavailable_reason:
+                raise ValueError("Scenario Coach Digest source diagnostic differs")
+        else:
+            if len(coach_events) != 1:
+                raise ValueError(
+                    "Scenario must have one compatible Coach Digest response per week"
+                )
+            coach_event = coach_events[0]
+            if (
+                expected_coach is None
+                or expected_coach.persona_id != scenario.persona_id
+                or expected_coach.week_end != week.week_end
+                or coach_event.details.narrative != expected_coach.narrative
+                or digest.coach_narrative != expected_coach.narrative
+                or expected_coach.generation is None
+                or expected_coach.generation.weekly_digest_event_id
+                != digest_event.event_id
+                or digest_event.details.coach_unavailable_reason is not None
+            ):
+                raise ValueError("Coach Digest event differs from the saved response")
 
     entries = scenario.journal_entries
     coordinates = [(entry.date, entry.t_index) for entry in entries]

@@ -16,40 +16,12 @@ import type { ExperienceState } from "./session";
 import {
   loadSavedScenario,
   loadScenarioCatalog,
-  projectScenarioWeek,
   type LoadedScenario,
   type ScenarioCatalog,
   type ScenarioCatalogItem,
 } from "./scenarioReplay";
 import type { ScenarioDeliveryState } from "./demoContracts";
-import {
-  isDisplayableNudge,
-  NUDGE_REVEAL_DELAY_MS,
-} from "./nudgeReveal";
-
-const ENTRY_REVEAL_DELAY_MS = 3_600;
-const RESULT_REVEAL_DELAY_MS = 3_200;
-const NEXT_WEEK_DELAY_MS = 6_000;
-
-type ReplayStep =
-  | { kind: "entry"; journalEntryId: string }
-  | { kind: "nudge"; journalEntryId: string }
-  | { kind: "result" };
-
-function replayStepsFor(
-  journalEntryIds: string[],
-  nudgeEntryIds: ReadonlySet<string>,
-): ReplayStep[] {
-  return [
-    ...journalEntryIds.flatMap((journalEntryId): ReplayStep[] => [
-      { kind: "entry", journalEntryId },
-      ...(nudgeEntryIds.has(journalEntryId)
-        ? [{ kind: "nudge" as const, journalEntryId }]
-        : []),
-    ]),
-    { kind: "result" },
-  ];
-}
+import { isDisplayableNudge } from "./nudgeReveal";
 
 function replayStateLabel(state: string): string {
   switch (state) {
@@ -158,34 +130,18 @@ function progressionGuide(item: ScenarioCatalogItem): string {
   ).join("; ");
 }
 
-function usePrefersReducedMotion(): boolean {
-  const query = "(prefers-reduced-motion: reduce)";
-  const [reduced, setReduced] = useState(
-    () => window.matchMedia?.(query).matches ?? false,
-  );
-
-  useEffect(() => {
-    const media = window.matchMedia?.(query);
-    if (!media) return;
-    const update = () => setReduced(media.matches);
-    update();
-    media.addEventListener?.("change", update);
-    return () => media.removeEventListener?.("change", update);
-  }, []);
-
-  return reduced;
-}
-
 interface PersonaReplayPickerProps {
   currentPersonaId?: string | null;
   onBack: () => void;
   onLoad: (loaded: LoadedScenario) => boolean;
+  onResume?: () => void;
 }
 
 export function PersonaReplayPicker({
   currentPersonaId = null,
   onBack,
   onLoad,
+  onResume,
 }: PersonaReplayPickerProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const replayRequestGenerationRef = useRef(0);
@@ -289,11 +245,11 @@ export function PersonaReplayPicker({
                     <button
                       className="button button--primary persona-option__action"
                       type="button"
-                      disabled={current || loadingId !== null}
-                      onClick={() => void startReplay(item)}
+                      disabled={(current && !onResume) || loadingId !== null}
+                      onClick={() => current ? onResume?.() : void startReplay(item)}
                     >
                       {current
-                        ? "Current replay"
+                        ? onResume ? "Continue replay" : "Current replay"
                         : loadingId === item.scenario_id
                           ? "Loading saved replay…"
                           : "Start at week 1"}
@@ -370,9 +326,8 @@ export function PersonaReplayExperience({
   onWeekChange,
   headingRef,
 }: PersonaReplayExperienceProps) {
-  const reducedMotion = usePrefersReducedMotion();
   const weekRailRef = useRef<HTMLOListElement>(null);
-  const [playing, setPlaying] = useState(false);
+  const [reviewedWeekKey, setReviewedWeekKey] = useState<string | null>(null);
   const weeks = loaded.fixture.scenario.weeks;
   const safeWeekIndex = Math.min(Math.max(weekIndex, 0), weeks.length - 1);
   const currentWeek = weeks[safeWeekIndex];
@@ -382,27 +337,16 @@ export function PersonaReplayExperience({
       entryIds.has(entry.journal_entry_id)
     );
   }, [currentWeek.journal_entry_ids, experience.journal_entries]);
-  const allNudgeEntryIds = useMemo(
-    () => new Set(
-      weeks.flatMap((_, index) =>
-        projectScenarioWeek(loaded.fixture, index).session.nudges
-      )
-        .filter(isDisplayableNudge)
-        .map((nudge) => nudge.journal_entry_id),
-    ),
-    [loaded.fixture, weeks],
-  );
-  const replaySteps = useMemo(
-    () => replayStepsFor(currentWeek.journal_entry_ids, allNudgeEntryIds),
-    [allNudgeEntryIds, currentWeek.journal_entry_ids],
-  );
-  const completedStage = replaySteps.length;
+  // Retain the saved step-count format so existing browser progress remains readable.
+  const completedStage = currentWeek.journal_entry_ids.length + experience.nudges.filter(
+    (nudge) => currentWeek.journal_entry_ids.includes(nudge.journal_entry_id)
+      && isDisplayableNudge(nudge),
+  ).length + 1;
+  const weekKey = `${loaded.catalogItem.scenario_id}:${currentWeek.week_id}`;
+  const resultVisible = reviewedWeekKey === weekKey;
   const progress = experience.replay_progress?.scenario_id === loaded.catalogItem.scenario_id
     ? experience.replay_progress
     : null;
-  const revealStage = progress?.week_index === safeWeekIndex
-    ? Math.min(progress.reveal_stage, completedStage)
-    : safeWeekIndex === 0 ? 0 : completedStage;
   const furthestCompletedWeek = Math.min(
     progress?.furthest_completed_week ?? (safeWeekIndex === 0 ? -1 : safeWeekIndex),
     weeks.length - 1,
@@ -419,21 +363,6 @@ export function PersonaReplayExperience({
       furthest_completed_week: furthest,
     } });
   }, [furthestCompletedWeek, loaded.catalogItem.scenario_id, safeWeekIndex, updateExperience]);
-  const revealedSteps = replaySteps.slice(0, revealStage);
-  const visibleEntryCount = revealedSteps.filter(
-    (step) => step.kind === "entry",
-  ).length;
-  const visibleNudgeEntryIds = useMemo(
-    () => new Set(
-      replaySteps
-        .slice(0, revealStage)
-        .filter((step) => step.kind === "nudge")
-        .map((step) => step.journalEntryId),
-    ),
-    [revealStage, replaySteps],
-  );
-  const nextReplayStep = replaySteps[revealStage] ?? null;
-  const resultVisible = revealedSteps.some((step) => step.kind === "result");
   const isFirst = safeWeekIndex === 0;
   const isLast = safeWeekIndex === weeks.length - 1;
   const preferredKeyIndex = keyMomentIndexFor(loaded.catalogItem, weeks);
@@ -450,16 +379,8 @@ export function PersonaReplayExperience({
     .find((event) => event !== undefined)?.event_id ?? null;
 
   useEffect(() => {
-    setPlaying(false);
-  }, [loaded.catalogItem.scenario_id]);
-
-  useEffect(() => {
-    if (nextReplayStep?.kind !== "nudge") return;
-    const timer = window.setTimeout(() => {
-      recordProgress(Math.min(revealStage + 1, completedStage));
-    }, NUDGE_REVEAL_DELAY_MS);
-    return () => window.clearTimeout(timer);
-  }, [completedStage, nextReplayStep, recordProgress, revealStage]);
+    setReviewedWeekKey(null);
+  }, [weekKey]);
 
   useEffect(() => {
     const activeWeek = weekRailRef.current?.querySelector<HTMLButtonElement>(
@@ -481,74 +402,19 @@ export function PersonaReplayExperience({
   }, [safeWeekIndex]);
 
   useEffect(() => {
-    if (reducedMotion && playing) setPlaying(false);
-  }, [playing, reducedMotion]);
-
-  useEffect(() => {
-    if (!playing || reducedMotion) return;
-    if (resultVisible && isLast) {
-      setPlaying(false);
-      return;
-    }
-    let delay = NEXT_WEEK_DELAY_MS;
-    let advance = () => {
-      onWeekChange(safeWeekIndex + 1);
-      recordProgress(0, safeWeekIndex + 1);
-    };
-    if (nextReplayStep?.kind === "nudge") return;
-    if (nextReplayStep?.kind === "entry") {
-      delay = ENTRY_REVEAL_DELAY_MS;
-      advance = () => recordProgress(revealStage + 1);
-    } else if (nextReplayStep?.kind === "result") {
-      delay = RESULT_REVEAL_DELAY_MS;
-      advance = () => {
-        recordProgress(completedStage, safeWeekIndex, Math.max(furthestCompletedWeek, safeWeekIndex));
-      };
-    }
-    const timer = window.setTimeout(advance, delay);
-    return () => window.clearTimeout(timer);
-  }, [
-    completedStage,
-    furthestCompletedWeek,
-    isLast,
-    nextReplayStep,
-    onWeekChange,
-    playing,
-    reducedMotion,
-    recordProgress,
-    resultVisible,
-    revealStage,
-    safeWeekIndex,
-  ]);
-
-  useEffect(() => {
     headingRef?.current?.focus({ preventScroll: true });
   }, [headingRef, loaded.catalogItem.scenario_id]);
 
-  const showCompletedWeek = (index: number) => {
+  const showWeek = (index: number) => {
     if (index < 0 || index >= weeks.length) return;
-    setPlaying(false);
+    setReviewedWeekKey(null);
     onWeekChange(index);
-    recordProgress(
-      replayStepsFor(weeks[index].journal_entry_ids, allNudgeEntryIds).length,
-      index,
-      Math.max(furthestCompletedWeek, index),
-    );
+    recordProgress(0, index);
   };
 
-  const advanceOneStep = () => {
-    setPlaying(false);
-    if (revealStage < completedStage) {
-      recordProgress(revealStage + 1, safeWeekIndex,
-        nextReplayStep?.kind === "result"
-          ? Math.max(furthestCompletedWeek, safeWeekIndex)
-          : furthestCompletedWeek);
-      return;
-    }
-    if (!isLast) {
-      onWeekChange(safeWeekIndex + 1);
-      recordProgress(0, safeWeekIndex + 1);
-    }
+  const reviewWeek = () => {
+    setReviewedWeekKey(weekKey);
+    recordProgress(completedStage, safeWeekIndex, Math.max(furthestCompletedWeek, safeWeekIndex));
   };
 
   return (
@@ -596,7 +462,6 @@ export function PersonaReplayExperience({
             className="inspect-run-link"
             type="button"
             onClick={() => {
-              setPlaying(false);
               onChoosePersona();
             }}
           >
@@ -635,7 +500,7 @@ export function PersonaReplayExperience({
             </strong>
           ) : (
             <span className="replay-controls__pending">
-              {playing ? "Replaying…" : "Ready"}
+              Ready to review
             </span>
           )}
         </div>
@@ -681,7 +546,7 @@ export function PersonaReplayExperience({
                     if (!revealed || (index === safeWeekIndex && !resultVisible)) {
                       return;
                     }
-                    showCompletedWeek(index);
+                    showWeek(index);
                   }}
                 >
                   <span>W{index + 1}</span>
@@ -696,14 +561,14 @@ export function PersonaReplayExperience({
 
         <div
           className="replay-controls__buttons"
-          style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}
+          style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
         >
           <button
             className="button button--quiet"
             type="button"
-            disabled={isFirst && furthestCompletedWeek < 0 && revealStage === 0}
+            disabled={isFirst && furthestCompletedWeek < 0 && !resultVisible}
             onClick={() => {
-              setPlaying(false);
+              setReviewedWeekKey(null);
               onWeekChange(0);
               recordProgress(0, 0, -1);
             }}
@@ -715,45 +580,29 @@ export function PersonaReplayExperience({
             type="button"
             disabled={isFirst}
             onClick={() => {
-              showCompletedWeek(safeWeekIndex - 1);
+              showWeek(safeWeekIndex - 1);
             }}
           >
             Previous
           </button>
           <button
-            className="button replay-controls__play"
-            type="button"
-            disabled={reducedMotion || (isLast && resultVisible && !playing)}
-            aria-describedby={reducedMotion ? "reduced-motion-note" : undefined}
-            onClick={() => setPlaying((current) => !current)}
-          >
-            {playing ? "Pause replay" : "Auto replay"}
-          </button>
-          <button
             className="button button--primary"
             type="button"
-            disabled={(isLast && resultVisible) || nextReplayStep?.kind === "result"}
-            onClick={advanceOneStep}
+            disabled={isLast || !resultVisible}
+            onClick={() => showWeek(safeWeekIndex + 1)}
           >
-            Next step
+            Next week
           </button>
           <button
             className="button button--quiet replay-controls__jump"
             style={{ gridColumn: "1 / -1", fontSize: "0.75rem" }}
             type="button"
             disabled={safeWeekIndex === keyMomentIndex && resultVisible}
-            onClick={() => showCompletedWeek(keyMomentIndex)}
+            onClick={() => showWeek(keyMomentIndex)}
           >
             {keyMomentLabel(loaded.catalogItem.role, keyMomentIndex)}
           </button>
         </div>
-
-        {reducedMotion ? (
-          <p className="replay-controls__motion-note" id="reduced-motion-note">
-            Automatic replay is off because reduced motion is enabled. Previous
-            and Next step remain available.
-          </p>
-        ) : null}
       </section>
 
       <ReplayTimeline
@@ -766,17 +615,8 @@ export function PersonaReplayExperience({
         reviewTraceEvents={experience.trace_events}
         selectedJournalEntryId={experience.selected_entry_id}
         cumulativeEntryCount={experience.journal_entries.length}
-        visibleEntryCount={visibleEntryCount}
-        visibleNudgeEntryIds={visibleNudgeEntryIds}
-        pendingNudgeEntryId={
-          nextReplayStep?.kind === "nudge"
-            ? nextReplayStep.journalEntryId
-            : null
-        }
         resultVisible={resultVisible}
-        onRevealResult={() => showCompletedWeek(safeWeekIndex)}
-        onPauseReplay={() => setPlaying(false)}
-        playing={playing}
+        onRevealResult={reviewWeek}
         driftResult={experience.drift_result}
         weeklyDigest={experience.weekly_digest}
         inspectRun={inspectRun}

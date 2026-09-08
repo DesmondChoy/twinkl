@@ -16,8 +16,10 @@ from src.demo.contracts import (
     TraceReadRequest,
 )
 from src.north_star.runtime import (
+    LIVE_POLICY_PATH,
     NorthStarRequest,
     OpenAINorthStarRuntime,
+    _PrivateResponseLedger,
     pending_north_star_record,
 )
 from tests.demo.test_experience_service import (
@@ -82,6 +84,47 @@ async def reviewed_session(runtime: ControlledRuntime):
         week_start="2026-07-20",
     )
     return service, create, reviewer, response.session, request
+
+
+@pytest.mark.asyncio
+async def test_fresh_live_policy_passes_service_publication_and_reuse_validation(
+    tmp_path,
+):
+    service, _, reviewer, session, request = await reviewed_session(ControlledRuntime())
+    snapshot = service._north_star_request(session, request.week_start)
+    ledger = _PrivateResponseLedger(tmp_path / "live-budget.json", LIVE_POLICY_PATH)
+    provider = FakeProvider(
+        tmp_path,
+        supportive={(snapshot.core_values[0], snapshot.writing[0].entry_id)},
+        ledger=ledger,
+    )
+    service._north_star_runtime = OpenAINorthStarRuntime(
+        provider=provider,
+        count_requests=count_requests,
+        policy_path=LIVE_POLICY_PATH,
+    )
+    weekly_events = list(service._events[session.session_id])
+    first = await service.review_north_star(request)
+    assert first.operation == "north_star_reviewed"
+    event = service._events[session.session_id][-1]
+    assert isinstance(event, NorthStarReviewedEvent)
+    assert event.source == "live_run"
+    assert event.details.record.status == "complete"
+    assert event.details.record.selected.entry_id == snapshot.writing[0].entry_id
+    assert event.model_contract.model == "gpt-5.6-luna"
+    generated = provider.generated
+    charged = ledger.path.read_bytes()
+
+    reused = await service.review_north_star(request)
+    assert reused.operation == "north_star_reviewed"
+    assert reused.event_ids == first.event_ids
+    assert provider.generated == generated
+    assert ledger.path.read_bytes() == charged
+    assert len(reviewer.requests) == 1
+    assert [
+        event for event in service._events[session.session_id]
+        if not isinstance(event, NorthStarReviewedEvent)
+    ] == weekly_events
 
 
 @pytest.mark.asyncio

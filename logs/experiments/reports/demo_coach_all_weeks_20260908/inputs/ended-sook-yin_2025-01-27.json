@@ -1,0 +1,59 @@
+{
+  "persona_id": "ed67c9cc",
+  "persona_name": "Lim Sook Yin",
+  "week_start": "2025-01-27",
+  "week_end": "2025-02-02",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "hedonism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "hedonism": "no_active_drift"
+  },
+  "drift_details": {
+    "hedonism": {
+      "state": "no_active_drift",
+      "current_run_length": 1,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-02-02"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-02",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "Made pandan chiffon cake this morning. The kitchen smelled good for hours and I sat at the table eating a slice with hot Milo before anyone else was up. It was nice.\n\nResponse: Everything becomes about what needs doing next."
+    },
+    {
+      "date": "2025-02-02",
+      "t_index": 1,
+      "direction": "misaligned",
+      "dimensions": [
+        "hedonism"
+      ],
+      "score_mean": null,
+      "excerpt": "I said yes obviously. But it means I'll miss the CNY market at Chinatown with Mei and Hwee Leng."
+    }
+  ],
+  "coach_narrative": null,
+  "validation": null
+}

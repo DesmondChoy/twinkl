@@ -38,6 +38,7 @@ from src.north_star.review import (
 
 ROOT = Path(__file__).resolve().parents[2]
 INTEGRATION_POLICY_PATH = ROOT / "config/evals/north_star_integration_v1.json"
+LIVE_POLICY_PATH = ROOT / "config/evals/north_star_live_v1.json"
 DEFAULT_DIRECTORY = ROOT / "logs/experiments/reports/north_star_integration_20260906"
 PROTOCOL_VERSION = "north-star-integration-v1"
 RecordStatus = Literal["pending", "complete", "failed", "not_eligible"]
@@ -741,9 +742,35 @@ def validate_north_star_record(
     if len(record.reviews) != len(values):
         raise ValueError("North Star Moment review coverage is incomplete")
     reviewed = []
-    policy = json.loads(INTEGRATION_POLICY_PATH.read_text())
+    requests = source_review_requests(request)
+    if any(
+        not saved.provider_attempts
+        or saved.provider_attempts[-1].status != "completed"
+        for saved in record.reviews
+    ):
+        raise ValueError("North Star Moment lacks a completed provider receipt")
+    # The receipt identifies one of our pinned policies; records cannot supply
+    # policy settings or mix saved-experiment and live authorizations.
+    policies = [
+        json.loads(path.read_text())
+        for path in (INTEGRATION_POLICY_PATH, LIVE_POLICY_PATH)
+    ]
+    matching_policies = [
+        candidate
+        for candidate in policies
+        if all(
+            saved.provider_attempts[-1].request_hash
+            == stable_hash(
+                {**provider_request, "policy_hash": stable_hash(candidate)}
+            )
+            for saved, provider_request in zip(record.reviews, requests, strict=True)
+        )
+    ]
+    if len(matching_policies) != 1:
+        raise ValueError("North Star Moment provider receipt policy changed")
+    policy = matching_policies[0]
     for value, saved, provider_request in zip(
-        values, record.reviews, source_review_requests(request), strict=True
+        values, record.reviews, requests, strict=True
     ):
         metadata = request.value_definitions[value]
         if (
@@ -756,11 +783,6 @@ def validate_north_star_record(
             or saved.schema_version != assessment.SOURCE_SCHEMA_VERSION
         ):
             raise ValueError("North Star Moment review inputs changed")
-        if (
-            not saved.provider_attempts
-            or saved.provider_attempts[-1].status != "completed"
-        ):
-            raise ValueError("North Star Moment lacks a completed provider receipt")
         input_tokens = input_budget.validate_receipt(
             provider_request, policy, saved.input_receipt
         )

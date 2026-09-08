@@ -1010,6 +1010,15 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           }}>
           twinkl<span>·</span>
         </a>
+        {entryChoiceOpen ? (
+          <a className="entry-repository" href="https://github.com/DesmondChoy/twinkl"
+            target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.03-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.63 1.22 3.27.93.1-.72.4-1.22.71-1.5-2.5-.28-5.13-1.25-5.13-5.57 0-1.23.44-2.23 1.16-3.01-.12-.29-.5-1.43.11-2.98 0 0 .94-.3 3.08 1.15a10.75 10.75 0 0 1 5.6 0c2.14-1.45 3.07-1.15 3.07-1.15.61 1.55.23 2.69.11 2.98.73.78 1.16 1.78 1.16 3.01 0 4.33-2.63 5.28-5.14 5.56.41.35.76 1.03.76 2.08v3.11c0 .3.21.65.77.54A11.2 11.2 0 0 0 12 .8Z" />
+            </svg>
+            <span>GitHub{" "}<span className="sr-only">repository (opens in a new tab)</span></span>
+          </a>
+        ) : null}
         {!entryChoiceOpen ? <>
         <nav className="view-switcher" aria-label="Demo view">
           <button
@@ -1039,20 +1048,14 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           ) : null}
         </nav>
         <div className="topbar-actions">
-          {!personaPickerOpen ? (
-            <button
-              className="restart"
-              type="button"
-              disabled={deletingSession}
-              onClick={() => {
-                setPickerReturnsToChoice(false);
-                setPersonaPickerOpen(true);
-                showView("experience");
-              }}
-            >
-              {selectedPersonaId ? "Change Persona" : "Try demo"}
-            </button>
-          ) : null}
+          <button
+            className="restart"
+            type="button"
+            disabled={deletingSession}
+            onClick={() => setEntryChoiceOpen(true)}
+          >
+            Go home
+          </button>
           <button
             className="restart"
             type="button"
@@ -1158,6 +1161,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 if (pickerReturnsToChoice) setEntryChoiceOpen(true);
               }}
               onLoad={activateScenario}
+              onResume={() => {
+                setPersonaPickerOpen(false);
+                setPickerReturnsToChoice(false);
+              }}
             />
           ) : null}
 
