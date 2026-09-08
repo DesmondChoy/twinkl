@@ -268,6 +268,47 @@ describe("onboarding app", () => {
     expect(deleteExperienceSession).not.toHaveBeenCalled();
   });
 
+  it("keeps the saved replay free of the outer Experience trail while preserving chooser and Inspect navigation", async () => {
+    saveReplayInInspect(activeReplayJson.scenario.persona_id);
+    const saved = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
+    saved.experience.active_view = "experience";
+    saved.experience.selected_event_id = null;
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(saved));
+    vi.stubGlobal("fetch", vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(scenarioCatalogJson)))
+      .mockResolvedValueOnce(new Response(activeReplayRaw))
+      .mockImplementation(async () => new Response(JSON.stringify(scenarioCatalogJson))));
+    const user = userEvent.setup();
+    render(<App />);
+
+    const expectReplayLayout = () => {
+      const main = screen.getByRole("main");
+      expect(main.classList.contains("layout--replay")).toBe(true);
+      expect(main.classList.contains("layout--section-rail")).toBe(false);
+      expect(main.querySelector(".instrument-panel")).toBeNull();
+      expect(main.querySelector(".compass")).toBeNull();
+      expect(screen.queryByRole("navigation", { name: "Experience sections" })).toBeNull();
+      expect(screen.queryByText("Experience trail")).toBeNull();
+    };
+    expect(screen.getByRole("heading", { name: "Restoring the replay…" })).toBeTruthy();
+    expectReplayLayout();
+    await screen.findByRole("heading", { name: "Journal Entries" });
+    expectReplayLayout();
+
+    await user.click(screen.getByRole("button", { name: "Inspect" }));
+    const inspectNavigation = screen.getByRole("navigation", { name: "Experience sections" });
+    expect(within(inspectNavigation).getByRole("link", { name: "Summary" })).toBeTruthy();
+    expect(within(inspectNavigation).getByRole("link", { name: "Recorded work" })).toBeTruthy();
+    expect(screen.getByRole("main").classList.contains("layout--section-rail")).toBe(true);
+    expect(screen.getByRole("main").classList.contains("layout--replay")).toBe(false);
+
+    await user.click(screen.getByRole("button", { name: "Go home" }));
+    await user.click(screen.getByRole("button", { name: "Try the Demo" }));
+    await screen.findByRole("heading", { name: "See how Twinkl works" });
+    expect(screen.getByRole("main").classList.contains("layout--section-rail")).toBe(true);
+    expect(screen.getByRole("main").classList.contains("layout--replay")).toBe(false);
+  });
+
   it.each(["Experience", "Inspect"])("returns home from saved replay %s and continues the selected week without changing saved evidence or progress", async (view) => {
     saveReplayInInspect(activeReplayJson.scenario.persona_id);
     const fetchMock = vi.fn()

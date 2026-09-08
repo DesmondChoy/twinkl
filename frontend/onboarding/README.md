@@ -45,8 +45,8 @@ journeys while preserving progress. **Try the Demo** loads one of five saved
 synthetic Personas into the same React session. Each selected week immediately
 shows its Journal Entries, displayed nudges, and responses. **Review Weekly
 Drift Detection** opens the saved result and Coach Digest; **Next week** then
-advances. **Previous**, **Restart**, and named jumps such as **Show Active Drift —
-week 4** in Nisha's replay provide navigation. Every week change, reload, and
+advances. Previously reviewed weeks, **Restart**, and named jumps such as
+**Show Active Drift — week 4** in Nisha's replay provide navigation. Every week change, reload, and
 return from Inspect opens the journals first. The Persona picker shows all weekly
 states in one selectable comparison table. On desktop, the table spans the
 available content width, with compact rows and spacing that adapts to the
@@ -61,6 +61,13 @@ explanation and action follow that Persona's row. A **See how Twinkl works**
 banner explains how to read the saved Journal Entries, see weekly results,
 and check supporting entries in Inspect. Experience and Inspect navigation
 begins inside the replay.
+
+Inside the saved replay, a quiet 170px week navigator replaces the section-link
+banner. It shows week numbers and dates, highlights the selection, and keeps
+future outcomes hidden. Restart and the key-week shortcut sit below it. A
+collapsed Profile row and compact week heading leave the main area for reading;
+Next week stays beside the week heading. At widths up to 900px, the weeks form
+a horizontal strip instead.
 
 The saved demo uses the chooser's typography throughout: Source Serif 4
 headings, Manrope body text and actions at 16px, and secondary labels at 14.4px.
@@ -86,12 +93,12 @@ that the current rule generated the historical nudges. Live Experience still
 enforces the anti-annoyance rule.
 
 The selected week has one expanded reading panel. **Review Weekly Drift
-Detection** gives the result the full workspace width and collapses the
-journals to a count and **Read Journal Entries** action. **Read Weekly Drift
+Detection** sits beside the Journal Entries heading and opens the result in
+the same content area, with **Read Journal Entries** beside its heading. **Read Weekly Drift
 Detection** restores a reviewed result. **Why this state** keeps detailed
 evidence collapsed; source links open a desktop side panel or phone bottom
-sheet. Coach Digest and North Star Moment appear side by side on wide screens
-and stack on phones, with direct navigation to each available card. A uniquely
+sheet. The Drift state and Coach Digest appear side by side on wide screens
+and stack on phones. The North Star Moment remains within the Coach Digest. A uniquely
 matched abbreviated Coach Digest quotation expands to its full source below
 the paragraph, while Inspect preserves the original model response.
 

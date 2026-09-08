@@ -427,18 +427,17 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     selectedPersonaId
     && loadedScenario?.catalogItem.persona_id === selectedPersonaId,
   );
+  const showSavedPersonaReplay = Boolean(selectedPersonaId) && !personaPickerOpen;
   const experienceSectionView: ExperienceSectionMapView | null =
     personaPickerOpen
       ? "persona-picker"
-      : personaReplayReady
-        ? "persona-replay"
-        : !selectedPersonaId && session.stage === "summary"
-          ? "summary"
-          : !selectedPersonaId && session.stage === "complete" && !journalStarted
-            ? "complete"
-            : !selectedPersonaId && journalStarted
-              ? "journal"
-              : null;
+      : !selectedPersonaId && session.stage === "summary"
+        ? "summary"
+        : !selectedPersonaId && session.stage === "complete" && !journalStarted
+          ? "complete"
+          : !selectedPersonaId && journalStarted
+            ? "journal"
+            : null;
   const showProfileCompass = !selectedPersonaId
     && !journalStarted
     && (session.stage === "summary" || session.stage === "complete");
@@ -1115,9 +1114,12 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           aria-busy={deletingSession}
           inert={deletingSession ? true : undefined}
           className={`layout${
-            experienceSectionView ? " layout--section-rail" : ""
+            showSavedPersonaReplay
+              ? " layout--replay"
+              : experienceSectionView ? " layout--section-rail" : ""
           }`}
         >
+          {!showSavedPersonaReplay ? (
           <aside
             className={`instrument-panel${showProfileCompass ? " instrument-panel--with-profile-compass" : ""}`}
           >
@@ -1158,6 +1160,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               </>
             )}
           </aside>
+          ) : null}
 
           <section className="flow-panel">
           {!personaPickerOpen && !selectedPersonaId && !journalStarted ? (

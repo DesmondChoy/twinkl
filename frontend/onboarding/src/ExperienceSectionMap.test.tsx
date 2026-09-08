@@ -8,7 +8,6 @@ const EXPECTED_LINKS: Partial<Record<ExperienceSectionMapView, string[]>> = {
   summary: ["Profile", "Confirm"],
   complete: ["Profile", "Journal Entry"],
   journal: ["Prompt", "Write"],
-  "persona-replay": ["Persona", "Week", "This week"],
   inspect: ["Summary", "Recorded work"],
 };
 

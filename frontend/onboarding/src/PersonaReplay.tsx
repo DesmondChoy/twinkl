@@ -364,33 +364,49 @@ export function PersonaReplayExperience({
   }, [weekKey]);
 
   useEffect(() => {
-    const activeWeek = weekRailRef.current?.querySelector<HTMLButtonElement>(
-      '.week-rail__button[aria-current="step"]',
-    );
-    if (activeWeek && weekRailRef.current) {
-      const railBounds = weekRailRef.current.getBoundingClientRect();
+    const keepActiveWeekVisible = () => {
+      const rail = weekRailRef.current;
+      const activeWeek = rail?.querySelector<HTMLButtonElement>(
+        '.week-rail__button[aria-current="step"]',
+      );
+      if (!rail || !activeWeek) return;
+      const railBounds = rail.getBoundingClientRect();
       const activeBounds = activeWeek.getBoundingClientRect();
       const activeCenter =
         activeBounds.left
         - railBounds.left
-        + weekRailRef.current.scrollLeft
+        + rail.scrollLeft
         + activeBounds.width / 2;
-      weekRailRef.current.scrollLeft = Math.max(
+      rail.scrollLeft = Math.max(
         0,
-        activeCenter - weekRailRef.current.clientWidth / 2,
+        activeCenter - rail.clientWidth / 2,
       );
-    }
-  }, [safeWeekIndex]);
+      const navigation = rail.parentElement;
+      if (navigation) {
+        const bounds = navigation.getBoundingClientRect();
+        if (activeBounds.bottom > bounds.bottom) {
+          navigation.scrollTop += activeBounds.bottom - bounds.bottom;
+        } else if (activeBounds.top < bounds.top) {
+          navigation.scrollTop -= bounds.top - activeBounds.top;
+        }
+      }
+    };
+    keepActiveWeekVisible();
+    window.addEventListener("resize", keepActiveWeekVisible);
+    return () => window.removeEventListener("resize", keepActiveWeekVisible);
+  }, [safeWeekIndex, furthestCompletedWeek]);
 
   useEffect(() => {
     headingRef?.current?.focus({ preventScroll: true });
   }, [headingRef, loaded.catalogItem.scenario_id]);
 
-  const showWeek = (index: number) => {
+  const showWeek = (index: number, restart = false) => {
     if (index < 0 || index >= weeks.length) return;
     setReviewedWeekKey(null);
     onWeekChange(index);
-    recordProgress(0, index);
+    recordProgress(0, index, restart ? -1 : furthestCompletedWeek);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   };
 
   const reviewWeek = () => {
@@ -451,41 +467,8 @@ export function PersonaReplayExperience({
         </div>
       </details>
 
-      <section
-        className="replay-controls"
-        aria-labelledby="replay-week-title"
-      >
-        <div
-          className="replay-controls__week"
-          aria-atomic="true"
-          aria-live="polite"
-        >
-          <div>
-            <p className="eyebrow">
-              Week {safeWeekIndex + 1} of {weeks.length}
-            </p>
-            <h2 id="replay-week-title">
-              {displayWeekRange(
-                currentWeek.week_start,
-                currentWeek.week_end,
-              )}
-            </h2>
-          </div>
-          {resultVisible ? (
-            <strong
-              className={`replay-controls__state replay-controls__state--${
-                currentWeek.expected_delivery_state
-              }`}
-            >
-              {replayStateLabel(currentWeek.expected_delivery_state)}
-            </strong>
-          ) : (
-            <span className="replay-controls__pending">
-              Ready to review
-            </span>
-          )}
-        </div>
-
+      <nav className="replay-week-nav" aria-label="Replay weeks">
+        <p className="replay-week-nav__title">Weeks</p>
         <ol
           className="week-rail"
           aria-label="Saved replay weeks"
@@ -495,6 +478,7 @@ export function PersonaReplayExperience({
             const revealed =
               index <= furthestCompletedWeek
               || (index === safeWeekIndex && resultVisible);
+            const selectable = revealed || index < safeWeekIndex;
             const label = revealed
               ? `Week ${index + 1}: ${
                 replayStateLabel(week.expected_delivery_state)
@@ -514,7 +498,7 @@ export function PersonaReplayExperience({
                 <button
                   type="button"
                   className="week-rail__button"
-                  disabled={!revealed || (index === safeWeekIndex && !resultVisible)}
+                  disabled={!selectable || (index === safeWeekIndex && !resultVisible)}
                   aria-current={
                     index === safeWeekIndex ? "step" : undefined
                   }
@@ -524,15 +508,18 @@ export function PersonaReplayExperience({
                       : `Show week ${index + 1}, outcome hidden`
                   }
                   onClick={() => {
-                    if (!revealed || (index === safeWeekIndex && !resultVisible)) {
+                    if (!selectable || (index === safeWeekIndex && !resultVisible)) {
                       return;
                     }
                     showWeek(index);
                   }}
                 >
-                  <span>W{index + 1}</span>
+                  <span>Week {index + 1}</span>
+                  <small className="replay-week-nav__dates">
+                    {displayWeekRange(week.week_start, week.week_end)}
+                  </small>
                   {revealed ? (
-                    <small>{replayStateLabel(week.expected_delivery_state)}</small>
+                    <small className="replay-week-nav__state">{replayStateLabel(week.expected_delivery_state)}</small>
                   ) : null}
                 </button>
               </li>
@@ -540,41 +527,17 @@ export function PersonaReplayExperience({
           })}
         </ol>
 
-        <div
-          className="replay-controls__buttons"
-        >
+        <div className="replay-week-nav__shortcuts">
           <button
             className="button button--quiet"
             type="button"
             disabled={isFirst && furthestCompletedWeek < 0 && !resultVisible}
-            onClick={() => {
-              setReviewedWeekKey(null);
-              onWeekChange(0);
-              recordProgress(0, 0, -1);
-            }}
+            onClick={() => showWeek(0, true)}
           >
             Restart
           </button>
           <button
-            className="button button--quiet"
-            type="button"
-            disabled={isFirst}
-            onClick={() => {
-              showWeek(safeWeekIndex - 1);
-            }}
-          >
-            Previous
-          </button>
-          <button
-            className="button button--primary"
-            type="button"
-            disabled={isLast || !resultVisible}
-            onClick={() => showWeek(safeWeekIndex + 1)}
-          >
-            Next week
-          </button>
-          <button
-            className="button button--quiet replay-controls__jump"
+            className="button button--quiet replay-week-nav__jump"
             type="button"
             disabled={safeWeekIndex === keyMomentIndex && resultVisible}
             onClick={() => showWeek(keyMomentIndex)}
@@ -582,7 +545,26 @@ export function PersonaReplayExperience({
             {keyMomentLabel(loaded.catalogItem.role, keyMomentIndex)}
           </button>
         </div>
-      </section>
+      </nav>
+
+      <header className="replay-week-heading">
+        <div aria-atomic="true" aria-live="polite">
+          <p className="replay-week-heading__position">
+            Week {safeWeekIndex + 1} of {weeks.length}
+          </p>
+          <h2 id="replay-week-title">
+            {displayWeekRange(currentWeek.week_start, currentWeek.week_end)}
+          </h2>
+        </div>
+        <button
+          className="button button--primary"
+          type="button"
+          disabled={isLast || !resultVisible}
+          onClick={() => showWeek(safeWeekIndex + 1)}
+        >
+          Next week
+        </button>
+      </header>
 
       <ReplayTimeline
         profile={profile}

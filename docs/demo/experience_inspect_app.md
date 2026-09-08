@@ -306,8 +306,16 @@ Persona simulation presents one week at a time. Each selected week immediately
 shows all its saved Journal Entries as compact excerpts, with available nudges
 and responses beneath their entries. **Review Weekly Drift Detection** opens
 that week's saved result. The replay makes no timed or automatic result reveal.
-**Next week** becomes available after this explicit review, while **Previous**,
-**Restart**, and the previously reviewed week markers provide navigation.
+**Next week** becomes available after this explicit review. Previously reviewed
+weeks remain selectable; **Restart** returns to week one and clears replay progress.
+
+On desktop, a quiet 170-pixel week navigator replaces the section-link banner.
+It shows each week's number and dates, highlights the selected week, and reveals
+states through the furthest reviewed week. Earlier weeks remain accessible after a key-week
+jump even when their outcomes have not been revealed. **Restart** and the named key-week shortcut sit
+below the list. The content area begins with a collapsed Profile row and a
+compact selected-week heading beside **Next week**. At widths up to 900 pixels,
+the weeks form a horizontally scrollable strip above the reading area.
 
 Selecting a week projects only Journal Entries and evidence available by its
 cutoff. Later week markers remain disabled until reviewed. A named jump, such
@@ -341,14 +349,14 @@ The card discloses expansion; Inspect retains the original model response.
 Ambiguous matches and ellipses present in the source remain
 unchanged, with the complete Journal Entry available through its link.
 
-The desktop and phone Experience use one expanded panel in the fixed weekly
-workspace. Journal Entries occupy the full width first, with **Review Weekly
-Drift Detection** on the right (below the introduction on phones). Revealing the
-result minimizes the journals to a count and **Read Journal Entries** button.
+The desktop and phone Experience use one expanded reading panel that grows with
+its content. Journal Entries occupy the content width first, with **Review Weekly
+Drift Detection** beside the panel heading (below it on phones). Revealing the
+result hides the journals and places **Read Journal Entries** beside the result heading.
 That button restores the journals and hides the result; **Read Weekly Drift
 Detection** returns to the completed result without changing its evidence.
 Every week change opens Journal Entries, including key-week jumps and returning
-to a completed week. The review button opens its result again.
+to a completed week, and returns the page to the top. The review button opens its result again.
 
 The result uses two columns on wide desktops: a compact Drift state on the
 left and one integrated Coach Digest on the right. Phones and narrower screens
@@ -366,7 +374,7 @@ with the Drift state. Missing or invalid Coach responses show their existing
 status and suppress the passage. Missing, pending, failed, or unsuitable North
 Star Moment results leave a valid Coach Digest intact, without an empty moment
 card. Source links open the Journal Entry drawer without expanding the journals
-panel. The active week stays centered in the week rail.
+panel. The active week stays centered in the horizontal week strip on narrow screens.
 
 Profile details remain collapsed by default and include a short Persona context.
 Each Core Value explanation names its state beside the Core Value. When a
@@ -469,9 +477,10 @@ map highlights the section at the reading position. Narrow screens keep the
 single-column Inspect layout and do not show the rail.
 
 The same 240-pixel section rail supports Profile confirmation, the first
-Journal Entry handoff, manual Journal Entry work, saved Persona replay, and
-saved-run Inspect. The Persona chooser uses an informational banner instead
-of a section map. Each section map links only to sections in
+Journal Entry handoff, manual Journal Entry work, and saved-run Inspect.
+Saved Persona replay uses the week navigator described in section 5.3.
+The Persona chooser uses an informational banner instead of a section map.
+Each section map links only to sections in
 the current view. Content with a maximum width stays centered between the
 section rail and the outer page edge. The active values questions retain the
 compass because it shows assessment progress. Narrow screens do not show a
@@ -892,8 +901,10 @@ the source files and separate provider-backed Coach Digest generation workflow.
 - Primary actions, Journal Entry composition, persona replay, Coach Digest
   reading, and event inspection remain usable without hover or precision
   pointer input.
-- Persona replay controls and revealed week markers remain operable with touch
-  and keyboard input; unrevealed weeks remain inert.
+- Persona replay controls and available week markers remain operable with touch
+  and keyboard input. Earlier weeks remain accessible without exposing their
+  unrevealed outcomes; future weeks remain inert until reached through review
+  and **Next week**, or through a named key-week jump.
 - A context-specific weekly Inspect action moves focus to the weekly
   explanation. It keeps the linked event selected and expanded. Other Inspect
   actions move focus to the selected event.

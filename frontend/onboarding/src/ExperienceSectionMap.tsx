@@ -5,7 +5,6 @@ export type ExperienceSectionMapView =
   | "complete"
   | "journal"
   | "persona-picker"
-  | "persona-replay"
   | "inspect";
 
 interface ExperienceSectionMapProps {
@@ -56,28 +55,6 @@ const MAPS: Record<
         id: "experience-journal-handoff",
         label: "Journal Entry",
         description: "Continue into Experience",
-      },
-    ],
-  },
-  "persona-replay": {
-    eyebrow: "Experience trail",
-    title: "Follow this week.",
-    description: "Move between the Persona, week, Journal Entries, and result.",
-    sections: [
-      {
-        id: "experience-persona-profile",
-        label: "Persona",
-        description: "Profile and Core Values",
-      },
-      {
-        id: "replay-week-title",
-        label: "Week",
-        description: "Replay controls",
-      },
-      {
-        id: "replay-workspace",
-        label: "This week",
-        description: "Journal Entries and reflection",
       },
     ],
   },

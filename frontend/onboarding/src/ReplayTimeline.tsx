@@ -254,41 +254,6 @@ export default function ReplayTimeline({
         className={`replay-workspace${showingResult ? " replay-workspace--result" : ""}`}
         aria-label={`Week workspace with ${journalEntries.length} Journal Entries`}
       >
-        <div className="replay-workspace__controls">
-          <span>{showingResult
-            ? `${journalEntries.length} Journal Entries · minimized`
-            : resultVisible
-              ? "Revisit the week's Journal Entries."
-              : "Read the week, then reveal its reflection."}</span>
-          {showingResult ? (
-            <button
-              className="button button--quiet"
-              type="button"
-              aria-controls="replay-journals"
-              onClick={() => {
-                setPanel("entries");
-                window.requestAnimationFrame?.(() =>
-                  entriesHeadingRef.current?.focus({ preventScroll: true }),
-                );
-              }}
-            >
-              Read Journal Entries
-            </button>
-          ) : (
-            <button
-              className="button button--primary"
-              type="button"
-              aria-controls="replay-weekly-result"
-              onClick={() => {
-                setPanel("result");
-                if (!resultVisible) onRevealResult();
-              }}
-            >
-              {resultVisible ? "Read Weekly Drift Detection" : "Review Weekly Drift Detection"}
-            </button>
-          )}
-        </div>
-
         <section
           id="replay-journals"
           className="replay-column replay-column--entries"
@@ -297,14 +262,26 @@ export default function ReplayTimeline({
         >
           <header className="replay-column__header">
             <div>
-              <p className="eyebrow">This week</p>
               <h2 id="replay-entries-title" ref={entriesHeadingRef} tabIndex={-1}>
                 Journal Entries
               </h2>
             </div>
-            <span>
-              {visibleEntries.length} of {journalEntries.length}
-            </span>
+            <div className="replay-column__actions">
+              <span className="replay-column__count">
+                {journalEntries.length} {journalEntries.length === 1 ? "entry" : "entries"}
+              </span>
+              <button
+                className="button button--primary"
+                type="button"
+                aria-controls="replay-weekly-result"
+                onClick={() => {
+                  setPanel("result");
+                  if (!resultVisible) onRevealResult();
+                }}
+              >
+                {resultVisible ? "Read Weekly Drift Detection" : "Review Weekly Drift Detection"}
+              </button>
+            </div>
           </header>
           <div
             className="replay-timeline__status"
@@ -385,7 +362,6 @@ export default function ReplayTimeline({
         >
           <header className="replay-column__header">
             <div>
-              <p className="eyebrow">This week</p>
               <h2 id="replay-result-column-title" ref={resultHeadingRef} tabIndex={-1}>
                 Weekly Drift Detection{" "}
                 <span className="replay-column__basis">
@@ -396,6 +372,19 @@ export default function ReplayTimeline({
                 </span>
               </h2>
             </div>
+            <button
+              className="button button--quiet"
+              type="button"
+              aria-controls="replay-journals"
+              onClick={() => {
+                setPanel("entries");
+                window.requestAnimationFrame?.(() =>
+                  entriesHeadingRef.current?.focus({ preventScroll: true }),
+                );
+              }}
+            >
+              Read Journal Entries
+            </button>
           </header>
           <div className="replay-result-columns">
             <section className="replay-result-column replay-result-column--state" aria-label="Drift state">
