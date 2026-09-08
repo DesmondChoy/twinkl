@@ -295,6 +295,13 @@ Drift Reviewer Decisions, Drift states, and Coach Digest responses. **Go home**
 returns to the entry page from the Persona picker, replay, onboarding, or
 Inspect. A replay also offers **Choose another Persona** inside Profile details.
 
+The chooser and subsequent saved replay screens share Source Serif 4 headings
+and Manrope body text, with a consistent heading scale, 16px body text and
+actions, and 14.4px secondary labels. This includes Profile details, weekly
+results, Inspect, and the Journal Entry and AI review drawers. Technical code
+retains monospace. Shorter and narrow windows allow the replay page to scroll
+vertically so the larger text stays accessible.
+
 Persona simulation presents one week at a time. Each selected week immediately
 shows all its saved Journal Entries as compact excerpts, with available nudges
 and responses beneath their entries. **Review Weekly Drift Detection** opens

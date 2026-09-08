@@ -13,6 +13,13 @@
   --focus: #3157d5;
   --line: rgba(20, 34, 59, 0.15);
   --shadow: 0 28px 80px rgba(20, 34, 59, 0.12);
+  --demo-font-body: "Manrope Variable", "Avenir Next", system-ui, sans-serif;
+  --demo-font-heading: "Source Serif 4 Variable", Georgia, serif;
+  --demo-type-title: clamp(2rem, 2.6vw, 2.8rem);
+  --demo-type-section: clamp(1.5rem, 1.8vw, 2rem);
+  --demo-type-subheading: clamp(1.3rem, 1.5vw, 1.65rem);
+  --demo-type-body: 1rem;
+  --demo-type-secondary: 0.9rem;
 }
 
 * {
@@ -7758,7 +7765,7 @@ h2 {
 .persona-picker__header h1 {
   max-width: none;
   margin: 0 0 var(--picker-section-gap);
-  font-size: clamp(2rem, 2.6vw, 2.8rem);
+  font-size: var(--demo-type-title);
   line-height: 1.1;
 }
 
@@ -7918,7 +7925,7 @@ h2 {
 
 .persona-selection h2 {
   margin-bottom: 9px;
-  font-size: clamp(1.5rem, 1.8vw, 2rem);
+  font-size: var(--demo-type-section);
   line-height: 1.12;
 }
 
@@ -8092,4 +8099,132 @@ h2 {
 
 @media (max-width: 360px) {
   .persona-comparison tr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* The saved demo and its portals share the chooser's reading scale. */
+:is(.app-shell.app-shell--saved-persona:not(.app-shell--persona),
+    .replay-entry-drawer, .review-evidence-drawer, .review-evidence-preview) {
+  font-family: var(--demo-font-body);
+  font-size: var(--demo-type-body);
+  line-height: 1.5;
+
+  & :is(p, span, q, li, dt, dd, label, small, strong, a, button, summary,
+        input, select, textarea, time, blockquote, figcaption, .lede) {
+    font-family: var(--demo-font-body);
+    font-size: var(--demo-type-body);
+    line-height: 1.5;
+  }
+
+  & h1 {
+    font-family: var(--demo-font-heading);
+    font-size: var(--demo-type-title);
+    line-height: 1.1;
+  }
+
+  & h2 {
+    font-family: var(--demo-font-heading);
+    font-size: var(--demo-type-section);
+    line-height: 1.2;
+  }
+
+  & :is(h3, h4, .replay-persona > summary strong, .state-change header > span) {
+    font-family: var(--demo-font-heading);
+    font-size: var(--demo-type-subheading);
+    line-height: 1.25;
+  }
+
+  & :is(.eyebrow, small, .replay-entry__meta, .replay-entry__open,
+        .replay-entry__number, .replay-entry__nudge-label,
+        .replay-entry__response > span, .replay-persona__expand,
+        .persona-replay__source-line, .persona-replay__source-line span,
+        .replay-controls__state, .replay-controls__pending,
+        .replay-column__basis, .replay-column__header > span,
+        .replay-timeline__status, .replay-state, .state-change__entry-meta,
+        .state-change__read, .state-change__review-action, .review-decision,
+        .trace-chip, .trace-event__component, .trace-event__parent,
+        .review-evidence__source, .section-map__link small,
+        .section-map__link > span:first-child) {
+    font-size: var(--demo-type-secondary);
+    line-height: 1.4;
+  }
+
+  & :is(.replay-persona__context, .replay-result__basis) {
+    font-size: var(--demo-type-body) !important;
+  }
+
+  & :is(code, pre, pre span) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: var(--demo-type-secondary);
+    line-height: 1.5;
+  }
+
+  & .section-map__intro h2 { font-size: var(--demo-type-title); }
+  & .wordmark { font-family: var(--demo-font-heading); font-size: 1.75rem; }
+  & .wordmark span { font-family: inherit; font-size: inherit; }
+  & .section-map__link strong { font-weight: 700; }
+  & .section-map { overflow-y: auto; }
+  & .section-map__link { grid-template-columns: 25px minmax(0, 1fr); }
+  & .button { min-height: 44px; }
+  & .restart { letter-spacing: 0; }
+  & .replay-entry__excerpt { line-height: 1.5; }
+  & .replay-entry > button { padding: 14px; }
+  & .replay-entry__open { position: static; grid-column: 2; justify-self: end; }
+  & .replay-entry__number { width: 26px; height: 26px; }
+
+  & .replay-controls__jump { grid-column: 1 / -1; }
+  & .replay-controls__buttons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  & .week-rail__week { min-width: 76px; height: auto; flex-basis: 76px; }
+  & .week-rail__week[aria-current="step"] { min-width: 150px; flex-basis: 150px; }
+  & .week-rail__week[aria-current="step"] .week-rail__button small { max-width: none; }
+  & .week-rail__button { height: auto; min-height: 54px; }
+  & .week-rail__button small { max-width: none; white-space: normal; }
+  & .replay-column__header { flex-wrap: wrap; }
+
+
+  & .replay-result__body > ul li { flex-wrap: wrap; }
+  & .replay-result__body > ul li span { white-space: normal; overflow: visible; }
+  & .state-change header { flex-wrap: wrap; gap: 8px; }
+  & .state-change__entry-meta { flex-wrap: wrap; }
+  & .state-change__evidence { padding-bottom: 0; }
+  & .state-change__review-action { position: static; margin-top: 8px; min-height: 40px; }
+  & .replay-persona__value,
+  & .replay-persona__value > span { white-space: normal; overflow: visible; }
+  & .replay-entry-drawer__panel { width: min(560px, 94vw); }
+  & .replay-entry-drawer__panel > header,
+  & .review-evidence-drawer__panel > header { flex-wrap: wrap; }
+  & .replay-entry-drawer__close { padding: 8px 14px; }
+  & .review-evidence__contract { overflow-wrap: anywhere; }
+}
+
+/* At shorter heights, let the page grow so enlarged text stays reachable. */
+@media (max-height: 950px), (max-width: 900px) {
+  .app-shell--journal.app-shell--saved-persona {
+    height: auto;
+    overflow: visible;
+  }
+
+  .app-shell--journal.app-shell--saved-persona .layout,
+  .app-shell--journal.app-shell--saved-persona .flow-panel,
+  .app-shell--journal.app-shell--saved-persona .persona-replay {
+    height: auto;
+    overflow: visible;
+  }
+
+  .app-shell--saved-persona .replay-column__scroll,
+  .app-shell--saved-persona .replay-result-columns { max-height: none; overflow: visible; }
+}
+
+@media (max-width: 620px) {
+  .app-shell.app-shell--saved-persona:not(.app-shell--persona) {
+    & .replay-persona > summary { grid-template-columns: minmax(0, 1fr); }
+    & .replay-persona__expand { justify-self: start; }
+    & .replay-controls__week { flex-wrap: wrap; gap: 8px; }
+    & .replay-controls__state,
+    & .replay-controls__pending { max-width: none; white-space: normal; }
+
+
+    & .replay-controls__jump { grid-column: 1 / -1; }
+    & .replay-entry > button { grid-template-columns: minmax(0, 1fr); }
+    & .replay-entry__open { grid-column: 1; }
+  }
 }

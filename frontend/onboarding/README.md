@@ -62,6 +62,12 @@ banner explains how to read the saved Journal Entries, see weekly results,
 and check supporting entries in Inspect. Experience and Inspect navigation
 begins inside the replay.
 
+The saved demo uses the chooser's typography throughout: Source Serif 4
+headings, Manrope body text and actions at 16px, and secondary labels at 14.4px.
+The same scale applies to Profile details, Journal Entry and AI review drawers,
+weekly results, and Inspect. Technical code retains monospace. On shorter or
+narrow screens, the replay page grows vertically to keep the text accessible.
+
 Each Core Value explanation names its own state. The selected week and
 previously reviewed weeks persist across Experience and Inspect and after
 reload. **Continue replay · Week N** resumes the current Persona after returning

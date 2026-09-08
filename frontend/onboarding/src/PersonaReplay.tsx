@@ -542,7 +542,6 @@ export function PersonaReplayExperience({
 
         <div
           className="replay-controls__buttons"
-          style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
         >
           <button
             className="button button--quiet"
@@ -576,7 +575,6 @@ export function PersonaReplayExperience({
           </button>
           <button
             className="button button--quiet replay-controls__jump"
-            style={{ gridColumn: "1 / -1", fontSize: "0.75rem" }}
             type="button"
             disabled={safeWeekIndex === keyMomentIndex && resultVisible}
             onClick={() => showWeek(keyMomentIndex)}
