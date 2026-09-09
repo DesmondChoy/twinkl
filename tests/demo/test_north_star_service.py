@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import date
+from datetime import UTC, date, datetime, timedelta
 
 import pytest
 
@@ -84,6 +84,30 @@ async def reviewed_session(runtime: ControlledRuntime):
         week_start="2026-07-20",
     )
     return service, create, reviewer, response.session, request
+
+
+@pytest.mark.asyncio
+async def test_terminal_nsm_preserves_pending_start_and_operation_duration(monkeypatch):
+    runtime = ControlledRuntime(blocked=True)
+    service, _, _, session, request = await reviewed_session(runtime)
+    clock = [datetime(2026, 7, 25, 8, 30, tzinfo=UTC)]
+    ticks = [100.0]
+    service._now = lambda: clock[0]
+    monkeypatch.setattr("src.demo.experience_service.perf_counter", lambda: ticks[0])
+    task = asyncio.create_task(service.review_north_star(request))
+    await asyncio.wait_for(runtime.started.wait(), 1)
+    pending = service._events[session.session_id][-1]
+    assert pending.status == "running"
+    clock[0] += timedelta(seconds=5.072)
+    ticks[0] += 5.072
+    runtime.release.set()
+    response = await task
+    assert response.operation == "north_star_reviewed"
+    completed = service._events[session.session_id][-1]
+    assert completed.event_id == pending.event_id
+    assert completed.started_at == pending.started_at
+    assert completed.completed_at == clock[0].isoformat()
+    assert completed.duration_ms == 5072
 
 
 @pytest.mark.asyncio

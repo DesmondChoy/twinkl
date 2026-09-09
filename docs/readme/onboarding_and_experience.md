@@ -43,6 +43,32 @@ response, North Star Moment record, and trace events. Manual sessions retain
 **View Profile calculation** in Inspect; saved Persona Profiles disclose their
 synthetic projection.
 
+**Reviewed week** opens a retained closed-week result, including its matching
+Coach Digest and North Star Moment outcome. Browsing completed historical
+results makes no model call; writing stays on the current Simulated time date.
+The selection is stored by the week's Monday rather than its position in the
+list. Active Drift presents the Journal Entries that started and continued the
+conflict before other context. A Not Conflict decision does not label that
+context as supportive.
+
+Manual Experience shows progress and failure states for Coach Digest and
+North Star Moment, as well as recorded ineligible or no-supportive-source
+outcomes. **Retry Coach Digest** retries the saved Weekly Drift Detection
+output without advancing time or repeating the Weekly Drift Reviewer.
+**Retry moment review** is available for an eligible retryable North Star
+Moment failure. If accepted work is missing its trace, **Try loading Inspect
+again** reloads those details without repeating the accepted work.
+
+**Inspect latest activity** opens the latest recorded event, while **Inspect
+this moment** opens the event for the displayed quotation. A weekly explanation
+uses the selected event's recorded run and dates, so results from different
+weeks do not mix. The **Weekly results** filter includes Drift Detector,
+structured Weekly Drift Detection output, Coach Digest, and North Star Moment
+events. **View Profile calculation** shows the assessment without a weekly
+summary. The live nudge prompt asks a brief, grounded, neutral open question
+without advice, character judgment, or an implied obligation to apologize or
+repair something.
+
 Saved Persona replay shows all Journal Entries, displayed nudges, and responses
 for the selected week immediately. **Review Weekly Drift Detection** opens the
 result in the full weekly workspace; **Next week** advances until the final
@@ -71,8 +97,9 @@ Evidence produces no card. The saved replay preserves 22 selected quotations,
 three ineligible outcomes, and two completed reviews without a supportive
 source from the pinned full-history study. These are AI assessments of
 synthetic writing, with human review deferred. Live review uses the separate
-`review_north_star` operation and fails
-closed without a finalized integration budget; the live budget is unavailable.
+`review_north_star` operation with a separately authorized US$1 allowance shared
+across sessions and restarts. It fails closed when that allowance is exhausted
+or its budget accounting is unavailable.
 
 Saved Persona replay is deterministic and does not require a provider key. The
 browser requests the scenario catalog and bundles with `cache: no-store`, then
@@ -110,7 +137,7 @@ The replay export writes the compact North Star Moment records, five scenario
 bundles, and catalog hashes from pinned experiment inputs. It preserves saved
 Coach Digest responses only when their source hashes match the current inputs.
 See the [Experience and Inspect guide](../../docs/demo/experience_inspect_app.md) for
-the seven operations, assessment deployment, data boundary, and verification
+the eight operations, assessment deployment, data boundary, and verification
 workflow.
 
 The [public assessment](https://onboarding-production-1dd2.up.railway.app/)

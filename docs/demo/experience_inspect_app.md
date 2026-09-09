@@ -186,6 +186,7 @@ One client-side session store owns:
 - ordered Journal Entries, including displayed nudges and responses;
 - the assessment clock for manual Experience, when active;
 - the selected persona scenario, week, Journal Entry, and trace event;
+- the selected manual reviewed week, stored by its Monday date;
 - Weekly Drift Reviewer Decisions grouped by calendar week;
 - the current Drift Detector result;
 - the Weekly Drift Detection output, Coach Digest status, and valid Coach
@@ -198,7 +199,9 @@ reset onboarding, alter replay progress, or create a second copy of the
 session.
 
 Saved replay Drift states and Coach Digest responses have context-specific
-Inspect actions. The live Journal Entry path retains one latest-run Inspect action.
+Inspect actions. The live Journal Entry path uses **Inspect latest activity**
+for its latest recorded event. A displayed North Star Moment in either path
+offers **Inspect this moment** for that quotation's exact event.
 A weekly result action switches to Inspect and focuses the weekly explanation.
 It also selects and expands the event that produced the result. Other Inspect
 actions focus the selected event. Returning to Experience restores the same
@@ -254,6 +257,16 @@ forward by one day. **Close week and review** moves the date to the next Monday
 and runs all due finalized weeks. Simulated dates never move backward. The
 action is blocked while a displayed nudge needs a response or skip.
 
+The **Reviewed week** picker reads retained Weekly Drift Detection results and
+their matching Coach Digest responses and North Star Moment records. Browsing
+completed historical results does not call a model or change Simulated time;
+the Journal Entry composer continues to use the current assessment date.
+`selected_manual_week` stores the selected Monday, so adding or rebuilding
+weeks does not shift the selection to a different array position. A null
+selection follows the latest reviewed week. If a selected week is no longer
+available after a source change, the view falls back to the latest remaining
+result. Closing a new week selects its result.
+
 The newest Journal Entry card appears first in manual Experience. The stored
 Journal Entries remain chronological by `t_index`. The Weekly Drift Reviewer,
 Drift Detector, Coach Digest, and Inspect use that chronological order. Persona
@@ -273,6 +286,15 @@ refusal, invalid response, or request failure must not discard the Journal
 Entry. Failure copy distinguishes text retained in the browser editor from a
 Journal Entry accepted by the Python boundary and names the Experience service
 rather than attributing transport or routing failures to a product component.
+If the accepted work is missing its Inspect trace, **Try loading Inspect again**
+retrieves the trace only; it does not repeat submission or model work.
+
+The live nudge question is brief, grounded in the writer's text, and open.
+Its direct, sometimes blunt voice does not permit advice, character judgments,
+invented motives, or an implied obligation to repair something. It may ask
+about an apology the writer introduced, but must not assume an apology is
+owed, wanted, or completed. The combined prompt retains its two-to-twelve-word
+limit and can choose `no_nudge` when no useful neutral question is supported.
 
 ### 5.3 Persona simulation
 
@@ -380,8 +402,8 @@ continues to focus the exact North Star Moment event. Inspect filters sit with
 Recorded work, directly above the affected lists, and show matching current-week
 and earlier-event counts beside the results.
 Onboarding presents the passage without a North Star Moment label; Persona
-replay adds a discreet attribution and **Inspect this moment**, which opens
-that exact backend event. Inspect distinguishes deterministic framing from
+replay adds a discreet attribution. Both paths provide **Inspect this moment**
+for that exact backend event. Inspect distinguishes deterministic framing from
 the exact source quotation and the AI assessment.
 
 The result grows with its content and uses page scrolling. **Why this state**
@@ -440,6 +462,27 @@ Experience does show the Weekly Drift Reviewer Decision, saved model contract,
 parsed model output, and recorded justification beside each cited Journal
 Entry. It does not claim that reasoning effort is a readable chain of thought.
 
+In manual Experience, Active Drift shows the triggering pair and current
+Conflict evidence before other Journal Entry context. The triggering pair
+comes from the Drift record's onset and confirmation indices, checked against
+the available Weekly Drift Reviewer Decisions. Other context appears
+separately and is not labeled supportive merely because a decision was Not
+Conflict. Selecting evidence opens and focuses its Journal Entry.
+
+Manual Coach Digest and North Star Moment work exposes progress and failure
+states while keeping the Weekly Drift Detection result visible. Recorded
+ineligible North Star Moment outcomes and completed reviews with no supportive
+source receive an explanation without a quotation. Pending or failed review
+does not fall back to an older quotation. **Retry moment review** appears only
+when the current failure permits retry. **Retry Coach Digest** uses the stored
+Weekly Drift Detection output; it does not advance Simulated time or repeat
+the Weekly Drift Reviewer. A failed trace refresh after accepted retry work
+instead offers **Try loading Inspect again**.
+Invalid Coach responses remain unpublished and can also be retried. Prompt
+4.3 makes the existing verbatim-quotation requirement explicit; validation
+still checks each generated response. Until Coach Digest is available, the
+Moment status explains that its review is waiting for the weekly reflection.
+
 ## 6. Inspect View
 
 ### 6.1 Information hierarchy
@@ -455,13 +498,24 @@ dump. The first level answers:
 
 Technical details show the duration, model contract, identifiers, hashes,
 inputs, prompts, responses, and validation on demand.
+Live Coach Digest and North Star Moment durations measure the complete
+operation; North Star Moment retains the recorded start of its pending work.
 
 For Persona replay, Inspect shows the selected week first. Filters select
-Journal Entry events, Weekly Drift Reviewer events, or Drift Detector events.
+**Journal Entries**, **Weekly Drift Reviewer**, or **Weekly results**. The
+last includes Drift Detector, structured Weekly Drift Detection output, Coach
+Digest, and North Star Moment events.
 The complete earlier Inspect history stays collapsed by default. Repeated
 saved-run labels, reused-result labels, and zero-duration labels do not appear
 on each event. Model details, run source, reasoning effort, identifiers, hashes,
 and exact inputs remain under **Technical details**.
+
+The weekly explanation follows the selected event's parent chain and recorded
+week dates rather than taking the latest event from each component across the
+session. This keeps earlier Coach Digest responses and North Star Moment
+records attached to the Weekly Drift Detection run that produced them.
+Opening the Profile calculation suppresses that weekly explanation and its
+event filters until **View recorded events** is selected again.
 
 Before the backend event timeline, Inspect presents the completed browser-side
 SVBWS calculation as a professor-facing explanation rather than developer
@@ -620,7 +674,7 @@ Provider keys and unredacted provider configuration stay on the Python side.
 
 ### 7.1 Version 1 contract
 
-`experience-inspect-v1` defines seven framework-neutral operations:
+`experience-inspect-v1` defines eight framework-neutral operations:
 
 | Operation | Purpose |
 |---|---|
@@ -631,6 +685,7 @@ Provider keys and unredacted provider configuration stay on the Python side.
 | `load_scenario` | Load one deterministic saved persona scenario |
 | `read_trace` | Retrieve typed trace events, optionally after a known event |
 | `review_north_star` | Review a frozen closed-week snapshot separately, reuse matching records, or retry a retryable NSM failure |
+| `retry_coach` | Retry Coach Digest for stored live Weekly Drift Detection output without advancing time or repeating the Weekly Drift Reviewer |
 
 Python Pydantic models are the schema source. The checked-in JSON Schema and
 canonical fixture are generated by
@@ -670,6 +725,15 @@ framework:
   share one worker. That worker owns completion and cleanup even if its HTTP
   waiter disconnects. Source edits remove affected records; stale output is
   discarded. A restored pending event is reused rather than left running.
+- `retry_coach` carries the expected session revision, reviewed Monday, and
+  an idempotency key. It uses that week's latest stored live Weekly Drift
+  Detection output, reuses a matching valid Coach Digest response when one
+  exists, and otherwise runs Coach Digest alone. Repeating the same key returns
+  the accepted response; reusing it with different inputs is rejected.
+  Retrying an earlier week does not replace the session's latest weekly result.
+  If the local service restarted, the browser can restore its complete saved
+  session and trace before retrying. Idempotency receipts themselves remain
+  in service memory and do not survive a restart.
 - A server-timestamped `nudge_response_recorded` event proves response
   availability separately from its parent Journal Entry. Original submission
   identity, date, order, and content must match before NSM uses the source.

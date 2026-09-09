@@ -69,6 +69,7 @@ Operation = Literal[
     "load_scenario",
     "read_trace",
     "review_north_star",
+    "retry_coach",
 ]
 
 CORE_VALUE_ORDER = (
@@ -934,6 +935,23 @@ class NorthStarReviewRequest(ContractModel):
         return value
 
 
+class CoachRetryRequest(ContractModel):
+    schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
+    operation: Literal["retry_coach"]
+    request_id: str
+    idempotency_key: str = Field(pattern=r"^[0-9a-f]{64}$")
+    session_id: str
+    expected_revision: int = Field(ge=0)
+    week_start: str
+
+    @field_validator("week_start")
+    @classmethod
+    def validate_week_start(cls, value: str) -> str:
+        if date.fromisoformat(value).weekday() != 0:
+            raise ValueError("Reviewed week must start on Monday")
+        return value
+
+
 class ScenarioLoadRequest(ContractModel):
     schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
     operation: Literal["load_scenario"]
@@ -956,7 +974,8 @@ ApiRequest = Annotated[
     | SessionDeleteRequest
     | ScenarioLoadRequest
     | TraceReadRequest
-    | NorthStarReviewRequest,
+    | NorthStarReviewRequest
+    | CoachRetryRequest,
     Field(discriminator="operation"),
 ]
 
@@ -1005,6 +1024,15 @@ class NorthStarReviewedResponse(ContractModel):
     event_ids: list[str] = Field(min_length=1)
 
 
+class CoachRetriedResponse(ContractModel):
+    schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
+    operation: Literal["retry_coach"]
+    request_id: str
+    status: Literal["ok"]
+    session: ExperienceSession
+    event_ids: list[str] = Field(min_length=1)
+
+
 class ScenarioLoadedResponse(ContractModel):
     schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
     operation: Literal["load_scenario"]
@@ -1041,6 +1069,7 @@ ApiResponse = Annotated[
     | ScenarioLoadedResponse
     | TraceReadResponse
     | NorthStarReviewedResponse
+    | CoachRetriedResponse
     | ApiErrorResponse,
     Field(discriminator="operation"),
 ]

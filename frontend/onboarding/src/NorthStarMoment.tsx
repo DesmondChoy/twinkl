@@ -66,7 +66,7 @@ export default function NorthStarMoment({
       {record.mode !== "encouragement" ? (
         <p className="north-star-moment__reference">This earlier writing is a reference point for your Core Value.</p>
       ) : null}
-      {presentation === "demo" && inspectMoment ? (
+      {inspectMoment ? (
         <button className="inspect-run-link north-star-moment__inspect" type="button"
           onClick={() => inspectMoment(result.event.event_id)}>
           Inspect this moment

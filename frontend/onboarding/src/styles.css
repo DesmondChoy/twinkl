@@ -5000,6 +5000,52 @@ h2 {
 }
 
 
+.manual-week-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  margin-top: 32px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+
+.manual-week-picker label {
+  font-weight: 750;
+}
+
+.manual-week-picker select {
+  max-width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 32px 9px 12px;
+  background: #fffdf8;
+  color: var(--ink);
+  font: inherit;
+}
+
+.manual-week-picker p {
+  flex-basis: 100%;
+  margin: 0;
+  color: rgba(20, 34, 59, 0.68);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.north-star-status {
+  margin-top: 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+  background: color-mix(in srgb, var(--mist) 55%, white);
+  line-height: 1.5;
+}
+
+.north-star-status h3 {
+  margin-top: 0;
+}
+
 .weekly-workspace {
   display: grid;
   grid-template-columns: minmax(0, 1.18fr) minmax(250px, 0.82fr);

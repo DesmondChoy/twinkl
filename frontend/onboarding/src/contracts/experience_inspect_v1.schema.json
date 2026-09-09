@@ -23,7 +23,8 @@
             "delete_session",
             "load_scenario",
             "read_trace",
-            "review_north_star"
+            "review_north_star",
+            "retry_coach"
           ],
           "title": "Requested Operation",
           "type": "string"
@@ -631,6 +632,99 @@
         "reflective_question"
       ],
       "title": "CoachNarrative",
+      "type": "object"
+    },
+    "CoachRetriedResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Event Ids",
+          "type": "array"
+        },
+        "operation": {
+          "const": "retry_coach",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session": {
+          "$ref": "#/$defs/ExperienceSession"
+        },
+        "status": {
+          "const": "ok",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "status",
+        "session",
+        "event_ids"
+      ],
+      "title": "CoachRetriedResponse",
+      "type": "object"
+    },
+    "CoachRetryRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "idempotency_key": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "operation": {
+          "const": "retry_coach",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "idempotency_key",
+        "session_id",
+        "expected_revision",
+        "week_start"
+      ],
+      "title": "CoachRetryRequest",
       "type": "object"
     },
     "CoreValueDigestDetail": {
@@ -6801,6 +6895,7 @@
             "delete_session": "#/$defs/SessionDeleteRequest",
             "load_scenario": "#/$defs/ScenarioLoadRequest",
             "read_trace": "#/$defs/TraceReadRequest",
+            "retry_coach": "#/$defs/CoachRetryRequest",
             "review_north_star": "#/$defs/NorthStarReviewRequest",
             "submit_journal_entry": "#/$defs/JournalEntrySubmitRequest"
           },
@@ -6827,6 +6922,9 @@
           },
           {
             "$ref": "#/$defs/NorthStarReviewRequest"
+          },
+          {
+            "$ref": "#/$defs/CoachRetryRequest"
           }
         ]
       },
@@ -6844,6 +6942,7 @@
             "load_scenario": "#/$defs/ScenarioLoadedResponse",
             "north_star_reviewed": "#/$defs/NorthStarReviewedResponse",
             "read_trace": "#/$defs/TraceReadResponse",
+            "retry_coach": "#/$defs/CoachRetriedResponse",
             "submit_journal_entry": "#/$defs/JournalEntrySubmittedResponse"
           },
           "propertyName": "operation"
@@ -6869,6 +6968,9 @@
           },
           {
             "$ref": "#/$defs/NorthStarReviewedResponse"
+          },
+          {
+            "$ref": "#/$defs/CoachRetriedResponse"
           },
           {
             "$ref": "#/$defs/ApiErrorResponse"

@@ -88,6 +88,40 @@ def test_build_request_rejects_only_blank_content() -> None:
     assert "Bad day." in short.prompt
 
 
+def test_prompt_requires_neutral_grounded_questions_without_banning_apologies() -> None:
+    entry = "I apologized, but the conversation ended abruptly."
+    request = build_nudge_runtime_request(
+        entry_content=entry,
+        entry_date="2026-07-25",
+    )
+
+    instructions = " ".join(request.instructions.split())
+    assert "Ask an open question about a missing detail" in instructions
+    assert (
+        "Do not invent motives, judge their character, or imply a required repair"
+        in instructions
+    )
+    assert "Do not turn the question into advice" in instructions
+    assert (
+        "An apology or repair is fair to ask about when the writer introduces it"
+        in instructions
+    )
+    assert (
+        "neutral question is supported by the entry, choose **no_nudge**"
+        in instructions
+    )
+    assert json.loads(request.input_data)["entry"]["content"] == entry
+
+    response = NudgeDecisionAndGenerationResponse(
+        decision="elaboration",
+        reason=(
+            "The writer names an apology but leaves the conversation ending unexplored."
+        ),
+        nudge_text="What happened after the apology?",
+    )
+    assert response.nudge_text == "What happened after the apology?"
+
+
 def test_response_requires_null_nudge_for_no_nudge() -> None:
     parsed = NudgeDecisionAndGenerationResponse(
         decision="no_nudge",
@@ -161,7 +195,7 @@ async def test_runtime_uses_fixed_luna_none_contract_once() -> None:
     assert receipt.decision == "elaboration"
     assert receipt.nudge_text == "What did you want Karen to ask?"
     assert receipt.prompt_name == "nudge_decision_and_generation"
-    assert receipt.prompt_version == "1.0.0"
+    assert receipt.prompt_version == "1.1.0"
     assert receipt.response_id == "resp_nudge_123"
     assert receipt.usage == {
         "input_tokens": 120,

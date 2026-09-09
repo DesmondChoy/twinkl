@@ -71,6 +71,7 @@ export interface ExperienceState {
   error_message: string | null;
   selected_persona_id: string | null;
   selected_week: number | null;
+  selected_manual_week?: string | null;
   replay_progress: ReplayProgress | null;
   selected_entry_id: string | null;
   selected_event_id: string | null;
@@ -120,6 +121,7 @@ export function createExperienceState(): ExperienceState {
     error_message: null,
     selected_persona_id: null,
     selected_week: null,
+    selected_manual_week: null,
     replay_progress: null,
     selected_entry_id: null,
     selected_event_id: null,
@@ -252,6 +254,8 @@ function isExperienceState(value: unknown): value is ExperienceState {
     isNullableString(value.error_message) &&
     isNullableString(value.selected_persona_id) &&
     (value.selected_week === null || (Number.isInteger(value.selected_week) && Number(value.selected_week) >= 0)) &&
+    (value.selected_manual_week === undefined || value.selected_manual_week === null
+      || (typeof value.selected_manual_week === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.selected_manual_week))) &&
     (value.replay_progress === null || (
       isSessionRecord(value.replay_progress) &&
       typeof value.replay_progress.scenario_id === "string" &&

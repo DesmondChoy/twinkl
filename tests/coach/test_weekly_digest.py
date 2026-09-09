@@ -218,6 +218,10 @@ def test_generate_validate_and_persist_weekly_digest(tmp_path: Path):
     ) -> str:
         assert instructions is not None
         assert "Return JSON with exactly these keys" in instructions
+        assert (
+            "phrase copied verbatim from an excerpt in evidence_lines" in instructions
+        )
+        assert "enclosed in double quotation marks, in weekly_mirror" in instructions
         assert json.loads(prompt)["persona_name"] == "Casey"
         assert response_format is not None
         return json.dumps(

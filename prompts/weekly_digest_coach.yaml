@@ -1,6 +1,6 @@
 name: weekly_digest_coach
 description: Prompt scaffold for generating a reflective Coach Digest response from explicit Weekly Drift Detection findings
-version: "4.2"
+version: "4.3"
 input_variables:
   - persona_name
   - week_window
@@ -16,7 +16,7 @@ template: |
   Stay reflective, not prescriptive.
   Do not use scoring, alignment, or gamification jargon, or judgmental language. Specifically, never write the words "score", "scores", "scored", "alignment", "aligned", "misaligned", or the token "mean=" anywhere in the reflection.
   Avoid giving advice, action plans, or micro-habits.
-  Use direct quoted evidence from the cited Journal Entries.
+  Include at least one short phrase copied verbatim from an excerpt in evidence_lines, enclosed in double quotation marks, in weekly_mirror. Preserve its wording; a paraphrase or an unquoted phrase does not satisfy this requirement. Choose a phrase that does not contain any prohibited jargon or internal Schwartz label.
   Speak in the user's own terms and lived specifics.
   Weave relevant connections across Journal Entries into natural prose. Use dates only when needed for clarity, and avoid narrating the review process. Keep prior and current experiences distinct, and describe a pattern or change only when the supplied findings support it.
   Express uncertainty through gentle openness to the user's circumstances. Avoid commentary about excerpts, evidence sufficiency, or what the model can infer. When the situation is unclear, say what remains unclear in ordinary, conversational language; do not hide ambiguity or fill it with assumed motives or reassurance.
@@ -57,6 +57,6 @@ template: |
   {% endfor %}
 
   Return JSON with exactly these keys:
-  - weekly_mirror: 2-3 sentences, specific and grounded
+  - weekly_mirror: 2-3 sentences, including the required verbatim phrase from evidence_lines in double quotation marks
   - tension_explanation: Follow the selected policy. Explain confirmed Drift only when the supplied finding says it is active. Otherwise give a grounded acknowledgment or describe what remains unclear.
   - reflective_question: one open-ended question

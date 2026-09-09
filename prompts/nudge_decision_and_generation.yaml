@@ -1,6 +1,6 @@
 name: nudge_decision_and_generation
 description: Decide whether a Journal Entry needs a follow-up and generate it when needed
-version: "1.0.0"
+version: "1.1.0"
 
 input_variables:
   - entry_content
@@ -75,11 +75,29 @@ template: |
   - Short enough to type in two seconds
   - The kind of thing a friend would say without rehearsing
 
+  ## Grounding and Neutrality
+  Ask an open question about a missing detail in what happened, what they
+  felt, or what they meant. Leave decisions about what to do next to them.
+  Do not invent motives, judge their character, or imply a required repair.
+  Do not turn the question into advice or a check that they did the right
+  thing. Avoid leading yes/no questions such as "Have you apologized to
+  them yet?" when the entry has not introduced an apology.
+
+  An apology or repair is fair to ask about when the writer introduces it;
+  do not assume it is owed, wanted, or completed. For example:
+  - Entry: "I snapped at my teammate and felt uneasy afterward."
+    Question: "What happened just before you snapped?"
+  - Entry: "I apologized, but the conversation ended abruptly."
+    Question: "What happened after the apology?"
+
+  Apply the same grounding rule to every example below. If no useful,
+  neutral question is supported by the entry, choose **no_nudge**.
+
   ## Examples by Category
 
   **clarification**
   - "What happened right before that?"
-  - "The meeting?"
+  - "Which meeting?"
   - "Since when?"
 
   **elaboration**
@@ -89,7 +107,7 @@ template: |
 
   **tension_surfacing**
   - "What's the 'sort of' part?"
-  - "Does that sit okay?"
+  - "What feels unresolved about it?"
   - "What stopped you?"
 
   ## Output

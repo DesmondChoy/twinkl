@@ -53,6 +53,7 @@ const OPERATIONS = new Set([
   "load_scenario",
   "read_trace",
   "review_north_star",
+  "retry_coach",
 ]);
 const HASH_PATTERN = /^[0-9a-f]{64}$/;
 
@@ -222,6 +223,15 @@ export interface NorthStarReviewedResponseContract extends JsonObject {
   event_ids: string[];
 }
 
+export interface CoachRetriedResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "retry_coach";
+  request_id: string;
+  status: "ok";
+  session: ExperienceSessionContract;
+  event_ids: string[];
+}
+
 export interface SessionDeletedResponseContract extends JsonObject {
   schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
   operation: "delete_session";
@@ -256,6 +266,7 @@ export type ExperienceApiResponseContract =
   | JournalEntrySubmittedResponseContract
   | AssessmentTimeAdvancedResponseContract
   | NorthStarReviewedResponseContract
+  | CoachRetriedResponseContract
   | SessionDeletedResponseContract
   | ScenarioLoadedResponseContract
   | TraceReadResponseContract;
@@ -1138,6 +1149,7 @@ function validateRequest(value: unknown, name: string): JsonObject {
     load_scenario: ["schema_version", "operation", "request_id", "scenario_id"],
     read_trace: ["schema_version", "operation", "request_id", "session_id", "after_event_id"],
     review_north_star: ["schema_version", "operation", "request_id", "session_id", "expected_revision", "week_start", "retry"],
+    retry_coach: ["schema_version", "operation", "request_id", "idempotency_key", "session_id", "expected_revision", "week_start"],
   };
   const expectedKeys = [...requestKeys[String(request.operation)]];
   if (request.operation === "create_session" && "resume_state" in request) {
@@ -1151,6 +1163,7 @@ function validateRequest(value: unknown, name: string): JsonObject {
     "create_session",
     "submit_journal_entry",
     "advance_assessment_time",
+    "retry_coach",
   ].includes(String(request.operation))) {
     if (!HASH_PATTERN.test(String(request.idempotency_key))) {
       throw new Error(`${name}.idempotency_key is incompatible`);
@@ -1185,6 +1198,15 @@ function validateRequest(value: unknown, name: string): JsonObject {
     integer(request.expected_revision, `${name}.expected_revision`);
     string(request.week_start, `${name}.week_start`);
     boolean(request.retry, `${name}.retry`);
+  }
+  if (request.operation === "retry_coach") {
+    string(request.session_id, `${name}.session_id`);
+    integer(request.expected_revision, `${name}.expected_revision`);
+    string(request.week_start, `${name}.week_start`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(request.week_start))
+      || new Date(`${request.week_start}T00:00:00Z`).getUTCDay() !== 1) {
+      throw new Error(`${name}.week_start must be a Monday`);
+    }
   }
   return request;
 }
@@ -1245,6 +1267,7 @@ function validateResponse(value: unknown, name: string): JsonObject {
     ],
     read_trace: ["schema_version", "operation", "request_id", "status", "session_id", "events"],
     north_star_reviewed: ["schema_version", "operation", "request_id", "status", "session", "event_ids"],
+    retry_coach: ["schema_version", "operation", "request_id", "status", "session", "event_ids"],
   };
   exactKeys(response, responseKeys[String(response.operation)], name);
   if ([
@@ -1253,6 +1276,7 @@ function validateResponse(value: unknown, name: string): JsonObject {
     "advance_assessment_time",
     "load_scenario",
     "north_star_reviewed",
+    "retry_coach",
   ].includes(String(response.operation))) {
     validateSession(response.session, `${name}.session`);
   }
@@ -1262,8 +1286,12 @@ function validateResponse(value: unknown, name: string): JsonObject {
     "advance_assessment_time",
     "load_scenario",
     "north_star_reviewed",
+    "retry_coach",
   ].includes(String(response.operation))) {
     stringArray(response.event_ids, `${name}.event_ids`);
+    if (response.operation === "retry_coach" && (response.event_ids as string[]).length === 0) {
+      throw new Error(`${name}.event_ids must include the Coach Digest event`);
+    }
   }
   if (response.operation === "read_trace") {
     string(response.session_id, `${name}.session_id`);

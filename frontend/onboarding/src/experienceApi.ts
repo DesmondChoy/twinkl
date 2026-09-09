@@ -8,6 +8,7 @@ import {
   type JournalEntryContract,
   type JournalEntrySubmittedResponseContract,
   type NorthStarReviewedResponseContract,
+  type CoachRetriedResponseContract,
   type SessionDeletedResponseContract,
   type SessionCreatedResponseContract,
   type TraceReadResponseContract,
@@ -347,4 +348,31 @@ export async function reviewNorthStar({
     );
   }
   return response;
+}
+
+export async function retryCoachDigest({
+  sessionId, expectedRevision, weekStart, idempotencyKey,
+}: {
+  sessionId: string;
+  expectedRevision: number;
+  weekStart: string;
+  idempotencyKey: string;
+}): Promise<CoachRetriedResponseContract> {
+  const response = await postExperience({
+    schema_version: EXPERIENCE_INSPECT_CONTRACT_VERSION,
+    operation: "retry_coach",
+    request_id: requestId(),
+    session_id: sessionId,
+    expected_revision: expectedRevision,
+    week_start: weekStart,
+    idempotency_key: idempotencyKey,
+  });
+  if (response.operation !== "retry_coach") {
+    throw new ExperienceApiError("Retrying the Coach Digest returned the wrong result.", "unexpected_operation", false);
+  }
+  return response;
+}
+
+export async function coachRetryKey(sessionId: string, weekStart: string, expectedRevision: number): Promise<string> {
+  return sha256({ operation: "retry_coach", sessionId, weekStart, expectedRevision });
 }

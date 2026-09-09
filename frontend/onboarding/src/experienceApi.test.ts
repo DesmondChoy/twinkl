@@ -8,6 +8,8 @@ import {
   ExperienceApiError,
   readExperienceTrace,
   reviewNorthStar,
+  retryCoachDigest,
+  coachRetryKey,
   submitJournalEntry,
 } from "./experienceApi";
 
@@ -33,6 +35,29 @@ afterEach(() => {
 });
 
 describe("Experience API client", () => {
+  it("keeps the same Coach retry identity across remounts until the revision advances", async () => {
+    expect(await coachRetryKey(profile.session_id, "2026-07-06", 3))
+      .toBe(await coachRetryKey(profile.session_id, "2026-07-06", 3));
+    expect(await coachRetryKey(profile.session_id, "2026-07-06", 3))
+      .not.toBe(await coachRetryKey(profile.session_id, "2026-07-06", 4));
+  });
+  it("retries only a specified Coach Digest using the caller's stable attempt key", async () => {
+    const result = { schema_version: "experience-inspect-v1", operation: "retry_coach",
+      request_id: "coach-retry-response", status: "ok",
+      session: canonicalInspectFixture.session, event_ids: ["retried-coach"] };
+    fetchMock.mockResolvedValue(jsonResponse(result));
+    const request = { sessionId: profile.session_id, expectedRevision: 3,
+      weekStart: "2026-07-06", idempotencyKey: "a".repeat(64) };
+    expect((await retryCoachDigest(request)).operation).toBe("retry_coach");
+    await retryCoachDigest(request);
+    for (const [, init] of fetchMock.mock.calls) {
+      expect(JSON.parse(init.body)).toMatchObject({ operation: "retry_coach",
+        session_id: profile.session_id, expected_revision: 3,
+        week_start: "2026-07-06", idempotency_key: request.idempotencyKey });
+    }
+    fetchMock.mockResolvedValue(jsonResponse({ ...result, event_ids: [] }));
+    await expect(retryCoachDigest(request)).rejects.toMatchObject({ code: "invalid_response" });
+  });
   it("reviews a North Star Moment separately from the weekly review", async () => {
     fetchMock.mockResolvedValueOnce(jsonResponse({
       schema_version: "experience-inspect-v1", operation: "north_star_reviewed",

@@ -62,7 +62,7 @@ const MAPS: Record<
   },
   inspect: {
     eyebrow: "Inspect trail",
-    title: "Follow the replay.",
+    title: "Follow the work.",
     description: "Move from the selected run to its recorded events.",
     sections: [
       {

@@ -162,7 +162,7 @@ class SavedCoachGeneration(CatalogModel):
     model_contract: ModelContract
     service_tier: str
     prompt_name: str
-    prompt_version: Literal["4.1", "4.2"]
+    prompt_version: Literal["4.1", "4.2", "4.3"]
     prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     prompt: str = Field(min_length=1)
     raw_output: str = Field(min_length=1)

@@ -9,6 +9,7 @@ import type {
   TraceEventContract,
 } from "./demoContracts";
 import JournalExperience from "./JournalExperience";
+import { ExperienceApiError } from "./experienceApi";
 import { canonicalInspectFixture } from "./inspectFixture";
 import { createExperienceState, type ExperienceState } from "./session";
 
@@ -19,6 +20,7 @@ const api = vi.hoisted(() => ({
   readExperienceTrace: vi.fn(),
   submitJournalEntry: vi.fn(),
   reviewNorthStar: vi.fn(),
+  retryCoachDigest: vi.fn(),
 }));
 
 vi.mock("./experienceApi", async (importOriginal) => {
@@ -113,11 +115,13 @@ function Harness({
   inspectRun = vi.fn(),
   mode = "manual",
   acknowledgeNotice = true,
+  northStarReviewEnabled = true,
 }: {
   initial?: ExperienceState;
   inspectRun?: (eventId: string) => void;
   mode?: "manual" | "saved_replay";
   acknowledgeNotice?: boolean;
+  northStarReviewEnabled?: boolean;
 }) {
   const [experience, setExperience] = useState({
     ...initial,
@@ -133,12 +137,14 @@ function Harness({
       inspectRun={inspectRun}
       mode={mode}
       showWeeklySummary={false}
+      northStarReviewEnabled={northStarReviewEnabled}
     />
   );
 }
 
 beforeEach(() => {
   vi.clearAllMocks();
+  api.retryCoachDigest.mockReset();
   api.createExperienceSession.mockImplementation(async (
     _profile: unknown,
     resumeState: {
@@ -161,6 +167,127 @@ beforeEach(() => {
 });
 
 describe("manual Journal Entry Experience", () => {
+  it("reloads Inspect after an accepted date advance without advancing or submitting again", async () => {
+    const savedEntry = entry();
+    const clock = { mode: "simulated_assessment" as const, current_date: savedEntry.date, timezone: "Asia/Singapore" };
+    const initial = { ...createExperienceState(), journal_started: true, revision: 1,
+      journal_entries: [savedEntry], nudges: [nudge("no_nudge")], assessment_clock: clock,
+      run_state: "complete" as const };
+    const changed = { ...canonicalInspectFixture.trace_events[0], event_id: "date-changed", event_type: "assessment_time_advanced" };
+    api.advanceAssessmentTime.mockResolvedValueOnce({ operation: "advance_assessment_time", session: {
+      ...session([savedEntry], [nudge("no_nudge")]), revision: 2,
+      assessment_clock: { ...clock, current_date: "2026-07-26" }, trace_event_ids: [changed.event_id],
+    } });
+    api.readExperienceTrace.mockRejectedValueOnce(new Error("connection interrupted"))
+      .mockResolvedValueOnce(trace([changed]));
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+    await user.click(screen.getByRole("button", { name: "Write on the next day" }));
+    await user.click(await screen.findByRole("button", { name: "Try loading Inspect again" }));
+    await waitFor(() => expect(screen.queryByRole("button", { name: "Try loading Inspect again" })).toBeNull());
+    expect(api.advanceAssessmentTime).toHaveBeenCalledTimes(1);
+    expect(api.submitJournalEntry).not.toHaveBeenCalled();
+    expect(api.readExperienceTrace).toHaveBeenCalledTimes(2);
+    expect(screen.getByRole("complementary", { name: "Simulated time" }).textContent).toContain("Jul 26, 2026");
+  });
+
+  it("switches between retained weekly responses and their Inspect targets without new work", async () => {
+    const first = canonicalInspectFixture.trace_events.filter((event) =>
+      ["event-07", "event-08", "event-09", "event-10", "event-11"].includes(event.event_id));
+    const second = structuredClone(first).map((event) => ({ ...event,
+      event_id: `second-${event.event_id}`, parent_event_id: `second-${event.parent_event_id}`,
+    }));
+    const digest = second.find((event) => event.event_type === "weekly_digest_built")!;
+    digest.details.digest = { ...(digest.details.digest as Record<string, unknown>),
+      week_start: "2026-07-20", week_end: "2026-07-26" };
+    const coach = second.find((event) => event.event_type === "weekly_coach_generated")!;
+    coach.details.narrative = { ...(coach.details.narrative as Record<string, unknown>), weekly_mirror: "The second week has its own reflection." };
+    const all = [...first, ...second];
+    const initial = { ...createExperienceState(), ...canonicalInspectFixture.session,
+      trace_events: all, trace_event_ids: all.map((event) => event.event_id),
+      weekly_digest: digest.details.digest as Record<string, unknown>,
+      journal_entries: [...canonicalInspectFixture.session.journal_entries,
+        { ...entry(), journal_entry_id: "second-week-entry", date: "2026-07-20", t_index: 2 }],
+    };
+    const inspectRun = vi.fn();
+    const user = userEvent.setup();
+    render(<Harness initial={initial} inspectRun={inspectRun} northStarReviewEnabled={false} />);
+    expect(screen.getByText("The second week has its own reflection.")).toBeTruthy();
+    await user.selectOptions(screen.getByRole("combobox", { name: "Reviewed week" }), "2026-07-06");
+    expect(screen.queryByText("The second week has its own reflection.")).toBeNull();
+    expect(screen.getByText("You wrote twice about choosing work over time with your sister.")).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "See how this was decided" }));
+    expect(inspectRun).toHaveBeenLastCalledWith("event-11");
+    await user.selectOptions(screen.getByRole("combobox", { name: "Reviewed week" }), "2026-07-20");
+    await user.click(screen.getByRole("button", { name: "See how this was decided" }));
+    expect(inspectRun).toHaveBeenLastCalledWith("second-event-11");
+    expect(api.advanceAssessmentTime).not.toHaveBeenCalled();
+    expect(api.submitJournalEntry).not.toHaveBeenCalled();
+    expect(api.retryCoachDigest).not.toHaveBeenCalled();
+    expect(api.reviewNorthStar).not.toHaveBeenCalled();
+  });
+
+  it.each(["failed", "invalid", "restored"] as const)("recovers a %s Coach attempt's lost trace without regenerating the completed response", async (status) => {
+    const events = structuredClone(canonicalInspectFixture.trace_events).filter((event) => event.event_id !== "event-13");
+    const failedCoach = events.find((event) => event.event_type === "weekly_coach_generated")!;
+    failedCoach.status = status === "restored" ? "invalid" : status;
+    failedCoach.details = { narrative: null, validation: null };
+    failedCoach.error = status !== "failed"
+      ? { code: "coach_response_invalid", message: "Invalid", retryable: false }
+      : { code: "coach_response_unavailable", message: "Unavailable", retryable: true };
+    const retry = { ...canonicalInspectFixture.trace_events.find((event) => event.event_type === "weekly_coach_generated")!, event_id: "recovered-coach" };
+    const complete = [...events, retry];
+    const initial = { ...createExperienceState(), ...canonicalInspectFixture.session,
+      weekly_digest: { ...canonicalInspectFixture.session.weekly_digest, coach_narrative: null },
+      trace_events: events, trace_event_ids: events.map((event) => event.event_id) };
+    if (status === "restored") {
+      api.retryCoachDigest.mockRejectedValueOnce(new ExperienceApiError("Session missing", "session_not_found", false));
+      api.createExperienceSession.mockResolvedValueOnce({ session: initial });
+    }
+    api.retryCoachDigest.mockResolvedValueOnce({ operation: "retry_coach", event_ids: [retry.event_id], session: {
+      ...canonicalInspectFixture.session, revision: initial.revision + 1,
+      trace_event_ids: complete.map((event) => event.event_id),
+    } });
+    api.readExperienceTrace.mockRejectedValueOnce(new Error("lost trace"))
+      .mockResolvedValueOnce(trace(complete));
+    const user = userEvent.setup();
+    render(<Harness initial={initial} northStarReviewEnabled={false} />);
+    await user.click(screen.getByRole("button", { name: "Retry Coach Digest" }));
+    await user.click(await screen.findByRole("button", { name: "Try loading Inspect again" }));
+    await screen.findByRole("heading", { name: "Your weekly reflection" });
+    expect(api.retryCoachDigest).toHaveBeenCalledTimes(status === "restored" ? 2 : 1);
+    if (status === "restored") {
+      expect(api.retryCoachDigest.mock.calls[1]).toEqual(api.retryCoachDigest.mock.calls[0]);
+      expect(api.createExperienceSession).toHaveBeenCalledWith(profile, expect.objectContaining({
+        revision: initial.revision, trace_events: events, journal_entries: initial.journal_entries,
+      }));
+    }
+    expect(api.advanceAssessmentTime).not.toHaveBeenCalled();
+    expect(api.submitJournalEntry).not.toHaveBeenCalled();
+    expect(api.readExperienceTrace).toHaveBeenCalledTimes(2);
+    expect(screen.queryByRole("button", { name: "Retry Coach Digest" })).toBeNull();
+  });
+
+  it("discards a late Coach retry response after navigating away", async () => {
+    const failedCoach = { ...canonicalInspectFixture.trace_events.find((event) => event.event_type === "weekly_coach_generated")!,
+      status: "failed" as const, details: { narrative: null, validation: null },
+      error: { code: "coach_response_unavailable", message: "Unavailable", retryable: true } };
+    const initial = { ...createExperienceState(), ...canonicalInspectFixture.session,
+      weekly_digest: { ...canonicalInspectFixture.session.weekly_digest, coach_narrative: null },
+      trace_events: [failedCoach], trace_event_ids: [failedCoach.event_id] };
+    let resolve!: (value: unknown) => void;
+    api.retryCoachDigest.mockReturnValueOnce(new Promise((done) => { resolve = done; }));
+    const updateExperience = vi.fn();
+    const { unmount } = render(<JournalExperience profile={profile} experience={initial}
+      updateExperience={updateExperience} inspectRun={vi.fn()} northStarReviewEnabled={false} />);
+    await userEvent.click(screen.getByRole("button", { name: "Retry Coach Digest" }));
+    await waitFor(() => expect(api.retryCoachDigest).toHaveBeenCalledTimes(1));
+    unmount();
+    resolve({ operation: "retry_coach", session: canonicalInspectFixture.session, event_ids: ["recovered-coach"] });
+    await waitFor(() => expect(api.readExperienceTrace).not.toHaveBeenCalled());
+    expect(updateExperience).not.toHaveBeenCalled();
+  });
+
   it("requires the data notice before manual writing", async () => {
     const user = userEvent.setup();
     render(<Harness acknowledgeNotice={false} />);
@@ -230,10 +357,10 @@ describe("manual Journal Entry Experience", () => {
       "nudge-reveal",
     )).toBe(true);
     await waitFor(() => expect(document.activeElement).toBe(nudgeHeading));
-    expect(screen.getByRole("status").textContent).toContain(
+    expect(screen.getByRole("status", { name: "Journal status" }).textContent).toContain(
       "A follow-up question is ready.",
     );
-    expect(screen.getByRole("status").querySelector("button")).toBeNull();
+    expect(screen.getByRole("status", { name: "Journal status" }).querySelector("button")).toBeNull();
     await user.type(
       screen.getByRole("textbox", { name: "Your response" }),
       "I stopped performing for anyone else.",
@@ -339,7 +466,7 @@ describe("manual Journal Entry Experience", () => {
     expect(
       await screen.findByDisplayValue("This answer should remain here."),
     ).toBeTruthy();
-    expect(screen.getByRole("status").textContent).toContain(
+    expect(screen.getByRole("status", { name: "Journal status" }).textContent).toContain(
       "Your response is still here, but the saved Journal Entry could not update. Try again.",
     );
     expect(screen.getByRole("button", { name: "Save response" })).toBeTruthy();
@@ -774,17 +901,17 @@ describe("manual Journal Entry Experience", () => {
         submittedEntry = args.entry;
         return {
           operation: "submit_journal_entry",
-          session: session([args.entry], []),
+          session: { ...session([args.entry], []), trace_event_ids: ["decision-failed"] },
         };
       })
       .mockImplementationOnce(async (args: { entry: JournalEntryContract }) => {
         submittedEntry = args.entry;
         return {
           operation: "submit_journal_entry",
-          session: session(
+          session: { ...session(
             [args.entry],
             [nudge("no_nudge", args.entry.journal_entry_id)],
-          ),
+          ), trace_event_ids: ["decision-complete"] },
         };
       });
     api.readExperienceTrace
@@ -827,10 +954,10 @@ describe("manual Journal Entry Experience", () => {
       submittedEntry = args.entry;
       return {
         operation: "submit_journal_entry",
-        session: session(
+        session: { ...session(
           [args.entry],
           [nudge("no_nudge", args.entry.journal_entry_id)],
-        ),
+        ), trace_event_ids: ["decision-complete"] },
       };
     });
     api.readExperienceTrace
@@ -852,7 +979,7 @@ describe("manual Journal Entry Experience", () => {
         name: "Try loading Inspect again",
       }),
     ).toBeTruthy();
-    expect(screen.getByRole("status").textContent).toContain(
+    expect(screen.getByRole("status", { name: "Journal status" }).textContent).toContain(
       "Your Journal Entry is saved.",
     );
     expect(screen.getAllByText(savedEntry.content)).toHaveLength(1);
@@ -867,7 +994,8 @@ describe("manual Journal Entry Experience", () => {
     );
 
     await waitFor(() => expect(api.readExperienceTrace).toHaveBeenCalledTimes(2));
-    expect(api.createExperienceSession.mock.calls[1]?.[1]).toBeNull();
+    expect(api.createExperienceSession).toHaveBeenCalledTimes(1);
+    expect(api.submitJournalEntry).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole("button", {
       name: "Try loading Inspect again",
     })).toBeNull();
@@ -908,7 +1036,7 @@ describe("manual Journal Entry Experience", () => {
     ).toBeTruthy();
     expect(screen.getByDisplayValue(savedEntry.content)).toBeTruthy();
     expect(screen.queryByRole("region", { name: "Moment by moment." })).toBeNull();
-    expect(screen.getByRole("status").querySelector("button")).toBeNull();
+    expect(screen.getByRole("status", { name: "Journal status" }).querySelector("button")).toBeNull();
 
     await user.click(
       screen.getByRole("button", { name: "Try saving again" }),
@@ -944,7 +1072,7 @@ describe("manual Journal Entry Experience", () => {
     expect(journal.disabled).toBe(true);
     expect(journal.value).toBe(pendingEntry.content);
     expect(screen.queryByRole("button", { name: "Try saving again" })).toBeNull();
-    expect(screen.getByRole("status").textContent).toContain(
+    expect(screen.getByRole("status", { name: "Journal status" }).textContent).toContain(
       "still in this editor",
     );
     expect(
@@ -962,7 +1090,7 @@ describe("manual Journal Entry Experience", () => {
         name: "Save Journal Entry",
       }) as HTMLButtonElement).disabled,
     ).toBe(false);
-    expect(screen.getByRole("status").textContent).toBe("");
+    expect(screen.getByRole("status", { name: "Journal status" }).textContent).toBe("");
   });
 
   it("uses singular grammar for one Journal Entry character", async () => {
@@ -1153,7 +1281,7 @@ describe("manual Journal Entry Experience", () => {
     ).toBeTruthy();
     expect(
       screen.getByText(
-        "The Weekly Drift Detection result above remains available.",
+        "The Weekly Drift Detection result remains available.",
       ),
     ).toBeTruthy();
   });

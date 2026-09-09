@@ -13,6 +13,11 @@ import type {
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 import { journalEntryAnchorId } from "./journalEntryAnchor";
+import {
+  currentNorthStarEvent,
+  displayableNorthStarSelection,
+  useNorthStarProfileRef,
+} from "./northStar";
 
 type JsonObject = Record<string, unknown>;
 type DeliveryState =
@@ -35,6 +40,12 @@ interface WeeklyExperienceProps {
     failed: boolean;
     retryable: boolean;
     retry: () => void;
+  };
+  coachReview?: {
+    pending: boolean;
+    retryable: boolean;
+    retry: () => void;
+    error?: string | null;
   };
 }
 
@@ -156,29 +167,110 @@ export default function WeeklyExperience({
   selectJournalEntry,
   showInspectAction = true,
   northStarReview,
+  coachReview,
 }: WeeklyExperienceProps) {
-  if (driftResult === null || weeklyDigest === null) return null;
+  const profileRef = useNorthStarProfileRef(profile);
+  if (driftResult === null) return null;
 
   const rawStates = object(driftResult.core_value_states) ?? {};
   const aggregateState = deliveryState(driftResult.delivery_state);
-  const evidence = digestEvidence(weeklyDigest);
+  const evidence = digestEvidence(weeklyDigest ?? {});
   const entriesByIndex = new Map(
     journalEntries.map((entry) => [entry.t_index, entry]),
   );
   const coachEventId = latestEventId(traceEvents, "weekly_coach_generated");
-  const coachEvent = [...traceEvents]
-    .reverse()
-    .find((event) => event.event_type === "weekly_coach_generated") ?? null;
-  const coachUnavailable = coachEvent !== null
-    && coachEvent.status !== "complete"
-    && object(weeklyDigest.coach_narrative) === null;
+  const narrative = object(weeklyDigest?.coach_narrative);
+  const hasCoach = ["weekly_mirror", "tension_explanation", "reflective_question"]
+    .every((key) => typeof narrative?.[key] === "string"
+      && narrative[key].trim().length > 0);
+  const coachPending = coachReview?.pending ?? false;
+  const coachUnavailable = !hasCoach && !coachPending;
   const driftEventId = latestEventId(traceEvents, "drift_detected");
   const digestEventId = latestEventId(traceEvents, "weekly_digest_built");
   const inspectEventId = coachEventId ?? driftEventId ?? digestEventId;
   const weekStart =
-    typeof weeklyDigest.week_start === "string" ? weeklyDigest.week_start : null;
+    typeof weeklyDigest?.week_start === "string" ? weeklyDigest.week_start : null;
   const weekEnd =
-    typeof weeklyDigest.week_end === "string" ? weeklyDigest.week_end : null;
+    typeof weeklyDigest?.week_end === "string" ? weeklyDigest.week_end : null;
+  const northStar = currentNorthStarEvent({
+    events: traceEvents, profile, profileRef, weeklyDigest, journalEntries,
+  });
+  const selectedMoment = displayableNorthStarSelection(northStar, profile, journalEntries, driftResult);
+  const momentPending = northStarReview?.pending || northStar?.record.status === "pending";
+  const momentFailed = northStarReview?.failed || northStar?.record.status === "failed";
+  let momentStatus: string | null = null;
+  if (momentPending) {
+    momentStatus = "Looking for a moment in your writing that expressed one of your priorities…";
+  } else if (momentFailed) {
+    momentStatus = "A moment from your writing could not be prepared. Your weekly result remains available.";
+  } else if (northStar?.record.status === "not_eligible") {
+    momentStatus = northStar.record.reason === "insufficient_evidence"
+      ? "A moment is not shown while this week's evidence is insufficient."
+      : northStar.record.reason === "no_eligible_writing"
+        ? "No eligible writing was available for a moment in this week's reflection."
+        : "A moment could not be prepared from the available weekly evidence.";
+  } else if (northStar?.record.status === "complete" && !selectedMoment) {
+    momentStatus = northStar.record.selected === null
+      ? "The review did not identify a supportive action in the eligible writing."
+      : "The selected moment could not be verified against your current Journal Entries.";
+  } else if (coachUnavailable && !northStar) {
+    momentStatus = "A moment from your writing can be reviewed after your weekly reflection is ready.";
+  }
+  const drifts = Array.isArray(driftResult.drifts)
+    ? driftResult.drifts.map(object).filter((row) => row !== null) : [];
+  const valueEvidence = profile.top_values.map((coreValue) => {
+    const state = deliveryState(rawStates[coreValue]);
+    const context = evidence.filter((row) => (weekEnd === null || row.date <= weekEnd)
+      && (row.dimensions.length === 0
+        ? profile.top_values.length === 1 : row.dimensions.includes(coreValue)));
+    const activeDrift = [...drifts].reverse().find((row) => row.core_value === coreValue
+      && row.termination_reason == null && !Number.isInteger(row.termination_t_index));
+    const startingIndices = new Set([activeDrift?.onset_t_index, activeDrift?.confirmation_t_index]
+      .filter((index): index is number => typeof index === "number" && Number.isInteger(index)));
+    const conflict = state !== "active_drift" ? [] : weeklyReviewerDecisions.flatMap((decision) => {
+      const entry = entriesByIndex.get(decision.t_index);
+      if (decision.core_value !== coreValue || decision.review_status !== "ok"
+        || decision.verdict !== "conflict" || !entry || entry.date !== decision.date
+        || (weekEnd !== null && entry.date > weekEnd)
+        || (typeof activeDrift?.onset_t_index === "number" && entry.t_index < activeDrift.onset_t_index)
+        || (!startingIndices.has(entry.t_index)
+          && !(weekStart !== null && weekEnd !== null && entry.date >= weekStart && entry.date <= weekEnd))) {
+        return [];
+      }
+      return [{
+        date: entry.date, tIndex: entry.t_index, dimensions: [coreValue],
+        excerpt: decision.evidence_quote.trim() && entry.content.includes(decision.evidence_quote)
+          ? decision.evidence_quote : entry.content,
+      }];
+    }).sort((left, right) =>
+      Number(!startingIndices.has(left.tIndex)) - Number(!startingIndices.has(right.tIndex))
+      || left.tIndex - right.tIndex);
+    const conflictIndices = new Set(conflict.map((row) => row.tIndex));
+    return {
+      coreValue, state, conflict,
+      context: context.filter((row) => !conflictIndices.has(row.tIndex))
+        .sort((left, right) => left.tIndex - right.tIndex),
+    };
+  });
+  const renderEvidence = (rows: DigestEvidence[], coreValue: string) => (
+    <ol className="weekly-evidence">
+      {rows.map((row) => {
+        const entry = entriesByIndex.get(row.tIndex);
+        return (
+          <li key={`${coreValue}-${row.date}-${row.tIndex}`}>
+            {weekStart !== null && row.date < weekStart ? <small>Earlier week</small> : null}
+            {entry ? (
+              <a href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
+                onClick={() => selectJournalEntry?.(entry.journal_entry_id)}>
+                <span>{displayEvidenceDate(row.date)}</span>
+                <q>{citationExcerpt(row.excerpt)}</q>
+              </a>
+            ) : <blockquote>{row.excerpt}</blockquote>}
+          </li>
+        );
+      })}
+    </ol>
+  );
   const reviewUnavailable =
     weekStart !== null &&
     weekEnd !== null &&
@@ -233,13 +325,7 @@ export default function WeeklyExperience({
             className="weekly-experience__values"
             aria-label="Current Drift by Core Value"
           >
-            {profile.top_values.map((coreValue) => {
-              const state = deliveryState(rawStates[coreValue]);
-              const stateEvidence = evidence.filter((row) =>
-                row.dimensions.length === 0
-                  ? profile.top_values.length === 1
-                  : row.dimensions.includes(coreValue),
-              );
+            {valueEvidence.map(({ coreValue, state, conflict, context }) => {
               return (
                 <li
                   className={`weekly-value weekly-value--${state}`}
@@ -250,32 +336,20 @@ export default function WeeklyExperience({
                     <strong>{stateLabel(state)}</strong>
                   </div>
                   <p>{stateExplanation(state)}</p>
-                  {stateEvidence.length > 0 ? (
-                    <ol className="weekly-evidence">
-                      {stateEvidence.map((row) => {
-                        const entry = entriesByIndex.get(row.tIndex);
-                        const earlierWeek =
-                          weekStart !== null && row.date < weekStart;
-                        return (
-                          <li key={`${coreValue}-${row.date}-${row.tIndex}`}>
-                            {earlierWeek ? <small>Earlier week</small> : null}
-                            {entry ? (
-                              <a
-                                href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
-                                onClick={() =>
-                                  selectJournalEntry?.(entry.journal_entry_id)
-                                }
-                              >
-                                <span>{displayEvidenceDate(row.date)}</span>
-                                <q>{citationExcerpt(row.excerpt)}</q>
-                              </a>
-                            ) : (
-                              <blockquote>{row.excerpt}</blockquote>
-                            )}
-                          </li>
-                        );
-                      })}
-                    </ol>
+                  {conflict.length > 0 ? (
+                    <section aria-label="Journal Entries behind this Drift">
+                      <h3>Journal Entries behind this Drift</h3>
+                      {renderEvidence(conflict, coreValue)}
+                    </section>
+                  ) : null}
+                  {context.length > 0 ? (
+                    <section aria-label={state === "active_drift" ? "Other Journal Entry context" : "Journal Entry context"}>
+                      <h3>{state === "active_drift" ? "Other Journal Entry context" : "Journal Entry context"}</h3>
+                      {state === "active_drift" ? (
+                        <p>These entries provide context; they do not establish this Drift.</p>
+                      ) : null}
+                      {renderEvidence(context, coreValue)}
+                    </section>
                   ) : null}
                 </li>
               );
@@ -283,20 +357,20 @@ export default function WeeklyExperience({
           </ul>
         )}
 
-        {evidence.length > 0 ? (
+        {valueEvidence.some((value) => value.conflict.length > 0 || value.context.length > 0) ? (
           <p className="weekly-experience__evidence-note">
-            Selecting evidence opens and focuses that Journal Entry below.
+            Selecting evidence opens and focuses its Journal Entry.
           </p>
         ) : null}
       </div>
 
       <div className="weekly-workspace__response">
         <CoachDigestCard
-          weeklyDigest={weeklyDigest}
+          weeklyDigest={coachPending ? null : weeklyDigest}
           headingId="weekly-coach-title"
           journalEntries={journalEntries}
-          northStar={northStarReview?.pending || northStarReview?.failed ? undefined : {
-            profile, driftResult, traceEvents,
+          northStar={momentPending || momentFailed ? undefined : {
+            profile, driftResult, traceEvents, inspectMoment: inspectRun,
           }}
           onOpenEntry={selectJournalEntry ? (entry) => {
             selectJournalEntry(entry.journal_entry_id);
@@ -306,19 +380,35 @@ export default function WeeklyExperience({
           } : undefined}
         />
 
-        {coachUnavailable ? (
+        {coachPending || coachUnavailable ? (
           <aside
             className="coach-digest coach-digest--unavailable"
             aria-labelledby="weekly-coach-unavailable-title"
           >
             <p className="eyebrow">Coach Digest</p>
             <h2 id="weekly-coach-unavailable-title">
-              Your weekly response could not be prepared.
+              {coachPending ? "Preparing your weekly reflection…" : "Your weekly response could not be prepared."}
             </h2>
             <p>
-              The Weekly Drift Detection result above remains available.
+              The Weekly Drift Detection result remains available.
             </p>
+            {coachUnavailable && coachReview?.error ? <p>{coachReview.error}</p> : null}
+            {coachUnavailable && coachReview?.retryable ? (
+              <button className="button button--quiet" type="button" onClick={coachReview.retry}>
+                Retry Coach Digest
+              </button>
+            ) : null}
           </aside>
+        ) : null}
+        {momentStatus ? (
+          <section className="north-star-status" aria-label="Moment review">
+            <p role="status" aria-label="Moment review status">{momentStatus}</p>
+            {momentFailed && !momentPending && northStarReview?.retryable ? (
+              <button className="button button--quiet" type="button" onClick={northStarReview.retry}>
+                Retry moment review
+              </button>
+            ) : null}
+          </section>
         ) : null}
       </div>
 

@@ -9,6 +9,7 @@ import os
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
+from time import perf_counter
 from typing import Any, Literal, Protocol, cast
 from uuid import uuid4
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -35,6 +36,8 @@ from src.demo.contracts import (
     AssessmentTimeAdvancedEvent,
     AssessmentTimeAdvancedResponse,
     AssessmentTimeAdvanceRequest,
+    CoachRetriedResponse,
+    CoachRetryRequest,
     ContractFixtureSet,
     DriftDetectedDetails,
     DriftDetectedEvent,
@@ -124,6 +127,7 @@ Operation = Literal[
     "load_scenario",
     "read_trace",
     "review_north_star",
+    "retry_coach",
 ]
 
 
@@ -162,6 +166,7 @@ class _IdempotentResult:
         SessionCreatedResponse
         | JournalEntrySubmittedResponse
         | AssessmentTimeAdvancedResponse
+        | CoachRetriedResponse
     )
     retryable: bool = False
     retry_parent_event_id: str | None = None
@@ -219,6 +224,7 @@ class InMemoryExperienceService:
             SessionCreateRequest
             | JournalEntrySubmitRequest
             | AssessmentTimeAdvanceRequest
+            | CoachRetryRequest
         ),
     ) -> str:
         return _hash_payload(
@@ -265,10 +271,12 @@ class InMemoryExperienceService:
             response.model_copy(update={"request_id": request_id}),
         )
 
-    def _terminal_event_fields(self, *, duration_ms: int = 0) -> dict[str, Any]:
+    def _terminal_event_fields(
+        self, *, duration_ms: int = 0, started_at: str | None = None
+    ) -> dict[str, Any]:
         timestamp = self._timestamp()
         return {
-            "started_at": timestamp,
+            "started_at": started_at or timestamp,
             "completed_at": timestamp,
             "duration_ms": duration_ms,
         }
@@ -1225,6 +1233,8 @@ class InMemoryExperienceService:
         parent_event_id: str,
         week_id: str,
     ) -> tuple[WeeklyDigest, WeeklyCoachGeneratedEvent]:
+        started_at = self._timestamp()
+        started = perf_counter()
         prompt = render_digest_prompt(digest)
         narrative = None
         validation = None
@@ -1266,7 +1276,7 @@ class InMemoryExperienceService:
             error = SafeError(
                 code="coach_response_invalid",
                 message="The Coach Digest response did not pass validation.",
-                retryable=False,
+                retryable=self._coach_llm_complete is not None,
             )
 
         event = WeeklyCoachGeneratedEvent(
@@ -1296,12 +1306,126 @@ class InMemoryExperienceService:
                 narrative=narrative,
                 validation=validation,
             ),
-            **self._terminal_event_fields(),
+            **self._terminal_event_fields(
+                started_at=started_at,
+                duration_ms=max(0, round((perf_counter() - started) * 1000)),
+            ),
         )
         return (
             attach_coach_artifacts(digest, narrative, validation) if valid else digest,
             event,
         )
+
+    async def retry_coach(
+        self, request: CoachRetryRequest
+    ) -> CoachRetriedResponse | ApiErrorResponse:
+        """Recover a Coach Digest from its frozen weekly output without re-review."""
+        async with self._lock:
+            key = (request.operation, request.idempotency_key)
+            fingerprint = self._fingerprint(request)
+            cached = self._idempotency.get(key)
+            if cached is not None:
+                if cached.fingerprint != fingerprint:
+                    return self._error(
+                        requested_operation=request.operation,
+                        request_id=request.request_id,
+                        code="idempotency_conflict",
+                        message=(
+                            "This retry key was already used for another Coach Digest."
+                        ),
+                    )
+                response = cast(CoachRetriedResponse, cached.response)
+                return response.model_copy(update={"request_id": request.request_id})
+
+            session = self._sessions.get(request.session_id)
+            if session is None:
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="session_not_found",
+                    message="This Experience session is no longer available.",
+                )
+            if session.revision != request.expected_revision:
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="session_conflict",
+                    message=(
+                        "The Coach Digest retry belongs to an older session revision."
+                    ),
+                )
+            events = self._events[session.session_id]
+            digest_event = next(
+                (
+                    event
+                    for event in reversed(events)
+                    if isinstance(event, WeeklyDigestBuiltEvent)
+                    and event.details.digest.week_start == request.week_start
+                ),
+                None,
+            )
+            if digest_event is None or digest_event.source != "live_run":
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="coach_retry_unavailable",
+                    message=(
+                        "Complete a live weekly review before retrying Coach Digest."
+                    ),
+                )
+            digest = digest_event.details.digest
+            input_hash = _hash_payload(digest.model_dump(mode="json"))
+            completed = next(
+                (
+                    event
+                    for event in reversed(events)
+                    if isinstance(event, WeeklyCoachGeneratedEvent)
+                    and event.parent_event_id == digest_event.event_id
+                    and event.input_hash == input_hash
+                    and event.status in {"complete", "reused"}
+                    and event.validation is not None
+                    and event.validation.valid
+                    and event.details.narrative is not None
+                ),
+                None,
+            )
+            if completed is not None:
+                response = CoachRetriedResponse(
+                    operation="retry_coach",
+                    request_id=request.request_id,
+                    status="ok",
+                    session=session,
+                    event_ids=[completed.event_id],
+                )
+            else:
+                recovered, coach_event = await self._run_coach_digest(
+                    digest=digest,
+                    session_id=session.session_id,
+                    parent_event_id=digest_event.event_id,
+                    week_id=f"{session.session_id}:{request.week_start}",
+                )
+                is_current_week = (
+                    session.weekly_digest is not None
+                    and session.weekly_digest.week_start == request.week_start
+                )
+                updated = self._append_session(
+                    session,
+                    weekly_digest=recovered if is_current_week else None,
+                    event_ids=[coach_event.event_id],
+                    increment_revision=True,
+                )
+                events.append(coach_event)
+                response = CoachRetriedResponse(
+                    operation="retry_coach",
+                    request_id=request.request_id,
+                    status="ok",
+                    session=updated,
+                    event_ids=[coach_event.event_id],
+                )
+            self._idempotency[key] = _IdempotentResult(
+                fingerprint=fingerprint, response=response
+            )
+            return response
 
     async def _run_weekly_review(
         self,
@@ -2003,7 +2127,13 @@ class InMemoryExperienceService:
         )
 
     def _north_star_event(
-        self, record: NorthStarRecord, *, event_id: str, parent_event_id: str | None
+        self,
+        record: NorthStarRecord,
+        *,
+        event_id: str,
+        parent_event_id: str | None,
+        started_at: str | None = None,
+        duration_ms: int = 0,
     ) -> NorthStarReviewedEvent:
         pending = record.status == "pending"
         failed = record.status == "failed"
@@ -2037,7 +2167,9 @@ class InMemoryExperienceService:
             **(
                 {"started_at": self._timestamp()}
                 if pending
-                else self._terminal_event_fields()
+                else self._terminal_event_fields(
+                    started_at=started_at, duration_ms=duration_ms
+                )
             ),
         )
 
@@ -2046,6 +2178,7 @@ class InMemoryExperienceService:
     ) -> NorthStarRecord | None:
         """Finish publication and cleanup even if the HTTP waiter disconnects."""
         key = (snapshot.session_id, snapshot.input_hash)
+        started = perf_counter()
         try:
             try:
                 record = validate_north_star_record(
@@ -2091,12 +2224,18 @@ class InMemoryExperienceService:
                             omitted,
                             event_id=event_id,
                             parent_event_id=events[index].parent_event_id,
+                            started_at=events[index].started_at,
+                            duration_ms=max(
+                                0, round((perf_counter() - started) * 1000)
+                            ),
                         )
                     return None
                 events[index] = self._north_star_event(
                     record,
                     event_id=event_id,
                     parent_event_id=events[index].parent_event_id,
+                    started_at=events[index].started_at,
+                    duration_ms=max(0, round((perf_counter() - started) * 1000)),
                 )
                 self._north_star_inflight.pop(key, None)
                 return record
@@ -2272,6 +2411,7 @@ class InMemoryExperienceService:
             | SessionDeleteRequest
             | TraceReadRequest
             | NorthStarReviewRequest
+            | CoachRetryRequest
         ),
     ) -> ApiResponse:
         if isinstance(request, SessionCreateRequest):
@@ -2284,4 +2424,6 @@ class InMemoryExperienceService:
             return await self.delete_session(request)
         if isinstance(request, NorthStarReviewRequest):
             return await self.review_north_star(request)
+        if isinstance(request, CoachRetryRequest):
+            return await self.retry_coach(request)
         return await self.read_trace(request)

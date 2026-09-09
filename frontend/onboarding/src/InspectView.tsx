@@ -9,6 +9,8 @@ import type { TraceEventContract } from "./demoContracts";
 import type { BwsResponse, ScoreBundle, ValueKey } from "./domain";
 import OnboardingScoreInspection from "./OnboardingScoreInspection";
 import { northStarFraming } from "./northStar";
+import { displayWeekRange } from "./displayFormatters";
+import { isWeeklyEvent, weeklyRunContext } from "./weeklyRun";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -113,8 +115,9 @@ const FILTER_LABELS: Record<InspectFilter, string> = {
   all: "All steps",
   journal: "Journal Entries",
   reviewer: "Weekly Drift Reviewer",
-  detector: "Drift Detector",
+  detector: "Weekly results",
 };
+
 
 function eventMatchesFilter(
   event: TraceEventContract,
@@ -538,12 +541,12 @@ export default function InspectView({
       : null,
     [currentJournalEntryIds],
   );
-  const selectedEvent = selectedEventId
+  const selectedEvent = !onboarding && selectedEventId
     ? events.find((event) => event.event_id === selectedEventId) ?? null
     : null;
   const currentWeekEventIdSet = useMemo(
-    () => currentWeekEventIds ? new Set(currentWeekEventIds) : null,
-    [currentWeekEventIds],
+    () => !onboarding && currentWeekEventIds ? new Set(currentWeekEventIds) : null,
+    [currentWeekEventIds, onboarding],
   );
   const currentEvents = useMemo(
     () => currentWeekEventIdSet
@@ -558,20 +561,22 @@ export default function InspectView({
     [currentWeekEventIdSet, events],
   );
   const filteredCurrentEvents = currentEvents.filter((event) =>
-    eventMatchesFilter(event, activeFilter)
+    eventMatchesFilter(event, onboarding ? "all" : activeFilter)
   );
   const filteredHistoryEvents = historyEvents.filter((event) =>
-    eventMatchesFilter(event, activeFilter)
+    eventMatchesFilter(event, onboarding ? "all" : activeFilter)
   );
-  const weeklyFocus =
-    currentWeekEventIdSet !== null
-    ||
-    selectedEvent?.event_type === "drift_detected"
-    || selectedEvent?.event_type === "weekly_digest_built"
-    || selectedEvent?.event_type === "weekly_coach_generated"
-    || selectedEvent?.event_type === "north_star_reviewed";
+  const focusedWeeklyEvent = selectedEvent && isWeeklyEvent(selectedEvent)
+    ? selectedEvent
+    : currentWeekEventIdSet
+      ? [...currentEvents].reverse().find(isWeeklyEvent)
+      : undefined;
+  const focusedContext = useMemo(() => focusedWeeklyEvent
+    ? weeklyRunContext(events, focusedWeeklyEvent.event_id) : null, [events, focusedWeeklyEvent]);
+  const weeklyFocus = !onboarding && focusedContext !== null;
   const latestWeeklyEvent = (eventType: string) =>
-    [...currentEvents].reverse().find((event) => event.event_type === eventType)
+    (selectedEvent?.event_type === eventType ? selectedEvent : null)
+    ?? [...(focusedContext?.events ?? [])].reverse().find((event) => event.event_type === eventType)
     ?? null;
   const reviewerEvent = latestWeeklyEvent("weekly_review_completed");
   const driftEvent = latestWeeklyEvent("drift_detected");
@@ -583,7 +588,7 @@ export default function InspectView({
   const reviewerEffort = string(reviewerModel?.reasoning_effort);
 
   useEffect(() => {
-    if (!selectedEventId || !eventRefs.current.has(selectedEventId)) {
+    if (onboarding || !selectedEventId || !eventRefs.current.has(selectedEventId)) {
       headingRef.current?.focus({ preventScroll: true });
       return;
     }
@@ -598,7 +603,7 @@ export default function InspectView({
     const target = eventRefs.current.get(selectedEventId);
     target?.focus({ preventScroll: true });
     target?.scrollIntoView?.({ block: "center" });
-  }, [selectedEventId, selectedEvent?.event_type, weeklyFocus]);
+  }, [onboarding, selectedEventId, selectedEvent?.event_type, weeklyFocus]);
 
   const setEventExpanded = (eventId: string, open: boolean) => {
     setExpandedEvents((current) => {
@@ -622,7 +627,7 @@ export default function InspectView({
         const parentNumber = event.parent_event_id
           ? eventNumbers.get(event.parent_event_id)
           : null;
-        const isSelected = event.event_id === selectedEventId;
+        const isSelected = !onboarding && event.event_id === selectedEventId;
         const isExpanded = expandedEvents.has(event.event_id);
         const showStatus = !["complete", "reused"].includes(event.status);
         return (
@@ -749,6 +754,9 @@ export default function InspectView({
               <h2 id="inspect-focus-title">
                 How Twinkl reached this result.
               </h2>
+              {focusedContext?.week ? (
+                <p>Week: {displayWeekRange(focusedContext.week.start, focusedContext.week.end)}</p>
+              ) : null}
             </div>
             <details className="inspect-focus__technical">
               <summary>Technical details</summary>
@@ -841,7 +849,7 @@ export default function InspectView({
             {eventPresentation(selectedEvent.event_type).component}
           </p>
         </div>
-      ) : selectedEventId ? (
+      ) : !onboarding && selectedEventId ? (
         <div className="inspect-selection inspect-selection--missing" role="status">
           <small>Linked event unavailable</small>
           <p><code>{selectedEventId}</code> is not present in this trace.</p>
@@ -873,7 +881,7 @@ export default function InspectView({
             </div>
             <p>
               Use the filters to follow Journal Entries, the Weekly Drift
-              Reviewer, or the Drift Detector.
+              Reviewer, or weekly results including Coach Digest and North Star Moment.
             </p>
           </header>
         ) : (

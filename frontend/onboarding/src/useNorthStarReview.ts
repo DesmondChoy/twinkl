@@ -5,13 +5,14 @@ import { createExperienceSession, ExperienceApiError, readExperienceTrace, revie
 import { currentNorthStarEvent, useNorthStarProfileRef } from "./northStar";
 
 export default function useNorthStarReview({
-  profile, experience, updateExperience, enabled, busy,
+  profile, experience, updateExperience, enabled, busy, autoReview = true,
 }: {
   profile: OnboardingProfile;
   experience: ExperienceState;
   updateExperience: (patch: Partial<ExperienceState>) => void;
   enabled: boolean;
   busy: boolean;
+  autoReview?: boolean;
 }) {
   const profileRef = useNorthStarProfileRef(profile);
   const identity = JSON.stringify({
@@ -111,10 +112,10 @@ export default function useNorthStarReview({
   }, [busy, enabled, experience, identity, profile, profileRef, result, updateExperience]);
 
   useEffect(() => {
-    if (!enabled || busy || !profileRef || !experience.weekly_digest
+    if (!autoReview || !enabled || busy || !profileRef || !experience.weekly_digest
       || !experience.drift_result || experience.pending_submission) return;
     void run(false);
-  }, [busy, enabled, experience.drift_result, experience.pending_submission, experience.weekly_digest, profileRef, run]);
+  }, [autoReview, busy, enabled, experience.drift_result, experience.pending_submission, experience.weekly_digest, profileRef, run]);
 
   const pending = pendingIdentity === identity
     || (result?.record.status === "pending" && failure?.identity !== identity

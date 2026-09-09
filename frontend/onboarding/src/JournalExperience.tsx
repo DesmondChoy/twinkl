@@ -16,14 +16,18 @@ import {
   advanceAssessmentTime,
   createExperienceSession,
   ExperienceApiError,
+  coachRetryKey,
   journalIdempotencyKey,
   readExperienceTrace,
+  retryCoachDigest,
   submitJournalEntry,
 } from "./experienceApi";
 import { journalEntryAnchorId } from "./journalEntryAnchor";
 import { NUDGE_REVEAL_DELAY_MS } from "./nudgeReveal";
 import WeeklyExperience from "./WeeklyExperience";
 import useNorthStarReview from "./useNorthStarReview";
+import { manualWeeklyHistory } from "./manualWeeklyHistory";
+import { displayWeekRange } from "./displayFormatters";
 import type {
   ExperienceState,
   PendingJournalSubmission,
@@ -189,6 +193,13 @@ export default function JournalExperience({
   northStarReviewEnabled = true,
 }: JournalExperienceProps) {
   const submissionLockRef = useRef(false);
+  const mountedRef = useRef(false);
+  const operationSessionRef = useRef(profile.session_id);
+  operationSessionRef.current = profile.session_id;
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
   const nudgeHeadingRef = useRef<HTMLHeadingElement>(null);
   const threadHeadingRef = useRef<HTMLHeadingElement>(null);
   const latestEntryRef = useRef<HTMLLIElement>(null);
@@ -201,6 +212,10 @@ export default function JournalExperience({
     "next_day" | "close_week" | null
   >(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [coachRetry, setCoachRetry] = useState<{
+    week: string; pending: boolean; error: string | null; retryable: boolean;
+  } | null>(null);
+  const coachRetryRequest = useRef<{ week: string; revision: number; key: string } | null>(null);
   const [revealedNudgeId, setRevealedNudgeId] = useState<string | null>(null);
   const replayWeekStart =
     typeof experience.weekly_digest?.week_start === "string"
@@ -275,7 +290,18 @@ export default function JournalExperience({
   const latestEntry = experience.journal_entries.at(-1) ?? null;
   const isBusy = ["saving", "checking_nudge", "running"].includes(
     experience.run_state,
-  );
+  ) || coachRetry?.pending === true;
+  const reviewedWeeks = useMemo(() => mode === "manual" ? manualWeeklyHistory(experience) : [],
+    [experience, mode]);
+  const displayedWeek = reviewedWeeks.find((week) => week.weekStart === experience.selected_manual_week)
+    ?? reviewedWeeks.at(-1) ?? null;
+  const latestReviewedWeek = reviewedWeeks.at(-1) ?? null;
+  const displayedExperience = mode === "manual" && displayedWeek ? {
+    ...experience,
+    weekly_digest: displayedWeek.digest,
+    drift_result: displayedWeek.driftResult,
+  } : experience;
+  const displayedEvents = mode === "manual" && displayedWeek ? displayedWeek.events : experience.trace_events;
   const isAwaitingResponse =
     experience.run_state === "awaiting_response" && activeNudge !== null;
   const isActiveNudgeVisible =
@@ -296,9 +322,12 @@ export default function JournalExperience({
         : statusCopy(experience);
 
   const northStar = useNorthStarReview({
-    profile, experience, updateExperience,
-    enabled: mode === "manual" && experience.data_notice_acknowledged && northStarReviewEnabled,
-    busy: isBusy || timeAction !== null || removingEntryId !== null,
+    profile, experience: displayedExperience, updateExperience,
+    enabled: mode === "manual" && experience.data_notice_acknowledged && northStarReviewEnabled
+      && Boolean(displayedExperience.weekly_digest?.coach_narrative),
+    autoReview: displayedWeek?.weekStart === latestReviewedWeek?.weekStart,
+    busy: isBusy || timeAction !== null || removingEntryId !== null
+      || (experience.run_state === "failed" && experience.error_message?.includes("Inspect") === true),
   });
 
   useEffect(() => {
@@ -453,6 +482,7 @@ export default function JournalExperience({
           : null,
         trace_event_ids: acceptedResponse.session.trace_event_ids,
         trace_events: trace.events,
+        selected_event_id: trace.events.at(-1)?.event_id ?? null,
       });
     } catch (error) {
       const apiError =
@@ -539,6 +569,118 @@ export default function JournalExperience({
     submissionLockRef.current = true;
     try {
       await runSubmission(experience.pending_submission);
+    } finally {
+      submissionLockRef.current = false;
+    }
+  };
+
+  const reloadInspectTrace = async () => {
+    if (submissionLockRef.current || isBusy) return;
+    submissionLockRef.current = true;
+    updateExperience({ run_state: "running", retryable: false });
+    try {
+      const trace = await readExperienceTrace(profile.session_id);
+      const ids = new Set(trace.events.map((event) => event.event_id));
+      if (trace.session_id !== profile.session_id
+        || !experience.trace_event_ids.every((id) => ids.has(id))) {
+        throw new ExperienceApiError("Inspect returned an incomplete session trace.");
+      }
+      const pending = experience.pending_submission;
+      const decision = pending ? latestDecisionFor(trace.events, pending.entry.journal_entry_id) : null;
+      const failed = decision?.status === "failed";
+      const awaitingResponse = experience.nudges.some((nudge) => nudge.outcome === "displayed");
+      updateExperience({
+        trace_events: trace.events,
+        trace_event_ids: trace.events.map((event) => event.event_id),
+        selected_event_id: trace.events.at(-1)?.event_id ?? null,
+        pending_submission: failed ? pending : null,
+        run_state: awaitingResponse ? "awaiting_response" : failed ? "failed" : "complete",
+        retryable: failed && decision.error?.retryable === true,
+        error_message: failed ? "Your Journal Entry is saved. The follow-up check could not finish." : null,
+      });
+    } catch (error) {
+      updateExperience({ run_state: "failed", retryable: error instanceof ExperienceApiError ? error.retryable : true,
+        error_message: "Your saved work is available, but its Inspect details could not be loaded." });
+    } finally {
+      submissionLockRef.current = false;
+    }
+  };
+
+  const retryWeeklyCoach = async () => {
+    if (!displayedWeek || isBusy || submissionLockRef.current) return;
+    const week = displayedWeek.weekStart;
+    const sessionId = profile.session_id;
+    const stillCurrent = () => mountedRef.current && operationSessionRef.current === sessionId;
+    submissionLockRef.current = true;
+    setCoachRetry({ week, pending: true, error: null, retryable: false });
+    let accepted: Awaited<ReturnType<typeof retryCoachDigest>> | null = null;
+    try {
+      if (coachRetryRequest.current?.week !== week
+        || coachRetryRequest.current.revision !== experience.revision) {
+        coachRetryRequest.current = { week, revision: experience.revision,
+          key: await coachRetryKey(sessionId, week, experience.revision) };
+      }
+      if (!stillCurrent()) return;
+      const request = { sessionId: profile.session_id,
+        expectedRevision: experience.revision, weekStart: week,
+        idempotencyKey: coachRetryRequest.current.key };
+      try {
+        accepted = await retryCoachDigest(request);
+      } catch (error) {
+        const traceIds = new Set(experience.trace_events.map((event) => event.event_id));
+        const completeTrace = traceIds.size > 0
+          && experience.trace_event_ids.length === traceIds.size
+          && experience.trace_event_ids.every((id) => traceIds.has(id));
+        if (!(error instanceof ExperienceApiError) || error.code !== "session_not_found"
+          || !completeTrace || !stillCurrent()) throw error;
+        const restored = await createExperienceSession(profile, {
+          session_id: sessionId, revision: experience.revision,
+          journal_entries: experience.journal_entries, nudges: experience.nudges,
+          assessment_clock: experience.assessment_clock, trace_events: experience.trace_events,
+        });
+        if (!stillCurrent()) return;
+        if (restored.session.revision !== experience.revision) {
+          throw new ExperienceApiError("The saved review belongs to an older session.", "session_conflict", false);
+        }
+        accepted = await retryCoachDigest(request);
+      }
+      if (!stillCurrent()) return;
+      if (accepted.session.session_id !== profile.session_id) {
+        accepted = null;
+        throw new ExperienceApiError("The Coach Digest belongs to a different session.", "session_conflict", false);
+      }
+      const trace = await readExperienceTrace(profile.session_id);
+      if (!stillCurrent()) return;
+      if (trace.session_id !== profile.session_id) {
+        throw new ExperienceApiError("Inspect returned a different session.", "session_conflict", false);
+      }
+      updateExperience({ revision: accepted.session.revision,
+        weekly_digest: accepted.session.weekly_digest,
+        drift_result: accepted.session.drift_result,
+        weekly_reviewer_decisions: accepted.session.weekly_reviewer_decisions,
+        trace_event_ids: trace.events.map((event) => event.event_id),
+        trace_events: trace.events,
+        selected_event_id: accepted.event_ids.at(-1) ?? null,
+        run_state: "complete", retryable: false, error_message: null });
+      coachRetryRequest.current = null;
+      setCoachRetry(null);
+    } catch (error) {
+      if (!stillCurrent()) return;
+      const retryable = error instanceof ExperienceApiError ? error.retryable : true;
+      if (accepted) {
+        updateExperience({ revision: accepted.session.revision,
+          weekly_digest: accepted.session.weekly_digest,
+          drift_result: accepted.session.drift_result,
+          weekly_reviewer_decisions: accepted.session.weekly_reviewer_decisions,
+          trace_event_ids: accepted.session.trace_event_ids,
+          run_state: "failed", retryable,
+          error_message: "The Coach Digest attempt finished, but its Inspect details could not be loaded." });
+        coachRetryRequest.current = null;
+        setCoachRetry(null);
+      } else {
+        setCoachRetry({ week, pending: false, retryable,
+          error: error instanceof Error ? error.message : "The Coach Digest could not be retried." });
+      }
     } finally {
       submissionLockRef.current = false;
     }
@@ -684,11 +826,13 @@ export default function JournalExperience({
         drift_result: acceptedResponse.session.drift_result,
         weekly_digest: acceptedResponse.session.weekly_digest,
         assessment_clock: acceptedResponse.session.assessment_clock,
-        run_state: "complete",
+        run_state: action === "next_day" ? "idle" : "complete",
         retryable: false,
         error_message: null,
         trace_event_ids: acceptedResponse.session.trace_event_ids,
         trace_events: trace.events,
+        selected_manual_week: action === "close_week" ? null : experience.selected_manual_week,
+        selected_event_id: trace.events.at(-1)?.event_id ?? null,
       });
       const focusTarget = () => {
         if (action === "next_day") {
@@ -724,6 +868,7 @@ export default function JournalExperience({
           error_message:
             "The date changed, but its Inspect details could not be loaded.",
           trace_event_ids: acceptedResponse.session.trace_event_ids,
+          selected_manual_week: action === "close_week" ? null : experience.selected_manual_week,
         });
       } else {
         updateExperience({
@@ -758,6 +903,14 @@ export default function JournalExperience({
     updateExperience({ run_state: "running", error_message: null });
     try {
       const synchronized = await synchronizeBrowserState(journalEntries, nudges);
+      const updatedWeeks = manualWeeklyHistory({ ...experience,
+        journal_entries: synchronized.response.session.journal_entries,
+        weekly_digest: synchronized.response.session.weekly_digest,
+        drift_result: synchronized.response.session.drift_result,
+        trace_events: synchronized.trace.events,
+      });
+      const selectedWeek = updatedWeeks.find((week) => week.weekStart === experience.selected_manual_week)
+        ?? updatedWeeks.at(-1);
       updateExperience({
         revision: synchronized.response.session.revision,
         journal_entries: synchronized.response.session.journal_entries,
@@ -771,6 +924,8 @@ export default function JournalExperience({
           experience.selected_entry_id === journalEntryId
             ? null
             : experience.selected_entry_id,
+        selected_manual_week: selectedWeek?.weekStart === updatedWeeks.at(-1)?.weekStart ? null : selectedWeek?.weekStart ?? null,
+        selected_event_id: selectedWeek?.inspectEventId ?? synchronized.trace.events.at(-1)?.event_id ?? null,
         run_state: "complete",
         retryable: false,
         error_message: null,
@@ -794,6 +949,12 @@ export default function JournalExperience({
     const eventId = experience.trace_event_ids.at(-1);
     if (eventId) inspectRun(eventId);
   };
+
+  const traceIds = new Set(experience.trace_events.map((event) => event.event_id));
+  const traceNeedsRecovery = experience.run_state === "failed" && experience.retryable
+    && (experience.trace_event_ids.some((id) => !traceIds.has(id))
+      || experience.error_message?.includes("Inspect") === true);
+  const displayedCoach = [...displayedEvents].reverse().find((event) => event.event_type === "weekly_coach_generated");
 
   const renderJournalThread = (
     entries: JournalEntryContract[],
@@ -941,16 +1102,25 @@ export default function JournalExperience({
     <WeeklyExperience
       profile={profile}
       journalEntries={experience.journal_entries}
-      weeklyReviewerDecisions={experience.weekly_reviewer_decisions}
-      driftResult={experience.drift_result}
-      weeklyDigest={experience.weekly_digest}
-      traceEvents={experience.trace_events}
+      weeklyReviewerDecisions={displayedWeek?.decisions ?? experience.weekly_reviewer_decisions}
+      driftResult={displayedExperience.drift_result}
+      weeklyDigest={displayedExperience.weekly_digest}
+      traceEvents={displayedEvents}
       inspectRun={inspectRun}
       selectJournalEntry={(journalEntryId) =>
         updateExperience({ selected_entry_id: journalEntryId })
       }
       showInspectAction={mode === "manual"}
       northStarReview={mode === "manual" ? northStar : undefined}
+      coachReview={mode === "manual" ? {
+        pending: coachRetry?.week === displayedWeek?.weekStart && coachRetry?.pending === true,
+        retryable: !isBusy && !isAwaitingResponse && !traceNeedsRecovery
+          && (coachRetry !== null && coachRetry.week === displayedWeek?.weekStart
+            ? coachRetry.retryable : displayedCoach?.error?.retryable === true
+              || displayedCoach?.error?.code === "coach_response_invalid"),
+        retry: () => void retryWeeklyCoach(),
+        error: coachRetry?.week === displayedWeek?.weekStart ? coachRetry?.error : null,
+      } : undefined}
     />
   );
 
@@ -1063,7 +1233,10 @@ export default function JournalExperience({
                 experience.pending_submission !== null
               }
             >
-              {isBusy ? "Saving…" : "Save Journal Entry"}
+              {timeAction === "close_week" ? "Preparing review…"
+                : timeAction === "next_day" ? "Changing date…"
+                : coachRetry?.pending ? "Retrying weekly response…"
+                : isBusy ? "Saving…" : "Save Journal Entry"}
             </button>
           </div>
         </form>
@@ -1112,6 +1285,7 @@ export default function JournalExperience({
         className={`journal-status journal-status--${experience.run_state}`}
         id="journal-status"
         role="status"
+        aria-label="Journal status"
         aria-live="polite"
       >
         {copy ? <p>{copy}</p> : null}
@@ -1119,7 +1293,12 @@ export default function JournalExperience({
       <div className={`journal-status-actions${
         mode === "saved_replay" ? " journal-status-actions--replay" : ""
       }`}>
-        {experience.run_state === "failed" && experience.retryable &&
+        {traceNeedsRecovery ? (
+          <button className="button button--quiet" type="button" onClick={() => void reloadInspectTrace()}>
+            Try loading Inspect again
+          </button>
+        ) : null}
+        {!traceNeedsRecovery && experience.run_state === "failed" && experience.retryable &&
         experience.pending_submission ? (
           <button
             className="button button--quiet"
@@ -1153,7 +1332,7 @@ export default function JournalExperience({
             type="button"
             onClick={inspectLatest}
           >
-            Inspect this run
+            Inspect latest activity
           </button>
         ) : null}
       </div>
@@ -1198,6 +1377,28 @@ export default function JournalExperience({
         </button>
       ) : null}
 
+      {mode === "manual" && reviewedWeeks.length > 0 ? (
+        <nav className="manual-week-picker" aria-label="Reviewed weeks">
+          <label htmlFor="reviewed-week">Reviewed week</label>
+          <select id="reviewed-week" disabled={isBusy}
+            value={displayedWeek?.weekStart ?? ""}
+            onChange={(event) => {
+              const index = reviewedWeeks.findIndex((week) => week.weekStart === event.target.value);
+              const week = reviewedWeeks[index];
+              if (week) updateExperience({
+                selected_manual_week: index === reviewedWeeks.length - 1 ? null : week.weekStart,
+                selected_event_id: week.inspectEventId,
+              });
+            }}>
+            {reviewedWeeks.map((week) => (
+              <option key={week.weekStart} value={week.weekStart}>
+                {displayWeekRange(week.weekStart, week.weekEnd)}
+              </option>
+            ))}
+          </select>
+          <p>Choose a closed week to read its result. Writing continues on the simulated date above.</p>
+        </nav>
+      ) : null}
       {mode === "manual" ? weeklyExperience : null}
     </div>
   );

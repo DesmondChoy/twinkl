@@ -81,12 +81,11 @@ describe("Coach Digest composition", () => {
     expect(within(coach).getByRole("heading", { level: 3, name: "A past moment in your own words" })).toBeTruthy();
     if (presentation === "demo") {
       expect(within(coach).getByText("North Star Moment")).toBeTruthy();
-      await user.click(within(coach).getByRole("button", { name: "Inspect this moment" }));
-      expect(inspectMoment).toHaveBeenCalledWith(event.event_id);
     } else {
       expect(within(coach).queryByText(/North Star Moment/)).toBeNull();
-      expect(within(coach).queryByRole("button", { name: "Inspect this moment" })).toBeNull();
     }
+    await user.click(within(coach).getByRole("button", { name: "Inspect this moment" }));
+    expect(inspectMoment).toHaveBeenCalledWith(event.event_id);
     await user.click(within(coach).getByRole("link", { name: /^Open Journal Entry/ }));
     expect(onOpenEntry).toHaveBeenCalledWith(entry);
     expect(JSON.stringify({ digest, event })).toBe(original);
@@ -166,7 +165,7 @@ describe("Coach Digest composition", () => {
     },
   );
 
-  it("integrates the personal passage without implementation labels and fails quietly during review", async () => {
+  it("keeps the personal response while showing moment review progress and recovery", async () => {
     const event = await momentEvent();
     const selectJournalEntry = vi.fn();
     const props = {
@@ -187,7 +186,7 @@ describe("Coach Digest composition", () => {
       expect(screen.queryByText(quote)).toBeNull();
       expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
       expect(screen.queryByText(/North Star Moment/)).toBeNull();
-      expect(screen.queryByRole("button", { name: /Retry/ })).toBeNull();
+      expect(Boolean(screen.queryByRole("button", { name: "Retry moment review" }))).toBe(!pending);
     }
   });
 
