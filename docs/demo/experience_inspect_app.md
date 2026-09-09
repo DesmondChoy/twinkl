@@ -387,7 +387,7 @@ their entries; manual journaling retains its separate delayed Nudge reveal.
 
 When a saved Coach Digest response is present, it appears after the Weekly
 Drift Detection result in the same reading area. It does not replace the
-Weekly Drift Detection result. The short heading **Your weekly reflection**
+Weekly Drift Detection result. The heading **Coach Digest**
 precedes readable narrative paragraphs and links to the supporting Journal
 Entries. Ellipsis-ended quotations expand through the source sentence only
 when they match a unique occurrence in a cited Journal Entry available by the
@@ -424,8 +424,9 @@ AI rejection, Insufficient Evidence, and an unavailable comparison. A bound
 review offers **View review in Inspect**. Changing Persona or week closes the
 explanation. Toggling performs no provider call. Onboarding continues to show its
 original narrative, optional validated passage, and original question.
-The **Something to reflect on** label identifies that final question as an
-invitation addressed to the user. Prompt `4.5` asks for conversational prose
+The reflective question closes the **Coach Digest** as an ordinary paragraph,
+without a separate label or callout. The optional North Star Moment and source-date links follow the complete response. The card uses **Coach Digest** as its sole
+heading. The replay result heading reads **Drift Detection (End of Week)**. Prompt `4.5` asks for conversational prose
 that opens with a specific lived moment, avoids calendar-recap openings and
 clinical findings, and asks one short question about a concrete experience.
 New generation checks also reject date-led openings and writing-process commentary;
@@ -459,6 +460,12 @@ inspectable independently of the Experience toggle. The paired record is
 bound to the same Persona, reviewed week, weekly input hash, and validated
 North Star Moment source; it is not accepted on live-session events.
 
+The expanded **Why this state** section omits the repeated Core Value and state
+header for single-Core-Value Personas and the generic No Active Drift summary.
+Personas with multiple Core Values retain per-value labels to distinguish their
+states. Supporting Journal Entries and specific Drift start, continuation, and
+ending explanations remain available.
+
 The result grows with its content and uses page scrolling. **Why this state**
 keeps detailed evidence collapsed until requested; **Inspect decision** stays
 with the Drift state. Missing or invalid Coach responses show their existing
@@ -468,8 +475,8 @@ card. Source links open the Journal Entry dialog without expanding the journals
 panel. The active week stays centered in the horizontal week strip on narrow screens.
 
 Profile details remain collapsed by default and include a short Persona context.
-Each Core Value explanation names its state beside the Core Value. When a
-Profile has two Core Values, the overall result explains that their states can
+For Profiles with two Core Values, each explanation names its state beside the
+Core Value, and the overall result explains that their states can
 differ. A No Active Drift explanation for one Core Value does not contradict
 Active Drift or Insufficient Evidence for the other Core Value.
 The Persona header always names the selected Schwartz Core Values. State-change
@@ -507,7 +514,7 @@ Experience shows:
   unavailable state;
 - within a valid Coach Digest, at most one North Star Moment with the exact
   quotation, source date, and Journal Entry link when an eligible review selects
-  a supportive action, followed by the original reflective question.
+  a supportive action, following the original reflective question.
 
 Experience does not show the full Weekly Drift Reviewer prompt, provider
 payload, validation record, identifiers, or hashes. Those belong in Inspect.

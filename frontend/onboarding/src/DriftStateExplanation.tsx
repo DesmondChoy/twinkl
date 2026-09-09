@@ -473,21 +473,19 @@ export default function DriftStateExplanation({
               className={`state-change state-change--${state}`}
               key={coreValue}
             >
-              <header>
-                <span>{VALUES[coreValue as ValueKey]?.name ?? coreValue}</span>
-                <strong>
-                  {state === "active_drift" ? "Active Drift"
-                    : state === "insufficient_evidence" ? "Insufficient Evidence"
-                      : "No Active Drift"}
-                </strong>
-              </header>
+              {profile.top_values.length > 1 ? (
+                <header>
+                  <span>{VALUES[coreValue as ValueKey]?.name ?? coreValue}</span>
+                  <strong>
+                    {state === "active_drift" ? "Active Drift"
+                      : state === "insufficient_evidence" ? "Insufficient Evidence"
+                        : "No Active Drift"}
+                  </strong>
+                </header>
+              ) : null}
 
               {state === "no_active_drift" ? (
                 <>
-                  <p className="state-change__summary">
-                    No active Drift is confirmed at this cutoff. This does not
-                    prove a positive change.
-                  </p>
                   {endingEntry ? (
                     <>
                       <p className="state-change__marker">

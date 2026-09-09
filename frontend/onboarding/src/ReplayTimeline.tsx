@@ -353,7 +353,7 @@ export default function ReplayTimeline({
           <header className="replay-column__header">
             <div>
               <h2 id="replay-result-column-title" ref={resultHeadingRef} tabIndex={-1}>
-                Weekly Drift Detection{" "}
+                Drift Detection (End of Week){" "}
                 <span className="replay-column__basis">
                   (based on {cumulativeEntryCount} Journal{" "}
                   {cumulativeEntryCount === 1 ? "Entry" : "Entries"} through{" "}

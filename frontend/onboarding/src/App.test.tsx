@@ -359,7 +359,7 @@ describe("onboarding app", () => {
 
     expect(screen.getByText("Week 4 of 5")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     const after = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
     expect(after.session_id).toBe(before.session_id);
     expect(after.experience.selected_persona_id).toBe(before.experience.selected_persona_id);

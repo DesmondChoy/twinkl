@@ -310,7 +310,7 @@ describe("Coach Digest composition", () => {
       await user.click(toggle);
     }
     const quotation = await screen.findByText(quote);
-    const coach = screen.getByRole("complementary", { name: "Your weekly reflection" });
+    const coach = screen.getByRole("complementary", { name: "Coach Digest" });
     const introduction = screen.getByText(northStarFraming("reflection")!);
     const question = within(coach).getByText(narrative.reflective_question);
     expect(document.querySelectorAll(".coach-digest")).toHaveLength(1);
@@ -319,8 +319,8 @@ describe("Coach Digest composition", () => {
     const tension = within(coach).getByText(narrative.tension_explanation);
     expect(tension.compareDocumentPosition(introduction) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(introduction.compareDocumentPosition(quotation) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(quotation.compareDocumentPosition(question) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(coach.lastElementChild).toBe(question);
+    expect(question.compareDocumentPosition(introduction) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(tension.nextElementSibling).toBe(question);
     expect(coach.querySelectorAll(".coach-digest__question")).toHaveLength(1);
     expect(quotation.textContent).toBe(quote);
     expect(within(coach).getByRole("heading", { level: 3, name: "A past moment in your own words" })).toBeTruthy();

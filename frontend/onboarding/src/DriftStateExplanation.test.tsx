@@ -38,7 +38,7 @@ describe("ended Drift explanation", () => {
     expect(props.onOpenEntry).toHaveBeenCalledWith(
       props.journalEntries.find((entry) => entry.t_index === 2),
     );
-    expect(screen.getByText(/This does not prove a positive change/)).toBeTruthy();
+    expect(screen.queryByText(/This does not prove a positive change/)).toBeNull();
   });
 
   it("distinguishes an earlier ending from the selected week's decisions", () => {
@@ -58,7 +58,8 @@ describe("ended Drift explanation", () => {
   it("does not expose a later ending while Drift is still active", () => {
     render(<DriftStateExplanation {...propsForWeek(0)} />);
 
-    expect(screen.getByText("Active Drift")).toBeTruthy();
+    expect(screen.queryByText("Active Drift")).toBeNull();
+    expect(screen.getByText("Drift started here.")).toBeTruthy();
     expect(screen.queryByText(/Drift ended here/)).toBeNull();
     expect(screen.queryByRole("button", {
       name: /Read Journal Entry from (?=.*\b20\b)(?=.*Nov)(?=.*2025)/,

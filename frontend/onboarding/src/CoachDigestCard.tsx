@@ -123,7 +123,7 @@ export default function CoachDigestCard({
   return (
     <aside className={classes} aria-labelledby={headingId}>
       <div className="coach-digest__header">
-        <p className="eyebrow">Coach Digest</p>
+        <Heading className="eyebrow" id={headingId}>Coach Digest</Heading>
         {demo ? (
           <button className="coach-digest__comparison-toggle" type="button"
             aria-describedby={`${headingId}-comparison-status`}
@@ -137,7 +137,6 @@ export default function CoachDigestCard({
           </button>
         ) : null}
       </div>
-      <Heading id={headingId}>Your weekly reflection</Heading>
       {demo ? (
         <div className="coach-digest__comparison-status" id={`${headingId}-comparison-status`} role="status">
           <p>Showing: {withMoment ? "With" : "Without"} North Star Moment</p>
@@ -164,6 +163,17 @@ export default function CoachDigestCard({
           {fullQuotations(paragraph)}
         </Fragment>
       ))}
+      {fullQuotations(expanded[2])}
+      <p className="coach-digest__question">{expanded[2].text}</p>
+      {northStar && (!demo || withMoment) ? (
+        <NorthStarMoment
+          {...northStar}
+          weeklyDigest={weeklyDigest!}
+          journalEntries={journalEntries}
+          openJournalEntry={onOpenEntry}
+          headingLevel={headingLevel === 2 ? 3 : 4}
+        />
+      ) : null}
       {sourceEntries.length > 0 ? (
         <nav className="coach-digest__sources" aria-label="Coach Digest Journal Entries">
           <ul>
@@ -180,18 +190,6 @@ export default function CoachDigestCard({
           </ul>
         </nav>
       ) : null}
-      {northStar && (!demo || withMoment) ? (
-        <NorthStarMoment
-          {...northStar}
-          weeklyDigest={weeklyDigest!}
-          journalEntries={journalEntries}
-          openJournalEntry={onOpenEntry}
-          headingLevel={headingLevel === 2 ? 3 : 4}
-        />
-      ) : null}
-      {fullQuotations(expanded[2])}
-      <p className="coach-digest__question-label">Something to reflect on</p>
-      <p className="coach-digest__question">{expanded[2].text}</p>
     </aside>
   );
 }

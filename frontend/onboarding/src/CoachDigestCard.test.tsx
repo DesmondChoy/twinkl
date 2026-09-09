@@ -76,7 +76,7 @@ describe("Coach Digest quotations", () => {
 
     rerender(<CoachDigestCard weeklyDigest={{ ...digest, week_end: entry.date }}
       headingId="coach-title" journalEntries={[entry]} onOpenEntry={onOpenEntry} />);
-    expect(screen.getByRole("heading", { name: "Your weekly reflection" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Coach Digest" })).toBeTruthy();
     expect(screen.getByText('You said “five more minutes would be fine.”')).toBeTruthy();
     await userEvent.click(screen.getByRole("link"));
     expect(onOpenEntry).toHaveBeenCalledWith(entry);
@@ -103,10 +103,10 @@ describe("Coach Digest quotations", () => {
       const original = JSON.stringify(session.weekly_digest);
       const { container } = render(<CoachDigestCard weeklyDigest={session.weekly_digest}
         headingId="coach-title" journalEntries={session.journal_entries} />);
-      expect(screen.getByRole("heading", { name: "Your weekly reflection" })).toBeTruthy();
+      expect(screen.getByRole("heading", { name: "Coach Digest" })).toBeTruthy();
       expect(container.textContent).not.toMatch(/(?:\.{3}|…)[”"]/);
       expect(JSON.stringify(session.weekly_digest)).toBe(original);
-      expect(screen.getByText("Something to reflect on")).toBeTruthy();
+      expect(screen.queryByText("Something to reflect on")).toBeNull();
       expect(screen.queryByText("Read the supporting Journal Entries")).toBeNull();
     },
   );

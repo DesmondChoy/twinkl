@@ -510,7 +510,6 @@ function CoachComparisonInspection({ comparison }: { comparison: CoachComparison
                   <h5>Associated Coach Digest response</h5>
                   <p>{arm.narrative.weekly_mirror}</p>
                   <p>{arm.narrative.tension_explanation}</p>
-                  <h5>Something to reflect on</h5>
                   <p>{arm.narrative.reflective_question}</p>
                 </section>
                 <TextBlock label={`${label}: exact raw provider response`} value={arm.raw_output} />
@@ -658,10 +657,10 @@ function NorthStarInspection({ event, comparison }: { event: TraceEventContract;
         </details>
         {framing ? (
           <div className="nsm-inspect__composition">
-            <h5>Where it appears in Your weekly reflection</h5>
+            <h5>Where it appears in Coach Digest</h5>
             <p>{comparison
-              ? "The saved demo starts with the response generated without North Star Moment. Switching to the with-context response replaces both narrative paragraphs and its reflective question, and displays this exact quotation between them. The selected quotation and its full source were supplied to the with-context request; both prompts and responses are recorded in the Coach Digest comparison."
-              : "The full selected quotation is inserted as a North Star Moment passage after the Coach Digest narrative and before its reflective question. Its wording is preserved; the selected text is not sent back to rewrite the narrative."}</p>
+              ? "The saved demo starts with the response generated without North Star Moment. Switching to the with-context response replaces both narrative paragraphs and its reflective question, and displays this exact quotation after the complete response. The selected quotation and its full source were supplied to the with-context request; both prompts and responses are recorded in the Coach Digest comparison."
+              : "The full selected quotation is inserted as a North Star Moment passage after the Coach Digest narrative and reflective question. Its wording is preserved; the selected text is not sent back to rewrite the narrative."}</p>
             <p>Introduction: {framing}</p>
           </div>
         ) : null}

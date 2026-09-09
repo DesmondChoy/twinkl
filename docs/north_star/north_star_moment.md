@@ -10,7 +10,7 @@ replay uses the completed full-history outcomes from the targeted Weekly Drift
 v4 Run 1 update, preserving no-card outcomes and original receipt provenance.
 Live review uses a separately authorized US$1 allowance shared across sessions
 and restarts. Both Experience paths place a selected quotation within a valid
-Coach Digest before its reflective question. The saved demo can switch between
+Coach Digest after its reflective question. The saved demo can switch between
 complete responses generated with and without the selected source context;
 onboarding retains its original narrative and question.
 
@@ -77,7 +77,7 @@ covering 27 reviewed weeks from the completed targeted experiment. The
 onboarding path supports generation during the user's session after an
 eligible closed-week review when its runtime budget is available. Both paths
 use the same selection and validation rules. Experience places the quotation
-after the displayed Coach Digest narrative and before its reflective question,
+after the displayed Coach Digest narrative and reflective question,
 within one reading area. Inspect shows why it was selected. In the saved demo,
 the with-context response receives the exact quotation and complete selected
 source in its prompt; its narrative and question can therefore refer to that
@@ -153,8 +153,8 @@ This wording rule does not change detection decisions or permit rewriting
 the user's quoted words.
 
 Experience adds at most one North Star Moment passage to a valid Coach Digest
-per reviewed week. The exact selected quotation is preserved, with the displayed
-response's reflective question at the end. Saved replay shows this passage only
+per reviewed week. The exact selected quotation is preserved after the complete
+displayed response, including its reflective question. Saved replay shows this passage only
 with its validated with-context response; the without-context response hides it.
 Onboarding preserves its original generated narrative and question. The introduction
 is deterministic and based on the accepted record:

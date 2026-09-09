@@ -254,7 +254,7 @@ describe("manual Journal Entry Experience", () => {
     render(<Harness initial={initial} northStarReviewEnabled={false} />);
     await user.click(screen.getByRole("button", { name: "Retry Coach Digest" }));
     await user.click(await screen.findByRole("button", { name: "Try loading Inspect again" }));
-    await screen.findByRole("heading", { name: "Your weekly reflection" });
+    await screen.findByRole("heading", { name: "Coach Digest" });
     expect(api.retryCoachDigest).toHaveBeenCalledTimes(status === "restored" ? 2 : 1);
     if (status === "restored") {
       expect(api.retryCoachDigest.mock.calls[1]).toEqual(api.retryCoachDigest.mock.calls[0]);

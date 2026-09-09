@@ -253,7 +253,7 @@ describe("persona replay", () => {
       await user.click(screen.getByRole("button", { name: "Next week" }));
     }
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     await user.click(screen.getByRole("button", { name: "Show week 2: no active drift" }));
     await user.click(screen.getByRole("button", { name: "Inspect" }));
@@ -265,7 +265,7 @@ describe("persona replay", () => {
       name: "Show week 3: no active drift",
     }) as HTMLButtonElement).disabled).toBe(false);
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     const states = document.querySelectorAll(".state-change > header");
     expect(Array.from(states, (header) => header.textContent)).toEqual([
@@ -276,13 +276,13 @@ describe("persona replay", () => {
     render(<App />);
     await screen.findByText("Week 2 of 5");
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     expect((screen.getByRole("button", {
       name: "Show week 3: no active drift",
     }) as HTMLButtonElement).disabled).toBe(false);
     await user.click(screen.getByRole("button", { name: "Show week 3: no active drift" }));
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     expect(Array.from(document.querySelectorAll(".state-change > header"),
       (header) => header.textContent)).toEqual([
@@ -298,13 +298,13 @@ describe("persona replay", () => {
     await user.click(screen.getByRole("button", { name: "Inspect" }));
     await user.click(screen.getByRole("button", { name: "Return to Experience" }));
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ })).toHaveLength(firstWeekCount);
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
 
     view.unmount();
     const restored = render(<App />);
     await screen.findByRole("button", { name: /Open Journal Entry 1/ });
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     await user.click(screen.getByRole("button", { name: "Next week" }));
     expect(screen.getByText("Week 2 of 5")).toBeTruthy();
@@ -315,7 +315,7 @@ describe("persona replay", () => {
     render(<App />);
     await screen.findByText("Week 2 of 5");
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ })).toHaveLength(secondWeekCount);
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
   });
 
   it("loads a selected persona from the saved catalog", async () => {
@@ -440,7 +440,7 @@ describe("persona replay", () => {
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ }))
       .toHaveLength(week.journal_entry_ids.length);
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     expect(screen.queryByRole("button", { name: "Next step" })).toBeNull();
     expect(screen.queryByRole("button", { name: /Auto replay|Pause replay/ })).toBeNull();
     expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
@@ -459,7 +459,7 @@ describe("persona replay", () => {
       onWeekChange={() => undefined} />);
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ })).toHaveLength(2);
     expect(screen.getByRole("button", { name: "Review Weekly Drift Detection" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
   });
 
   it("advances without review and returns to journals for new weeks and restart", async () => {
@@ -471,12 +471,12 @@ describe("persona replay", () => {
     expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
     await user.click(screen.getByRole("button", { name: "Next week" }));
     expect(screen.getByText("Week 2 of 5")).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Show week 1, outcome hidden" }));
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     expect(screen.getByRole("heading", { name: "No Active Drift" })).toBeTruthy();
     expect(screen.getByRole("heading", {
-      name: "Weekly Drift Detection (based on 2 Journal Entries through Feb 16)",
+      name: "Drift Detection (End of Week) (based on 2 Journal Entries through Feb 16)",
     })).toBeTruthy();
     document.documentElement.scrollTop = 640;
     document.body.scrollTop = 640;
@@ -485,12 +485,12 @@ describe("persona replay", () => {
     expect(document.documentElement.scrollTop).toBe(0);
     expect(document.body.scrollTop).toBe(0);
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(false);
     await user.click(screen.getByRole("button", { name: "Show week 1: no active drift" }));
     expect(screen.getByText("Week 1 of 5")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     document.documentElement.scrollTop = 640;
     document.body.scrollTop = 640;
@@ -500,7 +500,7 @@ describe("persona replay", () => {
     expect(screen.getByText("Week 1 of 5")).toBeTruthy();
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ })).toHaveLength(2);
     expect(screen.getByRole("button", { name: "Review Weekly Drift Detection" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     expect(screen.getByRole("listitem", { name: "Week 1, not yet replayed" })).toBeTruthy();
   });
 
@@ -512,7 +512,7 @@ describe("persona replay", () => {
       await user.click(screen.getByRole("button", { name: "Next week" }));
       expect(screen.getByText(`Week ${week} of ${fixture.scenario.weeks.length}`)).toBeTruthy();
       expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-      expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+      expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     }
     expect((screen.getByRole("button", { name: "Next week" }) as HTMLButtonElement).disabled).toBe(true);
     await user.click(screen.getByRole("button", { name: "Next week" }));
@@ -527,7 +527,7 @@ describe("persona replay", () => {
     act(() => vi.advanceTimersByTime(60_000));
     expect(screen.getByText("Week 1 of 5")).toBeTruthy();
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ })).toHaveLength(2);
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
   });
 
   it("reviews the week with keyboard input without revealing future outcomes", async () => {
@@ -537,7 +537,7 @@ describe("persona replay", () => {
     screen.getByRole("button", { name: "Review Weekly Drift Detection" }).focus();
     await user.keyboard("{Enter}");
     expect(screen.getByText("Week 1 of 5")).toBeTruthy();
-    const resultHeading = screen.getByRole("heading", { name: /^Weekly Drift Detection/ });
+    const resultHeading = screen.getByRole("heading", { name: /^Drift Detection \(End of Week\)/ });
     await waitFor(() => expect(document.activeElement).toBe(resultHeading));
     expect(screen.getByRole("listitem", { name: "Week 5, not yet replayed" })).toBeTruthy();
     expect(screen.queryByRole("listitem", { name: "Week 5: No Active Drift" })).toBeNull();
@@ -610,7 +610,7 @@ describe("persona replay", () => {
     await user.click(futureWeek);
     expect(screen.getByText("Week 4 of 5")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
     await user.click(
       screen.getByRole("button", {
@@ -620,7 +620,7 @@ describe("persona replay", () => {
 
     expect(screen.getByText("Week 1 of 5")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     expect(
       (screen.getByRole("button", {
         name: "Restart",
@@ -659,7 +659,7 @@ describe("persona replay", () => {
       expect(screen.getByText(`Week ${index + 1} of ${weeks.length}`)).toBeTruthy();
       expect(weekButton.getAttribute("aria-current")).toBe("step");
       expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-      expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+      expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
       for (const entryId of weeks[index].journal_entry_ids) {
         expect(document.getElementById(`replay-entry-button-${entryId}`)).not.toBeNull();
       }
@@ -673,10 +673,10 @@ describe("persona replay", () => {
     }
 
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
-    expect(screen.getByRole("heading", { name: /^Weekly Drift Detection/ })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeTruthy();
     await user.click(screen.getByRole("button", { name: /^Show week 1:/ }));
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
   });
 
   it("opens an earlier unreviewed week after a key-week jump without revealing outcomes", async () => {
@@ -699,7 +699,7 @@ describe("persona replay", () => {
 
     expect(screen.getByText("Week 3 of 5")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     for (const entryId of fixture.scenario.weeks[2].journal_entry_ids) {
       expect(document.getElementById(`replay-entry-button-${entryId}`)).not.toBeNull();
     }
@@ -731,12 +731,12 @@ describe("persona replay", () => {
       const user = userEvent.setup();
       render(<ScenarioReplayHarness scenarioJson={scenarioJson} />);
       expect(screen.queryByText("No saved Coach Digest for this result")).toBeNull();
-      expect(screen.queryByRole("heading", { name: "Your weekly reflection" })).toBeNull();
+      expect(screen.queryByRole("heading", { name: "Coach Digest" })).toBeNull();
       await user.click(screen.getByRole("button", {
         name: /^Show .+ — week \d+$/,
       }));
       expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-      expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+      expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
       const selectedFixture = validateExperienceInspectFixture(scenarioJson);
       const selectedItem = catalog.scenarios.find((item) => item.scenario_id === scenarioId)!;
       const selectedWeek = selectedFixture.scenario.weeks.find((week) => week.week_start === selectedItem.key_week_start)!;
@@ -749,7 +749,7 @@ describe("persona replay", () => {
 
       expect(screen.queryByText("No saved Coach Digest for this result")).toBeNull();
       expect(screen.getByText("Why this state")).toBeTruthy();
-      expect(screen.getByRole("heading", { name: "Your weekly reflection" })).toBeTruthy();
+      expect(screen.getByRole("heading", { name: "Coach Digest" })).toBeTruthy();
       const tension = document.querySelector(".coach-digest__tension");
       expect(tension?.textContent).toContain(
         savedNarrative.tension_explanation.split("...")[0],
@@ -780,7 +780,7 @@ describe("persona replay", () => {
           .toBe(source.content);
         expect(screen.queryByRole("heading", { name: "Journal Entries" })).toBeNull();
         await user.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Close Journal Entry" }));
-        expect(screen.getByRole("heading", { name: /^Weekly Drift Detection/ })).toBeTruthy();
+        expect(screen.getByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeTruthy();
         expect(screen.queryByRole("heading", { name: "Journal Entries" })).toBeNull();
       } else {
         expect(toggle.hasAttribute("disabled")).toBe(false);
@@ -805,13 +805,13 @@ describe("persona replay", () => {
       await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
       const firstWeekDigest = projectScenarioWeek(saved, 0).session.weekly_digest;
       if (firstWeekDigest?.coach_narrative) {
-        expect(screen.getByRole("heading", { name: "Your weekly reflection" })).toBeTruthy();
+        expect(screen.getByRole("heading", { name: "Coach Digest" })).toBeTruthy();
         expect(screen.queryByText("No saved Coach Digest for this result")).toBeNull();
       } else {
         expect(screen.getByText("No saved Coach Digest for this result")).toBeTruthy();
         expect(document.querySelector(".coach-digest__question")).toBeNull();
         expect(document.querySelector(".north-star-moment")).toBeNull();
-        expect(screen.queryByRole("heading", { name: "Your weekly reflection" })).toBeNull();
+        expect(screen.queryByRole("heading", { name: "Coach Digest" })).toBeNull();
       }
       expect(screen.queryByRole("button", { name: "Coach Digest" })).toBeNull();
     },
@@ -972,10 +972,11 @@ describe("persona replay", () => {
     expect(columns).toHaveLength(2);
     expect(within(columns[0]).getByRole("article", { name: "Active Drift" })).toBeTruthy();
     expect(within(columns[0]).getByRole("button", { name: "Inspect decision" })).toBeTruthy();
-    expect(within(columns[1]).getByRole("heading", { name: "Your weekly reflection" })).toBeTruthy();
+    expect(within(columns[1]).getByRole("heading", { name: "Coach Digest" })).toBeTruthy();
     const momentHeading = within(columns[1]).getByRole("heading", { level: 4, name: "A past moment in your own words" });
     const coach = momentHeading.closest(".coach-digest")!;
-    expect(coach.lastElementChild?.className).toBe("coach-digest__question");
+    expect(coach.querySelector(".coach-digest__tension")?.nextElementSibling)
+      .toBe(coach.querySelector(".coach-digest__question"));
     expect(within(coach as HTMLElement).getByText("North Star Moment")).toBeTruthy();
     expect(screen.queryByRole("navigation", { name: "Weekly reflection sections" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Coach Digest" })).toBeNull();
@@ -1019,7 +1020,7 @@ describe("persona replay", () => {
       name: "Active Drift",
     });
     const coachHeading = screen.getByRole("heading", {
-      name: "Your weekly reflection",
+      name: "Coach Digest",
     });
     expect(screen.getByText(narrative.weekly_mirror)).toBeTruthy();
     const coachCard = coachHeading.closest(".coach-digest--replay");
@@ -1099,8 +1100,7 @@ describe("persona replay", () => {
     expect(explanation.open).toBe(false);
     await user.click(within(result).getByText("Why this state"));
     expect(explanation.open).toBe(true);
-    expect(result.querySelector(".state-change > header")?.textContent)
-      .toBe("UniversalismActive Drift");
+    expect(result.querySelector(".state-change > header")).toBeNull();
     expect(within(result).queryByText(
       "Making the world a fairer, better place",
     )).toBeNull();
@@ -1183,10 +1183,10 @@ describe("persona replay", () => {
     render(<ReplayHarness />);
 
     expect(screen.getByRole("heading", { name: "Journal Entries" })).toBeTruthy();
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
 
-    const resultHeading = screen.getByRole("heading", { name: /^Weekly Drift Detection/ });
+    const resultHeading = screen.getByRole("heading", { name: /^Drift Detection \(End of Week\)/ });
     expect(screen.getByText("Week 1 of 5")).toBeTruthy();
     expect(screen.queryByRole("heading", { name: "Journal Entries" })).toBeNull();
     expect(screen.queryByRole("button", { name: /Open Journal Entry/ })).toBeNull();
@@ -1199,7 +1199,7 @@ describe("persona replay", () => {
     await waitFor(() => expect(document.activeElement)
       .toBe(screen.getByRole("heading", { name: "Journal Entries" })));
     expect(screen.getAllByRole("button", { name: /Open Journal Entry/ })).toHaveLength(2);
-    expect(screen.queryByRole("heading", { name: /^Weekly Drift Detection/ })).toBeNull();
+    expect(screen.queryByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeNull();
 
     await user.click(screen.getByRole("button", { name: "Read Weekly Drift Detection" }));
     expect(screen.getByRole("heading", { name: "No Active Drift" })).toBeTruthy();

@@ -5205,13 +5205,6 @@ h2 {
   line-height: 1.58;
 }
 
-.coach-digest__question {
-  border-left: 3px solid var(--blue);
-  padding-left: 14px;
-  font-family: "Source Serif 4 Variable", Georgia, serif;
-  font-size: 1.2rem;
-}
-
 .coach-digest__sources {
   margin-top: 20px;
   border-top: 1px solid var(--line);
@@ -6675,28 +6668,6 @@ h2 {
   line-height: 1.6;
 }
 
-.coach-digest--replay .coach-digest__question {
-  margin-top: 12px;
-  border-left-color: var(--verdigris);
-  border-radius: 0 9px 9px 0;
-  padding: 9px 10px;
-  background: rgba(46, 140, 130, 0.07);
-  color: var(--ink);
-  font-size: 0.92rem;
-  line-height: 1.35;
-}
-
-.coach-digest > p.coach-digest__question-label {
-  margin: 24px 0 6px;
-  color: #536171;
-  font-size: 0.9rem;
-  font-weight: 650;
-}
-
-.coach-digest .coach-digest__question-label + .coach-digest__question {
-  margin-top: 0;
-}
-
 .coach-digest__header {
   display: flex;
   align-items: center;
@@ -7998,7 +7969,7 @@ h2 {
     line-height: 1.25;
   }
 
-  & :is(.eyebrow, small, .coach-digest__question-label, .replay-entry__meta, .replay-entry__open,
+  & :is(.eyebrow, small, .replay-entry__meta, .replay-entry__open,
         .replay-entry__number, .replay-entry__nudge-label,
         .replay-entry__response > span, .replay-persona__expand,
         .persona-replay__source-line, .persona-replay__source-line span,
