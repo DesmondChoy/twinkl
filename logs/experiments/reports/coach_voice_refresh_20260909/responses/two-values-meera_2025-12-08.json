@@ -1,0 +1,323 @@
+{
+  "persona_id": "961a4e3f",
+  "persona_name": "Meera Krishnamurthy",
+  "week_start": "2025-12-08",
+  "week_end": "2025-12-14",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "self_direction",
+    "tradition"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "self_direction": "no_active_drift",
+    "tradition": "no_active_drift"
+  },
+  "drift_details": {
+    "self_direction": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 11,
+      "last_date": "2025-12-14"
+    },
+    "tradition": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 11,
+      "last_date": "2025-12-14"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "self_direction",
+      "previous_week_start": "2025-12-01",
+      "previous_week_end": "2025-12-07",
+      "current_week_start": "2025-12-08",
+      "current_week_end": "2025-12-14",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-12-02",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Told Ravi about Priya's proposal over chai after the boys went to bed. He was more supportive than I expected. He said if I wanted to try it, he'd help me figure out the money side. He even suggested converting..."
+        },
+        {
+          "date": "2025-12-07",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Mummyji brought up the store room idea at dinner, in front of Ravi's parents who were visiting. She said something like, \"Meera is thinking of opening a factory in the house.\" She was smiling but it was the wrong kind..."
+        },
+        {
+          "date": "2025-12-07",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Can't sleep. Ravi's parents left after dinner and everyone is being normal now but I keep replaying the table conversation. The worst part isn't what Mummyji said, it's that nobody asked me a real question about it. Nobody said, what..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-12-14",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Took the boys to the Ganesh temple this morning for the monthly abhishekam. Vihaan recited the first twenty verses of the Sahasranama on the auto ride there, unprompted. I didn't even know he'd been practising on his own. The priest..."
+        },
+        {
+          "date": "2025-12-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Called Priya back tonight and said yes to the February order. Twelve runners, twenty napkins, indigo with a kalamkari-inspired border block I've been working on. She sounded happy. I felt terrified and then calm, in that order, like jumping into..."
+        }
+      ]
+    },
+    {
+      "core_value": "tradition",
+      "previous_week_start": "2025-12-01",
+      "previous_week_end": "2025-12-07",
+      "current_week_start": "2025-12-08",
+      "current_week_end": "2025-12-14",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-12-02",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Told Ravi about Priya's proposal over chai after the boys went to bed. He was more supportive than I expected. He said if I wanted to try it, he'd help me figure out the money side. He even suggested converting..."
+        },
+        {
+          "date": "2025-12-07",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Mummyji brought up the store room idea at dinner, in front of Ravi's parents who were visiting. She said something like, \"Meera is thinking of opening a factory in the house.\" She was smiling but it was the wrong kind..."
+        },
+        {
+          "date": "2025-12-07",
+          "t_index": 9,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Can't sleep. Ravi's parents left after dinner and everyone is being normal now but I keep replaying the table conversation. The worst part isn't what Mummyji said, it's that nobody asked me a real question about it. Nobody said, what..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-12-14",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Took the boys to the Ganesh temple this morning for the monthly abhishekam. Vihaan recited the first twenty verses of the Sahasranama on the auto ride there, unprompted. I didn't even know he'd been practising on his own. The priest..."
+        },
+        {
+          "date": "2025-12-14",
+          "t_index": 11,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Called Priya back tonight and said yes to the February order. Twelve runners, twenty napkins, indigo with a kalamkari-inspired border block I've been working on. She sounded happy. I felt terrified and then calm, in that order, like jumping into..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "961a4e3f:self_direction:0:not_conflict"
+  ],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-12-02",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Told Ravi about Priya's proposal over chai after the boys went to bed. He was more supportive than I expected. He said if I wanted to try it, he'd help me figure out the money side. He even suggested converting..."
+    },
+    {
+      "date": "2025-12-02",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Told Ravi about Priya's proposal over chai after the boys went to bed. He was more supportive than I expected. He said if I wanted to try it, he'd help me figure out the money side. He even suggested converting..."
+    },
+    {
+      "date": "2025-12-07",
+      "t_index": 8,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Mummyji brought up the store room idea at dinner, in front of Ravi's parents who were visiting. She said something like, \"Meera is thinking of opening a factory in the house.\" She was smiling but it was the wrong kind..."
+    },
+    {
+      "date": "2025-12-07",
+      "t_index": 8,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Mummyji brought up the store room idea at dinner, in front of Ravi's parents who were visiting. She said something like, \"Meera is thinking of opening a factory in the house.\" She was smiling but it was the wrong kind..."
+    },
+    {
+      "date": "2025-12-07",
+      "t_index": 9,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Can't sleep. Ravi's parents left after dinner and everyone is being normal now but I keep replaying the table conversation. The worst part isn't what Mummyji said, it's that nobody asked me a real question about it. Nobody said, what..."
+    },
+    {
+      "date": "2025-12-07",
+      "t_index": 9,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Can't sleep. Ravi's parents left after dinner and everyone is being normal now but I keep replaying the table conversation. The worst part isn't what Mummyji said, it's that nobody asked me a real question about it. Nobody said, what..."
+    },
+    {
+      "date": "2025-12-14",
+      "t_index": 10,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Took the boys to the Ganesh temple this morning for the monthly abhishekam. Vihaan recited the first twenty verses of the Sahasranama on the auto ride there, unprompted. I didn't even know he'd been practising on his own. The priest..."
+    },
+    {
+      "date": "2025-12-14",
+      "t_index": 10,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Took the boys to the Ganesh temple this morning for the monthly abhishekam. Vihaan recited the first twenty verses of the Sahasranama on the auto ride there, unprompted. I didn't even know he'd been practising on his own. The priest..."
+    },
+    {
+      "date": "2025-12-14",
+      "t_index": 11,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Called Priya back tonight and said yes to the February order. Twelve runners, twenty napkins, indigo with a kalamkari-inspired border block I've been working on. She sounded happy. I felt terrified and then calm, in that order, like jumping into..."
+    },
+    {
+      "date": "2025-12-14",
+      "t_index": 11,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Called Priya back tonight and said yes to the February order. Twelve runners, twenty napkins, indigo with a kalamkari-inspired border block I've been working on. She sounded happy. I felt terrified and then calm, in that order, like jumping into..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "Calling Priya back with a yes to the February order brought terror first and calm after, as you chose a path that was distinctly yours. At the temple, Vihaan’s unprompted verses connected that new step with the practices you carry forward; \"I felt terrified and then calm, in that order\" holds the feeling of the decision honestly.",
+    "tension_explanation": "The dinner conversation with Mummyji still seems to have stayed with you, especially because nobody asked what you wanted. Alongside that, Ravi offered practical support, and you moved toward the order in your own way while continuing the family’s temple traditions with the boys.",
+    "reflective_question": "When you think about saying yes to Priya, what part of that choice feels most like your own?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I felt terrified and then calm, in that order"
+    ],
+    "word_count": 119,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 119 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

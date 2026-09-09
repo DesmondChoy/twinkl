@@ -1303,9 +1303,9 @@ async def generate_weekly_digest_coach_diagnostic(
             f"- {requirement}" for requirement in repair_requirements
         )
         instructions += (
-            "\n\nA prior response failed Coach Digest Validations. Generate a "
-            "new response. Correct each failure below. Do not discuss the "
-            f"failures in the response.\n{requirements}"
+            "\n\nA prior response needs revision. Generate a "
+            "new response. Follow each requirement below. Do not discuss the "
+            f"revision in the response.\n{requirements}"
         )
     prompt = render_live_prompt_receipt(
         instructions=instructions,
@@ -1376,7 +1376,9 @@ async def generate_weekly_digest_coach_diagnostic(
             prompt,
         )
 
-    validation = validate_weekly_digest_narrative(digest, narrative)
+    validation = validate_weekly_digest_narrative(
+        digest, narrative, validate_voice=True
+    )
     failed_checks = [
         f"{check.name}: {check.details}"
         for check in validation.checks
@@ -1432,6 +1434,8 @@ def validate_weekly_digest_narrative(
     min_words: int = 25,
     max_words: int = 180,
     config_path: Path = SCHWARTZ_CONFIG_PATH,
+    *,
+    validate_voice: bool = False,
 ) -> DigestValidation:
     """Run Coach Digest Validations on one response."""
     combined_text = " ".join(
@@ -1561,6 +1565,41 @@ def validate_weekly_digest_narrative(
             ),
         ),
     ]
+
+    if validate_voice:
+        # Quoted Journal Entries remain the user's words, including recap wording.
+        fields = [
+            narrative.weekly_mirror,
+            narrative.tension_explanation,
+            narrative.reflective_question,
+        ]
+        narration = [re.sub(r'["“][^"”]*["”]', "QUOTATION", text).strip()
+                     for text in fields]
+        recap_opening = any(re.match(
+            r"^(?:(?:[^,\n]{1,60}),\s*)?(?:this week\b|your week\b|"
+            r"the week\b|looking back on (?:this|your|the) week\b)",
+            text, re.IGNORECASE,
+        ) for text in narration)
+        clinical_summary = re.search(
+            r"\bno\s+(?:(?:confirmed|clear|current|active|ongoing|repeated)\s+)*"
+            r"(?:tension|pattern|conflict|drift)\b|"
+            r"\b(?:the (?:available )?(?:entries|evidence|review) "
+            r"(?:show|shows|suggest|suggests|confirm|confirms)|"
+            r"what does the contrast|this action from the week)\b",
+            " ".join(narration), re.IGNORECASE,
+        )
+        checks.append(ValidationCheck(
+            name="conversational_voice",
+            passed=not recap_opening and clinical_summary is None,
+            details=(
+                "Start with a specific lived moment, not a weekly recap."
+                if recap_opening else
+                "Describe the person's experiences without clinical findings "
+                "or abstract contrast language."
+                if clinical_summary else
+                "Response avoids recap openings and clinical finding language."
+            ),
+        ))
 
     return DigestValidation(
         grounded_quotes=grounded_quotes,

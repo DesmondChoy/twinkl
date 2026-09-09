@@ -210,7 +210,10 @@ def _stub_timeline_df() -> pl.DataFrame:
     )
 
 
-def test_run_weekly_coach_cycle_attaches_narrative_with_llm(tmp_path: Path, monkeypatch):
+@pytest.mark.parametrize("recap_opening", [False, True])
+def test_run_weekly_coach_cycle_attaches_only_valid_narrative(
+    tmp_path: Path, monkeypatch, recap_opening: bool
+):
     wrangled_dir = tmp_path / "wrangled"
     wrangled_dir.mkdir(parents=True, exist_ok=True)
     _write_runtime_wrangled(wrangled_dir / "persona_deadbeef.md")
@@ -233,15 +236,22 @@ def test_run_weekly_coach_cycle_attaches_narrative_with_llm(tmp_path: Path, monk
         return json.dumps(
             {
                 "weekly_mirror": (
-                    'You wrote, "Protected the evening for family and left the '
+                    ('This week, you wrote, "' if recap_opening else 'You wrote, "')
+                    + 'Protected the evening for family and left the '
                     'laptop shut", during a week with competing demands.'
                 ),
-                "tension_explanation": "The week pulled between staying late for work and protecting family time.",
-                "reflective_question": "What made it easier to shut the laptop on the evenings you managed to?",
+                "tension_explanation": (
+                    "Staying late for work left less room for the family time "
+                    "you wanted to protect."
+                ),
+                "reflective_question": (
+                    "What made it easier to shut the laptop on the evenings "
+                    "you managed to?"
+                ),
             }
         )
 
-    digest, _paths = run_weekly_coach_cycle(
+    digest, paths = run_weekly_coach_cycle(
         persona_id="deadbeef",
         checkpoint_path="unused.pt",
         wrangled_dir=wrangled_dir,
@@ -251,9 +261,14 @@ def test_run_weekly_coach_cycle_attaches_narrative_with_llm(tmp_path: Path, monk
         llm_complete=stub_llm,
     )
 
-    assert digest.coach_narrative is not None
-    assert digest.coach_narrative.weekly_mirror.startswith("You wrote")
-    assert digest.validation is not None
+    if recap_opening:
+        assert digest.coach_narrative is None
+        stored = json.loads(Path(paths["digest_json_path"]).read_text())
+        assert stored["coach_narrative"] is None
+    else:
+        assert digest.coach_narrative is not None
+        assert digest.coach_narrative.weekly_mirror.startswith("You wrote")
+        assert digest.validation is not None
 
 
 def test_build_llm_complete_returns_none_without_keys(monkeypatch):

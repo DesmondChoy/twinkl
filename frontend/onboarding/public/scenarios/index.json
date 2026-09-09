@@ -5,7 +5,7 @@
     {
       "scenario_id": "active-nisha",
       "file": "active-nisha.json",
-      "content_sha256": "0bb065f3ffd71ee0365e49c258c7ac5ef8cbcb8d339588ce738d31b46b95c760",
+      "content_sha256": "7f30d28364aa6b41a9aa6c09f7d468f5fbff409b1abf2876d35e0d79db9c1b6f",
       "persona_id": "5fa8b540",
       "persona_name": "Nisha Agarwal",
       "age": "18-24",
@@ -38,7 +38,7 @@
     {
       "scenario_id": "stable-noor",
       "file": "stable-noor.json",
-      "content_sha256": "5b6022e99b684dc6abb6fa3006468bfdffd8e43737ed700401fafebb4d1527c6",
+      "content_sha256": "870d3301fc31592b447a14544961c78d4c8999f48fb9aaf3242126766de7ca91",
       "persona_id": "02fb94f3",
       "persona_name": "Noor Haddad",
       "age": "18-24",
@@ -82,7 +82,7 @@
     {
       "scenario_id": "persistent-lukas",
       "file": "persistent-lukas.json",
-      "content_sha256": "e3ec28aa786a9e8e90f85a6578f041447d3419948c26c95a538f8d48b9bbaf44",
+      "content_sha256": "053fc61e4c014430536dafb36d91a216eca50f2609fecbb7583bb706d31970a4",
       "persona_id": "a24b8d8f",
       "persona_name": "Lukas Vetter",
       "age": "25-34",
@@ -115,7 +115,7 @@
     {
       "scenario_id": "uncertain-wei-jun",
       "file": "uncertain-wei-jun.json",
-      "content_sha256": "4af00f6c3f7b9aa47d042e1c28bfd8aa1a06da5e920068a937d4b5e3406d61b1",
+      "content_sha256": "254b7b4872d750e914e899925366b1bbc1dc4963fe80fdf9828ea32fbf4c96a4",
       "persona_id": "8f83c818",
       "persona_name": "Wei Jun Chen",
       "age": "35-44",
@@ -150,7 +150,7 @@
     {
       "scenario_id": "two-values-meera",
       "file": "two-values-meera.json",
-      "content_sha256": "59d6363b455af99ac5867efbdc229149477a4ecdc8a32abf0c7e250dbccc0f1e",
+      "content_sha256": "b3532c6a8e6fa09da005ee1212a46599379b64319be9b46af9b62d25308cfdcc",
       "persona_id": "961a4e3f",
       "persona_name": "Meera Krishnamurthy",
       "age": "45-54",

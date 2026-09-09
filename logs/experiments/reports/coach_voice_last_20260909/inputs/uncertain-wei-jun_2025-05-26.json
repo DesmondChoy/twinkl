@@ -1,0 +1,57 @@
+{
+  "scenario_id": "uncertain-wei-jun",
+  "digest": {
+    "persona_id": "8f83c818",
+    "persona_name": "Wei Jun Chen",
+    "week_start": "2025-05-26",
+    "week_end": "2025-06-01",
+    "response_mode": "no_active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 1,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "universalism"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "universalism": "no_active_drift"
+    },
+    "drift_details": {
+      "universalism": {
+        "state": "no_active_drift",
+        "current_run_length": 1,
+        "last_decision": "conflict",
+        "last_review_status": "ok",
+        "last_t_index": 0,
+        "last_date": "2025-05-31"
+      }
+    },
+    "state_comparisons": [],
+    "drift_reasons": [],
+    "top_tensions": [],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-05-31",
+        "t_index": 0,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "bfba9823548c0dcb57673b05c8e1fce3ee361b19cb2e2c3790d8ac0a7366aa24",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/uncertain-wei-jun.json",
+  "source_bundle_content_sha256": "4af00f6c3f7b9aa47d042e1c28bfd8aa1a06da5e920068a937d4b5e3406d61b1",
+  "weekly_digest_event_id": "uncertain-wei-jun:event:009",
+  "prompt_sha256": "506c470533ca6e892ccc4426d1cae2740011883ac5daebdf4f4e2952f9c1b33a"
+}

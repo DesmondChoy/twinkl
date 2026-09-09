@@ -1,0 +1,13 @@
+{
+  "active-nisha::2025-02-24": [
+    "Use at least one short, complete, exact quotation already present in the supplied evidence, such as \"my room barely fits what I already have.\" Do not use any quotation containing ... or an ellipsis character. Do not quote the unfinished passage about explaining the lesson, or complete any omitted text.",
+    "Do not portray declining furniture because of limited room space as an expression of fairness, ethical behavior, or making the world better. Do not invent a moral or causal connection between the practical furniture choice and the teaching moment.",
+    "Do not describe what the writing holds, what the evidence shows, or what the model can infer. Use direct, ordinary language addressed to the person, without guessing what was omitted from a supplied excerpt."
+  ],
+  "uncertain-wei-jun::2025-06-30": [
+    "Do not use any of these analytical sentence forms: The writing leaves; It is not clear; remains unclear. Do not make the writing, entries, evidence, or lack of detail the subject of the reflection. Address the person in ordinary language, with a tentative reflection where appropriate and one natural user-directed question.",
+    "Do not turn Xiao Yu asking whether the user helps everyone into a claim that the user described their work as helping everyone. Do not complete the omitted answer after I said I.",
+    "Do not say or imply that the user never raised the data-validation concern, or question whether they found a way to raise it. The supplied words about waiting to escalate do not establish that no concern was raised.",
+    "Do not invent an event, decision, feeling, motive, or timing relationship not supported by the supplied text. Do not state what happened in omitted portions of the excerpts. Express openness about the user’s experience without an assessment of missing evidence."
+  ]
+}

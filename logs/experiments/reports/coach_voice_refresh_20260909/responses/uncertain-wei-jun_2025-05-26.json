@@ -1,0 +1,90 @@
+{
+  "persona_id": "8f83c818",
+  "persona_name": "Wei Jun Chen",
+  "week_start": "2025-05-26",
+  "week_end": "2025-06-01",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "no_active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "no_active_drift",
+      "current_run_length": 1,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 0,
+      "last_date": "2025-05-31"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-05-31",
+      "t_index": 0,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "You noticed you had the context and evidence to make a case, but chose to nod and write, \"checking the logs.\" That moment carries a tension between wanting to make the world a fairer, better place and holding back from pushing your view forward.",
+    "tension_explanation": "It is not clear from this moment alone what shaped your choice—whether you were protecting the conversation, waiting for firmer information, or simply not ready to press the point. The choice still seems worth noticing because you had stories and data you believed could matter.",
+    "reflective_question": "When you typed \"checking the logs,\" what felt most important to protect in that moment?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "checking the logs."
+    ],
+    "word_count": 104,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 104 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

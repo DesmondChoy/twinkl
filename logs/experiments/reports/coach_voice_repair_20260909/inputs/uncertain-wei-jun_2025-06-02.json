@@ -1,0 +1,103 @@
+{
+  "scenario_id": "uncertain-wei-jun",
+  "digest": {
+    "persona_id": "8f83c818",
+    "persona_name": "Wei Jun Chen",
+    "week_start": "2025-06-02",
+    "week_end": "2025-06-08",
+    "response_mode": "no_active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 1,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "universalism"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "universalism": "no_active_drift"
+    },
+    "drift_details": {
+      "universalism": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 1,
+        "last_date": "2025-06-07"
+      }
+    },
+    "state_comparisons": [
+      {
+        "core_value": "universalism",
+        "previous_week_start": "2025-05-26",
+        "previous_week_end": "2025-06-01",
+        "current_week_start": "2025-06-02",
+        "current_week_end": "2025-06-08",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-05-31",
+            "t_index": 0,
+            "direction": "misaligned",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-06-07",
+            "t_index": 1,
+            "direction": "context",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+          }
+        ]
+      }
+    ],
+    "drift_reasons": [],
+    "top_tensions": [],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-05-31",
+        "t_index": 0,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+      },
+      {
+        "date": "2025-06-07",
+        "t_index": 1,
+        "direction": "context",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "8beefb21ed5a40a2221c09a0f5eba79bdc187dda7690560d5e0822606d59cbb8",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/uncertain-wei-jun.json",
+  "source_bundle_content_sha256": "4af00f6c3f7b9aa47d042e1c28bfd8aa1a06da5e920068a937d4b5e3406d61b1",
+  "weekly_digest_event_id": "uncertain-wei-jun:event:017",
+  "prompt_sha256": "927422c7a73a2a986ead2ed1a649be11a6f8c18217341147e59a94c44e8471bb"
+}

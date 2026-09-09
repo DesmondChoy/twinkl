@@ -1,0 +1,21 @@
+{
+  "accepted": 27,
+  "total": 27,
+  "reserved_usd": "0.522",
+  "maximum_reserved_usd": "1.944",
+  "usage": {
+    "n_calls": 29,
+    "n_calls_with_usage": 29,
+    "input_tokens": 54362,
+    "cached_input_tokens": 28634,
+    "cache_write_input_tokens": 25641,
+    "output_tokens": 4910,
+    "total_tokens": 59272,
+    "calculated_cost_usd": 0.01289233,
+    "total_latency_seconds": 81.114169791108,
+    "mean_latency_seconds": 2.7970403376244137,
+    "median_latency_seconds": 2.6976399999985006,
+    "max_latency_seconds": 3.7464063750230707
+  },
+  "limitations": "Automated validation only; no human validation or new judge run."
+}

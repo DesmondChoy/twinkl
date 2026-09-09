@@ -152,9 +152,15 @@ question or infer overall alignment, improvement, or recovery. The passage conta
 - one exact quotation, identified as coming from the Journal Entry or the
   user's nudge response;
 - an expandable quotation with no fixed word limit;
-- an action to open the complete Journal Entry without losing the current week;
-- for reflection and historical reminders, the notice: **This earlier writing
-  is a reference point for your Core Value.**
+- an action to open the complete Journal Entry in a centered dialog without
+  losing the current week.
+
+The introductory wording points directly to the quotation. Current-week
+encouragement says, **Here’s a moment worth holding onto, in your own words:**
+Reflection says, **You’ve acted on what matters to you before. You wrote:**
+Historical reminders say, **Your earlier words offer a reminder of how you’ve
+made room for what matters to you:** The heading and source date identify
+earlier writing without a second explanatory notice.
 
 Collapsing a long quotation changes its presentation only. Expanding it must
 reveal the complete accepted quotation without paraphrasing or joining
@@ -170,6 +176,12 @@ Inspect links the reviewed state and selected treatment to eligible writing, sou
 AI review, code checks, and selected quotation. A **saved review
 record** contains these inputs and decisions, their versions, and model details.
 It lets teammates inspect why a card appeared or why it was omitted.
+Inspect presents the complete supplied writing, exact system and user prompts
+and response schema, each source's factual action/value/Conflict assessments,
+and the application's source-order selection and validation. The selected
+source's assessment opens by default. Original provider attempts remain visible;
+missing receipts are explicitly unavailable. These runtime AI assessments do
+not stand in for the separate benchmark evaluation or human validation.
 
 Pending, missing, invalid, or failed records omit the passage and leave Weekly
 Drift Detection and any valid Coach Digest available. An absent or invalid Coach
@@ -202,9 +214,9 @@ selects this earlier supportive action:
 >
 > 7 March 2025 · From your Journal Entry
 >
-> “Stayed back to help the peon uncle fix a broken desk in my classroom.”
+> You’ve acted on what matters to you before. You wrote:
 >
-> This earlier writing is a reference point for your Core Value.
+> “Stayed back to help the peon uncle fix a broken desk in my classroom.”
 
 The quotation is present at `t_index=4`, before Drift starts at `t_index=5`
 on 8 March. It is an exact runtime selection from the targeted experiment,

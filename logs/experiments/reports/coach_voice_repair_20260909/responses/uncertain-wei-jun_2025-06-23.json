@@ -1,0 +1,158 @@
+{
+  "persona_id": "8f83c818",
+  "persona_name": "Wei Jun Chen",
+  "week_start": "2025-06-23",
+  "week_end": "2025-06-29",
+  "response_mode": "insufficient_evidence",
+  "mode_source": "drift_detector",
+  "mode_rationale": "The Weekly Drift Reviewer could not return usable evidence for this week.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "insufficient_evidence"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "insufficient_evidence",
+      "current_run_length": 0,
+      "last_decision": "abstain",
+      "last_review_status": "invalid",
+      "last_t_index": 8,
+      "last_date": "2025-06-25"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-06-16",
+      "previous_week_end": "2025-06-22",
+      "current_week_start": "2025-06-23",
+      "current_week_end": "2025-06-29",
+      "previous_state": "no_active_drift",
+      "current_state": "insufficient_evidence",
+      "change": "evidence_became_insufficient",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-06-16",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+        },
+        {
+          "date": "2025-06-22",
+          "t_index": 7,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-06-25",
+          "t_index": 8,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Sprint deadline tomorrow and I'm at the office late. The PM asked me to cut corners on the data validation layer for the remittance feature, the same one Ravi flagged weeks ago. She said we'll circle back to it after..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [
+    "universalism"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-06-16",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+    },
+    {
+      "date": "2025-06-22",
+      "t_index": 7,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+    },
+    {
+      "date": "2025-06-25",
+      "t_index": 8,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Sprint deadline tomorrow and I'm at the office late. The PM asked me to cut corners on the data validation layer for the remittance feature, the same one Ravi flagged weeks ago. She said we'll circle back to it after..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "At East Coast Park, Xiao Yu spent an hour collecting shells and bits of plastic, and later you helped two new guys file their claims before sharing murukku on the bench. By Wednesday, you were facing the request to \"cut corners on the data validation layer\" while staying late for the sprint deadline, bringing a different kind of pressure into the week.",
+    "tension_explanation": "The moments you describe move between caring for the people and places around you and being asked to set aside a safeguard in the remittance feature. What remains unclear is how you weighed that request against the concern Ravi had already raised and the people who may rely on the feature.",
+    "reflective_question": "When the PM asked you to cut corners on the validation layer, what felt most important to protect in that moment?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "cut corners on the data validation layer"
+    ],
+    "word_count": 134,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 134 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

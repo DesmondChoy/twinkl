@@ -1,0 +1,136 @@
+{
+  "persona_id": "5fa8b540",
+  "persona_name": "Nisha Agarwal",
+  "week_start": "2025-02-24",
+  "week_end": "2025-03-02",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "no_active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 3,
+      "last_date": "2025-03-02"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-02-17",
+      "previous_week_end": "2025-02-23",
+      "current_week_start": "2025-02-24",
+      "current_week_end": "2025-03-02",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-02-23",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Interesting thing happened during morning assembly. One of my Class 3 students, Ravi, came up to me after and said he told his mother about the water pollution lesson I did last week. She apparently asked him to explain it..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-03-02",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Didi called from Bangalore. She's remodelling her flat and asked if I wanted her old furniture shipped to Lucknow. Said no thanks, my room barely fits what I already have. Realized after I hung up that we didn't talk about..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-02-23",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Interesting thing happened during morning assembly. One of my Class 3 students, Ravi, came up to me after and said he told his mother about the water pollution lesson I did last week. She apparently asked him to explain it..."
+    },
+    {
+      "date": "2025-03-02",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Didi called from Bangalore. She's remodelling her flat and asked if I wanted her old furniture shipped to Lucknow. Said no thanks, my room barely fits what I already have. Realized after I hung up that we didn't talk about..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "When Didi offered to send her old furniture to Lucknow, you noticed the practical limit straight away: \"my room barely fits what I already have.\" Earlier, Ravi telling you he had shared your water pollution lesson with his mother brought a different kind of connection into the week, one that continued beyond your classroom.",
+    "tension_explanation": "Your entries move between an everyday decision about the space in your room and a teaching moment that reached Ravi’s family. The call with Didi also ended with something left unsaid, which may be worth noticing in its own right.",
+    "reflective_question": "When you think back to the call with Didi, what feels most present about the part you didn’t discuss?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "my room barely fits what I already have."
+    ],
+    "word_count": 113,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 113 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

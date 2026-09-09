@@ -104,11 +104,8 @@ describe("Coach Digest quotations", () => {
       expect(screen.getByRole("heading", { name: "Your weekly reflection" })).toBeTruthy();
       expect(container.textContent).not.toMatch(/(?:\.{3}|…)[”"]/);
       expect(JSON.stringify(session.weekly_digest)).toBe(original);
-      if (item.scenario_id === "active-nisha") {
-        expect(screen.getByText("we didn't talk about anything real.")).toBeTruthy();
-        expect(container.textContent).toContain('“we didn\'t talk about” what might have mattered to her.');
-        expect(screen.getByText("Full quotation from")).toBeTruthy();
-      }
+      expect(screen.getByText("Something to reflect on")).toBeTruthy();
+      expect(screen.queryByText("Read the supporting Journal Entries")).toBeNull();
     },
   );
 });

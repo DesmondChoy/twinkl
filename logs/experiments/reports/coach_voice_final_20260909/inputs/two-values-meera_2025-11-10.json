@@ -1,0 +1,101 @@
+{
+  "scenario_id": "two-values-meera",
+  "digest": {
+    "persona_id": "961a4e3f",
+    "persona_name": "Meera Krishnamurthy",
+    "week_start": "2025-11-10",
+    "week_end": "2025-11-16",
+    "response_mode": "active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "At least one Core Value has active Drift.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 2,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "self_direction",
+      "tradition"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "self_direction": "active_drift",
+      "tradition": "no_active_drift"
+    },
+    "drift_details": {
+      "self_direction": {
+        "state": "active_drift",
+        "current_run_length": 2,
+        "last_decision": "conflict",
+        "last_review_status": "ok",
+        "last_t_index": 1,
+        "last_date": "2025-11-15"
+      },
+      "tradition": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 1,
+        "last_date": "2025-11-15"
+      }
+    },
+    "state_comparisons": [],
+    "drift_reasons": [
+      "961a4e3f:self_direction:0:open"
+    ],
+    "top_tensions": [
+      "self_direction"
+    ],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-11-14",
+        "t_index": 0,
+        "direction": "misaligned",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "I scrubbed the indigo off after lunch."
+      },
+      {
+        "date": "2025-11-14",
+        "t_index": 0,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Mummyji made a comment at lunch about the indigo stains on my fingernails. She didn't say anything directly, just that thing she does where she looks at my hands and then looks at the dal and raises her eyebrows. Ravi..."
+      },
+      {
+        "date": "2025-11-15",
+        "t_index": 1,
+        "direction": "misaligned",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "I smiled and nodded and said I'd encourage him to be more social."
+      },
+      {
+        "date": "2025-11-15",
+        "t_index": 1,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Arjun's parent-teacher meeting today. The class teacher mentioned he draws during free period instead of playing cricket with the other boys and asked if everything is okay at home. I wanted to say, yes, everything is fine, my son likes..."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "535a53539dc3a4a79cc79a0bd2c9455f3b7e175e07b6172b84ed5e9aa778c4ee",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/two-values-meera.json",
+  "source_bundle_content_sha256": "59d6363b455af99ac5867efbdc229149477a4ecdc8a32abf0c7e250dbccc0f1e",
+  "weekly_digest_event_id": "two-values-meera:event:013",
+  "prompt_sha256": "ffe8979c8d5577097686e9b1e3b3363422c162f5ff2e58f9594559c26dbbfe58"
+}

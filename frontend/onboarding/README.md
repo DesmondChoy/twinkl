@@ -64,6 +64,9 @@ explanation and action follow that Persona's row. A **See how Twinkl works**
 banner explains how to read the saved Journal Entries, see weekly results,
 and check supporting entries in Inspect. Experience and Inspect navigation
 begins inside the replay.
+The selected Persona panel has extra separation below the comparison. Its
+start button gives two brief sparkle cues, then rests; reduced-motion settings
+disable the sparkles.
 
 Inside the saved replay, a quiet 170px week navigator replaces the section-link
 banner. It shows week numbers and dates, highlights the selection, and keeps
@@ -75,9 +78,12 @@ occupies a separate header row so the full label remains visible.
 
 The saved demo uses the chooser's typography throughout: Source Serif 4
 headings, Manrope body text and actions at 16px, and secondary labels at 14.4px.
-The same scale applies to Profile details, Journal Entry and AI review drawers,
+The same scale applies to Profile details, Journal Entry and AI review dialogs,
 weekly results, and Inspect. Technical code retains monospace. On shorter or
 narrow screens, the replay page grows vertically to keep the text accessible.
+Journal Entry previews show up to 50 words. Clicking opens a centered reading
+dialog with the original paragraph breaks, keyboard dismissal, and focus
+restoration. Hover and focus provide a quiet cue without opening the dialog.
 
 Each Core Value explanation names its own state. The selected week and
 previously reviewed weeks persist across Experience and Inspect and after
@@ -100,8 +106,8 @@ The selected week has one expanded reading panel. **Review Weekly Drift
 Detection** sits beside the Journal Entries heading and opens the result in
 the same content area, with **Read Journal Entries** beside its heading. **Read Weekly Drift
 Detection** restores a reviewed result. **Why this state** keeps detailed
-evidence collapsed; source links open a desktop side panel or phone bottom
-sheet. Journal Entry and AI review dialogs retain keyboard focus and make the
+evidence collapsed; Journal Entry source links open a centered reading dialog.
+Journal Entry and AI review dialogs retain keyboard focus and make the
 background inactive until dismissal. The Drift state and Coach Digest appear side by side on wide screens
 and stack on phones. The North Star Moment remains within the Coach Digest. A uniquely
 matched abbreviated Coach Digest quotation expands to its full source below
@@ -111,6 +117,10 @@ the paragraph, while Inspect preserves the original model response.
 Detector event, falling back to the saved Weekly Drift Detection output.
 **Inspect this moment** focuses the North Star Moment event. Inspect filters
 sit beside Recorded work with live matching counts for current and earlier events.
+North Star Moment inspection walks through the complete supplied writing,
+exact prompts, factual AI assessments, and application selection and checks.
+The selected source's assessment is expanded; original provider attempts remain
+available separately from benchmark evaluation results.
 The manual **Write** link appears only when the Journal Entry form is present,
 after the first-use notice and outside a pending Nudge response.
 
@@ -258,13 +268,13 @@ files, plus the v4 definitions study's `requests.jsonl`, `responses.jsonl`,
 builds from the exported scenario bundles without importing the historical
 August Coach Digest evaluation manifest.
 
-The scenario exporter verifies saved Coach Digest provenance against the
-current key-week Weekly Drift Detection output. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
-provides one accepted response for each of the five current key weeks, generated
-with Luna at reasoning effort `none` and prompt `4.2`. All five passed Coach
-Digest Validations; these responses have no Coach Digest Evals or human review.
-The other 22 reviewed weeks contain Weekly Drift Detection output without a
-saved Coach Digest response.
+The scenario exporter verifies saved Coach Digest provenance against each
+week's Weekly Drift Detection output. The [9 September voice refresh](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
+provides a response for all 27 current replay weeks, generated with Luna at
+reasoning effort `none` and prompt `4.4`. The warmer prompt and generation checks
+avoid recap openings, clinical findings, and abstract questions. Earlier
+responses and every new provider attempt remain in the refresh records.
+These responses have no new Coach Digest Evals or human validation.
 Incompatible responses remain unavailable. The August Coach Digest evaluation
 remains historical evidence. The browser requests
 the scenario catalog and bundles with

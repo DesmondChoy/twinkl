@@ -565,7 +565,7 @@ describe("persona replay", () => {
     expect(scrollTo).toHaveBeenCalledWith({ top: 0 });
   });
 
-  it("keeps Journal Entries compact and opens the full text in a dialog", async () => {
+  it("shows a longer Journal Entry preview and opens the complete text in a dialog", async () => {
     matchMedia(false);
     const user = userEvent.setup();
     render(<ReplayHarness />);
@@ -574,7 +574,11 @@ describe("persona replay", () => {
     const entryButton = screen.getByRole("button", {
       name: /Open Journal Entry 1/,
     });
-    expect(entryButton.textContent).not.toContain(entry.content);
+    const words = entry.content.trim().split(/\s+/);
+    expect(entryButton.querySelector(".replay-entry__excerpt")?.textContent).toBe(
+      words.length > 50 ? `${words.slice(0, 50).join(" ")}…` : entry.content.trim(),
+    );
+    expect(entryButton.getAttribute("aria-haspopup")).toBe("dialog");
 
     await user.click(entryButton);
     const dialog = screen.getByRole("dialog");

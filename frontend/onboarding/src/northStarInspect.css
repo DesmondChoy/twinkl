@@ -1,0 +1,119 @@
+.nsm-inspect {
+  grid-column: 1 / -1;
+  min-width: 0;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+.nsm-inspect > h3 {
+  margin-block: 0 14px;
+  font-size: 1.05rem;
+}
+
+.nsm-inspect p,
+.nsm-inspect dd {
+  overflow-wrap: anywhere;
+}
+
+.nsm-inspect__outcome {
+  font-weight: 760;
+}
+
+.nsm-inspect__step {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(20, 34, 59, 0.12);
+}
+
+.nsm-inspect h4 {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+}
+
+.nsm-inspect h5 {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+.nsm-inspect__writing,
+.nsm-inspect__review,
+.nsm-inspect__composition {
+  margin-block: 16px;
+  padding: 16px;
+  border: 1px solid rgba(20, 34, 59, 0.09);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.nsm-inspect__source-label {
+  font-size: 0.7rem;
+  font-weight: 760;
+  color: rgba(20, 34, 59, 0.65);
+}
+
+.nsm-inspect__full-text {
+  white-space: pre-wrap;
+}
+
+.nsm-inspect__source {
+  margin-block: 12px;
+  padding: 0 14px;
+  border: 1px solid rgba(20, 34, 59, 0.12);
+  border-radius: 10px;
+}
+
+.nsm-inspect__source > summary {
+  padding-block: 14px;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.nsm-inspect__source > summary span + span {
+  display: block;
+  margin-top: 4px;
+  color: rgba(20, 34, 59, 0.66);
+  font-size: 0.7rem;
+}
+
+.nsm-inspect__source[open] {
+  background: rgba(229, 239, 234, 0.42);
+}
+
+.nsm-inspect__assessments {
+  margin: 0 0 16px;
+}
+
+.nsm-inspect__assessments div + div {
+  margin-top: 16px;
+}
+
+.nsm-inspect__assessments dt {
+  font-weight: 760;
+}
+
+.nsm-inspect__assessments dd {
+  margin: 5px 0 0;
+}
+
+.nsm-inspect blockquote {
+  margin: 16px 0;
+  padding: 12px 18px;
+  border-left: 3px solid #789781;
+  background: rgba(229, 239, 234, 0.5);
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.nsm-inspect .inspect-detail {
+  margin-block: 16px;
+}
+
+@media (max-width: 620px) {
+  .nsm-inspect__writing,
+  .nsm-inspect__review,
+  .nsm-inspect__composition {
+    padding: 12px;
+  }
+}

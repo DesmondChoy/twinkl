@@ -63,9 +63,6 @@ export default function NorthStarMoment({
         }}>
         Open {selected.quote_source === "nudge_response" ? "response in " : ""}Journal Entry · {date}
       </a>
-      {record.mode !== "encouragement" ? (
-        <p className="north-star-moment__reference">This earlier writing is a reference point for your Core Value.</p>
-      ) : null}
       {inspectMoment ? (
         <button className="inspect-run-link north-star-moment__inspect" type="button"
           onClick={() => inspectMoment(result.event.event_id)}>

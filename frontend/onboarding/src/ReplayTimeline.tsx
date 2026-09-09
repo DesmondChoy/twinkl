@@ -71,7 +71,7 @@ function stateExplanation(state: ScenarioDeliveryState): string {
   }
 }
 
-function excerpt(content: string, wordLimit = 20): string {
+function excerpt(content: string, wordLimit = 50): string {
   const words = content.trim().split(/\s+/);
   return words.length > wordLimit
     ? `${words.slice(0, wordLimit).join(" ")}…`
@@ -96,15 +96,15 @@ function evidenceUsesEarlierWeek(
   });
 }
 
-interface JournalEntryDrawerProps {
+interface JournalEntryDialogProps {
   entry: JournalEntryContract | null;
   onClose: () => void;
 }
 
-function JournalEntryDrawer({
+function JournalEntryDialog({
   entry,
   onClose,
-}: JournalEntryDrawerProps) {
+}: JournalEntryDialogProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   useModalFocus(entry !== null, overlayRef, closeRef, onClose);
@@ -120,7 +120,7 @@ function JournalEntryDrawer({
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <aside
+      <section
         className="replay-entry-drawer__panel"
         role="dialog"
         aria-modal="true"
@@ -150,7 +150,7 @@ function JournalEntryDrawer({
             <p className="replay-entry-drawer__content">{entry.nudge_response}</p>
           </section>
         ) : null}
-      </aside>
+      </section>
     </div>,
     document.body,
   );
@@ -295,6 +295,7 @@ export default function ReplayTimeline({
                     <button
                       id={`replay-entry-button-${entry.journal_entry_id}`}
                       type="button"
+                      aria-haspopup="dialog"
                       onClick={() => openJournalEntry(entry)}
                       aria-current={
                         selectedJournalEntryId === entry.journal_entry_id
@@ -311,7 +312,7 @@ export default function ReplayTimeline({
                         {excerpt(entry.content)}
                       </span>
                       <span className="replay-entry__open" aria-hidden="true">
-                        Read
+                        Read entry
                       </span>
                     </button>
                     {nudge?.text ? (
@@ -456,7 +457,7 @@ export default function ReplayTimeline({
         </aside>
       </section>
 
-      <JournalEntryDrawer
+      <JournalEntryDialog
         entry={openEntry}
         onClose={() => {
           const closingEntry = openEntry;

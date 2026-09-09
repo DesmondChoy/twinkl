@@ -5345,11 +5345,6 @@ h2 {
   overflow: hidden;
 }
 
-.north-star-moment__reference {
-  color: rgba(20, 34, 59, 0.62);
-  font-size: 0.8rem;
-}
-
 .north-star-moment__inspect {
   display: block;
   min-height: 44px;
@@ -5880,12 +5875,14 @@ h2 {
   cursor: pointer;
   transition:
     border-color 160ms ease,
-    transform 160ms ease;
+    background-color 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .replay-entry > button:hover {
   border-color: rgba(85, 118, 217, 0.35);
-  transform: translateX(2px);
+  background-color: #fff;
+  box-shadow: 0 3px 12px rgba(20, 34, 59, 0.06);
 }
 
 .replay-entry > button:focus-visible {
@@ -5906,13 +5903,10 @@ h2 {
 }
 
 .replay-entry__excerpt {
-  display: -webkit-box;
-  overflow: hidden;
+  display: block;
   font-family: "Source Serif 4 Variable", Georgia, serif;
   font-size: 0.88rem;
   line-height: 1.25;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
 }
 
 .replay-entry__open {
@@ -5922,6 +5916,11 @@ h2 {
   color: var(--blue);
   font-size: 0.62rem;
   font-weight: 820;
+}
+
+.replay-entry > button:is(:hover, :focus-visible) .replay-entry__open {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .replay-entry__nudge {
@@ -6201,20 +6200,24 @@ h2 {
   z-index: 100;
   inset: 0;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
   background: rgba(20, 34, 59, 0.26);
   backdrop-filter: blur(4px);
   animation: replay-drawer-backdrop 180ms ease both;
 }
 
 .replay-entry-drawer__panel {
-  width: min(440px, 92vw);
-  height: 100%;
+  width: min(700px, 100%);
+  max-height: calc(100dvh - 48px);
   overflow-y: auto;
-  padding: 28px;
+  overscroll-behavior: contain;
+  border-radius: 18px;
+  padding: 28px 36px 36px;
   background: #fffdf8;
-  box-shadow: -24px 0 60px rgba(20, 34, 59, 0.16);
-  animation: replay-drawer-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  box-shadow: 0 24px 80px rgba(20, 34, 59, 0.2);
+  animation: replay-entry-open 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .replay-entry-drawer__panel > header {
@@ -6253,6 +6256,8 @@ h2 {
   font-family: "Source Serif 4 Variable", Georgia, serif;
   font-size: 1.22rem;
   line-height: 1.68;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .replay-entry-drawer__response {
@@ -6270,9 +6275,9 @@ h2 {
   to { opacity: 1; }
 }
 
-@keyframes replay-drawer-in {
-  from { transform: translateX(28px); }
-  to { transform: translateX(0); }
+@keyframes replay-entry-open {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @media (max-width: 900px) {
@@ -6424,27 +6429,20 @@ h2 {
   }
 
   .replay-entry-drawer {
-    align-items: flex-end;
+    padding: 16px;
   }
 
   .replay-entry-drawer__panel {
     width: 100%;
     height: auto;
-    max-height: 72dvh;
-    border-radius: 22px 22px 0 0;
+    max-height: calc(100dvh - 32px);
+    border-radius: 16px;
     padding: 20px 18px 28px;
-    box-shadow: 0 -24px 60px rgba(20, 34, 59, 0.18);
-    animation-name: replay-drawer-up;
   }
 
   .replay-entry-drawer__content {
     margin-top: 20px;
     font-size: 1.08rem;
-  }
-
-  @keyframes replay-drawer-up {
-    from { transform: translateY(30px); }
-    to { transform: translateY(0); }
   }
 }
 
@@ -6686,6 +6684,17 @@ h2 {
   color: var(--ink);
   font-size: 0.92rem;
   line-height: 1.35;
+}
+
+.coach-digest > p.coach-digest__question-label {
+  margin: 24px 0 6px;
+  color: #536171;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.coach-digest .coach-digest__question-label + .coach-digest__question {
+  margin-top: 0;
 }
 
 .replay-column__inspect {
@@ -7517,7 +7526,7 @@ h2 {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
-  gap: var(--picker-section-gap);
+  gap: clamp(32px, 4dvh, 56px);
 }
 
 .persona-picker__matrix {
@@ -7749,6 +7758,45 @@ h2 {
   line-height: 1.4;
 }
 
+.persona-selection__cta {
+  position: relative;
+  isolation: isolate;
+}
+
+.persona-selection__sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.persona-selection__sparkles > span {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  background: #fff8d8;
+  clip-path: polygon(50% 0, 62% 37%, 100% 50%, 62% 63%, 50% 100%, 38% 63%, 0 50%, 38% 37%);
+  opacity: 0;
+  animation: persona-cta-sparkle 6s 800ms ease-in-out 1 both;
+}
+
+.persona-selection__sparkles > span:nth-child(1) { left: 8%; top: 9%; }
+.persona-selection__sparkles > span:nth-child(2) { right: 10%; top: 6%; width: 12px; height: 12px; animation-delay: 1050ms; }
+.persona-selection__sparkles > span:nth-child(3) { right: 5%; bottom: 8%; width: 20px; height: 20px; animation-delay: 1300ms; }
+
+.persona-selection__cta:disabled .persona-selection__sparkles {
+  display: none;
+}
+
+@keyframes persona-cta-sparkle {
+  0%, 30%, 62%, 100% { opacity: 0; transform: scale(0.35) rotate(-15deg); }
+  9%, 72% { opacity: 0.95; transform: scale(1) rotate(0deg); }
+  22%, 87% { opacity: 0; transform: scale(0.65) rotate(12deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .persona-selection__sparkles { display: none; }
+}
+
 .persona-picker__legend {
   margin-top: 8px;
   color: #455b70;
@@ -7877,7 +7925,7 @@ h2 {
     line-height: 1.25;
   }
 
-  & :is(.eyebrow, small, .replay-entry__meta, .replay-entry__open,
+  & :is(.eyebrow, small, .coach-digest__question-label, .replay-entry__meta, .replay-entry__open,
         .replay-entry__number, .replay-entry__nudge-label,
         .replay-entry__response > span, .replay-persona__expand,
         .persona-replay__source-line, .persona-replay__source-line span,
@@ -7931,7 +7979,7 @@ h2 {
   & .state-change__review-action { position: static; margin-top: 8px; min-height: 40px; }
   & .replay-persona__value,
   & .replay-persona__value > span { white-space: normal; overflow: visible; }
-  & .replay-entry-drawer__panel { width: min(560px, 94vw); }
+  & .replay-entry-drawer__panel { width: min(700px, 100%); }
   & .replay-entry-drawer__panel > header,
   & .review-evidence-drawer__panel > header { flex-wrap: wrap; }
   & .replay-entry-drawer__close { padding: 8px 14px; }

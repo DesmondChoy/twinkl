@@ -1,0 +1,208 @@
+{
+  "scenario_id": "stable-noor",
+  "digest": {
+    "persona_id": "02fb94f3",
+    "persona_name": "Noor Haddad",
+    "week_start": "2025-05-19",
+    "week_end": "2025-05-25",
+    "response_mode": "no_active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 2,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "self_direction",
+      "tradition"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "self_direction": "no_active_drift",
+      "tradition": "no_active_drift"
+    },
+    "drift_details": {
+      "self_direction": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 11,
+        "last_date": "2025-05-22"
+      },
+      "tradition": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 11,
+        "last_date": "2025-05-22"
+      }
+    },
+    "state_comparisons": [
+      {
+        "core_value": "self_direction",
+        "previous_week_start": "2025-05-12",
+        "previous_week_end": "2025-05-18",
+        "current_week_start": "2025-05-19",
+        "current_week_end": "2025-05-25",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-05-15",
+            "t_index": 9,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-05-22",
+            "t_index": 10,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+          },
+          {
+            "date": "2025-05-22",
+            "t_index": 11,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+          }
+        ]
+      },
+      {
+        "core_value": "tradition",
+        "previous_week_start": "2025-05-12",
+        "previous_week_end": "2025-05-18",
+        "current_week_start": "2025-05-19",
+        "current_week_end": "2025-05-25",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-05-15",
+            "t_index": 9,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-05-22",
+            "t_index": 10,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+          },
+          {
+            "date": "2025-05-22",
+            "t_index": 11,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+          }
+        ]
+      }
+    ],
+    "drift_reasons": [],
+    "top_tensions": [],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-05-15",
+        "t_index": 9,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+      },
+      {
+        "date": "2025-05-15",
+        "t_index": 9,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "New client reached out through Instagram. Wants a logo for a women's fitness studio in West Amman. Paying 80 JD. I said yes before thinking about when I'd actually do the work. Sami's not sleeping well again and the house..."
+      },
+      {
+        "date": "2025-05-22",
+        "t_index": 10,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+      },
+      {
+        "date": "2025-05-22",
+        "t_index": 10,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Tariq and I had an actual conversation last night. Not a fight. He asked why I've been staying up so late and I almost lied but I was too tired to come up with something so I told him about..."
+      },
+      {
+        "date": "2025-05-22",
+        "t_index": 11,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+      },
+      {
+        "date": "2025-05-22",
+        "t_index": 11,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Same day, later. Tariq's mother asked me at dinner if everything was okay between us. She must have heard us talking last night. I said everything was fine. Tariq backed me up. She didn't push it. But the way she..."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "7778f53422fe464fa31875cdbf489660680564b60be6731bc75e27034527aa62",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/stable-noor.json",
+  "source_bundle_content_sha256": "5b6022e99b684dc6abb6fa3006468bfdffd8e43737ed700401fafebb4d1527c6",
+  "weekly_digest_event_id": "stable-noor:event:067",
+  "prompt_sha256": "ef8033bc73d5cc6a1e024da0940fcda876d8bc20644eb48587c1444f3545f75c"
+}

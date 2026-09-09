@@ -7,8 +7,15 @@ import type { TraceEventContract } from "./demoContracts";
 import { displayWeekRange } from "./displayFormatters";
 import { weeklyRunContext } from "./weeklyRun";
 import styles from "./styles.css?raw";
+import activeReplay from "../public/scenarios/active-nisha.json";
+import { validateExperienceInspectFixture } from "./demoContracts";
 
 const events = canonicalInspectFixture.trace_events;
+const savedNorthStarEvent = activeReplay.trace_events.find((event) =>
+  event.event_type === "north_star_reviewed" && event.details.record?.selected)!;
+const savedNorthStarRecord = savedNorthStarEvent.details.record!;
+const northStarEvent = validateExperienceInspectFixture(activeReplay).trace_events
+  .find((event) => event.event_id === savedNorthStarEvent.event_id)!;
 
 function weeklyTrace(prefix: string, start: string, end: string): TraceEventContract[] {
   const rows = structuredClone(events.slice(6, 11));
@@ -34,6 +41,133 @@ function weeklyTrace(prefix: string, start: string, end: string): TraceEventCont
 }
 
 describe("Inspect view", () => {
+  it("explains a saved North Star Moment from original nested requests and responses", async () => {
+    const user = userEvent.setup();
+    render(<InspectView events={[northStarEvent]} selectedEventId={northStarEvent.event_id}
+      traceLabel="Saved Persona replay" onReturn={() => undefined} />);
+
+    const result = savedNorthStarRecord;
+    const receipt = result.experiment.receipts[0];
+    const input = JSON.parse(receipt.request.prompt);
+    const assessment = JSON.parse(receipt.attempts.at(-1)!.raw_text!).results[0];
+    const inspection = within(screen.getByRole("region", { name: "How this North Star Moment was derived" }));
+    expect(inspection.getByText(/original recorded provider requests and responses/)).toBeTruthy();
+    expect(inspection.getByLabelText("Exact selected quotation").textContent).toBe(result.selected!.evidence_quote);
+    expect(inspection.getByText(assessment.action_assessment)).toBeTruthy();
+    expect(inspection.getByText(assessment.value_assessment)).toBeTruthy();
+    const selectedAssessment = inspection.getByText("Selected quotation").closest("details")!;
+    expect(within(selectedAssessment).getByText(assessment.conflict_assessment)).toBeTruthy();
+    expect(selectedAssessment.open).toBe(true);
+    expect(inspection.getByText(/not human validation or a separate benchmark evaluator/)).toBeTruthy();
+    expect(inspection.getByText(/selected text is not sent back to rewrite the narrative/)).toBeTruthy();
+
+    await user.click(inspection.getByText(`${input.user_phrase} · 2 Journal Entries · full request writing`));
+    const writing = [...document.querySelectorAll(".nsm-inspect__full-text")].map((node) => node.textContent);
+    expect(writing).toEqual(input.sources.map((source: { journal_entry: string }) => source.journal_entry));
+    await user.click(inspection.getByText(`${input.user_phrase} · exact prompts and response schema`));
+    expect(inspection.getByLabelText(`Exact system prompt · ${input.user_phrase}`).textContent)
+      .toBe(receipt.request.system);
+    expect(inspection.getByLabelText(`Exact user message · ${input.user_phrase}`).textContent)
+      .toBe(receipt.request.prompt);
+    expect(inspection.getByLabelText(`Exact response schema · ${input.user_phrase}`).textContent)
+      .toBe(JSON.stringify(receipt.request.schema, null, 2));
+    expect(inspection.getByLabelText(`Exact response · ${input.user_phrase} · attempt 1`).textContent)
+      .toBe(receipt.attempts[0].raw_text);
+  });
+
+  it("reads live requests and raw AI assessments without relying on saved experiment fields", () => {
+    const event = structuredClone(northStarEvent);
+    const { experiment, ...result } = structuredClone(savedNorthStarRecord);
+    const receipt = experiment.receipts[0];
+    const input = JSON.parse(receipt.request.prompt);
+    event.details.record = { ...result, reviews: [{
+      core_value: input.core_value, value_phrase: input.user_phrase,
+      approved_definition: input.approved_definition,
+      provider_request: receipt.request, provider_attempts: receipt.attempts.map((attempt: Record<string, unknown>) => ({
+        ...attempt, parsed_output: undefined,
+      })), input_receipt: receipt.count_receipt, validation_errors: [],
+    }] };
+    event.source = "live_run";
+    render(<InspectView events={[event]} selectedEventId={event.event_id}
+      traceLabel="Current Experience session" onReturn={() => undefined} />);
+
+    expect(screen.getByText(/These requests and responses belong to this Experience session/)).toBeTruthy();
+    expect(screen.getByText(JSON.parse(receipt.attempts[0].raw_text!).results[0].action_assessment)).toBeTruthy();
+    expect(screen.getByLabelText(`Exact user message · ${input.user_phrase}`).textContent).toBe(receipt.request.prompt);
+    expect(screen.queryByText(/Saved replay: these are the original/)).toBeNull();
+  });
+
+  it("distinguishes a prepared but unsent request from an AI review", () => {
+    const event = structuredClone(northStarEvent);
+    const { experiment, ...result } = structuredClone(savedNorthStarRecord);
+    const receipt = experiment.receipts[0];
+    event.details.record = { ...result, status: "failed", reason: "input_budget:InputBudgetError",
+      reviews: [{ provider_request: receipt.request, provider_attempts: [], validation_errors: [] }] };
+    event.source = "live_run";
+    render(<InspectView events={[event]} selectedEventId={event.event_id}
+      traceLabel="Current Experience session" onReturn={() => undefined} />);
+
+    expect(screen.getByText("Prepared writing; no provider attempt is recorded.")).toBeTruthy();
+    expect(screen.getByText("No provider attempt is recorded for this prepared request.")).toBeTruthy();
+    expect(screen.getByText("No accepted North Star Moment is available from this record.")).toBeTruthy();
+    expect(screen.queryByLabelText("Exact selected quotation")).toBeNull();
+  });
+
+  it("preserves nudge response boundaries and failed attempts without presenting them as an accepted selection", () => {
+    const event = structuredClone(northStarEvent);
+    const result = structuredClone(savedNorthStarRecord);
+    const receipt = result.experiment.receipts[0];
+    const input = JSON.parse(receipt.request.prompt);
+    input.sources[0].nudge_response = "I went back and helped her finish the next page.";
+    receipt.request.prompt = JSON.stringify(input);
+    result.status = "failed";
+    result.reason = "provider_invalid";
+    event.details.record = { ...result, experiment: { ...result.experiment, receipts: [{
+      ...receipt, attempts: [...receipt.attempts, { ...receipt.attempts[0], status: "invalid", raw_text: "Incomplete response {" }],
+    }] } };
+    render(<InspectView events={[event]} selectedEventId={event.event_id}
+      traceLabel="Recorded failure fixture" onReturn={() => undefined} />);
+
+    const response = screen.getByText(input.sources[0].nudge_response);
+    expect(response.previousElementSibling?.textContent).toBe("User nudge response");
+    expect(screen.getByText(/This attempt did not produce an accepted response/)).toBeTruthy();
+    expect(screen.getByLabelText(`Exact response · ${input.user_phrase} · attempt 1`).textContent)
+      .toBe(receipt.attempts[0].raw_text);
+    expect(screen.getByLabelText(`Exact response · ${input.user_phrase} · attempt 2`).textContent)
+      .toBe("Incomplete response {");
+    expect(screen.queryByLabelText("Exact selected quotation")).toBeNull();
+    expect(screen.queryByText("Selected quotation")).toBeNull();
+  });
+
+  it.each([
+    ["not_eligible", "insufficient_evidence", "This weekly result was not eligible for a North Star Moment."],
+    ["pending", "not_in_completed_experiment", "No completed North Star Moment review is available."],
+    ["complete", "no_supportive_source", "The review completed without a suitable quotation."],
+  ])("explains the %s no-card outcome without inventing a model call", (status, reason, outcome) => {
+    const event = structuredClone(northStarEvent);
+    event.details.record = { ...savedNorthStarRecord,
+      status, reason, selected: null, mode: null, sources: [], source_ids: [], reviews: [],
+      experiment: { ...savedNorthStarRecord.experiment, receipts: [] } };
+    render(<InspectView events={[event]} selectedEventId={event.event_id}
+      traceLabel="Saved Persona replay" onReturn={() => undefined} />);
+    expect(screen.getByText(outcome)).toBeTruthy();
+    expect(screen.getByText("No AI source assessment is recorded for this result.")).toBeTruthy();
+    expect(screen.getByText("No quotation from this record is added to the Coach Digest.")).toBeTruthy();
+    expect(screen.queryByLabelText("Exact selected quotation")).toBeNull();
+    expect(screen.queryByText("Selected quotation")).toBeNull();
+  });
+
+  it("opens North Star Moment evidence from the focused weekly summary even when a filter hides its event", async () => {
+    const user = userEvent.setup();
+    render(<InspectView events={[northStarEvent]} selectedEventId={northStarEvent.event_id}
+      traceLabel="Saved Persona replay" onReturn={() => undefined} />);
+    await user.click(screen.getByRole("button", { name: "Journal Entries" }));
+    expect(screen.queryByRole("region", { name: "How this North Star Moment was derived" })).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Inspect North Star Moment" }));
+    expect(screen.getByRole("region", { name: "How this North Star Moment was derived" })).toBeTruthy();
+    expect(document.activeElement).toBe(screen.getByLabelText("Event 1: North Star Moment reviewed"));
+  });
+
   it.each([true, false])("distinguishes saved nudge history from an enforced spacing decision (would suppress: %s)", (suppressed) => {
     const event = structuredClone(events.find((item) => item.event_type === "nudge_suppression_checked")!);
     event.details.policy_applied = false;

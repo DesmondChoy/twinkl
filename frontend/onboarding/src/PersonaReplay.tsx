@@ -210,9 +210,12 @@ export function PersonaReplayPicker({
       </div>
       <div className="persona-selection__start">
         <p>{current ? "Continue from your saved week." : "Begin with the Journal Entries, then reveal the weekly reflection."}</p>
-        <button className="button button--primary" type="button"
+        <button className="button button--primary persona-selection__cta" type="button"
           disabled={(current && !onResume) || loadingId !== null}
           onClick={() => current ? onResume?.() : void startReplay(selected)}>
+          <span className="persona-selection__sparkles" key={selected.scenario_id} aria-hidden="true">
+            <span /><span /><span />
+          </span>
           {loadingId !== null ? "Loading saved replay…"
             : current ? `Continue replay · Week ${Math.min(Math.max(currentWeekIndex ?? 0, 0), selected.progression.length - 1) + 1}`
               : "Start at week 1"}

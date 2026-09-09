@@ -1,0 +1,143 @@
+{
+  "scenario_id": "uncertain-wei-jun",
+  "digest": {
+    "persona_id": "8f83c818",
+    "persona_name": "Wei Jun Chen",
+    "week_start": "2025-06-09",
+    "week_end": "2025-06-15",
+    "response_mode": "no_active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 4,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "universalism"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "universalism": "no_active_drift"
+    },
+    "drift_details": {
+      "universalism": {
+        "state": "no_active_drift",
+        "current_run_length": 1,
+        "last_decision": "conflict",
+        "last_review_status": "ok",
+        "last_t_index": 5,
+        "last_date": "2025-06-13"
+      }
+    },
+    "state_comparisons": [
+      {
+        "core_value": "universalism",
+        "previous_week_start": "2025-06-02",
+        "previous_week_end": "2025-06-08",
+        "current_week_start": "2025-06-09",
+        "current_week_end": "2025-06-15",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-06-07",
+            "t_index": 1,
+            "direction": "context",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-06-09",
+            "t_index": 3,
+            "direction": "misaligned",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "Ordered from Grab because I was too tired to cook. While eating I scrolled past an article about plastic waste in the Java Sea. Closed it, kept eating from the styrofoam container."
+          },
+          {
+            "date": "2025-06-10",
+            "t_index": 4,
+            "direction": "context",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT."
+          },
+          {
+            "date": "2025-06-13",
+            "t_index": 5,
+            "direction": "misaligned",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "I didn't laugh but I also didn't say anything."
+          }
+        ]
+      }
+    ],
+    "drift_reasons": [],
+    "top_tensions": [],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-06-07",
+        "t_index": 1,
+        "direction": "context",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+      },
+      {
+        "date": "2025-06-09",
+        "t_index": 3,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Ordered from Grab because I was too tired to cook. While eating I scrolled past an article about plastic waste in the Java Sea. Closed it, kept eating from the styrofoam container."
+      },
+      {
+        "date": "2025-06-10",
+        "t_index": 4,
+        "direction": "context",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT."
+      },
+      {
+        "date": "2025-06-13",
+        "t_index": 5,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "I didn't laugh but I also didn't say anything."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "98ae31ada96630710dde848cc66e8890a2357f57422e9fb542302fe464ed749a",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/uncertain-wei-jun.json",
+  "source_bundle_content_sha256": "4af00f6c3f7b9aa47d042e1c28bfd8aa1a06da5e920068a937d4b5e3406d61b1",
+  "weekly_digest_event_id": "uncertain-wei-jun:event:034",
+  "prompt_sha256": "be5a6822f8df89c4580defac72d6f666e6cf8f4c93b29f8dd99fc613bbf41381"
+}

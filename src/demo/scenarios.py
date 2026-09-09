@@ -162,7 +162,7 @@ class SavedCoachGeneration(CatalogModel):
     model_contract: ModelContract
     service_tier: str
     prompt_name: str
-    prompt_version: Literal["4.1", "4.2", "4.3"]
+    prompt_version: Literal["4.1", "4.2", "4.3", "4.4"]
     prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     prompt: str = Field(min_length=1)
     raw_output: str = Field(min_length=1)
@@ -1066,6 +1066,10 @@ def build_scenario_fixture(
             coach_validation = validate_weekly_digest_narrative(
                 digest,
                 coach_narrative,
+                validate_voice=(
+                    saved_coach_response.generation is not None
+                    and saved_coach_response.generation.prompt_version == "4.4"
+                ),
             )
             failed_checks = [
                 check.name for check in coach_validation.checks if not check.passed

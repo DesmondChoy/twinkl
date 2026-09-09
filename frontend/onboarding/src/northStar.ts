@@ -39,11 +39,11 @@ export interface NorthStarRecord extends JsonObject {
 export function northStarFraming(mode: unknown): string | null {
   switch (mode) {
     case "reflection":
-      return "This earlier action expressed a priority that has felt harder to make room for in the week reviewed.";
+      return "You’ve acted on what matters to you before. You wrote:";
     case "encouragement":
-      return "This action from the week reviewed is one way you put this priority into practice.";
+      return "Here’s a moment worth holding onto, in your own words:";
     case "reminder":
-      return "This earlier action is a reminder of how you have expressed this priority. It offers perspective on the week reviewed.";
+      return "Your earlier words offer a reminder of how you’ve made room for what matters to you:";
     default:
       return null;
   }

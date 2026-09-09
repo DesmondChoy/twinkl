@@ -1,0 +1,136 @@
+{
+  "persona_id": "8f83c818",
+  "persona_name": "Wei Jun Chen",
+  "week_start": "2025-06-02",
+  "week_end": "2025-06-08",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "no_active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-06-07"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-05-26",
+      "previous_week_end": "2025-06-01",
+      "current_week_start": "2025-06-02",
+      "current_week_end": "2025-06-08",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-05-31",
+          "t_index": 0,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-06-07",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-05-31",
+      "t_index": 0,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I could have pushed. I had the context, the stories, the data to make a case. But I just nodded and typed something in the chat about checking the logs."
+    },
+    {
+      "date": "2025-06-07",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Went to the worker center this morning. There was a new guy, Suresh, from Tamil Nadu. Fell from scaffolding three weeks ago and his employer hasn't filed the injury report. He showed me the bruises on his back, purple-yellow, still..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "At the worker center, you met Suresh and heard what happened after his fall from scaffolding. His bruises and the missing injury report make the stakes very concrete, especially beside your earlier choice: \"I could have pushed.\"",
+    "tension_explanation": "You have been close to situations where fairness depends on someone speaking up, yet the choices looked different: earlier, you held back and wrote about checking the logs; more recently, you spent time with a worker whose employer had not filed his report. What you want to do with that connection remains open.",
+    "reflective_question": "When you think about Suresh showing you his bruises, what feels most important for you to hold onto?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I could have pushed."
+    ],
+    "word_count": 108,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 108 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

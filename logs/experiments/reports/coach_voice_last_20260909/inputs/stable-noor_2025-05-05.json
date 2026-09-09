@@ -1,0 +1,288 @@
+{
+  "scenario_id": "stable-noor",
+  "digest": {
+    "persona_id": "02fb94f3",
+    "persona_name": "Noor Haddad",
+    "week_start": "2025-05-05",
+    "week_end": "2025-05-11",
+    "response_mode": "no_active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 3,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "self_direction",
+      "tradition"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "self_direction": "no_active_drift",
+      "tradition": "no_active_drift"
+    },
+    "drift_details": {
+      "self_direction": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 8,
+        "last_date": "2025-05-10"
+      },
+      "tradition": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 8,
+        "last_date": "2025-05-10"
+      }
+    },
+    "state_comparisons": [
+      {
+        "core_value": "self_direction",
+        "previous_week_start": "2025-04-28",
+        "previous_week_end": "2025-05-04",
+        "current_week_start": "2025-05-05",
+        "current_week_end": "2025-05-11",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-05-02",
+            "t_index": 4,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+          },
+          {
+            "date": "2025-05-02",
+            "t_index": 5,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-05-05",
+            "t_index": 6,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+          },
+          {
+            "date": "2025-05-06",
+            "t_index": 7,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+          },
+          {
+            "date": "2025-05-10",
+            "t_index": 8,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+          }
+        ]
+      },
+      {
+        "core_value": "tradition",
+        "previous_week_start": "2025-04-28",
+        "previous_week_end": "2025-05-04",
+        "current_week_start": "2025-05-05",
+        "current_week_end": "2025-05-11",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-05-02",
+            "t_index": 4,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+          },
+          {
+            "date": "2025-05-02",
+            "t_index": 5,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-05-05",
+            "t_index": 6,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+          },
+          {
+            "date": "2025-05-06",
+            "t_index": 7,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+          },
+          {
+            "date": "2025-05-10",
+            "t_index": 8,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+          }
+        ]
+      }
+    ],
+    "drift_reasons": [],
+    "top_tensions": [],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-05-02",
+        "t_index": 4,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+      },
+      {
+        "date": "2025-05-02",
+        "t_index": 4,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+      },
+      {
+        "date": "2025-05-02",
+        "t_index": 5,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+      },
+      {
+        "date": "2025-05-02",
+        "t_index": 5,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+      },
+      {
+        "date": "2025-05-05",
+        "t_index": 6,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+      },
+      {
+        "date": "2025-05-05",
+        "t_index": 6,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Got the payment for the logo project. Not a lot -- 45 JD -- but I earned it. Put it in the envelope I keep in my underwear drawer. I have about 200 JD saved now. I don't know what..."
+      },
+      {
+        "date": "2025-05-06",
+        "t_index": 7,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+      },
+      {
+        "date": "2025-05-06",
+        "t_index": 7,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Took Sami to the park near the mosque this morning. He's getting better at walking on his own, barely needs my hand now. He kept crouching down to look at ants. We stayed for almost two hours. I didn't bring..."
+      },
+      {
+        "date": "2025-05-10",
+        "t_index": 8,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+      },
+      {
+        "date": "2025-05-10",
+        "t_index": 8,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Friday. Tariq took the day off and we went to his parents' village with Sami to visit his grandfather. The old house has a courtyard with a lemon tree that Tariq's grandmother planted. His grandfather told Sami the same story..."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "a6f4652980ffd0bc2b3c0f07c146321252608757ecc9d079b667e81c6318c5f3",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/stable-noor.json",
+  "source_bundle_content_sha256": "5b6022e99b684dc6abb6fa3006468bfdffd8e43737ed700401fafebb4d1527c6",
+  "weekly_digest_event_id": "stable-noor:event:048",
+  "prompt_sha256": "31e91b98e4f142aed7b1a0f741e37ba99175ad170be55a7fab0810c92b44229e"
+}

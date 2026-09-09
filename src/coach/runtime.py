@@ -83,7 +83,7 @@ def run_weekly_coach_cycle(
             generate_weekly_digest_coach(digest, llm_complete)
         )
         validation = (
-            validate_weekly_digest_narrative(digest, narrative)
+            validate_weekly_digest_narrative(digest, narrative, validate_voice=True)
             if narrative is not None
             else None
         )

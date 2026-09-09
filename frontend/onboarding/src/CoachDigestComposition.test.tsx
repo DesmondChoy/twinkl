@@ -198,12 +198,14 @@ describe("Coach Digest composition", () => {
       selectedEventId={selected.event_id} traceLabel="Saved Persona replay" onReturn={() => undefined} />);
     const details = screen.getByTestId(`trace-details-${selected.event_id}`);
     expect(screen.getByLabelText("Event 1: North Star Moment reviewed").getAttribute("aria-current")).toBe("true");
-    expect(within(details).getByLabelText("Deterministic introduction").textContent).toBe(northStarFraming("reflection"));
+    expect(within(details).getByText(`Introduction: ${northStarFraming("reflection")}`)).toBeTruthy();
     expect(within(details).getByLabelText("Exact selected quotation").textContent).toBe(quote);
-    expect(within(details).getByText(entry.journal_entry_id)).toBeTruthy();
-    await user.click(within(details).getByText("Source checks and AI assessment"));
-    expect(within(details).getByLabelText("AI assessment").textContent).toContain("observable_choice");
+    expect(within(details).getAllByText(entry.journal_entry_id).length).toBeGreaterThan(0);
+    await user.click(within(details).getByText("Recorded application validation and source checks"));
     expect(within(details).getByLabelText("Source checks").textContent).toContain("2026-07-07T18:00:00Z");
+    expect(within(details).getByLabelText("Source checks").textContent).toContain("2026-07-01T18:00:00Z");
+    expect(within(details).getByText("No AI source assessment is recorded for this result.")).toBeTruthy();
+    expect(within(details).getByLabelText("Effective result").textContent).toContain("observable_choice");
     expect(within(details).getByText(/not human validation/)).toBeTruthy();
   });
 

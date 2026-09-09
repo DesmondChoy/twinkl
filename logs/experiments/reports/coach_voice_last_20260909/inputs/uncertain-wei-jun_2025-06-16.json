@@ -1,0 +1,163 @@
+{
+  "scenario_id": "uncertain-wei-jun",
+  "digest": {
+    "persona_id": "8f83c818",
+    "persona_name": "Wei Jun Chen",
+    "week_start": "2025-06-16",
+    "week_end": "2025-06-22",
+    "response_mode": "no_active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 2,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "universalism"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "universalism": "no_active_drift"
+    },
+    "drift_details": {
+      "universalism": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 7,
+        "last_date": "2025-06-22"
+      }
+    },
+    "state_comparisons": [
+      {
+        "core_value": "universalism",
+        "previous_week_start": "2025-06-09",
+        "previous_week_end": "2025-06-15",
+        "current_week_start": "2025-06-16",
+        "current_week_end": "2025-06-22",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-06-09",
+            "t_index": 3,
+            "direction": "misaligned",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "Ordered from Grab because I was too tired to cook. While eating I scrolled past an article about plastic waste in the Java Sea. Closed it, kept eating from the styrofoam container."
+          },
+          {
+            "date": "2025-06-10",
+            "t_index": 4,
+            "direction": "context",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT."
+          },
+          {
+            "date": "2025-06-13",
+            "t_index": 5,
+            "direction": "misaligned",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "I didn't laugh but I also didn't say anything."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-06-16",
+            "t_index": 6,
+            "direction": "context",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+          },
+          {
+            "date": "2025-06-22",
+            "t_index": 7,
+            "direction": "context",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+          }
+        ]
+      }
+    ],
+    "drift_reasons": [],
+    "top_tensions": [],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-06-09",
+        "t_index": 3,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Ordered from Grab because I was too tired to cook. While eating I scrolled past an article about plastic waste in the Java Sea. Closed it, kept eating from the styrofoam container."
+      },
+      {
+        "date": "2025-06-10",
+        "t_index": 4,
+        "direction": "context",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Rainy morning. The uncle at the kopi stall asked about my daughter. Drank my coffee and watched the wet road for a while before heading to the MRT."
+      },
+      {
+        "date": "2025-06-13",
+        "t_index": 5,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "I didn't laugh but I also didn't say anything."
+      },
+      {
+        "date": "2025-06-16",
+        "t_index": 6,
+        "direction": "context",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Long week but today felt different. Took Xiao Yu to East Coast Park and she spent an hour picking up shells and bits of plastic from the sand. She didn't separate them at first, just collecting, and then she looked..."
+      },
+      {
+        "date": "2025-06-22",
+        "t_index": 7,
+        "direction": "context",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Worker center morning. Helped two new guys file their claims. One of them brought me a packet of murukku his wife made. Sat on the bench outside eating it and feeling grateful for this strange second life I have on..."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "78c8999430e0ea2a9da6c4b1c6d60a18fcf73ab44fefebc674a914cb28a262b3",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/uncertain-wei-jun.json",
+  "source_bundle_content_sha256": "4af00f6c3f7b9aa47d042e1c28bfd8aa1a06da5e920068a937d4b5e3406d61b1",
+  "weekly_digest_event_id": "uncertain-wei-jun:event:045",
+  "prompt_sha256": "a993a303f975b1a4c4b602cbfc9e44e0a88af183a1cf37f65ad3da6061e7444d"
+}

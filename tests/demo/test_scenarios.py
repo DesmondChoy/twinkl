@@ -231,7 +231,7 @@ def test_all_weeks_reuse_exact_source_bound_coach_digests(loaded_scenarios) -> N
             ]
             generation = saved.generation
             assert generation is not None
-            assert generation.prompt_version == "4.2"
+            assert generation.prompt_version == "4.4"
             assert generation.model_contract.provider == "openai"
             assert generation.model_contract.model == "gpt-5.6-luna"
             assert generation.model_contract.reasoning_effort == "none"
@@ -243,7 +243,7 @@ def test_all_weeks_reuse_exact_source_bound_coach_digests(loaded_scenarios) -> N
                 mode="json"
             )
             assert generation.response_sha256 == _coach_response_sha256(saved.narrative)
-            assert 1 <= generation.attempt_count <= 2
+            assert 1 <= generation.attempt_count <= 4
             assert len(generation.call_metrics) == len(generation.diagnostic_paths)
             assert len(generation.call_metrics) == generation.attempt_count
             for metric, path in zip(
@@ -290,14 +290,20 @@ def test_all_weeks_reuse_exact_source_bound_coach_digests(loaded_scenarios) -> N
             assert digest_event.details.coach_unavailable_reason is None
 
 
-def test_retained_coach_responses_remain_exactly_preserved() -> None:
+def test_pre_refresh_coach_responses_remain_exactly_preserved() -> None:
     plan = json.loads(
         (
             ROOT
             / "logs/experiments/reports/demo_persona_replacement_20260908/plan.json"
         ).read_text()
     )
-    responses = load_saved_coach_responses(ROOT).responses
+    refresh_root = ROOT / "logs/experiments/reports/coach_voice_refresh_20260909"
+    original_bytes = (
+        refresh_root / "original_coach_digest_responses.json"
+    ).read_bytes()
+    refresh_plan = json.loads((refresh_root / "plan.json").read_text())
+    assert hashlib.sha256(original_bytes).hexdigest() == refresh_plan["original_sha256"]
+    responses = SavedCoachResponseFixture.model_validate_json(original_bytes).responses
     assert len(plan["retained_responses"]) == 17
     for key, original in plan["retained_responses"].items():
         assert responses[key].model_dump(mode="json") == original

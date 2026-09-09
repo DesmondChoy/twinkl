@@ -288,8 +288,8 @@ def _valid_coach_response() -> str:
                 "That detail gives us a clear place to pause this week."
             ),
             "tension_explanation": (
-                "The week does not show a repeated pattern, but the moment you "
-                "noticed can help you decide what deserves attention next."
+                "You noticed something worth pausing over, even with everything "
+                "else asking for your attention."
             ),
             "reflective_question": (
                 "What would you want to notice if a similar moment happens again?"
@@ -759,6 +759,56 @@ async def test_invalid_coach_digest_keeps_weekly_drift_detection_result() -> Non
     assert trace.events[-2].event_type == "weekly_digest_built"
     assert trace.events[-1].event_type == "weekly_coach_generated"
     assert trace.events[-1].status == "invalid"
+
+
+@pytest.mark.asyncio
+async def test_live_voice_failure_keeps_drift_and_rejected_response() -> None:
+    narrative = json.loads(_valid_coach_response())
+    narrative["weekly_mirror"] = (
+        'This week, you wrote, "Journal Entry 0 says enough to invite reflection." '
+        "That detail gave you a reason to pause."
+    )
+    service, _, _ = _service(
+        [_receipt(decision="no_nudge", nudge_text=None)],
+        coach_response=json.dumps(narrative),
+    )
+    create_request = await _create_assessment(service)
+    submitted = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    assert submitted.operation == "submit_journal_entry"
+    closed = await service.advance_assessment_time(
+        AssessmentTimeAdvanceRequest(
+            operation="advance_assessment_time",
+            request_id="close-with-voice-failure",
+            idempotency_key="f" * 64,
+            session_id=create_request.profile.session_id,
+            expected_revision=1,
+            action="close_week",
+        )
+    )
+    assert closed.operation == "advance_assessment_time"
+    assert closed.session.drift_result is not None
+    assert closed.session.weekly_digest is not None
+    assert closed.session.weekly_digest.coach_narrative is None
+    trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="voice-failure-trace",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert trace.operation == "read_trace"
+    coach_event = trace.events[-1]
+    assert coach_event.event_type == "weekly_coach_generated"
+    assert coach_event.status == "invalid"
+    assert coach_event.raw_response == narrative
+    assert coach_event.details.narrative is not None
+    assert coach_event.details.validation is not None
+    assert [
+        check.name for check in coach_event.details.validation.checks
+        if not check.passed
+    ] == ["conversational_voice"]
 
 
 @pytest.mark.parametrize(

@@ -1,0 +1,323 @@
+{
+  "persona_id": "961a4e3f",
+  "persona_name": "Meera Krishnamurthy",
+  "week_start": "2025-11-24",
+  "week_end": "2025-11-30",
+  "response_mode": "no_active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 3,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "self_direction",
+    "tradition"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "self_direction": "no_active_drift",
+    "tradition": "no_active_drift"
+  },
+  "drift_details": {
+    "self_direction": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 6,
+      "last_date": "2025-11-30"
+    },
+    "tradition": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 6,
+      "last_date": "2025-11-30"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "self_direction",
+      "previous_week_start": "2025-11-17",
+      "previous_week_end": "2025-11-23",
+      "current_week_start": "2025-11-24",
+      "current_week_end": "2025-11-30",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-11-20",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out,..."
+        },
+        {
+          "date": "2025-11-23",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Spent the whole morning at the Diwali mela helping set up the community puja. I did the rangoli at the entrance the way my grandmother taught me, rice flour with turmeric borders, none of the acrylic paint shortcuts the younger..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-11-24",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Mummyji wants me to start teaching Vihaan the Vishnu Sahasranama. He's seven. She says she learned it by six. I said I'd start next week, which I will, because it's important, Appa made sure I knew it by heart and..."
+        },
+        {
+          "date": "2025-11-30",
+          "t_index": 5,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Sat down this morning to teach Vihaan the first twenty verses. He's quicker than I expected. He kept asking what the words meant and I found myself explaining them properly, not just the rote way I was taught but actually..."
+        },
+        {
+          "date": "2025-11-30",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "self_direction"
+          ],
+          "score_mean": null,
+          "excerpt": "Spent the afternoon cataloguing my dye samples. I have fourteen shades of indigo now, ranging from almost-grey to a deep navy that I got by double-dipping with a fermentation vat I built from a recipe in an old Kalamkari manual...."
+        }
+      ]
+    },
+    {
+      "core_value": "tradition",
+      "previous_week_start": "2025-11-17",
+      "previous_week_end": "2025-11-23",
+      "current_week_start": "2025-11-24",
+      "current_week_end": "2025-11-30",
+      "previous_state": "no_active_drift",
+      "current_state": "no_active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-11-20",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out,..."
+        },
+        {
+          "date": "2025-11-23",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Spent the whole morning at the Diwali mela helping set up the community puja. I did the rangoli at the entrance the way my grandmother taught me, rice flour with turmeric borders, none of the acrylic paint shortcuts the younger..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-11-24",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Mummyji wants me to start teaching Vihaan the Vishnu Sahasranama. He's seven. She says she learned it by six. I said I'd start next week, which I will, because it's important, Appa made sure I knew it by heart and..."
+        },
+        {
+          "date": "2025-11-30",
+          "t_index": 5,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Sat down this morning to teach Vihaan the first twenty verses. He's quicker than I expected. He kept asking what the words meant and I found myself explaining them properly, not just the rote way I was taught but actually..."
+        },
+        {
+          "date": "2025-11-30",
+          "t_index": 6,
+          "direction": "context",
+          "dimensions": [
+            "tradition"
+          ],
+          "score_mean": null,
+          "excerpt": "Spent the afternoon cataloguing my dye samples. I have fourteen shades of indigo now, ranging from almost-grey to a deep navy that I got by double-dipping with a fermentation vat I built from a recipe in an old Kalamkari manual...."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "961a4e3f:self_direction:0:not_conflict"
+  ],
+  "top_tensions": [],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-11-20",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out,..."
+    },
+    {
+      "date": "2025-11-20",
+      "t_index": 2,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out,..."
+    },
+    {
+      "date": "2025-11-23",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the whole morning at the Diwali mela helping set up the community puja. I did the rangoli at the entrance the way my grandmother taught me, rice flour with turmeric borders, none of the acrylic paint shortcuts the younger..."
+    },
+    {
+      "date": "2025-11-23",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the whole morning at the Diwali mela helping set up the community puja. I did the rangoli at the entrance the way my grandmother taught me, rice flour with turmeric borders, none of the acrylic paint shortcuts the younger..."
+    },
+    {
+      "date": "2025-11-24",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Mummyji wants me to start teaching Vihaan the Vishnu Sahasranama. He's seven. She says she learned it by six. I said I'd start next week, which I will, because it's important, Appa made sure I knew it by heart and..."
+    },
+    {
+      "date": "2025-11-24",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Mummyji wants me to start teaching Vihaan the Vishnu Sahasranama. He's seven. She says she learned it by six. I said I'd start next week, which I will, because it's important, Appa made sure I knew it by heart and..."
+    },
+    {
+      "date": "2025-11-30",
+      "t_index": 5,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Sat down this morning to teach Vihaan the first twenty verses. He's quicker than I expected. He kept asking what the words meant and I found myself explaining them properly, not just the rote way I was taught but actually..."
+    },
+    {
+      "date": "2025-11-30",
+      "t_index": 5,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Sat down this morning to teach Vihaan the first twenty verses. He's quicker than I expected. He kept asking what the words meant and I found myself explaining them properly, not just the rote way I was taught but actually..."
+    },
+    {
+      "date": "2025-11-30",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the afternoon cataloguing my dye samples. I have fourteen shades of indigo now, ranging from almost-grey to a deep navy that I got by double-dipping with a fermentation vat I built from a recipe in an old Kalamkari manual...."
+    },
+    {
+      "date": "2025-11-30",
+      "t_index": 6,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Spent the afternoon cataloguing my dye samples. I have fourteen shades of indigo now, ranging from almost-grey to a deep navy that I got by double-dipping with a fermentation vat I built from a recipe in an old Kalamkari manual...."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "Teaching Vihaan the first twenty verses became more than repeating what you were taught: \"I found myself explaining them properly\". Later, your indigo work carried that same care into something distinctly your own, from almost-grey to deep navy, using a fermentation vat shaped by an old Kalamkari manual.",
+    "tension_explanation": "You spent these days carrying family practices forward while also making room for your own curiosity and interpretation. The rangoli, the aloo paratha, the prayers, and your dye experiments each connect you with Appa, your grandmother, and the traditions you were raised with, without erasing your individual way of doing things.",
+    "reflective_question": "When Vihaan asked what the verses meant, what did that change for you about how you wanted to pass them on?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I found myself explaining them properly"
+    ],
+    "word_count": 120,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 120 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

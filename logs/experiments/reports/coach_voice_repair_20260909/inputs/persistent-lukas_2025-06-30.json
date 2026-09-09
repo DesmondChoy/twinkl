@@ -1,0 +1,107 @@
+{
+  "scenario_id": "persistent-lukas",
+  "digest": {
+    "persona_id": "a24b8d8f",
+    "persona_name": "Lukas Vetter",
+    "week_start": "2025-06-30",
+    "week_end": "2025-07-06",
+    "response_mode": "active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "At least one Core Value has active Drift.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 1,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "universalism"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "universalism": "active_drift"
+    },
+    "drift_details": {
+      "universalism": {
+        "state": "active_drift",
+        "current_run_length": 5,
+        "last_decision": "conflict",
+        "last_review_status": "ok",
+        "last_t_index": 5,
+        "last_date": "2025-07-01"
+      }
+    },
+    "state_comparisons": [
+      {
+        "core_value": "universalism",
+        "previous_week_start": "2025-06-23",
+        "previous_week_end": "2025-06-29",
+        "current_week_start": "2025-06-30",
+        "current_week_end": "2025-07-06",
+        "previous_state": "active_drift",
+        "current_state": "active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-06-25",
+            "t_index": 4,
+            "direction": "misaligned",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "I chose the easier path — I got my answer, I can file it away, and nobody has to be uncomfortable."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-07-01",
+            "t_index": 5,
+            "direction": "misaligned",
+            "dimensions": [
+              "universalism"
+            ],
+            "score_mean": null,
+            "excerpt": "During onboarding someone made a joke about Eastern European work ethic — meant as a compliment, apparently. Tomasz laughed it off. I didn't say anything."
+          }
+        ]
+      }
+    ],
+    "drift_reasons": [
+      "a24b8d8f:universalism:1:open"
+    ],
+    "top_tensions": [
+      "universalism"
+    ],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-06-25",
+        "t_index": 4,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "I chose the easier path — I got my answer, I can file it away, and nobody has to be uncomfortable."
+      },
+      {
+        "date": "2025-07-01",
+        "t_index": 5,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "During onboarding someone made a joke about Eastern European work ethic — meant as a compliment, apparently. Tomasz laughed it off. I didn't say anything."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "958f9058097e28713be03f0089e3ddfa927d4f7b456cb64ddc389f949bd5f9f8",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/persistent-lukas.json",
+  "source_bundle_content_sha256": "e3ec28aa786a9e8e90f85a6578f041447d3419948c26c95a538f8d48b9bbaf44",
+  "weekly_digest_event_id": "persistent-lukas:event:039",
+  "prompt_sha256": "4e46ecb1c594b29902cdc145d572aeb34be14fe6126c6378880b209f19025aa3"
+}

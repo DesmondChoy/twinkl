@@ -45,9 +45,12 @@ source hash matches that week's current Weekly Drift Detection output. The
 adds ten responses for Lukas and Meera and retains 17 compatible responses for
 Nisha, Noor, and Wei Jun from the
 [September completion run](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md).
-All 27 use Luna at reasoning effort `none`, prompt `4.2`, and pass Coach Digest
-Validations. These generation runs add no Coach Digest Evals or human
-validation; the
+The [9 September voice refresh](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
+regenerates all 27 from the same weekly inputs with Luna at reasoning effort
+`none` and prompt `4.4`, preserving the earlier response receipts. It replaces
+calendar-recap openings and clinical finding language with conversational,
+specific reflections. Coach Digest Validations include the new voice checks.
+These generation runs add no Coach Digest Evals or human validation; the
 [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
 remains historical evidence for a different Persona roster and inputs.
 
@@ -361,8 +364,11 @@ of which results have been reviewed.
 Sessions holding a retired Persona return safely to the current chooser rather
 than attempting to load a removed bundle.
 
-Opening a Journal Entry uses a desktop side panel or mobile bottom sheet so
-the reading area does not reflow. Journal Entry and AI review dialogs keep
+Journal Entry previews show up to 50 words without a visual line clamp.
+Opening a Journal Entry uses a centered reading dialog on desktop and phones,
+with a subtle opening transition and the original paragraph breaks. A hover
+or keyboard-focus cue identifies the action without opening writing implicitly.
+The reading area does not reflow. Journal Entry and AI review dialogs keep
 keyboard focus inside and make the background inactive until dismissal;
 Escape, Close, or a backdrop click restores focus to the triggering control.
 Saved nudges are available immediately with
@@ -376,7 +382,8 @@ Entries. Ellipsis-ended quotations expand through the source sentence only
 when they match a unique occurrence in a cited Journal Entry available by the
 week's cutoff. If inline expansion would interrupt the surrounding sentence,
 the complete source quotation appears immediately below that paragraph.
-The card discloses expansion; Inspect retains the original model response.
+Inspect retains the original model response. Source-date links remain available
+without the extra “Read the supporting Journal Entries” instruction.
 Ambiguous matches and ellipses present in the source remain
 unchanged, with the complete Journal Entry available through its link.
 
@@ -394,6 +401,12 @@ left and one integrated Coach Digest on the right. Phones and narrower screens
 stack these in the same order. The Coach Digest presents its original narrative,
 then an optional validated North Star Moment passage, and ends with its one
 original reflective question. No additional model rewrites the response.
+The **Something to reflect on** label identifies that final question as an
+invitation addressed to the user. Prompt `4.4` asks for conversational prose
+that opens with a specific lived moment, avoids calendar-recap openings and
+clinical findings, and asks one short question about a concrete experience.
+New generation checks reject those narrow wording failures; historical responses
+retain the validation rules under which they were generated.
 
 **Inspect decision** beneath the Drift state opens the weekly explanation,
 linked to the current week's Drift Detector event (or its saved Weekly Drift
@@ -405,13 +418,20 @@ Onboarding presents the passage without a North Star Moment label; Persona
 replay adds a discreet attribution. Both paths provide **Inspect this moment**
 for that exact backend event. Inspect distinguishes deterministic framing from
 the exact source quotation and the AI assessment.
+The North Star Moment inspection follows four stages: eligible writing, exact
+system and user prompts, per-source AI assessments, and application selection
+and validation. The chosen source's action, value-support, and same-value
+Conflict assessments open by default. Every supplied source and provider attempt
+remains available. Recorded runtime AI assessment is distinct from the separate
+benchmark evaluation and from human validation. Opening Inspect performs no
+provider call.
 
 The result grows with its content and uses page scrolling. **Why this state**
 keeps detailed evidence collapsed until requested; **Inspect decision** stays
 with the Drift state. Missing or invalid Coach responses show their existing
 status and suppress the passage. Missing, pending, failed, or unsuitable North
 Star Moment results leave a valid Coach Digest intact, without an empty moment
-card. Source links open the Journal Entry drawer without expanding the journals
+card. Source links open the Journal Entry dialog without expanding the journals
 panel. The active week stays centered in the horizontal week strip on narrow screens.
 
 Profile details remain collapsed by default and include a short Persona context.

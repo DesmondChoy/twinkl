@@ -1,0 +1,180 @@
+{
+  "persona_id": "a24b8d8f",
+  "persona_name": "Lukas Vetter",
+  "week_start": "2025-06-16",
+  "week_end": "2025-06-22",
+  "response_mode": "active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "At least one Core Value has active Drift.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 1,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "active_drift",
+      "current_run_length": 3,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 3,
+      "last_date": "2025-06-19"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-06-09",
+      "previous_week_end": "2025-06-15",
+      "current_week_start": "2025-06-16",
+      "current_week_end": "2025-06-22",
+      "previous_state": "active_drift",
+      "current_state": "active_drift",
+      "change": "unchanged",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-06-10",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Helped Amira debug the intake form tonight at the nonprofit. She'd been stuck on a date-parsing issue for two days and we sorted it in twenty minutes. Small thing, but it felt like the right use of a Tuesday evening...."
+        },
+        {
+          "date": "2025-06-11",
+          "t_index": 1,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I sat there and said nothing."
+        },
+        {
+          "date": "2025-06-14",
+          "t_index": 2,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I picked convenience and cost"
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-06-19",
+          "t_index": 3,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "I changed the subject to the upcoming sprint deadline. Could have said something. Should have, maybe. But Sandra is senior to me and she's leading the Q3 roadmap review. There's a calculation that happens in these moments and I went..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "a24b8d8f:universalism:1:open"
+  ],
+  "top_tensions": [
+    "universalism"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-06-10",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Helped Amira debug the intake form tonight at the nonprofit. She'd been stuck on a date-parsing issue for two days and we sorted it in twenty minutes. Small thing, but it felt like the right use of a Tuesday evening...."
+    },
+    {
+      "date": "2025-06-11",
+      "t_index": 1,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I sat there and said nothing."
+    },
+    {
+      "date": "2025-06-14",
+      "t_index": 2,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I picked convenience and cost"
+    },
+    {
+      "date": "2025-06-19",
+      "t_index": 3,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "I changed the subject to the upcoming sprint deadline. Could have said something. Should have, maybe. But Sandra is senior to me and she's leading the Q3 roadmap review. There's a calculation that happens in these moments and I went..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "On Tuesday evening, you helped Amira untangle the intake form, and it felt like \"the right use of a Tuesday evening.\" A few days later, with Sandra, you changed the subject rather than speaking up, aware that her seniority and the roadmap review shaped your choice.",
+    "tension_explanation": "The recent entries point to a repeated pull between making room for fairness and choosing silence or convenience when speaking up feels costly. “I sat there and said nothing,” “I picked convenience and cost,” and changing the subject with Sandra each describe moments where you noticed the choice and held back.",
+    "reflective_question": "When you changed the subject with Sandra, what were you most concerned might happen if you said what you were thinking?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "the right use of a Tuesday evening."
+    ],
+    "word_count": 118,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 118 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

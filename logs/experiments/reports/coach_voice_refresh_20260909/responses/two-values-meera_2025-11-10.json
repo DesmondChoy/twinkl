@@ -1,0 +1,134 @@
+{
+  "persona_id": "961a4e3f",
+  "persona_name": "Meera Krishnamurthy",
+  "week_start": "2025-11-10",
+  "week_end": "2025-11-16",
+  "response_mode": "active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "At least one Core Value has active Drift.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 2,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "self_direction",
+    "tradition"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "self_direction": "active_drift",
+    "tradition": "no_active_drift"
+  },
+  "drift_details": {
+    "self_direction": {
+      "state": "active_drift",
+      "current_run_length": 2,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-11-15"
+    },
+    "tradition": {
+      "state": "no_active_drift",
+      "current_run_length": 0,
+      "last_decision": "not_conflict",
+      "last_review_status": "ok",
+      "last_t_index": 1,
+      "last_date": "2025-11-15"
+    }
+  },
+  "state_comparisons": [],
+  "drift_reasons": [
+    "961a4e3f:self_direction:0:open"
+  ],
+  "top_tensions": [
+    "self_direction"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-11-14",
+      "t_index": 0,
+      "direction": "misaligned",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "I scrubbed the indigo off after lunch."
+    },
+    {
+      "date": "2025-11-14",
+      "t_index": 0,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Mummyji made a comment at lunch about the indigo stains on my fingernails. She didn't say anything directly, just that thing she does where she looks at my hands and then looks at the dal and raises her eyebrows. Ravi..."
+    },
+    {
+      "date": "2025-11-15",
+      "t_index": 1,
+      "direction": "misaligned",
+      "dimensions": [
+        "self_direction"
+      ],
+      "score_mean": null,
+      "excerpt": "I smiled and nodded and said I'd encourage him to be more social."
+    },
+    {
+      "date": "2025-11-15",
+      "t_index": 1,
+      "direction": "context",
+      "dimensions": [
+        "tradition"
+      ],
+      "score_mean": null,
+      "excerpt": "Arjun's parent-teacher meeting today. The class teacher mentioned he draws during free period instead of playing cricket with the other boys and asked if everything is okay at home. I wanted to say, yes, everything is fine, my son likes..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "You scrubbed the indigo from your hands after Mummyji’s pointed look at lunch, and later smiled and nodded when Arjun’s teacher worried about his choice to draw instead of play cricket. “I scrubbed the indigo off after lunch.” Both moments seem to carry the weight of fitting someone else’s expectations, even as your own choices—or Arjun’s—were present underneath.",
+    "tension_explanation": "Across these two moments, you moved away from choosing your own path: hiding the indigo after the lunch exchange and reassuring the teacher rather than naming that Arjun may simply prefer drawing. The pull to honour familiar expectations seems close by, but what you wanted for yourself and for Arjun remains less visible in what you said or did.",
+    "reflective_question": "When you think about the lunch with Mummyji or the meeting about Arjun, which moment most made you set aside what you really wanted to say?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "I scrubbed the indigo off after lunch."
+    ],
+    "word_count": 143,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 143 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

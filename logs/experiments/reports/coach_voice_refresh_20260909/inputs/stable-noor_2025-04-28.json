@@ -1,0 +1,248 @@
+{
+  "scenario_id": "stable-noor",
+  "digest": {
+    "persona_id": "02fb94f3",
+    "persona_name": "Noor Haddad",
+    "week_start": "2025-04-28",
+    "week_end": "2025-05-04",
+    "response_mode": "no_active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 2,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "self_direction",
+      "tradition"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "self_direction": "no_active_drift",
+      "tradition": "no_active_drift"
+    },
+    "drift_details": {
+      "self_direction": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 5,
+        "last_date": "2025-05-02"
+      },
+      "tradition": {
+        "state": "no_active_drift",
+        "current_run_length": 0,
+        "last_decision": "not_conflict",
+        "last_review_status": "ok",
+        "last_t_index": 5,
+        "last_date": "2025-05-02"
+      }
+    },
+    "state_comparisons": [
+      {
+        "core_value": "self_direction",
+        "previous_week_start": "2025-04-21",
+        "previous_week_end": "2025-04-27",
+        "current_week_start": "2025-04-28",
+        "current_week_end": "2025-05-04",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-04-21",
+            "t_index": 2,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+          },
+          {
+            "date": "2025-04-27",
+            "t_index": 3,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-05-02",
+            "t_index": 4,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+          },
+          {
+            "date": "2025-05-02",
+            "t_index": 5,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+          }
+        ]
+      },
+      {
+        "core_value": "tradition",
+        "previous_week_start": "2025-04-21",
+        "previous_week_end": "2025-04-27",
+        "current_week_start": "2025-04-28",
+        "current_week_end": "2025-05-04",
+        "previous_state": "no_active_drift",
+        "current_state": "no_active_drift",
+        "change": "unchanged",
+        "end_reason": null,
+        "previous_evidence": [
+          {
+            "date": "2025-04-21",
+            "t_index": 2,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+          },
+          {
+            "date": "2025-04-27",
+            "t_index": 3,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+          }
+        ],
+        "current_evidence": [
+          {
+            "date": "2025-05-02",
+            "t_index": 4,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+          },
+          {
+            "date": "2025-05-02",
+            "t_index": 5,
+            "direction": "context",
+            "dimensions": [
+              "tradition"
+            ],
+            "score_mean": null,
+            "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+          }
+        ]
+      }
+    ],
+    "drift_reasons": [],
+    "top_tensions": [],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-04-21",
+        "t_index": 2,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+      },
+      {
+        "date": "2025-04-21",
+        "t_index": 2,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+      },
+      {
+        "date": "2025-04-27",
+        "t_index": 3,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+      },
+      {
+        "date": "2025-04-27",
+        "t_index": 3,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+      },
+      {
+        "date": "2025-05-02",
+        "t_index": 4,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+      },
+      {
+        "date": "2025-05-02",
+        "t_index": 4,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Eid preparations are consuming the entire house. Tariq's mother has been cooking since dawn. She made ma'moul and knafeh and keeps sending me to the store for things she forgot. I don't mind the errands but she keeps correcting how..."
+      },
+      {
+        "date": "2025-05-02",
+        "t_index": 5,
+        "direction": "context",
+        "dimensions": [
+          "self_direction"
+        ],
+        "score_mean": null,
+        "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+      },
+      {
+        "date": "2025-05-02",
+        "t_index": 5,
+        "direction": "context",
+        "dimensions": [
+          "tradition"
+        ],
+        "score_mean": null,
+        "excerpt": "Later. Wore the dress. Tariq said I looked nice. His mother didn't comment. My sister-in-law Huda actually asked where I got it. Sami grabbed the embroidery and pulled a thread loose, which honestly made me laugh. Small thing but I..."
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "02d9e8d612ac5396a0f5b0f78adc08bdfa2fa3b106bd29ae00a9d9692ef2acce",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/stable-noor.json",
+  "source_bundle_content_sha256": "5b6022e99b684dc6abb6fa3006468bfdffd8e43737ed700401fafebb4d1527c6",
+  "weekly_digest_event_id": "stable-noor:event:034",
+  "prompt_sha256": "22e43350c62b1cbe257cf60cd337555ad40ec7d9066f2d2c9b3283ded9e17f01"
+}

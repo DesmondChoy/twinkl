@@ -1,0 +1,180 @@
+{
+  "persona_id": "5fa8b540",
+  "persona_name": "Nisha Agarwal",
+  "week_start": "2025-03-03",
+  "week_end": "2025-03-09",
+  "response_mode": "active_drift",
+  "mode_source": "drift_detector",
+  "mode_rationale": "At least one Core Value has active Drift.",
+  "signal_source": "weekly_drift_reviewer",
+  "n_entries": 3,
+  "overall_mean": null,
+  "overall_uncertainty": null,
+  "core_values": [
+    "universalism"
+  ],
+  "goal_context": null,
+  "drift_states": {
+    "universalism": "active_drift"
+  },
+  "drift_details": {
+    "universalism": {
+      "state": "active_drift",
+      "current_run_length": 2,
+      "last_decision": "conflict",
+      "last_review_status": "ok",
+      "last_t_index": 6,
+      "last_date": "2025-03-09"
+    }
+  },
+  "state_comparisons": [
+    {
+      "core_value": "universalism",
+      "previous_week_start": "2025-02-24",
+      "previous_week_end": "2025-03-02",
+      "current_week_start": "2025-03-03",
+      "current_week_end": "2025-03-09",
+      "previous_state": "no_active_drift",
+      "current_state": "active_drift",
+      "change": "active_drift_started",
+      "end_reason": null,
+      "previous_evidence": [
+        {
+          "date": "2025-03-02",
+          "t_index": 3,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Didi called from Bangalore. She's remodelling her flat and asked if I wanted her old furniture shipped to Lucknow. Said no thanks, my room barely fits what I already have. Realized after I hung up that we didn't talk about..."
+        }
+      ],
+      "current_evidence": [
+        {
+          "date": "2025-03-07",
+          "t_index": 4,
+          "direction": "context",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "Finished compiling the mid-term attendance data. Our school's retention rate is up from last year, which the principal seemed happy about. Stayed back to help the peon uncle fix a broken desk in my classroom."
+        },
+        {
+          "date": "2025-03-08",
+          "t_index": 5,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "But I kept quiet because Sharma sir is senior and it was the end of a long day and I didn't have the energy to start something."
+        },
+        {
+          "date": "2025-03-09",
+          "t_index": 6,
+          "direction": "misaligned",
+          "dimensions": [
+            "universalism"
+          ],
+          "score_mean": null,
+          "excerpt": "But today I was tired and the Hazratganj shop was right there and I just wanted to get it done fast. So I spent probably twice as much at a chain store when I could have waited one more day..."
+        }
+      ]
+    }
+  ],
+  "drift_reasons": [
+    "5fa8b540:universalism:5:open"
+  ],
+  "top_tensions": [
+    "universalism"
+  ],
+  "top_strengths": [],
+  "dimensions": [],
+  "evidence": [
+    {
+      "date": "2025-03-02",
+      "t_index": 3,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Didi called from Bangalore. She's remodelling her flat and asked if I wanted her old furniture shipped to Lucknow. Said no thanks, my room barely fits what I already have. Realized after I hung up that we didn't talk about..."
+    },
+    {
+      "date": "2025-03-07",
+      "t_index": 4,
+      "direction": "context",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "Finished compiling the mid-term attendance data. Our school's retention rate is up from last year, which the principal seemed happy about. Stayed back to help the peon uncle fix a broken desk in my classroom."
+    },
+    {
+      "date": "2025-03-08",
+      "t_index": 5,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "But I kept quiet because Sharma sir is senior and it was the end of a long day and I didn't have the energy to start something."
+    },
+    {
+      "date": "2025-03-09",
+      "t_index": 6,
+      "direction": "misaligned",
+      "dimensions": [
+        "universalism"
+      ],
+      "score_mean": null,
+      "excerpt": "But today I was tired and the Hazratganj shop was right there and I just wanted to get it done fast. So I spent probably twice as much at a chain store when I could have waited one more day..."
+    }
+  ],
+  "coach_narrative": {
+    "weekly_mirror": "You noticed, after speaking with Didi, that \"we didn't talk about...\" what might have mattered beyond the furniture. Later, tiredness shaped two choices: staying quiet with Sharma sir and buying quickly at a chain store, even while you knew there was another option.",
+    "tension_explanation": "Across the recent entries, being tired or short on energy seems to have narrowed your choices around speaking up and spending. That sits beside your care for people at school, like staying back to help fix the broken desk, making the tension feel specific rather than simple.",
+    "reflective_question": "When you think about staying quiet with Sharma sir, what do you wish you had been able to say?"
+  },
+  "validation": {
+    "grounded_quotes": [
+      "we didn't talk about..."
+    ],
+    "word_count": 109,
+    "checks": [
+      {
+        "name": "groundedness",
+        "passed": true,
+        "details": "Found 1 quoted phrase(s) that match selected evidence."
+      },
+      {
+        "name": "non_circularity",
+        "passed": true,
+        "details": "Response avoids raw scoring and alignment terminology."
+      },
+      {
+        "name": "value_leakage",
+        "passed": true,
+        "details": "Response avoids naming raw Schwartz value labels."
+      },
+      {
+        "name": "state_claims",
+        "passed": true,
+        "details": "Response makes only supported current-state claims."
+      },
+      {
+        "name": "length",
+        "passed": true,
+        "details": "Combined response length is 109 words (target 25-180)."
+      },
+      {
+        "name": "conversational_voice",
+        "passed": true,
+        "details": "Response avoids recap openings and clinical finding language."
+      }
+    ]
+  }
+}

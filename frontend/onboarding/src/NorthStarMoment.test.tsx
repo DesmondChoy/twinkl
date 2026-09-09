@@ -54,7 +54,7 @@ describe("North Star Moment", () => {
     await renderCard({}, { selectJournalEntry });
     expect(await screen.findByText(quote)).toBeTruthy();
     expect(screen.queryByText("North Star Moment")).toBeNull();
-    expect(screen.getByText(/earlier action expressed a priority/)).toBeTruthy();
+    expect(screen.getByText(/You’ve acted on what matters to you before/)).toBeTruthy();
     expect(screen.getByText(quote).tagName).toBe("BLOCKQUOTE");
     expect(screen.getByRole("heading", { name: "A past moment in your own words" })).toBeTruthy();
     await user.click(screen.getByRole("link", { name: /Open Journal Entry/ }));
@@ -85,14 +85,14 @@ describe("North Star Moment", () => {
       weeklyDigest: { week_start: "2026-06-29", week_end: "2026-07-05" },
       driftResult: { delivery_state: "no_active_drift", core_value_states: {} },
     });
-    expect(await screen.findByText(/one way you put this priority into practice/)).toBeTruthy();
+    expect(await screen.findByText(/Here’s a moment worth holding onto/)).toBeTruthy();
     expect(screen.queryByText("This earlier writing is a reference point for your Core Value.")).toBeNull();
   });
 
   it("frames an older example as a reminder when no conflict is active", async () => {
     await renderCard({ mode: "reminder" }, { driftResult: { delivery_state: "no_active_drift" } });
-    expect(await screen.findByText(/earlier action is a reminder/)).toBeTruthy();
-    expect(screen.queryByText(/one way you put this priority into practice/)).toBeNull();
+    expect(await screen.findByText(/Your earlier words offer a reminder/)).toBeTruthy();
+    expect(screen.queryByText(/Here’s a moment worth holding onto/)).toBeNull();
   });
 
   it.each([

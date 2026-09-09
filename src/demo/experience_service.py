@@ -1251,7 +1251,9 @@ class InMemoryExperienceService:
                 generation_failed = narrative is None
 
         if narrative is not None:
-            validation = validate_weekly_digest_narrative(digest, narrative)
+            validation = validate_weekly_digest_narrative(
+                digest, narrative, validate_voice=True
+            )
         validation_errors = (
             [check.details for check in validation.checks if not check.passed]
             if validation is not None

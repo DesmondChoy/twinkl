@@ -244,10 +244,16 @@ Fast, objective checks that don't require LLM calls:
 | **Non-circularity** | % of Coach Digest responses that avoid score and alignment jargon | > 95% |
 | **Raw value leakage** | Response does not expose raw Schwartz value labels | Reported |
 | **Current-state claims** | Response does not make an unsupported positive-change claim | Reported |
+| **Conversational voice** | New responses avoid calendar-recap openings and the narrow clinical finding phrases checked by code; quoted user wording is preserved | Reported from prompt `4.4` |
 | **Length** | Coach Digest response remains within 25-180 words | > 90% |
 
 **Current code status:**
 - Coach Digest responses: validated by `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
+- New generation and live display enable conversational-voice checks. Historical
+  responses retain their original validation rules. These wording checks do not
+  establish warmth, semantic correctness, or human benefit; the
+  [9 September refresh](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
+  records the associated generation and separate AI editorial review.
 - LLM-Judge rationales: still planned as a batch checker in `src/judge/`
 
 **Reference implementation shape:**

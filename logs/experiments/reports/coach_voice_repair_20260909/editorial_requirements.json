@@ -1,0 +1,28 @@
+{
+  "active-nisha::2025-02-17": [
+    "Do not copy trailing input-truncation markers (...) or unfinished phrases into the reflection. Do not complete omitted text or add words to a quotation; any quotation must be a complete, meaningful phrase exactly present in the supplied evidence.",
+    "Do not hang a sentence on the unfinished phrase about gripping the pencil. Do not narrate an evaluation of the entries or evidence."
+  ],
+  "active-nisha::2025-02-24": [
+    "Do not copy trailing input-truncation markers (...) or unfinished phrases into the reflection. Do not complete omitted text or add words to a quotation; any quotation must be a complete, meaningful phrase exactly present in the supplied evidence.",
+    "Do not portray declining furniture because of limited room space as an expression of fairness, ethical behavior, or making the world better. Do not invent a moral connection between the practical furniture choice and the teaching moment."
+  ],
+  "active-nisha::2025-03-03": [
+    "Do not copy trailing input-truncation markers (...) or unfinished phrases into the reflection. Do not complete omitted text or add words to a quotation; any quotation must be a complete, meaningful phrase exactly present in the supplied evidence.",
+    "Do not open with the unfinished phrase about what Didi and Nisha did not talk about, or guess what was omitted. Do not add unprovided motives or details to the supplied silence, tiredness, spending, or desk-repair moments."
+  ],
+  "stable-noor::2025-04-28": [
+    "Do not copy trailing input-truncation markers (...) or unfinished phrases into the reflection. Do not complete omitted text or add words to a quotation; any quotation must be a complete, meaningful phrase exactly present in the supplied evidence.",
+    "Do not use the unfinished phrase Small thing but I as a quotation. Do not describe what the writing leaves present or what the entries show; avoid treating the person as the subject of textual analysis."
+  ],
+  "uncertain-wei-jun::2025-06-23": [
+    "Do not turn a request to cut corners on the data validation layer into a request to cut or remove the whole validation layer.",
+    "Do not claim that the writing does not say what was chosen, that no choice was made, or that the user has not recorded a decision. The supplied excerpts may omit context; do not infer facts from that omission.",
+    "Do not ask the user to repeat what they decided or presume a particular decision. Do not fill in omitted events. Keep uncertainty and the question about the lived pressure or priorities, without narrating evidence sufficiency."
+  ],
+  "uncertain-wei-jun::2025-06-30": [
+    "Do not turn Xiao Yu asking whether the user helps everyone into a claim that the user described their work as helping everyone. Do not complete the omitted answer after I said I.",
+    "Do not say or imply that the user never raised the data-validation concern, or question whether they found a way to raise it. The supplied words about waiting to escalate do not establish that no concern was raised.",
+    "Do not presume an unstated motive or missing event. Avoid discussing whether the writing leaves enough information; keep the question open about the lived pressure, feelings, or priorities."
+  ]
+}

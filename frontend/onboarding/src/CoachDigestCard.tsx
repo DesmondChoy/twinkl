@@ -71,7 +71,6 @@ export default function CoachDigestCard({
   )).map((entry) => entry.content);
   const paragraphs = [weeklyMirror, tensionExplanation, reflectiveQuestion];
   const expanded = paragraphs.map((text) => expandCoachQuotations(text, sources));
-  const hasExpandedQuotes = expanded.some((row, index) => row.text !== paragraphs[index]);
   const openEntry = (event: MouseEvent<HTMLAnchorElement>, entry: JournalEntryContract) => {
     if (onOpenEntry) {
       event.preventDefault();
@@ -108,7 +107,6 @@ export default function CoachDigestCard({
       ))}
       {sourceEntries.length > 0 ? (
         <nav className="coach-digest__sources" aria-label="Coach Digest Journal Entries">
-          <p>Read the supporting Journal Entries</p>
           <ul>
             {sourceEntries.map((entry) => (
               <li key={entry.journal_entry_id}>
@@ -121,9 +119,6 @@ export default function CoachDigestCard({
               </li>
             ))}
           </ul>
-          {hasExpandedQuotes ? (
-            <small>Truncated quotations are expanded from these Journal Entries.</small>
-          ) : null}
         </nav>
       ) : null}
       {northStar ? (
@@ -136,6 +131,7 @@ export default function CoachDigestCard({
         />
       ) : null}
       {fullQuotations(expanded[2])}
+      <p className="coach-digest__question-label">Something to reflect on</p>
       <p className="coach-digest__question">{expanded[2].text}</p>
     </aside>
   );

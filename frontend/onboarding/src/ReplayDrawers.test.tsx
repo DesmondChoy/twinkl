@@ -17,14 +17,14 @@ const week: ScenarioWeekContract = {
   expected_delivery_state: "no_active_drift",
 };
 
-function renderDrawer(kind: "Journal Entry" | "AI review") {
+function renderDrawer(kind: "Journal Entry" | "AI review", journalContent = entry.content) {
   const backgroundAction = vi.fn();
   const rendered = render(
     <>
       <button onClick={backgroundAction}>Inspect this moment</button>
       {kind === "Journal Entry" ? (
         <ReplayTimeline
-          profile={profile} week={week} journalEntries={[entry]} nudges={[]}
+          profile={profile} week={week} journalEntries={[{ ...entry, content: journalContent }]} nudges={[]}
           reviewedJournalEntries={[entry]} weeklyReviewerDecisions={[]}
           reviewTraceEvents={[]} selectedJournalEntryId={null} cumulativeEntryCount={1}
           resultVisible={false} onRevealResult={() => undefined} driftResult={null}
@@ -53,7 +53,7 @@ function renderDrawer(kind: "Journal Entry" | "AI review") {
   return { ...rendered, trigger, backgroundAction };
 }
 
-describe.each(["Journal Entry", "AI review"] as const)("%s modal drawer", (kind) => {
+describe.each(["Journal Entry", "AI review"] as const)("%s dialog", (kind) => {
   it("keeps keyboard focus inside and disables the background until Escape restores focus", async () => {
     const user = userEvent.setup();
     const { container, trigger, backgroundAction } = renderDrawer(kind);
@@ -117,4 +117,17 @@ describe.each(["Journal Entry", "AI review"] as const)("%s modal drawer", (kind)
       unavailable.remove();
     }
   });
+});
+
+it("keeps all 50 preview words and preserves the full Journal Entry's paragraphs in the dialog", async () => {
+  const user = userEvent.setup();
+  const words = Array.from({ length: 62 }, (_, index) => `word${index + 1}`);
+  const content = `${words.slice(0, 30).join(" ")}\n\n${words.slice(30).join(" ")}`;
+  const { trigger } = renderDrawer("Journal Entry", content);
+  expect(trigger.querySelector(".replay-entry__excerpt")?.textContent)
+    .toBe(`${words.slice(0, 50).join(" ")}…`);
+
+  await user.click(trigger);
+  expect(screen.getByRole("dialog").querySelector(".replay-entry-drawer__content")?.textContent)
+    .toBe(content);
 });

@@ -11,6 +11,7 @@ import OnboardingScoreInspection from "./OnboardingScoreInspection";
 import { northStarFraming } from "./northStar";
 import { displayWeekRange } from "./displayFormatters";
 import { isWeeklyEvent, weeklyRunContext } from "./weeklyRun";
+import "./northStarInspect.css";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -380,19 +381,120 @@ function TraceFacts({ event }: { event: TraceEventContract }) {
   );
 }
 
+function parsedRecord(value: unknown): JsonRecord | null {
+  if (typeof value !== "string") return record(value);
+  try {
+    return record(JSON.parse(value));
+  } catch {
+    return null;
+  }
+}
+
+interface NorthStarReviewEvidence {
+  request: JsonRecord;
+  input: JsonRecord | null;
+  attempts: JsonRecord[];
+  receipt: JsonRecord;
+  label: string;
+}
+
+function northStarReviewEvidence(result: JsonRecord): NorthStarReviewEvidence[] {
+  const experiment = record(result.experiment);
+  const reviews = array(experiment ? experiment.receipts : result.reviews);
+  return reviews.flatMap((value, index) => {
+    const receipt = record(value);
+    const request = record(experiment ? receipt?.request : receipt?.provider_request);
+    if (!receipt || !request) return [];
+    const input = parsedRecord(request.prompt);
+    return [{
+      request,
+      input,
+      receipt,
+      attempts: array(experiment ? receipt.attempts : receipt.provider_attempts)
+        .flatMap((attempt) => record(attempt) ? [record(attempt)!] : []),
+      label: string(input?.user_phrase) ?? string(receipt.value_phrase)
+        ?? string(input?.core_value) ?? `Core Value ${index + 1}`,
+    }];
+  });
+}
+
+function NorthStarAssessment({ review, selected }: {
+  review: NorthStarReviewEvidence;
+  selected: JsonRecord | null;
+}) {
+  const lastAttempt = review.attempts.at(-1);
+  const response = parsedRecord(lastAttempt?.raw_text) ?? record(lastAttempt?.parsed_output);
+  const assessments = array(response?.results).flatMap((item) => record(item) ? [record(item)!] : []);
+  return (
+    <section className="nsm-inspect__review">
+      <h5>{review.label}</h5>
+      <p>{lastAttempt
+        ? `Last recorded attempt: ${titleCase(string(lastAttempt.status) ?? "unknown")}.`
+        : "No provider attempt is recorded for this prepared request."}</p>
+      {lastAttempt && lastAttempt.status !== "completed" ? (
+        <p>This attempt did not produce an accepted response. Any response below is recorded evidence, not an accepted selection.</p>
+      ) : null}
+      {assessments.length === 0 ? <p>No readable source assessment is available in the recorded response.</p> : null}
+      {assessments.map((assessment, index) => {
+        const isSelected = selected !== null && selected.entry_id === assessment.entry_id
+          && selected.evidence_quote === assessment.evidence_quote;
+        return (
+          <details className="nsm-inspect__source" key={`${String(assessment.entry_id)}:${index}`} open={isSelected}>
+            <summary>
+              <span>{string(assessment.entry_id) ?? `Source ${index + 1}`}</span>
+              <span>{isSelected ? "Selected quotation" : titleCase(string(assessment.reason_code) ?? "No reason recorded")}</span>
+            </summary>
+            <dl className="nsm-inspect__assessments">
+              <div><dt>What did the writer do?</dt><dd>{string(assessment.action_assessment) ?? "Not recorded"}</dd></div>
+              <div><dt>How does the action relate to this Core Value?</dt><dd>{string(assessment.value_assessment) ?? "Not recorded"}</dd></div>
+              <div><dt>Does this source also show opposing behavior?</dt><dd>{string(assessment.conflict_assessment) ?? "Not recorded"}</dd></div>
+              <div><dt>AI reason</dt><dd>{titleCase(string(assessment.reason_code) ?? "Not recorded")}</dd></div>
+            </dl>
+            {string(assessment.evidence_quote) ? <blockquote>{string(assessment.evidence_quote)}</blockquote> : null}
+          </details>
+        );
+      })}
+      <details className="inspect-technical">
+        <summary>Every provider attempt and exact response</summary>
+        {review.attempts.map((attempt, index) => (
+          <div key={index}>
+            {typeof attempt.raw_text === "string" ? (
+              <TextBlock label={`Exact response · ${review.label} · attempt ${index + 1}`} value={attempt.raw_text} />
+            ) : null}
+            <JsonBlock label={`Provider receipt · ${review.label} · attempt ${index + 1}`} value={attempt} />
+          </div>
+        ))}
+        {array(review.receipt.validation_errors).length > 0 ? (
+          <JsonBlock label={`Response validation errors · ${review.label}`} value={review.receipt.validation_errors} />
+        ) : null}
+      </details>
+    </section>
+  );
+}
+
 function NorthStarInspection({ event }: { event: TraceEventContract }) {
   const result = record(event.details.record);
   if (!result) return null;
-  const selected = record(result.selected);
+  const selected = result.status === "complete" && event.validation?.valid !== false
+    ? record(result.selected) : null;
   const selectedSource = array(result.sources).map(record)
     .find((source) => source?.entry_id === selected?.entry_id);
   const experiment = record(result.experiment);
-  const savedOutput = record(experiment?.output);
-  const framing = result.status === "complete" && selected
-    ? northStarFraming(result.mode) : null;
+  const reviews = northStarReviewEvidence(result);
+  const framing = selected ? northStarFraming(result.mode) : null;
+  const outcome = selected ? "An exact quotation was selected."
+    : result.status === "complete" && result.reason === "no_supportive_source"
+      ? "The review completed without a suitable quotation."
+      : result.status === "not_eligible" ? "This weekly result was not eligible for a North Star Moment."
+        : result.status === "pending" ? "No completed North Star Moment review is available."
+          : "No accepted North Star Moment is available from this record.";
   return (
-    <section className="inspect-north-star" aria-labelledby={`moment-inspect-${event.event_id}`}>
-      <h3 id={`moment-inspect-${event.event_id}`}>Moment source and composition</h3>
+    <section className="inspect-north-star nsm-inspect" aria-labelledby={`moment-inspect-${event.event_id}`}>
+      <h3 id={`moment-inspect-${event.event_id}`}>How this North Star Moment was derived</h3>
+      <p className="nsm-inspect__outcome">{outcome}</p>
+      <p>{experiment
+        ? "Saved replay: these are the original recorded provider requests and responses. Opening Inspect does not call a model."
+        : "These requests and responses belong to this Experience session. Opening Inspect does not run another review."}</p>
       <dl className="trace-facts">
         <div><dt>Eligibility outcome</dt><dd>{titleCase(string(result.reason) ?? "unavailable")}</dd></div>
         <div><dt>Recorded status</dt><dd>{titleCase(string(result.status) ?? "unavailable")}</dd></div>
@@ -405,34 +507,107 @@ function NorthStarInspection({ event }: { event: TraceEventContract }) {
           </>
         ) : null}
       </dl>
-      {framing ? (
-        <>
-          <TextBlock label="Deterministic introduction" value={framing} />
-          <p>The interface inserts this fixed introduction and the exact quotation into an available Coach Digest before its existing reflective question. It does not rewrite the generated response.</p>
-        </>
-      ) : null}
       {typeof selected?.evidence_quote === "string" ? (
-        <TextBlock label="Exact selected quotation" value={selected.evidence_quote} />
+        <blockquote aria-label="Exact selected quotation">{selected.evidence_quote}</blockquote>
       ) : null}
-      <details className="inspect-technical">
-        <summary>Source checks and AI assessment</summary>
-        <p>Recorded AI assessment is not human validation. Experience also checks the current Profile, Journal Entry text, weekly result, ownership, and chronology before displaying this passage.</p>
-        <JsonBlock label="Source checks" value={{
-          validation: event.validation,
-          evidence: result.validation_evidence ?? [],
-          owner_id: result.owner_id,
-          profile_ref: result.profile_ref,
-          input_hash: result.input_hash,
-          week_start: result.week_start,
-          week_end: result.week_end,
-          cutoff_at: result.cutoff_at,
-          source_available_at: selected?.quote_source === "nudge_response"
-            ? selectedSource?.response_available_at : selectedSource?.available_at,
-          onset_available_at: result.onset_available_at,
-        }} />
-        <JsonBlock label="AI assessment" value={array(result.reviews).length > 0
-          ? result.reviews : savedOutput?.source_reviews ?? []} />
-      </details>
+
+      <section className="nsm-inspect__step">
+        <h4>1. Choose eligible writing</h4>
+        <p>The application chooses the Core Value and source window before the AI review. Active Drift uses writing from before its onset; otherwise, eligible writing runs through the reviewed week. Sources stay in newest-first order, with no embedding ranking.</p>
+        <p>The model receives the Core Value phrase, its approved definition, and the complete eligible Journal Entries and user nudge responses in each request below. Persona biographies and Weekly Drift Reviewer Decisions are not semantic evidence for this review.</p>
+        <p>Review cutoff: <code>{string(result.cutoff_at) ?? "Not recorded"}</code>{result.onset_date ? ` · Active Drift onset: ${String(result.onset_date)}` : ""}</p>
+        {reviews.length === 0 ? (
+          <p>{result.status === "not_eligible"
+            ? "No source-review request was needed for this ineligible result."
+            : "No source-review request is preserved in this record."}</p>
+        ) : null}
+        {reviews.map((review, index) => {
+          const sources = array(review.input?.sources).flatMap((source) => record(source) ? [record(source)!] : []);
+          return (
+            <details className="inspect-technical" key={index}>
+              <summary>{review.label} · {countLabel(sources.length, "Journal Entry", "Journal Entries")} · full request writing</summary>
+              <p>{review.attempts.length > 0 ? "Writing in the recorded provider request." : "Prepared writing; no provider attempt is recorded."}</p>
+              <p><strong>Approved definition:</strong> {string(review.input?.approved_definition) ?? "Not readable in the recorded request"}</p>
+              {sources.map((source, sourceIndex) => (
+                <section className="nsm-inspect__writing" key={`${String(source.entry_id)}:${sourceIndex}`}>
+                  <h5>{sourceIndex + 1}. {string(source.entry_id) ?? "Source identifier unavailable"}</h5>
+                  <p className="nsm-inspect__source-label">Journal Entry</p>
+                  <p className="nsm-inspect__full-text">{string(source.journal_entry) ?? "No Journal Entry text supplied."}</p>
+                  {typeof source.nudge_response === "string" ? (
+                    <><p className="nsm-inspect__source-label">User nudge response</p><p className="nsm-inspect__full-text">{source.nudge_response}</p></>
+                  ) : null}
+                </section>
+              ))}
+            </details>
+          );
+        })}
+      </section>
+
+      <section className="nsm-inspect__step">
+        <h4>2. Read the exact prompts</h4>
+        <p>The system prompt asks for factual assessments and an exact quotation for each suitable source. The user message supplies the writing; the response schema defines the required output.</p>
+        {reviews.length === 0 ? <p>No prompt is preserved because this record contains no source-review request.</p> : null}
+        {reviews.map((review, index) => {
+          const attempt = review.attempts.at(-1);
+          return (
+            <details className="inspect-technical" key={index}>
+              <summary>{review.label} · exact prompts and response schema</summary>
+              <dl className="trace-facts">
+                <div><dt>Requested model</dt><dd>{string(attempt?.requested_model) ?? "No provider attempt recorded"}</dd></div>
+                <div><dt>Actual model</dt><dd>{string(attempt?.actual_model) ?? "Not recorded"}</dd></div>
+                <div><dt>Reasoning effort</dt><dd>{string(attempt?.reasoning_effort) ?? "Not recorded"}</dd></div>
+                <div><dt>Recorded attempts</dt><dd>{review.attempts.length}</dd></div>
+              </dl>
+              {typeof review.request.system === "string" ? <TextBlock label={`Exact system prompt · ${review.label}`} value={review.request.system} /> : <p>The system prompt is missing.</p>}
+              {typeof review.request.prompt === "string" ? <TextBlock label={`Exact user message · ${review.label}`} value={review.request.prompt} /> : <p>The user message is missing.</p>}
+              <JsonBlock label={`Exact response schema · ${review.label}`} value={review.request.schema ?? null} />
+              <JsonBlock label={`Complete input token receipt · ${review.label}`} value={review.receipt.count_receipt ?? review.receipt.input_receipt ?? null} />
+            </details>
+          );
+        })}
+      </section>
+
+      <section className="nsm-inspect__step">
+        <h4>3. Follow the AI assessment</h4>
+        <p>The recorded model response answers three questions for every source. These are the runtime AI assessments used to derive the Moment, not human validation or a separate benchmark evaluator’s verdict.</p>
+        {reviews.length === 0 ? <p>No AI source assessment is recorded for this result.</p> : null}
+        {reviews.map((review, index) => <NorthStarAssessment key={index} review={review}
+          selected={review.input?.core_value === result.core_value ? selected : null} />)}
+      </section>
+
+      <section className="nsm-inspect__step">
+        <h4>4. Apply the selection rule and source checks</h4>
+        <p>The model assesses sources; application code chooses the quotation. An observable choice becomes eligible, ambiguous or insufficient writing produces an abstention, and other reasons exclude the source. Same-value opposing behavior excludes the entire source.</p>
+        <p>For Active Drift, the application reviews the Core Value with the longest current run, using confirmed Profile order to break ties. Otherwise, it reviews Core Values in confirmed Profile order and prefers a current-week supportive source. It then takes the first eligible source in that value and source order. It does not rank quotations as “best.”</p>
+        {selected ? <p>The selected source is <code>{string(selected.entry_id)}</code> for {string(result.value_phrase) ?? string(result.core_value)}.</p> : <p>No quotation from this record is added to the Coach Digest.</p>}
+        <p>Code checks source membership, identity, chronology, complete responses, and exact continuous quotation matching. It cannot prove the AI’s interpretation is correct.</p>
+        <details className="inspect-technical">
+          <summary>Recorded application validation and source checks</summary>
+          <p>These are recorded check results and source bindings. A valid record can describe an intentional no-card outcome.</p>
+          <JsonBlock label="Source checks" value={{
+            validation: event.validation,
+            evidence: result.validation_evidence ?? [],
+            owner_id: result.owner_id,
+            profile_ref: result.profile_ref,
+            input_hash: result.input_hash,
+            week_start: result.week_start,
+            week_end: result.week_end,
+            cutoff_at: result.cutoff_at,
+            source_available_at: selected?.quote_source === "nudge_response"
+              ? selectedSource?.response_available_at : selectedSource?.available_at,
+            onset_available_at: result.onset_available_at,
+            source_ids: result.source_ids,
+            retryable: result.retryable,
+          }} />
+        </details>
+        {framing ? (
+          <div className="nsm-inspect__composition">
+            <h5>Where it appears in Your weekly reflection</h5>
+            <p>The full selected quotation is inserted as a North Star Moment passage after the Coach Digest narrative and before its reflective question. Its wording is preserved; the selected text is not sent back to rewrite the narrative.</p>
+            <p>Introduction: {framing}</p>
+          </div>
+        ) : null}
+      </section>
     </section>
   );
 }
@@ -531,6 +706,7 @@ export default function InspectView({
     () => new Set(selectedEventId ? [selectedEventId] : []),
   );
   const [activeFilter, setActiveFilter] = useState<InspectFilter>("all");
+  const [pendingEventFocus, setPendingEventFocus] = useState<string | null>(null);
   const eventNumbers = useMemo(
     () => new Map(events.map((event, index) => [event.event_id, index + 1])),
     [events],
@@ -614,6 +790,16 @@ export default function InspectView({
       return next;
     });
   };
+
+  useEffect(() => {
+    if (!pendingEventFocus) return;
+    const target = eventRefs.current.get(pendingEventFocus);
+    const history = target?.closest<HTMLDetailsElement>(".inspect-history");
+    if (history) history.open = true;
+    target?.focus({ preventScroll: true });
+    target?.scrollIntoView?.({ block: "start" });
+    setPendingEventFocus(null);
+  }, [pendingEventFocus]);
 
   const renderTimeline = (
     displayedEvents: TraceEventContract[],
@@ -821,7 +1007,12 @@ export default function InspectView({
                 <div>
                   <strong>North Star Moment</strong>
                   <p>{eventSummary(northStarEvent, currentJournalEntryIdSet)}</p>
-                  <small>AI-reviewed writing with exact quotation, ownership, and chronology checks. Open Technical details below for source and provider records.</small>
+                  <small>Follow the full writing, exact prompts, AI assessments, and application selection checks.</small>
+                  <button className="inspect-run-link" type="button" onClick={() => {
+                    setActiveFilter("all");
+                    setEventExpanded(northStarEvent.event_id, true);
+                    setPendingEventFocus(northStarEvent.event_id);
+                  }}>Inspect North Star Moment</button>
                 </div>
               </li>
             ) : null}

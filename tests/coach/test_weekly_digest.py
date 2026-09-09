@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from prompts import get_prompt_metadata
 from src.coach.schemas import (
@@ -876,6 +877,87 @@ def _pad_to_word_count(text: str, target: int) -> str:
     while len(words) < target:
         words.append(filler[len(words) % len(filler)])
     return " ".join(words)
+
+
+@pytest.mark.parametrize("opening", [
+    "This week, you made room for family.",
+    "Nisha, this week held a few moments of care.",
+    "Your week held some difficult choices.",
+    "Looking back on this week, you had a lot to carry.",
+])
+def test_new_coach_responses_reject_recap_openings(opening):
+    narrative = CoachNarrative(
+        weekly_mirror=opening,
+        tension_explanation='You wrote "called my mom" after a long day at work.',
+        reflective_question="What was it like to hear her voice?",
+    )
+    validation = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validate_voice=True
+    )
+    assert not next(c for c in validation.checks
+                    if c.name == "conversational_voice").passed
+
+
+@pytest.mark.parametrize("explanation", [
+    "There is no confirmed current tension here.",
+    "There is no clear tension to name.",
+    "The available evidence shows that you were there for your family.",
+    "What does the contrast between these moments mean?",
+])
+def test_new_coach_responses_reject_clinical_summary_language(explanation):
+    narrative = CoachNarrative(
+        weekly_mirror='You found time for a call: "called my mom".',
+        tension_explanation=explanation,
+        reflective_question="What was it like to hear her voice?",
+    )
+    validation = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validate_voice=True
+    )
+    assert not next(c for c in validation.checks
+                    if c.name == "conversational_voice").passed
+
+
+def test_voice_checks_preserve_quoted_words_and_historical_validation():
+    narrative = CoachNarrative(
+        weekly_mirror='You wrote "This week, I called my mom" after a long day.',
+        tension_explanation="There was room to talk even with so much to do.",
+        reflective_question="What was it like to hear her voice?",
+    )
+    validation = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validate_voice=True
+    )
+    assert next(c for c in validation.checks
+                if c.name == "conversational_voice").passed
+    historical = narrative.model_copy(
+        update={"weekly_mirror": "This week you called home."}
+    )
+    assert "conversational_voice" not in {
+        c.name for c in validate_weekly_digest_narrative(
+            _digest_with_evidence(), historical
+        ).checks
+    }
+
+
+def test_generation_applies_voice_check_and_retains_rejected_receipt():
+    response = {
+        "weekly_mirror": 'This week, you wrote "called my mom" after work.',
+        "tension_explanation": (
+            "You found a little time for a conversation with someone close to you."
+        ),
+        "reflective_question": "What was it like to hear her voice?",
+    }
+
+    async def complete(*args):
+        return json.dumps(response)
+
+    diagnostic, _ = asyncio.run(generate_weekly_digest_coach_diagnostic(
+        _digest_with_evidence(), complete
+    ))
+    assert diagnostic.accepted is False
+    assert diagnostic.failure_stage == "coach_validation"
+    assert json.loads(diagnostic.raw_output) == response
+    assert any("conversational_voice" in failure
+               for failure in diagnostic.failure_details)
 
 
 def test_validation_flags_ungrounded_quotes():

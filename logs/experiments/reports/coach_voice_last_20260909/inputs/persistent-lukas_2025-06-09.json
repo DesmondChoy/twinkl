@@ -1,0 +1,81 @@
+{
+  "scenario_id": "persistent-lukas",
+  "digest": {
+    "persona_id": "a24b8d8f",
+    "persona_name": "Lukas Vetter",
+    "week_start": "2025-06-09",
+    "week_end": "2025-06-15",
+    "response_mode": "active_drift",
+    "mode_source": "drift_detector",
+    "mode_rationale": "At least one Core Value has active Drift.",
+    "signal_source": "weekly_drift_reviewer",
+    "n_entries": 3,
+    "overall_mean": null,
+    "overall_uncertainty": null,
+    "core_values": [
+      "universalism"
+    ],
+    "goal_context": null,
+    "drift_states": {
+      "universalism": "active_drift"
+    },
+    "drift_details": {
+      "universalism": {
+        "state": "active_drift",
+        "current_run_length": 2,
+        "last_decision": "conflict",
+        "last_review_status": "ok",
+        "last_t_index": 2,
+        "last_date": "2025-06-14"
+      }
+    },
+    "state_comparisons": [],
+    "drift_reasons": [
+      "a24b8d8f:universalism:1:open"
+    ],
+    "top_tensions": [
+      "universalism"
+    ],
+    "top_strengths": [],
+    "dimensions": [],
+    "evidence": [
+      {
+        "date": "2025-06-10",
+        "t_index": 0,
+        "direction": "context",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "Helped Amira debug the intake form tonight at the nonprofit. She'd been stuck on a date-parsing issue for two days and we sorted it in twenty minutes. Small thing, but it felt like the right use of a Tuesday evening...."
+      },
+      {
+        "date": "2025-06-11",
+        "t_index": 1,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "I sat there and said nothing."
+      },
+      {
+        "date": "2025-06-14",
+        "t_index": 2,
+        "direction": "misaligned",
+        "dimensions": [
+          "universalism"
+        ],
+        "score_mean": null,
+        "excerpt": "I picked convenience and cost"
+      }
+    ],
+    "coach_narrative": null,
+    "validation": null
+  },
+  "input_sha256": "1b5a85d628cd1794077f164dda80df910f121d086cdcc823e03d2f92672fd295",
+  "source_bundle_path": "frontend/onboarding/public/scenarios/persistent-lukas.json",
+  "source_bundle_content_sha256": "e3ec28aa786a9e8e90f85a6578f041447d3419948c26c95a538f8d48b9bbaf44",
+  "weekly_digest_event_id": "persistent-lukas:event:016",
+  "prompt_sha256": "57ee68bb09897eb51039c896e73a2f17eb166e25a067af72f3b98548924d95f5"
+}
