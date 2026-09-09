@@ -11,6 +11,7 @@ import OnboardingScoreInspection from "./OnboardingScoreInspection";
 import { northStarFraming } from "./northStar";
 import { displayWeekRange } from "./displayFormatters";
 import { isWeeklyEvent, weeklyRunContext } from "./weeklyRun";
+import { coachPromptParts, savedCoachComparison, type CoachComparison } from "./coachComparison";
 import "./northStarInspect.css";
 
 type JsonRecord = Record<string, unknown>;
@@ -472,7 +473,62 @@ function NorthStarAssessment({ review, selected }: {
   );
 }
 
-function NorthStarInspection({ event }: { event: TraceEventContract }) {
+function CoachComparisonInspection({ comparison }: { comparison: CoachComparison }) {
+  const common = coachPromptParts(comparison.without_north_star.base_prompt)!;
+  return (
+    <section className="inspect-coach-comparison" aria-label="Coach Digest prompt and response comparison">
+      <h3>Coach Digest with and without North Star Moment</h3>
+      <p>Two saved responses for the same Persona and week. Between the initial requests, only <code>north_star_context</code> changes. Opening Inspect or switching the reflection makes no provider call.</p>
+      <p>AI-generated synthetic demonstration evidence; these differences do not establish user benefit.</p>
+      <details className="inspect-technical">
+        <summary>Shared instructions and unchanged weekly input</summary>
+        <TextBlock label="Exact common initial instructions" value={common.instructions} />
+        <JsonBlock label="Unchanged weekly input" value={Object.fromEntries(Object.entries(common.input)
+          .filter(([key]) => key !== "north_star_context"))} />
+      </details>
+      {([ ["without_north_star", "Without North Star Moment"], ["with_north_star", "With North Star Moment"] ] as const)
+        .map(([key, label]) => {
+          const arm = comparison[key];
+          const input = coachPromptParts(arm.prompt)!.input;
+          const retried = arm.base_prompt !== arm.prompt;
+          return (
+            <section className="inspect-coach-comparison__arm" aria-label={label} key={key}>
+              <h4>{label}</h4>
+              <JsonBlock label={`${label}: north_star_context`} value={input.north_star_context} />
+              <details className="inspect-technical" open>
+                <summary>{label}: exact prompt and associated response</summary>
+                <TextBlock label={`${label}: exact accepted prompt`} value={arm.prompt} />
+                {retried ? (
+                  <details className="inspect-technical">
+                    <summary>Initial request and repair feedback</summary>
+                    <p>The accepted response below belongs to the accepted prompt above, which includes repair feedback.</p>
+                    <TextBlock label={`${label}: exact initial prompt`} value={arm.base_prompt} />
+                    <JsonBlock label={`${label}: repair requirements`} value={arm.repair_requirements} />
+                  </details>
+                ) : null}
+                <section className="inspect-coach-comparison__response" aria-label={`${label}: associated response`}>
+                  <h5>Associated Coach Digest response</h5>
+                  <p>{arm.narrative.weekly_mirror}</p>
+                  <p>{arm.narrative.tension_explanation}</p>
+                  <h5>Something to reflect on</h5>
+                  <p>{arm.narrative.reflective_question}</p>
+                </section>
+                <TextBlock label={`${label}: exact raw provider response`} value={arm.raw_output} />
+              </details>
+              <details className="inspect-technical">
+                <summary>{label}: validation and generation receipt</summary>
+                <JsonBlock label={`${label}: validation`} value={arm.validation} />
+                <JsonBlock label={`${label}: generation receipt`} value={Object.fromEntries(Object.entries(arm)
+                  .filter(([field]) => !["narrative", "validation", "base_prompt", "prompt", "raw_output"].includes(field)))} />
+              </details>
+            </section>
+          );
+        })}
+    </section>
+  );
+}
+
+function NorthStarInspection({ event, comparison }: { event: TraceEventContract; comparison: CoachComparison | null }) {
   const result = record(event.details.record);
   if (!result) return null;
   const selected = result.status === "complete" && event.validation?.valid !== false
@@ -603,7 +659,9 @@ function NorthStarInspection({ event }: { event: TraceEventContract }) {
         {framing ? (
           <div className="nsm-inspect__composition">
             <h5>Where it appears in Your weekly reflection</h5>
-            <p>The full selected quotation is inserted as a North Star Moment passage after the Coach Digest narrative and before its reflective question. Its wording is preserved; the selected text is not sent back to rewrite the narrative.</p>
+            <p>{comparison
+              ? "The saved demo starts with the response generated without North Star Moment. Switching to the with-context response replaces both narrative paragraphs and its reflective question, and displays this exact quotation between them. The selected quotation and its full source were supplied to the with-context request; both prompts and responses are recorded in the Coach Digest comparison."
+              : "The full selected quotation is inserted as a North Star Moment passage after the Coach Digest narrative and before its reflective question. Its wording is preserved; the selected text is not sent back to rewrite the narrative."}</p>
             <p>Introduction: {framing}</p>
           </div>
         ) : null}
@@ -612,7 +670,7 @@ function NorthStarInspection({ event }: { event: TraceEventContract }) {
   );
 }
 
-function EventDetails({ event }: { event: TraceEventContract }) {
+function EventDetails({ event, comparison }: { event: TraceEventContract; comparison: CoachComparison | null }) {
   const disclosure = (
     label: string,
     content: ReactNode,
@@ -634,7 +692,8 @@ function EventDetails({ event }: { event: TraceEventContract }) {
       {event.error !== null ? (
         <JsonBlock label="Safe error" value={event.error} />
       ) : null}
-      {event.event_type === "north_star_reviewed" ? <NorthStarInspection event={event} /> : null}
+      {event.event_type === "north_star_reviewed" ? <NorthStarInspection event={event} comparison={comparison} /> : null}
+      {event.event_type === "weekly_coach_generated" && comparison ? <CoachComparisonInspection comparison={comparison} /> : null}
       <details className="inspect-technical inspect-technical--group">
         <summary>Technical details</summary>
         <p className="inspect-technical__help">
@@ -711,6 +770,10 @@ export default function InspectView({
     () => new Map(events.map((event, index) => [event.event_id, index + 1])),
     [events],
   );
+  const coachComparisons = useMemo(() => new Map(events.flatMap((event) => {
+    const comparison = savedCoachComparison(event);
+    return comparison ? [[event.event_id, comparison] as const] : [];
+  })), [events]);
   const currentJournalEntryIdSet = useMemo(
     () => currentJournalEntryIds
       ? new Set(currentJournalEntryIds)
@@ -816,6 +879,11 @@ export default function InspectView({
         const isSelected = !onboarding && event.event_id === selectedEventId;
         const isExpanded = expandedEvents.has(event.event_id);
         const showStatus = !["complete", "reused"].includes(event.status);
+        const comparison = event.event_type === "weekly_coach_generated" ? coachComparisons.get(event.event_id) ?? null
+          : event.event_type === "north_star_reviewed" ? [...coachComparisons.values()].find((pair) =>
+            pair.north_star_input_hash === event.input_hash && pair.persona_id === record(event.details.record)?.owner_id
+            && pair.week_start === record(event.details.record)?.week_start
+            && pair.week_end === record(event.details.record)?.week_end) ?? null : null;
         return (
           <li className="trace-event" key={event.event_id}>
             <span className="trace-event__node" aria-hidden="true">
@@ -859,7 +927,7 @@ export default function InspectView({
                     : "First recorded step"}
                 </span>
               </summary>
-              {isExpanded ? <EventDetails event={event} /> : null}
+              {isExpanded ? <EventDetails event={event} comparison={comparison} /> : null}
             </details>
           </li>
         );
@@ -998,6 +1066,13 @@ export default function InspectView({
                     Uses Weekly Drift Detection output to create a response and
                     question.
                   </small>
+                  {savedCoachComparison(coachEvent) ? (
+                    <button className="inspect-run-link" type="button" onClick={() => {
+                      setActiveFilter("all");
+                      setEventExpanded(coachEvent.event_id, true);
+                      setPendingEventFocus(coachEvent.event_id);
+                    }}>Inspect Coach Digest comparison</button>
+                  ) : null}
                 </div>
               </li>
             ) : null}

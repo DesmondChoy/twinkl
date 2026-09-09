@@ -1,0 +1,75 @@
+{
+  "stable-noor::2025-04-28::with_north_star": {
+    "response_sha256": "95cf3dca9832c7e7a4a242f4dfa7ef7b0adde88f061a9710b72d1c733a54502b",
+    "reason": "AI editorial review: a truncated weekly phrase was made into the cause of laughter.",
+    "requirements": [
+      "Do not turn a truncated excerpt fragment into a concrete event, object, or cause. Preserve the explicitly described relationship between the child's action and the adult's laughter; do not attribute the laughter to the trailing incomplete phrase.",
+      "Choose a complete continuous phrase for the required weekly quotation. Leave omitted or truncated content unknown; do not infer a causal connection from the omitted ending."
+    ]
+  },
+  "persistent-lukas::2025-06-16::with_north_star": {
+    "response_sha256": "fa160170e2fcf383fdc92f7c4182e941237df8286900abb98ee918bba19d3da5",
+    "reason": "AI editorial review: an older action and later weekly event were compressed into an imprecise short gap.",
+    "requirements": [
+      "Use the supplied source dates explicitly to distinguish the earlier selected action from later weekly events. Preserve their actual chronological gap; do not compress events more than a week apart into a few days or an ambiguous weekday reference.",
+      "Keep the earlier supportive act separate from the current repeated choices; it does not cancel the supplied current Drift finding."
+    ]
+  },
+  "active-nisha::2025-02-17::with_north_star": {
+    "response_sha256": "6285d5656df2d9164f7d3a19b869e13d93862dc6de63fa77bc77a1fd40d59bfa",
+    "reason": "AI editorial review: events before the reviewed week were described as part of the current week.",
+    "requirements": [
+      "Compare each source date with week_window before describing time. Explicitly identify the first two older evidence items as earlier experiences, and keep the later current-week classroom event distinct.",
+      "Do not group older events under a statement about the reviewed week. Keep the opening and reflective question grounded in the actual dated experiences."
+    ]
+  },
+  "uncertain-wei-jun::2025-06-09::with_north_star": {
+    "response_sha256": "82a3d132153373f7804b97bdf20b47fef39ee9011e0b5a74c4a3997314387a30",
+    "reason": "AI editorial review: private reasoning was attributed to speech to a child and a specific choice became a broad positive trait.",
+    "requirements": [
+      "Distinguish a private explanation written in the journal from the narrower statement actually spoken to the child. Do not claim private motives or reasoning were spoken unless the source explicitly says so.",
+      "Acknowledge only the specific supported transport choice. Do not infer an enduring positive personal trait or portray the separate silence as supportive when the supplied finding is Conflict.",
+      "The short weekly excerpt about not laughing or speaking does not supply the surrounding event. Do not invent a joke, unkindness, or anyone's intentions, and do not describe the silence as supportive non-participation."
+    ]
+  },
+  "uncertain-wei-jun::2025-06-16::with_north_star": {
+    "response_sha256": "f09a06cfe43e925377e17f7d5a0919cbd17aa831faef156257bdcfa10ebd4435",
+    "reason": "AI editorial review: collecting activity was assigned an unsupported environmental purpose.",
+    "requirements": [
+      "Do not assign an environmental cleanup purpose to the child's collecting activity when the source explicitly does not support that purpose. Describe only the observable collecting, without inventing cooperation or a shared act of environmental care.",
+      "Anchor a supportive acknowledgement in the separately evidenced adult action concerning worker claims. Do not transfer that action's meaning onto the child's activity."
+    ]
+  },
+  "active-nisha::2025-02-24::without_north_star": {
+    "response_sha256": "7ce56d03953095138d94572951bd6517e6fe445d666ce1eeba5d6805c3dbf87e",
+    "reason": "AI editorial review: a truncated account of a call became an unsupported claim about intended duration.",
+    "requirements": [
+      "Do not infer the desired duration of a phone call, why it ended, or a particular conversation the person wished to have from a truncated excerpt. Leave the missing continuation unknown.",
+      "Ask a question anchored in a fully supplied concrete event or choice. Do not make the question presuppose an unstated wish or reason."
+    ]
+  },
+  "persistent-lukas::2025-07-07::without_north_star": {
+    "response_sha256": "b053fc1d6867be9fe00f5d66f68e6d3205a1d11e651c5a26a0499ba8045fe321",
+    "reason": "AI editorial review: silence from an earlier onboarding event was attributed to a later shopping deliberation.",
+    "requirements": [
+      "Keep the earlier onboarding interaction and later shopping deliberation separate. Attribute any quotation about staying silent only to its original earlier event, never to the later shopping passage.",
+      "Describe the shopping passage only as deliberation unless its supplied excerpt explicitly establishes the resulting purchase. Do not invent a purchase decision."
+    ]
+  },
+  "uncertain-wei-jun::2025-06-09::without_north_star": {
+    "response_sha256": "aa9944f2bee94bc10959770484968f6e68a118e21b9cf02a28a8d0c6c5503794",
+    "reason": "AI editorial review: missing context for silence became invented unkindness and supportive non-participation.",
+    "requirements": [
+      "The supplied short excerpt about not laughing or speaking does not describe the surrounding event. Do not invent a joke, unkindness, or anyone's intentions to fill that missing context.",
+      "Do not recast silence as supportive non-participation when the supplied current decision is Conflict. Preserve the finding while describing only the explicit behavior, with uncertainty about missing circumstances."
+    ]
+  },
+  "uncertain-wei-jun::2025-06-16::without_north_star": {
+    "response_sha256": "5ab3bd381a125c63e335355cfe8c70e47ef64b3aede071b38483553ceecaece6",
+    "reason": "AI editorial review: collecting was portrayed as cooperative environmental cleanup.",
+    "requirements": [
+      "Describe the child's collecting as collecting only. The supplied excerpt does not support environmental cleanup intent, a shared act of environmental care, or a claim that the adult stayed with the child in that act.",
+      "Anchor any supportive acknowledgement in the separately evidenced adult action concerning worker claims, without transferring that meaning onto the child's activity."
+    ]
+  }
+}

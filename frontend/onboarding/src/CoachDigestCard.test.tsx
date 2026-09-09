@@ -1,4 +1,4 @@
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import activeReplay from "../public/scenarios/active-nisha.json";
@@ -11,6 +11,8 @@ import CoachDigestCard from "./CoachDigestCard";
 import { expandCoachQuotations } from "./coachQuotes";
 import { validateExperienceInspectFixture } from "./demoContracts";
 import { projectScenarioWeek } from "./scenarioReplay";
+import type { NorthStarRecord } from "./northStar";
+import { savedCoachComparison } from "./coachComparison";
 
 afterEach(cleanup);
 
@@ -106,6 +108,45 @@ describe("Coach Digest quotations", () => {
       expect(JSON.stringify(session.weekly_digest)).toBe(original);
       expect(screen.getByText("Something to reflect on")).toBeTruthy();
       expect(screen.queryByText("Read the supporting Journal Entries")).toBeNull();
+    },
+  );
+
+  it.each([activeReplay, persistentReplay, stableReplay, twoValuesReplay, uncertainReplay])(
+    "offers exactly the frozen selected weeks across $scenario.scenario_id and restores the baseline on each click",
+    async (raw) => {
+      const fixture = validateExperienceInspectFixture(raw);
+      for (let index = 0; index < fixture.scenario.weeks.length; index += 1) {
+        const { session } = projectScenarioWeek(fixture, index);
+        const week = fixture.scenario.weeks[index];
+        const events = fixture.trace_events.filter((event) => week.event_ids.includes(event.event_id));
+        const moment = events.find((event) => event.event_type === "north_star_reviewed")!;
+        const record = moment.details.record as NorthStarRecord;
+        const coach = events.find((event) => event.event_type === "weekly_coach_generated")!;
+        const pair = savedCoachComparison(coach);
+        const view = render(<CoachDigestCard weeklyDigest={session.weekly_digest}
+          headingId="coach-title" journalEntries={session.journal_entries}
+          northStar={{ profile: session.profile, driftResult: session.drift_result!, traceEvents: events, presentation: "demo" }} />);
+        const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+        expect(document.querySelector(".north-star-moment")).toBeNull();
+        if (record.selected) {
+          expect(pair, `${fixture.scenario.scenario_id} ${week.week_start}`).not.toBeNull();
+          await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+          const baseline = document.querySelector(".coach-digest__question")!.textContent;
+          await userEvent.click(toggle);
+          await waitFor(() => expect(document.querySelector(".north-star-moment blockquote")!.textContent)
+            .toBe(record.selected!.evidence_quote));
+          expect(document.querySelector(".coach-digest__question")!.textContent)
+            .toBe(pair!.with_north_star.narrative.reflective_question);
+          await userEvent.click(screen.getByRole("button", { name: "Without North Star Moment" }));
+          expect(document.querySelector(".coach-digest__question")!.textContent).toBe(baseline);
+          expect(document.querySelector(".north-star-moment")).toBeNull();
+        } else {
+          expect(pair).toBeNull();
+          expect(toggle.hasAttribute("disabled")).toBe(true);
+          expect(screen.getByText("No North Star Moment for this week.")).toBeTruthy();
+        }
+        view.unmount();
+      }
     },
   );
 });

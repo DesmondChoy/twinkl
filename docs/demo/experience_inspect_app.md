@@ -50,6 +50,12 @@ regenerates all 27 from the same weekly inputs with Luna at reasoning effort
 `none` and prompt `4.4`, preserving the earlier response receipts. It replaces
 calendar-recap openings and clinical finding language with conversational,
 specific reflections. Coach Digest Validations include the new voice checks.
+The [saved North Star Moment comparison](../north_star/demo_coach_comparison.md)
+adds paired responses for weeks with an accepted selection, using the same base
+instructions and weekly input with only `north_star_context` changed. Its
+without-context response is the default for those weeks. Inspect exposes both
+complete prompts and their associated responses; the original prompt-4.4
+receipts remain preserved separately.
 These generation runs add no Coach Digest Evals or human validation; the
 [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
 remains historical evidence for a different Persona roster and inputs.
@@ -398,9 +404,16 @@ to a completed week, and returns the page to the top. The review button opens it
 
 The result uses two columns on wide desktops: a compact Drift state on the
 left and one integrated Coach Digest on the right. Phones and narrower screens
-stack these in the same order. The Coach Digest presents its original narrative,
-then an optional validated North Star Moment passage, and ends with its one
-original reflective question. No additional model rewrites the response.
+stack these in the same order. In saved replay, the Coach Digest starts with its
+without-context response and a **With North Star Moment** button. Clicking it
+switches both narrative paragraphs and the reflective question to the saved
+with-context response and shows the selected source panel. The button becomes
+**Without North Star Moment** and restores the complete baseline when clicked.
+A **Showing** status identifies the current version. The same button stacks
+above the heading on phones; changing Persona or week resets the comparison.
+The control is disabled with an explanation when no selection or valid pair is
+available. Toggling performs no provider call. Onboarding continues to show its
+original narrative, optional validated passage, and original question.
 The **Something to reflect on** label identifies that final question as an
 invitation addressed to the user. Prompt `4.4` asks for conversational prose
 that opens with a specific lived moment, avoids calendar-recap openings and
@@ -425,6 +438,15 @@ Conflict assessments open by default. Every supplied source and provider attempt
 remains available. Recorded runtime AI assessment is distinct from the separate
 benchmark evaluation and from human validation. Opening Inspect performs no
 provider call.
+
+The saved Coach Digest event also shows both comparison arms together, each with
+its exact accepted prompt, associated narrative and reflective question, raw
+provider response, and generation settings. Its initial request is available
+when repair feedback changed the accepted prompt. The changed
+`north_star_context` block and shared weekly input make the difference
+inspectable independently of the Experience toggle. The paired record is
+bound to the same Persona, reviewed week, weekly input hash, and validated
+North Star Moment source; it is not accepted on live-session events.
 
 The result grows with its content and uses page scrolling. **Why this state**
 keeps detailed evidence collapsed until requested; **Inspect decision** stays

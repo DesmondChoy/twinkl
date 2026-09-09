@@ -17,7 +17,6 @@ import stableReplayJson from "../public/scenarios/stable-noor.json";
 import twoValuesReplayJson from "../public/scenarios/two-values-meera.json";
 import twoValuesReplayRaw from "../public/scenarios/two-values-meera.json?raw";
 import uncertainReplayJson from "../public/scenarios/uncertain-wei-jun.json";
-import savedCoachResponses from "../../../src/demo/coach_digest_responses.json";
 import App from "./App";
 import {
   PersonaReplayExperience,
@@ -41,6 +40,7 @@ import {
   type ExperienceState,
 } from "./session";
 import type { NorthStarRecord } from "./northStar";
+import { savedCoachComparison, type CoachComparisonNarrative } from "./coachComparison";
 
 const fixture = validateExperienceInspectFixture(activeReplayJson);
 const catalog = validateScenarioCatalog(scenarioCatalogJson);
@@ -729,11 +729,6 @@ describe("persona replay", () => {
     async (scenarioId, scenarioJson) => {
       matchMedia(false);
       const user = userEvent.setup();
-      const savedResponse = Object.values(savedCoachResponses.responses).find(
-        (response) => response.scenario_id === scenarioId
-          && response.week_start === catalog.scenarios.find((item) => item.scenario_id === scenarioId)!.key_week_start,
-      )!;
-
       render(<ScenarioReplayHarness scenarioJson={scenarioJson} />);
       expect(screen.queryByText("No saved Coach Digest for this result")).toBeNull();
       expect(screen.queryByRole("heading", { name: "Your weekly reflection" })).toBeNull();
@@ -745,6 +740,9 @@ describe("persona replay", () => {
       const selectedFixture = validateExperienceInspectFixture(scenarioJson);
       const selectedItem = catalog.scenarios.find((item) => item.scenario_id === scenarioId)!;
       const selectedWeek = selectedFixture.scenario.weeks.find((week) => week.week_start === selectedItem.key_week_start)!;
+      const coachEvent = selectedFixture.trace_events.find((event) => selectedWeek.event_ids.includes(event.event_id)
+        && event.event_type === "weekly_coach_generated")!;
+      const savedNarrative = coachEvent.details.narrative as CoachComparisonNarrative;
       expect(screen.queryAllByRole("button", { name: /Open Journal Entry/ }))
         .toHaveLength(selectedWeek.journal_entry_ids.length);
       await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
@@ -752,20 +750,28 @@ describe("persona replay", () => {
       expect(screen.queryByText("No saved Coach Digest for this result")).toBeNull();
       expect(screen.getByText("Why this state")).toBeTruthy();
       expect(screen.getByRole("heading", { name: "Your weekly reflection" })).toBeTruthy();
-      const tension = document.querySelector(".coach-digest > p:nth-of-type(3)");
+      const tension = document.querySelector(".coach-digest__tension");
       expect(tension?.textContent).toContain(
-        savedResponse.narrative.tension_explanation.split("...")[0],
+        savedNarrative.tension_explanation.split("...")[0],
       );
       expect(tension?.textContent).not.toMatch(/(?:\.{3}|…)[”"]/);
       expect(document.querySelector(".coach-digest__question")?.textContent)
-        .toBe(savedResponse.narrative.reflective_question);
+        .toBe(savedNarrative.reflective_question);
       const saved = validateExperienceInspectFixture(scenarioJson);
       const item = catalog.scenarios.find((candidate) => candidate.scenario_id === scenarioId)!;
       const keyWeek = saved.scenario.weeks.find((week) => week.week_start === item.key_week_start)!;
       const record = saved.trace_events.find((event) =>
         keyWeek.event_ids.includes(event.event_id) && event.event_type === "north_star_reviewed"
       )!.details.record as NorthStarRecord;
+      expect(document.querySelector(".north-star-moment")).toBeNull();
+      const toggle = screen.getByRole("button", { name: "With North Star Moment" });
       if (record.selected) {
+        const comparison = savedCoachComparison(coachEvent);
+        expect(comparison).not.toBeNull();
+        await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+        await user.click(toggle);
+        expect(document.querySelector(".coach-digest__question")?.textContent)
+          .toBe(comparison!.with_north_star.narrative.reflective_question);
         await waitFor(() => expect(document.querySelector(".north-star-moment blockquote")?.textContent)
           .toBe(record.selected!.evidence_quote));
         await user.click(screen.getByRole("link", { name: /^Open (response in )?Journal Entry ·/ }));
@@ -777,6 +783,8 @@ describe("persona replay", () => {
         expect(screen.getByRole("heading", { name: /^Weekly Drift Detection/ })).toBeTruthy();
         expect(screen.queryByRole("heading", { name: "Journal Entries" })).toBeNull();
       } else {
+        expect(toggle.hasAttribute("disabled")).toBe(true);
+        expect(screen.getByText("No North Star Moment for this week.")).toBeTruthy();
         expect(["insufficient_evidence", "no_eligible_writing"]).toContain(record.reason);
         expect(document.querySelector(".north-star-moment")).toBeNull();
         expect(document.querySelector(".replay-result-column--north-star")).toBeNull();
@@ -947,7 +955,10 @@ describe("persona replay", () => {
     render(<ScenarioReplayHarness inspectRun={inspectRun} />);
     await user.click(screen.getByRole("button", { name: "Show Active Drift — week 4" }));
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
-
+    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    expect(document.querySelector(".north-star-moment")).toBeNull();
+    await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+    await user.click(toggle);
     await screen.findByRole("heading", { name: "A past moment in your own words" });
     const columns = document.querySelectorAll<HTMLElement>(".replay-result-columns > section");
     expect(columns).toHaveLength(2);
@@ -981,9 +992,7 @@ describe("persona replay", () => {
     )!;
     const weekIndex = scenarioFixture.scenario.weeks.findIndex((week) => week.week_start === item.key_week_start);
     const experience = experienceForWeek(weekIndex, scenarioFixture, item);
-    const narrative = Object.values(savedCoachResponses.responses).find(
-      (response) => response.scenario_id === item.scenario_id && response.week_start === item.key_week_start,
-    )!.narrative;
+    const narrative = experience.weekly_digest!.coach_narrative as CoachComparisonNarrative;
 
     render(
       <PersonaReplayExperience

@@ -1,0 +1,38 @@
+{
+  "input_sha256": "414bdd0b6ab15ac4ce9a942c7b074087f6bb56caa0875834dcb1798f08c5b9fe",
+  "attempts": [
+    {
+      "diagnostic_path": "logs/experiments/reports/demo_coach_nsm_comparison_20260909/diagnostics/uncertain-wei-jun_2025-06-02_with_north_star_1.json",
+      "request_path": "logs/experiments/reports/demo_coach_nsm_comparison_20260909/requests/uncertain-wei-jun_2025-06-02_with_north_star_1.json",
+      "request_sha256": "bdcd865bac54a740fe5735fc110251e069c8d5666076cc20250f919b889d5a48",
+      "reserved_usd": "0.018",
+      "input_token_bound": 18859,
+      "cost_bound_usd": "0.00717235"
+    },
+    {
+      "diagnostic_path": "logs/experiments/reports/demo_coach_nsm_comparison_20260909/diagnostics/uncertain-wei-jun_2025-06-02_with_north_star_2.json",
+      "request_path": "logs/experiments/reports/demo_coach_nsm_comparison_20260909/requests/uncertain-wei-jun_2025-06-02_with_north_star_2.json",
+      "request_sha256": "172231c02a069cb679b2fd080c3df8b6ddcd632bf91ead656be76c4835b49393",
+      "reserved_usd": "0.018",
+      "input_token_bound": 19199,
+      "cost_bound_usd": "0.00725735"
+    },
+    {
+      "diagnostic_path": "logs/experiments/reports/demo_coach_nsm_comparison_20260909/diagnostics/uncertain-wei-jun_2025-06-02_with_north_star_3.json",
+      "request_path": "logs/experiments/reports/demo_coach_nsm_comparison_20260909/requests/uncertain-wei-jun_2025-06-02_with_north_star_3.json",
+      "request_sha256": "172231c02a069cb679b2fd080c3df8b6ddcd632bf91ead656be76c4835b49393",
+      "reserved_usd": "0.018",
+      "input_token_bound": 19199,
+      "cost_bound_usd": "0.00725735"
+    },
+    {
+      "diagnostic_path": "logs/experiments/reports/demo_coach_nsm_comparison_20260909/diagnostics/uncertain-wei-jun_2025-06-02_with_north_star_4.json",
+      "request_path": "logs/experiments/reports/demo_coach_nsm_comparison_20260909/requests/uncertain-wei-jun_2025-06-02_with_north_star_4.json",
+      "request_sha256": "172231c02a069cb679b2fd080c3df8b6ddcd632bf91ead656be76c4835b49393",
+      "reserved_usd": "0.018",
+      "input_token_bound": 19199,
+      "cost_bound_usd": "0.00725735"
+    }
+  ],
+  "response": null
+}

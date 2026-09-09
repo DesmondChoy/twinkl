@@ -8,6 +8,7 @@ from typing import Annotated, Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from src.coach.demo_comparison import SavedCoachComparison
 from src.coach.schemas import CoachNarrative, DigestValidation, WeeklyDigest
 from src.demo.north_star_replay import SavedExperimentRecord
 from src.drift_detector import (
@@ -588,6 +589,7 @@ class WeeklyDigestBuiltDetails(ContractModel):
 class WeeklyCoachGeneratedDetails(ContractModel):
     narrative: CoachNarrative | None = None
     validation: DigestValidation | None = None
+    comparison: SavedCoachComparison | None = None
 
     @model_validator(mode="after")
     def validate_result(self) -> WeeklyCoachGeneratedDetails:
@@ -686,6 +688,27 @@ class WeeklyDigestBuiltEvent(TraceEventBase):
 class WeeklyCoachGeneratedEvent(TraceEventBase):
     event_type: Literal["weekly_coach_generated"]
     details: WeeklyCoachGeneratedDetails
+
+    @model_validator(mode="after")
+    def validate_saved_comparison(self) -> WeeklyCoachGeneratedEvent:
+        comparison = self.details.comparison
+        if comparison is None:
+            return self
+        baseline = comparison.without_north_star
+        if self.source != "saved_replay" or self.status not in {"complete", "reused"}:
+            raise ValueError("Coach comparisons are available only in saved replay")
+        if (
+            self.details.narrative != baseline.narrative
+            or self.details.validation != baseline.validation
+            or self.prompt != baseline.prompt
+            or self.raw_response != baseline.raw_output
+            or self.model_contract is None
+            or self.model_contract.provider != baseline.provider
+            or self.model_contract.model != baseline.model
+            or self.model_contract.reasoning_effort != baseline.reasoning_effort
+        ):
+            raise ValueError("Coach event must expose its without-context response")
+        return self
 
 
 class NorthStarReviewedEvent(TraceEventBase):

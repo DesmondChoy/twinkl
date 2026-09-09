@@ -269,9 +269,15 @@ def test_all_weeks_reuse_exact_source_bound_coach_digests(loaded_scenarios) -> N
             ]
             assert len(coach_events) == 1
             event = coach_events[0]
-            assert event.prompt == generation.prompt
-            assert event.raw_response == generation.raw_output
-            assert event.details.narrative == saved.narrative
+            comparison = event.details.comparison
+            baseline = comparison.without_north_star if comparison else None
+            assert event.prompt == (baseline.prompt if baseline else generation.prompt)
+            assert event.raw_response == (
+                baseline.raw_output if baseline else generation.raw_output
+            )
+            assert event.details.narrative == (
+                baseline.narrative if baseline else saved.narrative
+            )
             assert event.model_contract == generation.model_contract
             generated_digest = WeeklyDigest.model_validate_json(
                 (ROOT / generation.generated_response_path).read_bytes()
@@ -282,7 +288,11 @@ def test_all_weeks_reuse_exact_source_bound_coach_digests(loaded_scenarios) -> N
                 if event.event_type == "weekly_digest_built"
                 and event.event_id in week.event_ids
             )
-            assert digest_event.details.digest == generated_digest
+            expected_digest = generated_digest.model_copy(update={
+                "coach_narrative": baseline.narrative,
+                "validation": baseline.validation,
+            }) if baseline else generated_digest
+            assert digest_event.details.digest == expected_digest
             assert digest_event.event_id == generation.weekly_digest_event_id
             assert _weekly_drift_input_sha256(generated_digest) == (
                 generation.weekly_drift_input_sha256

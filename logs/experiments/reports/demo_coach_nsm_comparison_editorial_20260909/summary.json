@@ -1,0 +1,24 @@
+{
+  "eligible_pairs": 22,
+  "expected_arms": 44,
+  "accepted_arms": 44,
+  "retained_arms": 43,
+  "editorially_rejected_arms": 1,
+  "reserved_usd": "1.872",
+  "maximum_reserved_usd": "1.926",
+  "usage": {
+    "n_calls": 104,
+    "n_calls_with_usage": 104,
+    "input_tokens": 267280,
+    "cached_input_tokens": 121560,
+    "cache_write_input_tokens": 145408,
+    "output_tokens": 17931,
+    "total_tokens": 285211,
+    "calculated_cost_usd": 0.0603628,
+    "total_latency_seconds": 361.74408362500253,
+    "mean_latency_seconds": 3.478308496394255,
+    "median_latency_seconds": 3.293537624995224,
+    "max_latency_seconds": 7.276106249977602
+  },
+  "limitations": "Paired synthetic demonstration with deterministic validation; no human validation or evidence of user benefit. Initial requests differ only in north_star_context; validation retries retain separate receipts."
+}

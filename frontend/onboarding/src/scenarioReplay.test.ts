@@ -8,6 +8,7 @@ import savedCoachResponses from "../../../src/demo/coach_digest_responses.json";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { validateExperienceInspectFixture } from "./demoContracts";
 import { currentNorthStarEvent, displayableNorthStarSelection, northStarProfileRef } from "./northStar";
+import { savedCoachComparison } from "./coachComparison";
 import { BWS_SETS } from "./domain";
 import { createExperienceState, createSession, parseSession, persistSession, SESSION_STORAGE_KEY, type OnboardingSession } from "./session";
 import {
@@ -172,19 +173,30 @@ describe("saved persona replay", () => {
           currentEventIds.has(event.event_id)
           && event.event_type === "weekly_digest_built");
         expect(coachEvents).toHaveLength(index + 1);
-        expect(projected.session.weekly_digest?.coach_narrative).toEqual(savedResponse.narrative);
         expect(digestEvent?.details.coach_unavailable_reason).toBeNull();
         expect(currentCoachEvents).toHaveLength(1);
+        const comparison = savedCoachComparison(currentCoachEvents[0]);
+        const baseline = comparison?.without_north_star;
+        const expectedNarrative = baseline?.narrative ?? savedResponse.narrative;
+        expect(projected.session.weekly_digest?.coach_narrative).toEqual(expectedNarrative);
         expect(currentCoachEvents[0]).toMatchObject({
-          source: "saved_replay", model_contract: savedResponse.generation.model_contract,
-          prompt: savedResponse.generation.prompt, raw_response: savedResponse.generation.raw_output,
-          details: { narrative: savedResponse.narrative },
+          source: "saved_replay", model_contract: baseline ? {
+            provider: baseline.provider, model: baseline.model, reasoning_effort: baseline.reasoning_effort,
+          } : savedResponse.generation.model_contract,
+          prompt: baseline?.prompt ?? savedResponse.generation.prompt,
+          raw_response: baseline?.raw_output ?? savedResponse.generation.raw_output,
+          details: { narrative: expectedNarrative },
         });
         const input = Object.fromEntries(Object.entries(projected.session.weekly_digest!)
           .filter(([key]) => !["coach_narrative", "validation"].includes(key)));
         const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(canonicalJson(input)));
         expect(Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, "0")).join(""))
           .toBe(savedResponse.generation.weekly_drift_input_sha256);
+        if (comparison) {
+          expect(comparison).toMatchObject({ scenario_id: scenarioId, persona_id: scenarioFixture.scenario.persona_id,
+            week_start: week.week_start, week_end: week.week_end,
+            weekly_drift_input_sha256: savedResponse.generation.weekly_drift_input_sha256 });
+        }
         expect(digestEvent?.event_id).toBe(savedResponse.generation.weekly_digest_event_id);
         const futureEventIds = new Set(scenarioFixture.scenario.weeks.slice(index + 1)
           .flatMap((futureWeek) => futureWeek.event_ids));

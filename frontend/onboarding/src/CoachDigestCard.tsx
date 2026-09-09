@@ -1,9 +1,11 @@
-import { Fragment, type MouseEvent } from "react";
+import { Fragment, useEffect, useState, type MouseEvent } from "react";
 import type { JournalEntryContract, TraceEventContract } from "./demoContracts";
 import type { OnboardingProfile } from "./domain";
 import NorthStarMoment from "./NorthStarMoment";
 import { expandCoachQuotations } from "./coachQuotes";
 import { journalEntryAnchorId } from "./journalEntryAnchor";
+import { currentNorthStarEvent, displayableNorthStarSelection, useNorthStarProfileRef } from "./northStar";
+import { comparisonMatchesMoment, savedCoachComparison } from "./coachComparison";
 
 type JsonObject = Record<string, unknown>;
 
@@ -44,12 +46,35 @@ export default function CoachDigestCard({
   onOpenEntry,
   northStar,
 }: CoachDigestCardProps) {
-  const narrative = object(weeklyDigest?.coach_narrative);
+  const demo = northStar?.presentation === "demo";
+  const profileRef = useNorthStarProfileRef(demo ? northStar.profile : null);
+  const moment = demo ? currentNorthStarEvent({
+    events: northStar.traceEvents, profile: northStar.profile, profileRef, weeklyDigest, journalEntries,
+  }) : null;
+  const selected = demo ? displayableNorthStarSelection(moment, northStar.profile, journalEntries, northStar.driftResult) : null;
+  const coachEvent = demo ? [...northStar.traceEvents].reverse().find((event) =>
+    event.event_type === "weekly_coach_generated" && event.session_id === northStar.profile.session_id) ?? null : null;
+  const savedPair = savedCoachComparison(coachEvent);
+  const pair = savedPair && moment && selected && comparisonMatchesMoment(savedPair, moment, selected)
+    ? savedPair : null;
+  const recordedMoment = demo ? [...northStar.traceEvents].reverse().find((event) => {
+    const record = object(event.details.record);
+    return record !== null && event.event_type === "north_star_reviewed" && event.session_id === northStar.profile.session_id
+      && record.week_start === weeklyDigest?.week_start && record.week_end === weeklyDigest?.week_end;
+  }) : null;
+  const hasRecordedSelection = object(object(recordedMoment?.details.record)?.selected) !== null;
+  const comparisonKey = pair ? `${northStar!.profile.session_id}:${profileRef}:${pair.week_start}:${pair.week_end}:${moment!.event.event_id}:${coachEvent!.event_id}` : null;
+  const [activeComparison, setActiveComparison] = useState<string | null>(null);
+  useEffect(() => { setActiveComparison(null); }, [comparisonKey]);
+  const withMoment = pair !== null && comparisonKey !== null && activeComparison === comparisonKey;
+  const baseline = object(weeklyDigest?.coach_narrative);
+  const narrative = pair ? pair[withMoment ? "with_north_star" : "without_north_star"].narrative : baseline;
   const weeklyMirror = nonEmptyText(narrative?.weekly_mirror);
   const tensionExplanation = nonEmptyText(narrative?.tension_explanation);
   const reflectiveQuestion = nonEmptyText(narrative?.reflective_question);
 
-  if (!weeklyMirror || !tensionExplanation || !reflectiveQuestion) return null;
+  if (!weeklyMirror || !tensionExplanation || !reflectiveQuestion
+    || !["weekly_mirror", "tension_explanation", "reflective_question"].every((key) => nonEmptyText(baseline?.[key]))) return null;
 
   const Heading = headingLevel === 2 ? "h2" : "h3";
   const classes = ["coach-digest", className].filter(Boolean).join(" ");
@@ -97,11 +122,28 @@ export default function CoachDigestCard({
 
   return (
     <aside className={classes} aria-labelledby={headingId}>
-      <p className="eyebrow">Coach Digest</p>
+      <div className="coach-digest__header">
+        <p className="eyebrow">Coach Digest</p>
+        {demo ? (
+          <button className="coach-digest__comparison-toggle" type="button"
+            disabled={!pair}
+            aria-describedby={`${headingId}-comparison-status`}
+            onClick={() => setActiveComparison(withMoment ? null : comparisonKey)}>
+            {withMoment ? "Without North Star Moment" : "With North Star Moment"}
+          </button>
+        ) : null}
+      </div>
       <Heading id={headingId}>Your weekly reflection</Heading>
+      {demo ? (
+        <div className="coach-digest__comparison-status" id={`${headingId}-comparison-status`} role="status">
+          <p>Showing: {withMoment ? "With" : "Without"} North Star Moment</p>
+          {!pair ? <p>{hasRecordedSelection
+            ? "Comparison unavailable for this week." : "No North Star Moment for this week."}</p> : null}
+        </div>
+      ) : null}
       {expanded.slice(0, 2).map((paragraph, index) => (
         <Fragment key={index}>
-          <p>{paragraph.text}</p>
+          <p className={index === 0 ? "coach-digest__mirror" : "coach-digest__tension"}>{paragraph.text}</p>
           {fullQuotations(paragraph)}
         </Fragment>
       ))}
@@ -121,7 +163,7 @@ export default function CoachDigestCard({
           </ul>
         </nav>
       ) : null}
-      {northStar ? (
+      {northStar && (!demo || withMoment) ? (
         <NorthStarMoment
           {...northStar}
           weeklyDigest={weeklyDigest!}

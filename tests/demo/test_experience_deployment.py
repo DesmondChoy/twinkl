@@ -14,6 +14,7 @@ def test_current_replay_sources_are_packaged_and_load_without_full_nsm_study(
 ) -> None:
     from src.demo.north_star_replay import EXPERIMENT_PATH, EXPORT_PATH
     from src.demo.scenarios import (
+        COACH_COMPARISONS_PATH,
         SCENARIO_DIRECTORY,
         SELECTIONS,
         _source_files,
@@ -24,6 +25,7 @@ def test_current_replay_sources_are_packaged_and_load_without_full_nsm_study(
     dockerignore = (ROOT / "frontend/onboarding/Dockerfile.dockerignore").read_text()
     sources = {path for selection in SELECTIONS for path in _source_files(selection)}
     sources.add(EXPORT_PATH)
+    sources.add(COACH_COMPARISONS_PATH)
     for path in sources:
         if path.parts[0] != "src":
             assert path.as_posix() in dockerfile
@@ -33,10 +35,16 @@ def test_current_replay_sources_are_packaged_and_load_without_full_nsm_study(
         shutil.copyfile(ROOT / path, target)
     shutil.copytree(ROOT / SCENARIO_DIRECTORY, tmp_path / SCENARIO_DIRECTORY)
     assert not (tmp_path / EXPERIMENT_PATH).exists()
-    catalog, _ = load_scenario_catalog(tmp_path)
+    catalog, fixtures = load_scenario_catalog(tmp_path)
     assert {item.scenario_id for item in catalog.scenarios} == {
         selection.scenario_id for selection in SELECTIONS
     }
+    assert sum(
+        event.details.comparison is not None
+        for fixture in fixtures.values()
+        for event in fixture.trace_events
+        if event.event_type == "weekly_coach_generated"
+    ) == 22
 
 
 def test_railway_builds_the_combined_experience_image_from_the_repository() -> None:

@@ -8,8 +8,10 @@ import ReplayTimeline from "./ReplayTimeline";
 import { canonicalInspectFixture } from "./inspectFixture";
 import { northStarFraming, northStarProfileRef, type NorthStarRecord } from "./northStar";
 import type { TraceEventContract } from "./demoContracts";
+import { comparisonEvent } from "./test/coachComparisonFixture";
+import type { CoachComparison } from "./coachComparison";
 
-const profile = canonicalInspectFixture.session.profile;
+const profile = { ...canonicalInspectFixture.session.profile, session_id: "scenario-session:comparison-test" };
 const quote = "I left work on time and cooked dinner for my sister.";
 const entry = {
   journal_entry_id: "supportive-entry", t_index: 0, date: "2026-07-01",
@@ -54,16 +56,179 @@ function card(event: TraceEventContract, extra: Partial<Parameters<typeof CoachD
 }
 
 describe("Coach Digest composition", () => {
+  const withNarrative = {
+    weekly_mirror: "Cooking dinner for your sister gave that earlier evening a different shape.",
+    tension_explanation: "You made room for her then, while the longer hours at work are more recent.",
+    reflective_question: "What do you remember about cooking for your sister that evening?",
+  };
+
+  it("switches both paragraphs, the question, and the source panel together without making a request", async () => {
+    const user = userEvent.setup();
+    const request = vi.spyOn(globalThis, "fetch");
+    const event = await momentEvent();
+    const coach = comparisonEvent(event, narrative, withNarrative);
+    const original = JSON.stringify({ digest, event, coach });
+    render(card(event, { northStar: { profile, driftResult, traceEvents: [coach, event], presentation: "demo" } }));
+    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+    for (const text of Object.values(narrative)) expect(screen.getByText(text)).toBeTruthy();
+    expect(screen.getByRole("status").textContent).toBe("Showing: Without North Star Moment");
+    expect(screen.queryByText(quote)).toBeNull();
+    await user.click(toggle);
+    for (const text of Object.values(withNarrative)) expect(screen.getByText(text)).toBeTruthy();
+    for (const text of Object.values(narrative)) expect(screen.queryByText(text)).toBeNull();
+    expect(await screen.findByText(quote)).toBeTruthy();
+    expect(screen.getByRole("status").textContent).toBe("Showing: With North Star Moment");
+    await user.click(screen.getByRole("button", { name: "Without North Star Moment" }));
+    for (const text of Object.values(narrative)) expect(screen.getByText(text)).toBeTruthy();
+    for (const text of Object.values(withNarrative)) expect(screen.queryByText(text)).toBeNull();
+    expect(screen.queryByText(quote)).toBeNull();
+    expect(request).not.toHaveBeenCalled();
+    expect(JSON.stringify({ digest, event, coach })).toBe(original);
+    request.mockRestore();
+  });
+
+  it.each(["week", "Persona"])("resets to without-context when the %s changes and stays reset on return", async (change) => {
+    const event = await momentEvent();
+    const coach = comparisonEvent(event, narrative, withNarrative);
+    const props = { northStar: { profile, driftResult, traceEvents: [coach, event], presentation: "demo" as const } };
+    const { rerender } = render(card(event, props));
+    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+    await userEvent.click(toggle);
+    expect(screen.getByText(withNarrative.reflective_question)).toBeTruthy();
+    rerender(card(event, change === "week"
+      ? { ...props, weeklyDigest: { ...digest, week_start: "2026-07-13", week_end: "2026-07-19" } }
+      : { northStar: { ...props.northStar, profile: { ...profile, user_id: "another-persona", session_id: "scenario-session:another-persona" } } }));
+    expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+    expect(screen.queryByText(withNarrative.reflective_question)).toBeNull();
+    rerender(card(event, props));
+    await waitFor(() => expect(screen.getByRole("button", { name: "With North Star Moment" }).hasAttribute("disabled")).toBe(false));
+    expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+    expect(screen.queryByText(quote)).toBeNull();
+  });
+
+  it.each(["missing", "failed validation", "missing comparison validation", "mismatched context", "mismatched raw response", "live event", "changed source"])(
+    "keeps the baseline and disables an unavailable comparison: %s", async (reason) => {
+      const event = await momentEvent();
+      const coach = comparisonEvent(event, narrative, withNarrative);
+      const pair = coach.details.comparison as CoachComparison;
+      if (reason === "missing") coach.details.comparison = null;
+      if (reason === "failed validation") pair.with_north_star.validation.checks = [{ name: "groundedness", passed: false }];
+      if (reason === "missing comparison validation") pair.with_north_star.validation.checks = (pair.with_north_star.validation.checks as { name: string }[])
+        .filter((check) => check.name !== "all_quotes_grounded");
+      if (reason === "mismatched context") pair.north_star_context.exact_quote = "A different quotation.";
+      if (reason === "mismatched raw response") pair.with_north_star.raw_output = JSON.stringify(narrative);
+      if (reason === "live event") coach.source = "live_run";
+      render(card(event, {
+        journalEntries: reason === "changed source" ? [{ ...entry, content: "An edited Journal Entry." }] : [entry],
+        northStar: { profile, driftResult, traceEvents: [coach, event], presentation: "demo" },
+      }));
+      await act(async () => {});
+      expect(screen.getByRole("button", { name: "With North Star Moment" }).hasAttribute("disabled")).toBe(true);
+      expect(screen.getByText("Comparison unavailable for this week.")).toBeTruthy();
+      expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+      expect(screen.queryByText(withNarrative.reflective_question)).toBeNull();
+      expect(screen.queryByText(quote)).toBeNull();
+    },
+  );
+
+  it("explains an accepted no-selection week and keeps personal onboarding outside the comparison", async () => {
+    const event = await momentEvent({ selected: null, reason: "no_supportive_source" });
+    const { rerender } = render(card(event, {
+      northStar: { profile, driftResult, traceEvents: [event], presentation: "demo" },
+    }));
+    expect(screen.getByRole("button", { name: "With North Star Moment" }).hasAttribute("disabled")).toBe(true);
+    expect(screen.getByText("No North Star Moment for this week.")).toBeTruthy();
+    const selected = await momentEvent();
+    const coach = comparisonEvent(selected, narrative, withNarrative);
+    rerender(card(selected, { northStar: { profile, driftResult, traceEvents: [coach, selected], presentation: "personal" } }));
+    expect(screen.queryByRole("button", { name: "With North Star Moment" })).toBeNull();
+    expect(await screen.findByText(quote)).toBeTruthy();
+    expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+    expect(screen.queryByText(withNarrative.reflective_question)).toBeNull();
+  });
+
+  it("removes the treatment immediately when the current Drift no longer validates its selected moment", async () => {
+    const event = await momentEvent();
+    const coach = comparisonEvent(event, narrative, withNarrative);
+    const northStar = { profile, driftResult, traceEvents: [coach, event], presentation: "demo" as const };
+    const { rerender } = render(card(event, { northStar }));
+    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+    await userEvent.click(toggle);
+    expect(await screen.findByText(quote)).toBeTruthy();
+    rerender(card(event, { northStar: { ...northStar, driftResult: { delivery_state: "insufficient_evidence" } } }));
+    expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+    expect(screen.queryByText(withNarrative.reflective_question)).toBeNull();
+    expect(screen.queryByText(quote)).toBeNull();
+    expect(screen.getByRole("button", { name: "With North Star Moment" }).hasAttribute("disabled")).toBe(true);
+    rerender(card(event, { northStar }));
+    await waitFor(() => expect(screen.getByRole("button", { name: "With North Star Moment" }).hasAttribute("disabled")).toBe(false));
+    expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+    expect(screen.queryByText(quote)).toBeNull();
+  });
+
+  it("accepts an optional null parent in a typed receipt while Inspect preserves the actual injected object", async () => {
+    const event = await momentEvent();
+    const coach = comparisonEvent(event, narrative, withNarrative);
+    const pair = coach.details.comparison as CoachComparison;
+    pair.north_star_context.parent_journal_entry = null;
+    const view = render(card(event, { northStar: { profile, driftResult, traceEvents: [coach, event], presentation: "demo" } }));
+    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+    await userEvent.click(toggle);
+    expect(await screen.findByText(quote)).toBeTruthy();
+    expect(screen.getByText(withNarrative.reflective_question)).toBeTruthy();
+    view.unmount();
+    render(<InspectView events={[coach]} selectedEventId={coach.event_id}
+      traceLabel="Saved Persona replay" onReturn={vi.fn()} />);
+    expect(screen.getByLabelText("With North Star Moment: north_star_context").textContent).not.toContain("parent_journal_entry");
+    expect(screen.getByLabelText("With North Star Moment: exact accepted prompt").textContent).toBe(pair.with_north_star.prompt);
+  });
+
+  it("Inspect associates each exact accepted prompt with its response and distinguishes initial requests from repair feedback", async () => {
+    const event = await momentEvent();
+    const coach = comparisonEvent(event, narrative, withNarrative);
+    const pair = coach.details.comparison as CoachComparison;
+    pair.with_north_star.prompt = pair.with_north_star.base_prompt.replace("TRUSTED INSTRUCTIONS\n", "TRUSTED INSTRUCTIONS\nCorrect the previous validation failure.\n");
+    pair.with_north_star.repair_requirements = ["Include a grounded quotation."];
+    render(<InspectView events={[coach, event]} selectedEventId={coach.event_id}
+      traceLabel="Saved Persona replay" onReturn={vi.fn()} />);
+    const comparison = within(screen.getByRole("region", { name: "Coach Digest prompt and response comparison" }));
+    for (const [key, label] of [["without_north_star", "Without North Star Moment"], ["with_north_star", "With North Star Moment"]] as const) {
+      const arm = pair[key];
+      const panel = within(comparison.getByRole("region", { name: label }));
+      expect(panel.getByLabelText(`${label}: exact accepted prompt`).textContent).toBe(arm.prompt);
+      expect(panel.getByLabelText(`${label}: exact raw provider response`).textContent).toBe(arm.raw_output);
+      const response = within(panel.getByRole("region", { name: `${label}: associated response` }));
+      for (const text of Object.values(arm.narrative)) expect(response.getByText(text as string)).toBeTruthy();
+      const context = panel.getByLabelText(`${label}: north_star_context`).textContent;
+      expect(context).toBe(JSON.stringify(key === "without_north_star" ? null : pair.north_star_context, null, 2));
+    }
+    expect(comparison.getByLabelText("With North Star Moment: exact initial prompt").textContent).toBe(pair.with_north_star.base_prompt);
+    expect(comparison.queryByLabelText("Without North Star Moment: exact initial prompt")).toBeNull();
+    expect(comparison.getByText("Initial request and repair feedback")).toBeTruthy();
+    expect(comparison.getByText(/includes repair feedback/)).toBeTruthy();
+  });
+
   it.each(["personal", "demo"] as const)("keeps the %s moment inside the response and the existing question last", async (presentation) => {
     const user = userEvent.setup();
     const event = await momentEvent();
     const onOpenEntry = vi.fn();
     const inspectMoment = vi.fn();
-    const original = JSON.stringify({ digest, event });
+    const coachEvent = comparisonEvent(event, narrative);
+    const original = JSON.stringify({ digest, event, coachEvent });
     render(card(event, {
       onOpenEntry,
-      northStar: { profile, driftResult, traceEvents: [event], presentation, inspectMoment },
+      northStar: { profile, driftResult, traceEvents: [coachEvent, event], presentation, inspectMoment },
     }));
+    if (presentation === "demo") {
+      expect(screen.queryByText(quote)).toBeNull();
+      const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+      await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+      await user.click(toggle);
+    }
     const quotation = await screen.findByText(quote);
     const coach = screen.getByRole("complementary", { name: "Your weekly reflection" });
     const introduction = screen.getByText(northStarFraming("reflection")!);
@@ -88,7 +253,7 @@ describe("Coach Digest composition", () => {
     expect(inspectMoment).toHaveBeenCalledWith(event.event_id);
     await user.click(within(coach).getByRole("link", { name: /^Open Journal Entry/ }));
     expect(onOpenEntry).toHaveBeenCalledWith(entry);
-    expect(JSON.stringify({ digest, event })).toBe(original);
+    expect(JSON.stringify({ digest, event, coachEvent })).toBe(original);
   });
 
   it.each([null, {}, { ...narrative, reflective_question: " " }])(
@@ -217,14 +382,18 @@ describe("Coach Digest composition", () => {
     const sourceEntry = { ...entry, content: "I wanted to record a busy day.", nudge_response: quote };
     record.sources[0] = { ...record.sources[0], journal_entry: sourceEntry.content,
       nudge_response: quote, response_available_at: "2026-07-01T19:00:00Z" };
+    const coachEvent = comparisonEvent(event, narrative);
     render(<ReplayTimeline profile={profile} week={{
       week_id: "current-week", week_start: digest.week_start, week_end: digest.week_end,
       journal_entry_ids: [], event_ids: [event.event_id], expected_delivery_state: "active_drift",
     }} journalEntries={[]} nudges={[]} reviewedJournalEntries={[sourceEntry]}
-      weeklyReviewerDecisions={[]} reviewTraceEvents={[event]} selectedJournalEntryId={null}
+      weeklyReviewerDecisions={[]} reviewTraceEvents={[coachEvent, event]} selectedJournalEntryId={null}
       cumulativeEntryCount={1} resultVisible onRevealResult={vi.fn()} driftResult={driftResult}
       weeklyDigest={digest} inspectRun={vi.fn()} inspectEventId={event.event_id}
       onSelectJournalEntry={vi.fn()} />);
+    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
+    await user.click(toggle);
     const sourceLink = await screen.findByRole("link", { name: /^Open response in Journal Entry/ });
     await user.click(sourceLink);
     const drawer = screen.getByRole("dialog");

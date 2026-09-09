@@ -88,11 +88,12 @@ export async function northStarProfileRef(profile: OnboardingProfile): Promise<s
     .map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-export function useNorthStarProfileRef(profile: OnboardingProfile): string | null {
+export function useNorthStarProfileRef(profile: OnboardingProfile | null): string | null {
   const profileJson = JSON.stringify(profile);
   const [resolved, setResolved] = useState<{ key: string; hash: string } | null>(null);
   useEffect(() => {
     let current = true;
+    if (profileJson === "null") return;
     void northStarProfileRef(JSON.parse(profileJson) as OnboardingProfile)
       .then((hash) => { if (current) setResolved({ key: profileJson, hash }); })
       .catch(() => { if (current) setResolved(null); });

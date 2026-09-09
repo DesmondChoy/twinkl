@@ -610,6 +610,121 @@
       "title": "BwsResults",
       "type": "object"
     },
+    "CoachComparisonArm": {
+      "additionalProperties": false,
+      "properties": {
+        "base_prompt": {
+          "title": "Base Prompt",
+          "type": "string"
+        },
+        "base_prompt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Base Prompt Sha256",
+          "type": "string"
+        },
+        "call_metrics": {
+          "items": {
+            "$ref": "#/$defs/LLMCallMetrics"
+          },
+          "title": "Call Metrics",
+          "type": "array"
+        },
+        "diagnostic_paths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Diagnostic Paths",
+          "type": "array"
+        },
+        "model": {
+          "const": "gpt-5.6-luna",
+          "default": "gpt-5.6-luna",
+          "title": "Model",
+          "type": "string"
+        },
+        "narrative": {
+          "$ref": "#/$defs/CoachNarrative"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        },
+        "prompt_name": {
+          "const": "demo_coach_nsm_comparison",
+          "default": "demo_coach_nsm_comparison",
+          "title": "Prompt Name",
+          "type": "string"
+        },
+        "prompt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Prompt Sha256",
+          "type": "string"
+        },
+        "prompt_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Prompt Version",
+          "type": "string"
+        },
+        "provider": {
+          "const": "openai",
+          "default": "openai",
+          "title": "Provider",
+          "type": "string"
+        },
+        "raw_output": {
+          "title": "Raw Output",
+          "type": "string"
+        },
+        "raw_output_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Raw Output Sha256",
+          "type": "string"
+        },
+        "reasoning_effort": {
+          "const": "none",
+          "default": "none",
+          "title": "Reasoning Effort",
+          "type": "string"
+        },
+        "repair_requirements": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Repair Requirements",
+          "type": "array"
+        },
+        "response_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Response Sha256",
+          "type": "string"
+        },
+        "service_tier": {
+          "const": "default",
+          "default": "default",
+          "title": "Service Tier",
+          "type": "string"
+        },
+        "validation": {
+          "$ref": "#/$defs/DigestValidation"
+        }
+      },
+      "required": [
+        "narrative",
+        "validation",
+        "base_prompt",
+        "prompt",
+        "raw_output",
+        "call_metrics",
+        "diagnostic_paths",
+        "base_prompt_sha256",
+        "prompt_sha256",
+        "response_sha256",
+        "raw_output_sha256"
+      ],
+      "title": "CoachComparisonArm",
+      "type": "object"
+    },
     "CoachNarrative": {
       "description": "Structured Coach Digest response.",
       "properties": {
@@ -2086,6 +2201,200 @@
       "title": "JournalEntrySubmittedResponse",
       "type": "object"
     },
+    "LLMCallMetrics": {
+      "description": "Usage and timing for one provider model call.",
+      "properties": {
+        "cache_write_input_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cache Write Input Tokens"
+        },
+        "cached_input_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cached Input Tokens"
+        },
+        "calculated_cost_usd": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calculated Cost Usd"
+        },
+        "call_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Call Label"
+        },
+        "error_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Type"
+        },
+        "input_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Tokens"
+        },
+        "latency_seconds": {
+          "minimum": 0,
+          "title": "Latency Seconds",
+          "type": "number"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "output_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Tokens"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        },
+        "reasoning_effort": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reasoning Effort"
+        },
+        "reasoning_output_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reasoning Output Tokens"
+        },
+        "response_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Id"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "service_tier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Service Tier"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "total_tokens": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Tokens"
+        }
+      },
+      "required": [
+        "provider",
+        "model",
+        "latency_seconds"
+      ],
+      "title": "LLMCallMetrics",
+      "type": "object"
+    },
     "ModelContract": {
       "additionalProperties": false,
       "properties": {
@@ -2117,6 +2426,70 @@
         "model"
       ],
       "title": "ModelContract",
+      "type": "object"
+    },
+    "NorthStarCoachContext": {
+      "additionalProperties": false,
+      "properties": {
+        "core_value_phrase": {
+          "title": "Core Value Phrase",
+          "type": "string"
+        },
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "exact_quote": {
+          "title": "Exact Quote",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "reflection",
+            "encouragement",
+            "reminder"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "parent_journal_entry": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ParentJournalEntry"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_text": {
+          "title": "Source Text",
+          "type": "string"
+        },
+        "source_type": {
+          "enum": [
+            "journal_entry",
+            "nudge_response"
+          ],
+          "title": "Source Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "source_type",
+        "date",
+        "exact_quote",
+        "source_text",
+        "mode",
+        "core_value_phrase"
+      ],
+      "title": "NorthStarCoachContext",
       "type": "object"
     },
     "NorthStarRecord": {
@@ -3794,6 +4167,30 @@
       "title": "OnboardingProfile",
       "type": "object"
     },
+    "ParentJournalEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_text": {
+          "title": "Source Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "date",
+        "source_text"
+      ],
+      "title": "ParentJournalEntry",
+      "type": "object"
+    },
     "ProfileConfirmedDetails": {
       "additionalProperties": false,
       "properties": {
@@ -4352,6 +4749,71 @@
         "retryable"
       ],
       "title": "SafeError",
+      "type": "object"
+    },
+    "SavedCoachComparison": {
+      "additionalProperties": false,
+      "properties": {
+        "north_star_context": {
+          "$ref": "#/$defs/NorthStarCoachContext"
+        },
+        "north_star_context_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "North Star Context Sha256",
+          "type": "string"
+        },
+        "north_star_input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "North Star Input Hash",
+          "type": "string"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "scenario_id": {
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "coach-digest-nsm-comparison-v1",
+          "default": "coach-digest-nsm-comparison-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "week_end": {
+          "title": "Week End",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        },
+        "weekly_drift_input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Weekly Drift Input Sha256",
+          "type": "string"
+        },
+        "with_north_star": {
+          "$ref": "#/$defs/CoachComparisonArm"
+        },
+        "without_north_star": {
+          "$ref": "#/$defs/CoachComparisonArm"
+        }
+      },
+      "required": [
+        "scenario_id",
+        "persona_id",
+        "week_start",
+        "week_end",
+        "weekly_drift_input_sha256",
+        "north_star_input_hash",
+        "north_star_context_sha256",
+        "north_star_context",
+        "without_north_star",
+        "with_north_star"
+      ],
+      "title": "SavedCoachComparison",
       "type": "object"
     },
     "SavedExperimentRecord": {
@@ -5484,6 +5946,17 @@
     "WeeklyCoachGeneratedDetails": {
       "additionalProperties": false,
       "properties": {
+        "comparison": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SavedCoachComparison"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "narrative": {
           "anyOf": [
             {

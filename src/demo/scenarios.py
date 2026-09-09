@@ -12,6 +12,10 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from src.coach.demo_comparison import (
+    SavedCoachComparisonFixture,
+    validate_saved_comparison,
+)
 from src.coach.schemas import CoachNarrative, LLMCallMetrics
 from src.coach.weekly_digest import (
     attach_coach_artifacts,
@@ -55,6 +59,7 @@ ATTEMPTS_PATH = WEEKLY_EXPERIMENT_DIRECTORY / "attempts.jsonl"
 WEEKLY_MANIFEST_PATH = WEEKLY_EXPERIMENT_DIRECTORY / "manifest.json"
 WEEKLY_VARIANT = "definitions"
 COACH_RESPONSES_PATH = Path("src/demo/coach_digest_responses.json")
+COACH_COMPARISONS_PATH = Path("src/demo/coach_digest_comparisons.json")
 NORTH_STAR_REPORT_PATH = Path("src/demo/north_star_replay_records.json")
 
 LUNA_LOW = ModelContract(
@@ -332,6 +337,18 @@ def load_saved_coach_responses(root: Path) -> SavedCoachResponseFixture:
                 response.narrative
             ):
                 raise ValueError("Coach Digest response hash differs from its text")
+    return fixture
+
+
+def load_saved_coach_comparisons(root: Path) -> SavedCoachComparisonFixture:
+    """Read optional demo pairs; manual sessions never consume this fixture."""
+    path = root.resolve() / COACH_COMPARISONS_PATH
+    if not path.exists():
+        return SavedCoachComparisonFixture(comparisons={})
+    fixture = SavedCoachComparisonFixture.model_validate_json(path.read_bytes())
+    allowed = {selection.scenario_id for selection in SELECTIONS}
+    if any(pair.scenario_id not in allowed for pair in fixture.comparisons.values()):
+        raise ValueError("Coach comparison is outside the five saved Personas")
     return fixture
 
 
@@ -1239,6 +1256,7 @@ def build_scenario_fixture(
     )
     if include_north_star and (root / NORTH_STAR_REPORT_PATH).exists():
         fixture = attach_saved_north_star(fixture, root=root)
+        fixture = attach_saved_coach_comparisons(fixture, root=root)
     return fixture
 
 
@@ -1377,6 +1395,107 @@ def attach_saved_north_star(
     return ContractFixtureSet.model_validate(payload)
 
 
+def attach_saved_coach_comparisons(
+    fixture: ContractFixtureSet, *, root: Path
+) -> ContractFixtureSet:
+    """Attach validated demo pairs and expose their without-context default."""
+    from src.demo.north_star_replay import validate_saved_record
+
+    saved = load_saved_coach_comparisons(root)
+    matching = {
+        key: pair for key, pair in saved.comparisons.items()
+        if pair.scenario_id == fixture.scenario.scenario_id
+    }
+    if not matching:
+        return fixture
+    expected_keys = {
+        f"{fixture.scenario.scenario_id}::{week.week_start}"
+        for week in fixture.scenario.weeks
+    }
+    if not matching.keys() <= expected_keys:
+        raise ValueError("Coach comparison contains an unknown replay week")
+    payload = fixture.model_dump(mode="json")
+    payload_events = {event["event_id"]: event for event in payload["trace_events"]}
+    for week in fixture.scenario.weeks:
+        pair = matching.get(f"{fixture.scenario.scenario_id}::{week.week_start}")
+        if pair is None:
+            continue
+        events = [
+            event for event in fixture.trace_events if event.event_id in week.event_ids
+        ]
+        digests = [
+            event for event in events if event.event_type == "weekly_digest_built"
+        ]
+        coaches = [
+            event for event in events if event.event_type == "weekly_coach_generated"
+        ]
+        moments = [
+            event for event in events if event.event_type == "north_star_reviewed"
+        ]
+        if len(digests) != 1 or len(coaches) != 1 or len(moments) != 1:
+            raise ValueError(
+                "Coach comparison requires one digest, response, and NSM record"
+            )
+        digest = digests[0].details.digest
+        record = moments[0].details.record
+        validate_saved_record(
+            record, build_saved_north_star_request(fixture, week.week_id)
+        )
+        validate_saved_comparison(pair, digest, record, fixture.scenario.scenario_id)
+        baseline = pair.without_north_star
+        updated_digest = attach_coach_artifacts(
+            digest, baseline.narrative, baseline.validation
+        ).model_dump(mode="json")
+        digest_event = payload_events[digests[0].event_id]
+        digest_event["details"]["digest"] = updated_digest
+        digest_event["details"]["coach_unavailable_reason"] = None
+        coach_event = payload_events[coaches[0].event_id]
+        coach_event["details"] = {
+            "narrative": baseline.narrative.model_dump(mode="json"),
+            "validation": baseline.validation.model_dump(mode="json"),
+            "comparison": pair.model_dump(mode="json"),
+        }
+        coach_event["prompt"] = baseline.prompt
+        coach_event["raw_response"] = baseline.raw_output
+        coach_event["model_contract"] = {
+            "provider": baseline.provider,
+            "model": baseline.model,
+            "reasoning_effort": baseline.reasoning_effort,
+        }
+        duration = round(baseline.call_metrics[-1].latency_seconds * 1000)
+        coach_event["duration_ms"] = duration
+        coach_event["completed_at"] = (
+            datetime.fromisoformat(coach_event["started_at"].replace("Z", "+00:00"))
+            + timedelta(milliseconds=duration)
+        ).isoformat().replace("+00:00", "Z")
+        moment_event = payload_events[moments[0].event_id]
+        moment_event["started_at"] = coach_event["completed_at"]
+        moment_event["completed_at"] = coach_event["completed_at"]
+        for event in (digest_event, coach_event):
+            event["input_hash"] = _sha256_json({
+                field: event[field]
+                for field in ("event_type", "input_refs", "details", "prompt")
+            })
+        if week.week_id == fixture.scenario.weeks[-1].week_id:
+            payload["scenario"]["weekly_digest"] = updated_digest
+    scenario = payload["scenario"]
+    scenario["manifest"]["source_files"].append(COACH_COMPARISONS_PATH.as_posix())
+    scenario["manifest"]["input_hash"] = _sha256_json({
+        "base_input_hash": scenario["manifest"]["input_hash"],
+        "coach_comparisons_sha256": _sha256_file(root / COACH_COMPARISONS_PATH),
+    })
+    session = _initial_session_payload(
+        scenario=scenario, trace_events=payload["trace_events"], week_index=0
+    )
+    payload["session"] = session
+    for response in payload["responses"]:
+        if response["operation"] == "load_scenario":
+            response["session"] = session
+            response["scenario"] = scenario
+            response["event_ids"] = session["trace_event_ids"]
+    return ContractFixtureSet.model_validate(payload)
+
+
 def project_scenario_week(
     fixture: ContractFixtureSet,
     week_id: str,
@@ -1433,6 +1552,11 @@ def _validate_fixture_semantics(
     has_north_star = any(
         event.event_type == "north_star_reviewed" for event in fixture.trace_events
     )
+    has_comparisons = any(
+        event.event_type == "weekly_coach_generated"
+        and event.details.comparison is not None
+        for event in fixture.trace_events
+    )
     if has_north_star:
         expected_sources.append(NORTH_STAR_REPORT_PATH.as_posix())
         expected_input_hash = _sha256_json(
@@ -1441,6 +1565,12 @@ def _validate_fixture_semantics(
                 "north_star_report_sha256": _sha256_file(root / NORTH_STAR_REPORT_PATH),
             }
         )
+    if has_comparisons:
+        expected_sources.append(COACH_COMPARISONS_PATH.as_posix())
+        expected_input_hash = _sha256_json({
+            "base_input_hash": expected_input_hash,
+            "coach_comparisons_sha256": _sha256_file(root / COACH_COMPARISONS_PATH),
+        })
     if scenario.manifest.source_files != expected_sources:
         raise ValueError("Scenario source provenance is incomplete")
     if scenario.manifest.input_hash != expected_input_hash:
@@ -1476,6 +1606,9 @@ def _validate_fixture_semantics(
             )
 
     coach_responses = load_saved_coach_responses(root)
+    comparisons = (
+        load_saved_coach_comparisons(root).comparisons if has_north_star else {}
+    )
     for week in scenario.weeks:
         expected_coach = coach_responses.responses.get(
             f"{selection.scenario_id}::{week.week_start}"
@@ -1493,6 +1626,32 @@ def _validate_fixture_semantics(
             and event.event_id in week.event_ids
         )
         digest = digest_event.details.digest
+        comparison = comparisons.get(f"{selection.scenario_id}::{week.week_start}")
+        if comparison is not None:
+            moment = next(
+                event for event in fixture.trace_events
+                if event.event_type == "north_star_reviewed"
+                and event.event_id in week.event_ids
+            )
+            validate_saved_comparison(
+                comparison, digest, moment.details.record, scenario.scenario_id
+            )
+            baseline = comparison.without_north_star
+            if (
+                len(coach_events) != 1
+                or coach_events[0].details.comparison != comparison
+                or digest.coach_narrative != baseline.narrative
+                or digest.validation != baseline.validation
+                or digest_event.details.coach_unavailable_reason is not None
+                or expected_coach is None
+                or expected_coach.generation is None
+                or expected_coach.generation.weekly_digest_event_id
+                != digest_event.event_id
+            ):
+                raise ValueError("Scenario Coach comparison differs from saved pair")
+            continue
+        if any(event.details.comparison is not None for event in coach_events):
+            raise ValueError("Scenario contains an unsaved Coach comparison")
         unavailable_reason = _coach_unavailable_reason(expected_coach, digest)
         if unavailable_reason is not None:
             if coach_events or digest.coach_narrative is not None:

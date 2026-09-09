@@ -4061,7 +4061,8 @@
               "details": "Within limit"
             }
           ]
-        }
+        },
+        "comparison": null
       }
     },
     {

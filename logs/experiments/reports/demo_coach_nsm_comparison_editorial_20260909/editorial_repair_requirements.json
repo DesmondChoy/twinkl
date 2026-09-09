@@ -1,0 +1,11 @@
+{
+  "active-nisha::2025-03-10::with_north_star": {
+    "response_sha256": "61c87a7f55414af4f4ae971919436b6d570c1ccef83b412472fe627dda38b217",
+    "reason": "AI editorial review: the earlier weekly attendance-data passage was invented as the cause of the later selected lesson-planning action.",
+    "requirements": [
+      "Keep the required quoted weekly evidence separate from the motivation for the selected action. Do not use an earlier administrative passage as a causal explanation of a later teaching decision unless the source explicitly links them.",
+      "Use only the motivation actually supplied in the full selected source_text for its described action. In that source, the relevant motivation is the earlier classroom-to-home learning example, not the unrelated administrative work.",
+      "Avoid causal connective wording between independent dated passages. You may reflect on both, but preserve their separate dates, actors, and stated reasons."
+    ]
+  }
+}

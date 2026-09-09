@@ -6697,6 +6697,65 @@ h2 {
   margin-top: 0;
 }
 
+.coach-digest__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.coach-digest__header .eyebrow {
+  margin: 0;
+}
+
+.coach-digest__comparison-toggle {
+  border: 1px solid rgba(46, 140, 130, 0.45);
+  border-radius: 9px;
+  padding: 8px 12px;
+  background: transparent;
+  color: #246e66;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 650;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.coach-digest__comparison-toggle:disabled {
+  color: #6f797b;
+  border-color: #c9d0d0;
+  cursor: default;
+}
+
+.coach-digest__comparison-toggle:focus-visible {
+  outline: 2px solid var(--verdigris);
+  outline-offset: 3px;
+}
+
+.coach-digest__comparison-status {
+  margin: 0 0 16px;
+  color: #617078;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.coach-digest__comparison-status p {
+  margin: 0 0 4px;
+}
+
+@media (max-width: 600px) {
+  .coach-digest__header {
+    align-items: stretch;
+    flex-direction: column;
+    margin-bottom: 14px;
+  }
+
+  .coach-digest__comparison-toggle {
+    width: 100%;
+  }
+}
+
 .replay-column__inspect {
   justify-self: start;
   margin: 0 2px 2px;

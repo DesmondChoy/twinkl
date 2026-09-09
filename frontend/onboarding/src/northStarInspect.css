@@ -117,3 +117,31 @@
     padding: 12px;
   }
 }
+.inspect-coach-comparison {
+  min-width: 0;
+}
+
+.inspect-coach-comparison__arm {
+  min-width: 0;
+  margin-top: 24px;
+  border-top: 1px solid rgba(46, 140, 130, 0.25);
+  padding-top: 16px;
+}
+
+.inspect-coach-comparison__arm > h4 {
+  margin: 0 0 12px;
+  color: #246e66;
+  font-size: 1rem;
+}
+
+.inspect-coach-comparison__response {
+  margin: 20px 0;
+  border-left: 3px solid var(--verdigris);
+  padding: 4px 16px;
+  line-height: 1.65;
+}
+
+.inspect-coach-comparison__response h5 {
+  margin: 8px 0;
+  font-size: 0.9rem;
+}

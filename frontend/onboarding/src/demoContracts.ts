@@ -836,7 +836,9 @@ function validateEventDetails(event: JsonObject, name: string): void {
       }
       break;
     case "weekly_coach_generated":
-      exactKeys(details, ["narrative", "validation"], `${name}.details`);
+      exactKeys(details, ["narrative", "validation",
+        ...("comparison" in details ? ["comparison"] : []),
+      ], `${name}.details`);
       if (details.narrative !== null) {
         object(details.narrative, `${name}.details.narrative`);
       }

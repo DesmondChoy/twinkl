@@ -10,7 +10,9 @@ replay uses the completed full-history outcomes from the targeted Weekly Drift
 v4 Run 1 update, preserving no-card outcomes and original receipt provenance.
 Live review uses a separately authorized US$1 allowance shared across sessions
 and restarts. Both Experience paths place a selected quotation within a valid
-Coach Digest before its original reflective question.
+Coach Digest before its reflective question. The saved demo can switch between
+complete responses generated with and without the selected source context;
+onboarding retains its original narrative and question.
 
 The [8 September integration check](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
 records five unresolved AI editorial concerns across the previous roster's
@@ -44,6 +46,15 @@ encouragement, then an older
 historical reminder. No Active Drift alone never establishes alignment.
 Insufficient Evidence produces no card.
 
+**Saved demo comparison:** The [five-Persona comparison](demo_coach_comparison.md)
+specifies the toggle, exact Coach Digest prompts, injected field, and paired
+response provenance. The default is **Without North Star Moment**. Switching to
+**With North Star Moment** replaces both narrative paragraphs and the reflective
+question for the same Persona and week, and displays the existing quotation
+panel. Inspect shows both exact prompts beside their associated responses.
+This comparison applies only to saved demo Personas; it preserves onboarding
+behavior and the frozen North Star Moment selection experiment.
+
 ## 1. Role in the weekly reflection
 
 Twinkl compares Journal Entries with the user's confirmed Core Values.
@@ -66,9 +77,12 @@ covering 27 reviewed weeks from the completed targeted experiment. The
 onboarding path supports generation during the user's session after an
 eligible closed-week review when its runtime budget is available. Both paths
 use the same selection and validation rules. Experience places the quotation
-after the existing Coach Digest narrative and before its original reflective
-question, within one reading area. Inspect shows why it was selected. The
-personal example adds no advice, second question, or model rewrite.
+after the displayed Coach Digest narrative and before its reflective question,
+within one reading area. Inspect shows why it was selected. In the saved demo,
+the with-context response receives the exact quotation and complete selected
+source in its prompt; its narrative and question can therefore refer to that
+action. Onboarding keeps its existing response and inserts the quotation without
+a model rewrite. Neither path adds advice or a second question.
 
 A Persona or user need not receive a card. Weeks without an eligible trigger
 or a suitable earlier action correctly show none. The onboarding path uses
@@ -139,8 +153,10 @@ This wording rule does not change detection decisions or permit rewriting
 the user's quoted words.
 
 Experience adds at most one North Star Moment passage to a valid Coach Digest
-per reviewed week. It preserves the generated narrative fields and exact selected
-quotation, with the original reflective question at the end. The introduction
+per reviewed week. The exact selected quotation is preserved, with the displayed
+response's reflective question at the end. Saved replay shows this passage only
+with its validated with-context response; the without-context response hides it.
+Onboarding preserves its original generated narrative and question. The introduction
 is deterministic and based on the accepted record:
 reflection for Active Drift, specific acknowledgment for a current-week
 action, or historical reminder for older writing. It does not add a second
@@ -183,6 +199,14 @@ source's assessment opens by default. Original provider attempts remain visible;
 missing receipts are explicitly unavailable. These runtime AI assessments do
 not stand in for the separate benchmark evaluation or human validation.
 
+For an available saved comparison, the Coach Digest Inspect event contains
+**Without North Star Moment** and **With North Star Moment** panels. Each panel
+shows its generated narrative, question, exact accepted prompt, raw response,
+and model details. The initial prompt remains available when repair feedback
+changed the accepted request. Inspect also shows the changed `north_star_context`
+field and the shared weekly input. Switching the Experience toggle does not hide
+either Inspect panel and never makes a provider call.
+
 Pending, missing, invalid, or failed records omit the passage and leave Weekly
 Drift Detection and any valid Coach Digest available. An absent or invalid Coach
 Digest also suppresses augmentation; Experience does not show an empty moment
@@ -194,9 +218,11 @@ retry; they are not excluded because they are manual sessions. Changes to
 source data invalidate affected results in both paths.
 
 North Star Moment leaves the Profile, Core Values, Weekly Drift Reviewer
-Decisions, Drift Detector result, Historical Drift Records, and existing Coach Digest
-response unchanged. The NSM introduction supplies the additional context-sensitive
-Coach framing beside that response. Advice, action plans, habits, external quotations, Profile
+Decisions, Drift Detector result, and Historical Drift Records unchanged. The
+saved comparison varies only the Coach Digest's selected source context; the
+two complete responses retain separate provider receipts. Onboarding keeps its
+existing response and uses the deterministic introduction beside the quotation.
+Advice, action plans, habits, external quotations, Profile
 evolution, model training, production multi-user storage, and background
 scheduling remain outside this version.
 
