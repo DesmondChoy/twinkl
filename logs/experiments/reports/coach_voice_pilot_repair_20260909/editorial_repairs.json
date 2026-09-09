@@ -1,0 +1,20 @@
+{
+  "persistent-lukas::2025-06-16::without_north_star": {
+    "response_sha256": "8388eafa7ff2d9f32b7577a5650476e3a362d14c68c580f827385f3c0b916cc2",
+    "reason": "AI editorial review found repeated lunch narration and remaining assessment language despite factual improvements. A final concise voice revision is needed.",
+    "requirements": [
+      "The revision still reads like an assessment. Put the pressure of Sandra being senior and leading the upcoming roadmap review into the opening, then the choice to change the subject and the required quotation. Do not open by listing what happened at lunch followed immediately by another occasion. Avoid retelling the same lunch in both paragraphs.",
+      "Use everyday words and speak to Lukas directly. Remove alongside that, the recent entries include, point to a repeated difficulty, together they show, did not guide what you did, and the reasons may not be the same. Do not replace these phrases with other commentary about evidence, categories, or inference. Leaving separate reasons unstated is sufficient; do not add a disclaimer about them.",
+      "Let the second paragraph add a personal reflection about the gap between wanting fairness and the particular choices of silence or convenience, without assigning a single motive or judging the person. If the earlier help for Amira is used, place it naturally in this paragraph as one specific memory. Keep the whole response about 90-120 words with one short question. Prefer simple sentences over semicolon summaries."
+    ]
+  },
+  "persistent-lukas::2025-06-16::with_north_star": {
+    "response_sha256": "fb46702e6c2f1480f68b696c3f26f37e2f818d0dabccac52e8f31f254d597bc5",
+    "reason": "AI editorial review found repeated lunch narration and remaining assessment language despite factual improvements. A final concise voice revision is needed.",
+    "requirements": [
+      "The revision still reads like an assessment. Put the pressure of Sandra being senior and leading the upcoming roadmap review into the opening, then the choice to change the subject and the required quotation. Do not open by listing what happened at lunch followed immediately by another occasion. Avoid retelling the same lunch in both paragraphs.",
+      "Use everyday words and speak to Lukas directly. Remove alongside that, the recent entries include, point to a repeated difficulty, together they show, did not guide what you did, and the reasons may not be the same. Do not replace these phrases with other commentary about evidence, categories, or inference. Leaving separate reasons unstated is sufficient; do not add a disclaimer about them.",
+      "Let the second paragraph add a personal reflection about the gap between wanting fairness and the particular choices of silence or convenience, without assigning a single motive or judging the person. If the earlier help for Amira is used, place it naturally in this paragraph as one specific memory. Keep the whole response about 90-120 words with one short question. Prefer simple sentences over semicolon summaries."
+    ]
+  }
+}

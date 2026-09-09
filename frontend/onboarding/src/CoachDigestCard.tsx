@@ -5,7 +5,7 @@ import NorthStarMoment from "./NorthStarMoment";
 import { expandCoachQuotations } from "./coachQuotes";
 import { journalEntryAnchorId } from "./journalEntryAnchor";
 import { currentNorthStarEvent, displayableNorthStarSelection, useNorthStarProfileRef } from "./northStar";
-import { comparisonMatchesMoment, savedCoachComparison } from "./coachComparison";
+import { comparisonMatchesMoment, northStarAbsenceExplanation, savedCoachComparison } from "./coachComparison";
 
 type JsonObject = Record<string, unknown>;
 
@@ -57,16 +57,15 @@ export default function CoachDigestCard({
   const savedPair = savedCoachComparison(coachEvent);
   const pair = savedPair && moment && selected && comparisonMatchesMoment(savedPair, moment, selected)
     ? savedPair : null;
-  const recordedMoment = demo ? [...northStar.traceEvents].reverse().find((event) => {
-    const record = object(event.details.record);
-    return record !== null && event.event_type === "north_star_reviewed" && event.session_id === northStar.profile.session_id
-      && record.week_start === weeklyDigest?.week_start && record.week_end === weeklyDigest?.week_end;
-  }) : null;
-  const hasRecordedSelection = object(object(recordedMoment?.details.record)?.selected) !== null;
   const comparisonKey = pair ? `${northStar!.profile.session_id}:${profileRef}:${pair.week_start}:${pair.week_end}:${moment!.event.event_id}:${coachEvent!.event_id}` : null;
   const [activeComparison, setActiveComparison] = useState<string | null>(null);
   useEffect(() => { setActiveComparison(null); }, [comparisonKey]);
   const withMoment = pair !== null && comparisonKey !== null && activeComparison === comparisonKey;
+  const explanationKey = JSON.stringify([northStar?.profile, weeklyDigest?.week_start, weeklyDigest?.week_end]);
+  const [expandedExplanation, setExpandedExplanation] = useState<string | null>(null);
+  useEffect(() => { setExpandedExplanation(null); }, [explanationKey, comparisonKey]);
+  const showExplanation = !pair && expandedExplanation === explanationKey;
+  const explanation = northStarAbsenceExplanation(moment);
   const baseline = object(weeklyDigest?.coach_narrative);
   const narrative = pair ? pair[withMoment ? "with_north_star" : "without_north_star"].narrative : baseline;
   const weeklyMirror = nonEmptyText(narrative?.weekly_mirror);
@@ -77,6 +76,7 @@ export default function CoachDigestCard({
     || !["weekly_mirror", "tension_explanation", "reflective_question"].every((key) => nonEmptyText(baseline?.[key]))) return null;
 
   const Heading = headingLevel === 2 ? "h2" : "h3";
+  const ExplanationHeading = headingLevel === 2 ? "h3" : "h4";
   const classes = ["coach-digest", className].filter(Boolean).join(" ");
   const cutoff = typeof weeklyDigest?.week_end === "string"
     ? weeklyDigest.week_end : null;
@@ -126,10 +126,14 @@ export default function CoachDigestCard({
         <p className="eyebrow">Coach Digest</p>
         {demo ? (
           <button className="coach-digest__comparison-toggle" type="button"
-            disabled={!pair}
             aria-describedby={`${headingId}-comparison-status`}
-            onClick={() => setActiveComparison(withMoment ? null : comparisonKey)}>
-            {withMoment ? "Without North Star Moment" : "With North Star Moment"}
+            aria-expanded={!pair ? showExplanation : undefined}
+            aria-controls={!pair ? `${headingId}-comparison-explanation` : undefined}
+            onClick={() => {
+              if (pair) setActiveComparison(withMoment ? null : comparisonKey);
+              else setExpandedExplanation(showExplanation ? null : explanationKey);
+            }}>
+            {withMoment ? "Without North Star Moment" : showExplanation ? "Hide explanation" : "With North Star Moment"}
           </button>
         ) : null}
       </div>
@@ -137,9 +141,22 @@ export default function CoachDigestCard({
       {demo ? (
         <div className="coach-digest__comparison-status" id={`${headingId}-comparison-status`} role="status">
           <p>Showing: {withMoment ? "With" : "Without"} North Star Moment</p>
-          {!pair ? <p>{hasRecordedSelection
-            ? "Comparison unavailable for this week." : "No North Star Moment for this week."}</p> : null}
         </div>
+      ) : null}
+      {demo && !pair ? (
+        <section className="coach-digest__comparison-explanation"
+          id={`${headingId}-comparison-explanation`} hidden={!showExplanation}
+          aria-labelledby={`${headingId}-explanation-title`}>
+          <ExplanationHeading id={`${headingId}-explanation-title`}>{explanation.title}</ExplanationHeading>
+          <p>{explanation.reason}</p>
+          <p>The reflection below is unchanged.</p>
+          {moment && northStar.inspectMoment ? (
+            <button className="inspect-run-link" type="button"
+              onClick={() => northStar.inspectMoment!(moment.event.event_id)}>
+              View review in Inspect
+            </button>
+          ) : null}
+        </section>
       ) : null}
       {expanded.slice(0, 2).map((paragraph, index) => (
         <Fragment key={index}>

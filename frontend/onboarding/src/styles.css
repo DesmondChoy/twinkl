@@ -6722,12 +6722,6 @@ h2 {
   cursor: pointer;
 }
 
-.coach-digest__comparison-toggle:disabled {
-  color: #6f797b;
-  border-color: #c9d0d0;
-  cursor: default;
-}
-
 .coach-digest__comparison-toggle:focus-visible {
   outline: 2px solid var(--verdigris);
   outline-offset: 3px;
@@ -6742,6 +6736,26 @@ h2 {
 
 .coach-digest__comparison-status p {
   margin: 0 0 4px;
+}
+
+.coach-digest__comparison-explanation {
+  border-top: 1px solid #c9d0d0;
+  margin: 0 0 20px;
+  padding-top: 14px;
+  color: #42545c;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.coach-digest__comparison-explanation h3,
+.coach-digest__comparison-explanation h4 {
+  margin: 0 0 8px;
+  font: inherit;
+  font-weight: 650;
+}
+
+.coach-digest__comparison-explanation p {
+  margin: 0 0 10px;
 }
 
 @media (max-width: 600px) {

@@ -172,7 +172,7 @@ def test_refresh_preserves_original_receipts_and_resumes_without_calls(
     assert request["model"] == "gpt-5.6-luna"
     assert request["reasoning"] == {"effort": "none"}
     assert state["attempts"][0]["request_sha256"] == runner._hash(request)
-    assert state["response"]["generation"]["prompt_version"] == "4.4"
+    assert state["response"]["generation"]["prompt_version"] == "4.5"
     runner.apply(tmp_path, output, plan)
     refreshed = load_saved_coach_responses(tmp_path).responses[key]
     assert refreshed.generation.prompt != "original provider prompt"

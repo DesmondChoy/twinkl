@@ -1,0 +1,20 @@
+{
+  "persistent-lukas::2025-06-16::without_north_star": {
+    "response_sha256": "9b196d52bbd5410d1169bc09330a2f433d9cd902b93b2eac4e289fa416d220b7",
+    "reason": "AI editorial review requests a final correction to the conversation referent and removal of analytical closing clauses.",
+    "requirements": [
+      "Sandra was the person Lukas was with, not the topic of a conversation about her. Say he was with Sandra and considered her seniority; do not say Sandra came up in conversation. Do not add a location or a meeting topic.",
+      "Remove the final analytical commentary about holding differences in view, not reducing things to a simple explanation, or difficulty showing up differently. End the second paragraph after the grounded acknowledgment of what matters to Lukas and any earlier help for Amira. Do not replace those removed clauses with another explanation of the contrast. A short paragraph is sufficient.",
+      "The question should ask what felt at stake when deciding whether to speak up with Sandra. Do not presume that Lukas wanted to protect something."
+    ]
+  },
+  "persistent-lukas::2025-06-16::with_north_star": {
+    "response_sha256": "6d095cd5f1381e8ecb4371055f402f1894864b7540dac120bf2aa152a4d15360",
+    "reason": "AI editorial review requests a final correction to the conversation referent and removal of analytical closing clauses.",
+    "requirements": [
+      "Sandra was the person Lukas was with, not the topic of a conversation about her. Say he was with Sandra and considered her seniority; do not say Sandra came up in conversation. Do not add a location or a meeting topic.",
+      "Remove the final analytical commentary about holding differences in view, not reducing things to a simple explanation, or difficulty showing up differently. End the second paragraph after the grounded acknowledgment of what matters to Lukas and any earlier help for Amira. Do not replace those removed clauses with another explanation of the contrast. A short paragraph is sufficient.",
+      "The question should ask what felt at stake when deciding whether to speak up with Sandra. Do not presume that Lukas wanted to protect something."
+    ]
+  }
+}

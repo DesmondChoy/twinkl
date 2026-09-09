@@ -58,9 +58,8 @@ def test_all_eligible_pairs_replay_the_exact_default_and_inspect_receipts(
                 pair, session.weekly_digest, record, fixture.scenario.scenario_id
             )
             baseline = pair.without_north_star
-            for field, text in baseline.narrative.model_dump().items():
-                other = getattr(pair.with_north_star.narrative, field)
-                assert text.strip() != other.strip()
+            # Independent generations can arrive at the same reflective question.
+            assert baseline.narrative != pair.with_north_star.narrative
             assert session.weekly_digest.coach_narrative == baseline.narrative
             assert session.weekly_digest.validation == baseline.validation
             assert coach.details.narrative == baseline.narrative

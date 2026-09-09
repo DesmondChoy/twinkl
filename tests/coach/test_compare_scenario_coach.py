@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -62,6 +63,126 @@ def _generate(tmp_path, output, plan, metrics, responses, *, cost=0.001):
             metrics=metrics,
         )
     )
+
+
+def _selected_setup(tmp_path, monkeypatch):
+    key, _, _ = _setup(tmp_path, monkeypatch)
+    cases = runner.collect_comparison_cases(tmp_path)
+    other_key = "other-scenario::2025-01-01"
+    cases[other_key] = {**cases[key], "scenario_id": "other-scenario"}
+    old_pair = _pair(prompt_version="1.0")
+    other_pair = old_pair.model_copy(update={"scenario_id": "other-scenario"})
+    original = SavedCoachComparisonFixture(
+        comparisons={key: old_pair, other_key: other_pair}
+    ).model_dump(mode="json")
+    runner._write(tmp_path / COMPARISONS_PATH, original)
+    output = tmp_path / "selected"
+    plan = runner.prepare(tmp_path, output, case_keys=[key])
+    return key, other_key, output, plan, original
+
+
+def test_selected_pilot_only_calls_selected_pair_and_preserves_other_receipts(
+    tmp_path, monkeypatch
+):
+    key, other_key, output, plan, original = _selected_setup(tmp_path, monkeypatch)
+    original_bytes = (tmp_path / COMPARISONS_PATH).read_bytes()
+    assert plan["case_keys"] == [key]
+    assert list(plan["cases"]) == [key]
+    assert Decimal(plan["policy"]["maximum_reserved_usd"]) == (
+        2 * runner.MAXIMUM_ATTEMPTS * runner.PER_REQUEST_RESERVE_USD
+    )
+    metrics = []
+    _generate(tmp_path, output, plan, metrics, [_response(), _response()])
+    assert len(metrics) == 2
+    fixture = runner.apply(tmp_path, output, plan)
+    saved = json.loads((tmp_path / COMPARISONS_PATH).read_bytes())
+    assert set(fixture.comparisons) == {key, other_key}
+    assert saved["comparisons"][other_key] == original["comparisons"][other_key]
+    assert fixture.comparisons[key].with_north_star.prompt_version == "1.1"
+    assert (
+        output / "coach_digest_comparisons.before.json"
+    ).read_bytes() == original_bytes
+    assert runner.apply(tmp_path, output, plan) == fixture
+    assert runner.prepare(tmp_path, output) == plan
+    _generate(tmp_path, output, plan, metrics, [])
+    assert len(metrics) == 2
+
+
+@pytest.mark.parametrize(
+    ("selection", "message"),
+    [
+        ([], "nonempty"),
+        (["missing::2025-01-01"], "Unknown or ineligible"),
+        (["casey-scenario::2025-01-01"] * 2, "Duplicate"),
+        ("casey-scenario::2025-01-01", "nonempty"),
+    ],
+)
+def test_invalid_case_selection_is_rejected_before_freezing(
+    tmp_path, monkeypatch, selection, message
+):
+    _setup(tmp_path, monkeypatch)
+    output = tmp_path / "invalid-selection"
+    with pytest.raises(ValueError, match=message):
+        runner.prepare(tmp_path, output, case_keys=selection)
+    assert not output.exists()
+
+
+def test_selected_pilot_resume_and_repair_keep_frozen_selection(tmp_path, monkeypatch):
+    key, other_key, output, plan, _ = _selected_setup(tmp_path, monkeypatch)
+    assert runner.prepare(tmp_path, output) == plan
+    with pytest.raises(ValueError, match="Frozen comparison case selection"):
+        runner.prepare(tmp_path, output, case_keys=[other_key])
+    with pytest.raises(RuntimeError, match="Terminal"):
+        _generate(tmp_path, output, plan, [], [_response(), *(["bad"] * 4)])
+    repair = tmp_path / "selected-repair"
+    repair_plan = runner.prepare(tmp_path, repair, prior_run=output)
+    assert repair_plan["case_keys"] == [key]
+    assert list(repair_plan["cases"]) == [key]
+    assert repair_plan["comparison_baseline"] == plan["comparison_baseline"]
+    with pytest.raises(ValueError, match="selection differs from prior"):
+        runner.prepare(
+            tmp_path, tmp_path / "wrong-repair", prior_run=output, case_keys=[other_key]
+        )
+    metrics = []
+    _generate(tmp_path, repair, repair_plan, metrics, [_response()])
+    assert len(metrics) == 1
+    assert set(runner.apply(tmp_path, repair, repair_plan).comparisons) == {
+        key,
+        other_key,
+    }
+
+
+def test_incomplete_selected_pair_cannot_replace_existing_fixture(
+    tmp_path, monkeypatch
+):
+    _, _, output, plan, _ = _selected_setup(tmp_path, monkeypatch)
+    original = (tmp_path / COMPARISONS_PATH).read_bytes()
+    with pytest.raises(RuntimeError, match="Terminal"):
+        _generate(tmp_path, output, plan, [], [_response(), *(["bad"] * 4)])
+    with pytest.raises(RuntimeError, match="incomplete"):
+        runner.apply(tmp_path, output, plan)
+    assert (tmp_path / COMPARISONS_PATH).read_bytes() == original
+
+
+def test_selected_apply_rejects_changed_baseline_without_losing_update(
+    tmp_path, monkeypatch
+):
+    _, other_key, output, plan, original = _selected_setup(tmp_path, monkeypatch)
+    _generate(tmp_path, output, plan, [], [_response(), _response()])
+    del original["comparisons"][other_key]
+    runner._write(tmp_path / COMPARISONS_PATH, original)
+    changed = (tmp_path / COMPARISONS_PATH).read_bytes()
+    with pytest.raises(ValueError, match="fixture changed since"):
+        runner.apply(tmp_path, output, plan)
+    assert (tmp_path / COMPARISONS_PATH).read_bytes() == changed
+
+
+def test_selected_apply_rejects_changed_before_snapshot(tmp_path, monkeypatch):
+    _, _, output, plan, _ = _selected_setup(tmp_path, monkeypatch)
+    _generate(tmp_path, output, plan, [], [_response(), _response()])
+    (output / "coach_digest_comparisons.before.json").write_text("{}")
+    with pytest.raises(ValueError, match="baseline changed"):
+        runner.apply(tmp_path, output, plan)
 
 
 def test_complete_pairs_preserve_original_fixture_and_resume_without_calls(

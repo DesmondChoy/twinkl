@@ -1,0 +1,28 @@
+{
+  "persistent-lukas::2025-06-16::without_north_star": {
+    "response_sha256": "3e6be1491d4b35f9d3f61d57a5a95b006c565be6b6db7f5ea8c0043d4b82d5b1",
+    "reason": "AI editorial review found abstract assessment language, unsupported generalization across occasions, and a redundant or temporally ambiguous question despite deterministic validation passing.",
+    "requirements": [
+      "Rewrite the reflection in ordinary language that is comfortable to say aloud. Lead with the difficulty of speaking up at lunch with Sandra, using only the circumstances supplied in the input. Do not report on the writing or turn the second paragraph into a list of categories.",
+      "Keep claims specific to the recorded occasions. Do not infer that helping comes naturally, that practical help is generally easier, that speaking would have actual workplace consequences, or that the same psychological hesitation explains both silence and choosing convenience and cost. Acknowledge the repeated choices without inventing one motive for them all.",
+      "If you mention Amira, describe the particular help and the writer’s stated sense that the evening was worthwhile. Clearly locate it on an earlier occasion than the lunch with Sandra. Preserve the true gap using natural wording; do not require calendar dates or imply the two happened on the same day.",
+      "Use direct, concrete wording. Remove phrases such as sits sharply beside, how naturally you can, calculation around hierarchy, pull of safety or efficiency, and the immediate pressure wins out. Do not replace them with other abstract contrasts, personality claims, or general verdicts about the person.",
+      "Let the second paragraph develop the situation without repeating the opening, re-listing the events, or stating that a supportive act does not erase Drift. Keep the current repeated Conflict finding intact without suggesting overall progress or recovery.",
+      "Ask one short, concrete question that invites a further reflection rather than repeating the reason already given. Asking what Lukas wished he could have said to Sandra is a suitable direction. Do not assume how helping Amira felt compared with speaking up.",
+      "Preserve at least one exact phrase from evidence_lines in double quotation marks in weekly_mirror and ground every other quotation in the supplied source text. Do not add source details that are absent from the model input."
+    ]
+  },
+  "persistent-lukas::2025-06-16::with_north_star": {
+    "response_sha256": "ea47d9cf4d470ae0ce9d2d4f72a757e18f2b9303c8c502b25d23c5beb949ae44",
+    "reason": "AI editorial review found abstract assessment language, unsupported generalization across occasions, and a redundant or temporally ambiguous question despite deterministic validation passing.",
+    "requirements": [
+      "Rewrite the reflection in ordinary language that is comfortable to say aloud. Lead with the difficulty of speaking up at lunch with Sandra, using only the circumstances supplied in the input. Do not report on the writing or turn the second paragraph into a list of categories.",
+      "Keep claims specific to the recorded occasions. Do not infer that helping comes naturally, that practical help is generally easier, that speaking would have actual workplace consequences, or that the same psychological hesitation explains both silence and choosing convenience and cost. Acknowledge the repeated choices without inventing one motive for them all.",
+      "If you mention Amira, describe the particular help and the writer’s stated sense that the evening was worthwhile. Clearly locate it on an earlier occasion than the lunch with Sandra. Preserve the true gap using natural wording; do not require calendar dates or imply the two happened on the same day.",
+      "Use direct, concrete wording. Remove phrases such as sits sharply beside, how naturally you can, calculation around hierarchy, pull of safety or efficiency, and the immediate pressure wins out. Do not replace them with other abstract contrasts, personality claims, or general verdicts about the person.",
+      "Let the second paragraph develop the situation without repeating the opening, re-listing the events, or stating that a supportive act does not erase Drift. Keep the current repeated Conflict finding intact without suggesting overall progress or recovery.",
+      "Ask one short, concrete question that invites a further reflection rather than repeating the reason already given. Asking what Lukas wished he could have said to Sandra is a suitable direction. Do not assume how helping Amira felt compared with speaking up.",
+      "Preserve at least one exact phrase from evidence_lines in double quotation marks in weekly_mirror and ground every other quotation in the supplied source text. Do not add source details that are absent from the model input."
+    ]
+  }
+}

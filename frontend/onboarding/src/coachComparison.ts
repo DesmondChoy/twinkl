@@ -3,6 +3,48 @@ import type { NorthStarRecord, NorthStarSelection } from "./northStar";
 
 type JsonObject = Record<string, unknown>;
 
+export function northStarAbsenceExplanation(
+  result: { event: TraceEventContract; record: NorthStarRecord } | null,
+): { title: string; reason: string } {
+  const unavailable = {
+    title: "Comparison unavailable for this week",
+    reason: "The saved comparison could not be loaded or verified. This does not mean there was no supportive action in the writing.",
+  };
+  if (!result || !["complete", "reused", "not_eligible"].includes(result.event.status)
+    || result.event.validation?.valid === false
+    || !["complete", "not_eligible"].includes(result.record.status)
+    || result.record.selected !== null) return unavailable;
+  const { record } = result;
+  let reason: string;
+  switch (record.reason) {
+    case "no_eligible_writing":
+      reason = record.onset_t_index !== null
+        ? "For Active Drift, a North Star Moment must come from before the Drift began. No eligible writing was available from that earlier period."
+        : "There was no eligible writing available for this week’s North Star Moment review.";
+      break;
+    case "insufficient_evidence":
+      reason = "There isn’t enough evidence to determine this week’s Drift state. Twinkl skips North Star Moments in this situation.";
+      break;
+    case "no_supportive_source": {
+      reason = "The saved AI review did not find an action clearly supporting the reviewed Core Value in the eligible writing.";
+      const reviews = object(object(object(record.experiment)?.output)?.source_reviews);
+      const decisions = Object.values(reviews ?? {}).flatMap((review) => {
+        const results = object(review)?.results;
+        return Array.isArray(results) ? results.map(object) : [];
+      });
+      if (decisions.length && decisions.every((decision) => decision?.reason_code === "wrong_value")) {
+        reason = "The saved AI review did not find a clear enough connection between the action described and the reviewed Core Value.";
+      } else if (decisions.length && decisions.every((decision) => decision?.reason_code === "same_value_conflict")) {
+        reason = "The saved AI review found behavior conflicting with the same Core Value in the eligible writing, so it did not select a North Star Moment.";
+      }
+      break;
+    }
+    default:
+      return unavailable;
+  }
+  return { title: "Why there’s no North Star Moment", reason };
+}
+
 export interface CoachComparisonNarrative extends JsonObject {
   weekly_mirror: string;
   tension_explanation: string;
@@ -80,7 +122,7 @@ function validArm(value: unknown): value is CoachComparisonArm {
     .every((key) => typeof arm[key] === "string" && arm[key].length > 0)) return false;
   if (arm.provider !== "openai" || arm.model !== "gpt-5.6-luna" || arm.reasoning_effort !== "none"
     || arm.service_tier !== "default" || arm.prompt_name !== "demo_coach_nsm_comparison"
-    || arm.prompt_version !== "1.0") return false;
+    || !["1.0", "1.1"].includes(arm.prompt_version as string)) return false;
   if (!Array.isArray(arm.repair_requirements) || !arm.repair_requirements.every((item) => typeof item === "string")) return false;
   const checks = object(arm.validation)?.checks;
   if (!Array.isArray(checks) || !checks.every((item) => object(item)?.passed === true)
@@ -88,6 +130,8 @@ function validArm(value: unknown): value is CoachComparisonArm {
       "conversational_voice", "weekly_mirror_verbatim", "all_quotes_grounded",
       "one_reflective_question", "comparison_metadata_hidden"]
       .every((name) => checks.some((item) => object(item)?.name === name))) return false;
+  if (arm.prompt_version === "1.1"
+    && !checks.some((item) => object(item)?.name === "natural_reflection_voice")) return false;
   const base = coachPromptParts(arm.base_prompt as string);
   const accepted = coachPromptParts(arm.prompt as string);
   if (!base || !accepted || !sameJson(base.input, accepted.input)) return false;

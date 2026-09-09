@@ -1,4 +1,4 @@
-import { render, screen, cleanup, waitFor } from "@testing-library/react";
+import { act, render, screen, cleanup, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import activeReplay from "../public/scenarios/active-nisha.json";
@@ -11,7 +11,7 @@ import CoachDigestCard from "./CoachDigestCard";
 import { expandCoachQuotations } from "./coachQuotes";
 import { validateExperienceInspectFixture } from "./demoContracts";
 import { projectScenarioWeek } from "./scenarioReplay";
-import type { NorthStarRecord } from "./northStar";
+import { northStarProfileRef, type NorthStarRecord } from "./northStar";
 import { savedCoachComparison } from "./coachComparison";
 
 afterEach(cleanup);
@@ -112,7 +112,7 @@ describe("Coach Digest quotations", () => {
   );
 
   it.each([activeReplay, persistentReplay, stableReplay, twoValuesReplay, uncertainReplay])(
-    "offers exactly the frozen selected weeks across $scenario.scenario_id and restores the baseline on each click",
+    "switches saved pairs and explains every no-selection week across $scenario.scenario_id without changing its reflection",
     async (raw) => {
       const fixture = validateExperienceInspectFixture(raw);
       for (let index = 0; index < fixture.scenario.weeks.length; index += 1) {
@@ -127,23 +127,41 @@ describe("Coach Digest quotations", () => {
           headingId="coach-title" journalEntries={session.journal_entries}
           northStar={{ profile: session.profile, driftResult: session.drift_result!, traceEvents: events, presentation: "demo" }} />);
         const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+        expect(toggle.hasAttribute("disabled")).toBe(false);
+        await act(async () => { await northStarProfileRef(session.profile); });
+        const reflection = () => ["mirror", "tension", "question"].map((part) =>
+          document.querySelector(`.coach-digest__${part}`)!.textContent);
+        const baseline = reflection();
         expect(document.querySelector(".north-star-moment")).toBeNull();
         if (record.selected) {
           expect(pair, `${fixture.scenario.scenario_id} ${week.week_start}`).not.toBeNull();
-          await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
-          const baseline = document.querySelector(".coach-digest__question")!.textContent;
           await userEvent.click(toggle);
           await waitFor(() => expect(document.querySelector(".north-star-moment blockquote")!.textContent)
             .toBe(record.selected!.evidence_quote));
           expect(document.querySelector(".coach-digest__question")!.textContent)
             .toBe(pair!.with_north_star.narrative.reflective_question);
           await userEvent.click(screen.getByRole("button", { name: "Without North Star Moment" }));
-          expect(document.querySelector(".coach-digest__question")!.textContent).toBe(baseline);
+          expect(reflection()).toEqual(baseline);
           expect(document.querySelector(".north-star-moment")).toBeNull();
         } else {
           expect(pair).toBeNull();
-          expect(toggle.hasAttribute("disabled")).toBe(true);
-          expect(screen.getByText("No North Star Moment for this week.")).toBeTruthy();
+          expect(screen.queryByRole("heading", { name: "Why there’s no North Star Moment" })).toBeNull();
+          await userEvent.click(toggle);
+          expect(await screen.findByRole("heading", { name: "Why there’s no North Star Moment" })).toBeTruthy();
+          expect(screen.getByRole("status").textContent).toBe("Showing: Without North Star Moment");
+          if (record.reason === "no_supportive_source") {
+            expect(screen.getByText(/The saved AI review/)).toBeTruthy();
+          } else if (record.reason === "no_eligible_writing") {
+            expect(screen.getByText(/No eligible writing was available from that earlier period/)).toBeTruthy();
+          } else {
+            expect(record.reason).toBe("insufficient_evidence");
+            expect(screen.getByText(/isn’t enough evidence/)).toBeTruthy();
+          }
+          expect(reflection()).toEqual(baseline);
+          expect(document.querySelector(".north-star-moment")).toBeNull();
+          await userEvent.click(screen.getByRole("button", { name: "Hide explanation" }));
+          expect(screen.queryByRole("heading", { name: "Why there’s no North Star Moment" })).toBeNull();
+          expect(reflection()).toEqual(baseline);
         }
         view.unmount();
       }

@@ -1556,7 +1556,7 @@
     "manifest": {
       "bundle_version": "scenario-bundle-v1",
       "created_at": "2026-09-07T01:48:01.163525+00:00",
-      "input_hash": "d9131dad51afbf3b54e6b9427aebdbbd934f568c542e2c2ad4008a88d4035919",
+      "input_hash": "b4e834120f52601df539a4b941a9112e7b169853676ba161955282c834ed4e07",
       "source_files": [
         "logs/wrangled/persona_8f83c818.md",
         "logs/synthetic_data/persona_8f83c818.md",
@@ -3146,7 +3146,7 @@
         "manifest": {
           "bundle_version": "scenario-bundle-v1",
           "created_at": "2026-09-07T01:48:01.163525+00:00",
-          "input_hash": "d9131dad51afbf3b54e6b9427aebdbbd934f568c542e2c2ad4008a88d4035919",
+          "input_hash": "b4e834120f52601df539a4b941a9112e7b169853676ba161955282c834ed4e07",
           "source_files": [
             "logs/wrangled/persona_8f83c818.md",
             "logs/synthetic_data/persona_8f83c818.md",

@@ -151,7 +151,7 @@ def test_coach_only_generation_reuses_outputs_and_builds_manifest(tmp_path: Path
     assert calls == 2
     assert len(manifest) == 2
     assert all(
-        item["provenance"]["coach_prompt_version"] == "4.4"
+        item["provenance"]["coach_prompt_version"] == "4.5"
         for item in manifest
     )
     assert all(item["digest"]["state_comparisons"] == [] for item in manifest)

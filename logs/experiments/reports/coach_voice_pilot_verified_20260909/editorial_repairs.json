@@ -1,0 +1,20 @@
+{
+  "persistent-lukas::2025-06-16::without_north_star": {
+    "response_sha256": "8e31a004582badc50ea4e950d8a2e8f5eda81f25712c960d082e900e90e61a96",
+    "reason": "AI editorial review rejected invented roadmap meeting and unsupported common motives. Apply identical source corrections to both arms.",
+    "requirements": [
+      "The source names Sandra's seniority and her responsibility for the Q3 roadmap review. It does NOT say the conversation happened during that review or was about the roadmap. Describe the choice to change the subject with Sandra without inventing the conversation's topic or location. The review is upcoming; do not depict it as completed or underway.",
+      "Keep the opening on that current choice with Sandra. Integrate the short exact phrase \"Could have said something. Should have, maybe.\" to acknowledge the hesitation, without repeating the subject-changing action twice. If Amira is mentioned, acknowledge the earlier help briefly in the second paragraph, without drawing a general conclusion about when helping is easier for Lukas.",
+      "The sources establish repeated choices, not a shared motive. Sandra's seniority belongs only to the Sandra occasion. Do not turn choosing convenience and cost into a speaking-up event, or describe a shared hesitation, risk, fear, or reason across the occasions. The connection can simply be that wanting to make the world fairer has not shaped several recent choices. Express this naturally and directly, without listing the events or explaining the limits of the evidence."
+    ]
+  },
+  "persistent-lukas::2025-06-16::with_north_star": {
+    "response_sha256": "04c54f2451b56caca1a832dcdf1b5434e55736c015d5e9fffacacb1cc78d3396",
+    "reason": "AI editorial review rejected invented roadmap meeting and unsupported common motives. Apply identical source corrections to both arms.",
+    "requirements": [
+      "The source names Sandra's seniority and her responsibility for the Q3 roadmap review. It does NOT say the conversation happened during that review or was about the roadmap. Describe the choice to change the subject with Sandra without inventing the conversation's topic or location. The review is upcoming; do not depict it as completed or underway.",
+      "Keep the opening on that current choice with Sandra. Integrate the short exact phrase \"Could have said something. Should have, maybe.\" to acknowledge the hesitation, without repeating the subject-changing action twice. If Amira is mentioned, acknowledge the earlier help briefly in the second paragraph, without drawing a general conclusion about when helping is easier for Lukas.",
+      "The sources establish repeated choices, not a shared motive. Sandra's seniority belongs only to the Sandra occasion. Do not turn choosing convenience and cost into a speaking-up event, or describe a shared hesitation, risk, fear, or reason across the occasions. The connection can simply be that wanting to make the world fairer has not shaped several recent choices. Express this naturally and directly, without listing the events or explaining the limits of the evidence."
+    ]
+  }
+}

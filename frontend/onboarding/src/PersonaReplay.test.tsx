@@ -783,8 +783,16 @@ describe("persona replay", () => {
         expect(screen.getByRole("heading", { name: /^Weekly Drift Detection/ })).toBeTruthy();
         expect(screen.queryByRole("heading", { name: "Journal Entries" })).toBeNull();
       } else {
-        expect(toggle.hasAttribute("disabled")).toBe(true);
-        expect(screen.getByText("No North Star Moment for this week.")).toBeTruthy();
+        expect(toggle.hasAttribute("disabled")).toBe(false);
+        const reflection = () => ["mirror", "tension", "question"].map((part) =>
+          document.querySelector(`.coach-digest__${part}`)?.textContent);
+        const baseline = reflection();
+        await user.click(toggle);
+        expect(await screen.findByRole("heading", { name: "Why there’s no North Star Moment" })).toBeTruthy();
+        expect(reflection()).toEqual(baseline);
+        await user.click(screen.getByRole("button", { name: "Hide explanation" }));
+        expect(screen.queryByRole("heading", { name: "Why there’s no North Star Moment" })).toBeNull();
+        expect(reflection()).toEqual(baseline);
         expect(["insufficient_evidence", "no_eligible_writing"]).toContain(record.reason);
         expect(document.querySelector(".north-star-moment")).toBeNull();
         expect(document.querySelector(".replay-result-column--north-star")).toBeNull();

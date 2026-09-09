@@ -938,6 +938,65 @@ def test_voice_checks_preserve_quoted_words_and_historical_validation():
     }
 
 
+@pytest.mark.parametrize("opening", [
+    'On June 19, you wrote "called my mom".',
+    'By 19 June, you wrote "called my mom".',
+    '2025-06-19 was when you wrote "called my mom".',
+    'On Tuesday, you wrote "called my mom".',
+])
+def test_new_voice_rejects_calendar_openings_without_regrading_old_receipts(opening):
+    narrative = CoachNarrative(
+        weekly_mirror=opening,
+        tension_explanation="There was room to talk even with so much to do.",
+        reflective_question="What was it like to hear her voice?",
+    )
+    current = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validate_voice=True,
+    )
+    assert not next(c for c in current.checks
+                    if c.name == "natural_reflection_voice").passed
+    original = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validate_voice=True, voice_version="4.4",
+    )
+    assert "natural_reflection_voice" not in {c.name for c in original.checks}
+    assert next(c for c in original.checks if c.name == "conversational_voice").passed
+
+
+@pytest.mark.parametrize("explanation", [
+    "You also named the calculation behind that choice.",
+    "Across the recent entries, you described staying silent.",
+    "You identified the tension in the conversation.",
+])
+def test_new_voice_rejects_commentary_about_the_writing(explanation):
+    narrative = CoachNarrative(
+        weekly_mirror='You found time for a call: "called my mom".',
+        tension_explanation=explanation,
+        reflective_question="What was it like to hear her voice?",
+    )
+    validation = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validate_voice=True,
+    )
+    assert not next(c for c in validation.checks
+                    if c.name == "natural_reflection_voice").passed
+
+
+def test_new_voice_allows_source_quotes_and_dates_inside_a_reflection():
+    narrative = CoachNarrative(
+        weekly_mirror=(
+            '"On June 19, I called my mom" was how you described finding time.'
+        ),
+        tension_explanation=(
+            "Hearing her voice on June 19 mattered after the earlier silence."
+        ),
+        reflective_question="What was it like to hear her voice?",
+    )
+    validation = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validate_voice=True,
+    )
+    assert next(c for c in validation.checks
+                if c.name == "natural_reflection_voice").passed
+
+
 def test_generation_applies_voice_check_and_retains_rejected_receipt():
     response = {
         "weekly_mirror": 'This week, you wrote "called my mom" after work.',

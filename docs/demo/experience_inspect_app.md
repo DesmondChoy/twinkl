@@ -56,6 +56,11 @@ instructions and weekly input with only `north_star_context` changed. Its
 without-context response is the default for those weeks. Inspect exposes both
 complete prompts and their associated responses; the original prompt-4.4
 receipts remain preserved separately.
+The [Lukas voice pilot](../../logs/experiments/reports/coach_voice_pilot_selected_20260909/report.md)
+refreshes only his second-week pair with prompt `4.5` and comparison extension
+`1.1`. The other 21 pairs retain their recorded prompt versions. The pilot uses
+natural chronology and direct descriptions of experience; source review still
+remains necessary because the wording checks do not establish factual fidelity.
 These generation runs add no Coach Digest Evals or human validation; the
 [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
 remains historical evidence for a different Persona roster and inputs.
@@ -411,14 +416,20 @@ with-context response and shows the selected source panel. The button becomes
 **Without North Star Moment** and restores the complete baseline when clicked.
 A **Showing** status identifies the current version. The same button stacks
 above the heading on phones; changing Persona or week resets the comparison.
-The control is disabled with an explanation when no selection or valid pair is
-available. Toggling performs no provider call. Onboarding continues to show its
+When no selection or valid pair is available, the same enabled button expands
+an inline reason and becomes **Hide explanation**. Both narrative paragraphs
+and the reflective question remain unchanged, and the status stays **Showing:
+Without North Star Moment**. Reasons distinguish missing earlier writing, saved
+AI rejection, Insufficient Evidence, and an unavailable comparison. A bound
+review offers **View review in Inspect**. Changing Persona or week closes the
+explanation. Toggling performs no provider call. Onboarding continues to show its
 original narrative, optional validated passage, and original question.
 The **Something to reflect on** label identifies that final question as an
-invitation addressed to the user. Prompt `4.4` asks for conversational prose
+invitation addressed to the user. Prompt `4.5` asks for conversational prose
 that opens with a specific lived moment, avoids calendar-recap openings and
 clinical findings, and asks one short question about a concrete experience.
-New generation checks reject those narrow wording failures; historical responses
+New generation checks also reject date-led openings and writing-process commentary;
+historical responses
 retain the validation rules under which they were generated.
 
 **Inspect decision** beneath the Drift state opens the weekly explanation,

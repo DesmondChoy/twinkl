@@ -9,6 +9,7 @@ import pytest
 
 from src.coach.demo_comparison import (
     CoachComparisonArm,
+    ComparisonPromptVersion,
     SavedCoachComparison,
     build_north_star_context,
     hash_json,
@@ -72,7 +73,7 @@ def _record() -> SavedExperimentRecord:
     )
 
 
-def _pair() -> SavedCoachComparison:
+def _pair(prompt_version: ComparisonPromptVersion = "1.1") -> SavedCoachComparison:
     digest, record = _digest("casey"), _record()
     context = build_north_star_context(record)
     narrative = CoachNarrative.model_validate_json(_response())
@@ -81,11 +82,14 @@ def _pair() -> SavedCoachComparison:
         ("without_north_star", None),
         ("with_north_star", context),
     ):
-        prompt = render_demo_comparison_prompt(digest, arm_context)
+        prompt = render_demo_comparison_prompt(
+            digest, arm_context, prompt_version=prompt_version
+        )
         arms[name] = CoachComparisonArm(
             narrative=narrative,
+            prompt_version=prompt_version,
             validation=validate_demo_comparison_narrative(
-                digest, narrative, arm_context
+                digest, narrative, arm_context, prompt_version=prompt_version
             ),
             base_prompt=prompt,
             prompt=prompt,
@@ -120,6 +124,11 @@ def test_initial_messages_change_only_context_and_match_approved_instructions():
     baseline, without = render_demo_comparison_messages(digest, None)
     extended, with_context = render_demo_comparison_messages(digest, context)
     assert baseline == extended
+    assert (
+        "Shape the response around one experience in the current reviewed week"
+        in baseline
+    )
+    assert "A repeated choice does not establish a shared reason" in baseline
     first, second = json.loads(without), json.loads(with_context)
     assert first.pop("north_star_context") is None
     assert second.pop("north_star_context") == context.model_dump(
@@ -234,8 +243,11 @@ def test_valid_quotes_from_weekly_and_selected_sources_are_accepted():
     ).all_passed
 
 
-def test_saved_pair_binds_identity_inputs_prompts_raw_output_and_validation():
-    pair = _pair()
+@pytest.mark.parametrize("prompt_version", ["1.0", "1.1"])
+def test_saved_pair_binds_identity_inputs_prompts_raw_output_and_validation(
+    prompt_version,
+):
+    pair = _pair(prompt_version)
     assert (
         validate_saved_comparison(pair, _digest("casey"), _record(), "casey-scenario")
         == pair
@@ -256,3 +268,34 @@ def test_saved_pair_binds_identity_inputs_prompts_raw_output_and_validation():
             )
     with pytest.raises(ValueError):
         validate_saved_comparison(pair, _digest("casey"), _record(), "other-scenario")
+
+
+def test_saved_pair_rejects_mixed_prompt_versions():
+    pair = _pair("1.0")
+    pair.with_north_star = _pair("1.1").with_north_star
+    with pytest.raises(ValueError, match="different prompt versions"):
+        validate_saved_comparison(pair, _digest("casey"), _record(), "casey-scenario")
+
+
+@pytest.mark.parametrize("prompt_version", ["1.0", "1.1"])
+def test_saved_pair_rejects_version_relabeling(prompt_version):
+    pair = _pair(prompt_version)
+    for arm in (pair.without_north_star, pair.with_north_star):
+        arm.prompt_version = "1.1" if prompt_version == "1.0" else "1.0"
+    with pytest.raises(ValueError, match="prompt, response, or receipt changed"):
+        validate_saved_comparison(pair, _digest("casey"), _record(), "casey-scenario")
+
+
+def test_only_new_comparison_receipts_include_natural_reflection_voice():
+    legacy = _pair("1.0")
+    current = _pair("1.1")
+    assert "natural_reflection_voice" not in {
+        check.name for check in legacy.without_north_star.validation.checks
+    }
+    assert "natural_reflection_voice" in {
+        check.name for check in current.without_north_star.validation.checks
+    }
+    assert (
+        legacy.without_north_star.base_prompt
+        != current.without_north_star.base_prompt
+    )

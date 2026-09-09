@@ -176,12 +176,13 @@ LLM prompts are stored as YAML files with Jinja2 templating in `prompts/`:
 - `judge_alignment.yaml` — Score entries against Schwartz value dimensions
 - `weekly_vif_verifier.yaml` — Weekly Drift Reviewer prompt `4.0`, with the
   selected Core Values' definitions and motivations separated from user writing
-- `weekly_digest_coach.yaml` — Coach Digest prompt `4.4`, with cited writing,
+- `weekly_digest_coach.yaml` — Coach Digest prompt `4.5`, with cited writing,
   concrete conversational openings, ordinary expressions of uncertainty, and
   one short reflective question; new generation checks reject recap openings
-  and clinical finding language
-- `demo_coach_nsm_comparison.yaml` — Shared extension `1.0` to Coach prompt
-  `4.4` for the five saved Personas. Both initial requests use the same instructions and
+  and clinical finding language, plus date-led openings and writing-process commentary
+- `demo_coach_nsm_comparison.yaml` — Shared extension `1.1` to Coach prompt
+  `4.5`, piloted on Lukas's second week; the other 21 saved pairs retain `1.0`/`4.4`.
+  Both initial requests use the same instructions and
   weekly input; only `north_star_context` changes. [Exact prompts and UI](north_star/demo_coach_comparison.md)
 
 North Star Moment review prompts and structured response contracts live in
