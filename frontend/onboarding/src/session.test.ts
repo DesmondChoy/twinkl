@@ -110,6 +110,18 @@ describe("onboarding session", () => {
     expect(parseSession(JSON.stringify(session))).toBeNull();
   });
 
+  it("preserves replay Inspect context and accepts sessions saved before it existed", () => {
+    const session = createSession();
+    expect(parseSession(JSON.stringify(session))).toEqual(session);
+    for (const panel of ["entries", "result"] as const) {
+      session.experience.replay_inspect_panel = panel;
+      expect(parseSession(JSON.stringify(session))?.experience.replay_inspect_panel).toBe(panel);
+    }
+    const corrupted = JSON.parse(JSON.stringify(session));
+    corrupted.experience.replay_inspect_panel = "unknown";
+    expect(parseSession(JSON.stringify(corrupted))).toBeNull();
+  });
+
   it("migrates a version 4 onboarding session into the shared session", () => {
     const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
     legacy.schema_version = 4;

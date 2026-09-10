@@ -20,6 +20,7 @@ import { isDisplayableNudge } from "./nudgeReveal";
 import useModalFocus from "./useModalFocus";
 
 type JsonObject = Record<string, unknown>;
+const REPLAY_STEP_DELAY_MS = 500;
 
 interface ReplayTimelineProps {
   profile: OnboardingProfile;
@@ -32,6 +33,7 @@ interface ReplayTimelineProps {
   selectedJournalEntryId: string | null;
   cumulativeEntryCount: number;
   resultVisible: boolean;
+  onPanelChange?: (panel: "entries" | "result") => void;
   onRevealResult: () => void;
   driftResult: JsonObject | null;
   weeklyDigest: JsonObject | null;
@@ -98,11 +100,13 @@ function evidenceUsesEarlierWeek(
 
 interface JournalEntryDialogProps {
   entry: JournalEntryContract | null;
+  responseVisible: boolean;
   onClose: () => void;
 }
 
 function JournalEntryDialog({
   entry,
+  responseVisible,
   onClose,
 }: JournalEntryDialogProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -144,7 +148,7 @@ function JournalEntryDialog({
           </button>
         </header>
         <p className="replay-entry-drawer__content">{entry.content}</p>
-        {entry.nudge_response ? (
+        {responseVisible && entry.nudge_response ? (
           <section className="replay-entry-drawer__response" aria-labelledby="replay-entry-response-title">
             <h3 id="replay-entry-response-title">Response to the Nudge</h3>
             <p className="replay-entry-drawer__content">{entry.nudge_response}</p>
@@ -167,6 +171,7 @@ export default function ReplayTimeline({
   selectedJournalEntryId,
   cumulativeEntryCount,
   resultVisible,
+  onPanelChange,
   onRevealResult,
   driftResult,
   weeklyDigest,
@@ -189,7 +194,10 @@ export default function ReplayTimeline({
       && coachNarrative[key].trim().length > 0,
     );
   const showingResult = resultVisible && panel === "result";
-  const visibleEntries = journalEntries;
+  useEffect(() => {
+    onPanelChange?.(showingResult ? "result" : "entries");
+  }, [onPanelChange, showingResult]);
+  const [revealStage, setRevealStage] = useState(0);
   const nudgeByEntryId = useMemo(
     () => new Map(
       nudges
@@ -198,6 +206,29 @@ export default function ReplayTimeline({
     ),
     [nudges],
   );
+  const scheduledEntries = useMemo(() => {
+    let stage = 0;
+    return journalEntries.map((entry) => ({
+      entry,
+      entryStage: stage++,
+      nudgeStage: nudgeByEntryId.has(entry.journal_entry_id) ? stage++ : null,
+    }));
+  }, [journalEntries, nudgeByEntryId]);
+  const lastEntry = scheduledEntries.at(-1);
+  const finalStage = lastEntry?.nudgeStage ?? lastEntry?.entryStage ?? 0;
+  const visibleStage = resultVisible ? finalStage : revealStage;
+  const visibleEntries = scheduledEntries.filter(({ entryStage }) => entryStage <= visibleStage);
+  const openEntryNudgeStage = scheduledEntries.find(
+    ({ entry }) => entry.journal_entry_id === openEntry?.journal_entry_id,
+  )?.nudgeStage;
+
+  useEffect(() => {
+    if (resultVisible) return;
+    const timers = Array.from({ length: finalStage }, (_, index) =>
+      window.setTimeout(() => setRevealStage(index + 1), (index + 1) * REPLAY_STEP_DELAY_MS),
+    );
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [finalStage, resultVisible]);
   const state =
     (driftResult?.delivery_state as ScenarioDeliveryState | undefined)
     ?? week.expected_delivery_state;
@@ -282,8 +313,9 @@ export default function ReplayTimeline({
           </div>
           <div className="replay-column__scroll" ref={entriesScrollRef}>
             <ol className="replay-entry-list">
-              {visibleEntries.map((entry, index) => {
-                const nudge = nudgeByEntryId.get(entry.journal_entry_id);
+              {visibleEntries.map(({ entry, nudgeStage }, index) => {
+                const nudge = nudgeStage !== null && nudgeStage <= visibleStage
+                  ? nudgeByEntryId.get(entry.journal_entry_id) : undefined;
                 return (
                   <li
                     className="replay-entry replay-entry--arriving"
@@ -459,6 +491,7 @@ export default function ReplayTimeline({
 
       <JournalEntryDialog
         entry={openEntry}
+        responseVisible={openEntryNudgeStage == null || openEntryNudgeStage <= visibleStage}
         onClose={() => {
           const closingEntry = openEntry;
           setOpenEntry(null);

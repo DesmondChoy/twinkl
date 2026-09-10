@@ -384,7 +384,10 @@ canonical group's randomized card order, the tie selection, and the shared
 Experience and Inspect view state. An additive `replay_progress` field stores
 the selected scenario, week, revealed step, and furthest completed week. Older
 version `10` sessions without this field remain readable; their exact partial
-replay progress cannot be recovered. Versions `4` through `9` migrate when a
+replay progress cannot be recovered. The optional `replay_inspect_panel` field
+records whether Inspect was opened from Journal Entries or the weekly result,
+so reloading Inspect preserves that context. Older sessions default to Journal
+Entry inspection. Versions `4` through `9` migrate when a
 confirmed legacy Profile contains at most two Core Values. A version `6` goal
 stage resumes at the Core Value summary. Confirmed version `2` and `3` Profiles
 with at most two Core Values migrate to version `4` without `goal_category`.

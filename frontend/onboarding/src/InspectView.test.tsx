@@ -41,6 +41,41 @@ function weeklyTrace(prefix: string, start: string, end: string): TraceEventCont
 }
 
 describe("Inspect view", () => {
+  it("scopes journal replay Inspect and its history to recorded entry and nudge work", async () => {
+    const user = userEvent.setup();
+    const journalTypes = new Set([
+      "journal_entry_submitted", "assessment_time_advanced", "nudge_suppression_checked",
+      "nudge_decided", "nudge_generated", "nudge_response_recorded",
+    ]);
+    const currentIds = new Set(events.slice(6).map((event) => event.event_id));
+    const journalEvents = events.filter((event) => journalTypes.has(event.event_type));
+    const current = journalEvents.filter((event) => currentIds.has(event.event_id));
+    const earlier = journalEvents.filter((event) => !currentIds.has(event.event_id));
+    render(<InspectView events={events} replayPanel="entries"
+      currentWeekEventIds={[...currentIds]} selectedEventId="event-09"
+      traceLabel="Saved Persona replay" onReturn={() => undefined} />);
+
+    expect(screen.getByRole("heading", { name: "Recorded work" })).toBeTruthy();
+    expect(screen.queryByRole("region", { name: "How Twinkl reached this result." })).toBeNull();
+    expect(screen.queryByTestId("inspect-selection")).toBeNull();
+    expect(screen.queryByText("Linked event unavailable")).toBeNull();
+    expect(screen.queryByRole("navigation", { name: "Filter Inspect events" })).toBeNull();
+    expect(screen.getByText(`${journalEvents.length} recorded events`)).toBeTruthy();
+    expect(screen.getByRole("status", { name: "Filtered event count" }).textContent)
+      .toBe(`${current.length} of ${current.length} current week events · ${earlier.length} of ${earlier.length} earlier events`);
+    expect(within(screen.getByRole("list", { name: "Current week events" }))
+      .getAllByRole("listitem")).toHaveLength(current.length);
+    await user.click(screen.getByText("Earlier Journal Entry work"));
+    expect(within(screen.getByRole("list", { name: "Earlier events" }))
+      .getAllByRole("listitem")).toHaveLength(earlier.length);
+    expect(screen.queryByText("Weekly Drift Reviewer")).toBeNull();
+    expect(screen.queryByText("Drift Detector")).toBeNull();
+    for (const event of journalEvents) {
+      const index = events.findIndex((row) => row.event_id === event.event_id) + 1;
+      expect(screen.getByLabelText(new RegExp(`^Event ${index}:`))).toBeTruthy();
+    }
+  });
+
   it.each([
     ["nudge_decided", "Nudge decision", "src/nudge/runtime.py#L145"],
     ["weekly_review_completed", "Weekly Drift Reviewer", "src/weekly_drift_reviewer.py#L243"],

@@ -395,7 +395,7 @@ describe("onboarding app", () => {
     expect(createExperienceSession).not.toHaveBeenCalled();
   });
 
-  it("withholds persisted Inspect decisions until the current replay is validated and projected", async () => {
+  it("withholds persisted Inspect work until the current replay is validated and projected", async () => {
     saveReplayInInspect(activeReplayJson.scenario.persona_id);
     let resolveCatalog!: (response: Response) => void;
     let resolveScenario!: (response: Response) => void;
@@ -414,7 +414,8 @@ describe("onboarding app", () => {
     expect(screen.getByRole("heading", { name: "Restoring the replay…" })).toBeTruthy();
     expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
     await act(async () => { resolveScenario(new Response(activeReplayRaw)); });
-    await screen.findByRole("heading", { name: "How Twinkl reached this result." });
+    await screen.findByRole("heading", { name: "Recorded work" });
+    expect(screen.queryByRole("heading", { name: "How Twinkl reached this result." })).toBeNull();
     expect(screen.queryByText("Stale saved experiment prompt")).toBeNull();
     expect(screen.getByText("Nisha Agarwal · saved replay")).toBeTruthy();
     const stored = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;

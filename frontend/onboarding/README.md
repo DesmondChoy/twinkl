@@ -55,9 +55,13 @@ failures include a retry action. The Twinkl wordmark returns to the entry page
 while preserving progress. Saved replay Experience and Inspect offer
 **Choose another Persona** to return to the chooser; **Go home** remains in the
 chooser, onboarding, and manual Experience and Inspect. **Try the Demo** loads one of five saved
-synthetic Personas into the same React session. Each selected week immediately
-shows its Journal Entries, displayed nudges, and responses. **Review Weekly
-Drift Detection** opens the saved result and Coach Digest. **Next week** advances
+synthetic Personas into the same React session. Each selected week shows its
+first Journal Entry immediately, then its displayed nudge and response together
+500 ms later. Subsequent Journal Entries and their interactions appear at 500 ms
+intervals; entries without a displayed nudge have no extra interaction step.
+Week navigation and **Restart** begin the sequence again. **Review Weekly
+Drift Detection** can open the saved result and Coach Digest at any time;
+returning to Journal Entries then shows the whole week. **Next week** advances
 without requiring review and is disabled only at the final week. Every week is
 directly selectable before review. **Restart** and named jumps such as
 **Show Active Drift — week 4** in Nisha's replay provide navigation. Every week change, reload, and
@@ -123,6 +127,15 @@ background inactive until dismissal. The Drift state and Coach Digest appear sid
 and stack on phones. The North Star Moment remains within the Coach Digest. A uniquely
 matched abbreviated Coach Digest quotation expands to its full source below
 the paragraph, while Inspect preserves the original model response.
+
+The top-level **Inspect** switch follows the visible saved replay panel.
+From Journal Entries it opens **Recorded work**, limited to saved Journal Entry
+intake, nudges, and responses, with earlier Journal Entry work collapsed. From
+the weekly result it opens the Weekly Drift Reviewer and Drift Detector
+explanation. Switching back to Journal Entries restores journal inspection,
+even after a weekly event was previously selected. Reloading Inspect preserves
+the originating panel. Opening Inspect does not
+generate new Journal Entries or run models.
 
 **Inspect decision** opens the weekly explanation linked to the current Drift
 Detector event, falling back to the saved Weekly Drift Detection output.

@@ -24,6 +24,7 @@ interface EventPresentation {
 
 interface InspectViewProps {
   events: TraceEventContract[];
+  replayPanel?: "entries" | "result";
   currentWeekEventIds?: string[];
   currentJournalEntryIds?: string[];
   emptyActionLabel?: string;
@@ -757,7 +758,8 @@ function EventDetails({ event, comparison }: { event: TraceEventContract; compar
 }
 
 export default function InspectView({
-  events,
+  events: traceEvents,
+  replayPanel,
   currentWeekEventIds,
   currentJournalEntryIds,
   emptyActionLabel,
@@ -766,10 +768,16 @@ export default function InspectView({
   onEmptyAction,
   onToggleCalculation,
   syntheticProfile = false,
-  selectedEventId,
+  selectedEventId: linkedEventId,
   traceLabel,
   onReturn,
 }: InspectViewProps) {
+  const journalFocus = !onboarding && replayPanel === "entries";
+  const events = useMemo(() => journalFocus
+    ? traceEvents.filter((event) => eventMatchesFilter(event, "journal"))
+    : traceEvents, [journalFocus, traceEvents]);
+  const selectedEventId = journalFocus && !events.some((event) => event.event_id === linkedEventId)
+    ? null : linkedEventId;
   const headingRef = useRef<HTMLHeadingElement>(null);
   const eventRefs = useRef(new Map<string, HTMLElement>());
   const [expandedEvents, setExpandedEvents] = useState<Set<string>>(
@@ -778,8 +786,8 @@ export default function InspectView({
   const [activeFilter, setActiveFilter] = useState<InspectFilter>("all");
   const [pendingEventFocus, setPendingEventFocus] = useState<string | null>(null);
   const eventNumbers = useMemo(
-    () => new Map(events.map((event, index) => [event.event_id, index + 1])),
-    [events],
+    () => new Map(traceEvents.map((event, index) => [event.event_id, index + 1])),
+    [traceEvents],
   );
   const coachComparisons = useMemo(() => new Map(events.flatMap((event) => {
     const comparison = savedCoachComparison(event);
@@ -810,13 +818,14 @@ export default function InspectView({
       : [],
     [currentWeekEventIdSet, events],
   );
+  const effectiveFilter = onboarding ? "all" : journalFocus ? "journal" : activeFilter;
   const filteredCurrentEvents = currentEvents.filter((event) =>
-    eventMatchesFilter(event, onboarding ? "all" : activeFilter)
+    eventMatchesFilter(event, effectiveFilter)
   );
   const filteredHistoryEvents = historyEvents.filter((event) =>
-    eventMatchesFilter(event, onboarding ? "all" : activeFilter)
+    eventMatchesFilter(event, effectiveFilter)
   );
-  const focusedWeeklyEvent = selectedEvent && isWeeklyEvent(selectedEvent)
+  const focusedWeeklyEvent = journalFocus ? undefined : selectedEvent && isWeeklyEvent(selectedEvent)
     ? selectedEvent
     : currentWeekEventIdSet
       ? [...currentEvents].reverse().find(isWeeklyEvent)
@@ -967,7 +976,9 @@ export default function InspectView({
               ? "The assessment recorded one Most and one Least card in each question. Below, those 22 choices are followed into Schwartz scores, the ten-value Profile, and the exact phrases shown in Experience."
               : weeklyFocus
                 ? "The focused result comes first. The complete event history follows."
-                : "Each row is one recorded step. Open Technical details for exact inputs, prompts, and validation."}
+                : journalFocus
+                  ? "Follow the saved Journal Entries, nudges, and responses. Open Technical details for the recorded inputs and results."
+                  : "Each row is one recorded step. Open Technical details for exact inputs, prompts, and validation."}
           </p>
           {onToggleCalculation ? (
             <button className="inspect-run-link" type="button" onClick={onToggleCalculation}>
@@ -1154,11 +1165,12 @@ export default function InspectView({
           <header className="backend-trace__heading">
             <div>
               <p className="eyebrow">Selected week</p>
-              <h2 id="backend-trace-title">Current week first.</h2>
+              <h2 id="backend-trace-title">{journalFocus ? "Recorded work" : "Current week first."}</h2>
             </div>
             <p>
-              Use the filters to follow Journal Entries, the Weekly Drift
-              Reviewer, or weekly results including Coach Digest and North Star Moment.
+              {journalFocus
+                ? "Journal Entry and nudge events for the selected week appear first."
+                : "Use the filters to follow Journal Entries, the Weekly Drift Reviewer, or weekly results including Coach Digest and North Star Moment."}
             </p>
           </header>
         ) : (
@@ -1169,7 +1181,7 @@ export default function InspectView({
 
         {!onboarding && events.length > 0 ? (
           <>
-            <nav className="inspect-filters" aria-label="Filter Inspect events">
+            {!journalFocus ? <nav className="inspect-filters" aria-label="Filter Inspect events">
               {(Object.keys(FILTER_LABELS) as InspectFilter[]).map((filter) => (
                 <button
                   type="button"
@@ -1180,7 +1192,7 @@ export default function InspectView({
                   {FILTER_LABELS[filter]}
                 </button>
               ))}
-            </nav>
+            </nav> : null}
             <p className="inspect-filter-count" role="status" aria-label="Filtered event count">
               {filteredCurrentEvents.length} of {countLabel(
                 currentEvents.length,
@@ -1215,20 +1227,20 @@ export default function InspectView({
               )
             ) : (
               <p className="inspect-filter-empty" role="status">
-                This week has no {FILTER_LABELS[activeFilter]} events.
+                This week has no {FILTER_LABELS[effectiveFilter]} events.
               </p>
             )}
             {historyEvents.length > 0 ? (
               <details className="inspect-history">
                 <summary>
-                  <span>Complete Inspect history</span>
+                  <span>{journalFocus ? "Earlier Journal Entry work" : "Complete Inspect history"}</span>
                   <small>{countLabel(filteredHistoryEvents.length, "event")}</small>
                 </summary>
                 {filteredHistoryEvents.length > 0 ? (
                   renderTimeline(filteredHistoryEvents, "Earlier events")
                 ) : (
                   <p className="inspect-filter-empty">
-                    Earlier weeks have no {FILTER_LABELS[activeFilter]} events.
+                    Earlier weeks have no {FILTER_LABELS[effectiveFilter]} events.
                   </p>
                 )}
               </details>

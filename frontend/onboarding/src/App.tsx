@@ -378,6 +378,9 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   );
   const [personaPickerOpen, setPersonaPickerOpen] = useState(false);
   const [inspectCalculation, setInspectCalculation] = useState(false);
+  const setReplayPanel = useCallback((panel: "entries" | "result") => {
+    updateExperience({ replay_inspect_panel: panel });
+  }, [updateExperience]);
   const [loadedScenario, setLoadedScenario] = useState<LoadedScenario | null>(
     null,
   );
@@ -1200,6 +1203,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 experience={session.experience}
                 updateExperience={updateExperience}
                 inspectRun={inspectRun}
+                onPanelChange={setReplayPanel}
                 onWeekChange={(weekIndex) =>
                   applyScenarioWeek(loadedScenario, weekIndex)
                 }
@@ -1514,6 +1518,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             {selectedPersonaId && !personaReplayReady ? replayRestoreStatus : (
             <InspectView
               events={session.experience.trace_events}
+              replayPanel={selectedPersonaId ? session.experience.replay_inspect_panel ?? "entries" : undefined}
               currentWeekEventIds={
                 loadedScenario && selectedPersonaId
                   ? loadedScenario.fixture.scenario.weeks[

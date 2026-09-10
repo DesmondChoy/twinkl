@@ -73,6 +73,7 @@ export interface ExperienceState {
   selected_week: number | null;
   selected_manual_week?: string | null;
   replay_progress: ReplayProgress | null;
+  replay_inspect_panel?: "entries" | "result";
   selected_entry_id: string | null;
   selected_event_id: string | null;
   weekly_reviewer_decisions: WeeklyDriftReviewerDecisionContract[];
@@ -256,6 +257,8 @@ function isExperienceState(value: unknown): value is ExperienceState {
     (value.selected_week === null || (Number.isInteger(value.selected_week) && Number(value.selected_week) >= 0)) &&
     (value.selected_manual_week === undefined || value.selected_manual_week === null
       || (typeof value.selected_manual_week === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.selected_manual_week))) &&
+    (value.replay_inspect_panel === undefined || value.replay_inspect_panel === "entries"
+      || value.replay_inspect_panel === "result") &&
     (value.replay_progress === null || (
       isSessionRecord(value.replay_progress) &&
       typeof value.replay_progress.scenario_id === "string" &&

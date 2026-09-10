@@ -302,6 +302,7 @@ interface PersonaReplayExperienceProps {
   updateExperience: (patch: Partial<ExperienceState>) => void;
   inspectRun: (eventId: string) => void;
   onWeekChange: (weekIndex: number) => void;
+  onPanelChange?: (panel: "entries" | "result") => void;
   headingRef?: RefObject<HTMLHeadingElement | null>;
 }
 
@@ -313,10 +314,12 @@ export function PersonaReplayExperience({
   updateExperience,
   inspectRun,
   onWeekChange,
+  onPanelChange,
   headingRef,
 }: PersonaReplayExperienceProps) {
   const weekRailRef = useRef<HTMLOListElement>(null);
   const [reviewedWeekKey, setReviewedWeekKey] = useState<string | null>(null);
+  const [replayAttempt, setReplayAttempt] = useState(0);
   const weeks = loaded.fixture.scenario.weeks;
   const safeWeekIndex = Math.min(Math.max(weekIndex, 0), weeks.length - 1);
   const currentWeek = weeks[safeWeekIndex];
@@ -410,6 +413,7 @@ export function PersonaReplayExperience({
 
   const showWeek = (index: number, restart = false) => {
     if (index < 0 || index >= weeks.length) return;
+    setReplayAttempt((attempt) => attempt + 1);
     setReviewedWeekKey(null);
     onWeekChange(index);
     recordProgress(0, index, restart ? -1 : furthestCompletedWeek);
@@ -559,6 +563,7 @@ export function PersonaReplayExperience({
       </header>
 
       <ReplayTimeline
+        key={`${weekKey}:${replayAttempt}`}
         profile={profile}
         week={currentWeek}
         journalEntries={currentWeekEntries}
@@ -569,6 +574,7 @@ export function PersonaReplayExperience({
         selectedJournalEntryId={experience.selected_entry_id}
         cumulativeEntryCount={experience.journal_entries.length}
         resultVisible={resultVisible}
+        onPanelChange={onPanelChange}
         onRevealResult={reviewWeek}
         driftResult={experience.drift_result}
         weeklyDigest={experience.weekly_digest}

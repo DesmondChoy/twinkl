@@ -343,10 +343,13 @@ results, Inspect, and the Journal Entry and AI review drawers. Technical code
 retains monospace. Shorter and narrow windows allow the replay page to scroll
 vertically so the larger text stays accessible.
 
-Persona simulation presents one week at a time. Each selected week immediately
-shows all its saved Journal Entries as compact excerpts, with available nudges
-and responses beneath their entries. **Review Weekly Drift Detection** opens
-that week's saved result. The replay makes no timed or automatic result reveal.
+Persona simulation presents one week at a time. Each selected week shows its
+first saved Journal Entry immediately as a compact excerpt. Its available nudge
+and response appear together 500 ms later, followed by the next Journal Entry
+after another 500 ms. Entries without a displayed nudge have no extra interaction
+step. Week navigation and **Restart** reset this sequence. **Review Weekly Drift
+Detection** opens that week's saved result at any time; returning to Journal
+Entries then shows the whole week. The result is never revealed automatically.
 **Next week** advances without requiring result review and is disabled only
 at the final week. Every week is directly selectable without reviewing earlier weeks;
 **Restart** returns to week one and clears replay progress.
@@ -382,8 +385,8 @@ or keyboard-focus cue identifies the action without opening writing implicitly.
 The reading area does not reflow. Journal Entry and AI review dialogs keep
 keyboard focus inside and make the background inactive until dismissal;
 Escape, Close, or a backdrop click restores focus to the triggering control.
-Saved nudges are available immediately with
-their entries; manual journaling retains its separate delayed Nudge reveal.
+Saved nudges and responses appear 500 ms after their entries;
+manual journaling retains its separate delayed Nudge reveal.
 
 When a saved Coach Digest response is present, it appears after the Weekly
 Drift Detection result in the same reading area. It does not replace the
@@ -576,11 +579,20 @@ references.
 Live Coach Digest and North Star Moment durations measure the complete
 operation; North Star Moment retains the recorded start of its pending work.
 
-For Persona replay, Inspect shows the selected week first. Filters select
-**Journal Entries**, **Weekly Drift Reviewer**, or **Weekly results**. The
-last includes Drift Detector, structured Weekly Drift Detection output, Coach
-Digest, and North Star Moment events.
-The complete earlier Inspect history stays collapsed by default. Repeated
+For Persona replay, the top-level **Inspect** switch follows the visible
+Experience panel. From Journal Entries, **Recorded work** shows the selected
+week's Journal Entry intake, nudge processing, and responses. Earlier Journal
+Entry work stays collapsed; weekly events and filters are omitted from this
+view. These are saved processing records, not a new Journal Entry generation run.
+From the weekly result, Inspect opens the focused Weekly Drift Reviewer and
+Drift Detector explanation. Returning to Journal Entries restores journal
+inspection even when a weekly event was previously selected.
+
+Weekly Inspect also keeps the complete recorded work available. Filters select
+**Journal Entries**, **Weekly Drift Reviewer**, or **Weekly results**; the last
+includes Drift Detector, structured Weekly Drift Detection output, Coach Digest,
+and North Star Moment events. The complete earlier Inspect history stays
+collapsed by default. Repeated
 saved-run labels, reused-result labels, and zero-duration labels do not appear
 on each event. Model details, run source, reasoning effort, identifiers, hashes,
 and exact inputs remain under **Technical details**.
