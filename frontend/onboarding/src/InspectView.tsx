@@ -8,6 +8,7 @@ import {
 import type { TraceEventContract } from "./demoContracts";
 import type { BwsResponse, ScoreBundle, ValueKey } from "./domain";
 import OnboardingScoreInspection from "./OnboardingScoreInspection";
+import InspectReferences, { type InspectReferenceKey } from "./InspectReferences";
 import { northStarFraming } from "./northStar";
 import { displayWeekRange } from "./displayFormatters";
 import { isWeeklyEvent, weeklyRunContext } from "./weeklyRun";
@@ -109,6 +110,14 @@ const STATUS_LABELS: Record<string, string> = {
 const SOURCE_LABELS: Record<string, string> = {
   saved_replay: "Saved replay",
   live_run: "Live run",
+};
+
+const EVENT_REFERENCES: Partial<Record<TraceEventContract["event_type"], InspectReferenceKey>> = {
+  nudge_decided: "nudge",
+  weekly_review_completed: "reviewer",
+  drift_detected: "detector",
+  weekly_coach_generated: "coach",
+  north_star_reviewed: "northStar",
 };
 
 type InspectFilter = "all" | "journal" | "reviewer" | "detector";
@@ -670,6 +679,8 @@ function NorthStarInspection({ event, comparison }: { event: TraceEventContract;
 }
 
 function EventDetails({ event, comparison }: { event: TraceEventContract; comparison: CoachComparison | null }) {
+  const reference = event.event_type === "weekly_coach_generated" && comparison
+    ? "coachComparison" : EVENT_REFERENCES[event.event_type];
   const disclosure = (
     label: string,
     content: ReactNode,
@@ -691,6 +702,7 @@ function EventDetails({ event, comparison }: { event: TraceEventContract; compar
       {event.error !== null ? (
         <JsonBlock label="Safe error" value={event.error} />
       ) : null}
+      {reference ? <InspectReferences reference={reference} /> : null}
       {event.event_type === "north_star_reviewed" ? <NorthStarInspection event={event} comparison={comparison} /> : null}
       {event.event_type === "weekly_coach_generated" && comparison ? <CoachComparisonInspection comparison={comparison} /> : null}
       <details className="inspect-technical inspect-technical--group">

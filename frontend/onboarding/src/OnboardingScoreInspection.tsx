@@ -10,6 +10,7 @@ import {
   type ValueKey,
 } from "./domain";
 import { ASSESSMENT_SECTIONS } from "./AssessmentSectionMap";
+import InspectReferences from "./InspectReferences";
 
 interface OnboardingScoreInspectionProps {
   confirmedValues: ValueKey[] | null;
@@ -129,6 +130,8 @@ export default function OnboardingScoreInspection({
           <strong>Deterministic · no model</strong>
         </div>
       </header>
+
+      <InspectReferences reference="profile" />
 
       <div className="score-result">
         <div>

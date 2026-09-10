@@ -41,6 +41,55 @@ function weeklyTrace(prefix: string, start: string, end: string): TraceEventCont
 }
 
 describe("Inspect view", () => {
+  it.each([
+    ["nudge_decided", "Nudge decision", "src/nudge/runtime.py#L145"],
+    ["weekly_review_completed", "Weekly Drift Reviewer", "src/weekly_drift_reviewer.py#L243"],
+    ["drift_detected", "Drift Detector", "src/drift_detector.py#L94"],
+    ["weekly_coach_generated", "Coach Digest", "src/coach/weekly_digest.py#L1433"],
+    ["north_star_reviewed", "North Star Moment", "src/north_star/runtime.py#L171"],
+  ])("shows contextual references only after opening %s", async (eventType, label, path) => {
+    const user = userEvent.setup();
+    const event = eventType === "north_star_reviewed" ? northStarEvent
+      : events.find((item) => item.event_type === eventType)!;
+    render(<InspectView events={[event]} selectedEventId={null}
+      traceLabel="Saved replay" onReturn={() => undefined} />);
+
+    expect(screen.queryByRole("link")).toBeNull();
+    await user.click(screen.getByLabelText(/^Event 1:/));
+    const references = within(screen.getByRole("complementary", { name: `${label} references` }));
+    const links = references.getAllByRole("link");
+    expect(links).toHaveLength(2);
+    expect(references.getByRole("link", { name: /^View implementation/ }).getAttribute("href"))
+      .toBe(`https://github.com/DesmondChoy/twinkl/blob/b277f72df47350cf5f7f5c73a7870dff783076b1/${path}`);
+    for (const link of links) {
+      expect(link.getAttribute("target")).toBe("_blank");
+      expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+      expect(link.textContent).toContain("opens in a new tab");
+    }
+    expect(references.getByText(/Recorded prompts and receipts remain the evidence/)).toBeTruthy();
+  });
+
+  it("links paired Coach Digest responses to their comparison implementation", () => {
+    const event = validateExperienceInspectFixture(activeReplay).trace_events
+      .find((item) => item.event_type === "weekly_coach_generated" && item.details.comparison)!;
+    render(<InspectView events={[event]} selectedEventId={event.event_id}
+      traceLabel="Saved replay" onReturn={() => undefined} />);
+    const references = within(screen.getByRole("complementary", { name: "Coach Digest comparison references" }));
+    expect(references.getByRole("link", { name: /^View implementation/ }).getAttribute("href"))
+      .toContain("/src/coach/demo_comparison.py#L253");
+    expect(references.getByRole("link", { name: /^Read the method/ }).getAttribute("href"))
+      .toContain("/docs/north_star/demo_coach_comparison.md");
+  });
+
+  it.each(["journal_entry_submitted", "profile_confirmed", "weekly_digest_built"])(
+    "keeps reference links out of %s", (eventType) => {
+      const event = events.find((item) => item.event_type === eventType)!;
+      render(<InspectView events={[event]} selectedEventId={event.event_id}
+        traceLabel="Saved replay" onReturn={() => undefined} />);
+      expect(screen.queryByRole("link")).toBeNull();
+    },
+  );
+
   it("explains a saved North Star Moment from original nested requests and responses", async () => {
     const user = userEvent.setup();
     render(<InspectView events={[northStarEvent]} selectedEventId={northStarEvent.event_id}

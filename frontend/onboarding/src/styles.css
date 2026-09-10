@@ -6932,6 +6932,42 @@ h2 {
   line-height: 1.45;
 }
 
+.inspect-references {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: 10px 0;
+}
+
+.inspect-references__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 18px;
+}
+
+.inspect-references__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #344f65;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.inspect-references__links a:focus-visible {
+  outline: 2px solid #344f65;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.inspect-references > small {
+  display: block;
+  color: #536477;
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
 .inspect-technical--group {
   grid-column: 1 / -1;
   border: 1px solid rgba(20, 34, 59, 0.1);

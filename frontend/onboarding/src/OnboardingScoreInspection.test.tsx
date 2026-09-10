@@ -29,6 +29,13 @@ describe("onboarding score inspection", () => {
     ).toBeTruthy();
     expect(screen.getByText("Calculation method")).toBeTruthy();
     expect(screen.getByText("Deterministic · no model")).toBeTruthy();
+    const references = within(screen.getByRole("complementary", { name: "Profile calculation references" }));
+    expect(references.getAllByRole("link")).toHaveLength(2);
+    expect(references.getByRole("link", { name: /^Read the method/ }).getAttribute("href"))
+      .toContain("/docs/onboarding/onboarding_spec.md#5-scoring-and-product-transformation");
+    expect(references.getByRole("link", { name: /^View implementation/ }).getAttribute("href"))
+      .toContain("/frontend/onboarding/src/domain.ts#L363-L422");
+    expect(references.getByText(/Explains the browser calculation/)).toBeTruthy();
     expect(
       screen.getByRole("list", { name: "SVBWS calculation steps" }),
     ).toBeTruthy();

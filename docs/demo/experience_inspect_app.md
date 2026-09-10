@@ -558,6 +558,21 @@ dump. The first level answers:
 
 Technical details show the duration, model contract, identifiers, hashes,
 inputs, prompts, responses, and validation on demand.
+Expanded Nudge decision, Weekly Drift Reviewer completion, Drift Detector,
+Coach Digest, and North Star Moment events include **Read the method** and
+**View implementation** links. The Profile calculation includes the same pair
+for browser scoring. Saved paired Coach Digest responses link to their comparison
+method and validation implementation. Submission, clock, and storage events do
+not repeat these references.
+
+The links open in a new tab and use the fixed assessment reference revision
+`b277f72df47350cf5f7f5c73a7870dff783076b1`. They explain the component; the
+recorded prompts, responses, hashes, and receipts remain the evidence for a
+particular run. This reference revision does not identify the execution revision
+of every saved replay. Maintain the revision, paths, and anchors together in
+`frontend/onboarding/src/InspectReferences.tsx` when refreshing the assessment
+references.
+
 Live Coach Digest and North Star Moment durations measure the complete
 operation; North Star Moment retains the recorded start of its pending work.
 
