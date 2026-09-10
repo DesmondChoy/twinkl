@@ -178,15 +178,68 @@ h2 {
 }
 
 .entry-intro {
+  position: relative;
+  isolation: isolate;
   color: var(--paper);
   background: var(--ink);
 }
 
+.entry-intro__sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.entry-intro__shooting-star {
+  position: absolute;
+  top: 18px;
+  left: -180px;
+  width: 160px;
+  height: 2px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255, 138, 91, 0.15) 25%,
+    #ff8a5b 80%, #fff4d9);
+  transform: rotate(3deg);
+  opacity: 0;
+  animation: entry-shooting-star 5s linear infinite;
+}
+
+.entry-intro__shooting-star::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -1px;
+  width: 5px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff8e8;
+  box-shadow: 0 0 6px 2px #ffc58e, -8px 0 16px 3px rgba(255, 118, 63, 0.6);
+}
+
+@keyframes entry-shooting-star {
+  0% { opacity: 0; transform: translate(0, 0) rotate(3deg); }
+  5% { opacity: 0.85; }
+  39% { opacity: 0.85; }
+  44%, 100% {
+    opacity: 0;
+    transform: translate(calc(100vw + 360px), 28px) rotate(3deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-intro__shooting-star {
+    display: none;
+    animation: none;
+  }
+}
+
 .entry-intro__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 240px;
+  grid-template-columns: minmax(0, 1fr) clamp(200px, 24vw, 280px);
   align-items: center;
-  gap: clamp(32px, 6vw, 96px);
+  gap: clamp(28px, 4vw, 64px);
   width: min(1120px, calc(100% - 48px));
   margin: 0 auto;
   border-top: 1px solid rgba(247, 250, 249, 0.18);
@@ -195,8 +248,9 @@ h2 {
 
 .entry-intro h1 {
   margin-bottom: 24px;
-  font-size: clamp(3rem, 5.7vw, 5rem);
-  line-height: 1.05;
+  font-size: clamp(2.25rem, 3.5vw, 3rem);
+  line-height: 1.12;
+  text-wrap: balance;
 }
 
 .entry-intro__description {
@@ -207,9 +261,100 @@ h2 {
   line-height: 1.75;
 }
 
+.entry-intro__description + .entry-intro__description {
+  margin-top: 1.25em;
+}
+
 .entry-intro__compass {
+  position: relative;
   width: 100%;
-  color: #63788f;
+  aspect-ratio: 1;
+  perspective: 850px;
+}
+
+.entry-intro__compass::before {
+  content: "";
+  position: absolute;
+  inset: 10% -10%;
+  background: radial-gradient(ellipse, rgba(103, 160, 185, 0.14), transparent 68%);
+  pointer-events: none;
+}
+
+.entry-compass__orbit {
+  position: absolute;
+  inset: -1%;
+  border: 1px solid rgba(161, 187, 204, 0.28);
+  border-radius: 50%;
+  transform: rotateX(52deg) rotateY(-18deg) rotateZ(-15deg);
+  box-shadow: 0 1px 0 rgba(247, 250, 249, 0.12);
+}
+
+.entry-compass__body {
+  position: absolute;
+  inset: 4%;
+  transform-style: preserve-3d;
+  transform: rotateX(32deg) rotateY(-12deg) rotateZ(-8deg);
+}
+
+.entry-compass__base,
+.entry-compass__face,
+.entry-compass__needle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.entry-compass__base {
+  transform: translateZ(-12px);
+  background: #24364a;
+  box-shadow: 0 3px 0 #52677d, 0 7px 0 #263b50,
+    0 11px 0 #0b1727, 12px 30px 35px rgba(0, 0, 0, 0.4);
+}
+
+.entry-compass__face {
+  background:
+    radial-gradient(circle, #192e43 62%, transparent 63%),
+    conic-gradient(from var(--compass-light, 101deg), #526c80, #d8e8ed 12%,
+      #425b70 24%, #1a2e41 44%, #8aabbe 58%, #dce9eb 65%, #354d62 80%, #526c80);
+  border: 1px solid #91aabc;
+  box-shadow: inset 0 0 0 2px rgba(223, 237, 240, 0.3),
+    inset 0 0 0 6px rgba(12, 28, 43, 0.45);
+}
+
+.entry-compass__face svg,
+.entry-compass__needle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.entry-compass__needle {
+  transform: translateZ(18px) rotateZ(32deg);
+}
+
+.entry-compass__needle svg {
+  filter: drop-shadow(5px 9px 3px rgba(0, 0, 0, 0.45));
+}
+
+.entry-compass__pivot {
+  position: absolute;
+  inset: 46.5%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #fff, #9aafc4 45%, #344b64 75%);
+  border: 1px solid #c3d0dc;
+  transform: translateZ(22px);
+}
+
+.entry-compass__glass {
+  position: absolute;
+  inset: 5%;
+  border-radius: 50%;
+  transform: translateZ(25px);
+  background: linear-gradient(var(--compass-light, 101deg),
+    transparent 18%, rgba(207, 230, 242, 0.1) 37%,
+    rgba(230, 245, 250, 0.02) 38%, transparent 65%);
+  border: 1px solid rgba(183, 213, 231, 0.12);
+  pointer-events: none;
 }
 
 .entry-choice__paths {
@@ -279,7 +424,8 @@ h2 {
   }
 
   .entry-intro__compass {
-    display: none;
+    width: 180px;
+    justify-self: center;
   }
 
   .entry-choice__paths {

@@ -1,4 +1,5 @@
 import type { Ref } from "react";
+import LandingCompass from "./LandingCompass";
 
 interface EntryChoiceProps {
   headingRef: Ref<HTMLHeadingElement>;
@@ -16,25 +17,26 @@ export default function EntryChoice({
   return (
     <main className="entry-choice" id="main">
       <section className="entry-intro" aria-labelledby="entry-intro-title">
+        <div className="entry-intro__sky" aria-hidden="true">
+          <span className="entry-intro__shooting-star" />
+        </div>
         <div className="entry-intro__inner">
           <div>
-            <h1 id="entry-intro-title" ref={headingRef} tabIndex={-1}>Your inner compass.</h1>
+            <h1 id="entry-intro-title" ref={headingRef} tabIndex={-1}>Can AI Recognize When Behavior Conflicts with Values?</h1>
             <p className="entry-intro__description">
-              Twinkl helps you compare everyday choices with your confirmed Core
-              Values. It reviews your Journal Entries over time and shows the
-              evidence when your behavior conflicts with what matters to you.
+              A capstone project combining behavioral science, longitudinal
+              reasoning, and systematic experimentation to investigate how AI can
+              detect repeated conflict between people’s stated priorities and
+              their reported behavior. Model comparisons and ablation studies on
+              synthetic Journal Entries inform its design.
+            </p>
+            <p className="entry-intro__description">
+              Grounded in Schwartz’s established theory of human values, Twinkl
+              addresses a risk in AI-assisted reflection: affirming someone’s
+              account without examining the contradictions within it.
             </p>
           </div>
-          <svg className="entry-intro__compass" viewBox="0 0 240 240" fill="none" aria-hidden="true">
-            <circle cx="120" cy="120" r="102" stroke="currentColor" strokeWidth="1" />
-            <circle cx="120" cy="120" r="76" stroke="currentColor" strokeDasharray="1 9" />
-            <path d="M120 8v20m0 184v20M8 120h20m184 0h20" stroke="currentColor" />
-            <g transform="rotate(28 120 120)">
-              <path d="m120 40 19 80-19-8-19 8Z" fill="var(--apricot)" />
-              <path d="m120 200 19-80-19 8-19-8Z" fill="var(--paper)" />
-            </g>
-            <circle cx="120" cy="120" r="4" fill="var(--paper)" />
-          </svg>
+          <LandingCompass />
         </div>
       </section>
       <section className="entry-choice__paths" aria-labelledby="entry-paths-title">

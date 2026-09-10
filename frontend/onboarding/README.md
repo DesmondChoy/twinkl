@@ -8,8 +8,19 @@ Experience state with the in-memory Python boundary. A separate host can also
 persist the Profile exposed by the handoff, and the batch runtime imports its
 Core Values from saved JSON.
 
-The entry page introduces the project with an inner-compass banner and a
-GitHub link. Fresh visits start with two choices: **Try the Demo** opens the current saved
+The entry page introduces the capstone's behavioral science, longitudinal
+reasoning, and systematic experimentation. It introduces the research problem
+and model comparisons and ablations on synthetic Journal Entries, followed by
+Schwartz theory and the risk of affirming a person's account without examining
+its contradictions.
+A decorative warm shooting star crosses the banner from left
+to right in about two seconds, once every five seconds; reduced motion hides it.
+The banner also contains an inner compass and a GitHub link. Its decorative CSS
+3D compass uses continuous wave-based motion and damped
+pointer tilt, with metallic and glass highlights. Reduced-motion preferences
+keep it static; animation pauses while the browser tab is hidden. The
+compass remains visible at mobile widths and is separate from the onboarding
+progress compass. Fresh visits start with two choices: **Try the Demo** opens the current saved
 Persona catalog; **Try Onboarding** starts the personal assessment. The Twinkl
 wordmark returns to this choice without clearing progress. Existing sessions
 resume their current flow. Choosing Onboarding from a saved Persona starts a

@@ -198,7 +198,7 @@ describe("onboarding app", () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect(screen.getByRole("heading", { level: 1, name: "Your inner compass." })).toBeTruthy();
+    expect(screen.getByRole("heading", { level: 1, name: "Can AI Recognize When Behavior Conflicts with Values?" })).toBeTruthy();
     const repository = screen.getByRole("link", { name: "GitHub repository (opens in a new tab)" });
     expect(repository.getAttribute("href")).toBe("https://github.com/DesmondChoy/twinkl");
     expect(repository.getAttribute("target")).toBe("_blank");
@@ -258,7 +258,7 @@ describe("onboarding app", () => {
     await screen.findByRole("heading", { name: "Explore five synthetic Personas, each with a different Drift profile." });
 
     await user.click(screen.getByRole("button", { name: "Go home" }));
-    expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Can AI Recognize When Behavior Conflicts with Values?" })).toBeTruthy();
     expect(screen.queryByRole("button", { name: "Go home" })).toBeNull();
     await user.click(screen.getByRole("button", { name: "Try Onboarding" }));
     const after = parseSession(localStorage.getItem(SESSION_STORAGE_KEY))!;
@@ -340,11 +340,11 @@ describe("onboarding app", () => {
       ? banner.getByRole("link", { name: "Twinkl home" })
       : banner.getByRole("button", { name: "Choose another Persona" }));
     if (control === "wordmark") {
-      expect(screen.getByRole("heading", { name: "Your inner compass." })).toBeTruthy();
+      expect(screen.getByRole("heading", { name: "Can AI Recognize When Behavior Conflicts with Values?" })).toBeTruthy();
       expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))).toEqual(before);
       await user.click(screen.getByRole("button", { name: "Try the Demo" }));
     } else {
-      expect(screen.queryByRole("heading", { name: "Your inner compass." })).toBeNull();
+      expect(screen.queryByRole("heading", { name: "Can AI Recognize When Behavior Conflicts with Values?" })).toBeNull();
       expect(parseSession(localStorage.getItem(SESSION_STORAGE_KEY))).toEqual({
         ...before,
         experience: { ...before.experience, active_view: "experience" },
