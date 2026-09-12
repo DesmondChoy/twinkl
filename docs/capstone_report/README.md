@@ -8,8 +8,8 @@ supporting capstone report materials. Submitted milestone files remain under
 
 - [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
   the Phase 2 Technical Paper
-- Rendered report PDF — not included; generate it from the maintained source
-  and visually verify every page before distribution
+- [`capstone_project_report.pdf`](capstone_project_report.pdf) — rendered report,
+  with all 44 pages visually verified on 12 September 2026
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
 - [`images/`](images/) — report figures, interface captures, and evaluation
@@ -19,8 +19,8 @@ supporting capstone report materials. Submitted milestone files remain under
 
 ## Report Controls
 
-- **Document status:** Maintained Phase 2 Technical Paper source; PDF generation
-  and visual verification are required before distribution
+- **Document status:** Maintained Phase 2 Technical Paper source and verified PDF;
+  regenerate and visually verify the PDF after source or figure changes
 - **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
 - **Product source:** [`../prd.md`](../prd.md)
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
@@ -44,7 +44,8 @@ source .venv/bin/activate
 export UV_CACHE_DIR=/tmp/twinkl-uv-cache
 MPLCONFIGDIR=/tmp/twinkl-matplotlib \
   uv run python scripts/capstone/generate_report_figures.py
-quarto render docs/capstone_report/capstone_project_report.md --to pdf
+cd docs/capstone_report
+quarto render capstone_project_report.md --to pdf
 ```
 
 The figure script reads committed configuration, Parquet data, JSON metrics,

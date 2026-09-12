@@ -303,17 +303,17 @@ def draw_adopted_architecture() -> None:
 
 def draw_drift_detector_transitions() -> None:
     """Render the exact state and substate path in the Drift Detector."""
-    fig, ax = plt.subplots(figsize=(12.2, 6.2))
+    fig, ax = plt.subplots(figsize=(12.2, 9.2))
     ax.set_xlim(0, 12.2)
-    ax.set_ylim(0, 6.2)
+    ax.set_ylim(0, 9.2)
     ax.axis("off")
 
     nodes = {
-        "n0": (0.45, 4.05, 2.05, "No Active Drift\nrun length 0"),
-        "n1": (3.25, 4.05, 2.05, "No Active Drift\nrun length 1 · first Conflict"),
-        "active": (8.95, 4.05, 2.45, "Active Drift\nrun length ≥ 2"),
-        "i0": (1.85, 1.55, 2.45, "Insufficient Evidence\nrun length 0 · unresolved"),
-        "i1": (5.45, 1.55, 2.45, "Insufficient Evidence\nrun length 1 · unresolved"),
+        "n0": (0.25, 6.2, 2.95, "No Active Drift\nrun length 0"),
+        "n1": (4.6, 6.2, 2.95, "No Active Drift\nrun length 1\nfirst Conflict"),
+        "active": (8.95, 6.2, 2.95, "Active Drift\nrun length ≥ 2"),
+        "i0": (1.95, 2.85, 3.3, "Insufficient Evidence\nrun length 0\nunresolved"),
+        "i1": (6.95, 2.85, 3.3, "Insufficient Evidence\nrun length 1\nunresolved"),
     }
     styles = {
         "n0": (TEAL_LIGHT, TEAL),
@@ -329,119 +329,117 @@ def draw_drift_detector_transitions() -> None:
             x=x,
             y=y,
             width=width,
-            height=0.9,
+            height=1.2,
             text=label,
             facecolor=facecolor,
             edgecolor=edgecolor,
-            fontsize=10.2,
+            fontsize=16.5,
             linewidth=1.6,
         )
 
-    add_arrow(ax, (2.5, 4.5), (3.25, 4.5), color=TEAL)
-    ax.text(2.87, 4.72, "valid Conflict", ha="center", fontsize=9.1)
-    add_arrow(ax, (5.3, 4.5), (8.95, 4.5), color=GOLD)
+    add_arrow(ax, (3.2, 6.8), (4.6, 6.8), color=TEAL)
+    ax.text(3.9, 7.02, "valid\nConflict", ha="center", fontsize=16)
+    add_arrow(ax, (7.55, 6.8), (8.95, 6.8), color=GOLD)
     ax.text(
-        7.12,
-        4.72,
-        "adjacent valid Conflict",
+        8.25,
+        7.02,
+        "adjacent\nvalid\nConflict",
         ha="center",
-        fontsize=9.1,
+        fontsize=16,
     )
-    add_arrow(ax, (4.3, 2.0), (5.45, 2.0), color=CORAL)
-    ax.text(4.87, 2.22, "valid Conflict", ha="center", fontsize=9.1)
-    add_arrow(ax, (7.9, 2.0), (9.55, 4.05), color=GOLD, rad=-0.13)
+    add_arrow(ax, (5.25, 3.5), (6.95, 3.5), color=CORAL)
+    ax.text(6.1, 3.72, "valid\nConflict", ha="center", fontsize=16)
+    add_arrow(ax, (10.25, 3.5), (10.7, 6.2), color=GOLD, rad=0.1)
     ax.text(
-        8.68,
-        2.9,
-        "adjacent valid Conflict",
+        9.55,
+        4.7,
+        "adjacent\nvalid\nConflict",
         ha="center",
-        fontsize=9.1,
-        rotation=47,
+        fontsize=16,
     )
 
-    add_arrow(ax, (0.78, 4.95), (2.18, 4.95), color=TEAL, rad=-0.55)
+    add_arrow(ax, (0.65, 7.4), (2.8, 7.4), color=TEAL, rad=-0.55)
     ax.text(
-        1.48,
-        5.72,
+        1.72,
+        8.5,
         "valid Not Conflict or\nstandalone valid Abstain",
         ha="center",
-        fontsize=8.9,
+        fontsize=16,
     )
-    add_arrow(ax, (9.35, 4.95), (11.0, 4.95), color=GOLD, rad=-0.55)
+    add_arrow(ax, (9.35, 7.4), (11.5, 7.4), color=GOLD, rad=-0.55)
     ax.text(
-        10.18,
-        5.72,
+        10.42,
+        8.5,
         "adjacent valid Conflict\nextends the run",
         ha="center",
-        fontsize=8.9,
+        fontsize=16,
     )
 
-    add_arrow(ax, (1.5, 4.05), (2.55, 2.45), color=CORAL, rad=0.08)
-    ax.text(1.55, 3.05, "failed review", fontsize=8.8, rotation=-47)
-    add_arrow(ax, (4.25, 4.05), (3.55, 2.45), color=CORAL, rad=-0.05)
+    add_arrow(ax, (1.75, 6.2), (2.65, 4.05), color=CORAL, rad=0.08)
+    ax.text(0.45, 5.1, "failed\nreview", fontsize=16)
+    add_arrow(ax, (5.55, 6.2), (4.7, 4.05), color=CORAL, rad=-0.05)
     ax.text(
-        4.25,
-        3.03,
+        4.0,
+        5.0,
+        "valid Abstain\nor failed\nreview",
+        ha="center",
+        fontsize=16,
+    )
+    add_arrow(ax, (9.25, 6.2), (5.25, 4.05), color=CORAL, rad=-0.1)
+    ax.text(
+        7.15,
+        5.45,
         "valid Abstain\nor failed review",
         ha="center",
-        fontsize=8.8,
+        fontsize=16,
     )
-    add_arrow(ax, (9.15, 4.05), (4.3, 2.18), color=CORAL, rad=-0.1)
+    add_arrow(ax, (1.95, 3.05), (1.95, 3.8), color=CORAL, rad=-1.2)
     ax.text(
-        6.85,
-        3.05,
-        "valid Abstain or failed review",
-        ha="center",
-        fontsize=8.8,
-        rotation=18,
-    )
-    add_arrow(ax, (1.85, 1.72), (1.85, 2.25), color=CORAL, rad=-1.2)
-    ax.text(
-        0.3,
-        1.75,
-        "valid Abstain\nor failed review",
+        0.12,
+        2.38,
+        "valid Abstain\nor failed\nreview",
         ha="left",
-        fontsize=8.7,
+        fontsize=16,
     )
-    add_arrow(ax, (5.45, 1.78), (4.3, 1.78), color=CORAL)
+    add_arrow(ax, (6.95, 3.05), (5.25, 3.05), color=CORAL)
     ax.text(
-        4.88,
-        1.25,
+        6.1,
+        2.35,
         "valid Abstain\nor failed review",
         ha="center",
-        fontsize=8.7,
+        fontsize=16,
     )
 
     ax.text(
-        0.5,
-        0.66,
+        0.25,
+        1.5,
         (
-            "GLOBAL RESET · A valid Not Conflict returns any node to No Active "
+            "GLOBAL RESET · A valid Not Conflict returns any node to\nNo Active "
             "Drift, run length 0."
         ),
-        fontsize=9.3,
+        fontsize=16,
         color=INK,
         weight="bold",
     )
     ax.text(
-        0.5,
-        0.34,
+        0.25,
+        0.7,
         (
-            "GAP RULE · A Journal Entry gap breaks adjacency. After recent Conflict "
+            "GAP RULE · A Journal Entry gap breaks adjacency. After recent Conflict\n"
             "or unresolved evidence, a next Conflict enters the unresolved "
             "run-length-1 node."
         ),
-        fontsize=9.1,
+        fontsize=16,
         color=MUTED,
     )
     ax.text(
-        0.5,
-        0.07,
+        0.25,
+        0.18,
         (
             "HISTORY · Historical Drift Records remain stored after the current "
             "state changes."
         ),
-        fontsize=9.1,
+        fontsize=16,
         color=MUTED,
     )
     fig.subplots_adjust(left=0.015, right=0.985, top=0.99, bottom=0.04)
@@ -556,11 +554,11 @@ def draw_synthetic_data_lifts() -> None:
         parse_float(second_by_family["New BalancedSoftmax"][4]),
     ]
 
-    fig, axes = plt.subplots(1, 2, figsize=(12.2, 5.8), gridspec_kw={"wspace": 0.34})
+    fig, axes = plt.subplots(2, 1, figsize=(6.5, 6.6))
     x = list(range(3))
     axes[0].plot(x, entries, color=TEAL, linewidth=2.5, zorder=2)
     axes[0].scatter(x, entries, s=100, color=TEAL, zorder=3)
-    annotation_layout = [(18, "left"), (0, "center"), (-10, "right")]
+    annotation_layout = [(6, "left"), (0, "center"), (-10, "right")]
     for index, (entry_count, persona_count) in enumerate(
         zip(entries, personas, strict=True)
     ):
@@ -568,15 +566,18 @@ def draw_synthetic_data_lifts() -> None:
         axes[0].annotate(
             f"{entry_count:,} entries\n{persona_count} personas",
             (index, entry_count),
-            xytext=(horizontal_offset, 14),
+            xytext=(horizontal_offset, 28 if index == 0 else 14),
             textcoords="offset points",
             ha=alignment,
             weight="bold",
+            fontsize=9,
         )
     axes[0].set_xticks(x, stages)
     axes[0].set_ylim(1390, 1725)
-    axes[0].set_ylabel("Persisted Journal Entries")
-    axes[0].set_title("(a) Train-only corpus growth", fontsize=13, weight="bold")
+    axes[0].set_ylabel("Persisted Journal Entries", fontsize=9)
+    axes[0].set_title(
+        "(a) Train-only corpus growth", fontsize=11, weight="bold", pad=12
+    )
     axes[0].yaxis.grid(True, color=GRID, linewidth=0.8)
     axes[0].set_axisbelow(True)
 
@@ -593,7 +594,7 @@ def draw_synthetic_data_lifts() -> None:
                 xytext=(8, 8),
                 textcoords="offset points",
                 ha="left",
-                fontsize=8.5,
+                fontsize=9,
                 color=end_color,
                 weight="bold",
             )
@@ -604,7 +605,7 @@ def draw_synthetic_data_lifts() -> None:
             xytext=(-7, -14),
             textcoords="offset points",
             ha="right",
-            fontsize=8.5,
+            fontsize=9,
             color=MUTED,
         )
         axes[1].annotate(
@@ -613,35 +614,37 @@ def draw_synthetic_data_lifts() -> None:
             xytext=(7, 8),
             textcoords="offset points",
             ha="left",
-            fontsize=8.5,
+            fontsize=9,
             color=end_color,
             weight="bold",
         )
     axes[1].set_yticks(y, effect_labels)
+    axes[1].set_ylim(-0.5, 3.5)
     axes[1].invert_yaxis()
-    axes[1].set_xlim(0, 0.66)
-    axes[1].set_xlabel("Held-out metric value")
+    axes[1].set_xlim(0, 0.76)
+    axes[1].set_xlabel("Held-out metric value", fontsize=9)
     axes[1].set_title(
-        "(b) Selected target-dimension effects", fontsize=13, weight="bold"
+        "(b) Selected target-dimension effects", fontsize=11, weight="bold", pad=12
     )
     axes[1].xaxis.grid(True, color=GRID, linewidth=0.8)
     axes[1].set_axisbelow(True)
 
     for ax in axes:
+        ax.tick_params(axis="both", labelsize=9)
         for spine in ("top", "right", "left"):
             ax.spines[spine].set_visible(False)
         ax.spines["bottom"].set_color(GRID)
     fig.text(
-        0.56,
-        0.012,
+        0.02,
+        0.035,
         (
-            "Circles show the pre-lift reference; diamonds show the post-lift "
+            "Circles show the pre-lift reference; diamonds show the post-lift\n"
             "result. Compare each row only within its named metric."
         ),
         color=MUTED,
-        fontsize=9.7,
+        fontsize=9,
     )
-    fig.subplots_adjust(bottom=0.20, top=0.90)
+    fig.subplots_adjust(left=0.32, right=0.97, bottom=0.16, top=0.92, hspace=0.75)
     save_figure(fig, "synthetic-data-lifts.png")
 
 
@@ -734,11 +737,9 @@ def draw_per_value_conflict_recall() -> None:
     labels = [dimension.replace("_", " ").title() for dimension in vif_dimensions]
     labels[0] = "Self-Direction"
     fig, axes = plt.subplots(
-        1,
         2,
-        figsize=(12.2, 7.0),
-        sharey=True,
-        gridspec_kw={"wspace": 0.26},
+        1,
+        figsize=(6.5, 7.4),
     )
     y = list(range(len(labels)))
     panels = (
@@ -769,32 +770,33 @@ def draw_per_value_conflict_recall() -> None:
                 xytext=(7, -1),
                 textcoords="offset points",
                 va="center",
-                fontsize=8.5,
+                fontsize=9,
                 color=color,
                 weight="bold",
             )
-        ax.set_xlim(0, 0.92)
-        ax.set_xlabel("Median entry-level Conflict recall")
-        ax.set_title(f"{title}\n{subtitle}", fontsize=11.5, weight="bold")
+        ax.set_xlim(0, 1.0)
+        ax.set_xlabel("Median entry-level Conflict recall", fontsize=9)
+        ax.set_title(f"{title}\n{subtitle}", fontsize=10, weight="bold", pad=12)
+        ax.set_yticks(y, labels)
+        ax.invert_yaxis()
+        ax.tick_params(axis="both", labelsize=9)
         ax.xaxis.grid(True, color=GRID, linewidth=0.8)
         ax.set_axisbelow(True)
         for spine in ("top", "right", "left"):
             ax.spines[spine].set_visible(False)
         ax.spines["bottom"].set_color(GRID)
-    axes[0].set_yticks(y, labels)
-    axes[0].invert_yaxis()
     fig.text(
         0.5,
-        0.018,
+        0.025,
         (
-            "The panels use different data, label rubrics, and model inputs. "
+            "The panels use different data, label rubrics, and model inputs.\n"
             "Compare value patterns within each panel, not scores across panels."
         ),
         ha="center",
         color=MUTED,
-        fontsize=10,
+        fontsize=9,
     )
-    fig.subplots_adjust(bottom=0.13, top=0.88)
+    fig.subplots_adjust(left=0.20, right=0.98, bottom=0.13, top=0.92, hspace=0.65)
     save_figure(fig, "per-value-conflict-recall.png")
 
 
