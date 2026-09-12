@@ -292,7 +292,7 @@ describe("Coach Digest composition", () => {
     expect(comparison.getByText(/includes repair feedback/)).toBeTruthy();
   });
 
-  it.each(["personal", "demo"] as const)("keeps the %s moment inside the response and the existing question last", async (presentation) => {
+  it.each(["personal", "demo"] as const)("keeps the %s moment inside the response after the existing question", async (presentation) => {
     const user = userEvent.setup();
     const event = await momentEvent();
     const onOpenEntry = vi.fn();

@@ -138,7 +138,9 @@ def prepare(
         digest = WeeklyDigest.model_validate(cases[key]["digest"])
         if _coach_unavailable_reason(response, digest) is not None:
             raise ValueError(f"Refusing to overwrite incompatible response: {key}")
-        if not validate_weekly_digest_narrative(digest, response.narrative).all_passed:
+        if not validate_weekly_digest_narrative(
+            digest, response.narrative, validation_policy="historical"
+        ).all_passed:
             raise ValueError(f"Existing response failed validations: {key}")
     policy = {
         "model": DEFAULT_OPENAI_MODEL,

@@ -7,6 +7,9 @@ import json
 from pathlib import Path
 
 import polars as pl
+import pytest
+
+from tests.historical import assert_in_snapshot, source_snapshot
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ARTIFACT_ROOT = (
@@ -146,7 +149,16 @@ def test_resolution_completes_cohort_without_adding_drift():
     }
 
 
-def test_all_frozen_and_result_hashes_match_manifests():
+def test_all_frozen_and_result_hashes_match_manifests(tmp_path):
+    snapshot = source_snapshot(
+        REPO_ROOT,
+        "d687bf680d9dff99558f739b1cacff6a73dc8fa4",
+        tmp_path / "historical",
+    )
+    assert_in_snapshot(snapshot, Path(__file__), "_assert_receipt_hashes")
+
+
+def _assert_receipt_hashes():
     for manifest_path, sections in (
         (ARTIFACT_ROOT / "audit_manifest.json", ("source_files", "frozen_files")),
         (RESULTS / "audit_manifest.json", ("claude_output", "results")),
@@ -155,3 +167,14 @@ def test_all_frozen_and_result_hashes_match_manifests():
         for section in sections:
             for relative_path, expected in manifest[section].items():
                 assert _sha256(REPO_ROOT / relative_path) == expected
+
+
+def test_historical_replay_rejects_changed_source_snapshot(tmp_path):
+    snapshot = source_snapshot(
+        REPO_ROOT,
+        "d687bf680d9dff99558f739b1cacff6a73dc8fa4",
+        tmp_path / "historical",
+    )
+    (snapshot / "config/schwartz_values.yaml").write_text("changed snapshot\n")
+    with pytest.raises(AssertionError, match="AssertionError"):
+        assert_in_snapshot(snapshot, Path(__file__), "_assert_receipt_hashes")

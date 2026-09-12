@@ -24,6 +24,7 @@ def _api_response(
         [SimpleNamespace(content=[SimpleNamespace(refusal=refusal)])] if refusal else []
     )
     return SimpleNamespace(
+        status="completed",
         output_text=json.dumps(payload) if payload is not None else None,
         model=NUDGE_RUNTIME_MODEL,
         id="resp_nudge_123",
@@ -160,6 +161,52 @@ def test_response_requires_valid_question_for_nudge_category() -> None:
             reason="The writer dismisses an emotion immediately after naming it.",
             nudge_text="Why?",
         )
+
+
+@pytest.mark.parametrize("text", [
+    "You should quit your job today.", "You should quit your job today?",
+    "Please apologize to them?", "What happened? How did it feel?",
+])
+def test_nudge_rejects_statements_directives_and_multiple_questions(text):
+    with pytest.raises(ValidationError, match="question form"):
+        NudgeDecisionAndGenerationResponse(
+            decision="clarification", reason="A detail is missing.", nudge_text=text
+        )
+
+
+@pytest.mark.parametrize(
+    "text", ["Since when?", "And how did that land?", "Which meeting?"]
+)
+def test_nudge_preserves_short_and_conversational_questions(text):
+    assert NudgeDecisionAndGenerationResponse(
+        decision="clarification", reason="A detail is missing.", nudge_text=text
+    ).nudge_text == text
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("status,refusal,expected", [
+    ("completed", "Cannot comply", "refusal"),
+    ("incomplete", None, "invalid"),
+    ("incomplete", "Cannot comply", "refusal"),
+    (None, None, "invalid"),
+])
+async def test_valid_nudge_text_cannot_override_failed_provider_envelope(
+    status, refusal, expected
+):
+    response = _api_response({
+        "decision": "clarification", "reason": "A detail is missing.",
+        "nudge_text": "What happened after that?",
+    }, refusal=refusal)
+    response.status = status
+    create = AsyncMock(return_value=response)
+    receipt = await OpenAINudgeRuntime(client=SimpleNamespace(
+        responses=SimpleNamespace(create=create)
+    ))(build_nudge_runtime_request(
+        entry_content="I called home.", entry_date="2026-09-12"
+    ))
+    assert receipt.status == expected
+    assert receipt.nudge_text is None
+    create.assert_awaited_once()
 
 
 @pytest.mark.asyncio

@@ -6,6 +6,7 @@ import pytest
 
 from scripts.experiments import weekly_drift_reviewer_prompt_alignment as alignment
 from scripts.experiments import weekly_verifier_ablation as baseline
+from tests.historical import assert_in_snapshot, source_snapshot
 
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG = baseline._read_yaml(ROOT / alignment.DEFAULT_CONFIG_PATH)
@@ -195,12 +196,22 @@ def test_paid_run_guard(prepared) -> None:
         )
 
 
-def test_saved_result_is_complete_and_reproducible() -> None:
-    records, paths = alignment._load_prepared(CONFIG, ROOT)
+def test_saved_result_is_complete_and_reproducible(tmp_path) -> None:
+    snapshot = source_snapshot(
+        ROOT,
+        "a00d2b9eae2fb4174638fc0d782593fe4439d2a8",
+        tmp_path / "historical",
+    )
+    assert_in_snapshot(snapshot, Path(__file__), "_assert_saved_result")
+
+
+def _assert_saved_result() -> None:
+    config = baseline._read_yaml(ROOT / alignment.DEFAULT_CONFIG_PATH)
+    records, paths = alignment._load_prepared(config, ROOT)
     responses = baseline._load_jsonl(paths["responses"])
     saved = baseline._read_json(paths["metrics"])
     rescored = alignment.score_responses(
-        config=CONFIG,
+        config=config,
         root=ROOT,
         records=records,
         responses=responses,
@@ -211,8 +222,8 @@ def test_saved_result_is_complete_and_reproducible() -> None:
         repeat: sum(row["repeat"] == repeat for row in responses)
         for repeat in range(1, 4)
     } == {1: 126, 2: 126, 3: 126}
-    assert all(row["requested_model"] == CONFIG["api"]["model"] for row in responses)
-    assert all(row["resolved_model"] == CONFIG["api"]["model"] for row in responses)
+    assert all(row["requested_model"] == config["api"]["model"] for row in responses)
+    assert all(row["resolved_model"] == config["api"]["model"] for row in responses)
     assert all(row["response_id"] for row in responses)
     assert all((row.get("usage") or {}).get("total_tokens", 0) > 0 for row in responses)
     assert saved["response_summary"]["statuses"] == {"invalid": 27, "ok": 351}

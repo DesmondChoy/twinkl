@@ -8,6 +8,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from src.model_guardrails import is_single_question
 from src.models.nudge import NudgeCategory
 
 NudgeRuntimeDecision = Literal[
@@ -40,6 +41,8 @@ class NudgeDecisionAndGenerationResponse(BaseModel):
         word_count = len(stripped.split())
         if not 2 <= word_count <= 12:
             raise ValueError("nudge_text must contain 2-12 words")
+        if not is_single_question(stripped):
+            raise ValueError("nudge_text must be one question in question form")
         self.nudge_text = stripped
         return self
 

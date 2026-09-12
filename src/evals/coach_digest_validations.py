@@ -18,11 +18,13 @@ import argparse
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Literal
 
 import polars as pl
 
 from src.coach.schemas import (
     CoachNarrative,
+    DigestValidation,
     EvidenceSnippet,
     WeeklyDigest,
 )
@@ -33,6 +35,7 @@ DEFAULT_PARQUET = Path("logs/exports/weekly_digests/weekly_digests.parquet")
 # The approved runtime tags its digests with this signal_source. By default the
 # report measures only these rows, excluding deprecated vif_runtime leftovers.
 APPROVED_SIGNAL_SOURCE = "weekly_drift_reviewer"
+ValidationPolicy = Literal["recorded", "current"]
 
 # Pass-rate targets from docs/evals/explanation_quality_eval.md.
 # value_leakage has no published target; treated as informational (target None).
@@ -83,6 +86,7 @@ class CoachDigestValidationReport:
     n_rows: int
     n_with_narrative: int
     n_evaluated: int
+    validation_policy: ValidationPolicy = "recorded"
     signal_source_filter: str | None = None
     n_rows_after_filter: int = 0
     checks: dict[str, CheckSummary] = field(default_factory=dict)
@@ -99,6 +103,7 @@ class CoachDigestValidationReport:
             ),
             "input_source": self.input_source,
             "input_kind": self.input_kind,
+            "validation_policy": self.validation_policy,
             "signal_source_filter": self.signal_source_filter,
             "n_rows": self.n_rows,
             "n_rows_after_filter": self.n_rows_after_filter,
@@ -140,23 +145,87 @@ def _reconstruct_digest(row: dict[str, object]) -> WeeklyDigest:
         ),
         core_values=json.loads(str(row.get("core_values_json") or "[]")),
         goal_context=(
-            None
-            if row.get("goal_context") is None
-            else str(row["goal_context"])
+            None if row.get("goal_context") is None else str(row["goal_context"])
         ),
         drift_states=json.loads(str(row.get("drift_states_json") or "{}")),
+        drift_details=json.loads(str(row.get("drift_details_json") or "{}")),
+        state_comparisons=json.loads(str(row.get("state_comparisons_json") or "[]")),
         drift_reasons=json.loads(str(row.get("drift_reasons_json") or "[]")),
         top_tensions=json.loads(str(row.get("top_tensions_json") or "[]")),
         top_strengths=json.loads(str(row.get("top_strengths_json") or "[]")),
         dimensions=json.loads(str(row.get("dimensions_json") or "[]")),
         evidence=evidence,
+        validation=(
+            DigestValidation.model_validate_json(str(row["validation_json"]))
+            if row.get("validation_json")
+            else None
+        ),
     )
+
+
+def _validate_for_policy(
+    digest: WeeklyDigest,
+    narrative: CoachNarrative,
+    policy: ValidationPolicy,
+    *,
+    prompt_version: str | None = None,
+) -> tuple[DigestValidation, str]:
+    """Recompute checks without changing the response's saved validation receipt."""
+    if policy not in {"recorded", "current"}:
+        raise ValueError(f"Unknown validation policy: {policy}")
+    names = (
+        {check.name for check in digest.validation.checks}
+        if digest.validation
+        else set()
+    )
+    current = policy == "current" or "reflective_question_form" in names
+    voice = policy == "current" or (
+        bool(names & {"conversational_voice", "natural_reflection_voice"})
+        if digest.validation is not None
+        else prompt_version in {"4.4", "4.5"}
+    )
+    voice_version: Literal["4.4", "4.5"] = (
+        "4.5"
+        if policy == "current"
+        or "natural_reflection_voice" in names
+        or (digest.validation is None and prompt_version == "4.5")
+        else "4.4"
+    )
+    resolved = (
+        "current"
+        if current and voice and voice_version == "4.5"
+        else f"current_voice_{voice_version}"
+        if current and voice
+        else "current_base"
+        if current
+        else f"historical_voice_{voice_version}"
+        if voice
+        else "historical_base"
+    )
+    if policy == "recorded" and not names and prompt_version is None:
+        resolved += "_legacy_default"
+    return validate_weekly_digest_narrative(
+        digest,
+        narrative,
+        validate_voice=voice,
+        voice_version=voice_version,
+        validation_policy="current" if current else "historical",
+    ), resolved
+
+
+def _count_checks(counts: dict[str, list[int]], validation: DigestValidation) -> None:
+    for check in validation.checks:
+        count = counts.setdefault(check.name, [0, 0])
+        count[1] += 1
+        count[0] += int(check.passed)
 
 
 def evaluate_rows(
     rows: list[dict[str, object]],
     input_source: str,
     signal_source: str | None = APPROVED_SIGNAL_SOURCE,
+    *,
+    validation_policy: ValidationPolicy = "recorded",
 ) -> CoachDigestValidationReport:
     """Run Coach Digest Validations over parquet-shaped digest rows.
 
@@ -188,20 +257,18 @@ def evaluate_rows(
             sample_results.append({"sample_id": label, "status": "skipped"})
             continue
 
-        validation = validate_weekly_digest_narrative(digest, narrative)
+        validation, resolved_policy = _validate_for_policy(
+            digest, narrative, validation_policy
+        )
         n_evaluated += 1
-        for check in validation.checks:
-            if check.name in counts:
-                counts[check.name][1] += 1
-                if check.passed:
-                    counts[check.name][0] += 1
+        _count_checks(counts, validation)
         sample_results.append(
             {
                 "sample_id": label,
                 "status": "evaluated",
-                "checks": {
-                    check.name: check.passed for check in validation.checks
-                },
+                "validation_policy": resolved_policy,
+                "all_passed": validation.all_passed,
+                "checks": {check.name: check.passed for check in validation.checks},
                 "failed_checks": [
                     check.name for check in validation.checks if not check.passed
                 ],
@@ -213,13 +280,14 @@ def evaluate_rows(
             name=name,
             passed=counts[name][0],
             total=counts[name][1],
-            target=CHECK_TARGETS[name],
+            target=CHECK_TARGETS.get(name),
         )
-        for name in CHECK_TARGETS
+        for name in counts
     }
     return CoachDigestValidationReport(
         input_source=input_source,
         input_kind="parquet",
+        validation_policy=validation_policy,
         n_rows=total_rows,
         n_rows_after_filter=len(rows),
         signal_source_filter=signal_source,
@@ -234,18 +302,25 @@ def evaluate_rows(
 def evaluate_parquet(
     parquet_path: Path,
     signal_source: str | None = APPROVED_SIGNAL_SOURCE,
+    *,
+    validation_policy: ValidationPolicy = "recorded",
 ) -> CoachDigestValidationReport:
     """Run Coach Digest Validations on persisted Weekly Drift Detection output."""
     frame = pl.read_parquet(parquet_path)
     rows = frame.to_dicts()
     return evaluate_rows(
-        rows, input_source=str(parquet_path), signal_source=signal_source
+        rows,
+        input_source=str(parquet_path),
+        signal_source=signal_source,
+        validation_policy=validation_policy,
     )
 
 
 def evaluate_manifest(
     manifest_path: Path,
     signal_source: str | None = APPROVED_SIGNAL_SOURCE,
+    *,
+    validation_policy: ValidationPolicy = "recorded",
 ) -> CoachDigestValidationReport:
     """Run Coach Digest Validations on exact manifest digest-response pairs."""
     items = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -269,28 +344,27 @@ def evaluate_manifest(
             skipped.append(label)
             sample_results.append({"sample_id": label, "status": "skipped"})
             continue
-        validation = validate_weekly_digest_narrative(digest, narrative)
-        n_evaluated += 1
-        for check in validation.checks:
-            if check.name in counts:
-                counts[check.name][1] += 1
-                if check.passed:
-                    counts[check.name][0] += 1
         provenance = item.get("provenance", {})
+        validation, resolved_policy = _validate_for_policy(
+            digest,
+            narrative,
+            validation_policy,
+            prompt_version=provenance.get("generation", {}).get("prompt_version"),
+        )
+        n_evaluated += 1
+        _count_checks(counts, validation)
         sample_results.append(
             {
                 "sample_id": label,
                 "scenario_id": provenance.get("scenario_id"),
                 "status": "evaluated",
+                "validation_policy": resolved_policy,
+                "all_passed": validation.all_passed,
                 "weekly_drift_input_sha256": provenance.get(
                     "weekly_drift_input_sha256"
                 ),
-                "coach_response_sha256": provenance.get(
-                    "coach_response_sha256"
-                ),
-                "checks": {
-                    check.name: check.passed for check in validation.checks
-                },
+                "coach_response_sha256": provenance.get("coach_response_sha256"),
+                "checks": {check.name: check.passed for check in validation.checks},
                 "failed_checks": [
                     check.name for check in validation.checks if not check.passed
                 ],
@@ -301,13 +375,14 @@ def evaluate_manifest(
             name=name,
             passed=counts[name][0],
             total=counts[name][1],
-            target=CHECK_TARGETS[name],
+            target=CHECK_TARGETS.get(name),
         )
-        for name in CHECK_TARGETS
+        for name in counts
     }
     return CoachDigestValidationReport(
         input_source=str(manifest_path),
         input_kind="public_scenario_manifest",
+        validation_policy=validation_policy,
         n_rows=len(items),
         n_rows_after_filter=len(filtered_items),
         signal_source_filter=signal_source,
@@ -329,6 +404,9 @@ def render_markdown(report: CoachDigestValidationReport) -> str:
         "",
         f"- Input: `{report.input_source}`",
         f"- Input kind: `{report.input_kind}`",
+        f"- Validation policy: `{report.validation_policy}`",
+        "- Recorded mode uses saved checks or generation metadata; records without "
+        "either use the explicitly labelled historical base policy.",
         (
             f"- Signal source filter: `{report.signal_source_filter}` "
             f"({report.n_rows_after_filter} of {report.n_rows} rows)"
@@ -364,8 +442,8 @@ def render_markdown(report: CoachDigestValidationReport) -> str:
             "",
             "## Per-Response Results",
             "",
-            "| Response | Scenario | Result | Failed checks |",
-            "| --- | --- | --- | --- |",
+            "| Response | Scenario | Policy | Result | Failed checks |",
+            "| --- | --- | --- | --- | --- |",
         ]
         for result in report.sample_results:
             failed_checks_value = result.get("failed_checks")
@@ -376,6 +454,7 @@ def render_markdown(report: CoachDigestValidationReport) -> str:
             )
             lines.append(
                 f"| {result['sample_id']} | {result.get('scenario_id') or '—'} | "
+                f"{result.get('validation_policy') or '—'} | "
                 f"{result['status']} | {', '.join(failed_checks) or 'none'} |"
             )
     return "\n".join(lines) + "\n"
@@ -408,6 +487,12 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--validation-policy",
+        choices=["recorded", "current"],
+        default="recorded",
+        help="Reproduce recorded checks (default), or apply every current live check.",
+    )
+    parser.add_argument(
         "--all-sources",
         action="store_true",
         help="Evaluate every row regardless of signal_source.",
@@ -419,11 +504,16 @@ def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
     signal_source = None if args.all_sources else args.signal_source
     report = (
-        evaluate_manifest(args.manifest, signal_source=signal_source)
+        evaluate_manifest(
+            args.manifest,
+            signal_source=signal_source,
+            validation_policy=args.validation_policy,
+        )
         if args.manifest is not None
         else evaluate_parquet(
             args.parquet or DEFAULT_PARQUET,
             signal_source=signal_source,
+            validation_policy=args.validation_policy,
         )
     )
 

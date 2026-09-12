@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 from starlette.testclient import TestClient
 
+from prompts import get_prompt_metadata
 from src.demo.api import create_app, create_deployment_app
 from src.demo.canonical_fixture import build_canonical_fixture
 from src.demo.contracts import (
@@ -26,6 +27,7 @@ from src.demo.contracts import (
 from src.demo.experience_service import InMemoryExperienceService
 from src.nudge.runtime import NudgeRuntimeReceipt, NudgeRuntimeRequest
 from src.weekly_drift_reviewer import (
+    WEEKLY_DRIFT_REVIEWER_PROMPT,
     VerifierAssessment,
     WeeklyDriftReviewerDecision,
     WeeklyDriftReviewerReceipt,
@@ -122,8 +124,8 @@ class DeterministicWeeklyReviewer:
             week_end=request.week_end,
             core_values=request.core_values,
             current_t_indices=request.current_t_indices,
-            prompt_name="weekly_vif_verifier",
-            prompt_version="2.0",
+            prompt_name=WEEKLY_DRIFT_REVIEWER_PROMPT,
+            prompt_version=str(get_prompt_metadata(WEEKLY_DRIFT_REVIEWER_PROMPT)["version"]),
             prompt_sha256=request.prompt_sha256,
             runtime_text_sha256=request.runtime_text_sha256,
             requested_model="gpt-5.6-luna",

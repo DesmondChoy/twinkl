@@ -21,7 +21,9 @@ source .venv/bin/activate        # Bash/Zsh
 | Layer | Kind | LLM calls? | Where |
 | --- | --- | --- | --- |
 | Weekly Drift Detection output builders + rendering | Unit tests | No (mocked) | `tests/coach/test_weekly_digest.py`, `tests/coach/test_runtime.py`, `tests/coach/test_weekly_drift_runtime.py` |
-| Coach Digest Validations (groundedness, non-circularity, raw value leakage, current-state claims, length) | Unit tests | No | `tests/coach/test_weekly_digest.py` |
+| Coach Digest Validations (quotations, question form, non-circularity, raw value leakage, current-state claims, length, voice) | Unit tests | No | `tests/coach/test_weekly_digest.py` |
+| Provider attempt limits and failed response envelopes | Contract tests | No (local HTTP transport) | `tests/test_model_provider_boundaries.py`, `tests/nudge/test_runtime.py`, `tests/test_weekly_drift_reviewer.py` |
+| Experience browser journeys | Browser smoke | No (controlled Python providers) | `frontend/onboarding/e2e/experience.spec.ts` |
 | Coach Digest Validations batch report over a real Weekly Drift Detection output set | Eval | No | `src/evals/coach_digest_validations.py` |
 | Coach Digest Evals (correctness, specificity, non-prescriptive tone, tension honesty) | Eval | **Yes (paid)** | `src/evals/coach_narrative_judge.py` |
 | Coach Digest Drift/control comparison | Study | **Yes (paid generation and AI review)** | `scripts/experiments/run_coach_drift_control_eval.py`, `src/evals/coach_drift_control_report.py` |
@@ -48,11 +50,11 @@ Run only the Weekly Drift Detection output builder and automated response tests:
 uv run pytest tests/coach/test_weekly_digest.py
 ```
 
-Run only the automated response tests (groundedness, non-circularity, raw value
-leakage, current-state claims, and length, with pass and fail paths):
+Run the automated response tests, including mixed genuine/fabricated quotations
+and missing or malformed reflective questions:
 
 ```sh
-uv run pytest tests/coach/test_weekly_digest.py -k validation
+uv run python -m pytest tests/coach/test_weekly_digest.py
 ```
 
 Run the evaluation unit tests for the batch report and AI review. Both use
@@ -88,6 +90,45 @@ The import-isolated MyPy command supplies MyPy ephemerally and keeps this
 focused check separate from known type errors in unrelated repository
 dependencies.
 
+Current generation requires every source quotation to match supplied evidence
+and one English question in question form. These checks do not establish
+semantic correctness or non-prescriptive tone. The displayed nudge uses the
+same question-form check. SDK automatic retries are disabled: the nudge and
+Coach Digest provider adapters make one attempt per call; the Weekly Drift
+Reviewer owns its maximum of two attempts for transient failures. A refusal
+or incomplete provider response cannot become a displayed response.
+
+Run these boundary checks without network access:
+
+```sh
+uv run python -m pytest tests/test_model_provider_boundaries.py \
+  tests/nudge/test_runtime.py tests/test_weekly_drift_reviewer.py \
+  tests/evals/test_coach_behavioral_regressions.py
+```
+
+The [behavioral corpus](../../config/evals/coach_behavioral_regressions_v1.json)
+contains eight paired examples, including invented quotations, advice, assumed
+motives, uncompleted intentions, and instruction-like Journal Entries. These
+are Codex-authored synthetic examples with author expectations stored outside
+the model input. They are not sampled model outputs, measured evaluation
+results, or human validation. The unit tests exercise structural failures and
+complete source projection; semantic examples remain inputs for Coach Digest
+Evals or a human review. The existing evaluator can preview the 16 responses:
+
+```sh
+uv run python -m src.evals.coach_narrative_judge \
+  --manifest config/evals/coach_behavioral_regressions_v1.json
+```
+
+This is a dry run. Paid evaluation still requires `--execute`. This corpus does
+not evaluate the combined Coach Digest and selected North Star Moment; that
+review needs both components and their full source context.
+
+For browser smoke, follow the Chromium setup and `npm run test:e2e` command in
+the [frontend README](../../frontend/onboarding/README.md#checks). The two
+narrow-screen journeys cover replay/Inspect/reload and manual
+writing/closed-week review/Coach Digest retry/confirmed session deletion.
+
 ---
 
 ## 2. Automated batch evaluation (no API calls)
@@ -110,7 +151,7 @@ available for reproducing the historical sample.
 ```sh
 uv run python -m src.evals.coach_digest_validations \
   --manifest logs/experiments/reports/demo_v4_run1_20260907/judge_sample_manifest.json \
-  --out logs/experiments/reports/demo_v4_run1_20260907/validations
+  --validation-policy recorded
 ```
 
 - Use `--parquet` only for a separate persisted-output batch.
@@ -118,6 +159,17 @@ uv run python -m src.evals.coach_digest_validations \
   summary.
 - Rows with no response are skipped; unparseable responses are reported under
   `skipped_persona_weeks`.
+- `--validation-policy recorded` reproduces saved checks or the recorded
+  generation prompt's voice rules. Records without either use an explicitly
+  labelled historical base policy. It does not add today's rules to old
+  receipts.
+- `--validation-policy current` applies all current live response checks,
+  including quotation, question-form, and voice checks, and records the policy
+  in the report. Use a separate `--out` directory for this assessment; preserve
+  historical reports.
+- Parquet re-evaluation restores prior-week comparisons, detailed Drift state,
+  and saved validation checks so persistence does not change the factual basis
+  of the verdict.
 
 Verify all 27 exported responses, current input hashes, exact generation-source
 event IDs, and preservation of compatible retained receipts without provider calls:
@@ -129,7 +181,7 @@ uv run pytest tests/demo/test_scenarios.py
 The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
 records application checks and five unresolved AI editorial findings under
 `twinkl-rklc.39`. A selected NSM passage now appears within a valid Coach Digest,
-before its original question. Code checks do not resolve the reported semantic
+after its original question. Code checks do not resolve the reported semantic
 issues and are not human validation or new Coach Digest Evals scores.
 
 Pass-rate targets: groundedness > 70%, non-circularity > 95%, length > 90%.

@@ -116,9 +116,15 @@ export instead validates the completed-study hash and matching semantic inputs;
 see [Experience and Inspect](../demo/experience_inspect_app.md).
 
 The `north_star_phase0*`, `north_star_luna`, `north_star_encoder_probe`,
-`north_star_integration`, and `north_star_saved_checks` scripts support historical
+and `north_star_integration` scripts support historical
 preparation and diagnostics. Their experiment outputs do not supply the current
 NSM comparison; use the two `nsm_*` runners and linked frozen records above.
+
+The obsolete `north_star_saved_checks` runner and its tests were retired after
+the saved Persona roster and North Star Moment eligibility changed. Its outputs
+remain historical records. Historical receipt tests replay temporary source
+archives at the published study revisions; current runtime tests use this checkout.
+The full suite requires local Git history containing those recorded revisions.
 
 ### Saved Persona Coach Digest responses
 

@@ -2,6 +2,7 @@
 
 Run: python -m uvicorn scripts.demo_north_star_qc:app --port 8000
 POST /qc/mode/{success,failure,omission,pending,long} controls the NSM response.
+POST /qc/coach/{success,failure} controls Coach Digest availability.
 This harness is never imported by the deployed Experience app.
 """
 
@@ -9,6 +10,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import tempfile
 from pathlib import Path
 
@@ -40,7 +42,7 @@ LONG_QUOTE = QUOTE + (
     "had everything she needed for the morning. I was tired too, but making "
     "the evening easier for her felt like a good use of the time."
 )
-_state = {"mode": "success"}
+_state = {"mode": "success", "coach": "success"}
 _gate = asyncio.Event()
 _gate.set()
 _directory = tempfile.TemporaryDirectory(prefix="twinkl-nsm-browser-qc-")
@@ -117,10 +119,12 @@ async def north_star(request, *, retry: bool = False):
 
 
 async def nudge(request):
-    return _receipt(decision=None, nudge_text=None)
+    return _receipt(decision="no_nudge", nudge_text=None)
 
 
 async def coach(prompt, schema=None, instructions=None):
+    if _state["coach"] == "failure":
+        return None
     return json.dumps(
         {
             "weekly_mirror": f'You wrote, "{QUOTE}"',
@@ -139,7 +143,8 @@ service = InMemoryExperienceService(
     coach_llm_complete=coach,
     north_star_runtime=north_star,
 )
-app = create_app(service)
+_static_root = os.getenv("TWINKL_QC_STATIC_ROOT")
+app = create_app(service, static_root=Path(_static_root) if _static_root else None)
 
 
 async def mode(request: Request):
@@ -157,3 +162,16 @@ async def mode(request: Request):
 
 
 app.routes.insert(0, Route("/qc/mode/{mode}", mode, methods=["POST"]))
+
+
+async def coach_mode(request: Request):
+    choice = request.path_params["mode"]
+    if choice not in {"success", "failure"}:
+        return JSONResponse({"error": "Unknown controlled mode"}, status_code=400)
+    _state["coach"] = choice
+    return JSONResponse(
+        {"coach": choice, "provider": "controlled test double", "paid_calls": 0}
+    )
+
+
+app.routes.insert(0, Route("/qc/coach/{mode}", coach_mode, methods=["POST"]))

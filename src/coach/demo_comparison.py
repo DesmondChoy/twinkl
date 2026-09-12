@@ -27,6 +27,7 @@ from src.coach.weekly_digest import (
     render_digest_messages,
     validate_weekly_digest_narrative,
 )
+from src.model_guardrails import extract_source_quotations, is_single_question
 from src.north_star.runtime import MomentMode, NorthStarRecord, _timestamp
 from src.prompt_boundary import render_live_prompt_receipt, serialize_untrusted_data
 
@@ -256,6 +257,7 @@ def validate_demo_comparison_narrative(
     context: NorthStarCoachContext | None,
     *,
     prompt_version: ComparisonPromptVersion = PROMPT_VERSION,
+    validation_policy: Literal["historical", "current"] = "current",
 ) -> DigestValidation:
     """Retain all base checks and require every quotation to have a supplied source."""
     validation = validate_weekly_digest_narrative(
@@ -263,6 +265,8 @@ def validate_demo_comparison_narrative(
         narrative,
         validate_voice=True,
         voice_version=_prompt_templates(prompt_version)[2],
+        # Comparisons check all quotations against both weekly and selected sources.
+        validation_policy="historical",
     )
     weekly_sources = [item.excerpt for item in digest.evidence]
     sources = [*weekly_sources]
@@ -274,10 +278,15 @@ def validate_demo_comparison_narrative(
         if context.parent_journal_entry:
             sources.append(context.parent_journal_entry.source_text)
     fields = narrative.model_dump().values()
-    quotations = [q for text in fields for q in _extract_quoted_phrases(text)]
+    extract_quotes = (
+        extract_source_quotations
+        if validation_policy == "current"
+        else _extract_quoted_phrases
+    )
+    quotations = [q for text in fields for q in extract_quotes(text)]
     weekly_quotes = [
         q
-        for q in _extract_quoted_phrases(narrative.weekly_mirror)
+        for q in extract_quotes(narrative.weekly_mirror)
         if any(q in source for source in weekly_sources)
     ]
     ungrounded = [q for q in quotations if not any(q in source for source in sources)]
@@ -323,6 +332,16 @@ def validate_demo_comparison_narrative(
             details="Keep feature names and comparison metadata out of the reflection.",
         ),
     ]
+    if validation_policy == "current":
+        checks.append(
+            ValidationCheck(
+                name="reflective_question_form",
+                passed=is_single_question(narrative.reflective_question),
+                details=(
+                    "Return one question rather than a statement or directive."
+                ),
+            )
+        )
     return validation.model_copy(update={"checks": [*validation.checks, *checks]})
 
 
@@ -437,7 +456,17 @@ def validate_saved_comparison(
             prompt_version=arm.prompt_version,
         )
         validation = validate_demo_comparison_narrative(
-            digest, arm.narrative, arm_context, prompt_version=arm.prompt_version
+            digest,
+            arm.narrative,
+            arm_context,
+            prompt_version=arm.prompt_version,
+            validation_policy=(
+                "current"
+                if any(
+                    c.name == "reflective_question_form" for c in arm.validation.checks
+                )
+                else "historical"
+            ),
         )
         if (
             arm.base_prompt != base_prompt

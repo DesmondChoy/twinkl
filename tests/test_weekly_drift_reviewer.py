@@ -240,6 +240,7 @@ class _FakeResponses:
     async def parse(self, **kwargs):
         self.kwargs = kwargs
         return SimpleNamespace(
+            status="completed",
             output_parsed=self.parsed,
             model="gpt-5.6-luna",
             id="response-1",
@@ -316,4 +317,32 @@ async def test_provider_error_fails_closed_to_abstain():
     assert receipt.status == "error"
     assert receipt.attempts == 1
     assert receipt.error_type == "RuntimeError"
+    assert [decision.verdict for decision in receipt.decisions] == ["abstain"]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("status,refusal,expected", [
+    ("completed", "Cannot comply", "refusal"),
+    ("incomplete", None, "invalid"),
+    ("incomplete", "Cannot comply", "refusal"),
+    (None, None, "invalid"),
+])
+async def test_parsed_assessments_cannot_override_failed_provider_envelope(
+    status, refusal, expected
+):
+    class Responses(_FakeResponses):
+        async def parse(self, **kwargs):
+            response = await super().parse(**kwargs)
+            response.status = status
+            response.output = [SimpleNamespace(
+                content=[SimpleNamespace(refusal=refusal)]
+            )]
+            return response
+
+    reviewer = OpenAIWeeklyDriftReviewer(client=SimpleNamespace(
+        responses=Responses(WeeklyVerifierResponse(assessments=[_assessment()]))
+    ))
+    receipt = await reviewer(_request())
+    assert receipt.status == expected
+    assert receipt.attempts == 1
     assert [decision.verdict for decision in receipt.decisions] == ["abstain"]

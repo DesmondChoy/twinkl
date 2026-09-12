@@ -128,7 +128,8 @@ def prepare(
                 or _hash(response.narrative.model_dump(mode="json"))
                 != response.generation.response_sha256
                 or not validate_weekly_digest_narrative(
-                    digest, response.narrative, validate_voice=True
+                    digest, response.narrative, validate_voice=True,
+                    validation_policy="historical",
                 ).all_passed
             ):
                 raise ValueError(f"Prior response is incompatible or invalid: {key}")
@@ -455,7 +456,8 @@ def apply(root: Path, output: Path, plan: dict[str, Any]) -> None:
         if (
             _coach_unavailable_reason(response, digest) is not None
             or not validate_weekly_digest_narrative(
-                digest, response.narrative, validate_voice=True
+                digest, response.narrative, validate_voice=True,
+                validation_policy="historical",
             ).all_passed
         ):
             raise ValueError(f"Refreshed response failed validation: {key}")

@@ -45,6 +45,7 @@ from src.coach.schemas import (
     WeeklyDigest,
 )
 from src.drift_detector import DriftDetectorResult, detect_drift
+from src.model_guardrails import extract_source_quotations, is_single_question
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.prompt_boundary import (
     protect_instructions,
@@ -1439,8 +1440,9 @@ def validate_weekly_digest_narrative(
     *,
     validate_voice: bool = False,
     voice_version: Literal["4.4", "4.5"] = "4.5",
+    validation_policy: Literal["historical", "current"] = "current",
 ) -> DigestValidation:
-    """Run Coach Digest Validations on one response."""
+    """Validate a response; historical policy preserves pre-guardrail receipts."""
     combined_text = " ".join(
         [
             narrative.weekly_mirror.strip(),
@@ -1568,6 +1570,38 @@ def validate_weekly_digest_narrative(
             ),
         ),
     ]
+
+    if validation_policy == "current":
+        supplied_sources = list(source_texts)
+        for comparison in digest.state_comparisons:
+            supplied_sources.extend(
+                item.excerpt for item in comparison.previous_evidence
+            )
+            supplied_sources.extend(
+                item.excerpt for item in comparison.current_evidence
+            )
+        ungrounded_quotes = [
+            quote for quote in extract_source_quotations(combined_text)
+            if not any(quote in source for source in supplied_sources)
+        ]
+        checks.extend([
+            ValidationCheck(
+                name="all_quotes_grounded",
+                passed=not ungrounded_quotes,
+                details=(
+                    "Every quotation matches supplied evidence exactly."
+                    if not ungrounded_quotes else
+                    "Copy every quotation exactly from supplied evidence; "
+                    "remove quotation marks around paraphrases or invented phrases."
+                ),
+            ),
+            ValidationCheck(
+                name="reflective_question_form",
+                passed=is_single_question(narrative.reflective_question),
+                details="Return one nonempty question in question form. "
+                "This structural check does not establish non-prescriptive tone.",
+            ),
+        ])
 
     if validate_voice:
         # Quoted Journal Entries remain the user's words, including recap wording.

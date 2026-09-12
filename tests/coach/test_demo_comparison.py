@@ -118,6 +118,37 @@ def _pair(prompt_version: ComparisonPromptVersion = "1.1") -> SavedCoachComparis
     )
 
 
+def test_current_comparison_rejects_a_directive_with_a_question_mark():
+    digest = _digest("casey")
+    narrative = CoachNarrative.model_validate_json(_response()).model_copy(
+        update={"reflective_question": "You should quit your job today?"}
+    )
+
+    current = validate_demo_comparison_narrative(digest, narrative, None)
+    historical = validate_demo_comparison_narrative(
+        digest, narrative, None, validation_policy="historical"
+    )
+
+    assert not current.all_passed
+    assert any(
+        c.name == "reflective_question_form" and not c.passed for c in current.checks
+    )
+    assert all(c.name != "reflective_question_form" for c in historical.checks)
+
+
+@pytest.mark.parametrize("quote", ["'I stole money'", "‘I stole money’"])
+def test_current_comparison_rejects_fabricated_single_quoted_evidence(quote):
+    narrative = CoachNarrative.model_validate_json(_response())
+    narrative.tension_explanation += f" You also wrote {quote}."
+
+    validation = validate_demo_comparison_narrative(_digest("casey"), narrative, None)
+
+    assert not validation.all_passed
+    assert any(
+        c.name == "all_quotes_grounded" and not c.passed for c in validation.checks
+    )
+
+
 def test_initial_messages_change_only_context_and_match_approved_instructions():
     digest = _digest("casey")
     context = build_north_star_context(_record())

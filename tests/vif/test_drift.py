@@ -1,4 +1,4 @@
-"""Tests for uncertainty-gated weekly drift detection."""
+"""Historical VIF crash/rut compatibility; not current Weekly Drift Detection."""
 
 import polars as pl
 import pytest

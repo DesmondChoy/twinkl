@@ -4,9 +4,18 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
+from src.coach.schemas import CoachNarrative, CoreValueWeekComparison, WeeklyDigest
+from src.coach.weekly_digest import (
+    persist_weekly_digest_record,
+    validate_weekly_digest_narrative,
+)
 from src.evals.coach_digest_validations import (
     evaluate_manifest,
+    evaluate_parquet,
     evaluate_rows,
+    main,
     render_markdown,
 )
 
@@ -223,3 +232,227 @@ def test_evaluate_manifest_uses_exact_digest_response_pairs(tmp_path):
     assert report.input_kind == "public_scenario_manifest"
     assert report.n_evaluated == 1
     assert report.checks["groundedness"].passed == 1
+
+
+def _digest() -> WeeklyDigest:
+    return WeeklyDigest(
+        persona_id="casey",
+        week_start="2025-01-01",
+        week_end="2025-01-07",
+        response_mode="no_active_drift",
+        mode_source="drift_detector",
+        mode_rationale="A Not Conflict decision ended the earlier pattern.",
+        signal_source="weekly_drift_reviewer",
+        n_entries=1,
+        overall_mean=None,
+        core_values=["benevolence"],
+        drift_states={"benevolence": "no_active_drift"},
+        top_tensions=[],
+        top_strengths=[],
+        dimensions=[],
+        evidence=[
+            {
+                "date": "2025-01-03",
+                "t_index": 1,
+                "direction": "context",
+                "dimensions": ["benevolence"],
+                "excerpt": "called my mom and helped a colleague debug",
+            }
+        ],
+    )
+
+
+def test_persisted_state_comparison_keeps_the_direct_validation_verdict(tmp_path):
+    digest = _digest()
+    digest.state_comparisons = [
+        CoreValueWeekComparison(
+            core_value="benevolence",
+            previous_week_start="2024-12-25",
+            previous_week_end="2024-12-31",
+            current_week_start=digest.week_start,
+            current_week_end=digest.week_end,
+            previous_state="active_drift",
+            current_state="no_active_drift",
+            change="active_drift_ended",
+            end_reason="not_conflict",
+        )
+    ]
+    narrative = CoachNarrative(
+        weekly_mirror=(
+            'The earlier pattern did not continue when you "helped a colleague debug".'
+        ),
+        tension_explanation=(
+            "That names a change in the repeated choice, "
+            "without assuming what you felt about it."
+        ),
+        reflective_question="What was different about that choice?",
+    )
+    direct = validate_weekly_digest_narrative(digest, narrative, validate_voice=True)
+    assert direct.all_passed
+    digest.coach_narrative, digest.validation = narrative, direct
+    path = tmp_path / "digests.parquet"
+    persist_weekly_digest_record(digest, path)
+
+    report = evaluate_parquet(path)
+
+    assert report.sample_results[0]["checks"] == {
+        check.name: check.passed for check in direct.checks
+    }
+    assert report.sample_results[0]["validation_policy"] == "current"
+    assert report.sample_results[0]["all_passed"]
+
+
+def test_current_policy_reports_new_gates_without_regrading_historical_receipts(
+    tmp_path,
+):
+    digest = _digest()
+    narrative = CoachNarrative(
+        weekly_mirror=(
+            'This week you "helped a colleague debug" and wrote '
+            '"I stole money from my partner".'
+        ),
+        tension_explanation=(
+            "Your attention moved between other people and your own plans, "
+            "leaving a few choices for you to think about."
+        ),
+        reflective_question="",
+    )
+    digest.coach_narrative = narrative
+    digest.validation = validate_weekly_digest_narrative(
+        digest, narrative, validation_policy="historical"
+    )
+    assert digest.validation.all_passed
+    manifest = tmp_path / "sample.json"
+    manifest.write_text(
+        json.dumps(
+            [{"digest": digest.model_dump(), "narrative": narrative.model_dump()}]
+        )
+    )
+    original = manifest.read_bytes()
+
+    recorded = evaluate_manifest(manifest)
+    current = evaluate_manifest(manifest, validation_policy="current")
+
+    assert recorded.sample_results[0]["all_passed"]
+    for name in (
+        "all_quotes_grounded",
+        "reflective_question_form",
+        "conversational_voice",
+    ):
+        assert name not in recorded.checks
+        assert current.checks[name].total == 1
+        assert current.checks[name].passed == 0
+    assert current.validation_policy == "current"
+    assert not current.sample_results[0]["all_passed"]
+    assert manifest.read_bytes() == original
+
+
+@pytest.mark.parametrize("voice_version", ["4.4", "4.5"])
+def test_recorded_policy_replays_the_saved_voice_checks(tmp_path, voice_version):
+    digest = _digest()
+    narrative = CoachNarrative.model_validate(_CLEAN)
+    digest.validation = validate_weekly_digest_narrative(
+        digest,
+        narrative,
+        validate_voice=True,
+        voice_version=voice_version,
+        validation_policy="historical",
+    )
+    digest.coach_narrative = narrative
+    path = tmp_path / "digests.parquet"
+    persist_weekly_digest_record(digest, path)
+
+    report = evaluate_parquet(path)
+
+    assert report.sample_results[0]["checks"] == {
+        check.name: check.passed for check in digest.validation.checks
+    }
+    assert (
+        report.sample_results[0]["validation_policy"]
+        == f"historical_voice_{voice_version}"
+    )
+
+
+def test_manifest_without_receipt_uses_its_recorded_prompt_version(tmp_path):
+    digest = _digest()
+    narrative = {**_CLEAN, "weekly_mirror": 'This week you "helped a colleague debug".'}
+    path = tmp_path / "sample.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "digest": digest.model_dump(),
+                    "narrative": narrative,
+                    "provenance": {"generation": {"prompt_version": "4.4"}},
+                }
+            ]
+        )
+    )
+
+    report = evaluate_manifest(path)
+
+    assert report.checks["conversational_voice"].passed == 0
+    assert "natural_reflection_voice" not in report.checks
+    assert report.sample_results[0]["validation_policy"] == "historical_voice_4.4"
+
+
+def test_cli_selects_current_policy_and_records_it(tmp_path, capsys):
+    path = tmp_path / "sample.json"
+    path.write_text(
+        json.dumps([{"digest": _digest().model_dump(), "narrative": _CLEAN}])
+    )
+    output = tmp_path / "report"
+
+    assert (
+        main(
+            [
+                "--manifest",
+                str(path),
+                "--validation-policy",
+                "current",
+                "--out",
+                str(output),
+            ]
+        )
+        == 0
+    )
+
+    report = json.loads((output / "metrics.json").read_text())
+    assert report["validation_policy"] == "current"
+    assert "reflective_question_form" in report["checks"]
+    assert "Validation policy: `current`" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("voice_version", [None, "4.4"])
+def test_recorded_checks_outrank_newer_prompt_metadata(tmp_path, voice_version):
+    digest = _digest()
+    narrative = CoachNarrative.model_validate(_CLEAN)
+    narrative.weekly_mirror = (
+        'This week you "helped a colleague debug" and made time for a call '
+        "after work, even while other plans were on your mind."
+    )
+    digest.validation = validate_weekly_digest_narrative(
+        digest,
+        narrative,
+        validate_voice=voice_version is not None,
+        voice_version=voice_version or "4.5",
+    )
+    path = tmp_path / "sample.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "digest": digest.model_dump(),
+                    "narrative": narrative.model_dump(),
+                    "provenance": {"generation": {"prompt_version": "4.5"}},
+                }
+            ]
+        )
+    )
+
+    report = evaluate_manifest(path)
+
+    assert report.sample_results[0]["checks"] == {
+        check.name: check.passed for check in digest.validation.checks
+    }
+    assert "natural_reflection_voice" not in report.checks

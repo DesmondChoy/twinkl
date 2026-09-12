@@ -2,6 +2,7 @@
 
 from collections import Counter
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 
@@ -12,6 +13,7 @@ from src.north_star.provider import openai_input_payload, stable_hash
 from tests.evals.test_nsm_evaluation import ACTION, batch
 from tests.evals.test_nsm_experiment import small_case
 from tests.evals.test_nsm_provider import Harness, counted, generated, request, validate
+from tests.historical import assert_in_snapshot, source_snapshot
 
 
 def source_request(item, purpose="runtime:nomic"):
@@ -288,8 +290,34 @@ def test_order_and_availability_metadata_stay_outside_semantic_requests():
     assert output["selected"]["evidence_quote"] == ACTION
 
 
-def test_saved_impact_audit_reproduces_from_original_and_v4_run1():
-    """Rebuild actual frozen cases locally without embeddings or model calls."""
+def test_saved_impact_audit_reproduces_from_original_and_v4_run1(tmp_path):
+    """Replay the published update with its frozen runtime, without model calls."""
+    snapshot = source_snapshot(
+        update.ROOT,
+        "f7e14ebb09bdd1b5bf3e7628bbfcbf626f4b7b57",
+        tmp_path / "historical",
+    )
+    assert_in_snapshot(snapshot, Path(__file__), "_assert_saved_impact_audit")
+
+
+def test_current_update_still_rejects_changed_runtime_contract(monkeypatch):
+    original = update.read(update.ORIGINAL)
+    hashes = original["execution"]["freeze"]["code_sha256"]
+    monkeypatch.setattr(experiment, "_reporting_corrections", lambda _: {})
+    monkeypatch.setattr(
+        experiment,
+        "file_hash",
+        lambda path: (
+            "changed"
+            if path == update.ROOT / "src/north_star/runtime.py"
+            else hashes[path.relative_to(update.ROOT).as_posix()]
+        ),
+    )
+    with pytest.raises(ValueError, match="Original NSM contract changed"):
+        update.verify_original(original)
+
+
+def _assert_saved_impact_audit():
     original = update.read(update.ORIGINAL)
     saved = update.read(update.OUTPUT / "impact_audit.json")
     update.verify_original(original)

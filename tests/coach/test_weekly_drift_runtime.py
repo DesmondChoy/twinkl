@@ -93,6 +93,7 @@ class _SequencedResponses:
             ]
         )
         return SimpleNamespace(
+            status="completed",
             output_parsed=parsed,
             model="gpt-5.6-luna",
             id=f"response-{t_index}",

@@ -1092,7 +1092,7 @@ describe("persona replay", () => {
     )).toBeNull();
   });
 
-  it("places the moment inside Coach Digest before its question and links to the exact review event", async () => {
+  it("places the moment inside Coach Digest after its question and links to the exact review event", async () => {
     matchMedia(false);
     const user = userEvent.setup();
     const inspectRun = vi.fn();

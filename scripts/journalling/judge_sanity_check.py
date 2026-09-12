@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Quick sanity checks for judge labeling helpers."""
+"""Print a manual rubric preview.
+
+Automated checks are in ``tests/judge/test_labeling.py``.
+"""
 
 from __future__ import annotations
 

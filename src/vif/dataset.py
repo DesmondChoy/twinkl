@@ -100,7 +100,8 @@ def load_entries(
         raise ValueError(
             f"All initial_entry values are null across {len(df)} entries from "
             f"{len(persona_files)} files in {wrangled_dir}. This likely indicates a "
-            f"parser mismatch — ensure files are in wrangled format, not raw synthetic format."
+            "parser mismatch — ensure files are in wrangled format, "
+            "not raw synthetic format."
         )
 
     return df
@@ -135,7 +136,7 @@ def merge_labels_and_entries(
 ) -> pl.DataFrame:
     """Join labels and entries on (persona_id, t_index) with integrity checks.
 
-    Performs an inner join and validates that no rows were silently dropped.
+    Rejects duplicate keys, then validates that no rows were silently dropped.
     When labels and entries diverge (missing personas, mismatched t_indices),
     this either raises immediately or warns, depending on ``strict``.
 
@@ -149,9 +150,20 @@ def merge_labels_and_entries(
         Merged DataFrame with both labels and text content
 
     Raises:
-        ValueError: When strict=True and the inner join drops rows.
+        ValueError: On duplicate keys, or when strict=True and the join drops rows.
     """
     join_keys = ["persona_id", "t_index"]
+
+    # Duplicates can offset dropped rows or multiply examples in the joined data.
+    # They are ambiguous even when callers explicitly allow unmatched entries.
+    for side, frame in (("labels", labels_df), ("entries", entries_df)):
+        keys = frame.select(join_keys)
+        duplicates = keys.filter(keys.is_duplicated()).unique()
+        if not duplicates.is_empty():
+            raise ValueError(
+                f"Duplicate {side} keys (persona_id, t_index): "
+                f"{duplicates.head(5).to_dicts()}"
+            )
 
     merged_df = labels_df.join(entries_df, on=join_keys, how="inner")
 
@@ -175,7 +187,8 @@ def merge_labels_and_entries(
     )
 
     parts = [
-        f"Merge dropped rows: {n_labels} labels + {n_entries} entries → {n_merged} merged."
+        f"Merge dropped rows: {n_labels} labels + {n_entries} entries "
+        f"→ {n_merged} merged."
     ]
     if len(labels_without_entries) > 0:
         orphan_ids = (
@@ -183,7 +196,8 @@ def merge_labels_and_entries(
         )
         parts.append(
             f"  Labels without matching entries: {len(labels_without_entries)} rows "
-            f"({len(orphan_ids)} persona(s): {orphan_ids[:5]}{'...' if len(orphan_ids) > 5 else ''})"
+            f"({len(orphan_ids)} persona(s): {orphan_ids[:5]}"
+            f"{'...' if len(orphan_ids) > 5 else ''})"
         )
     if len(entries_without_labels) > 0:
         orphan_ids = (
@@ -191,7 +205,8 @@ def merge_labels_and_entries(
         )
         parts.append(
             f"  Entries without matching labels: {len(entries_without_labels)} rows "
-            f"({len(orphan_ids)} persona(s): {orphan_ids[:5]}{'...' if len(orphan_ids) > 5 else ''})"
+            f"({len(orphan_ids)} persona(s): {orphan_ids[:5]}"
+            f"{'...' if len(orphan_ids) > 5 else ''})"
         )
 
     message = "\n".join(parts)
@@ -302,7 +317,9 @@ def split_by_persona(
     return train_df, val_df, test_df
 
 
-def _build_persona_sign_features(merged_df: pl.DataFrame) -> tuple[list[str], np.ndarray]:
+def _build_persona_sign_features(
+    merged_df: pl.DataFrame,
+) -> tuple[list[str], np.ndarray]:
     """Build per-persona binary sign features from alignment vectors."""
     persona_ids = sorted(merged_df.select("persona_id").unique().to_series().to_list())
     persona_to_idx = {persona_id: idx for idx, persona_id in enumerate(persona_ids)}
@@ -310,7 +327,9 @@ def _build_persona_sign_features(merged_df: pl.DataFrame) -> tuple[list[str], np
     n_dims = len(SCHWARTZ_VALUE_ORDER)
     feature_matrix = np.zeros((len(persona_ids), n_dims * 2), dtype=np.int8)
 
-    for row in merged_df.select(["persona_id", "alignment_vector"]).iter_rows(named=True):
+    for row in merged_df.select(["persona_id", "alignment_vector"]).iter_rows(
+        named=True
+    ):
         p_idx = persona_to_idx[row["persona_id"]]
         alignment_vector = row["alignment_vector"] or []
 
@@ -616,7 +635,11 @@ def create_dataloaders(
     fixed_test_persona_ids: set[str] | list[str] | tuple[str, ...] | None = None,
     fixed_holdout_manifest_path: str | Path | None = None,
     target_column: str = "alignment_vector",
-) -> tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader, torch.utils.data.DataLoader]:
+) -> tuple[
+    torch.utils.data.DataLoader,
+    torch.utils.data.DataLoader,
+    torch.utils.data.DataLoader,
+]:
     """Create train/val/test DataLoaders in one call.
 
     Convenience function that loads data, splits by persona, creates datasets,

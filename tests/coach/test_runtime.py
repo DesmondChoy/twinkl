@@ -89,24 +89,43 @@ def _signal_row(
     row["profile_weight_achievement"] = 0.4
     row["profile_weight_benevolence"] = 0.3
     row["alignment_vector"] = [row[f"alignment_{dim}"] for dim in SCHWARTZ_VALUE_ORDER]
-    row["uncertainty_vector"] = [row[f"uncertainty_{dim}"] for dim in SCHWARTZ_VALUE_ORDER]
+    row["uncertainty_vector"] = [
+        row[f"uncertainty_{dim}"] for dim in SCHWARTZ_VALUE_ORDER
+    ]
     return row
 
 
-def test_build_weekly_digest_from_vif_signals_prefers_upstream_drift_result(tmp_path: Path):
+def test_build_weekly_digest_from_vif_signals_prefers_upstream_drift_result(
+    tmp_path: Path,
+):
     wrangled_dir = tmp_path / "wrangled"
     wrangled_dir.mkdir(parents=True, exist_ok=True)
     _write_runtime_wrangled(wrangled_dir / "persona_deadbeef.md")
 
     signals_df = pl.DataFrame(
         [
-            _signal_row(date="2025-01-14", t_index=2, achievement=-0.7, benevolence=0.7, overall_mean=0.1),
-            _signal_row(date="2025-01-16", t_index=3, achievement=-0.8, benevolence=0.2, overall_mean=-0.2),
+            _signal_row(
+                date="2025-01-14",
+                t_index=2,
+                achievement=-0.7,
+                benevolence=0.7,
+                overall_mean=0.1,
+            ),
+            _signal_row(
+                date="2025-01-16",
+                t_index=3,
+                achievement=-0.8,
+                benevolence=0.2,
+                overall_mean=-0.2,
+            ),
         ]
     )
     drift_result = DriftDetectionResult(
         response_mode="evolution",
-        rationale="Achievement is diverging with low volatility while benevolence is strengthening.",
+        rationale=(
+            "Achievement is diverging with low volatility "
+            "while benevolence is strengthening."
+        ),
         reasons=["low_volatility_directional_shift", "achievement"],
         source="drift_detector",
         trigger_type="evolution",
@@ -162,10 +181,34 @@ def test_run_weekly_coach_cycle_persists_bridge_artifacts(tmp_path: Path, monkey
 
     timeline_df = pl.DataFrame(
         [
-            _signal_row(date="2025-01-06", t_index=0, achievement=0.6, benevolence=-0.6, overall_mean=0.25),
-            _signal_row(date="2025-01-08", t_index=1, achievement=0.3, benevolence=0.2, overall_mean=0.2),
-            _signal_row(date="2025-01-14", t_index=2, achievement=-0.8, benevolence=0.6, overall_mean=-0.2),
-            _signal_row(date="2025-01-16", t_index=3, achievement=-0.9, benevolence=0.1, overall_mean=-0.35),
+            _signal_row(
+                date="2025-01-06",
+                t_index=0,
+                achievement=0.6,
+                benevolence=-0.6,
+                overall_mean=0.25,
+            ),
+            _signal_row(
+                date="2025-01-08",
+                t_index=1,
+                achievement=0.3,
+                benevolence=0.2,
+                overall_mean=0.2,
+            ),
+            _signal_row(
+                date="2025-01-14",
+                t_index=2,
+                achievement=-0.8,
+                benevolence=0.6,
+                overall_mean=-0.2,
+            ),
+            _signal_row(
+                date="2025-01-16",
+                t_index=3,
+                achievement=-0.9,
+                benevolence=0.1,
+                overall_mean=-0.35,
+            ),
         ]
     )
 
@@ -202,10 +245,34 @@ def test_run_weekly_coach_cycle_persists_bridge_artifacts(tmp_path: Path, monkey
 def _stub_timeline_df() -> pl.DataFrame:
     return pl.DataFrame(
         [
-            _signal_row(date="2025-01-06", t_index=0, achievement=0.6, benevolence=-0.6, overall_mean=0.25),
-            _signal_row(date="2025-01-08", t_index=1, achievement=0.3, benevolence=0.2, overall_mean=0.2),
-            _signal_row(date="2025-01-14", t_index=2, achievement=-0.8, benevolence=0.6, overall_mean=-0.2),
-            _signal_row(date="2025-01-16", t_index=3, achievement=-0.9, benevolence=0.1, overall_mean=-0.35),
+            _signal_row(
+                date="2025-01-06",
+                t_index=0,
+                achievement=0.6,
+                benevolence=-0.6,
+                overall_mean=0.25,
+            ),
+            _signal_row(
+                date="2025-01-08",
+                t_index=1,
+                achievement=0.3,
+                benevolence=0.2,
+                overall_mean=0.2,
+            ),
+            _signal_row(
+                date="2025-01-14",
+                t_index=2,
+                achievement=-0.8,
+                benevolence=0.6,
+                overall_mean=-0.2,
+            ),
+            _signal_row(
+                date="2025-01-16",
+                t_index=3,
+                achievement=-0.9,
+                benevolence=0.1,
+                overall_mean=-0.35,
+            ),
         ]
     )
 
@@ -237,7 +304,7 @@ def test_run_weekly_coach_cycle_attaches_only_valid_narrative(
             {
                 "weekly_mirror": (
                     ('This week, you wrote, "' if recap_opening else 'You wrote, "')
-                    + 'Protected the evening for family and left the '
+                    + "Protected the evening for family and left the "
                     'laptop shut", during a week with competing demands.'
                 ),
                 "tension_explanation": (
@@ -317,10 +384,11 @@ async def test_openai_sends_instructions_separately(monkeypatch):
     class Responses:
         async def create(self, **kwargs):
             captured.update(kwargs)
-            return SimpleNamespace(output_text='{"ok":true}')
+            return SimpleNamespace(output_text='{"ok":true}', status="completed")
 
     class Client:
-        def __init__(self):
+        def __init__(self, *, max_retries):
+            assert max_retries == 0
             self.responses = Responses()
 
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")
@@ -333,9 +401,7 @@ async def test_openai_sends_instructions_separately(monkeypatch):
 
     assert result == '{"ok":true}'
     assert captured["model"] == DEFAULT_OPENAI_MODEL
-    assert captured["reasoning"] == {
-        "effort": DEFAULT_OPENAI_REASONING_EFFORT
-    }
+    assert captured["reasoning"] == {"effort": DEFAULT_OPENAI_REASONING_EFFORT}
     assert captured["instructions"] == "trusted"
     assert captured["input"] == '{"journal_entry":"untrusted"}'
 
@@ -348,8 +414,13 @@ async def test_gemini_sends_system_instruction_separately(monkeypatch):
 
     class Models:
         def generate_content(self, **kwargs):
+            from google.genai.types import FinishReason
+
             captured.update(kwargs)
-            return SimpleNamespace(text='{"ok":true}')
+            return SimpleNamespace(
+                text='{"ok":true}',
+                candidates=[SimpleNamespace(finish_reason=FinishReason.STOP)],
+            )
 
     class Client:
         def __init__(self, *, api_key):
@@ -381,7 +452,8 @@ async def test_openai_failure_logs_warning(monkeypatch, caplog):
             raise RuntimeError("provider unavailable")
 
     class FailingClient:
-        def __init__(self):
+        def __init__(self, *, max_retries):
+            assert max_retries == 0
             self.responses = FailingResponses()
 
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")

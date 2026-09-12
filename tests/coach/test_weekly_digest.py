@@ -1041,6 +1041,97 @@ def test_validation_flags_ungrounded_quotes():
     assert "No quoted phrase from selected evidence" in ground_check.details
 
 
+@pytest.mark.parametrize("invented", ["I stole money", "Helped a colleague debug"])
+def test_current_validation_rejects_mixed_real_and_changed_quotes(invented):
+    narrative = CoachNarrative(
+        weekly_mirror='You "helped a colleague debug" and wrote '
+        f'"{invented}" when describing what happened after work.',
+        tension_explanation="Your attention moved between other people and your own "
+        "plans, leaving a few choices for you to think about.",
+        reflective_question="What stayed with you after that conversation?",
+    )
+    current = validate_weekly_digest_narrative(_digest_with_evidence(), narrative)
+    historical = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validation_policy="historical"
+    )
+    assert current.groundedness_passed
+    assert not current.all_passed
+    assert not next(c for c in current.checks if c.name == "all_quotes_grounded").passed
+    assert historical.all_passed
+    assert {c.name for c in historical.checks} == {
+        "groundedness", "non_circularity", "value_leakage", "state_claims", "length"
+    }
+
+
+@pytest.mark.parametrize("opening,closing", [("'", "'"), ("‘", "’")])
+def test_current_validation_checks_single_quoted_claims_with_contractions(
+    opening, closing
+):
+    narrative = CoachNarrative(
+        weekly_mirror='You "helped a colleague debug" after a day that had already '
+        'asked quite a lot of you.',
+        tension_explanation=f"You also wrote {opening}I didn't pay them back{closing} "
+        "when describing an earlier conversation.",
+        reflective_question=(
+            "If you could revisit that evening, what would matter most?"
+        ),
+    )
+    current = validate_weekly_digest_narrative(_digest_with_evidence(), narrative)
+    historical = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validation_policy="historical"
+    )
+    assert not next(c for c in current.checks if c.name == "all_quotes_grounded").passed
+    question_check = next(
+        c for c in current.checks if c.name == "reflective_question_form"
+    )
+    assert question_check.passed
+    assert historical.all_passed
+
+
+def test_current_quote_validation_includes_supplied_prior_week_evidence():
+    digest = _digest_with_evidence()
+    prior = digest.evidence[0].model_copy(update={"excerpt": "I cancelled our dinner."})
+    digest.state_comparisons = [CoreValueWeekComparison(
+        core_value="benevolence", previous_week_start="2024-12-25",
+        previous_week_end="2024-12-31", current_week_start="2025-01-01",
+        current_week_end="2025-01-07", previous_state="active_drift",
+        current_state="no_active_drift", change="active_drift_ended",
+        end_reason="not_conflict", previous_evidence=[prior],
+    )]
+    narrative = CoachNarrative(
+        weekly_mirror='You "helped a colleague debug" after a day that had already '
+        'asked quite a lot of you.',
+        tension_explanation='Earlier, "I cancelled our dinner" described the '
+        'evening you set aside for work. These were different choices.',
+        reflective_question="What stayed with you about these choices?",
+    )
+    assert validate_weekly_digest_narrative(digest, narrative).all_passed
+
+
+@pytest.mark.parametrize("question", [
+    "", "   ", "You should quit your job.", "You should quit your job?",
+    "Please apologize to them?", "What happened? How did that feel?",
+])
+def test_new_generation_rejects_missing_or_non_question_reflection(question):
+    narrative = CoachNarrative(
+        weekly_mirror='You "helped a colleague debug" after a day that had already '
+        'asked quite a lot of you.',
+        tension_explanation="Your attention moved between other people and your own "
+        "plans, leaving a few choices for you to think about.",
+        reflective_question=question,
+    )
+
+    async def complete(*_args):
+        return narrative.model_dump_json()
+
+    diagnostic, _ = asyncio.run(generate_weekly_digest_coach_diagnostic(
+        _digest_with_evidence(), complete
+    ))
+    assert not diagnostic.accepted
+    assert any("reflective_question_form" in failure
+               for failure in diagnostic.failure_details)
+
+
 def test_validation_passes_grounded_quotes():
     digest = _digest_with_evidence()
     grounded = CoachNarrative(

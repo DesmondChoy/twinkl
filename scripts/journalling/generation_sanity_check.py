@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Quick sanity checks for synthetic generation helpers.
+"""Print a manual preview of synthetic generation helpers.
 
 This script is intentionally lightweight: it exercises the extracted helper
-logic without making LLM API calls.
+logic without making LLM API calls. It makes no correctness assertions; use
+``tests/synthetic/test_generation.py`` for automated validation.
 """
 
 from __future__ import annotations
@@ -33,7 +34,10 @@ def main() -> None:
     print("Generated dates:", dates)
     print("Context preview:")
     print(context[:500] + ("..." if len(context) > 500 else ""))
-    print("Banned pattern test ('ambitious'):", bool(SCHWARTZ_BANNED_PATTERN.search("ambitious")))
+    print(
+        "Banned pattern test ('ambitious'):",
+        bool(SCHWARTZ_BANNED_PATTERN.search("ambitious")),
+    )
 
 
 if __name__ == "__main__":

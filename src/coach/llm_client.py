@@ -21,6 +21,7 @@ from typing import Any
 
 from src.coach.schemas import LLMCallMetrics
 from src.coach.weekly_digest import LLMCompleteFn
+from src.model_guardrails import openai_response_refusal
 
 logger = logging.getLogger(__name__)
 
@@ -222,7 +223,7 @@ def _build_openai_llm_complete(
         try:
             from openai import AsyncOpenAI
 
-            client = AsyncOpenAI()
+            client = AsyncOpenAI(max_retries=0)
             kwargs: dict[str, Any] = {
                 "model": resolved_model,
                 "input": prompt,
@@ -242,6 +243,11 @@ def _build_openai_llm_complete(
                 call_metrics.append(
                     _openai_call_metrics(response, time.perf_counter() - started)
                 )
+            if (
+                openai_response_refusal(response) is not None
+                or getattr(response, "status", None) != "completed"
+            ):
+                return None
             return getattr(response, "output_text", None) or None
         except Exception as exc:
             if call_metrics is not None:
@@ -293,7 +299,10 @@ def _build_gemini_llm_complete(
         config_kwargs: dict[str, Any] = {
             "max_output_tokens": max_output_tokens,
             # google-genai expects milliseconds for the request timeout.
-            "http_options": types.HttpOptions(timeout=int(timeout * 1000)),
+            "http_options": types.HttpOptions(
+                timeout=int(timeout * 1000),
+                retry_options=types.HttpRetryOptions(attempts=1),
+            ),
             # Gemini flash models "think" by default, consuming the output budget
             # before emitting JSON and truncating it. Disable for this short task.
             "thinking_config": types.ThinkingConfig(thinking_budget=0),
@@ -310,6 +319,20 @@ def _build_gemini_llm_complete(
             contents=prompt,
             config=types.GenerateContentConfig(**config_kwargs),
         )
+        feedback = getattr(response, "prompt_feedback", None)
+        block_reason = getattr(feedback, "block_reason", None)
+        if (
+            block_reason is not None
+            and str(block_reason).rsplit(".", 1)[-1] != "BLOCKED_REASON_UNSPECIFIED"
+        ):
+            return None
+        candidates = getattr(response, "candidates", []) or []
+        if not candidates or any(
+            getattr(getattr(candidate, "finish_reason", None), "value", None)
+            != "STOP"
+            for candidate in candidates
+        ):
+            return None
         return getattr(response, "text", None) or None
 
     async def llm_complete(

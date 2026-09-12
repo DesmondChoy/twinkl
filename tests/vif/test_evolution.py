@@ -1,4 +1,4 @@
-"""Tests for deterministic evolution detection on weekly VIF signals."""
+"""Historical VIF evolution compatibility; Profile evolution is future work."""
 
 import polars as pl
 
@@ -38,7 +38,9 @@ def _weekly_row(
     row["profile_weight_benevolence"] = benevolence_weight
     row["profile_weight_self_direction"] = self_direction_weight
     row["alignment_vector"] = [row[f"alignment_{dim}"] for dim in SCHWARTZ_VALUE_ORDER]
-    row["uncertainty_vector"] = [row[f"uncertainty_{dim}"] for dim in SCHWARTZ_VALUE_ORDER]
+    row["uncertainty_vector"] = [
+        row[f"uncertainty_{dim}"] for dim in SCHWARTZ_VALUE_ORDER
+    ]
     return row
 
 

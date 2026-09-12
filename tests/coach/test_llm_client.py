@@ -82,7 +82,8 @@ async def test_openai_call_records_usage_cost_and_latency(monkeypatch):
             )
 
     class Client:
-        def __init__(self):
+        def __init__(self, *, max_retries):
+            assert max_retries == 0
             self.responses = Responses()
 
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")

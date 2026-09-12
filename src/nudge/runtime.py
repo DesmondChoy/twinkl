@@ -11,6 +11,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from prompts import get_prompt_metadata, load_prompt
+from src.model_guardrails import openai_response_refusal
 from src.nudge.decision import format_previous_entries
 from src.nudge.schemas import (
     NUDGE_DECISION_AND_GENERATION_RESPONSE_FORMAT,
@@ -184,15 +185,6 @@ def _usage_tokens(response: Any) -> dict[str, int]:
     }
 
 
-def _response_refusal(response: Any) -> str | None:
-    for item in getattr(response, "output", []) or []:
-        for content in getattr(item, "content", []) or []:
-            refusal = getattr(content, "refusal", None)
-            if refusal:
-                return str(refusal)
-    return None
-
-
 def _receipt(
     request: NudgeRuntimeRequest,
     *,
@@ -278,7 +270,7 @@ class OpenAINudgeRuntime:
             try:
                 from openai import AsyncOpenAI
 
-                self._client = AsyncOpenAI()
+                self._client = AsyncOpenAI(max_retries=0)
             except Exception as error:  # noqa: BLE001 - provider boundary
                 return _receipt(
                     request,
@@ -313,7 +305,8 @@ class OpenAINudgeRuntime:
         response_id = getattr(api_response, "id", None)
         usage = _usage_tokens(api_response)
         latency_seconds = time.monotonic() - started
-        if raw_response is None:
+        refusal = openai_response_refusal(api_response)
+        if refusal is not None or raw_response is None:
             return _receipt(
                 request,
                 status="refusal",
@@ -322,7 +315,19 @@ class OpenAINudgeRuntime:
                 response_id=response_id,
                 usage=usage,
                 raw_response=raw_response,
-                refusal=_response_refusal(api_response),
+                refusal=refusal,
+            )
+
+        if getattr(api_response, "status", None) != "completed":
+            return _receipt(
+                request,
+                status="invalid",
+                latency_seconds=latency_seconds,
+                resolved_model=resolved_model,
+                response_id=response_id,
+                usage=usage,
+                raw_response=raw_response,
+                validation_error="Provider response was not completed",
             )
 
         try:

@@ -16,6 +16,7 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from prompts import get_prompt_metadata, load_prompt
+from src.model_guardrails import openai_response_refusal
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.prompt_boundary import (
     protect_instructions,
@@ -358,15 +359,6 @@ def _usage_tokens(response: Any) -> dict[str, int]:
     }
 
 
-def _response_refusal(response: Any) -> str | None:
-    for item in getattr(response, "output", []) or []:
-        for content in getattr(item, "content", []) or []:
-            refusal = getattr(content, "refusal", None)
-            if refusal:
-                return str(refusal)
-    return None
-
-
 def _is_transient_error(error: Exception) -> bool:
     try:
         from openai import (
@@ -500,7 +492,7 @@ class OpenAIWeeklyDriftReviewer:
             try:
                 from openai import AsyncOpenAI
 
-                self._client = AsyncOpenAI()
+                self._client = AsyncOpenAI(max_retries=0)
             except Exception as error:  # noqa: BLE001 - provider boundary
                 return _receipt(
                     request,
@@ -529,7 +521,10 @@ class OpenAIWeeklyDriftReviewer:
                 resolved_model = getattr(api_response, "model", None)
                 response_id = getattr(api_response, "id", None)
                 usage = _usage_tokens(api_response)
-                if not isinstance(parsed, WeeklyVerifierResponse):
+                refusal = openai_response_refusal(api_response)
+                if refusal is not None or not isinstance(
+                    parsed, WeeklyVerifierResponse
+                ):
                     return _receipt(
                         request,
                         status="refusal",
@@ -538,7 +533,18 @@ class OpenAIWeeklyDriftReviewer:
                         resolved_model=resolved_model,
                         response_id=response_id,
                         usage=usage,
-                        refusal=_response_refusal(api_response),
+                        refusal=refusal,
+                    )
+                if getattr(api_response, "status", None) != "completed":
+                    return _receipt(
+                        request,
+                        status="invalid",
+                        attempts=attempt,
+                        latency_seconds=time.monotonic() - started,
+                        resolved_model=resolved_model,
+                        response_id=response_id,
+                        usage=usage,
+                        validation_error="Provider response was not completed",
                     )
                 try:
                     validate_weekly_drift_reviewer_response(parsed, request)

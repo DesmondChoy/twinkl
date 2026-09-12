@@ -7,7 +7,6 @@ import pytest
 
 from src.vif.dataset import merge_labels_and_entries
 
-
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 
@@ -44,6 +43,27 @@ def _make_fake_data(n_personas: int = 3, entries_per_persona: int = 4):
 
 class TestMergeIntegrity:
     """Tests for merge_labels_and_entries join validation."""
+
+    @pytest.mark.parametrize("side", ["labels", "entries"])
+    @pytest.mark.parametrize("strict", [True, False])
+    def test_duplicate_keys_cannot_hide_an_unmatched_entry(self, side, strict):
+        labels, entries = _make_fake_data(n_personas=1, entries_per_persona=3)
+        # Equal row counts conceal one duplicated key and one missing key.
+        if side == "labels":
+            labels = pl.concat([labels.head(1), labels.head(2)])
+        else:
+            entries = pl.concat([entries.head(1), entries.head(2)])
+
+        with pytest.raises(ValueError, match=f"Duplicate {side} keys"):
+            merge_labels_and_entries(labels, entries, strict=strict)
+
+    def test_duplicate_keys_on_both_sides_cannot_multiply_training_rows(self):
+        labels, entries = _make_fake_data(n_personas=1, entries_per_persona=1)
+
+        with pytest.raises(ValueError, match="Duplicate labels keys"):
+            merge_labels_and_entries(
+                pl.concat([labels, labels]), pl.concat([entries, entries])
+            )
 
     def test_perfect_match_passes_silently(self):
         """No exception when all keys align between labels and entries."""
@@ -107,7 +127,9 @@ class TestMergeIntegrity:
         labels_df = pl.concat([labels_df, extra_label])
         entries_df = pl.concat([entries_df, extra_entry])
 
-        with pytest.raises(ValueError, match="Labels without matching entries") as exc_info:
+        with pytest.raises(
+            ValueError, match="Labels without matching entries"
+        ) as exc_info:
             merge_labels_and_entries(labels_df, entries_df)
         assert "Entries without matching labels" in str(exc_info.value)
 

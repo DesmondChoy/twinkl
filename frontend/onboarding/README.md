@@ -242,11 +242,30 @@ npm run typecheck
 npm run build
 ```
 
+The two deterministic browser smoke tests run the built app and real Python
+HTTP boundary at a 390px phone viewport in Chromium. They cover saved replay,
+Inspect and reload, plus onboarding, manual writing, closed-week review, a
+failed Coach Digest and retry, and confirmed session deletion. All model calls
+use test doubles; these checks provide application evidence, not model-quality
+or human-validation evidence.
+
+With the repository Python environment already installed, run from this directory:
+
+```sh
+npx playwright install chromium  # Once per Playwright browser version
+npm run test:e2e
+```
+
+The command builds the frontend and starts the controlled API on port 8765;
+that port must be free. It stops the server after the tests. Failure screenshots
+and traces are saved under `test-results/` and remain untracked.
+
 The [controlled browser QC harness](../../docs/demo/experience_inspect_app.md#16-verification-requirements)
 uses `uv run uvicorn scripts.demo_north_star_qc:app --port 8000` from the
 repository root in place of the normal Python boundary. Its local
 `POST /qc/mode/{mode}` endpoint supports `success`, `failure`, `omission`,
 `pending`, and `long` with test doubles and no paid provider calls.
+`POST /qc/coach/{success,failure}` controls Coach Digest availability.
 
 ## Shared contracts and saved replay export
 

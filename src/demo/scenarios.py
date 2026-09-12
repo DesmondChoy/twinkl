@@ -1083,6 +1083,8 @@ def build_scenario_fixture(
             coach_validation = validate_weekly_digest_narrative(
                 digest,
                 coach_narrative,
+                # Reproduce existing saved receipts; generation validates new responses.
+                validation_policy="historical",
                 validate_voice=(
                     saved_coach_response.generation is not None
                     and saved_coach_response.generation.prompt_version in {"4.4", "4.5"}
