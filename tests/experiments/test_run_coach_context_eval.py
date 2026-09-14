@@ -99,9 +99,9 @@ def test_dry_run_never_builds_provider(tmp_path, monkeypatch):
     monkeypatch.setattr(runner, "build_llm_complete", fail)
     assert runner.main(["--out", str(tmp_path / "experiment")]) == 0
     assert not list((tmp_path / "experiment").glob("*.call.json"))
-    assert (
-        tmp_path / "experiment/source_snapshot/prompts/weekly_digest_coach.yaml"
-    ).exists()
+    assert not (tmp_path / "experiment/receipts.jsonl").exists()
+    assert (tmp_path / "experiment/source_provenance.json").exists()
+    assert (tmp_path / "experiment/source.patch").exists()
 
 
 def test_bounded_calls_blind_full_context_judging_and_unchanged_resume(tmp_path, plan):
@@ -127,13 +127,17 @@ def test_bounded_calls_blind_full_context_judging_and_unchanged_resume(tmp_path,
     for index in [*range(6, 12), 13, 14]:
         assert "Brought it up in a 1:1 with my lead" in provider.calls[index][0]
     assert "Brought it up in a 1:1 with my lead" not in provider.calls[12][0]
-    receipts = {path.name: path.read_bytes() for path in tmp_path.glob("*.call.json")}
+    receipts = (tmp_path / "receipts.jsonl").read_bytes()
+    assert len(receipts.splitlines()) == 15
+    assert not list(tmp_path.glob("*.call.json"))
     resumed = asyncio.run(runner.run(tmp_path, plan, provider_factory=provider.factory))
     assert resumed == summary and len(provider.calls) == 15
-    assert receipts == {
-        path.name: path.read_bytes() for path in tmp_path.glob("*.call.json")
-    }
-    judge = json.loads((tmp_path / "judge_known_bad_full.call.json").read_text())
+    assert (tmp_path / "receipts.jsonl").read_bytes() == receipts
+    judge = next(
+        json.loads(line)
+        for line in receipts.splitlines()
+        if json.loads(line)["call_id"] == "judge_known_bad_full"
+    )
     assert json.loads(judge["raw_output"])["correctness"] == 2
     assert judge["request"]["settings"]["sdk_retries"] == 0
     assert summary["self_evaluation"] is True
@@ -152,10 +156,12 @@ def test_changed_manifest_pending_and_tampered_receipts_block_resume(tmp_path, p
     pending.unlink()
     provider = FakeProvider()
     asyncio.run(runner.run(tmp_path, plan, provider_factory=provider.factory))
-    saved = tmp_path / "generation_1_old.call.json"
-    record = json.loads(saved.read_text())
+    saved = tmp_path / "receipts.jsonl"
+    lines = saved.read_text().splitlines()
+    record = json.loads(lines[0])
     record["raw_output"] = "changed"
-    saved.write_text(json.dumps(record))
+    lines[0] = json.dumps(record)
+    saved.write_text("\n".join(lines) + "\n")
     with pytest.raises(ValueError, match="integrity failure"):
         asyncio.run(runner.run(tmp_path, plan, provider_factory=provider.factory))
     assert len(provider.calls) == 15
@@ -168,7 +174,7 @@ def test_transport_error_stops_calls_and_resume_skips_failed_key(tmp_path, plan)
         asyncio.run(runner.run(tmp_path, plan, provider_factory=broken.factory))
     assert len(broken.calls) == 1
     assert not list(tmp_path.glob("*.pending.json"))
-    receipt = (tmp_path / "generation_1_old.call.json").read_bytes()
+    receipt = (tmp_path / "receipts.jsonl").read_bytes()
     recovered = FakeProvider()
     summary = asyncio.run(
         runner.run(tmp_path, plan, provider_factory=recovered.factory)
@@ -179,7 +185,7 @@ def test_transport_error_stops_calls_and_resume_skips_failed_key(tmp_path, plan)
         summary["evaluations"]["judge_generation_1_old"]["status"]
         == "skipped_no_narrative"
     )
-    assert (tmp_path / "generation_1_old.call.json").read_bytes() == receipt
+    assert (tmp_path / "receipts.jsonl").read_bytes().startswith(receipt)
 
 
 def test_malformed_outputs_are_reported_without_retries_or_favorable_filtering(
@@ -198,3 +204,97 @@ def test_malformed_outputs_are_reported_without_retries_or_favorable_filtering(
         )
         == 6
     )
+
+
+def test_legacy_receipts_resume_without_writes_or_provider(tmp_path, plan):
+    runner.freeze(tmp_path, plan)
+    provider = FakeProvider()
+    summary = asyncio.run(runner.run(tmp_path, plan, provider_factory=provider.factory))
+    consolidated = tmp_path / "receipts.jsonl"
+    originals = {}
+    for line in consolidated.read_text().splitlines():
+        record = json.loads(line)
+        path = tmp_path / f"{record['call_id']}.call.json"
+        path.write_text(json.dumps(record, indent=2) + "\n")
+        originals[path.name] = path.read_bytes()
+    consolidated.unlink()
+    assert (
+        asyncio.run(runner.run(tmp_path, plan, provider_factory=provider.factory))
+        == summary
+    )
+    assert len(provider.calls) == 15
+    assert not consolidated.exists()
+    assert originals == {
+        path.name: path.read_bytes() for path in tmp_path.glob("*.call.json")
+    }
+
+
+def test_partial_legacy_resume_appends_distinct_consolidated_receipts(tmp_path, plan):
+    runner.freeze(tmp_path, plan)
+    broken = FakeProvider(transport_failure=True)
+    with pytest.raises(RuntimeError, match="Provider failure retained"):
+        asyncio.run(runner.run(tmp_path, plan, provider_factory=broken.factory))
+    consolidated = tmp_path / "receipts.jsonl"
+    record = json.loads(consolidated.read_text())
+    legacy = tmp_path / "generation_1_old.call.json"
+    legacy.write_text(json.dumps(record, indent=2) + "\n")
+    original = legacy.read_bytes()
+    consolidated.unlink()
+    provider = FakeProvider()
+    summary = asyncio.run(runner.run(tmp_path, plan, provider_factory=provider.factory))
+    assert summary["provider_attempts"] == 14 and len(provider.calls) == 13
+    assert len(consolidated.read_text().splitlines()) == 13
+    assert legacy.read_bytes() == original
+    assert "generation_1_old" not in {
+        json.loads(line)["call_id"] for line in consolidated.read_text().splitlines()
+    }
+
+
+@pytest.mark.parametrize(
+    "corruption",
+    [
+        "duplicate",
+        "cross_format_duplicate",
+        "truncated",
+        "malformed",
+        "blank",
+        "wrong_fingerprint",
+        "unknown_id",
+    ],
+)
+def test_invalid_consolidated_receipts_block_every_provider_call(
+    tmp_path, plan, corruption
+):
+    runner.freeze(tmp_path, plan)
+    broken = FakeProvider(transport_failure=True)
+    with pytest.raises(RuntimeError, match="Provider failure retained"):
+        asyncio.run(runner.run(tmp_path, plan, provider_factory=broken.factory))
+    path = tmp_path / "receipts.jsonl"
+    line = path.read_text()
+    if corruption == "duplicate":
+        path.write_text(line + line)
+    elif corruption == "cross_format_duplicate":
+        (tmp_path / "generation_1_old.call.json").write_text(line)
+    elif corruption == "truncated":
+        path.write_text(line.rstrip("\n"))
+    elif corruption == "malformed":
+        path.write_text(line + "{bad\n")
+    elif corruption == "blank":
+        path.write_text(line + "\n")
+    else:
+        record = json.loads(line)
+        record.pop("record_sha256")
+        if corruption == "wrong_fingerprint":
+            record["experiment_fingerprint"] = "different"
+        else:
+            record["call_id"] = "unplanned_call"
+        record["record_sha256"] = runner.fingerprint(record)
+        path.write_text(json.dumps(record) + "\n")
+
+    def never_build(**kwargs):
+        pytest.fail("Corrupt or ambiguous receipts must fail before provider setup")
+
+    before = path.read_bytes()
+    with pytest.raises(ValueError):
+        asyncio.run(runner.run(tmp_path, plan, provider_factory=never_build))
+    assert path.read_bytes() == before

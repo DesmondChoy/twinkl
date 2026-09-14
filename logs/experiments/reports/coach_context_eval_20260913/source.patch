@@ -1,0 +1,38 @@
+--- a/scripts/experiments/run_coach_context_eval.py
++++ b/scripts/experiments/run_coach_context_eval.py
+@@ -12,7 +12,7 @@
+ import json
+ from datetime import UTC, datetime
+ from pathlib import Path
+-from typing import Any, cast
++from typing import Any
+ 
+ from dotenv import load_dotenv
+ 
+@@ -197,7 +197,7 @@
+     ]
+     source_hashes = {path: _file_hash(root / path) for path in paths}
+     digests = {"old": old, "full": full}
+-    generation: dict[str, dict[str, Any]] = {}
++    generation = {}
+     for arm, digest in digests.items():
+         instructions, data = render_digest_messages(digest)
+         generation[arm] = {
+@@ -275,7 +275,7 @@
+ 
+ 
+ def _saved_call(path: Path, plan: dict) -> dict:
+-    record = cast(dict[str, Any], _read(path))
++    record = _read(path)
+     checksum = record.pop("record_sha256", None)
+     if (
+         fingerprint(record) != checksum
+@@ -405,7 +405,7 @@
+         ("judge_" + key, value["evidence_arm"], value["narrative"])
+         for key, value in plan["controls"].items()
+     ]
+-    evaluations: dict[str, dict[str, Any]] = {}
++    evaluations = {}
+     for call_id, evidence_arm, payload in targets:
+         if payload is None:
+             evaluations[call_id] = {"status": "skipped_no_narrative"}

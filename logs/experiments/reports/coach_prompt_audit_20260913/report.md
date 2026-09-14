@@ -12,7 +12,7 @@ Wei Jun uses `uncertain-wei-jun::2025-06-30` from the hash-verified current cata
 
 Generation used OpenAI `gpt-5.6-luna`, reasoning `none`, service tier `default`, maximum output 2048 tokens, SDK retries disabled, and no seed. Both initial requests used the new common prompt without the historical case-specific repair list. Each initially passed deterministic validation but failed AI source review. One source-grounding repair per input used the same data and retained the original response and exact added requirements. No output was hand-edited.
 
-Two initial sandbox DNS failures had no provider response IDs or usage; those records are retained in `network_failure/`. The subsequent four provider calls have complete response IDs and token usage. They are development diagnostics, not independent evaluation or human validation.
+Two initial sandbox DNS failures had no provider response IDs or usage; those records are retained under the `network_failure/` keys in [receipts.json](receipts.json). The subsequent four provider calls have complete response IDs and token usage. They are development diagnostics, not independent evaluation or human validation.
 
 ## Latest returned responses
 
@@ -62,12 +62,13 @@ The quotation and length changes pass their structural regressions. These reruns
 
 ## Reproduction and records
 
-Activate the project environment and use the included `rerun.py` for the exact workflow. It prepares the two requests without paid calls by default. `--execute` performs initial generation; `--execute --editorial-repair` performs the one hash-bound repair after `editorial_review.json` exists. The script refuses to overwrite provider attempts. Use a new report directory for another run and preserve the same relative directory depth.
+The [historical rerun script](https://github.com/DesmondChoy/twinkl/blob/af22ab457994fd2863fe5b5b7735f768f211519b/logs/experiments/reports/coach_prompt_audit_20260913/rerun.py) preserves the original generation and repair workflow. It expects the original separate files and source state; it is not the reader for the consolidated archive. The [source-context comparison](../coach_context_eval_20260913/report.md#verification-and-provenance) documents the maintained runner for new comparisons.
 
-- `manifest.json`: exact digest inputs, provider instructions/data, source hashes, model settings, and source-catalog provenance.
-- `*.attempt_1.json`, `*.attempt_2.json`: exact requests, raw provider outputs, validation, and usage.
-- `editorial_review.json`, `final_source_review.json`: separate AI source reviews and hash-bound repair instructions.
-- `short_response_check.json`: constructed 17-word response and current/historical validation, explicitly not provider output.
-- `summary.initial.json`, `summary.json`: initial and final run summaries.
+- [manifest.json](manifest.json): unchanged exact digest inputs, provider instructions/data, source hashes, model settings, and source-catalog provenance.
+- [receipts.json](receipts.json): twelve unique records keyed by their original relative filenames in `records`. These include all six generation attempts, both AI source reviews, the constructed 17-word validation check, and all three run summaries.
+- `aliases` maps the two exact duplicate records, `network_failure/manifest.json` and `network_failure/short_response_check.json`, to their canonical names. The canonical manifest remains the separate file; the validation check is in `records`.
+- `original_sha256` records the byte hash of every original JSON. Serializing each recovered record with `json.dumps(record, ensure_ascii=False, indent=2) + "\n"` reproduces its original bytes. The original file layout is also retained in Git revision `af22ab457994fd2863fe5b5b7735f768f211519b`.
+
+The 14 September consolidation changed storage only. All responses, reviews, timestamps, usage, and summaries were verified against that Git revision; no provider call was repeated.
 
 Four successful provider calls used 8,143 input tokens and 567 output tokens. The repository's recorded rate calculation gives **US$0.00234157**, with 14.364 seconds total request latency. This is calculated usage, not a billing export.

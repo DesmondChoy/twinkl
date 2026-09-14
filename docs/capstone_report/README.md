@@ -68,8 +68,9 @@ adds six fresh responses and nine same-model evaluator assessments for one
 synthetic Persona-week. Complete selected-entry context reduced clear event
 attribution errors in this sample, but causal overgeneralisation remained and
 the evaluator failed to flag the known incorrect response. These results are
-separate from the August scores and saved September replays. As of 14 September,
-the diagnostic and associated Coach changes remain uncommitted local evidence.
+separate from the August scores and saved September replays. The diagnostic and
+associated Coach changes are preserved in commit
+[`af22ab4`](https://github.com/DesmondChoy/twinkl/tree/af22ab457994fd2863fe5b5b7735f768f211519b).
 
 The [September Coach Digest sample](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
 contains five accepted key-week responses for the current Persona roster and

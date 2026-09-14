@@ -12,11 +12,12 @@ import hashlib
 import json
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 
 from dotenv import load_dotenv
 
 from prompts import get_prompt_metadata
+from scripts.experiments.coach_context_sources import freeze_sources, verify_sources
 from src.coach.llm_client import (
     DEFAULT_MAX_OUTPUT_TOKENS,
     DEFAULT_OPENAI_MODEL,
@@ -45,6 +46,7 @@ ROOT = Path(__file__).resolve().parents[2]
 BASELINE = Path("logs/experiments/reports/coach_prompt_audit_20260913")
 SOURCE_PATHS = (
     "scripts/experiments/run_coach_context_eval.py",
+    "scripts/experiments/coach_context_sources.py",
     "tests/experiments/test_run_coach_context_eval.py",
     "prompts/weekly_digest_coach.yaml",
     "prompts/coach_narrative_judge.yaml",
@@ -187,12 +189,14 @@ def prepare(root: Path = ROOT) -> dict:
     if old == full:
         raise ValueError("Context arms must differ")
     bad = CoachNarrative.model_validate(
-        _read(root / BASELINE / "wei_jun.attempt_2.json")["diagnostic"]["narrative"]
+        _read(root / BASELINE / "receipts.json")["records"]["wei_jun.attempt_2.json"][
+            "diagnostic"
+        ]["narrative"]
     )
     paths = [
         *SOURCE_PATHS,
         str(BASELINE / "manifest.json"),
-        str(BASELINE / "wei_jun.attempt_2.json"),
+        str(BASELINE / "receipts.json"),
         source["source_bundle_path"],
     ]
     source_hashes = {path: _file_hash(root / path) for path in paths}
@@ -263,46 +267,82 @@ def freeze(out: Path, plan: dict, root: Path = ROOT) -> None:
         if out.exists() and any(out.iterdir()):
             raise ValueError("Output directory is nonempty without its manifest")
         _write_new(path, plan)
-    for relative, expected in plan["source_hashes"].items():
-        destination = out / "source_snapshot" / relative
-        if destination.exists():
-            if _file_hash(destination) != expected:
-                raise ValueError("Source snapshot changed")
-        else:
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            with destination.open("xb") as handle:
-                handle.write((root / relative).read_bytes())
+    freeze_sources(out, plan["source_hashes"], root=root)
 
 
-def _saved_call(path: Path, plan: dict) -> dict:
-    record = cast(dict[str, Any], _read(path))
+def _validate_record(value: Any, plan: dict, origin: str) -> dict:
+    if not isinstance(value, dict):
+        raise ValueError(f"Malformed saved call: {origin}")
+    record = dict(value)
     checksum = record.pop("record_sha256", None)
     if (
         fingerprint(record) != checksum
-        or record["experiment_fingerprint"] != plan["fingerprint"]
+        or record.get("experiment_fingerprint") != plan["fingerprint"]
     ):
-        raise ValueError(f"Saved call integrity failure: {path.name}")
+        raise ValueError(f"Saved call integrity failure: {origin}")
     return record
+
+
+def _saved_call(path: Path, plan: dict) -> dict:
+    """Read a legacy single-call receipt without changing its original object."""
+    return _validate_record(_read(path), plan, path.name)
+
+
+def _load_calls(out: Path, plan: dict) -> dict[str, dict]:
+    """Validate both formats completely before constructing a provider."""
+    allowed = {row["id"] for row in plan["generation_order"]}
+    allowed.update("judge_" + row["id"] for row in plan["generation_order"])
+    allowed.update("judge_" + key for key in plan["controls"])
+    records: dict[str, dict] = {}
+
+    def add(record, origin, legacy_name=None):
+        call_id = record.get("call_id")
+        if not isinstance(call_id, str) or call_id not in allowed or (
+            legacy_name is not None and legacy_name != call_id + ".call.json"
+        ):
+            raise ValueError(f"Unexpected saved call: {origin}")
+        if call_id in records:
+            raise ValueError(f"Duplicate call ID across receipts: {call_id}")
+        records[call_id] = record
+
+    for path in sorted(out.glob("*.call.json")):
+        add(_saved_call(path, plan), path.name, path.name)
+    consolidated = out / "receipts.jsonl"
+    if consolidated.exists():
+        raw = consolidated.read_bytes()
+        if raw and not raw.endswith(b"\n"):
+            raise ValueError("Truncated receipts.jsonl: missing final newline")
+        for index, line in enumerate(raw.splitlines(), start=1):
+            origin = f"receipts.jsonl:{index}"
+            try:
+                value = json.loads(line)
+            except (ValueError, UnicodeDecodeError) as exc:
+                raise ValueError(f"Malformed receipt line: {origin}") from exc
+            add(_validate_record(value, plan, origin), origin)
+    return records
+
+
+def _append_call(out: Path, record: dict, plan: dict) -> None:
+    existing = _load_calls(out, plan)
+    if record["call_id"] in existing:
+        raise ValueError("Refusing to append a duplicate call ID")
+    value = {**record, "record_sha256": fingerprint(record)}
+    with (out / "receipts.jsonl").open("a", encoding="utf-8") as handle:
+        handle.write(
+            json.dumps(value, ensure_ascii=False, separators=(",", ":")) + "\n"
+        )
 
 
 def verify_resume(out: Path, plan: dict) -> None:
     if list(out.glob("*.pending.json")):
         raise ValueError("Unresolved provider attempt; inspect before resuming")
-    allowed = {row["id"] for row in plan["generation_order"]}
-    allowed.update("judge_" + row["id"] for row in plan["generation_order"])
-    allowed.update("judge_" + key for key in plan["controls"])
-    for path in out.glob("*.call.json"):
-        record = _saved_call(path, plan)
-        if (
-            record["call_id"] not in allowed
-            or path.name != record["call_id"] + ".call.json"
-        ):
-            raise ValueError("Unexpected saved call")
+    _load_calls(out, plan)
 
 
 async def run(out: Path, plan: dict, *, provider_factory=build_llm_complete) -> dict:
     """Run each planned call once; completed and failed calls are immutable."""
     verify_resume(out, plan)
+    verify_sources(out, plan["source_hashes"], root=ROOT)
     metrics: list[LLMCallMetrics] = []
     provider = None
     digests = {
@@ -312,9 +352,9 @@ async def run(out: Path, plan: dict, *, provider_factory=build_llm_complete) -> 
 
     async def call(call_id, request, operation):
         nonlocal provider
-        path = out / f"{call_id}.call.json"
-        if path.exists():
-            saved = _saved_call(path, plan)
+        saved_calls = _load_calls(out, plan)
+        if call_id in saved_calls:
+            saved = saved_calls[call_id]
             if saved["request"] != request:
                 raise ValueError("Saved provider request changed")
             return saved
@@ -369,7 +409,7 @@ async def run(out: Path, plan: dict, *, provider_factory=build_llm_complete) -> 
             "metrics": [row.model_dump(mode="json") for row in metrics[before:]],
             "provider_attempted": bool(captured),
         }
-        _write_new(path, {**record, "record_sha256": fingerprint(record)})
+        _append_call(out, record, plan)
         pending.unlink()
         if error or any(row.status == "error" for row in metrics[before:]):
             raise RuntimeError(
@@ -430,7 +470,8 @@ async def run(out: Path, plan: dict, *, provider_factory=build_llm_complete) -> 
             "correctness_below_3": verdict["correctness"] < 3 if verdict else None,
             "error_type": record["error_type"],
         }
-    records = [_saved_call(path, plan) for path in sorted(out.glob("*.call.json"))]
+    saved_calls = _load_calls(out, plan)
+    records = [saved_calls[key] for key in sorted(saved_calls)]
     all_metrics = [
         LLMCallMetrics.model_validate(metric)
         for record in records

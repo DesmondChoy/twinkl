@@ -148,8 +148,9 @@ are tracked as `twinkl-7wo2`.
 - Ruff passed for touched Python code; `git diff --check` passed.
 - MyPy reports six previously verified Polars conversion errors in unchanged
   portions of `src/coach/weekly_digest.py`. Type-only corrections to the new
-  runner were made after the live run; its executed source is preserved in
-  `source_snapshot`. The final runner passes scoped MyPy 2.3.0, Ruff, and all
+  runner were made after the live run; its executed source can be reconstructed
+  from the Git revision and patch below. The final runner at that time passed
+  scoped MyPy 2.3.0, Ruff, and all
   six runner regression tests. The only post-run changes are dictionary type
   annotations and a saved-record type cast; no prompts, inputs, or response
   records changed.
@@ -161,13 +162,42 @@ calculation gives **US$0.00741719**; this is calculated usage, not a billing
 export. Mean generation input increased from 2,139 to 2,925 tokens (786 tokens,
 about 36.7%) because the selected entries are now complete.
 
-`manifest.json` binds both digests, generation instructions, model settings,
-source hashes, control definitions, and the 15-call maximum. `*.call.json`
-preserve each exact request, raw output, result, timestamps, usage, and a
-record checksum. `summary.json` preserves all raw scores and response results.
-`source_snapshot` preserves the code, prompts, tests, and pinned inputs actually
-used. The experiment fingerprint is
+[manifest.json](manifest.json) binds both digests, generation instructions, model
+settings, source hashes, control definitions, and the 15-call maximum.
+[receipts.jsonl](receipts.jsonl) contains all 15 calls in start-time order, one
+JSON object per line with its original `call_id`, exact request, raw output,
+result, timestamps, usage, and record checksum. The `old` IDs identify the
+short-context comparison and remain part of the evidence.
+[summary.json](summary.json) preserves all raw scores and response results.
+[source_provenance.json](source_provenance.json) pins Git revision
+`af22ab457994fd2863fe5b5b7735f768f211519b` and the checksum of
+[source.patch](source.patch). Applying that 1,247-byte patch to the selected
+files from the Git revision reconstructs all 14 executed source files exactly,
+including the runner before its four type-only edits. The original source
+hashes remain in the unchanged manifest. The experiment fingerprint is
 `2104dd7725e0d5e09de3ead459b56812f8b26a031609caaeedaa03d91489e42f`.
+
+The 14 September consolidation replaced the separate call files and copied
+source tree. Every call retains its original checksum; serializing its object
+with `json.dumps(record, ensure_ascii=False, indent=2) + "\n"` reproduces the
+original file bytes. All 14 reconstructed source hashes were verified. No
+provider calls, scores, or source-review conclusions changed.
+
+To verify the saved sources without provider calls, run from the repository
+root with the environment active:
+
+```sh
+python - <<'PY'
+import json
+from pathlib import Path
+from scripts.experiments.coach_context_sources import verify_sources
+
+report = Path("logs/experiments/reports/coach_context_eval_20260913")
+manifest = json.loads((report / "manifest.json").read_text())
+verify_sources(report, manifest["source_hashes"], Path.cwd())
+print("All 14 executed source hashes match.")
+PY
+```
 
 To repeat with current code, activate the environment and use a new output
 directory; preparation makes no provider calls:
@@ -178,10 +208,11 @@ uv run python -m scripts.experiments.run_coach_context_eval --out /tmp/coach-con
 uv run python -m scripts.experiments.run_coach_context_eval --out /tmp/coach-context-new-run --execute
 ```
 
-The runner refuses a changed source fingerprint or unresolved provider attempt
-in an existing directory. Original run receipts and snapshots must remain
-unchanged; the post-run type annotations mean the current runner has a different
-source hash from the executed snapshot.
+New runs write consolidated receipts and Git-based source provenance. The
+runner refuses a changed source fingerprint, unresolved provider attempt, or
+corrupt or duplicated call record in an existing directory. Original run
+records and source hashes remain unchanged; the current runner has a different
+source hash from the executed version, so use a new directory for new calls.
 
 ## Fresh responses, verbatim
 

@@ -1,0 +1,6 @@
+{
+  "schema_version": "coach-context-sources-v1",
+  "git_revision": "af22ab457994fd2863fe5b5b7735f768f211519b",
+  "patch_sha256": "3e9133dbc6e884db4d3974c5799cb3bbbbc6e946be7a6bfeb07043646973c6e9",
+  "patch_file": "source.patch"
+}

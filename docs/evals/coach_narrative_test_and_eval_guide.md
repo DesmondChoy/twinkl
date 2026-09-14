@@ -236,7 +236,12 @@ uv run python -m scripts.experiments.run_coach_context_eval \
 ```
 
 The runner preserves source hashes, exact requests, raw responses, usage, and
-individual scores. It does not replace saved scenario responses or add an
+individual scores. Calls are appended to `receipts.jsonl`, one checksum-bearing
+JSON record per call. `source_provenance.json` and `source.patch` reconstruct
+the selected sources from a fixed Git revision, avoiding a copied source tree.
+Resume verifies the source hashes and rejects corrupt or duplicate call records
+before making a provider call; legacy separate call files remain readable.
+It does not replace saved scenario responses or add an
 evaluator call to the product runtime. The regression demonstrates whether
 context changes this case; it is not a fresh final test or human validation.
 
