@@ -47,7 +47,7 @@ def _prompt_templates(
             "4.4",
         )
     if version == "1.1":
-        return "weekly_digest_coach", PROMPT_NAME, "4.5"
+        return "versions/weekly_digest_coach_v4_5", PROMPT_NAME, "4.5"
     raise ValueError("Unsupported Coach comparison prompt version")
 
 

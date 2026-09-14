@@ -90,10 +90,15 @@ The import-isolated MyPy command supplies MyPy ephemerally and keeps this
 focused check separate from known type errors in unrelated repository
 dependencies.
 
-Current generation requires every source quotation to match supplied evidence
-and one English question in question form. These checks do not establish
-semantic correctness or non-prescriptive tone. The displayed nudge uses the
-same question-form check. SDK automatic retries are disabled: the nudge and
+Ordinary Coach Digest generation uses prompt `4.6`. It requires an exact
+quotation from supplied evidence in `weekly_mirror`, and every source quotation
+must match supplied evidence. All three fields must be nonempty, with one
+English question in question form and a maximum of 180 words across the
+response; there is no minimum word count. Historical receipts retain their
+recorded validation policy, including the original 25–180-word bounds.
+These checks do not establish semantic correctness or non-prescriptive tone.
+The displayed nudge uses the same question-form check. SDK automatic retries
+are disabled: the nudge and
 Coach Digest provider adapters make one attempt per call; the Weekly Drift
 Reviewer owns its maximum of two attempts for transient failures. A refusal
 or incomplete provider response cannot become a displayed response.
@@ -204,6 +209,44 @@ Journal Entries with dates, evidence roles, Core Value mappings, and excerpts.
 It does not use the legacy
 `top_tensions` field as a substitute for these facts.
 
+### Source-context comparison
+
+The bounded runner compares Wei Jun's saved short excerpts with complete
+displayed text for the same selected Journal Entries. It keeps Coach prompt
+`4.6`, evaluator prompt `3.1`, Luna at reasoning effort `none`, and Drift
+decisions fixed. Three generations per input produce six fresh responses.
+All six receive fresh evaluator scores against the same complete-context
+digest, including responses that fail mechanical checks. A failed provider
+response remains a recorded failure rather than a selected replacement.
+
+Three additional assessments score the recorded incorrect event connection
+with short and complete context, and a constructed accurate control with
+complete context. The full run therefore permits at most 15 provider calls,
+without automatic retries or repair generations. Source expectations and arm
+labels stay outside evaluator input. Scores remain same-model AI review.
+
+```sh
+# Prepare the frozen requests without provider calls:
+uv run python -m scripts.experiments.run_coach_context_eval \
+  --out /tmp/coach-context-new-run
+
+# Run the prepared comparison and fresh evaluator assessments:
+uv run python -m scripts.experiments.run_coach_context_eval \
+  --out /tmp/coach-context-new-run --execute
+```
+
+The runner preserves source hashes, exact requests, raw responses, usage, and
+individual scores. It does not replace saved scenario responses or add an
+evaluator call to the product runtime. The regression demonstrates whether
+context changes this case; it is not a fresh final test or human validation.
+
+Use a new output directory for changed code or prompts. The
+[13 September run](../../logs/experiments/reports/coach_context_eval_20260913/report.md)
+preserves all 15 completed calls. The known incorrect response scored 5 with
+short evidence and 4 with complete evidence, so neither assessment triggered
+the evaluator's review flag. High overall scores do not establish detection of
+event-attribution errors.
+
 ### 3a. Complete saved replay weeks and retain compatible responses
 
 All 27 saved replay weeks now contain a validated Coach Digest. The completion
@@ -289,6 +332,13 @@ dimension is flagged for human review. Report and doc lines label these scores
 as AI review, not human validation. The report keeps each response score,
 evaluator justification, token usage, calculated published-rate cost, and
 request latency.
+
+Evaluator prompt `3.1` accepts a grounded, open-ended question as a way to
+preserve uncertainty for `more_reflection_needed`. It does not require a
+statement of the evidence limit. The response must still leave Drift undecided
+and avoid inventing decisions, motives, or outcomes. This matches ordinary
+Coach Digest prompt `4.6`. Keep any rerun under the revised rubric separate
+from historical evaluation receipts.
 
 ---
 

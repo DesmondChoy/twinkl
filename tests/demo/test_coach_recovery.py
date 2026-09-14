@@ -242,7 +242,10 @@ async def test_invalid_coach_can_retry_and_each_fresh_response_is_validated():
             assert event.error is not None and event.error.retryable
             assert event.validation is not None and not event.validation.valid
             assert event.validation.errors == [
-                "No quoted phrase from selected evidence was detected."
+                "No quoted phrase from selected evidence was detected.",
+                "In weekly_mirror, copy a continuous phrase exactly from an "
+                "evidence_lines excerpt and enclose it in double quotation "
+                "marks. Preserve capitalization and punctuation.",
             ]
             assert response.session.weekly_digest.coach_narrative is None
         else:

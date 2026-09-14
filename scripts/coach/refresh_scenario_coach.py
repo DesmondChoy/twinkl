@@ -129,7 +129,10 @@ def prepare(
                 != response.generation.response_sha256
                 or not validate_weekly_digest_narrative(
                     digest, response.narrative, validate_voice=True,
-                    validation_policy="historical",
+                    validation_policy=(
+                        "current" if response.generation.prompt_version == "4.6"
+                        else "historical"
+                    ),
                 ).all_passed
             ):
                 raise ValueError(f"Prior response is incompatible or invalid: {key}")
@@ -457,7 +460,12 @@ def apply(root: Path, output: Path, plan: dict[str, Any]) -> None:
             _coach_unavailable_reason(response, digest) is not None
             or not validate_weekly_digest_narrative(
                 digest, response.narrative, validate_voice=True,
-                validation_policy="historical",
+                validation_policy=(
+                    "current"
+                    if response.generation is not None
+                    and response.generation.prompt_version == "4.6"
+                    else "historical"
+                ),
             ).all_passed
         ):
             raise ValueError(f"Refreshed response failed validation: {key}")

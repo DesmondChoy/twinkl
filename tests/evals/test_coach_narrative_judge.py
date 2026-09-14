@@ -96,7 +96,7 @@ def test_render_judge_prompt_includes_facts_and_narrative():
 def test_judge_prompt_declares_generation_facts_plus_narrative():
     metadata = get_prompt_metadata("coach_narrative_judge")
 
-    assert metadata["version"] == "3.0"
+    assert metadata["version"] == "3.1"
     assert metadata["input_variables"] == [
         "persona_name",
         "week_window",
@@ -167,6 +167,23 @@ def test_judge_prompt_preserves_delivery_state_facts(
     assert "A material policy mismatch must score 2 or lower" in " ".join(
         prompt.split()
     )
+
+
+def test_uncertainty_rubric_accepts_openness_without_evidence_commentary():
+    digest = _digest().model_copy(
+        update={
+            "response_mode": "insufficient_evidence",
+            "drift_states": {"benevolence": "insufficient_evidence"},
+        }
+    )
+
+    prompt = " ".join(render_judge_prompt(digest, _narrative()).split())
+
+    assert "Selected Coach Digest policy: more_reflection_needed" in prompt
+    assert "an explicit statement of the evidence limit is optional" in prompt
+    assert "Do not penalize its absence" in prompt
+    assert "without deciding whether Drift exists" in prompt
+    assert "or inventing a decision, motive, or outcome" in prompt
 
 
 def test_judge_narrative_parses_valid_verdict():

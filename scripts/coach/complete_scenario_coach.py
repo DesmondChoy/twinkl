@@ -139,7 +139,14 @@ def prepare(
         if _coach_unavailable_reason(response, digest) is not None:
             raise ValueError(f"Refusing to overwrite incompatible response: {key}")
         if not validate_weekly_digest_narrative(
-            digest, response.narrative, validation_policy="historical"
+            digest,
+            response.narrative,
+            validation_policy=(
+                "current"
+                if response.generation is not None
+                and response.generation.prompt_version == "4.6"
+                else "historical"
+            ),
         ).all_passed:
             raise ValueError(f"Existing response failed validations: {key}")
     policy = {

@@ -1,0 +1,654 @@
+{
+  "experiment_fingerprint": "2104dd7725e0d5e09de3ead459b56812f8b26a031609caaeedaa03d91489e42f",
+  "source": "ai_review",
+  "self_evaluation": true,
+  "generation": [
+    {
+      "id": "generation_1_old",
+      "arm": "old",
+      "repeat": 1,
+      "diagnostic": {
+        "schema_version": "1.0.0",
+        "persona_id": "8f83c818",
+        "week_start": "2025-06-30",
+        "week_end": "2025-07-06",
+        "accepted": true,
+        "failure_stage": null,
+        "failure_details": [],
+        "raw_output": "{\"weekly_mirror\":\"At dinner, Xiao Yu asked what you do at work, and you explained it as helping people buy things. Earlier, when the remittance feature was under deadline pressure, you wrote, \\\"I nodded. Again.\\\"\",\"tension_explanation\":\"You care about making the world a fairer, better place, while the request to cut corners on a validation layer Ravi had already flagged left you holding back again. Xiao Yu’s simple question brings the purpose of that work close to home, though what you want to do with that feeling remains open.\",\"reflective_question\":\"When you think about Xiao Yu asking whether you help everyone, what part of that dinner stays with you?\"}",
+        "narrative": {
+          "weekly_mirror": "At dinner, Xiao Yu asked what you do at work, and you explained it as helping people buy things. Earlier, when the remittance feature was under deadline pressure, you wrote, \"I nodded. Again.\"",
+          "tension_explanation": "You care about making the world a fairer, better place, while the request to cut corners on a validation layer Ravi had already flagged left you holding back again. Xiao Yu’s simple question brings the purpose of that work close to home, though what you want to do with that feeling remains open.",
+          "reflective_question": "When you think about Xiao Yu asking whether you help everyone, what part of that dinner stays with you?"
+        },
+        "validation": {
+          "grounded_quotes": [
+            "I nodded. Again."
+          ],
+          "word_count": 105,
+          "checks": [
+            {
+              "name": "groundedness",
+              "passed": true,
+              "details": "Found 1 quoted phrase(s) that match selected evidence."
+            },
+            {
+              "name": "non_circularity",
+              "passed": true,
+              "details": "Response avoids raw scoring and alignment terminology."
+            },
+            {
+              "name": "value_leakage",
+              "passed": true,
+              "details": "Response avoids naming raw Schwartz value labels."
+            },
+            {
+              "name": "state_claims",
+              "passed": true,
+              "details": "Response makes only supported current-state claims."
+            },
+            {
+              "name": "length",
+              "passed": true,
+              "details": "Combined response length is 105 words (maximum 180; no minimum)."
+            },
+            {
+              "name": "weekly_mirror_verbatim",
+              "passed": true,
+              "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+            },
+            {
+              "name": "nonempty_fields",
+              "passed": true,
+              "details": "Return nonempty text in all three response fields."
+            },
+            {
+              "name": "all_quotes_grounded",
+              "passed": true,
+              "details": "Every quotation matches supplied evidence exactly."
+            },
+            {
+              "name": "reflective_question_form",
+              "passed": true,
+              "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+            },
+            {
+              "name": "conversational_voice",
+              "passed": true,
+              "details": "Response avoids recap openings and clinical finding language."
+            },
+            {
+              "name": "natural_reflection_voice",
+              "passed": true,
+              "details": "Response avoids date-led openings and writing-process commentary."
+            }
+          ]
+        },
+        "llm_call": null
+      },
+      "error_type": null
+    },
+    {
+      "id": "generation_1_full",
+      "arm": "full",
+      "repeat": 1,
+      "diagnostic": {
+        "schema_version": "1.0.0",
+        "persona_id": "8f83c818",
+        "week_start": "2025-06-30",
+        "week_end": "2025-07-06",
+        "accepted": true,
+        "failure_stage": null,
+        "failure_details": [],
+        "raw_output": "{\"weekly_mirror\":\"At dinner, Xiao Yu asked whether you help everyone, and the answer felt heavy beside the remittance failures you had seen. You wrote, \\\"I'm not fine with it.\\\" Mei Ling’s hand under the table and your later conversation gave the moment somewhere honest to land.\",\"tension_explanation\":\"You care about making the world a fairer, better place, especially when real families are affected, yet the deadline, fatigue, and repeated nodding have kept you from pushing the issue further. The discomfort is becoming harder to set aside, without making the next choice clear yet.\",\"reflective_question\":\"When you think about Mei Ling asking what you were going to do, what feels most important to acknowledge now?\"}",
+        "narrative": {
+          "weekly_mirror": "At dinner, Xiao Yu asked whether you help everyone, and the answer felt heavy beside the remittance failures you had seen. You wrote, \"I'm not fine with it.\" Mei Ling’s hand under the table and your later conversation gave the moment somewhere honest to land.",
+          "tension_explanation": "You care about making the world a fairer, better place, especially when real families are affected, yet the deadline, fatigue, and repeated nodding have kept you from pushing the issue further. The discomfort is becoming harder to set aside, without making the next choice clear yet.",
+          "reflective_question": "When you think about Mei Ling asking what you were going to do, what feels most important to acknowledge now?"
+        },
+        "validation": {
+          "grounded_quotes": [
+            "I'm not fine with it."
+          ],
+          "word_count": 111,
+          "checks": [
+            {
+              "name": "groundedness",
+              "passed": true,
+              "details": "Found 1 quoted phrase(s) that match selected evidence."
+            },
+            {
+              "name": "non_circularity",
+              "passed": true,
+              "details": "Response avoids raw scoring and alignment terminology."
+            },
+            {
+              "name": "value_leakage",
+              "passed": true,
+              "details": "Response avoids naming raw Schwartz value labels."
+            },
+            {
+              "name": "state_claims",
+              "passed": true,
+              "details": "Response makes only supported current-state claims."
+            },
+            {
+              "name": "length",
+              "passed": true,
+              "details": "Combined response length is 111 words (maximum 180; no minimum)."
+            },
+            {
+              "name": "weekly_mirror_verbatim",
+              "passed": true,
+              "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+            },
+            {
+              "name": "nonempty_fields",
+              "passed": true,
+              "details": "Return nonempty text in all three response fields."
+            },
+            {
+              "name": "all_quotes_grounded",
+              "passed": true,
+              "details": "Every quotation matches supplied evidence exactly."
+            },
+            {
+              "name": "reflective_question_form",
+              "passed": true,
+              "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+            },
+            {
+              "name": "conversational_voice",
+              "passed": true,
+              "details": "Response avoids recap openings and clinical finding language."
+            },
+            {
+              "name": "natural_reflection_voice",
+              "passed": true,
+              "details": "Response avoids date-led openings and writing-process commentary."
+            }
+          ]
+        },
+        "llm_call": null
+      },
+      "error_type": null
+    },
+    {
+      "id": "generation_2_full",
+      "arm": "full",
+      "repeat": 2,
+      "diagnostic": {
+        "schema_version": "1.0.0",
+        "persona_id": "8f83c818",
+        "week_start": "2025-06-30",
+        "week_end": "2025-07-06",
+        "accepted": true,
+        "failure_stage": null,
+        "failure_details": [],
+        "raw_output": "{\"weekly_mirror\":\"At dinner, Xiao Yu asked whether you help everyone, and your simple answer felt heavy beside the failed remittance transfers. You wrote, \\\"I'm not fine with it.\\\"\",\"tension_explanation\":\"You care about making the world a fairer, better place, yet the deadline, tiredness, and repeated deferral have kept you nodding while people struggle to send money to their families. Mei Ling's hand under the table and her response gave you room to be honest, even while what comes next remains unclear.\",\"reflective_question\":\"When you think about Mei Ling asking what you were going to do, what feels most important to acknowledge?\"}",
+        "narrative": {
+          "weekly_mirror": "At dinner, Xiao Yu asked whether you help everyone, and your simple answer felt heavy beside the failed remittance transfers. You wrote, \"I'm not fine with it.\"",
+          "tension_explanation": "You care about making the world a fairer, better place, yet the deadline, tiredness, and repeated deferral have kept you nodding while people struggle to send money to their families. Mei Ling's hand under the table and her response gave you room to be honest, even while what comes next remains unclear.",
+          "reflective_question": "When you think about Mei Ling asking what you were going to do, what feels most important to acknowledge?"
+        },
+        "validation": {
+          "grounded_quotes": [
+            "I'm not fine with it."
+          ],
+          "word_count": 98,
+          "checks": [
+            {
+              "name": "groundedness",
+              "passed": true,
+              "details": "Found 1 quoted phrase(s) that match selected evidence."
+            },
+            {
+              "name": "non_circularity",
+              "passed": true,
+              "details": "Response avoids raw scoring and alignment terminology."
+            },
+            {
+              "name": "value_leakage",
+              "passed": true,
+              "details": "Response avoids naming raw Schwartz value labels."
+            },
+            {
+              "name": "state_claims",
+              "passed": true,
+              "details": "Response makes only supported current-state claims."
+            },
+            {
+              "name": "length",
+              "passed": true,
+              "details": "Combined response length is 98 words (maximum 180; no minimum)."
+            },
+            {
+              "name": "weekly_mirror_verbatim",
+              "passed": true,
+              "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+            },
+            {
+              "name": "nonempty_fields",
+              "passed": true,
+              "details": "Return nonempty text in all three response fields."
+            },
+            {
+              "name": "all_quotes_grounded",
+              "passed": true,
+              "details": "Every quotation matches supplied evidence exactly."
+            },
+            {
+              "name": "reflective_question_form",
+              "passed": true,
+              "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+            },
+            {
+              "name": "conversational_voice",
+              "passed": true,
+              "details": "Response avoids recap openings and clinical finding language."
+            },
+            {
+              "name": "natural_reflection_voice",
+              "passed": true,
+              "details": "Response avoids date-led openings and writing-process commentary."
+            }
+          ]
+        },
+        "llm_call": null
+      },
+      "error_type": null
+    },
+    {
+      "id": "generation_2_old",
+      "arm": "old",
+      "repeat": 2,
+      "diagnostic": {
+        "schema_version": "1.0.0",
+        "persona_id": "8f83c818",
+        "week_start": "2025-06-30",
+        "week_end": "2025-07-06",
+        "accepted": true,
+        "failure_stage": null,
+        "failure_details": [],
+        "raw_output": "{\"weekly_mirror\":\"At dinner, when Xiao Yu asked what you do, you described your work as helping people buy things. The question landed close to the choice you later captured: \\\"I nodded. Again.\\\"\",\"tension_explanation\":\"You seem to be carrying both the wish to make things fairer for people and the pressure of letting a concern about data validation pass while waiting for the right moment to raise it. What you told Xiao Yu keeps that wider purpose in view, even as the work situation remains unresolved.\",\"reflective_question\":\"When you think about the moment you nodded again, what would making the right moment look like to you?\"}",
+        "narrative": {
+          "weekly_mirror": "At dinner, when Xiao Yu asked what you do, you described your work as helping people buy things. The question landed close to the choice you later captured: \"I nodded. Again.\"",
+          "tension_explanation": "You seem to be carrying both the wish to make things fairer for people and the pressure of letting a concern about data validation pass while waiting for the right moment to raise it. What you told Xiao Yu keeps that wider purpose in view, even as the work situation remains unresolved.",
+          "reflective_question": "When you think about the moment you nodded again, what would making the right moment look like to you?"
+        },
+        "validation": {
+          "grounded_quotes": [
+            "I nodded. Again."
+          ],
+          "word_count": 102,
+          "checks": [
+            {
+              "name": "groundedness",
+              "passed": true,
+              "details": "Found 1 quoted phrase(s) that match selected evidence."
+            },
+            {
+              "name": "non_circularity",
+              "passed": true,
+              "details": "Response avoids raw scoring and alignment terminology."
+            },
+            {
+              "name": "value_leakage",
+              "passed": true,
+              "details": "Response avoids naming raw Schwartz value labels."
+            },
+            {
+              "name": "state_claims",
+              "passed": true,
+              "details": "Response makes only supported current-state claims."
+            },
+            {
+              "name": "length",
+              "passed": true,
+              "details": "Combined response length is 102 words (maximum 180; no minimum)."
+            },
+            {
+              "name": "weekly_mirror_verbatim",
+              "passed": true,
+              "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+            },
+            {
+              "name": "nonempty_fields",
+              "passed": true,
+              "details": "Return nonempty text in all three response fields."
+            },
+            {
+              "name": "all_quotes_grounded",
+              "passed": true,
+              "details": "Every quotation matches supplied evidence exactly."
+            },
+            {
+              "name": "reflective_question_form",
+              "passed": true,
+              "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+            },
+            {
+              "name": "conversational_voice",
+              "passed": true,
+              "details": "Response avoids recap openings and clinical finding language."
+            },
+            {
+              "name": "natural_reflection_voice",
+              "passed": true,
+              "details": "Response avoids date-led openings and writing-process commentary."
+            }
+          ]
+        },
+        "llm_call": null
+      },
+      "error_type": null
+    },
+    {
+      "id": "generation_3_old",
+      "arm": "old",
+      "repeat": 3,
+      "diagnostic": {
+        "schema_version": "1.0.0",
+        "persona_id": "8f83c818",
+        "week_start": "2025-06-30",
+        "week_end": "2025-07-06",
+        "accepted": true,
+        "failure_stage": null,
+        "failure_details": [],
+        "raw_output": "{\"weekly_mirror\":\"When Xiao Yu asked at dinner whether your work helps everyone, you answered, \\\"daddy helps move money from one place to another so people can buy things.\\\" That simple exchange brought the wider purpose of your work into a family moment.\",\"tension_explanation\":\"Earlier, with the remittance deadline pressing, you nodded when asked to cut corners, then wrote, \\\"I keep telling myself I'll escalate next time, build the case, find the right moment.\\\" The pull between making systems serve people fairly and staying quiet under pressure is still present in the circumstances you described, though what you want to do with that pull remains open.\",\"reflective_question\":\"When you think back to nodding in that conversation, what would you most want Xiao Yu to understand about how you try to help people through your work?\"}",
+        "narrative": {
+          "weekly_mirror": "When Xiao Yu asked at dinner whether your work helps everyone, you answered, \"daddy helps move money from one place to another so people can buy things.\" That simple exchange brought the wider purpose of your work into a family moment.",
+          "tension_explanation": "Earlier, with the remittance deadline pressing, you nodded when asked to cut corners, then wrote, \"I keep telling myself I'll escalate next time, build the case, find the right moment.\" The pull between making systems serve people fairly and staying quiet under pressure is still present in the circumstances you described, though what you want to do with that pull remains open.",
+          "reflective_question": "When you think back to nodding in that conversation, what would you most want Xiao Yu to understand about how you try to help people through your work?"
+        },
+        "validation": {
+          "grounded_quotes": [
+            "daddy helps move money from one place to another so people can buy things.",
+            "I keep telling myself I'll escalate next time, build the case, find the right moment."
+          ],
+          "word_count": 131,
+          "checks": [
+            {
+              "name": "groundedness",
+              "passed": true,
+              "details": "Found 2 quoted phrase(s) that match selected evidence."
+            },
+            {
+              "name": "non_circularity",
+              "passed": true,
+              "details": "Response avoids raw scoring and alignment terminology."
+            },
+            {
+              "name": "value_leakage",
+              "passed": true,
+              "details": "Response avoids naming raw Schwartz value labels."
+            },
+            {
+              "name": "state_claims",
+              "passed": true,
+              "details": "Response makes only supported current-state claims."
+            },
+            {
+              "name": "length",
+              "passed": true,
+              "details": "Combined response length is 131 words (maximum 180; no minimum)."
+            },
+            {
+              "name": "weekly_mirror_verbatim",
+              "passed": true,
+              "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+            },
+            {
+              "name": "nonempty_fields",
+              "passed": true,
+              "details": "Return nonempty text in all three response fields."
+            },
+            {
+              "name": "all_quotes_grounded",
+              "passed": true,
+              "details": "Every quotation matches supplied evidence exactly."
+            },
+            {
+              "name": "reflective_question_form",
+              "passed": true,
+              "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+            },
+            {
+              "name": "conversational_voice",
+              "passed": true,
+              "details": "Response avoids recap openings and clinical finding language."
+            },
+            {
+              "name": "natural_reflection_voice",
+              "passed": true,
+              "details": "Response avoids date-led openings and writing-process commentary."
+            }
+          ]
+        },
+        "llm_call": null
+      },
+      "error_type": null
+    },
+    {
+      "id": "generation_3_full",
+      "arm": "full",
+      "repeat": 3,
+      "diagnostic": {
+        "schema_version": "1.0.0",
+        "persona_id": "8f83c818",
+        "week_start": "2025-06-30",
+        "week_end": "2025-07-06",
+        "accepted": true,
+        "failure_stage": null,
+        "failure_details": [],
+        "raw_output": "{\"weekly_mirror\":\"At dinner, Xiao Yu asked whether you help everyone, and the answer felt heavy as you sat with the remittance failures affecting families. You wrote, \\\"I'm not fine with it.\\\"\",\"tension_explanation\":\"You care about making the world a fairer, better place, yet the deadline, fatigue, and repeated deferrals have made it easier to stay quiet while people struggle to send money home. Mei Ling’s question brought the uncertainty into the open without pretending the situation was settled.\",\"reflective_question\":\"When you think about Mei Ling asking what you were going to do, what feels most important to acknowledge now?\"}",
+        "narrative": {
+          "weekly_mirror": "At dinner, Xiao Yu asked whether you help everyone, and the answer felt heavy as you sat with the remittance failures affecting families. You wrote, \"I'm not fine with it.\"",
+          "tension_explanation": "You care about making the world a fairer, better place, yet the deadline, fatigue, and repeated deferrals have made it easier to stay quiet while people struggle to send money home. Mei Ling’s question brought the uncertainty into the open without pretending the situation was settled.",
+          "reflective_question": "When you think about Mei Ling asking what you were going to do, what feels most important to acknowledge now?"
+        },
+        "validation": {
+          "grounded_quotes": [
+            "I'm not fine with it."
+          ],
+          "word_count": 96,
+          "checks": [
+            {
+              "name": "groundedness",
+              "passed": true,
+              "details": "Found 1 quoted phrase(s) that match selected evidence."
+            },
+            {
+              "name": "non_circularity",
+              "passed": true,
+              "details": "Response avoids raw scoring and alignment terminology."
+            },
+            {
+              "name": "value_leakage",
+              "passed": true,
+              "details": "Response avoids naming raw Schwartz value labels."
+            },
+            {
+              "name": "state_claims",
+              "passed": true,
+              "details": "Response makes only supported current-state claims."
+            },
+            {
+              "name": "length",
+              "passed": true,
+              "details": "Combined response length is 96 words (maximum 180; no minimum)."
+            },
+            {
+              "name": "weekly_mirror_verbatim",
+              "passed": true,
+              "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+            },
+            {
+              "name": "nonempty_fields",
+              "passed": true,
+              "details": "Return nonempty text in all three response fields."
+            },
+            {
+              "name": "all_quotes_grounded",
+              "passed": true,
+              "details": "Every quotation matches supplied evidence exactly."
+            },
+            {
+              "name": "reflective_question_form",
+              "passed": true,
+              "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+            },
+            {
+              "name": "conversational_voice",
+              "passed": true,
+              "details": "Response avoids recap openings and clinical finding language."
+            },
+            {
+              "name": "natural_reflection_voice",
+              "passed": true,
+              "details": "Response avoids date-led openings and writing-process commentary."
+            }
+          ]
+        },
+        "llm_call": null
+      },
+      "error_type": null
+    }
+  ],
+  "evaluations": {
+    "judge_generation_1_old": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 5,
+        "specificity": 5,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 5,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately connects Xiao Yu’s question, the skipped validation layer, and the quoted “I nodded. Again.” while preserving the unresolved tension and asking a relevant, open-ended question without prescribing action."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    },
+    "judge_generation_1_full": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 5,
+        "specificity": 5,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 5,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately uses the dinner conversation, remittance failures, fatigue, and repeated nodding, preserves the findings’ insufficient-evidence uncertainty, remains non-directive, and ends with a relevant open question."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    },
+    "judge_generation_2_full": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 5,
+        "specificity": 5,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 5,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately uses the dinner conversation, failed remittance transfers, repeated deferral, and Mei Ling’s support, preserves the findings’ insufficient-evidence uncertainty, avoids prescribing action, and asks a relevant open-ended question."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    },
+    "judge_generation_2_old": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 4,
+        "specificity": 5,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 4,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately connects Xiao Yu’s dinner question, the skipped validation, and the repeated nodding, while keeping the unresolved situation reflective and avoiding invented outcomes, though it slightly frames the situation as a tension between purpose and inaction rather than explicitly naming the evidence insufficiency."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    },
+    "judge_generation_3_old": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 4,
+        "specificity": 5,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 4,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately cites Xiao Yu’s question, the skipped validation and escalation passages, and the unresolved tension supported by the insufficient-evidence findings, while remaining reflective; the question is open and relevant, though it slightly foregrounds Xiao Yu’s perspective rather than the explicitly unresolved next step."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    },
+    "judge_generation_3_full": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 5,
+        "specificity": 5,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 5,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately cites Xiao Yu’s question, remittance failures, fatigue and deferrals, and Mei Ling’s prompt while preserving the documented insufficient-evidence uncertainty and asking an open, relevant reflective question without prescribing action."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    },
+    "judge_known_bad_old": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 5,
+        "specificity": 5,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 5,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately connects the July 1 nod to the July 5 dinner question and June 25 deadline context, preserves the unresolved ending and insufficient evidence under more_reflection_needed, avoids advice, and asks an open relevant question."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    },
+    "judge_known_bad_full": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 4,
+        "specificity": 4,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 4,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately cites Xiao Yu’s question, the skipped validation issue, deadline pressure, and unresolved responsibility without prescribing action, though its tension framing somewhat implies the concern was merely kept in the background despite evidence of repeated unresolved choices."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    },
+    "judge_constructed_good_full": {
+      "status": "scored",
+      "verdict": {
+        "correctness": 5,
+        "specificity": 5,
+        "non_prescriptive_tone": 5,
+        "tension_honesty": 5,
+        "question_is_open_and_relevant": true,
+        "justification": "The response accurately quotes the July 1 acknowledgment, connects the July 5 family conversation to the unresolved remittance issue, remains reflective without prescribing action, and preserves uncertainty under the more_reflection_needed policy."
+      },
+      "correctness_below_3": false,
+      "error_type": null
+    }
+  },
+  "provider_attempts": 15,
+  "maximum_provider_calls": 15,
+  "usage": {
+    "n_calls": 15,
+    "n_calls_with_usage": 15,
+    "input_tokens": 31874,
+    "cached_input_tokens": 11742,
+    "cache_write_input_tokens": 20087,
+    "output_tokens": 1793,
+    "total_tokens": 33667,
+    "calculated_cost_usd": 0.007417190000000001,
+    "total_latency_seconds": 47.01594612491317,
+    "mean_latency_seconds": 3.134396408327545,
+    "median_latency_seconds": 2.2270901660085656,
+    "max_latency_seconds": 12.315931374963839
+  },
+  "limitations": "One synthetic case, three repeats per arm; same-model AI review can share errors. No human validation."
+}

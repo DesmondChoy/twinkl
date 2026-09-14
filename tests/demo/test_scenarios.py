@@ -545,6 +545,42 @@ def test_incompatible_coach_source_is_omitted(
         assert _weekly_drift_input_sha256(digest_event.details.digest) in reason
 
 
+@pytest.mark.parametrize("prompt_version", ["4.4", "4.5", "4.6"])
+def test_saved_coach_quote_placement_uses_its_generation_policy(
+    weekly_sources, prompt_version
+) -> None:
+    selection = SELECTIONS[0]
+    responses = load_saved_coach_responses(ROOT).model_copy(deep=True)
+    key = f"{selection.scenario_id}::{selection.coach_week_start}"
+    response = responses.responses[key]
+    assert response.generation is not None
+    response.generation.prompt_version = prompt_version
+    response.narrative.tension_explanation = (
+        f"{response.narrative.weekly_mirror} "
+        f"{response.narrative.tension_explanation}"
+    )
+    response.narrative.weekly_mirror = (
+        "You described a difficult choice and the thought that followed it."
+    )
+    response.generation.response_sha256 = _coach_response_sha256(response.narrative)
+    response.generation.raw_output = response.narrative.model_dump_json()
+
+    def build():
+        return build_scenario_fixture(
+            ROOT,
+            selection,
+            include_north_star=False,
+            **weekly_sources,
+            coach_responses=responses,
+        )
+
+    if prompt_version == "4.6":
+        with pytest.raises(ValueError, match="weekly_mirror_verbatim"):
+            build()
+    else:
+        build()
+
+
 @pytest.mark.parametrize(
     "mutation",
     [

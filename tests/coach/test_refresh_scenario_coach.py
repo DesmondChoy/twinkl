@@ -172,7 +172,7 @@ def test_refresh_preserves_original_receipts_and_resumes_without_calls(
     assert request["model"] == "gpt-5.6-luna"
     assert request["reasoning"] == {"effort": "none"}
     assert state["attempts"][0]["request_sha256"] == runner._hash(request)
-    assert state["response"]["generation"]["prompt_version"] == "4.5"
+    assert state["response"]["generation"]["prompt_version"] == "4.6"
     runner.apply(tmp_path, output, plan)
     refreshed = load_saved_coach_responses(tmp_path).responses[key]
     assert refreshed.generation.prompt != "original provider prompt"
@@ -208,6 +208,36 @@ def test_refresh_retries_validations_and_keeps_every_receipt(
     request = json.loads((tmp_path / state["attempts"][1]["request_path"]).read_bytes())
     assert "conversational_voice" in request["instructions"]
     assert len(list((output / "diagnostics").glob("*.json"))) == 2
+
+
+def test_short_current_response_survives_apply_and_subsequent_preparation(
+    tmp_path: Path, monkeypatch
+):
+    from scripts.coach import complete_scenario_coach
+
+    key, output, plan = _setup(tmp_path, monkeypatch)
+    short = {
+        "weekly_mirror": 'You "called my mom and helped a colleague debug".',
+        "tension_explanation": "Connection mattered then.",
+        "reflective_question": "What stayed with you?",
+    }
+    assert sum(len(text.split()) for text in short.values()) < 25
+    metrics = []
+    asyncio.run(runner.generate(
+        tmp_path, output, plan,
+        llm_complete=_complete(metrics, [json.dumps(short)]), metrics=metrics,
+    ))
+    runner.apply(tmp_path, output, plan)
+    saved = load_saved_coach_responses(tmp_path).responses[key]
+    assert saved.narrative.model_dump() == short
+    monkeypatch.setattr(complete_scenario_coach, "collect_cases", runner.collect_cases)
+    completion_plan = complete_scenario_coach.prepare(tmp_path, tmp_path / "complete")
+    assert completion_plan["missing_keys"] == []
+    repair_plan = runner.prepare(
+        tmp_path, tmp_path / "repair", prior_run=output,
+        repair_requirements={key: ["Keep the same concise reflection."]},
+    )
+    assert repair_plan["retained_responses"] == {}
 
 
 def test_incomplete_refresh_cannot_replace_active_fixture(tmp_path: Path, monkeypatch):

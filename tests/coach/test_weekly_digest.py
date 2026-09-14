@@ -679,6 +679,18 @@ def test_coach_prompt_declares_only_the_projected_inputs():
     assert list(prompt_inputs) == expected_inputs
 
 
+def test_current_prompt_states_uncertainty_and_complete_output_contract():
+    instructions, _ = render_digest_messages(_minimal_digest())
+    assert get_prompt_metadata("weekly_digest_coach")["version"] == "4.6"
+    assert "A focused, open question can preserve uncertainty" in instructions
+    assert "explicit statement about what remains unclear is optional" in instructions
+    assert "State the ambiguity gently" not in instructions
+    assert "at most 180 words" in instructions
+    assert "no minimum length" in instructions
+    assert "Every quotation in any response field must match" in instructions
+    assert "Keep all three response fields nonempty" in instructions
+
+
 def test_validation_flags_raw_schwartz_value_labels():
     digest = _minimal_digest()
     leaking = CoachNarrative(
@@ -1193,7 +1205,7 @@ def test_validation_flags_score_jargon():
     assert "raw scoring" in circ_check.details
 
 
-def test_validation_flags_too_short_length():
+def test_historical_validation_retains_minimum_length():
     digest = _minimal_digest()
     too_short = CoachNarrative(
         weekly_mirror="A steady, quiet week.",
@@ -1201,10 +1213,79 @@ def test_validation_flags_too_short_length():
         reflective_question="What kept it steady?",
     )
 
-    validation = validate_weekly_digest_narrative(digest, too_short)
+    validation = validate_weekly_digest_narrative(
+        digest, too_short, validation_policy="historical"
+    )
 
     assert validation.word_count < 25
     assert not validation.length_passed
+
+
+def test_current_generation_accepts_complete_17_word_response():
+    narrative = CoachNarrative(
+        weekly_mirror='You "called my mom".',
+        tension_explanation="You also helped a colleague debug.",
+        reflective_question="What stayed with you after the call?",
+    )
+
+    async def complete(*args):
+        return narrative.model_dump_json()
+
+    diagnostic, _ = asyncio.run(generate_weekly_digest_coach_diagnostic(
+        _digest_with_evidence(), complete
+    ))
+    assert diagnostic.accepted
+    assert diagnostic.validation.word_count == 17
+    historical = validate_weekly_digest_narrative(
+        _digest_with_evidence(), narrative, validation_policy="historical"
+    )
+    assert not historical.length_passed
+
+
+@pytest.mark.parametrize("field", ["weekly_mirror", "tension_explanation"])
+@pytest.mark.parametrize("empty", ["", " \n "])
+def test_current_generation_rejects_empty_fields_without_word_minimum(field, empty):
+    narrative = CoachNarrative(
+        weekly_mirror='You "called my mom".',
+        tension_explanation="You also helped a colleague debug.",
+        reflective_question="What stayed with you after the call?",
+    ).model_copy(update={field: empty})
+
+    async def complete(*args):
+        return narrative.model_dump_json()
+
+    diagnostic, _ = asyncio.run(generate_weekly_digest_coach_diagnostic(
+        _digest_with_evidence(), complete
+    ))
+    assert not diagnostic.accepted
+    assert diagnostic.validation.length_passed
+    assert any("nonempty_fields" in detail for detail in diagnostic.failure_details)
+
+
+@pytest.mark.parametrize("mirror,explanation", [
+    ("You made time for a conversation.", 'You "called my mom" after work.'),
+    ('You "CALLED MY MOM".', "You made time for a conversation."),
+    ("You 'called my mom'.", "You made time for a conversation."),
+])
+def test_current_generation_requires_exact_double_quote_in_weekly_mirror(
+    mirror, explanation
+):
+    narrative = CoachNarrative(
+        weekly_mirror=mirror,
+        tension_explanation=explanation,
+        reflective_question="What stayed with you after the call?",
+    )
+
+    async def complete(*args):
+        return narrative.model_dump_json()
+
+    diagnostic, _ = asyncio.run(generate_weekly_digest_coach_diagnostic(
+        _digest_with_evidence(), complete
+    ))
+    assert not diagnostic.accepted
+    assert any(
+        "weekly_mirror_verbatim" in detail for detail in diagnostic.failure_details
+    )
 
 
 def test_validation_flags_too_long_length():

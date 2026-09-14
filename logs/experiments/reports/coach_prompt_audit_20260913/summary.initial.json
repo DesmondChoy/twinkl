@@ -1,0 +1,36 @@
+{
+  "results": {
+    "wei_jun": {
+      "attempts": 1,
+      "accepted": true,
+      "response": {
+        "weekly_mirror": "At dinner, Xiao Yu asked what you do at work, and you explained it as helping people buy things. Her question about whether you help everyone brings the wider human purpose of your work close to home. You also wrote, \"I nodded. Again.\"",
+        "tension_explanation": "Earlier, the pressure to move forward at work involved a data-validation concern that had already been raised, while you were telling yourself you would escalate next time and find the right moment. The dinner conversation seems to place that unresolved choice beside your wish to make the world a fairer, better place, without settling what you want to do next.",
+        "reflective_question": "When you think about Xiao Yu asking whether you help everyone, what part of the remittance decision feels most important to hold onto?"
+      }
+    },
+    "casey": {
+      "attempts": 1,
+      "accepted": true,
+      "response": {
+        "weekly_mirror": "After calling your mom, you also helped a colleague debug: \"called my mom and helped a colleague debug\". Both moments involved giving your time and attention to people who mattered in your day.",
+        "tension_explanation": "Being there for the people closest to you showed up in two different relationships here—family and work. The writing gives a glimpse of that care without saying what either person needed most from you in those moments.",
+        "reflective_question": "When you think about calling your mom and helping your colleague, which moment felt most meaningful to you?"
+      }
+    }
+  },
+  "usage": {
+    "n_calls": 2,
+    "n_calls_with_usage": 2,
+    "input_tokens": 3930,
+    "cached_input_tokens": 1626,
+    "cache_write_input_tokens": 2298,
+    "output_tokens": 298,
+    "total_tokens": 4228,
+    "calculated_cost_usd": 0.00096582,
+    "total_latency_seconds": 8.469400666945148,
+    "mean_latency_seconds": 4.234700333472574,
+    "median_latency_seconds": 4.234700333472574,
+    "max_latency_seconds": 5.1884696669876575
+  }
+}

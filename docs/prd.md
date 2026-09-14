@@ -25,6 +25,22 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
 
+New Coach Digest inputs retain the complete displayed text of each selected
+Journal Entry, so a quoted reaction keeps its surrounding conversation and
+later decisions. The selected entries, prior/current grouping, and Drift
+decisions remain unchanged. Frozen replay exports use historical excerpts to
+preserve their recorded inputs and response hashes. The
+[Weekly Drift Detection contract](weekly/weekly_drift_detection.md#weekly-drift-detection-output-contract)
+describes this evidence behavior; the
+[source-context comparison](evals/coach_narrative_test_and_eval_guide.md#source-context-comparison)
+tests it with fixed Coach instructions and fresh AI assessment.
+The [13 September comparison](../logs/experiments/reports/coach_context_eval_20260913/report.md)
+ran six generations and nine evaluator calls. Separate AI source review found
+clear chronology or dialogue errors in two of three short-context outputs and
+none of three full-context outputs, while causal overgeneralization remained.
+Evaluator 3.1 did not flag the known incorrect response even with complete
+context. Its high scores do not establish reliable factual accuracy.
+
 **Data Pipeline Progress:**
 ```
 logs/
@@ -176,12 +192,17 @@ LLM prompts are stored as YAML files with Jinja2 templating in `prompts/`:
 - `judge_alignment.yaml` — Score entries against Schwartz value dimensions
 - `weekly_vif_verifier.yaml` — Weekly Drift Reviewer prompt `4.0`, with the
   selected Core Values' definitions and motivations separated from user writing
-- `weekly_digest_coach.yaml` — Coach Digest prompt `4.5`, with cited writing,
+- `weekly_digest_coach.yaml` — Coach Digest prompt `4.6`, with cited writing,
   concrete conversational openings, ordinary expressions of uncertainty, and
   one short reflective question; new generation checks reject recap openings
-  and clinical finding language, plus date-led openings and writing-process commentary
+  and clinical finding language, plus date-led openings and writing-process commentary.
+  Insufficient Evidence may be expressed through a grounded open question without
+  an explicit evidence-limit statement. New responses require an exact weekly
+  quotation in `weekly_mirror`, exact source matches for every quotation, three
+  nonempty fields, and one question. They have no minimum length and a 180-word
+  maximum. Saved responses retain their original validation rules.
 - `demo_coach_nsm_comparison.yaml` — Shared extension `1.1` to Coach prompt
-  `4.5`, piloted on Lukas's second week; the other 21 saved pairs retain `1.0`/`4.4`.
+  archived `4.5`, piloted on Lukas's second week; the other 21 saved pairs retain `1.0`/`4.4`.
   Both initial requests use the same instructions and
   weekly input; only `north_star_context` changes. [Exact prompts and UI](north_star/demo_coach_comparison.md)
 

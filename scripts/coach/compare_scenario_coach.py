@@ -86,6 +86,7 @@ SOURCE_FILES = (
     "prompts/weekly_digest_coach.yaml",
     "prompts/demo_coach_nsm_comparison.yaml",
     "prompts/versions/weekly_digest_coach_v4_4.yaml",
+    "prompts/versions/weekly_digest_coach_v4_5.yaml",
     "prompts/versions/demo_coach_nsm_comparison_v1_0.yaml",
     "src/demo/north_star_replay_records.json",
     "src/demo/coach_digest_responses.json",

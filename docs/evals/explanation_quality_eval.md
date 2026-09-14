@@ -31,10 +31,14 @@ user-perceived-accuracy checks for those two outputs.
 - The approved Weekly Drift Reviewer and Drift Detector runtime selects cited
   Journal Entry evidence for the Weekly Drift Detection output in
   [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py)
-- Coach Digest Validations are implemented: groundedness via quoted substring
-  matches, non-circularity via score-jargon avoidance, raw Schwartz value
-  leakage, unsupported current-state claims, and length bounds via
+- Coach Digest Validations are implemented: an exact evidence quotation in
+  `weekly_mirror`, source matching for every quotation, nonempty fields,
+  question form, non-circularity via score-jargon avoidance, raw Schwartz value
+  leakage, unsupported current-state claims, and a 180-word maximum via
   [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
+  for ordinary Coach Digest prompt `4.6`. There is no minimum word count.
+  Historical receipts retain their recorded validation rules, including the
+  original 25–180-word bounds.
 - Coach Digest Validations batch reporting: A batch runner
   ([`src/evals/coach_digest_validations.py`](../../src/evals/coach_digest_validations.py))
   runs `validate_weekly_digest_narrative()` over the exact public-scenario
@@ -65,6 +69,17 @@ user-perceived-accuracy checks for those two outputs.
   attached response as valid.
 
 ### Current Result Status
+
+The [13 September context comparison](../../logs/experiments/reports/coach_context_eval_20260913/report.md)
+contains six fresh generations and nine fresh evaluator 3.1 assessments of one
+synthetic Wei Jun week. Mean correctness was 4.33 with short generation excerpts
+and 5.00 with complete generation context; both arms were judged against the
+same complete sources. These scores failed the factual controls: the evaluator
+gave the known incorrect response 5 with short evidence and 4 with complete
+evidence, triggering no review flag. Separate AI source review found fewer
+clear event/dialogue errors with complete context, but continuing unsupported
+causal generalization. This small same-model development assessment is not a
+clean factual pass, human validation, or a replacement for earlier receipts.
 
 The [September replay refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
 contains five accepted responses for the current v4 Run 1 Persona key weeks.
@@ -215,6 +230,23 @@ reflective question is open and relevant.
 The target is a mean above `3.5` for each dimension. Any score below `3` is a
 review flag. These scores are AI review, not human validation.
 
+Evaluator prompt `3.1` accepts a grounded, open-ended question as a way to
+preserve uncertainty under `more_reflection_needed`. An explicit statement of
+the evidence limit is optional. The response must still leave Drift undecided
+and avoid inventing decisions, motives, or outcomes. This matches ordinary
+Coach Digest prompt `4.6`; it does not change historical evaluation receipts.
+
+The source-context regression compares the same Wei Jun week using its saved
+short excerpts and complete text for the same selected Journal Entries. Coach
+instructions, model settings, and Drift decisions remain fixed. Both sets of
+fresh responses are scored against the same complete-context input, so the
+comparison measures factual accuracy against a common source. Separate controls
+score the recorded event misattribution with short and complete context, and a
+constructed accurate response with complete context. Expected control outcomes
+are kept out of evaluator prompts. This focused comparison is a development
+diagnostic; repeated samples of one week do not establish population accuracy.
+See the [context comparison runbook](coach_narrative_test_and_eval_guide.md#source-context-comparison).
+
 ### Provider Separation and Drift/Control Comparison
 
 `src.evals.coach_narrative_judge` accepts `--judge-provider {openai,gemini}`
@@ -240,12 +272,12 @@ Fast, objective checks that don't require LLM calls:
 
 | Check | Description | Target |
 |-------|-------------|--------|
-| **Groundedness** | % of Coach Digest responses with a selected evidence quote present in the cited Journal Entry | > 70% |
+| **Groundedness** | % of Coach Digest responses with an exact evidence quotation in `weekly_mirror` and source matches for every quotation | > 70% |
 | **Non-circularity** | % of Coach Digest responses that avoid score and alignment jargon | > 95% |
 | **Raw value leakage** | Response does not expose raw Schwartz value labels | Reported |
 | **Current-state claims** | Response does not make an unsupported positive-change claim | Reported |
 | **Conversational voice** | New responses avoid calendar-recap openings and the narrow clinical finding phrases checked by code; quoted user wording is preserved | Reported from prompt `4.4` |
-| **Length** | Coach Digest response remains within 25-180 words | > 90% |
+| **Length** | Ordinary Coach Digest response has nonempty fields and at most 180 words, with no minimum word count | > 90% |
 
 **Current code status:**
 - Coach Digest responses: validated by `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
@@ -360,7 +392,7 @@ LLM-Judge produces rationales for N Journal Entries
 | Failure Mode | Example | Detection Method |
 |--------------|---------|------------------|
 | **Hallucinated quotes** | "Entry mentioned 'staying late'" when it didn't | Automated groundedness check |
-| **Generic explanation** | "Shows alignment with this value" | Automated length check and AI specificity review |
+| **Generic explanation** | "Shows alignment with this value" | Automated jargon check and AI specificity review |
 | **Circular reasoning** | "Achievement +1 because of achievement behavior" | Automated non-circularity check |
 | **Wrong attribution** | Confuses which value a behavior supports | AI review of rationale correctness |
 | **Over-inference** | Reads too much into a vague Journal Entry | AI review of rationale correctness |
@@ -373,7 +405,7 @@ LLM-Judge produces rationales for N Journal Entries
 |--------|--------|--------|-------|-----------|
 | Groundedness (code) | > 70% | Coach Digest Validations | **Current** | Responses should use quoted evidence from cited Journal Entries |
 | Non-circularity (code) | > 95% | Coach Digest Validations | **Current** | Responses should avoid score and alignment jargon |
-| Length compliance | > 90% | Coach Digest Validations | **Current** | Most responses should be 25-180 words |
+| Length compliance | > 90% | Coach Digest Validations | **Current** | Responses should have nonempty fields and at most 180 words; there is no minimum word count |
 | Correctness, specificity, non-prescriptive tone, and tension honesty | Mean > 3.5/5 for each dimension | Coach Digest Evals | **Current** | Measures the response contract; remains AI review rather than human validation |
 | Coach Digest Evals review flag | Any dimension < 3 | Coach Digest Evals | **Current** | Sends a low-scoring response to human review |
 | Correctness (rationale-review LLM) | Mean > 3.5/5 | AI review | Future | Rationales should be factually accurate |

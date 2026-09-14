@@ -351,7 +351,7 @@ metrics, or add new Personas.
 
 - [Current North Star Moment behavior](north_star_moment.md)
 - [Product intent](../prd.md) and [canonical nouns](../canonical_nouns.md)
-- [Current Coach Digest prompt 4.5](../../prompts/weekly_digest_coach.yaml)
+- [Archived Coach Digest prompt 4.5 used by comparison 1.1](../../prompts/versions/weekly_digest_coach_v4_5.yaml)
 - [Prompt construction and Coach Digest Validations](../../src/coach/weekly_digest.py)
 - [Response schema](../../src/coach/schemas.py) and [message boundary](../../src/prompt_boundary.py)
 - [Original Coach Digest inputs and responses](../../src/demo/coach_digest_responses.json)

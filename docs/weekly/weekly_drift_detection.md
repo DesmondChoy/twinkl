@@ -303,6 +303,19 @@ are optional because a missing or invalid Coach Digest response must not remove
 the Weekly Drift Detection output. The Coach Digest run is not optional in the
 manual Experience sequence.
 
+New outputs from the Weekly Drift Reviewer path retain the complete displayed
+text of each selected Journal Entry in `excerpt`. A selected Conflict quotation
+alone can omit the conversation or action it refers to, and a fixed word prefix
+can omit a later decision. Selection remains limited to the existing recent
+decisions for each Core Value and week, with dates and prior/current grouping
+preserved. If displayed text is unavailable, the stored reviewer quotation is
+the fallback. This changes Coach Digest context, not Weekly Drift Reviewer
+Decisions or Drift states. Saved receipts retain their original excerpts; the
+frozen scenario exporter explicitly uses `evidence_policy="historical"` to
+reproduce them. The legacy numeric-signal builder retains its historical
+excerpt behavior. Displayed Nudge and Response labels remain intact, identifying
+the assistant's question separately from the user's reply.
+
 ### Drift States, Coach Digest Policies, and Compatibility Modes
 
 The approved runtime uses three current states per Core Value and for the
@@ -450,10 +463,12 @@ The Coach Digest prompt requires:
   remain distinct, and findings must support any stated pattern or change;
 - conversational uncertainty that leaves room for the user's circumstances
   without commentary about excerpts, evidence sufficiency, or model inference;
-  unclear situations remain explicit without assumed motives or reassurance;
+  a grounded open question can preserve uncertainty without an explicit
+  evidence-limit statement, assumed motives, or reassurance;
 - no score jargon, gamification, or judgmental framing;
 - no micro-habit or action-plan output;
-- quoted evidence where possible; and
+- an exact evidence quotation in `weekly_mirror`, with every quotation matching
+  supplied source text; and
 - strict JSON fields:
   - `weekly_mirror`
   - `tension_explanation`
@@ -462,6 +477,11 @@ The Coach Digest prompt requires:
 Coach Digest Validations:
 
 - `groundedness`: at least one quoted phrase appears in selected evidence;
+- `weekly_mirror_verbatim`: the opening field contains an exact quotation from
+  `evidence_lines`;
+- `all_quotes_grounded`: every quotation matches a supplied source exactly;
+- `nonempty_fields` and `reflective_question_form`: all fields contain text and
+  the question field contains one question;
 - `non_circularity`: the response avoids score or alignment jargon;
 - `value_leakage`: the response does not name raw Schwartz value labels
   (for example Benevolence or Self-Direction) sourced from
@@ -469,7 +489,7 @@ Coach Digest Validations:
 - `state_claims`: the response does not claim improvement, recovery, or another
   positive change. A claim that a pattern ended requires an Active Drift to No
   Active Drift comparison ended by a Not Conflict decision; and
-- `length`: total response length remains within configured bounds.
+- `length`: at most 180 words in total, with no minimum for new responses.
 
 The `tension_explanation` field follows the selected policy. Active Drift may
 be explained only when Weekly Drift Detection supplies it. No-current-Drift
