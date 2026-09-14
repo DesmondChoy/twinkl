@@ -9,7 +9,7 @@ supporting capstone report materials. Submitted milestone files remain under
 - [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
   the Phase 2 Technical Paper
 - [`capstone_project_report.pdf`](capstone_project_report.pdf) — rendered report,
-  with all 44 pages visually verified on 12 September 2026
+  with all 45 pages visually verified on 14 September 2026
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
 - [`images/`](images/) — report figures, interface captures, and evaluation
@@ -27,7 +27,8 @@ supporting capstone report materials. Submitted milestone files remain under
 - **Prior submission:** [April 2026 Project
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
 - **Evidence date:** Core paper 2026-08-31; North Star Moment targeted v4 Run 1
-  results and saved Persona evidence 2026-09-07
+  results and saved Persona evidence 2026-09-07; application verification
+  2026-09-12; local Coach source-context diagnostic 2026-09-13
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -61,6 +62,14 @@ and [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260
 for the previous five-Persona roster and inputs. This result is same-model AI review. The
 independent-provider Coach Digest and Drift/control tooling has no committed paid result and
 does not change the report's evidence claim.
+
+The [13 September source-context diagnostic](../../logs/experiments/reports/coach_context_eval_20260913/report.md)
+adds six fresh responses and nine same-model evaluator assessments for one
+synthetic Persona-week. Complete selected-entry context reduced clear event
+attribution errors in this sample, but causal overgeneralisation remained and
+the evaluator failed to flag the known incorrect response. These results are
+separate from the August scores and saved September replays. As of 14 September,
+the diagnostic and associated Coach changes remain uncommitted local evidence.
 
 The [September Coach Digest sample](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
 contains five accepted key-week responses for the current Persona roster and
