@@ -24,14 +24,22 @@ from tests.demo.test_experience_service import (
 )
 
 
-async def failed_week():
+async def failed_week(
+    *, coach_response: str | None = None, entry_content: str | None = None
+):
     service, _, reviewer = _service(
-        [_receipt(decision="no_nudge", nudge_text=None)] * 2
+        [_receipt(decision="no_nudge", nudge_text=None)] * 2,
+        coach_response=coach_response,
     )
     create = await _create_assessment(service)
-    await service.submit_journal_entry(
-        _submit_request(create, index=0, expected_revision=0)
-    )
+    entry = _submit_request(create, index=0, expected_revision=0)
+    if entry_content is not None:
+        entry = entry.model_copy(update={
+            "journal_entry": entry.journal_entry.model_copy(update={
+                "content": entry_content,
+            }),
+        })
+    await service.submit_journal_entry(entry)
     response = await service.advance_assessment_time(
         AssessmentTimeAdvanceRequest(
             operation="advance_assessment_time",
@@ -256,3 +264,172 @@ async def test_invalid_coach_can_retry_and_each_fresh_response_is_validated():
         assert response.session.journal_entries == before.journal_entries
     assert len(calls) == 3
     assert len(reviewer.requests) == 1
+
+
+def punctuation_response(*, repaired: bool = False) -> str:
+    quote = "I enjoyed seeing her find her own words" + ("." if repaired else ",")
+    return json.dumps({
+        "weekly_mirror": f'You wrote, "{quote}" That moment gave you room to pause.',
+        "tension_explanation": (
+            "You made space for your colleague to express her ideas."
+        ),
+        "reflective_question": "What part of that conversation stayed with you?",
+    })
+
+
+@pytest.mark.asyncio
+async def test_retry_repairs_quote_punctuation_and_preserves_each_attempt():
+    invalid = punctuation_response()
+    service, reviewer, _, before, request = await failed_week(
+        coach_response=invalid,
+        entry_content=(
+            "I helped a colleague prepare for a meeting. "
+            "I enjoyed seeing her find her own words."
+        ),
+    )
+    original_events = list(service._events[before.session_id])
+    original = original_events[-1]
+    assert isinstance(original, WeeklyCoachGeneratedEvent)
+    assert original.status == "invalid"
+    assert original.validation is not None
+    failures = original.validation.errors
+    assert any("Preserve capitalization and punctuation" in error for error in failures)
+    assert before.weekly_digest.coach_narrative is None
+    calls = []
+    responses = iter([invalid, punctuation_response(repaired=True)])
+
+    async def coach(prompt, _format=None, instructions=None):
+        calls.append((prompt, instructions))
+        return next(responses)
+
+    service._coach_llm_complete = coach
+    first = await service.retry_coach(request)
+    assert first.operation == "retry_coach"
+    assert len(calls) == 1
+    assert all(error in calls[0][1] for error in failures)
+    failed_repair = service._events[before.session_id][-1]
+    assert isinstance(failed_repair, WeeklyCoachGeneratedEvent)
+    assert failed_repair.status == "invalid"
+    assert failed_repair.raw_response == original.raw_response == json.loads(invalid)
+    assert failed_repair.prompt != original.prompt
+    assert all(error in failed_repair.prompt for error in failures)
+    assert first.session.weekly_digest.coach_narrative is None
+    assert await service.retry_coach(request) == first
+    assert len(calls) == 1
+
+    second = await service.retry_coach(request.model_copy(update={
+        "idempotency_key": "c" * 64,
+        "expected_revision": first.session.revision,
+    }))
+    assert second.operation == "retry_coach"
+    repaired = service._events[before.session_id][-1]
+    assert isinstance(repaired, WeeklyCoachGeneratedEvent)
+    assert repaired.status == "complete"
+    assert repaired.raw_response == json.loads(punctuation_response(repaired=True))
+    assert all(error in calls[1][1] for error in failed_repair.validation.errors)
+    assert second.session.weekly_digest.coach_narrative is not None
+    assert second.session.weekly_reviewer_decisions == before.weekly_reviewer_decisions
+    assert second.session.drift_result == before.drift_result
+    assert second.session.journal_entries == before.journal_entries
+    assert second.session.assessment_clock == before.assessment_clock
+    assert service._events[before.session_id][:-2] == original_events
+    assert calls[0][0] == calls[1][0]
+    assert repaired.input_hash == failed_repair.input_hash == original.input_hash
+    assert len(calls) == 2
+    assert len(reviewer.requests) == 1
+
+
+@pytest.mark.parametrize("unrelated", [
+    {"parent_event_id": "different-digest"},
+    {"input_hash": "f" * 64},
+])
+@pytest.mark.asyncio
+async def test_retry_uses_only_matching_preceding_validation_failures(unrelated):
+    invalid = json.loads(_valid_coach_response())
+    invalid["weekly_mirror"] = invalid["weekly_mirror"].replace('"', "")
+    service, _, _, before, request = await failed_week(
+        coach_response=json.dumps(invalid)
+    )
+    matching = service._events[before.session_id][-1]
+    assert isinstance(matching, WeeklyCoachGeneratedEvent)
+    decoy = matching.model_copy(update={
+        **unrelated,
+        "event_id": "unrelated-invalid-coach",
+        "validation": matching.validation.model_copy(update={
+            "errors": ["Unrelated failure must not enter the repair request."],
+        }),
+    })
+    service._events[before.session_id].append(decoy)
+    calls = []
+
+    async def coach(prompt, _format=None, instructions=None):
+        calls.append(instructions)
+        return _valid_coach_response()
+
+    service._coach_llm_complete = coach
+    response = await service.retry_coach(request)
+    assert response.operation == "retry_coach"
+    assert all(error in calls[0] for error in matching.validation.errors)
+    assert "Unrelated failure" not in calls[0]
+    assert service._events[before.session_id][-2] == decoy
+
+
+@pytest.mark.parametrize("raw_response", [
+    "not-json",
+    "null",
+    "[]",
+    '{"weekly_mirror": "Missing the other required fields."}',
+])
+@pytest.mark.asyncio
+async def test_retry_keeps_malformed_provider_response_without_exposing_narrative(
+    raw_response,
+):
+    service, reviewer, _, before, request = await failed_week()
+    calls = []
+
+    async def coach(prompt, _format=None, instructions=None):
+        calls.append(instructions)
+        return raw_response
+
+    service._coach_llm_complete = coach
+    response = await service.retry_coach(request)
+    assert response.operation == "retry_coach"
+    event = service._events[before.session_id][-1]
+    assert isinstance(event, WeeklyCoachGeneratedEvent)
+    assert event.status == "failed"
+    assert event.error.code == "coach_response_unavailable"
+    assert event.details.narrative is None
+    assert event.details.validation is None
+    assert response.session.weekly_digest.coach_narrative is None
+    assert event.raw_response == raw_response
+    assert "A prior response needs revision" not in calls[0]
+    assert len(calls) == len(reviewer.requests) == 1
+
+
+@pytest.mark.asyncio
+async def test_failed_provider_repair_retains_attempted_prompt():
+    invalid = json.loads(_valid_coach_response())
+    invalid["weekly_mirror"] = invalid["weekly_mirror"].replace('"', "")
+    service, reviewer, _, before, request = await failed_week(
+        coach_response=json.dumps(invalid)
+    )
+    original = service._events[before.session_id][-1]
+    calls = []
+
+    async def coach(prompt, _format=None, instructions=None):
+        calls.append(instructions)
+        raise TimeoutError("Private provider diagnostic must not reach the safe error.")
+
+    service._coach_llm_complete = coach
+    response = await service.retry_coach(request)
+    assert response.operation == "retry_coach"
+    event = service._events[before.session_id][-1]
+    assert isinstance(event, WeeklyCoachGeneratedEvent)
+    assert event.status == "failed"
+    assert event.error.code == "coach_response_unavailable"
+    assert "Private provider diagnostic" not in event.error.message
+    assert event.raw_response is None
+    assert event.prompt != original.prompt
+    assert all(error in event.prompt for error in original.validation.errors)
+    assert response.session.weekly_digest.coach_narrative is None
+    assert len(calls) == len(reviewer.requests) == 1

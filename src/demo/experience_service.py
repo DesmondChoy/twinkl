@@ -6,7 +6,7 @@ import asyncio
 import hashlib
 import json
 import os
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
 from time import perf_counter
@@ -24,9 +24,8 @@ from src.coach.weekly_digest import (
     LLMCompleteFn,
     attach_coach_artifacts,
     build_weekly_drift_reviewer_digest_from_entries,
-    generate_weekly_digest_coach,
+    generate_weekly_digest_coach_diagnostic,
     render_digest_prompt,
-    validate_weekly_digest_narrative,
 )
 from src.demo.contracts import (
     ApiErrorResponse,
@@ -110,6 +109,7 @@ from src.nudge.runtime import (
     build_failed_nudge_runtime_receipt,
     build_nudge_runtime_request,
 )
+from src.prompt_boundary import render_live_prompt_receipt
 from src.weekly_drift_reviewer import (
     OpenAIWeeklyDriftReviewer,
     WeeklyDriftReviewerEntry,
@@ -1232,28 +1232,45 @@ class InMemoryExperienceService:
         session_id: str,
         parent_event_id: str,
         week_id: str,
+        repair_requirements: Sequence[str] | None = None,
     ) -> tuple[WeeklyDigest, WeeklyCoachGeneratedEvent]:
         started_at = self._timestamp()
         started = perf_counter()
-        prompt = render_digest_prompt(digest)
+        prompt_receipt = render_digest_prompt(digest)
         narrative = None
         validation = None
-        generation_failed = self._coach_llm_complete is None
-        if self._coach_llm_complete is not None:
+        raw_response = None
+        llm_complete = self._coach_llm_complete
+        generation_failed = llm_complete is None
+        if llm_complete is not None:
+            async def record_coach_call(
+                prompt: str,
+                response_format: dict | None,
+                instructions: str | None = None,
+            ) -> str | None:
+                nonlocal prompt_receipt, raw_response
+                prompt_receipt = render_live_prompt_receipt(
+                    instructions=instructions or "",
+                    input_data=prompt,
+                )
+                raw_response = await llm_complete(
+                    prompt, response_format, instructions
+                )
+                return raw_response
+
             try:
-                narrative, prompt = await generate_weekly_digest_coach(
+                result, prompt_receipt = await generate_weekly_digest_coach_diagnostic(
                     digest,
-                    self._coach_llm_complete,
+                    record_coach_call,
+                    repair_requirements=repair_requirements,
                 )
             except Exception:
                 generation_failed = True
             else:
+                narrative = result.narrative
+                validation = result.validation
                 generation_failed = narrative is None
 
-        if narrative is not None:
-            validation = validate_weekly_digest_narrative(
-                digest, narrative, validate_voice=True
-            )
         validation_errors = (
             [check.details for check in validation.checks if not check.passed]
             if validation is not None
@@ -1290,9 +1307,11 @@ class InMemoryExperienceService:
             source="live_run",
             input_refs=[ResourceRef(kind="weekly_digest", id=week_id)],
             model_contract=self._coach_model_contract,
-            prompt=prompt,
+            prompt=prompt_receipt,
             raw_response=(
-                narrative.model_dump(mode="json") if narrative is not None else None
+                _safe_raw_response(raw_response)
+                if narrative is not None
+                else raw_response
             ),
             validation=EventValidation(
                 valid=valid,
@@ -1400,11 +1419,29 @@ class InMemoryExperienceService:
                     event_ids=[completed.event_id],
                 )
             else:
+                rejected = next(
+                    (
+                        event
+                        for event in reversed(events)
+                        if isinstance(event, WeeklyCoachGeneratedEvent)
+                        and event.parent_event_id == digest_event.event_id
+                        and event.input_hash == input_hash
+                        and event.status == "invalid"
+                        and event.validation is not None
+                        and not event.validation.valid
+                    ),
+                    None,
+                )
                 recovered, coach_event = await self._run_coach_digest(
                     digest=digest,
                     session_id=session.session_id,
                     parent_event_id=digest_event.event_id,
                     week_id=f"{session.session_id}:{request.week_start}",
+                    repair_requirements=(
+                        rejected.validation.errors
+                        if rejected is not None and rejected.validation is not None
+                        else None
+                    ),
                 )
                 is_current_week = (
                     session.weekly_digest is not None
@@ -2029,9 +2066,11 @@ class InMemoryExperienceService:
             )
             return response
 
-    def _north_star_request(
+    def _north_star_weekly_events(
         self, session: ExperienceSession, week_start: str
-    ) -> NorthStarRequest:
+    ) -> tuple[
+        WeeklyReviewRequestedEvent, DriftDetectedEvent, WeeklyDigestBuiltEvent
+    ]:
         events = self._events[session.session_id]
         review_event = next(
             (
@@ -2075,6 +2114,15 @@ class InMemoryExperienceService:
         )
         if drift is None or digest_event is None:
             raise ValueError("A completed weekly review is required")
+        return review_event, drift, digest_event
+
+    def _north_star_request(
+        self, session: ExperienceSession, week_start: str
+    ) -> NorthStarRequest:
+        review_event, drift, digest_event = self._north_star_weekly_events(
+            session, week_start
+        )
+        events = self._events[session.session_id]
         digest = digest_event.details.digest
         submissions = {
             event.details.journal_entry.journal_entry_id: event
@@ -2303,10 +2351,13 @@ class InMemoryExperienceService:
                 if matching is not None and matching.details.record.status == "pending":
                     pending_event = matching
                 else:
+                    _, _, digest_event = self._north_star_weekly_events(
+                        session, request.week_start
+                    )
                     pending_event = self._north_star_event(
                         pending_north_star_record(snapshot),
                         event_id=self._make_id("north-star-reviewed"),
-                        parent_event_id=session.trace_event_ids[-1],
+                        parent_event_id=digest_event.event_id,
                     )
                     self._events[session.session_id].append(pending_event)
                     self._append_session(session, event_ids=[pending_event.event_id])

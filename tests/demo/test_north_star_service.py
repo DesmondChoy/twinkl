@@ -14,6 +14,8 @@ from src.demo.contracts import (
     SessionDeleteRequest,
     SessionResumeState,
     TraceReadRequest,
+    WeeklyDigestBuiltEvent,
+    WeeklyReviewRequestedEvent,
 )
 from src.north_star.runtime import (
     LIVE_POLICY_PATH,
@@ -27,6 +29,7 @@ from tests.demo.test_experience_service import (
     _receipt,
     _service,
     _submit_request,
+    _valid_coach_response,
 )
 from tests.north_star.test_runtime import FakeProvider, count_requests
 
@@ -57,8 +60,13 @@ class ControlledRuntime:
         self.forgotten.append(record.input_hash)
 
 
-async def reviewed_session(runtime: ControlledRuntime):
-    service, _, reviewer = _service([_receipt(decision=None, nudge_text=None)])
+async def reviewed_session(
+    runtime: ControlledRuntime, *, coach_response: str | None = None
+):
+    service, _, reviewer = _service(
+        [_receipt(decision=None, nudge_text=None)] * 2,
+        coach_response=coach_response,
+    )
     service._north_star_runtime = runtime
     create = await _create_assessment(service)
     first = await service.submit_journal_entry(
@@ -501,6 +509,77 @@ async def test_earlier_review_remains_addressable_after_later_week():
         }
     )
     assert service._north_star_request(later, request.week_start) == expected
+
+
+@pytest.mark.asyncio
+async def test_first_historical_moment_keeps_its_authoritative_weekly_lineage():
+    runtime = ControlledRuntime()
+    service, create, reviewer, first, request = await reviewed_session(
+        runtime, coach_response=_valid_coach_response()
+    )
+    assert first.weekly_digest.coach_narrative is not None
+    earlier_snapshot = service._north_star_request(first, request.week_start)
+    entry = _submit_request(create, index=1, expected_revision=first.revision)
+    saved = await service.submit_journal_entry(entry.model_copy(update={
+        "journal_entry": entry.journal_entry.model_copy(update={
+            "date": "2026-07-27", "content": first.journal_entries[0].content,
+        }),
+    }))
+    assert saved.operation == "submit_journal_entry"
+    later = await service.advance_assessment_time(AssessmentTimeAdvanceRequest(
+        operation="advance_assessment_time", request_id="close-later",
+        idempotency_key="d" * 64, session_id=first.session_id,
+        expected_revision=saved.session.revision, action="close_week",
+    ))
+    assert later.operation == "advance_assessment_time"
+    assert later.session.weekly_digest.coach_narrative is not None
+    latest_moment = await service.review_north_star(request.model_copy(update={
+        "request_id": "latest-moment", "week_start": "2026-07-27",
+        "expected_revision": later.session.revision,
+    }))
+    assert latest_moment.operation == "north_star_reviewed"
+    before = list(service._events[first.session_id])
+    old_digest = next(event for event in before
+        if isinstance(event, WeeklyDigestBuiltEvent)
+        and event.details.digest.week_start == request.week_start)
+    old_review = next(event for event in before
+        if isinstance(event, WeeklyReviewRequestedEvent)
+        and event.details.request.week_start == request.week_start)
+    old_request = request.model_copy(update={
+        "expected_revision": later.session.revision,
+    })
+    runtime.release.clear()
+    runtime.started.clear()
+    task = asyncio.create_task(service.review_north_star(old_request))
+    await asyncio.wait_for(runtime.started.wait(), 1)
+    pending = service._events[first.session_id][-1]
+    runtime.release.set()
+    completed = await task
+    assert completed.operation == "north_star_reviewed"
+    assert pending.parent_event_id == old_digest.event_id
+    event = service._events[first.session_id][-1]
+    assert event.parent_event_id == old_digest.event_id
+    assert event.input_hash == earlier_snapshot.input_hash
+    assert event.event_id == pending.event_id
+    by_id = {item.event_id: item for item in service._events[first.session_id]}
+    lineage = []
+    current = event
+    while current is not None:
+        lineage.append(current.event_id)
+        if isinstance(current, WeeklyReviewRequestedEvent):
+            break
+        current = by_id.get(current.parent_event_id)
+    assert old_review.event_id in lineage
+    assert latest_moment.event_ids[0] not in lineage
+    assert service._events[first.session_id][:-1] == before
+    assert completed.session.weekly_digest == later.session.weekly_digest
+    assert completed.session.drift_result == later.session.drift_result
+    assert completed.session.assessment_clock == later.session.assessment_clock
+    assert completed.session.revision == later.session.revision
+    reused = await service.review_north_star(old_request)
+    assert reused.operation == "north_star_reviewed"
+    assert reused.event_ids == completed.event_ids
+    assert len(runtime.requests) == len(reviewer.requests) == 2
 
 
 @pytest.mark.asyncio
