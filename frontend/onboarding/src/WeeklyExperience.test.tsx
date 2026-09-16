@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import WeeklyExperience from "./WeeklyExperience";
@@ -83,7 +83,7 @@ describe("manual weekly response", () => {
     expect(within(context).getByText(entries[1].content)).toBeTruthy();
     expect(context.textContent).not.toMatch(/supportive|aligned|Not Conflict/);
     expect(within(context).getByText("These entries provide context; they do not establish this Drift.")).toBeTruthy();
-    expect(screen.getByText("Selecting evidence opens and focuses its Journal Entry.")).toBeTruthy();
+    expect(screen.getByText("Selecting evidence opens its Journal Entry without leaving this week.")).toBeTruthy();
     await user.click(within(conflict).getAllByRole("link")[0]);
     expect(selectJournalEntry).toHaveBeenCalledWith(entries[2].journal_entry_id);
   });
@@ -109,6 +109,39 @@ describe("manual weekly response", () => {
     await user.click(inspect);
     expect(inspectRun).toHaveBeenCalledWith(event.event_id);
   });
+
+  it.each(["weekly evidence", "Coach citation", "North Star Moment"])(
+    "opens %s in the shared Journal Entry dialog and restores the source link",
+    async (source) => {
+      const user = userEvent.setup();
+      const event = await momentEvent();
+      const response = "I stayed to hear about her day after dinner.";
+      const selectJournalEntry = vi.fn();
+      const { container } = render(<WeeklyExperience {...props} traceEvents={[event]}
+        journalEntries={entries.map((entry) => entry.journal_entry_id === "supportive"
+          ? { ...entry, nudge_response: response } : entry)} selectJournalEntry={selectJournalEntry} />);
+      const moment = await screen.findByRole("region", { name: "A past moment in your own words" });
+      const trigger = source === "North Star Moment"
+        ? within(moment).getByRole("link", { name: /Open Journal Entry/ })
+        : source === "Coach citation"
+          ? within(screen.getByRole("navigation", { name: "Coach Digest Journal Entries" }))
+            .getByRole("link", { name: "Jul 1" })
+          : within(screen.getByRole("region", { name: "Other Journal Entry context" }))
+            .getByRole("link", { name: /I cooked dinner for my sister/ });
+      await user.click(trigger);
+      const dialog = screen.getByRole("dialog");
+      expect(within(dialog).getByText(entries[1].content)).toBeTruthy();
+      expect(within(dialog).getByText(response)).toBeTruthy();
+      expect(document.activeElement).toBe(within(dialog).getByRole("button", { name: "Close Journal Entry" }));
+      expect(container.hasAttribute("inert")).toBe(true);
+      expect(selectJournalEntry).toHaveBeenCalledWith("supportive");
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(document.activeElement).toBe(trigger));
+      expect(container.hasAttribute("inert")).toBe(false);
+      expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+    },
+  );
 
   it.each(["pending", "failed"])("explains %s moment review while preserving the weekly result", async (state) => {
     const user = userEvent.setup();
@@ -144,6 +177,27 @@ describe("manual weekly response", () => {
     expect(screen.queryByRole("heading", { name: "A past moment in your own words" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Retry moment review" })).toBeNull();
     expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+  });
+
+  it.each([false, true])("offers historical pending recovery when the last local request failed: %s", async (failed) => {
+    const user = userEvent.setup();
+    const review = vi.fn();
+    const retry = vi.fn();
+    const pending = await momentEvent({ status: "pending", selected: null });
+    render(<WeeklyExperience {...props} traceEvents={[pending]} northStarReview={{
+      pending: false, failed, retryable: failed, retry,
+      resumeNeeded: !failed, reviewable: !failed, review,
+    }} />);
+    const recovery = await screen.findByRole("button", {
+      name: failed ? "Retry moment review" : "Resume moment review",
+    });
+    const status = screen.getByRole("status", { name: "Moment review status" });
+    expect(status.textContent).toContain(failed ? "could not be prepared" : "has not finished");
+    expect(status.textContent).not.toContain("Looking for a moment");
+    expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
+    await user.click(recovery);
+    expect(failed ? retry : review).toHaveBeenCalledOnce();
+    expect(failed ? review : retry).not.toHaveBeenCalled();
   });
 
   it("removes the old moment when a newer review fails source binding", async () => {

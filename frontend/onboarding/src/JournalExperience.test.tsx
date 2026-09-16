@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type {
@@ -12,6 +12,7 @@ import JournalExperience from "./JournalExperience";
 import { ExperienceApiError } from "./experienceApi";
 import { canonicalInspectFixture } from "./inspectFixture";
 import { createExperienceState, type ExperienceState } from "./session";
+import { northStarProfileRef } from "./northStar";
 
 const api = vi.hoisted(() => ({
   advanceAssessmentTime: vi.fn(),
@@ -266,6 +267,64 @@ describe("manual Journal Entry Experience", () => {
     expect(api.submitJournalEntry).not.toHaveBeenCalled();
     expect(api.readExperienceTrace).toHaveBeenCalledTimes(2);
     expect(screen.queryByRole("button", { name: "Retry Coach Digest" })).toBeNull();
+  });
+
+  it("lets a recovered historical Coach explicitly request its missing moment after a later week", async () => {
+    const first = structuredClone(canonicalInspectFixture.trace_events).filter((event) =>
+      ["event-07", "event-08", "event-09", "event-10", "event-11"].includes(event.event_id));
+    const second = structuredClone(first).map((event) => ({ ...event,
+      event_id: `second-${event.event_id}`, parent_event_id: `second-${event.parent_event_id}`,
+    }));
+    const secondDigest = second.find((event) => event.event_type === "weekly_digest_built")!;
+    secondDigest.details.digest = { ...(secondDigest.details.digest as Record<string, unknown>),
+      week_start: "2026-07-20", week_end: "2026-07-26" };
+    const recoveredCoach = { ...structuredClone(first.find((event) => event.event_type === "weekly_coach_generated")!),
+      event_id: "recovered-first-week-coach" };
+    const failedCoach = first.find((event) => event.event_type === "weekly_coach_generated")!;
+    failedCoach.status = "invalid";
+    failedCoach.details = { narrative: null, validation: null };
+    failedCoach.error = { code: "coach_response_invalid", message: "Invalid quotation", retryable: true };
+    const all = [...first, ...second];
+    const initial = { ...createExperienceState(), ...canonicalInspectFixture.session,
+      selected_manual_week: "2026-07-06", weekly_digest: secondDigest.details.digest as Record<string, unknown>,
+      trace_events: all, trace_event_ids: all.map((event) => event.event_id),
+      journal_entries: [...canonicalInspectFixture.session.journal_entries,
+        { ...entry(), journal_entry_id: "second-week-entry", date: "2026-07-20", t_index: 2 }],
+    };
+    const recovered = [...all, recoveredCoach];
+    const revised = { ...initial, revision: initial.revision + 1,
+      trace_event_ids: recovered.map((event) => event.event_id) };
+    api.retryCoachDigest.mockResolvedValueOnce({ operation: "retry_coach", event_ids: [recoveredCoach.event_id], session: revised });
+    const record = { schema_version: "north-star-record-v1", session_id: profile.session_id,
+      owner_id: profile.user_id, profile_ref: await northStarProfileRef(profile),
+      week_start: "2026-07-06", week_end: canonicalInspectFixture.session.weekly_digest!.week_end,
+      input_hash: "d".repeat(64),
+      status: "complete", selected: null, sources: [], reason: "no_supportive_source", retryable: false };
+    const moment = { ...recoveredCoach, event_id: "historical-moment", event_type: "north_star_reviewed",
+      parent_event_id: recoveredCoach.event_id, input_hash: record.input_hash, details: { record } };
+    api.readExperienceTrace.mockResolvedValueOnce(trace(recovered)).mockResolvedValueOnce(trace([...recovered, moment]));
+    let finishReview!: (value: unknown) => void;
+    api.reviewNorthStar.mockReturnValueOnce(new Promise((resolve) => { finishReview = resolve; }));
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+    expect(screen.getByRole("combobox", { name: "Reviewed week" }).querySelectorAll("option")).toHaveLength(2);
+    expect(screen.getByRole("heading", { name: "Your weekly response could not be prepared." })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Retry Coach Digest" }));
+    const review = await screen.findByRole("button", { name: "Review moment" });
+    expect(screen.getByRole("status", { name: "Moment review status" }).textContent)
+      .toContain("A moment has not been reviewed for this week yet.");
+    expect(api.reviewNorthStar).not.toHaveBeenCalled();
+    await user.click(review);
+    await waitFor(() => expect(api.reviewNorthStar).toHaveBeenCalledExactlyOnceWith({
+      sessionId: profile.session_id, expectedRevision: revised.revision, weekStart: "2026-07-06", retry: false,
+    }));
+    expect(screen.getByRole("status", { name: "Moment review status" }).textContent).toContain("Looking for a moment");
+    await act(async () => { finishReview({ session: { ...revised, trace_event_ids: [...revised.trace_event_ids, moment.event_id] } }); });
+    await screen.findByText("The review did not identify a supportive action in the eligible writing.");
+    expect(screen.queryByRole("button", { name: "Review moment" })).toBeNull();
+    expect((screen.getByRole("combobox", { name: "Reviewed week" }) as HTMLSelectElement).value).toBe("2026-07-06");
+    expect(api.retryCoachDigest).toHaveBeenCalledTimes(1);
+    expect(api.advanceAssessmentTime).not.toHaveBeenCalled();
   });
 
   it("discards a late Coach retry response after navigating away", async () => {

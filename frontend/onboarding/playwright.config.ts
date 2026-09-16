@@ -8,12 +8,15 @@ export default defineConfig({
   use: {
     ...devices["Desktop Chrome"],
     baseURL: "http://127.0.0.1:8765",
-    viewport: { width: 390, height: 844 },
     reducedMotion: "reduce",
     timezoneId: "Asia/Singapore",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
+  projects: [
+    { name: "desktop-chromium", use: { viewport: { width: 1280, height: 900 } } },
+    { name: "narrow-chromium", use: { viewport: { width: 390, height: 844 } } },
+  ],
   webServer: {
     command: "npm run build && cd ../.. && . .venv/bin/activate && uv run --no-sync uvicorn scripts.demo_north_star_qc:app --host 127.0.0.1 --port 8765",
     env: { TWINKL_QC_STATIC_ROOT: "frontend/onboarding/dist" },

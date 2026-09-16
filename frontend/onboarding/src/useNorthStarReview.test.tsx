@@ -48,6 +48,29 @@ describe("independent North Star Moment lifecycle", () => {
     expect(api.reviewNorthStar).not.toHaveBeenCalled();
   });
 
+  it("offers an explicit first review for historical writing without running on mount or reload", async () => {
+    const updateExperience = vi.fn();
+    const options = { profile, experience, updateExperience, enabled: true, busy: false, autoReview: false };
+    const first = renderHook(() => useNorthStarReview(options));
+    await waitFor(() => expect(first.result.current.unreviewed).toBe(true));
+    expect(api.reviewNorthStar).not.toHaveBeenCalled();
+    first.unmount();
+
+    let resolve!: (value: unknown) => void;
+    api.reviewNorthStar.mockReturnValueOnce(new Promise((done) => { resolve = done; }));
+    const reloaded = renderHook(() => useNorthStarReview(options));
+    await waitFor(() => expect(reloaded.result.current.reviewable).toBe(true));
+    expect(api.reviewNorthStar).not.toHaveBeenCalled();
+    act(() => reloaded.result.current.review());
+    await waitFor(() => expect(reloaded.result.current.pending).toBe(true));
+    expect(api.reviewNorthStar).toHaveBeenCalledExactlyOnceWith({
+      sessionId: profile.session_id, expectedRevision: experience.revision,
+      weekStart: experience.weekly_digest?.week_start, retry: false,
+    });
+    await act(async () => { resolve({ session: canonicalInspectFixture.session }); });
+    await waitFor(() => expect(updateExperience).toHaveBeenCalledTimes(1));
+  });
+
   it.each(["complete", "failed", "not_eligible", "pending"])(
     "resumes pending work but does not automatically rerun a %s record",
     async (status) => {
@@ -73,6 +96,82 @@ describe("independent North Star Moment lifecycle", () => {
       }
     },
   );
+
+  it("resumes stored historical pending work only on request and bounds retries after failure", async () => {
+    const record = {
+      schema_version: "north-star-record-v1", session_id: profile.session_id,
+      owner_id: profile.user_id, profile_ref: await northStarProfileRef(profile),
+      week_start: experience.weekly_digest?.week_start, week_end: experience.weekly_digest?.week_end,
+      input_hash: "c".repeat(64), status: "pending", selected: null, sources: [], retryable: false,
+    };
+    const event = { ...canonicalInspectFixture.trace_events[0],
+      event_id: "historical-pending", event_type: "north_star_reviewed",
+      input_hash: record.input_hash, details: { record },
+    };
+    const current = { ...experience, trace_events: [...experience.trace_events, event] };
+    const options = { profile, experience: current, updateExperience: vi.fn(), enabled: true,
+      busy: false, autoReview: false };
+    const first = renderHook(() => useNorthStarReview(options));
+    await waitFor(() => expect(first.result.current.resumeNeeded).toBe(true));
+    expect(first.result.current.pending).toBe(false);
+    expect(api.reviewNorthStar).not.toHaveBeenCalled();
+    first.unmount();
+
+    const reloaded = renderHook(() => useNorthStarReview(options));
+    await waitFor(() => expect(reloaded.result.current.resumeNeeded).toBe(true));
+    expect(reloaded.result.current.reviewable).toBe(true);
+    expect(api.reviewNorthStar).not.toHaveBeenCalled();
+    let reject!: (reason: unknown) => void;
+    api.reviewNorthStar.mockReturnValueOnce(new Promise((_resolve, fail) => { reject = fail; }));
+    act(() => reloaded.result.current.review());
+    await waitFor(() => expect(reloaded.result.current.pending).toBe(true));
+    expect(reloaded.result.current.resumeNeeded).toBe(false);
+    expect(api.reviewNorthStar).toHaveBeenCalledExactlyOnceWith({
+      sessionId: profile.session_id, expectedRevision: current.revision,
+      weekStart: current.weekly_digest?.week_start, retry: false,
+    });
+    await act(async () => { reject(new ExperienceApiError("Unavailable")); });
+    await waitFor(() => expect(reloaded.result.current.failed).toBe(true));
+    expect(reloaded.result.current.pending).toBe(false);
+    expect(reloaded.result.current.retryable).toBe(true);
+    api.reviewNorthStar.mockRejectedValueOnce(new ExperienceApiError("Still unavailable"));
+    act(() => reloaded.result.current.retry());
+    await waitFor(() => expect(reloaded.result.current.pending).toBe(false));
+    expect(api.reviewNorthStar).toHaveBeenCalledTimes(2);
+    expect(api.reviewNorthStar.mock.calls[1][0].retry).toBe(true);
+    expect(reloaded.result.current.retryable).toBe(false);
+    act(() => reloaded.result.current.retry());
+    expect(api.reviewNorthStar).toHaveBeenCalledTimes(2);
+    expect(options.updateExperience).not.toHaveBeenCalled();
+  });
+
+  it("disables another historical review until a stale in-flight request settles", async () => {
+    let resolve!: (value: unknown) => void;
+    api.reviewNorthStar.mockReturnValueOnce(new Promise((done) => { resolve = done; }));
+    const updateExperience = vi.fn();
+    const { result, rerender } = renderHook((current) => useNorthStarReview({
+      profile, experience: current, updateExperience, enabled: true, busy: false, autoReview: false,
+    }), { initialProps: experience });
+    await waitFor(() => expect(result.current.reviewable).toBe(true));
+    act(() => result.current.review());
+    await waitFor(() => expect(result.current.pending).toBe(true));
+    const nextWeek = { ...experience, weekly_digest: { ...experience.weekly_digest,
+      week_start: "2026-07-20", week_end: "2026-07-26" } };
+    rerender(nextWeek);
+    expect(result.current.unreviewed).toBe(true);
+    expect(result.current.pending).toBe(false);
+    expect(result.current.reviewable).toBe(false);
+    act(() => result.current.review());
+    expect(api.reviewNorthStar).toHaveBeenCalledTimes(1);
+    await act(async () => { resolve({ session: canonicalInspectFixture.session }); });
+    expect(updateExperience).not.toHaveBeenCalled();
+    expect(api.readExperienceTrace).not.toHaveBeenCalled();
+    await waitFor(() => expect(result.current.reviewable).toBe(true));
+    act(() => result.current.review());
+    await waitFor(() => expect(api.reviewNorthStar).toHaveBeenCalledTimes(2));
+    expect(api.reviewNorthStar.mock.calls[1][0]).toMatchObject({ weekStart: "2026-07-20", retry: false });
+    await waitFor(() => expect(updateExperience).toHaveBeenCalledTimes(1));
+  });
 
   it("restores complete browser-held state only when the Python session is missing", async () => {
     api.reviewNorthStar.mockRejectedValueOnce(new ExperienceApiError("Missing", "session_not_found", false));

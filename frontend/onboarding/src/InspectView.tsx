@@ -580,7 +580,8 @@ function NorthStarInspection({ event, comparison }: { event: TraceEventContract;
         <h4>1. Choose eligible writing</h4>
         <p>The application chooses the Core Value and source window before the AI review. Active Drift uses writing from before its onset; otherwise, eligible writing runs through the reviewed week. Sources stay in newest-first order, with no embedding ranking.</p>
         <p>The model receives the Core Value phrase, its approved definition, and the complete eligible Journal Entries and user nudge responses in each request below. Persona biographies and Weekly Drift Reviewer Decisions are not semantic evidence for this review.</p>
-        <p>Review cutoff: <code>{string(result.cutoff_at) ?? "Not recorded"}</code>{result.onset_date ? ` · Active Drift onset: ${String(result.onset_date)}` : ""}</p>
+        <p>Source availability cutoff (timestamp): <code>{string(result.cutoff_at) ?? "Not recorded"}</code></p>
+        <p>Journal chronology ({experiment ? "saved Persona dates" : "Simulated time"}): {string(result.week_start) ?? "Not recorded"}–{string(result.week_end) ?? "Not recorded"}{result.onset_date ? ` · Active Drift onset: ${String(result.onset_date)}` : ""}. Journal dates and source-availability timestamps use separate clocks.</p>
         {reviews.length === 0 ? (
           <p>{result.status === "not_eligible"
             ? "No source-review request was needed for this ineligible result."
@@ -595,8 +596,8 @@ function NorthStarInspection({ event, comparison }: { event: TraceEventContract;
               <p><strong>Approved definition:</strong> {string(review.input?.approved_definition) ?? "Not readable in the recorded request"}</p>
               {sources.map((source, sourceIndex) => (
                 <section className="nsm-inspect__writing" key={`${String(source.entry_id)}:${sourceIndex}`}>
-                  <h5>{sourceIndex + 1}. {string(source.entry_id) ?? "Source identifier unavailable"}</h5>
-                  <p className="nsm-inspect__source-label">Journal Entry</p>
+                  <h5>{sourceIndex + 1}. Journal Entry · {string(array(result.sources).map(record).find((item) => item?.entry_id === source.entry_id)?.date) ?? "Date not recorded"}</h5>
+                  <p className="nsm-inspect__source-label"><code>{string(source.entry_id) ?? "Source identifier unavailable"}</code></p>
                   <p className="nsm-inspect__full-text">{string(source.journal_entry) ?? "No Journal Entry text supplied."}</p>
                   {typeof source.nudge_response === "string" ? (
                     <><p className="nsm-inspect__source-label">User nudge response</p><p className="nsm-inspect__full-text">{source.nudge_response}</p></>

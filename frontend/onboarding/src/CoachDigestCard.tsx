@@ -113,6 +113,7 @@ export default function CoachDigestCard({
           <figcaption>
             Full quotation from{" "}
             <a href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
+              aria-haspopup={onOpenEntry ? "dialog" : undefined}
               onClick={(event) => openEntry(event, entry)}>{entryDate(entry)}</a>
           </figcaption>
           <blockquote>{row.quotation}</blockquote>
@@ -181,6 +182,7 @@ export default function CoachDigestCard({
               <li key={entry.journal_entry_id}>
                 <a
                   href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
+                  aria-haspopup={onOpenEntry ? "dialog" : undefined}
                   onClick={(event) => openEntry(event, entry)}
                 >
                   {entryDate(entry)}

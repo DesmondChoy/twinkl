@@ -37,7 +37,8 @@ export default function useNorthStarReview({
 
   const run = useCallback(async (retry: boolean) => {
     const weekStart = experience.weekly_digest?.week_start;
-    if (!enabled || busy || !profileRef || typeof weekStart !== "string"
+    if (!enabled || busy || !profileRef || !experience.drift_result
+      || experience.pending_submission || typeof weekStart !== "string"
       || running.current !== null) return;
     const count = attempts.current.get(identity) ?? 0;
     if (count >= 2 || (!retry && (count > 0
@@ -118,11 +119,20 @@ export default function useNorthStarReview({
   }, [autoReview, busy, enabled, experience.drift_result, experience.pending_submission, experience.weekly_digest, profileRef, run]);
 
   const pending = pendingIdentity === identity
-    || (result?.record.status === "pending" && failure?.identity !== identity
+    || (autoReview && result?.record.status === "pending" && failure?.identity !== identity
       && (attempts.current.get(identity) ?? 0) === 0);
   const failed = failure?.identity === identity || result?.record.status === "failed";
   const retryable = (attempts.current.get(identity) ?? 0) < 2
     && (failure?.identity === identity ? failure.retryable
       : result?.record.status === "failed" && result.record.retryable);
-  return { pending, failed, retryable, retry: () => void run(true) };
+  const historicalReview = enabled && !autoReview && profileRef !== null
+    && experience.weekly_digest !== null && experience.drift_result !== null
+    && !pending && !failed;
+  const unreviewed = historicalReview && result === null;
+  const resumeNeeded = historicalReview && result?.record.status === "pending";
+  const reviewable = (unreviewed || resumeNeeded) && !busy && running.current === null
+    && experience.pending_submission === null
+    && (attempts.current.get(identity) ?? 0) === 0;
+  return { pending, failed, retryable, retry: () => void run(true),
+    unreviewed, resumeNeeded, reviewable, review: () => void run(false) };
 }

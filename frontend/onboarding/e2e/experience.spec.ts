@@ -52,7 +52,8 @@ async function completeOnboarding(page: Page) {
     const cards = page.locator('[data-testid="value-card"][data-location="pool"]');
     await expect(cards).toHaveCount(6);
     const shown = await cards.evaluateAll((elements) => elements.map((element) => element.getAttribute("data-value")));
-    const ordered = BWS_OBJECT_ORDER.filter((value) => shown.includes(value));
+    const ordered = ["benevolence", ...BWS_OBJECT_ORDER.filter((value) => value !== "benevolence")]
+      .filter((value) => shown.includes(value));
     // Fixed choices preserve the Profile despite randomized card and group order.
     await page.locator(`[data-testid="value-card"][data-value="${ordered[0]}"]`).press("m");
     await page.locator(`[data-testid="value-card"][data-value="${ordered.at(-1)}"]`).press("l");
@@ -144,4 +145,75 @@ test("manual writing closes a week, recovers only Coach Digest, and confirms ses
   });
   expect(missing.status()).toBe(404);
   expect((await missing.json()).error.code).toBe("session_not_found");
+});
+
+test("an older Coach can recover its missing Moment without rerunning historical work", async ({ page, request }) => {
+  expect((await request.post("/qc/mode/success")).ok()).toBe(true);
+  await page.goto("/");
+  const sessionId = await completeOnboarding(page);
+  await page.getByRole("button", { name: "Start my first Journal Entry" }).click();
+  await page.getByRole("button", { name: "Continue with manual demo" }).click();
+  await page.getByRole("textbox", { name: "First Journal Entry", exact: true }).fill(quote);
+  await page.getByRole("button", { name: "Save Journal Entry", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Close week and review" })).toBeEnabled();
+  expect((await request.post("/qc/coach/failure")).ok()).toBe(true);
+  await page.getByRole("button", { name: "Close week and review" }).click();
+  await expect(page.getByRole("heading", { name: "Your weekly response could not be prepared." })).toBeVisible();
+  const firstWeek = await page.getByLabel("Reviewed week", { exact: true }).inputValue();
+
+  expect((await request.post("/qc/coach/success")).ok()).toBe(true);
+  await page.getByRole("textbox", { name: "Journal Entry", exact: true }).fill(quote);
+  await page.getByRole("button", { name: "Save Journal Entry", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Close week and review" })).toBeEnabled();
+  await page.getByRole("button", { name: "Close week and review" }).click();
+  await expect(page.getByRole("heading", { name: "A moment in your own words", exact: true })).toBeVisible();
+  const secondWeek = await page.getByLabel("Reviewed week", { exact: true }).inputValue();
+
+  await page.getByLabel("Reviewed week", { exact: true }).selectOption(firstWeek);
+  await page.getByRole("button", { name: "Retry Coach Digest", exact: true }).click();
+  await expect(page.getByText("A moment has not been reviewed for this week yet.", { exact: true })).toBeVisible();
+  // Later journal work must not become the parent of the historical Moment.
+  await page.getByRole("textbox", { name: "Journal Entry", exact: true }).fill(quote);
+  await page.getByRole("button", { name: "Save Journal Entry", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Review moment", exact: true })).toBeEnabled();
+  const beforeMoment = await trace(request, sessionId);
+  expect(beforeMoment.filter((event) => event.event_type === "weekly_review_completed")).toHaveLength(2);
+  expect(beforeMoment.filter((event) => event.event_type === "weekly_coach_generated")
+    .map((event) => event.status)).toEqual(["failed", "complete", "complete"]);
+  await page.getByRole("button", { name: "Review moment", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "A moment in your own words", exact: true })).toBeVisible();
+  const recovered = await trace(request, sessionId);
+  const moments = recovered.filter((event) => event.event_type === "north_star_reviewed");
+  expect(moments).toHaveLength(2);
+  expect(moments.map((event) => (event.details.record as Record<string, unknown>).week_start))
+    .toEqual([secondWeek, firstWeek]);
+  await expect(page.getByRole("navigation", { name: "Experience sections", exact: true })
+    .getByRole("link", { name: /Weekly Drift/ })).toBeVisible();
+
+  const source = page.getByRole("link", { name: /^Open Journal Entry ·/ });
+  await source.click();
+  await expect(page.getByRole("dialog")).toContainText(quote);
+  await expect(page.getByRole("button", { name: "Close Journal Entry", exact: true })).toBeFocused();
+  await page.screenshot({ path: test.info().outputPath("journal-source-dialog.png") });
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(source).toBeFocused();
+  await expect(page.getByLabel("Reviewed week", { exact: true })).toHaveValue(firstWeek);
+
+  const browsingRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/experience")) {
+      browsingRequests.push(request.postDataJSON()?.operation);
+    }
+  });
+  await page.getByLabel("Reviewed week", { exact: true }).selectOption(secondWeek);
+  await page.getByLabel("Reviewed week", { exact: true }).selectOption(firstWeek);
+  await page.reload();
+  await page.waitForLoadState("networkidle");
+  await expect(page.getByRole("heading", { name: "A moment in your own words", exact: true })).toBeVisible();
+  await expect(page.getByLabel("Reviewed week", { exact: true })).toHaveValue(firstWeek);
+  expect(browsingRequests).toEqual([]);
+  expect((await trace(request, sessionId)).map((event) => event.event_id))
+    .toEqual(recovered.map((event) => event.event_id));
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });

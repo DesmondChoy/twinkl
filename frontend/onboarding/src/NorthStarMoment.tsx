@@ -54,6 +54,7 @@ export default function NorthStarMoment({
         </button>
       ) : null}
       <a href={`#${journalEntryAnchorId(selected.entry_id)}`}
+        aria-haspopup={openJournalEntry ? "dialog" : undefined}
         onClick={(event) => {
           const entry = journalEntries.find((candidate) => candidate.journal_entry_id === selected.entry_id);
           if (openJournalEntry && entry) {

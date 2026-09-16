@@ -1,9 +1,11 @@
+import { useEffect, useRef, useState } from "react";
 import {
   VALUES,
   type OnboardingProfile,
   type ValueKey,
 } from "./domain";
 import CoachDigestCard from "./CoachDigestCard";
+import JournalEntryDialog from "./JournalEntryDialog";
 import {
   displayWeekRange,
 } from "./displayFormatters";
@@ -40,6 +42,10 @@ interface WeeklyExperienceProps {
     failed: boolean;
     retryable: boolean;
     retry: () => void;
+    unreviewed?: boolean;
+    resumeNeeded?: boolean;
+    reviewable?: boolean;
+    review?: () => void;
   };
   coachReview?: {
     pending: boolean;
@@ -170,6 +176,15 @@ export default function WeeklyExperience({
   coachReview,
 }: WeeklyExperienceProps) {
   const profileRef = useNorthStarProfileRef(profile);
+  const [openEntryId, setOpenEntryId] = useState<string | null>(null);
+  const sourceLinkRef = useRef<HTMLElement | null>(null);
+  useEffect(() => { setOpenEntryId(null); }, [weeklyDigest?.week_start, weeklyDigest?.week_end]);
+  const openEntry = journalEntries.find((entry) => entry.journal_entry_id === openEntryId) ?? null;
+  const openJournalEntry = (entry: JournalEntryContract) => {
+    sourceLinkRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    selectJournalEntry?.(entry.journal_entry_id);
+    setOpenEntryId(entry.journal_entry_id);
+  };
   if (driftResult === null) return null;
 
   const rawStates = object(driftResult.core_value_states) ?? {};
@@ -196,8 +211,8 @@ export default function WeeklyExperience({
     events: traceEvents, profile, profileRef, weeklyDigest, journalEntries,
   });
   const selectedMoment = displayableNorthStarSelection(northStar, profile, journalEntries, driftResult);
-  const momentPending = northStarReview?.pending || northStar?.record.status === "pending";
-  const momentFailed = northStarReview?.failed || northStar?.record.status === "failed";
+  const momentPending = northStarReview?.pending ?? northStar?.record.status === "pending";
+  const momentFailed = northStarReview?.failed ?? northStar?.record.status === "failed";
   let momentStatus: string | null = null;
   if (momentPending) {
     momentStatus = "Looking for a moment in your writing that expressed one of your priorities…";
@@ -215,6 +230,10 @@ export default function WeeklyExperience({
       : "The selected moment could not be verified against your current Journal Entries.";
   } else if (coachUnavailable && !northStar) {
     momentStatus = "A moment from your writing can be reviewed after your weekly reflection is ready.";
+  } else if (hasCoach && northStarReview?.unreviewed) {
+    momentStatus = "A moment has not been reviewed for this week yet.";
+  } else if (hasCoach && northStarReview?.resumeNeeded) {
+    momentStatus = "This week's moment review has not finished.";
   }
   const drifts = Array.isArray(driftResult.drifts)
     ? driftResult.drifts.map(object).filter((row) => row !== null) : [];
@@ -260,8 +279,11 @@ export default function WeeklyExperience({
           <li key={`${coreValue}-${row.date}-${row.tIndex}`}>
             {weekStart !== null && row.date < weekStart ? <small>Earlier week</small> : null}
             {entry ? (
-              <a href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
-                onClick={() => selectJournalEntry?.(entry.journal_entry_id)}>
+              <a href={`#${journalEntryAnchorId(entry.journal_entry_id)}`} aria-haspopup="dialog"
+                onClick={(event) => {
+                  event.preventDefault();
+                  openJournalEntry(entry);
+                }}>
                 <span>{displayEvidenceDate(row.date)}</span>
                 <q>{citationExcerpt(row.excerpt)}</q>
               </a>
@@ -359,7 +381,7 @@ export default function WeeklyExperience({
 
         {valueEvidence.some((value) => value.conflict.length > 0 || value.context.length > 0) ? (
           <p className="weekly-experience__evidence-note">
-            Selecting evidence opens and focuses its Journal Entry.
+            Selecting evidence opens its Journal Entry without leaving this week.
           </p>
         ) : null}
       </div>
@@ -372,12 +394,7 @@ export default function WeeklyExperience({
           northStar={momentPending || momentFailed ? undefined : {
             profile, driftResult, traceEvents, inspectMoment: inspectRun,
           }}
-          onOpenEntry={selectJournalEntry ? (entry) => {
-            selectJournalEntry(entry.journal_entry_id);
-            const target = document.getElementById(journalEntryAnchorId(entry.journal_entry_id));
-            target?.focus({ preventScroll: true });
-            target?.scrollIntoView?.({ block: "center", behavior: "smooth" });
-          } : undefined}
+          onOpenEntry={openJournalEntry}
         />
 
         {coachPending || coachUnavailable ? (
@@ -408,6 +425,12 @@ export default function WeeklyExperience({
                 Retry moment review
               </button>
             ) : null}
+            {(northStarReview?.unreviewed || northStarReview?.resumeNeeded) && !momentPending && !momentFailed ? (
+              <button className="button button--quiet" type="button"
+                disabled={!northStarReview.reviewable} onClick={northStarReview.review}>
+                {northStarReview.resumeNeeded ? "Resume moment review" : "Review moment"}
+              </button>
+            ) : null}
           </section>
         ) : null}
       </div>
@@ -421,6 +444,14 @@ export default function WeeklyExperience({
           See how this was decided
         </button>
       ) : null}
+      <JournalEntryDialog entry={openEntry} onClose={() => {
+        setOpenEntryId(null);
+        window.requestAnimationFrame?.(() => {
+          const target = sourceLinkRef.current?.isConnected
+            ? sourceLinkRef.current : document.getElementById("weekly-view-title");
+          target?.focus({ preventScroll: true });
+        });
+      }} />
     </section>
   );
 }

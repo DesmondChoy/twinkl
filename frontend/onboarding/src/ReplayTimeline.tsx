@@ -4,9 +4,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { createPortal } from "react-dom";
 import CoachDigestCard from "./CoachDigestCard";
 import DriftStateExplanation from "./DriftStateExplanation";
+import JournalEntryDialog from "./JournalEntryDialog";
 import type { OnboardingProfile } from "./domain";
 import type {
   JournalEntryContract,
@@ -17,7 +17,6 @@ import type {
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 import { isDisplayableNudge } from "./nudgeReveal";
-import useModalFocus from "./useModalFocus";
 
 type JsonObject = Record<string, unknown>;
 const REPLAY_STEP_DELAY_MS = 500;
@@ -96,68 +95,6 @@ function evidenceUsesEarlierWeek(
     const row = object(item);
     return typeof row?.date === "string" && row.date < weekStart;
   });
-}
-
-interface JournalEntryDialogProps {
-  entry: JournalEntryContract | null;
-  responseVisible: boolean;
-  onClose: () => void;
-}
-
-function JournalEntryDialog({
-  entry,
-  responseVisible,
-  onClose,
-}: JournalEntryDialogProps) {
-  const closeRef = useRef<HTMLButtonElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  useModalFocus(entry !== null, overlayRef, closeRef, onClose);
-
-  if (!entry) return null;
-
-  return createPortal(
-    <div
-      ref={overlayRef}
-      className="replay-entry-drawer"
-      role="presentation"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <section
-        className="replay-entry-drawer__panel"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="replay-entry-drawer-title"
-      >
-        <header>
-          <div>
-            <p className="eyebrow">Journal Entry</p>
-            <h2 id="replay-entry-drawer-title">
-              {displayEntryDate(entry.date)}
-            </h2>
-          </div>
-          <button
-            className="replay-entry-drawer__close"
-            ref={closeRef}
-            type="button"
-            aria-label="Close Journal Entry"
-            onClick={onClose}
-          >
-            Close
-          </button>
-        </header>
-        <p className="replay-entry-drawer__content">{entry.content}</p>
-        {responseVisible && entry.nudge_response ? (
-          <section className="replay-entry-drawer__response" aria-labelledby="replay-entry-response-title">
-            <h3 id="replay-entry-response-title">Response to the Nudge</h3>
-            <p className="replay-entry-drawer__content">{entry.nudge_response}</p>
-          </section>
-        ) : null}
-      </section>
-    </div>,
-    document.body,
-  );
 }
 
 export default function ReplayTimeline({
