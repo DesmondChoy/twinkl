@@ -150,10 +150,10 @@ session, selected week, selected Journal Entry, and selected backend event.
 This design lets a professor assess both user value and Architecting AI Systems
 work without waiting for a real week of journaling.
 
-The React app is mobile-first. Design and verify the complete Experience and
-Inspect walkthrough for narrow-screen phones first, then progressively enhance
-the same views for wider screens. Desktop convenience must not determine the
-information hierarchy, interaction order, or acceptance of the mobile flow.
+Desktop and laptop browsers are the primary design and verification target
+for the React app. Verify the complete Experience and Inspect walkthrough at
+that size first. Preserve the existing narrow-screen flow and include small
+shared improvements, without prioritizing a separate mobile redesign.
 
 ## 2. Product and Evidence Boundaries
 
@@ -530,21 +530,35 @@ Conflict evidence before other Journal Entry context. The triggering pair
 comes from the Drift record's onset and confirmation indices, checked against
 the available Weekly Drift Reviewer Decisions. Other context appears
 separately and is not labeled supportive merely because a decision was Not
-Conflict. Selecting evidence opens and focuses its Journal Entry.
+Conflict. Selecting evidence opens its complete Journal Entry in a centered
+dialog. Closing the dialog restores focus to the source link and preserves
+the selected week and reading position.
 
 Manual Coach Digest and North Star Moment work exposes progress and failure
 states while keeping the Weekly Drift Detection result visible. Recorded
 ineligible North Star Moment outcomes and completed reviews with no supportive
 source receive an explanation without a quotation. Pending or failed review
 does not fall back to an older quotation. **Retry moment review** appears only
-when the current failure permits retry. **Retry Coach Digest** uses the stored
+when the current failure permits retry. A valid historical Coach Digest whose
+Moment has never been reviewed offers **Review moment**. A stored historical
+review that has not finished offers **Resume moment review**. Selecting an
+older week or reloading its stored result does not start a model call. New
+Moment events reference the saved digest for the requested week, even when
+other weeks or later Journal Entries were processed more recently.
+**Retry Coach Digest** uses the stored
 Weekly Drift Detection output; it does not advance Simulated time or repeat
 the Weekly Drift Reviewer. A failed trace refresh after accepted retry work
 instead offers **Try loading Inspect again**.
-Invalid Coach responses remain unpublished and can also be retried. Prompt
-4.3 makes the existing verbatim-quotation requirement explicit; validation
-still checks each generated response. Until Coach Digest is available, the
-Moment status explains that its review is waiting for the weekly reflection.
+Invalid Coach responses remain unpublished and can also be retried. Each
+explicit retry makes at most one generation attempt. When the previous matching
+attempt failed validation, its specific failures enter the repair instructions;
+Inspect retains both attempts and their actual prompts. Prompt 4.7 preserves
+exact source quotations, separates reported actions and motives, and asks one
+generated question across the full response. Validation excludes verified
+source quotations when checking unsupported state claims and counting generated
+questions; it still rejects altered or invented quotations. These checks do
+not establish semantic accuracy. Until Coach Digest is available, the Moment
+status explains that its review is waiting for the weekly reflection.
 
 ## 6. Inspect View
 
@@ -578,6 +592,9 @@ references.
 
 Live Coach Digest and North Star Moment durations measure the complete
 operation; North Star Moment retains the recorded start of its pending work.
+North Star Moment inspection labels source-availability timestamps separately
+from Journal Entry dates and Simulated time. Source headings show the Journal
+Entry date, with the full identifier retained below it.
 
 For Persona replay, the top-level **Inspect** switch follows the visible
 Experience panel. From Journal Entries, **Recorded work** shows the selected
@@ -1058,9 +1075,9 @@ the source files and separate provider-backed Coach Digest generation workflow.
 
 ## 11. Responsive and Accessible Behavior
 
-- Narrow-screen phones are the primary design and verification target. Start
-  layout, interaction, and content decisions at the narrow viewport; treat
-  wider layouts as progressive enhancements.
+- Desktop and laptop browsers are the primary design and verification target.
+  Retain narrow-screen usability and keyboard access through shared components
+  and small responsive adjustments.
 - The Experience/Inspect selector remains reachable at the top of every
   post-onboarding screen.
 - On narrow screens, each view occupies the full screen; do not force a

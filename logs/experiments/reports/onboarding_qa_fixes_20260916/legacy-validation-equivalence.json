@@ -1,0 +1,26 @@
+{
+  "git_head": "c6b5edb1a30e1f18f23a5f1752fa545abc386c6f",
+  "original_source_sha256": "cabb137210f439aa5eaa268f2d7a04ba0a2baae6ae3c21d57fefcc5763a4889e",
+  "comparison_count": 192,
+  "all_identical": true,
+  "comparison_kind": "synthetic fixture/settings combinations, not saved model responses",
+  "narrative_cases": [
+    "normal", "source_improvement", "extra_question", "invented_quote",
+    "source_question", "too_long", "whitespace", "empty"
+  ],
+  "policy_mappings": [
+    {"original": "historical", "current": "historical"},
+    {"original": "current", "current": "4.6"}
+  ],
+  "voice_settings": [
+    {"validate_voice": false, "voice_version": "4.5"},
+    {"validate_voice": true, "voice_version": "4.4"},
+    {"validate_voice": true, "voice_version": "4.5"}
+  ],
+  "min_words": [null, 10],
+  "max_words": [180, 20],
+  "seed": null,
+  "provider_calls": 0,
+  "reproduction": "legacy-validation-command.md",
+  "limitation": "The baseline validator function executes with current module globals; shared helpers were unchanged in this patch."
+}

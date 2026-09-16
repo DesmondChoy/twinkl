@@ -1,0 +1,61 @@
+{
+  "original": {
+    "command": [
+      "uv",
+      "run",
+      "--no-sync",
+      "--with",
+      "mypy==2.3.0",
+      "mypy",
+      "--explicit-package-bases",
+      "--follow-imports=silent",
+      "--shadow-file",
+      "src/coach/weekly_digest.py",
+      "/tmp/twinkl-qa-20260916/mypy-original/src/coach/weekly_digest.py",
+      "--shadow-file",
+      "src/evals/coach_digest_validations.py",
+      "/tmp/twinkl-qa-20260916/mypy-original/src/evals/coach_digest_validations.py",
+      "--shadow-file",
+      "src/demo/scenarios.py",
+      "/tmp/twinkl-qa-20260916/mypy-original/src/demo/scenarios.py",
+      "--shadow-file",
+      "scripts/coach/complete_scenario_coach.py",
+      "/tmp/twinkl-qa-20260916/mypy-original/scripts/coach/complete_scenario_coach.py",
+      "--shadow-file",
+      "scripts/coach/refresh_scenario_coach.py",
+      "/tmp/twinkl-qa-20260916/mypy-original/scripts/coach/refresh_scenario_coach.py",
+      "--shadow-file",
+      "scripts/experiments/run_coach_context_eval.py",
+      "/tmp/twinkl-qa-20260916/mypy-original/scripts/experiments/run_coach_context_eval.py",
+      "src/coach/weekly_digest.py",
+      "src/evals/coach_digest_validations.py",
+      "src/demo/scenarios.py",
+      "scripts/coach/complete_scenario_coach.py",
+      "scripts/coach/refresh_scenario_coach.py",
+      "scripts/experiments/run_coach_context_eval.py"
+    ],
+    "exit_code": 1,
+    "output": "src/coach/weekly_digest.py:288: error: Argument 1 to \"_parse_iso_date\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str\"  [arg-type]\nsrc/coach/weekly_digest.py:289: error: Argument 1 to \"_parse_iso_date\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str\"  [arg-type]\nsrc/coach/weekly_digest.py:563: error: Argument 1 to \"float\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\"  [arg-type]\nsrc/coach/weekly_digest.py:670: error: Argument 1 to \"float\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\"  [arg-type]\nsrc/coach/weekly_digest.py:673: error: Argument 1 to \"float\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\"  [arg-type]\nsrc/coach/weekly_digest.py:676: error: Argument 1 to \"float\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\"  [arg-type]\nFound 6 errors in 1 file (checked 6 source files)\n"
+  },
+  "changed": {
+    "command": [
+      "uv",
+      "run",
+      "--no-sync",
+      "--with",
+      "mypy==2.3.0",
+      "mypy",
+      "--explicit-package-bases",
+      "--follow-imports=silent",
+      "src/coach/weekly_digest.py",
+      "src/evals/coach_digest_validations.py",
+      "src/demo/scenarios.py",
+      "scripts/coach/complete_scenario_coach.py",
+      "scripts/coach/refresh_scenario_coach.py",
+      "scripts/experiments/run_coach_context_eval.py"
+    ],
+    "exit_code": 1,
+    "output": "src/coach/weekly_digest.py:288: error: Argument 1 to \"_parse_iso_date\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str\"  [arg-type]\nsrc/coach/weekly_digest.py:289: error: Argument 1 to \"_parse_iso_date\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str\"  [arg-type]\nsrc/coach/weekly_digest.py:563: error: Argument 1 to \"float\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\"  [arg-type]\nsrc/coach/weekly_digest.py:670: error: Argument 1 to \"float\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\"  [arg-type]\nsrc/coach/weekly_digest.py:673: error: Argument 1 to \"float\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\"  [arg-type]\nsrc/coach/weekly_digest.py:676: error: Argument 1 to \"float\" has incompatible type \"int | float | Decimal | date | time | timedelta | str | bytes | ndarray[Any, Any] | list[Any] | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\"  [arg-type]\nFound 6 errors in 1 file (checked 6 source files)\n"
+  },
+  "identical_output": true
+}

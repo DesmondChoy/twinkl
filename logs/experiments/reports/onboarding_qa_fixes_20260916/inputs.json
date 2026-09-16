@@ -1,0 +1,629 @@
+{
+  "provenance": "Fictional Journal Entries from four AI browser QA sessions on 2026-09-16. These three cases were selected because known defects were observed; they are development cases, not a held-out evaluation. Expected concerns are withheld from the generation request.",
+  "cases": [
+    {
+      "case_id": "task_improvement_quote",
+      "source_file": "professor-b/final-storage.json",
+      "source_file_sha256": "b5ad59a3206cbddf879b6933752c22974715c2badd3d7e45f61641e35eb3f836",
+      "session_id": "57688660-1110-44d1-819c-f085012bc82a",
+      "digest_event_id": "weekly-digest-built-dca68db4-04ff-43ac-b885-7590267f1142",
+      "original_coach_event_id": "weekly-coach-generated-50b62f8e-fd71-4677-9eaa-43b1d3f73ef6",
+      "original_prompt_sha256": "478b8235485fca0c3c3393c0a79e2d3df9bdc7c07225e2b30363de8a68b90cf0",
+      "original_prompt_version": "4.6",
+      "original_status": "invalid",
+      "original_narrative": {
+        "weekly_mirror": "You protected time for an illustration course you had chosen, then carried the learning into a paid project rather than leaving it as an isolated exercise. As you put it, \"I liked being able to decide what to learn and to see a concrete improvement in the finished work.\"",
+        "tension_explanation": "That same room to choose shaped your exhibition proposal and the illustrated map of your neighbourhood: you tested ideas carefully, made thoughtful decisions, and followed through on work that felt distinctly yours. The pleasure seems tied not just to finishing, but to having authorship over what you pursue and how you make it.",
+        "reflective_question": "When you think about the exhibition identity and the neighbourhood map, which choice felt most distinctly like your own?"
+      },
+      "original_validation": {
+        "grounded_quotes": [
+          "I liked being able to decide what to learn and to see a concrete improvement in the finished work."
+        ],
+        "word_count": 121,
+        "checks": [
+          {
+            "name": "groundedness",
+            "passed": true,
+            "details": "Found 1 quoted phrase(s) that match selected evidence."
+          },
+          {
+            "name": "non_circularity",
+            "passed": true,
+            "details": "Response avoids raw scoring and alignment terminology."
+          },
+          {
+            "name": "value_leakage",
+            "passed": true,
+            "details": "Response avoids naming raw Schwartz value labels."
+          },
+          {
+            "name": "state_claims",
+            "passed": false,
+            "details": "Response makes an unsupported positive transition claim with: improve."
+          },
+          {
+            "name": "length",
+            "passed": true,
+            "details": "Combined response length is 121 words (maximum 180; no minimum)."
+          },
+          {
+            "name": "weekly_mirror_verbatim",
+            "passed": true,
+            "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+          },
+          {
+            "name": "nonempty_fields",
+            "passed": true,
+            "details": "Return nonempty text in all three response fields."
+          },
+          {
+            "name": "all_quotes_grounded",
+            "passed": true,
+            "details": "Every quotation matches supplied evidence exactly."
+          },
+          {
+            "name": "reflective_question_form",
+            "passed": true,
+            "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+          },
+          {
+            "name": "conversational_voice",
+            "passed": true,
+            "details": "Response avoids recap openings and clinical finding language."
+          },
+          {
+            "name": "natural_reflection_voice",
+            "passed": true,
+            "details": "Response avoids date-led openings and writing-process commentary."
+          }
+        ]
+      },
+      "original_input_hash": "9b8cfa2a60db76357af1cf473affe36344e2acc87875cc2dd902ac4f4f01db24",
+      "digest": {
+        "persona_id": "e53d1f47-15ea-4bd1-9d57-dfc12f076494",
+        "persona_name": null,
+        "week_start": "2026-09-14",
+        "week_end": "2026-09-20",
+        "response_mode": "no_active_drift",
+        "mode_source": "drift_detector",
+        "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+        "signal_source": "weekly_drift_reviewer",
+        "n_entries": 5,
+        "overall_mean": null,
+        "overall_uncertainty": null,
+        "core_values": [
+          "self_direction"
+        ],
+        "goal_context": null,
+        "drift_states": {
+          "self_direction": "no_active_drift"
+        },
+        "drift_details": {
+          "self_direction": {
+            "state": "no_active_drift",
+            "current_run_length": 0,
+            "last_decision": "not_conflict",
+            "last_review_status": "ok",
+            "last_t_index": 4,
+            "last_date": "2026-09-20"
+          }
+        },
+        "state_comparisons": [],
+        "drift_reasons": [],
+        "top_tensions": [],
+        "top_strengths": [],
+        "dimensions": [],
+        "evidence": [
+          {
+            "date": "2026-09-18",
+            "t_index": 2,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "I protected two hours for an illustration course I had chosen for myself. I finished the perspective exercise, compared it against the rubric, and redrew the weak section instead of submitting a quick first attempt. Then I used the new technique in a paid project. I liked being able to decide what to learn and to see a concrete improvement in the finished work."
+          },
+          {
+            "date": "2026-09-19",
+            "t_index": 3,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "Today I prepared my own proposal for the exhibition identity, tested the colour palette for readability, and delivered the files a day ahead of schedule. I chose an unusual but workable layout after checking it with two readers. Nobody dictated the approach. I felt proud of making a thoughtful decision and carrying it through carefully."
+          },
+          {
+            "date": "2026-09-20",
+            "t_index": 4,
+            "direction": "context",
+            "dimensions": [
+              "self_direction"
+            ],
+            "score_mean": null,
+            "excerpt": "I spent Sunday making a small illustrated map of my neighbourhood. I chose the places, tried a new drawing technique, and finished the map before dinner. I shared the finished file with friends because it represented something I had wanted to make for months. Having room to follow an idea of my own felt especially good."
+          }
+        ],
+        "coach_narrative": null,
+        "validation": null
+      },
+      "review_concern": "An exact quotation about improvement in finished work was falsely rejected as a current-state claim."
+    },
+    {
+      "case_id": "interaction_attribution",
+      "source_file": "lead-week2-storage.json",
+      "source_file_sha256": "936123670cfa31ca9848a356cdf50a89080000e32c04d056488df6eda95d868c",
+      "session_id": "9f27bd88-863f-4b4a-a4d5-6f7c8fb14b06",
+      "digest_event_id": "weekly-digest-built-9b9d431b-bf49-46e4-a2b2-3330e1f34dbb",
+      "original_coach_event_id": "weekly-coach-generated-73685879-f7a0-4c34-998a-44db0bdabd86",
+      "original_prompt_sha256": "849da0ed2f1a48d7c8f3efd3739d2f86c17670e5fd6da1181881b471ad4159c1",
+      "original_prompt_version": "4.6",
+      "original_status": "complete",
+      "original_narrative": {
+        "weekly_mirror": "At your brother’s flat, you helped assemble the shelves, carried the boxes, and told him honestly that you had remembered your earlier arrangement. His appreciation came after a difficult moment, and you also wrote that you had “kept the time I had offered her.”",
+        "tension_explanation": "Being there for the people closest to you has sometimes competed with the easier option—staying on the sofa or choosing a game—but the later visits to your brother and your teammate show you giving time that had already been promised. What feels different about keeping an arrangement when the easier choice is right in front of you?",
+        "reflective_question": "When you think about the bookcase and the slides, what helped you keep those commitments?"
+      },
+      "original_validation": {
+        "grounded_quotes": [
+          "kept the time I had offered her."
+        ],
+        "word_count": 116,
+        "checks": [
+          {
+            "name": "groundedness",
+            "passed": true,
+            "details": "Found 1 quoted phrase(s) that match selected evidence."
+          },
+          {
+            "name": "non_circularity",
+            "passed": true,
+            "details": "Response avoids raw scoring and alignment terminology."
+          },
+          {
+            "name": "value_leakage",
+            "passed": true,
+            "details": "Response avoids naming raw Schwartz value labels."
+          },
+          {
+            "name": "state_claims",
+            "passed": true,
+            "details": "Response makes only supported current-state claims."
+          },
+          {
+            "name": "length",
+            "passed": true,
+            "details": "Combined response length is 116 words (maximum 180; no minimum)."
+          },
+          {
+            "name": "weekly_mirror_verbatim",
+            "passed": true,
+            "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+          },
+          {
+            "name": "nonempty_fields",
+            "passed": true,
+            "details": "Return nonempty text in all three response fields."
+          },
+          {
+            "name": "all_quotes_grounded",
+            "passed": true,
+            "details": "Every quotation matches supplied evidence exactly."
+          },
+          {
+            "name": "reflective_question_form",
+            "passed": true,
+            "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+          },
+          {
+            "name": "conversational_voice",
+            "passed": true,
+            "details": "Response avoids recap openings and clinical finding language."
+          },
+          {
+            "name": "natural_reflection_voice",
+            "passed": true,
+            "details": "Response avoids date-led openings and writing-process commentary."
+          }
+        ]
+      },
+      "original_input_hash": "3882ebd7b276b3b5a8335c6d4866c977aa7a6ce906fbf7a6801397634ca69356",
+      "digest": {
+        "persona_id": "44ddca98-19fb-40cf-9664-780ded743d22",
+        "persona_name": null,
+        "week_start": "2026-09-21",
+        "week_end": "2026-09-27",
+        "response_mode": "no_active_drift",
+        "mode_source": "drift_detector",
+        "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+        "signal_source": "weekly_drift_reviewer",
+        "n_entries": 2,
+        "overall_mean": null,
+        "overall_uncertainty": null,
+        "core_values": [
+          "benevolence"
+        ],
+        "goal_context": null,
+        "drift_states": {
+          "benevolence": "no_active_drift"
+        },
+        "drift_details": {
+          "benevolence": {
+            "state": "no_active_drift",
+            "current_run_length": 0,
+            "last_decision": "not_conflict",
+            "last_review_status": "ok",
+            "last_t_index": 4,
+            "last_date": "2026-09-22"
+          }
+        },
+        "state_comparisons": [
+          {
+            "core_value": "benevolence",
+            "previous_week_start": "2026-09-14",
+            "previous_week_end": "2026-09-20",
+            "current_week_start": "2026-09-21",
+            "current_week_end": "2026-09-27",
+            "previous_state": "active_drift",
+            "current_state": "no_active_drift",
+            "change": "active_drift_ended",
+            "end_reason": "not_conflict",
+            "previous_evidence": [
+              {
+                "date": "2026-09-16",
+                "t_index": 0,
+                "direction": "context",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "After work I took dinner to my sister, who was assembling furniture for her new flat. I washed the dishes and helped put together a desk while she unpacked the boxes. I had planned to watch a film, but spending the evening helping her settle in felt like the right use of my time."
+              },
+              {
+                "date": "2026-09-17",
+                "t_index": 1,
+                "direction": "misaligned",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "My teammate asked me to check her slides before tomorrow’s meeting. I had plenty of time, but I told her I was too busy and spent the evening playing a game instead. She had helped me prepare my own presentation last week. I knew she was counting on me and deliberately ignored her follow-up message.\n\nNudge: \"How did you feel after ignoring her message?\"\n\nResponse: I felt guilty because I had agreed to help and then chose an easier evening for myself. It was not a problem with the slides or a lack of time."
+              },
+              {
+                "date": "2026-09-18",
+                "t_index": 2,
+                "direction": "misaligned",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "My brother asked for help carrying a bookcase upstairs today. I had promised yesterday that I would come over. When the time arrived I stayed on the sofa watching videos and texted that I had forgotten. I had remembered perfectly well. He had to do it alone, and I knew I was letting him down.\n\nNudge: \"What stopped you from going?\""
+              }
+            ],
+            "current_evidence": [
+              {
+                "date": "2026-09-21",
+                "t_index": 3,
+                "direction": "context",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "I went to my brother’s flat after work and helped him assemble the shelves we had discussed. We carried the boxes together and sorted the tools before I left. I told him I had remembered our earlier arrangement but had chosen not to go. He said he appreciated the honest answer."
+              },
+              {
+                "date": "2026-09-22",
+                "t_index": 4,
+                "direction": "context",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "I set aside half an hour to read my teammate’s revised slides before our next meeting. I sent specific comments and checked the figures with her. She used two of the suggestions. I finished my own work later than planned, but I had kept the time I had offered her."
+              }
+            ]
+          }
+        ],
+        "drift_reasons": [
+          "44ddca98-19fb-40cf-9664-780ded743d22:benevolence:1:not_conflict"
+        ],
+        "top_tensions": [],
+        "top_strengths": [],
+        "dimensions": [],
+        "evidence": [
+          {
+            "date": "2026-09-16",
+            "t_index": 0,
+            "direction": "context",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "After work I took dinner to my sister, who was assembling furniture for her new flat. I washed the dishes and helped put together a desk while she unpacked the boxes. I had planned to watch a film, but spending the evening helping her settle in felt like the right use of my time."
+          },
+          {
+            "date": "2026-09-17",
+            "t_index": 1,
+            "direction": "misaligned",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "My teammate asked me to check her slides before tomorrow’s meeting. I had plenty of time, but I told her I was too busy and spent the evening playing a game instead. She had helped me prepare my own presentation last week. I knew she was counting on me and deliberately ignored her follow-up message.\n\nNudge: \"How did you feel after ignoring her message?\"\n\nResponse: I felt guilty because I had agreed to help and then chose an easier evening for myself. It was not a problem with the slides or a lack of time."
+          },
+          {
+            "date": "2026-09-18",
+            "t_index": 2,
+            "direction": "misaligned",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "My brother asked for help carrying a bookcase upstairs today. I had promised yesterday that I would come over. When the time arrived I stayed on the sofa watching videos and texted that I had forgotten. I had remembered perfectly well. He had to do it alone, and I knew I was letting him down.\n\nNudge: \"What stopped you from going?\""
+          },
+          {
+            "date": "2026-09-21",
+            "t_index": 3,
+            "direction": "context",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "I went to my brother’s flat after work and helped him assemble the shelves we had discussed. We carried the boxes together and sorted the tools before I left. I told him I had remembered our earlier arrangement but had chosen not to go. He said he appreciated the honest answer."
+          },
+          {
+            "date": "2026-09-22",
+            "t_index": 4,
+            "direction": "context",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "I set aside half an hour to read my teammate’s revised slides before our next meeting. I sent specific comments and checked the figures with her. She used two of the suggestions. I finished my own work later than planned, but I had kept the time I had offered her."
+          }
+        ],
+        "coach_narrative": null,
+        "validation": null
+      },
+      "review_concern": "The Coach invented a visit to a teammate and asked two questions. The source only reports reviewing slides and sending comments; the physical visit was to the brother."
+    },
+    {
+      "case_id": "uncertain_motive",
+      "source_file": "professor-a/storage-state-final.json",
+      "source_file_sha256": "9d4577c3045320a1c61d7682ddbed44cb6011eab0e9fc5c556a467bb68aabdf1",
+      "session_id": "9af8f161-888f-460a-bd0e-b9dba19ae840",
+      "digest_event_id": "weekly-digest-built-e8289d5c-011e-44ce-a297-8b0588491629",
+      "original_coach_event_id": "weekly-coach-generated-3992496a-f62d-4ee1-9daf-6ad5911c0a51",
+      "original_prompt_sha256": "482eeede656c1ba0aa9aff079349d1f869877c4dafceaca6a1170d250b3fc37d",
+      "original_prompt_version": "4.6",
+      "original_status": "complete",
+      "original_narrative": {
+        "weekly_mirror": "Covering the reception desk for twenty minutes still left room for your own work, and you made the arrangement clear for your colleague. Later, you called the friend whose apartment you helped move into and brought the promised book for tea; \"It was a simple evening of talking and making room for each other.\"",
+        "tension_explanation": "Being there for the people closest to you seems to include both practical help and the quieter work of keeping a connection alive. The disappointment after the book swap leaves an interesting question about what kind of acknowledgement helps your own effort feel seen, especially when you are giving time without expecting anything back.",
+        "reflective_question": "When you think about the book swap, what would have helped you feel personally acknowledged?"
+      },
+      "original_validation": {
+        "grounded_quotes": [
+          "It was a simple evening of talking and making room for each other."
+        ],
+        "word_count": 123,
+        "checks": [
+          {
+            "name": "groundedness",
+            "passed": true,
+            "details": "Found 1 quoted phrase(s) that match selected evidence."
+          },
+          {
+            "name": "non_circularity",
+            "passed": true,
+            "details": "Response avoids raw scoring and alignment terminology."
+          },
+          {
+            "name": "value_leakage",
+            "passed": true,
+            "details": "Response avoids naming raw Schwartz value labels."
+          },
+          {
+            "name": "state_claims",
+            "passed": true,
+            "details": "Response makes only supported current-state claims."
+          },
+          {
+            "name": "length",
+            "passed": true,
+            "details": "Combined response length is 123 words (maximum 180; no minimum)."
+          },
+          {
+            "name": "weekly_mirror_verbatim",
+            "passed": true,
+            "details": "Weekly Mirror preserves an exact quotation from weekly evidence."
+          },
+          {
+            "name": "nonempty_fields",
+            "passed": true,
+            "details": "Return nonempty text in all three response fields."
+          },
+          {
+            "name": "all_quotes_grounded",
+            "passed": true,
+            "details": "Every quotation matches supplied evidence exactly."
+          },
+          {
+            "name": "reflective_question_form",
+            "passed": true,
+            "details": "Return one nonempty question in question form. This structural check does not establish non-prescriptive tone."
+          },
+          {
+            "name": "conversational_voice",
+            "passed": true,
+            "details": "Response avoids recap openings and clinical finding language."
+          },
+          {
+            "name": "natural_reflection_voice",
+            "passed": true,
+            "details": "Response avoids date-led openings and writing-process commentary."
+          }
+        ]
+      },
+      "original_input_hash": "7670fb7223788468642a70a374b6243b1bf03487472476b04abac7f18bc505df",
+      "digest": {
+        "persona_id": "18d003fa-ef42-4b5d-8c28-fc2326f40aac",
+        "persona_name": null,
+        "week_start": "2026-09-28",
+        "week_end": "2026-10-04",
+        "response_mode": "no_active_drift",
+        "mode_source": "drift_detector",
+        "mode_rationale": "No Core Value has active Drift at this cutoff. This does not prove supportive behavior or improvement.",
+        "signal_source": "weekly_drift_reviewer",
+        "n_entries": 2,
+        "overall_mean": null,
+        "overall_uncertainty": null,
+        "core_values": [
+          "benevolence"
+        ],
+        "goal_context": null,
+        "drift_states": {
+          "benevolence": "no_active_drift"
+        },
+        "drift_details": {
+          "benevolence": {
+            "state": "no_active_drift",
+            "current_run_length": 0,
+            "last_decision": "not_conflict",
+            "last_review_status": "ok",
+            "last_t_index": 13,
+            "last_date": "2026-09-29"
+          }
+        },
+        "state_comparisons": [
+          {
+            "core_value": "benevolence",
+            "previous_week_start": "2026-09-21",
+            "previous_week_end": "2026-09-27",
+            "current_week_start": "2026-09-28",
+            "current_week_end": "2026-10-04",
+            "previous_state": "no_active_drift",
+            "current_state": "no_active_drift",
+            "change": "unchanged",
+            "end_reason": null,
+            "previous_evidence": [
+              {
+                "date": "2026-09-25",
+                "t_index": 9,
+                "direction": "context",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "Fictional QA diary. I finished work late and almost cancelled dinner with an old friend. I told her honestly that I would be thirty minutes late, and we chose a cafe near her place. I put my phone away while she talked about her new job, and I was glad I had made the effort."
+              },
+              {
+                "date": "2026-09-26",
+                "t_index": 10,
+                "direction": "context",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "Fictional QA diary. At the community book swap, I sorted donations and helped two visitors find books for their children. I carried the remaining boxes into storage before leaving. The organiser thanked the whole group, but I felt oddly disappointed on the way home. I cannot tell whether I wanted personal acknowledgement or was just tired.\n\nNudge: \"What would personal acknowledgement have meant?\""
+              },
+              {
+                "date": "2026-09-27",
+                "t_index": 11,
+                "direction": "context",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "Fictional QA diary. My cousin sent the revised presentation. I listened to her final practice, pointed out the parts that were clear, and reminded her that the ideas were hers. I did not rewrite it for her. She sounded pleased, and I felt close to her even though we only spoke online."
+              }
+            ],
+            "current_evidence": [
+              {
+                "date": "2026-09-28",
+                "t_index": 12,
+                "direction": "context",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "Fictional QA diary. A colleague needed someone to cover the reception desk while he collected a delayed delivery. I checked my schedule, agreed to twenty minutes, and left him a clear note about the visitor who had arrived. My own work still got done, and the arrangement felt fair to both of us."
+              },
+              {
+                "date": "2026-09-29",
+                "t_index": 13,
+                "direction": "context",
+                "dimensions": [
+                  "benevolence"
+                ],
+                "score_mean": null,
+                "excerpt": "Fictional QA diary. I called the friend whose apartment I helped move into and asked whether the kitchen boxes were unpacked. He invited me over for tea, and I brought the book I had promised to lend him. It was a simple evening of talking and making room for each other."
+              }
+            ]
+          }
+        ],
+        "drift_reasons": [],
+        "top_tensions": [],
+        "top_strengths": [],
+        "dimensions": [],
+        "evidence": [
+          {
+            "date": "2026-09-25",
+            "t_index": 9,
+            "direction": "context",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "Fictional QA diary. I finished work late and almost cancelled dinner with an old friend. I told her honestly that I would be thirty minutes late, and we chose a cafe near her place. I put my phone away while she talked about her new job, and I was glad I had made the effort."
+          },
+          {
+            "date": "2026-09-26",
+            "t_index": 10,
+            "direction": "context",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "Fictional QA diary. At the community book swap, I sorted donations and helped two visitors find books for their children. I carried the remaining boxes into storage before leaving. The organiser thanked the whole group, but I felt oddly disappointed on the way home. I cannot tell whether I wanted personal acknowledgement or was just tired.\n\nNudge: \"What would personal acknowledgement have meant?\""
+          },
+          {
+            "date": "2026-09-27",
+            "t_index": 11,
+            "direction": "context",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "Fictional QA diary. My cousin sent the revised presentation. I listened to her final practice, pointed out the parts that were clear, and reminded her that the ideas were hers. I did not rewrite it for her. She sounded pleased, and I felt close to her even though we only spoke online."
+          },
+          {
+            "date": "2026-09-28",
+            "t_index": 12,
+            "direction": "context",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "Fictional QA diary. A colleague needed someone to cover the reception desk while he collected a delayed delivery. I checked my schedule, agreed to twenty minutes, and left him a clear note about the visitor who had arrived. My own work still got done, and the arrangement felt fair to both of us."
+          },
+          {
+            "date": "2026-09-29",
+            "t_index": 13,
+            "direction": "context",
+            "dimensions": [
+              "benevolence"
+            ],
+            "score_mean": null,
+            "excerpt": "Fictional QA diary. I called the friend whose apartment I helped move into and asked whether the kitchen boxes were unpacked. He invited me over for tea, and I brought the book I had promised to lend him. It was a simple evening of talking and making room for each other."
+          }
+        ],
+        "coach_narrative": null,
+        "validation": null
+      },
+      "review_concern": "The Coach stated giving time without expecting anything back although prior writing explicitly leaves the wish for acknowledgment uncertain."
+    }
+  ]
+}

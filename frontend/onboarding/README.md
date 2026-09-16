@@ -242,10 +242,12 @@ npm run typecheck
 npm run build
 ```
 
-The two deterministic browser smoke tests run the built app and real Python
-HTTP boundary at a 390px phone viewport in Chromium. They cover saved replay,
+The deterministic browser smoke tests run the built app and real Python
+HTTP boundary in Chromium at a 1280px desktop viewport and a secondary 390px
+phone viewport. Desktop and laptop use is the primary target. They cover saved replay,
 Inspect and reload, plus onboarding, manual writing, closed-week review, a
-failed Coach Digest and retry, and confirmed session deletion. All model calls
+failed Coach Digest and retry, historical Moment recovery, source-dialog focus
+restoration, and confirmed session deletion. All model calls
 use test doubles; these checks provide application evidence, not model-quality
 or human-validation evidence.
 
