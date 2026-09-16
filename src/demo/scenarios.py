@@ -20,6 +20,7 @@ from src.coach.schemas import CoachNarrative, LLMCallMetrics
 from src.coach.weekly_digest import (
     attach_coach_artifacts,
     build_weekly_drift_reviewer_digest,
+    coach_validation_policy_for_prompt_version,
     validate_weekly_digest_narrative,
 )
 from src.demo.contracts import (
@@ -167,7 +168,7 @@ class SavedCoachGeneration(CatalogModel):
     model_contract: ModelContract
     service_tier: str
     prompt_name: str
-    prompt_version: Literal["4.1", "4.2", "4.3", "4.4", "4.5", "4.6"]
+    prompt_version: Literal["4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7"]
     prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     prompt: str = Field(min_length=1)
     raw_output: str = Field(min_length=1)
@@ -1084,21 +1085,20 @@ def build_scenario_fixture(
             coach_validation = validate_weekly_digest_narrative(
                 digest,
                 coach_narrative,
-                validation_policy=(
-                    "current"
-                    if saved_coach_response.generation is not None
-                    and saved_coach_response.generation.prompt_version == "4.6"
-                    else "historical"
+                validation_policy=coach_validation_policy_for_prompt_version(
+                    saved_coach_response.generation.prompt_version
+                    if saved_coach_response.generation is not None else None
                 ),
                 validate_voice=(
                     saved_coach_response.generation is not None
                     and saved_coach_response.generation.prompt_version
-                    in {"4.4", "4.5", "4.6"}
+                    in {"4.4", "4.5", "4.6", "4.7"}
                 ),
                 voice_version=(
                     "4.5"
                     if saved_coach_response.generation is not None
-                    and saved_coach_response.generation.prompt_version in {"4.5", "4.6"}
+                    and saved_coach_response.generation.prompt_version
+                    in {"4.5", "4.6", "4.7"}
                     else "4.4"
                 ),
             )

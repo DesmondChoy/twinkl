@@ -28,7 +28,10 @@ from src.coach.schemas import (
     EvidenceSnippet,
     WeeklyDigest,
 )
-from src.coach.weekly_digest import validate_weekly_digest_narrative
+from src.coach.weekly_digest import (
+    coach_validation_policy_for_prompt_version,
+    validate_weekly_digest_narrative,
+)
 
 DEFAULT_PARQUET = Path("logs/exports/weekly_digests/weekly_digests.parquet")
 
@@ -178,29 +181,34 @@ def _validate_for_policy(
         if digest.validation
         else set()
     )
-    current = policy == "current" or "reflective_question_form" in names
+    base_policy: Literal["historical", "4.6", "current"]
+    if policy == "current":
+        base_policy = "current"
+    elif digest.validation is not None:
+        base_policy = (
+            "current" if "single_generated_question" in names else
+            "4.6" if "reflective_question_form" in names else "historical"
+        )
+    else:
+        base_policy = coach_validation_policy_for_prompt_version(prompt_version)
     voice = policy == "current" or (
         bool(names & {"conversational_voice", "natural_reflection_voice"})
         if digest.validation is not None
-        else prompt_version in {"4.4", "4.5"}
+        else prompt_version in {"4.4", "4.5", "4.6", "4.7"}
     )
     voice_version: Literal["4.4", "4.5"] = (
         "4.5"
         if policy == "current"
         or "natural_reflection_voice" in names
-        or (digest.validation is None and prompt_version == "4.5")
+        or (digest.validation is None and prompt_version in {"4.5", "4.6", "4.7"})
         else "4.4"
     )
     resolved = (
-        "current"
-        if current and voice and voice_version == "4.5"
-        else f"current_voice_{voice_version}"
-        if current and voice
-        else "current_base"
-        if current
-        else f"historical_voice_{voice_version}"
+        base_policy
+        if base_policy != "historical" and voice and voice_version == "4.5"
+        else f"{base_policy}_voice_{voice_version}"
         if voice
-        else "historical_base"
+        else f"{base_policy}_base"
     )
     if policy == "recorded" and not names and prompt_version is None:
         resolved += "_legacy_default"
@@ -209,7 +217,7 @@ def _validate_for_policy(
         narrative,
         validate_voice=voice,
         voice_version=voice_version,
-        validation_policy="current" if current else "historical",
+        validation_policy=base_policy,
     ), resolved
 
 

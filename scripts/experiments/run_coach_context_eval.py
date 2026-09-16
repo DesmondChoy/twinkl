@@ -44,11 +44,12 @@ from src.weekly_drift_reviewer import WeeklyDriftReviewerDecision
 
 ROOT = Path(__file__).resolve().parents[2]
 BASELINE = Path("logs/experiments/reports/coach_prompt_audit_20260913")
+COACH_PROMPT_NAME = "versions/weekly_digest_coach_v4_6"
 SOURCE_PATHS = (
     "scripts/experiments/run_coach_context_eval.py",
     "scripts/experiments/coach_context_sources.py",
     "tests/experiments/test_run_coach_context_eval.py",
-    "prompts/weekly_digest_coach.yaml",
+    f"prompts/{COACH_PROMPT_NAME}.yaml",
     "prompts/coach_narrative_judge.yaml",
     "config/schwartz_values.yaml",
     "src/coach/weekly_digest.py",
@@ -180,7 +181,7 @@ def prepare(root: Path = ROOT) -> dict:
     bundle_path = root / source["source_bundle_path"]
     if _file_hash(bundle_path) != source["source_bundle_content_sha256"]:
         raise ValueError("Frozen scenario bundle hash changed")
-    if get_prompt_metadata("weekly_digest_coach")["version"] != "4.6":
+    if get_prompt_metadata(COACH_PROMPT_NAME)["version"] != "4.6":
         raise ValueError("Experiment requires Coach prompt 4.6")
     if get_prompt_metadata("coach_narrative_judge")["version"] != "3.1":
         raise ValueError("Experiment requires evaluator prompt 3.1")
@@ -203,12 +204,14 @@ def prepare(root: Path = ROOT) -> dict:
     digests = {"old": old, "full": full}
     generation: dict[str, dict[str, Any]] = {}
     for arm, digest in digests.items():
-        instructions, data = render_digest_messages(digest)
+        instructions, data = render_digest_messages(
+            digest, prompt_name=COACH_PROMPT_NAME,
+        )
         generation[arm] = {
             "request": _request(
                 data, WEEKLY_DIGEST_COACH_RESPONSE_FORMAT, instructions
             ),
-            "receipt": render_digest_prompt(digest),
+            "receipt": render_digest_prompt(digest, prompt_name=COACH_PROMPT_NAME),
         }
     if (
         generation["old"]["request"]["instructions"]
@@ -424,7 +427,7 @@ async def run(out: Path, plan: dict, *, provider_factory=build_llm_complete) -> 
 
         async def generate(complete, digest=digests[arm]):
             diagnostic, receipt = await generate_weekly_digest_coach_diagnostic(
-                digest, complete
+                digest, complete, prompt_name=COACH_PROMPT_NAME, validation_policy="4.6"
             )
             return {
                 "diagnostic": diagnostic.model_dump(mode="json"),

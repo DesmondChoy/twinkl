@@ -456,3 +456,85 @@ def test_recorded_checks_outrank_newer_prompt_metadata(tmp_path, voice_version):
         check.name: check.passed for check in digest.validation.checks
     }
     assert "natural_reflection_voice" not in report.checks
+
+
+@pytest.mark.parametrize("policy,resolved", [("4.6", "4.6"), ("current", "current")])
+@pytest.mark.parametrize("case", ["source_improvement", "extra_question"])
+def test_versioned_receipts_replay_exact_checks_without_regrading(
+    tmp_path, policy, resolved, case,
+):
+    digest = _digest()
+    digest.evidence[0].excerpt += ". I saw an improvement in the drawing."
+    narrative = CoachNarrative.model_validate(_CLEAN)
+    narrative.tension_explanation = (
+        'You wrote, "I saw an improvement in the drawing."'
+        if case == "source_improvement" else
+        "You made time for that conversation. What drew you to it?"
+    )
+    direct = validate_weekly_digest_narrative(
+        digest, narrative, validate_voice=True, validation_policy=policy,
+    )
+    digest.coach_narrative, digest.validation = narrative, direct
+    path = tmp_path / "digests.parquet"
+    persist_weekly_digest_record(digest, path)
+    original = path.read_bytes()
+
+    recorded = evaluate_parquet(path)
+    current = evaluate_parquet(path, validation_policy="current")
+
+    assert recorded.sample_results[0]["checks"] == {
+        check.name: check.passed for check in direct.checks
+    }
+    assert recorded.sample_results[0]["validation_policy"] == resolved
+    assert recorded.sample_results[0]["all_passed"] == direct.all_passed
+    assert current.sample_results[0]["all_passed"] == (case == "source_improvement")
+    assert path.read_bytes() == original
+
+
+@pytest.mark.parametrize("version,resolved", [("4.6", "4.6"), ("4.7", "current")])
+def test_manifest_without_receipt_routes_modern_prompt_versions(
+    tmp_path, version, resolved,
+):
+    digest = _digest()
+    narrative = CoachNarrative.model_validate(_CLEAN)
+    narrative.tension_explanation += " What drew you to that choice?"
+    path = tmp_path / "sample.json"
+    path.write_text(json.dumps([{
+        "digest": digest.model_dump(),
+        "narrative": narrative.model_dump(),
+        "provenance": {"generation": {"prompt_version": version}},
+    }]))
+
+    report = evaluate_manifest(path)
+
+    assert report.sample_results[0]["validation_policy"] == resolved
+    assert report.sample_results[0]["all_passed"] == (version == "4.6")
+    assert ("single_generated_question" in report.checks) == (version == "4.7")
+    assert "natural_reflection_voice" in report.checks
+
+
+@pytest.mark.parametrize("policy,metadata,resolved", [
+    ("4.6", "4.7", "4.6"), ("current", "4.6", "current"),
+])
+def test_saved_question_contract_outranks_conflicting_prompt_metadata(
+    tmp_path, policy, metadata, resolved,
+):
+    digest = _digest()
+    narrative = CoachNarrative.model_validate(_CLEAN)
+    narrative.tension_explanation += " What drew you to that choice?"
+    digest.validation = validate_weekly_digest_narrative(
+        digest, narrative, validate_voice=True, validation_policy=policy,
+    )
+    path = tmp_path / "sample.json"
+    path.write_text(json.dumps([{
+        "digest": digest.model_dump(),
+        "narrative": narrative.model_dump(),
+        "provenance": {"generation": {"prompt_version": metadata}},
+    }]))
+
+    report = evaluate_manifest(path)
+
+    assert report.sample_results[0]["validation_policy"] == resolved
+    assert report.sample_results[0]["checks"] == {
+        check.name: check.passed for check in digest.validation.checks
+    }

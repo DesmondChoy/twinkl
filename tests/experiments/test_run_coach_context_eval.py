@@ -48,6 +48,19 @@ def test_context_only_changes_selected_excerpts(plan):
     ]
 
 
+def test_frozen_context_experiment_uses_46_after_active_prompt_changes(plan):
+    digest = runner.WeeklyDigest.model_validate(plan["digests"]["old"])
+    archived_instructions, _ = runner.render_digest_messages(
+        digest, prompt_name=runner.COACH_PROMPT_NAME,
+    )
+    active_instructions, _ = runner.render_digest_messages(digest)
+
+    assert runner.get_prompt_metadata(runner.COACH_PROMPT_NAME)["version"] == "4.6"
+    assert plan["generation"]["old"]["request"]["instructions"] == archived_instructions
+    assert archived_instructions != active_instructions
+    assert "prompts/versions/weekly_digest_coach_v4_6.yaml" in runner.SOURCE_PATHS
+
+
 class FakeProvider:
     def __init__(self, *, transport_failure=False, malformed_generation=False):
         self.calls = []

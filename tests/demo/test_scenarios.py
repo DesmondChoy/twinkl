@@ -545,7 +545,7 @@ def test_incompatible_coach_source_is_omitted(
         assert _weekly_drift_input_sha256(digest_event.details.digest) in reason
 
 
-@pytest.mark.parametrize("prompt_version", ["4.4", "4.5", "4.6"])
+@pytest.mark.parametrize("prompt_version", ["4.4", "4.5", "4.6", "4.7"])
 def test_saved_coach_quote_placement_uses_its_generation_policy(
     weekly_sources, prompt_version
 ) -> None:
@@ -574,7 +574,7 @@ def test_saved_coach_quote_placement_uses_its_generation_policy(
             coach_responses=responses,
         )
 
-    if prompt_version == "4.6":
+    if prompt_version in {"4.6", "4.7"}:
         with pytest.raises(ValueError, match="weekly_mirror_verbatim"):
             build()
     else:

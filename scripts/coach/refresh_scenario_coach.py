@@ -41,6 +41,7 @@ from src.coach.schemas import CoachDigestDiagnostic, LLMCallMetrics, WeeklyDiges
 from src.coach.weekly_digest import (
     LLMCompleteFn,
     attach_coach_artifacts,
+    coach_validation_policy_for_prompt_version,
     generate_weekly_digest_coach_diagnostic,
     render_digest_prompt,
     validate_weekly_digest_narrative,
@@ -129,9 +130,8 @@ def prepare(
                 != response.generation.response_sha256
                 or not validate_weekly_digest_narrative(
                     digest, response.narrative, validate_voice=True,
-                    validation_policy=(
-                        "current" if response.generation.prompt_version == "4.6"
-                        else "historical"
+                    validation_policy=coach_validation_policy_for_prompt_version(
+                        response.generation.prompt_version
                     ),
                 ).all_passed
             ):
@@ -460,11 +460,9 @@ def apply(root: Path, output: Path, plan: dict[str, Any]) -> None:
             _coach_unavailable_reason(response, digest) is not None
             or not validate_weekly_digest_narrative(
                 digest, response.narrative, validate_voice=True,
-                validation_policy=(
-                    "current"
-                    if response.generation is not None
-                    and response.generation.prompt_version == "4.6"
-                    else "historical"
+                validation_policy=coach_validation_policy_for_prompt_version(
+                    response.generation.prompt_version
+                    if response.generation is not None else None
                 ),
             ).all_passed
         ):

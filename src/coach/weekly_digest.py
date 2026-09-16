@@ -1198,9 +1198,11 @@ def render_digest_messages(
     return protect_instructions(instructions), serialize_untrusted_data(prompt_inputs)
 
 
-def render_digest_prompt(digest: WeeklyDigest) -> str:
+def render_digest_prompt(
+    digest: WeeklyDigest, *, prompt_name: str = "weekly_digest_coach"
+) -> str:
     """Render the exact two-message Coach Digest request for Inspect."""
-    instructions, input_data = render_digest_messages(digest)
+    instructions, input_data = render_digest_messages(digest, prompt_name=prompt_name)
     return render_live_prompt_receipt(
         instructions=instructions,
         input_data=input_data,
@@ -1315,9 +1317,11 @@ async def generate_weekly_digest_coach_diagnostic(
     llm_complete: LLMCompleteFn,
     *,
     repair_requirements: Sequence[str] | None = None,
+    prompt_name: str = "weekly_digest_coach",
+    validation_policy: Literal["historical", "4.6", "current"] = "current",
 ) -> tuple[CoachDigestDiagnostic, str]:
     """Generate and diagnose one Coach Digest response."""
-    instructions, input_data = render_digest_messages(digest)
+    instructions, input_data = render_digest_messages(digest, prompt_name=prompt_name)
     if repair_requirements:
         requirements = "\n".join(
             f"- {requirement}" for requirement in repair_requirements
@@ -1397,7 +1401,7 @@ async def generate_weekly_digest_coach_diagnostic(
         )
 
     validation = validate_weekly_digest_narrative(
-        digest, narrative, validate_voice=True
+        digest, narrative, validate_voice=True, validation_policy=validation_policy
     )
     failed_checks = [
         f"{check.name}: {check.details}"
@@ -1430,6 +1434,34 @@ def _extract_quoted_phrases(text: str) -> list[str]:
     ]
 
 
+def _mask_source_quotations(text: str, sources: Sequence[str]) -> str:
+    """Exclude exact source quotations from checks of generated narration only."""
+    for quote in extract_source_quotations(text):
+        if not any(quote in source for source in sources):
+            continue
+        enclosed_quote = "|".join(
+            re.escape(opening) + r"\s*" + re.escape(quote) + r"\s*" + re.escape(closing)
+            for opening, closing in [('"', '"'), ("“", "”"), ("'", "'"), ("‘", "’")]
+        )
+        # A source comma can also separate the surrounding question's clauses.
+        replacement = "QUOTATION" + ("," if quote.endswith(",") else "")
+        text = re.sub(enclosed_quote, replacement, text)
+    return text
+
+
+def coach_validation_policy_for_prompt_version(
+    prompt_version: str | None,
+) -> Literal["historical", "4.6", "current"]:
+    """Select the original validation contract for a recorded Coach response."""
+    if prompt_version == "4.7":
+        return "current"
+    if prompt_version == "4.6":
+        return "4.6"
+    if prompt_version in {None, "4.1", "4.2", "4.3", "4.4", "4.5"}:
+        return "historical"
+    raise ValueError(f"Unsupported Coach Digest prompt version: {prompt_version}")
+
+
 def _detect_value_label_leakage(
     text: str,
     config_path: Path = SCHWARTZ_CONFIG_PATH,
@@ -1457,23 +1489,30 @@ def validate_weekly_digest_narrative(
     *,
     validate_voice: bool = False,
     voice_version: Literal["4.4", "4.5"] = "4.5",
-    validation_policy: Literal["historical", "current"] = "current",
+    validation_policy: Literal["historical", "4.6", "current"] = "current",
 ) -> DigestValidation:
     """Validate a response; historical policy preserves pre-guardrail receipts."""
     minimum_words = (
         min_words if min_words is not None
         else 25 if validation_policy == "historical" else 0
     )
-    combined_text = " ".join(
-        [
-            narrative.weekly_mirror.strip(),
-            narrative.tension_explanation.strip(),
-            narrative.reflective_question.strip(),
-        ]
-    ).strip()
+    fields = [
+        narrative.weekly_mirror.strip(),
+        narrative.tension_explanation.strip(),
+        narrative.reflective_question.strip(),
+    ]
+    combined_text = " ".join(fields).strip()
     word_count = len(combined_text.split())
 
     source_texts = [snippet.excerpt for snippet in digest.evidence]
+    supplied_sources = list(source_texts)
+    for comparison in digest.state_comparisons:
+        supplied_sources.extend(item.excerpt for item in comparison.previous_evidence)
+        supplied_sources.extend(item.excerpt for item in comparison.current_evidence)
+    generated_fields = (
+        [_mask_source_quotations(text, supplied_sources) for text in fields]
+        if validation_policy == "current" else fields
+    )
     grounded_quotes = [
         quote
         for quote in _extract_quoted_phrases(combined_text)
@@ -1507,7 +1546,7 @@ def validate_weekly_digest_narrative(
         "recover": r"\brecover\w*\b",
         "success": r"\bsuccess\w*\b",
     }
-    lowered_text = combined_text.lower()
+    lowered_text = " ".join(generated_fields).lower()
     found_transition_terms = sorted(
         label
         for label, pattern in positive_transition_patterns.items()
@@ -1530,7 +1569,12 @@ def validate_weekly_digest_narrative(
     state_claims_passed = not found_transition_terms and (
         not has_end_claim or supports_end_claim
     )
-    state_claim_details = "Response makes only supported current-state claims."
+    state_claim_details = (
+        "No prohibited transition wording was detected in generated narration; "
+        "this wording check does not establish source fidelity."
+        if validation_policy == "current" else
+        "Response makes only supported current-state claims."
+    )
     if found_transition_terms:
         state_claim_details = (
             "Response makes an unsupported positive transition claim with: "
@@ -1595,19 +1639,11 @@ def validate_weekly_digest_narrative(
         ),
     ]
 
-    if validation_policy == "current":
+    if validation_policy != "historical":
         weekly_quotes = [
             quote for quote in _extract_quoted_phrases(narrative.weekly_mirror)
             if any(quote in source for source in source_texts)
         ]
-        supplied_sources = list(source_texts)
-        for comparison in digest.state_comparisons:
-            supplied_sources.extend(
-                item.excerpt for item in comparison.previous_evidence
-            )
-            supplied_sources.extend(
-                item.excerpt for item in comparison.current_evidence
-            )
         ungrounded_quotes = [
             quote for quote in extract_source_quotations(combined_text)
             if not any(quote in source for source in supplied_sources)
@@ -1641,19 +1677,24 @@ def validate_weekly_digest_narrative(
             ),
             ValidationCheck(
                 name="reflective_question_form",
-                passed=is_single_question(narrative.reflective_question),
+                passed=is_single_question(generated_fields[2]),
                 details="Return one nonempty question in question form. "
                 "This structural check does not establish non-prescriptive tone.",
             ),
         ])
+        if validation_policy == "current":
+            checks.append(ValidationCheck(
+                name="single_generated_question",
+                passed=sum(text.count("?") for text in generated_fields) == 1,
+                details=(
+                    "Return exactly one generated question across all three fields, "
+                    "in reflective_question. Exact source question quotations may "
+                    "remain. This structural check does not establish source fidelity."
+                ),
+            ))
 
     if validate_voice:
         # Quoted Journal Entries remain the user's words, including recap wording.
-        fields = [
-            narrative.weekly_mirror,
-            narrative.tension_explanation,
-            narrative.reflective_question,
-        ]
         narration = [re.sub(r'["“][^"”]*["”]', "QUOTATION", text).strip()
                      for text in fields]
         recap_opening = any(re.match(

@@ -33,6 +33,7 @@ from src.coach.schemas import CoachDigestDiagnostic, LLMCallMetrics, WeeklyDiges
 from src.coach.weekly_digest import (
     LLMCompleteFn,
     attach_coach_artifacts,
+    coach_validation_policy_for_prompt_version,
     generate_weekly_digest_coach_diagnostic,
     validate_weekly_digest_narrative,
 )
@@ -141,11 +142,9 @@ def prepare(
         if not validate_weekly_digest_narrative(
             digest,
             response.narrative,
-            validation_policy=(
-                "current"
-                if response.generation is not None
-                and response.generation.prompt_version == "4.6"
-                else "historical"
+            validation_policy=coach_validation_policy_for_prompt_version(
+                response.generation.prompt_version
+                if response.generation is not None else None
             ),
         ).all_passed:
             raise ValueError(f"Existing response failed validations: {key}")

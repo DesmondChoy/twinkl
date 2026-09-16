@@ -681,7 +681,7 @@ def test_coach_prompt_declares_only_the_projected_inputs():
 
 def test_current_prompt_states_uncertainty_and_complete_output_contract():
     instructions, _ = render_digest_messages(_minimal_digest())
-    assert get_prompt_metadata("weekly_digest_coach")["version"] == "4.6"
+    assert get_prompt_metadata("weekly_digest_coach")["version"] == "4.7"
     assert "A focused, open question can preserve uncertainty" in instructions
     assert "explicit statement about what remains unclear is optional" in instructions
     assert "State the ambiguity gently" not in instructions
