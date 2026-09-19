@@ -83,9 +83,9 @@ The selected Persona panel has extra separation below the comparison. Its
 start button gives two brief sparkle cues, then rests; reduced-motion settings
 disable the sparkles.
 
-Inside the saved replay, a quiet 170px week navigator replaces the section-link
-banner. It shows week numbers and dates, highlights the selection, and keeps
-future outcomes hidden. Restart and the key-week shortcut sit below it. A
+Inside the saved replay, a quiet 170px week navigator shows week numbers and
+dates, highlights the selection, and keeps future outcomes hidden. Restart and
+the key-week shortcut sit below it. A
 collapsed Profile row and compact week heading leave the main area for reading;
 Next week stays beside the week heading. At widths up to 900px, the weeks form
 a horizontal strip instead. At widths up to 620px, **Choose another Persona**
@@ -128,6 +128,15 @@ and stack on phones. The North Star Moment remains within the Coach Digest. A un
 matched abbreviated Coach Digest quotation expands to its full source below
 the paragraph, while Inspect preserves the original model response.
 
+Saved replay starts with the Coach Digest generated without selected North Star
+Moment context. **With North Star Moment** switches both narrative paragraphs
+and the reflective question to a separate saved response that uses the selected
+source, then displays its exact quotation. **Without North Star Moment** restores
+the complete baseline response. If a selection or valid pair is unavailable,
+the control explains why and offers **View review in Inspect** when a matching
+review exists. Changing Persona or week resets the comparison. This toggle
+makes no provider call; personal Experience keeps its original response.
+
 The top-level **Inspect** switch follows the visible saved replay panel.
 From Journal Entries it opens **Recorded work**, limited to saved Journal Entry
 intake, nudges, and responses, with earlier Journal Entry work collapsed. From
@@ -145,6 +154,9 @@ North Star Moment inspection walks through the complete supplied writing,
 exact prompts, factual AI assessments, and application selection and checks.
 The selected source's assessment is expanded; original provider attempts remain
 available separately from benchmark evaluation results.
+Expanded component events and the Profile calculation include **Read the method**
+and **View implementation** links pinned to an assessment reference revision.
+The recorded prompts and receipts remain the evidence for each run.
 The manual **Write** link appears only when the Journal Entry form is present,
 after the first-use notice and outside a pending Nudge response.
 
@@ -161,8 +173,9 @@ generation provenance is in
 
 ## North Star Moment
 
-Both frontend paths display at most one North Star Moment beneath the Coach
-Digest. Active Drift uses a supportive action from before onset. No Active
+Both frontend paths display at most one North Star Moment within the Coach
+Digest, after its narrative and reflective question. Active Drift uses a
+supportive action from before onset. No Active
 Drift prefers a verified action from the reviewed week, with specific
 encouragement; older writing receives historical reminder wording. Neither an
 omission nor a Not Conflict decision establishes alignment. Insufficient
@@ -179,24 +192,33 @@ three ineligible outcomes, and two completed reviews with no supportive source.
 Records preserve original model receipts and synthetic source availability;
 they do not substitute AI evaluation grades for runtime decisions.
 
-Manual onboarding calls `review_north_star` separately after the existing
+Manual Experience calls `review_north_star` separately after the
 closed-week response, keeping Weekly Drift Detection and valid Coach Digest
 results available. It coalesces duplicate requests, reuses completed records,
 shows bounded retry when permitted, and discards obsolete results after source
 changes or deletion. Replies have separate server availability timestamps;
 the current runtime excludes responses without an availability value. This
-runtime behavior does not define the fresh experiment's synthetic-data policy.
+runtime behavior is separate from the offline experiment's synthetic-data policy.
+
+**Reviewed week** selects a retained result by its Monday date. Browsing or
+reloading historical results makes no model call or change to Simulated time.
+**Retry Coach Digest** runs only Coach Digest for the selected stored weekly
+output; a matching invalid attempt supplies repair feedback. Historical results
+with a valid Coach Digest offer **Review moment** when no review exists or
+**Resume moment review** for stored pending work. Source links open the complete
+Journal Entry and its saved response in a centered dialog; closing it restores
+focus and the reading position without changing the selected week.
 
 Temporary token-counting timeouts, connection failures, and retryable HTTP
 errors allow the same explicit retry. Invalid token receipts and over-limit
 inputs remain terminal. Counting failures consume no generation attempt, and
 retry reuses any earlier completed Core Value reviews.
 
-The backend uses server-side `OPENAI_API_KEY`, Luna `low`, and the shared
-[integration policy](../../config/evals/north_star_integration_v1.json): complete
+The backend uses server-side `OPENAI_API_KEY`, Luna `low`, and the
+[live policy](../../config/evals/north_star_live_v1.json): complete
 inputs up to 16,000 tokens, no truncation, at most two attempts per model
-request, US$0.25 per attempt and US$20 cumulative. These are retained runtime
-settings, not an approved budget for the fresh experiment. Default live
+request, US$0.25 per attempt, and a separately authorized US$1 allowance shared
+across sessions and restarts. Default live
 provider receipts persist budget metadata. Full prompts, eligible source
 text and raw responses remain in server session memory and browser-held
 Inspect records; browser localStorage retains those records for resume.
@@ -204,19 +226,21 @@ Confirmed Delete session removes both copies. A storage-quota failure raises
 the existing persistence warning; live history has no production storage
 capacity guarantee. The reusable synthetic preparation code supports
 source-disclosed raw outputs for reproduction. The saved replay links the
-completed experiment's original receipts without making new provider calls.
+completed experiment's original receipts without making provider calls.
 The live runtime does not make a separate evaluation call.
 
 Live NSM work is serialized in one worker thread. It uses the ignored
-`logs/exports/demo_tool_runs/north_star/` directory and requires a finalized
-integration budget. A missing or changed integration budget fails closed
-before counting or provider work. A finalized integration budget is unavailable,
-so live NSM generation is unavailable.
-Saved replay does not require a live integration budget.
+`logs/exports/demo_tool_runs/north_star/` directory for budget and token-count
+records. Unavailable budget accounting or an exhausted allowance fails closed.
+The default live runtime uses its own budget ledger; only an explicit legacy
+`source_directory` uses finalized integration spend under the separate
+[integration policy](../../config/evals/north_star_integration_v1.json).
+Saved replay requires neither a provider key nor a live budget.
 
 The [experiment methodology](../../docs/north_star/nsm_experiment_methodology.md)
 records the completed comparison and targeted v4 Run 1 update. Its results are
-AI assessments of synthetic histories, with human review deferred.
+AI assessments of synthetic histories without human review. Human calibration
+and the external user pilot are closed outside capstone scope.
 
 ## Run locally
 
@@ -256,9 +280,12 @@ With the repository Python environment already installed, run from this director
 ```sh
 npx playwright install chromium  # Once per Playwright browser version
 npm run test:e2e
+npm run test:e2e -- --project=desktop-chromium
+npm run test:e2e -- --project=narrow-chromium
 ```
 
-The command builds the frontend and starts the controlled API on port 8765;
+Without a project option, both viewports run. Each command builds the frontend
+and starts the controlled API on port 8765;
 that port must be free. It stops the server after the tests. Failure screenshots
 and traces are saved under `test-results/` and remain untracked.
 
@@ -314,12 +341,15 @@ builds from the exported scenario bundles without importing the historical
 August Coach Digest evaluation manifest.
 
 The scenario exporter verifies saved Coach Digest provenance against each
-week's Weekly Drift Detection output. The [9 September voice refresh](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
-provides a response for all 27 current replay weeks, generated with Luna at
-reasoning effort `none` and prompt `4.4`. The warmer prompt and generation checks
-avoid recap openings, clinical findings, and abstract questions. Earlier
-responses and every new provider attempt remain in the refresh records.
-These responses have no new Coach Digest Evals or human validation.
+week's Weekly Drift Detection output. The [27-response voice record](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
+contains responses generated with Luna at reasoning effort `none` and prompt
+`4.4`. The [saved North Star Moment comparison](../../docs/north_star/demo_coach_comparison.md)
+supplies paired responses for the 22 weeks with an accepted quotation; its
+without-context response is the default for those weeks. Lukas's second week
+uses prompt `4.5` and comparison extension `1.1`; the other 21 pairs use
+`4.4` and `1.0`. Each response retains its recorded validation rules, prompts,
+and provider attempts. These saved responses have no accompanying Coach Digest
+Evals or human validation. Manual generation uses prompt `4.7`.
 Incompatible responses remain unavailable. The August Coach Digest evaluation
 remains historical evidence. The browser requests
 the scenario catalog and bundles with

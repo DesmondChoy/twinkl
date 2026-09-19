@@ -61,10 +61,14 @@ The paper cites the historical August
 and [Coach Digest Evals](../../logs/experiments/reports/coach_digest_evals_20260824/report.md)
 for the previous five-Persona roster and inputs. This result is same-model AI review. The
 independent-provider Coach Digest and Drift/control tooling has no committed paid result and
-does not change the report's evidence claim.
+does not change the report's evidence claim. This workstream is Done under the
+[accepted capstone scope](../prd.md#capstone-closeout-decisions). Human
+calibration and the external user pilot are closed without execution. The
+report preserves its recorded evidence; the PRD records the final scope
+decisions, including completion of longitudinal Core Value history.
 
 The [13 September source-context diagnostic](../../logs/experiments/reports/coach_context_eval_20260913/report.md)
-adds six fresh responses and nine same-model evaluator assessments for one
+contains six responses and nine same-model evaluator assessments for one
 synthetic Persona-week. Complete selected-entry context reduced clear event
 attribution errors in this sample, but causal overgeneralisation remained and
 the evaluator failed to flag the known incorrect response. These results are
@@ -72,11 +76,20 @@ separate from the August scores and saved September replays. The diagnostic and
 associated Coach changes are preserved in commit
 [`af22ab4`](https://github.com/DesmondChoy/twinkl/tree/af22ab457994fd2863fe5b5b7735f768f211519b).
 
-The [September Coach Digest sample](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
-contains five accepted key-week responses for the current Persona roster and
-Weekly Drift inputs. All pass Coach Digest Validations, with no corresponding
-Coach Digest Evals or human review. The August scores do not describe these
-responses.
+The [7 September Coach Digest sample](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
+contains five accepted key-week responses for its recorded Persona roster and
+Weekly Drift inputs. The current 27-week replay uses the
+[voice refresh and repair receipts](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
+and [22 saved comparisons](../north_star/demo_coach_comparison.md). Each saved
+response retains its input hashes and validation policy. These responses have
+no corresponding Coach Digest Evals or human review; the August scores do not
+describe them.
+
+The [16 September application verification](../../logs/experiments/reports/onboarding_qa_fixes_20260916/report.md)
+records prompt-`4.7` validation, explicit Coach Digest retry, historical Moment
+recovery, and desktop browser evidence. The [current runtime guide](../weekly/weekly_drift_detection.md)
+describes ordinary generation; the paper's dated prompt-`4.6` diagnostic remains
+the source for that experiment's findings.
 
 The [NSM experiment methodology](../north_star/nsm_experiment_methodology.md)
 and [targeted v4 Run 1 results](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
@@ -86,8 +99,9 @@ history has higher Card precision and Opportunity recall than Nomic top-three
 retrieval in both partitions. These are AI assessments with qualified final
 histories that have prior upstream research exposure, not human validation or
 an untouched final test. Appendix C describes saved full-history outcomes for
-five Personas and 27 weeks. Live budget configuration and the final source-level
-walkthrough remain separate work.
+five Personas and 27 weeks. Live North Star Moment review uses its separately
+pinned US$1 allowance across sessions and restarts. The final professor
+walkthrough evidence remains open.
 
 ## Submission Checks
 

@@ -230,6 +230,10 @@ map; **View recorded events** returns to the event list. The calculation shows
 the confirmed Core Values separately from all values tied for the highest score.
 Saved Persona Profiles are synthetic projections, not records of a Persona
 completing the assessment, so they do not expose this manual calculation control.
+The calculation includes **Read the method** and **View implementation** links
+to the scoring specification and browser calculation at a fixed assessment
+reference revision. Those references explain the method; the recorded choices
+and confirmed Profile describe this session.
 
 On wide screens, the summary and Profile confirmation handoff compact their
 spacing so the primary action remains in view for typical results. Longer
@@ -387,7 +391,12 @@ version `10` sessions without this field remain readable; their exact partial
 replay progress cannot be recovered. The optional `replay_inspect_panel` field
 records whether Inspect was opened from Journal Entries or the weekly result,
 so reloading Inspect preserves that context. Older sessions default to Journal
-Entry inspection. Versions `4` through `9` migrate when a
+Entry inspection. The optional `selected_manual_week` stores the Monday of the
+selected historical manual result; null follows the latest reviewed week.
+Browsing or reloading a retained result does not advance Simulated time or
+start a model call. Recovery controls and source dialogs follow the
+[Experience and Inspect contract](../demo/experience_inspect_app.md#54-user-facing-results).
+Versions `4` through `9` migrate when a
 confirmed legacy Profile contains at most two Core Values. A version `6` goal
 stage resumes at the Core Value summary. Confirmed version `2` and `3` Profiles
 with at most two Core Values migrate to version `4` without `goal_category`.

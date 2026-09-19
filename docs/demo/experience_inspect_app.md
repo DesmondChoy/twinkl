@@ -36,33 +36,29 @@ available. A missing or invalid response does not remove the Weekly Drift
 Detection result.
 
 The five deterministic Persona replays load into the shared React session
-with immediate selected-week Journal Entries, explicit result review, previous-
-and next-week navigation, restart, named jumps to key weeks, reduced-motion behavior,
+with Journal Entries and nudge interactions revealed at 500 ms intervals,
+explicit result review, direct week selection and next-week navigation,
+restart, named jumps to key weeks, reduced-motion behavior,
 no-future-data projection, and browser-side scenario hash verification. The
 release quality gate is implemented. Every saved week has a Coach Digest whose
-source hash matches that week's current Weekly Drift Detection output. The
-[Persona replacement run](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md)
-adds ten responses for Lukas and Meera and retains 17 compatible responses for
-Nisha, Noor, and Wei Jun from the
-[September completion run](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md).
-The [9 September voice refresh](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
-regenerates all 27 from the same weekly inputs with Luna at reasoning effort
-`none` and prompt `4.4`, preserving the earlier response receipts. It replaces
-calendar-recap openings and clinical finding language with conversational,
-specific reflections. Coach Digest Validations include the new voice checks.
-The [saved North Star Moment comparison](../north_star/demo_coach_comparison.md)
-adds paired responses for weeks with an accepted selection, using the same base
-instructions and weekly input with only `north_star_context` changed. Its
+source hash matches that week's current Weekly Drift Detection output.
+The [27-response voice record](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
+contains source-compatible responses generated with Luna at reasoning effort
+`none` and prompt `4.4`, with original receipts preserved. The
+[saved North Star Moment comparison](../north_star/demo_coach_comparison.md)
+contains paired responses for weeks with an accepted selection, using the same
+base instructions and weekly input with only `north_star_context` changed. Its
 without-context response is the default for those weeks. Inspect exposes both
-complete prompts and their associated responses; the original prompt-4.4
-receipts remain preserved separately.
+complete prompts and their associated responses.
 The [Lukas voice pilot](../../logs/experiments/reports/coach_voice_pilot_selected_20260909/report.md)
-refreshes only his second-week pair with prompt `4.5` and comparison extension
-`1.1`. The other 21 pairs retain their recorded prompt versions. The pilot uses
-natural chronology and direct descriptions of experience; source review still
-remains necessary because the wording checks do not establish factual fidelity.
-These generation runs add no Coach Digest Evals or human validation; the
-[August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
+supplies his second-week pair with prompt `4.5` and comparison extension `1.1`;
+the other 21 pairs use `4.4` and `1.0`. These saved responses retain their
+recorded validation rules. Manual generation uses prompt `4.7`, with exact
+source quotations, conversational openings, and one generated reflective
+question across the response. Coach Digest Validations check the response's
+form and source matches; they do not establish factual or temporal accuracy.
+These generation records contain no accompanying Coach Digest Evals or human
+validation. The [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json)
 remains historical evidence for a different Persona roster and inputs.
 
 | Persona | Weeks with source-compatible Coach Digests |
@@ -73,12 +69,14 @@ remains historical evidence for a different Persona roster and inputs.
 | Wei Jun Chen | 1–6 |
 | Meera Krishnamurthy | 1–5 |
 
-The replacement uses exact saved weekly inputs, preserves compatible response
-receipts, and validates one Coach event per week. It reuses Weekly Drift
-Detection and full-history North Star Moment outcomes from the pinned studies.
-The generation command and raw receipts are recorded with the replacement report.
-The active replay files no longer include the two retired Personas; their
-source datasets and historical experiment records remain intact.
+The replay uses exact saved weekly inputs, compatible response receipts, and
+one Coach event per week. Weekly Drift Detection and full-history North Star
+Moment outcomes come from pinned studies. The
+[Persona preparation report](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md)
+and [September completion run](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
+preserve earlier generation commands and receipts. Retired Personas' source
+datasets and historical experiment records remain available outside the active
+replay catalog.
 
 The [integration validation](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
 records passing application checks and five AI editorial concerns in the
@@ -86,9 +84,16 @@ previous roster, tracked in `twinkl-rklc.39`. It remains historical evidence;
 replacing two Personas does not resolve the retained Personas' concerns or
 establish semantic agreement between the Coach Digest and North Star Moment.
 
-Current capstone work is
-Coach Digest feedback capture, longitudinal Core Value history, and the final
-professor walkthrough. The
+Longitudinal Core Value history is Done (`twinkl-rklc.30`). Manual Experience
+reconstructs reviewed weeks from retained trace events; the Reviewed week
+selector opens each week's Core Value states, cited evidence, Coach Digest
+response, and linked Inspect events. Session restore preserves this history,
+and recomputation replaces an affected week without duplicate results. This
+implementation satisfies the accepted capstone scope without a separate
+weekly-summary collection.
+
+Remaining feature and finalization work is Coach Digest feedback capture and
+the final professor walkthrough. The
 optional live rerun does not block the final walkthrough. The versioned
 React-Python boundary, JSON Schema, and
 canonical fixtures are implemented in
@@ -122,9 +127,13 @@ Core Value contracts.
 
 ## 1. Purpose
 
-The entry page introduces Twinkl with a full-width inner-compass banner and a
-short product description adapted from the [README](../../README.md). A
-top-right GitHub link opens the project repository in a new tab. Below the
+The entry page introduces the capstone's behavioral science, longitudinal
+reasoning, model comparisons, and ablations on synthetic Journal Entries.
+It connects Schwartz theory with the risk of affirming an account without
+examining its contradictions. Its full-width banner contains a decorative
+compass with continuous needle movement and damped pointer tilt. Reduced-motion
+preferences keep the compass static; animation pauses in hidden browser tabs.
+A top-right GitHub link opens the project repository in a new tab. Below the
 introduction, Try the Demo and Try Onboarding lead into the two journeys;
 the Twinkl home link returns to this page while preserving session progress.
 The top-right action is **Choose another Persona** in saved replay Experience
@@ -354,9 +363,9 @@ Entries then shows the whole week. The result is never revealed automatically.
 at the final week. Every week is directly selectable without reviewing earlier weeks;
 **Restart** returns to week one and clears replay progress.
 
-On desktop, a quiet 170-pixel week navigator replaces the section-link banner.
-It shows each week's number and dates, highlights the selected week, and reveals
-states through the furthest reviewed week. Selecting an unreviewed week opens
+On desktop, a quiet 170-pixel week navigator shows each week's number and dates,
+highlights the selected week, and reveals states through the furthest reviewed
+week. Selecting an unreviewed week opens
 its Journal Entries without revealing its outcome. **Restart** and the named key-week shortcut sit
 below the list. The content area begins with a collapsed Profile row and a
 compact selected-week heading beside **Next week**. At widths up to 900 pixels,
@@ -429,12 +438,12 @@ explanation. Toggling performs no provider call. Onboarding continues to show it
 original narrative, optional validated passage, and original question.
 The reflective question closes the **Coach Digest** as an ordinary paragraph,
 without a separate label or callout. The optional North Star Moment and source-date links follow the complete response. The card uses **Coach Digest** as its sole
-heading. The replay result heading reads **Drift Detection (End of Week)**. Prompt `4.5` asks for conversational prose
-that opens with a specific lived moment, avoids calendar-recap openings and
-clinical findings, and asks one short question about a concrete experience.
-New generation checks also reject date-led openings and writing-process commentary;
-historical responses
-retain the validation rules under which they were generated.
+heading. The replay result heading reads **Drift Detection (End of Week)**.
+Saved comparison responses use their recorded prompt versions and validation
+rules. Manual Coach Digest prompt `4.7` asks for conversational prose that opens
+with a specific lived moment, avoids calendar-recap openings and clinical
+findings, and asks one short question about a concrete experience. Its checks
+also reject date-led openings and writing-process commentary.
 
 **Inspect decision** beneath the Drift state opens the weekly explanation,
 linked to the current week's Drift Detector event (or its saved Weekly Drift
@@ -443,7 +452,7 @@ continues to focus the exact North Star Moment event. Inspect filters sit with
 Recorded work, directly above the affected lists, and show matching current-week
 and earlier-event counts beside the results.
 Onboarding presents the passage without a North Star Moment label; Persona
-replay adds a discreet attribution. Both paths provide **Inspect this moment**
+replay includes a discreet attribution. Both paths provide **Inspect this moment**
 for that exact backend event. Inspect distinguishes deterministic framing from
 the exact source quotation and the AI assessment.
 The North Star Moment inspection follows four stages: eligible writing, exact
@@ -542,9 +551,9 @@ does not fall back to an older quotation. **Retry moment review** appears only
 when the current failure permits retry. A valid historical Coach Digest whose
 Moment has never been reviewed offers **Review moment**. A stored historical
 review that has not finished offers **Resume moment review**. Selecting an
-older week or reloading its stored result does not start a model call. New
-Moment events reference the saved digest for the requested week, even when
-other weeks or later Journal Entries were processed more recently.
+older week or reloading its stored result does not start a model call.
+North Star Moment events reference the saved digest for the requested week,
+even when other weeks or later Journal Entries were processed more recently.
 **Retry Coach Digest** uses the stored
 Weekly Drift Detection output; it does not advance Simulated time or repeat
 the Weekly Drift Reviewer. A failed trace refresh after accepted retry work
@@ -1163,18 +1172,18 @@ capstone scope before the professor walkthrough starts.
 | `twinkl-rklc.5` | P0 | Weekly Drift Detection and Coach Digest | `.1`, `.4` |
 | `twinkl-rklc.6` | P0 | Week-by-week persona replay | `.2`, `.3`, `.5` |
 | `twinkl-rklc.7` | P0 | Event-linked Inspect view | `.1`, `.3` |
-| `twinkl-rklc.8` | P1 | Optional live rerun and visible reuse | `.5`, `.7` |
+| `twinkl-rklc.8` | P1 | Optional live rerun and visible reuse (Not done; closed outside capstone scope) | — |
 | `twinkl-rklc.9` | P0 | End-to-end demo quality gate | `.4`, `.5`, `.6`, `.7` |
 | `twinkl-rklc.26` | P0 | Minimum privacy controls for manual journaling (complete) | — |
 | `twinkl-rklc.27` | P0 | Current Coach Digest Validations and Coach Digest Evals results | — |
 | `twinkl-rklc.28` | P1 | Coach Digest feedback and perceived accuracy | — |
-| `twinkl-rklc.30` | P1 | Longitudinal Core Value history | — |
-| `twinkl-rklc.10` | P4 | Professor walkthrough and capstone evidence | `.9`, `.26`, `.27`, `.28`, `.30` |
+| `twinkl-rklc.30` | P1 | Longitudinal Core Value history (Done; existing reviewed-week selection accepted) | — |
+| `twinkl-rklc.10` | P4 | Professor walkthrough and capstone evidence | `.28` (other dependencies complete) |
 
 The P0 quality gate intentionally does not depend on optional live reruns. A
-saved, deterministic replay must remain sufficient for the complete Persona
-walkthrough. `twinkl-rklc.8` can therefore move to future work without blocking
-the final walkthrough.
+saved, deterministic replay is sufficient for the complete Persona
+walkthrough. `twinkl-rklc.8` is Not done and closed outside capstone scope. It
+does not block the final walkthrough.
 
 ## 16. Verification Requirements
 
@@ -1186,6 +1195,30 @@ npm run test:watch
 npm run typecheck
 npm run build
 ```
+
+The deterministic Playwright suite uses the built app and real Python HTTP
+boundary with test doubles for every model call. It runs three workflows in
+Chromium at a 1280 × 900 desktop viewport and a 390 × 844 phone viewport: saved
+replay with Inspect and reload; manual writing with a failed Coach Digest,
+retry, and session deletion; and historical North Star Moment recovery with
+source-dialog focus restoration. It checks that browsing retained results
+does not repeat model work. These checks provide application evidence, not
+model-quality or human-validation evidence.
+
+With the repository Python environment installed, run from
+`frontend/onboarding/`:
+
+```sh
+npx playwright install chromium  # Once per Playwright browser version
+npm run test:e2e
+npm run test:e2e -- --project=desktop-chromium
+npm run test:e2e -- --project=narrow-chromium
+```
+
+Without a project option, both viewports run. Each command builds the app and
+starts the controlled API on port 8765, which must be free. Playwright stops
+that server after the run. Failure screenshots, traces, and source-dialog
+screenshots live under the ignored `test-results/` directory.
 
 For controlled North Star Moment browser checks, run this Python boundary
 instead of `src.demo.api:app`, alongside the React development server:
@@ -1200,6 +1233,13 @@ Select a response mode through its local control endpoint:
 ```sh
 curl -X POST http://127.0.0.1:8000/qc/mode/failure
 curl -X POST http://127.0.0.1:8000/qc/mode/success
+```
+
+Coach Digest availability has an independent control:
+
+```sh
+curl -X POST http://127.0.0.1:8000/qc/coach/failure
+curl -X POST http://127.0.0.1:8000/qc/coach/success
 ```
 
 | Mode | Controlled behavior |
@@ -1225,12 +1265,12 @@ or human-validation evidence.
   schemas.
 - Integration tests cover successful, reused, refused, invalid, and failed
   model outcomes.
-- End-to-end browser tests cover the professor walkthrough, open-week Journal
-  Entries without weekly events, reply and skip, Journal Entry removal, active
-  Drift that ends, Insufficient Evidence, and view-state preservation.
+- The final professor walkthrough also checks reply and skip, Journal Entry
+  removal, Active Drift that ends, and Insufficient Evidence alongside the
+  automated browser coverage described above.
 - Accessibility checks cover keyboard operation, focus, names, status updates,
   and reduced motion.
-- Responsive checks treat representative narrow-screen phone viewports as the
-  primary acceptance target and also cover representative desktop viewports.
+- Responsive checks treat desktop and laptop browsers as the primary
+  acceptance target and preserve the existing narrow-screen flow.
 - Saved scenario manifests are reproducible from their recorded inputs and
   reject mismatched hashes or model contracts.

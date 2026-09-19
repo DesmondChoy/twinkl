@@ -1,5 +1,10 @@
 # North Star Moment experiment methodology
 
+> **Capstone closeout:** Human calibration and the external user pilot are
+> Not done and closed outside capstone scope. References to deferred human
+> review below describe the recorded experiment design; they are not active
+> completion requirements. See the [closeout decisions](../prd.md#capstone-closeout-decisions).
+
 **Latest NSM results to use:** the [targeted Weekly Drift v4 Run 1 update](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md), completed on 7 September 2026, is the current basis for NSM reporting and method comparisons. It supersedes the original v2 repeat-1 results for current reporting; the original record remains historical evidence. These results retain prior observations and remain AI assessments of synthetic histories.
 
 **Status, 7 September 2026:** the original paired AI comparison and its targeted

@@ -1,7 +1,7 @@
 # Demo Coach Digest comparison: with and without North Star Moment
 
-**Implemented demo scope — 9 September 2026.** This comparison covers only the
-five saved Personas in the frontend demo: Nisha, Noor, Lukas, Wei Jun, and Meera.
+This comparison covers the five saved Personas in the frontend demo: Nisha,
+Noor, Lukas, Wei Jun, and Meera.
 It provides two saved Coach Digest responses for the same Persona and reviewed
 week, generated without and with the selected North Star Moment context.
 Switching versions replaces both narrative paragraphs and “Something to reflect
@@ -14,18 +14,18 @@ their existing contracts. Beads: `twinkl-rklc.47` (design and mockups),
 `twinkl-rklc.48` (implementation and paired generation).
 
 The [conversational voice pilot](../../logs/experiments/reports/coach_voice_pilot_selected_20260909/report.md)
-updates Lukas's second-week pair to Coach prompt `4.5` and comparison extension
+provides Lukas's second-week pair with Coach prompt `4.5` and comparison extension
 `1.1`. The other 21 pairs retain `4.4`/`1.0`, with their original validation rules
 and provider receipts. AI editorial review accepted this limited pilot with minor
 wording limitations; it is not human validation or approval for a roster-wide refresh.
-The question happens to be identical in both new responses; independently generated
+The question happens to be identical in both responses; independently generated
 responses need not differ in every field.
 
 ## 1. Toggle behavior and mockups
 
-Keep the current Coach Digest card, typography, colors, date links, source
-panel, and question treatment. Add one button at the top. Its label names the
-version the next click will show; a small status line names the visible version.
+The Coach Digest card contains the narrative, date links, reflective question,
+and optional source panel. One button at the top names the version the next
+click will show; a small status line names the visible version.
 
 | Visible version | Button label | Narrative and question | North Star Moment source panel |
 | --- | --- | --- | --- |
@@ -111,7 +111,7 @@ changed field; diff markers are explanatory and are not sent to the model.
 
 The full source matters here. Nisha's existing weekly excerpt ends at “She was
 gripping it...”, before Fatima's name and the action “I sat with her for almost
-an hour.” The added context identifies who “her” is, what Nisha did, and why the
+an hour.” The selected context identifies who “her” is, what Nisha did, and why the
 encounter mattered in her writing. The Coach Digest can therefore refer to
 spending that time with Fatima, rather than merely displaying an isolated quote.
 
@@ -122,7 +122,7 @@ contain part or all of it in other weeks. Those cases remain valid comparisons
 and should not be edited to exaggerate a difference.
 
 The optional-context rules below are the **demo comparison extension 1.1 to
-prompt 4.5**, installed in [the comparison prompt](../../prompts/demo_coach_nsm_comparison.yaml).
+archived prompt 4.5**, defined in [the comparison prompt](../../prompts/demo_coach_nsm_comparison.yaml).
 They are included identically in both arms. The voice revision favors direct,
 situation-led prose and natural chronology while retaining the factual, policy,
 quotation, and trust-boundary rules. Historical comparison 1.0 receipts retain
@@ -292,8 +292,12 @@ all attempt receipts. Validation and AI editorial retries append arm-specific re
 therefore the initial requests differ only in context, while accepted retry
 instructions can also differ. Inspect makes that distinction visible.
 
-The comparison preserves Coach Digest Validations and adds checks for the saved
-context, exact quotation matching, and hidden comparison terminology. A phrase from
+The comparison uses its versioned Coach Digest Validations, with checks for saved
+context, exact quotation matching, one reflective question, and hidden comparison
+terminology. Current comparison generation also checks question form. Saved
+comparison receipts retain their recorded rules; ordinary Coach prompt `4.7`
+does not replace the archived comparison prompt or regrade its responses.
+A phrase from
 the selected moment does not replace the required verbatim phrase from unchanged
 weekly `evidence_lines`. Deterministic checks validate source eligibility and
 whether each quotation appears in a supplied source; they do not prove that its
@@ -312,6 +316,60 @@ requirements. The changed `north_star_context` field is shown with the pair so a
 reviewer can compare the inputs and see each associated output without toggling
 the Experience card. The ordinary Coach Digest event remains associated with the
 saved without-context response.
+
+### Generation and application
+
+The comparison runner freezes eligible selections and both initial requests
+before any provider call. It uses archived Coach prompt `4.5` plus comparison
+extension `1.1`, with at most four attempts per arm and no SDK retries. The plan
+reserves US$0.018 per request against a US$5 total budget, including inherited
+attempts. Each attempt retains its exact request, response, validation, and usage.
+
+```sh
+# Freeze a selected pair without provider calls:
+uv run python -m scripts.coach.compare_scenario_coach \
+  --output logs/experiments/reports/coach_comparison_run \
+  --case persistent-lukas::2025-06-16
+
+# Generate within authorized paid scope:
+uv run python -m scripts.coach.compare_scenario_coach \
+  --output logs/experiments/reports/coach_comparison_run \
+  --case persistent-lukas::2025-06-16 --execute
+
+# Install complete validated coverage for the frozen selection, then export:
+uv run python -m scripts.coach.compare_scenario_coach \
+  --output logs/experiments/reports/coach_comparison_run --apply
+uv run python -m src.demo.scenarios
+```
+
+Run these commands from the repository root after activating `.venv`. Use an
+unused output directory for a fresh run; historical plans preserve their exact
+input, code, prompt, and source hashes.
+
+| Option | Default / behavior |
+| --- | --- |
+| `--output` | `logs/experiments/reports/demo_coach_nsm_comparison_20260909`; checkpoint/report directory within the repository |
+| `--case` | Unset selects every eligible pair; repeat `scenario::week-start` to select several pairs |
+| `--execute` | Off; permits bounded paid Coach Digest calls |
+| `--apply` | Off; installs accepted pairs after verifying complete coverage for the frozen selection |
+| `--prior-run` | Optional compatible run whose accepted arms and all request receipts are retained |
+| `--editorial-repairs` | With `--prior-run`, JSON mapping from `scenario::week-start::arm` to `response_sha256`, `reason`, and a nonempty `requirements` list; the arm is `without_north_star` or `with_north_star` |
+
+The selected cases are frozen and inherited on resume or repair when `--case`
+is omitted. Duplicate, unknown, or ineligible selectors fail validation. A
+selected-case `--apply` merges those pairs into the preserved comparison fixture
+and requires the other pairs to remain unchanged. An unselected run requires
+complete eligible coverage. Ordinary baseline responses stay in their separate
+fixture.
+
+An editorial repair uses a different output directory, names the exact rejected
+response hash, and preserves the other accepted arms. The runner supports at most
+three bounded repair runs; the third is restricted to one editorially rejected
+arm after complete accepted coverage. Resume and apply retain the preparation's
+`--prior-run` and `--editorial-repairs` arguments. A request without its diagnostic
+requires inspection before another paid attempt. Export changes source hashes,
+so a completed plan describes its pre-export inputs and cannot be reused with
+changed sources.
 
 ## 7. Bounded demo coverage and interpretation
 

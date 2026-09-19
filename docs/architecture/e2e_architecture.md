@@ -79,18 +79,28 @@ Insufficient Evidence as the current state for each Core Value. It stores each
 confirmed past Drift as a Historical Drift Record.
 
 Weekly Drift Detection stores structured output with Core Values, cited Journal
-Entries, and Drift state. The Coach Digest runs after every stored result,
-including No Active Drift. Coach Digest Validations check cited text,
-restricted terms, and response length. If no valid response is available, the
-Weekly Drift Detection output remains available. OpenAI Coach Digest generation
-uses `gpt-5.6-luna` with reasoning effort `none` and prompt `4.2`, which asks for
-conversational connections across Journal Entries without advice or unsupported
-claims of improvement.
+Entries, and Drift state. Ordinary Coach Digest inputs retain complete displayed
+text from the selected Journal Entries, including their nudge exchanges and
+prior/current week grouping. Frozen saved replay retains its recorded excerpts.
+The Coach Digest runs after every stored result, including No Active Drift.
+OpenAI generation uses `gpt-5.6-luna` with reasoning effort `none` and prompt
+`4.7`. Coach Digest Validations require three nonempty fields, an exact weekly
+quotation in `weekly_mirror`, source matches for all quotations, one generated
+question, and at most 180 words. Verified source quotations are excluded from
+generated-question counts and unsupported-state-claim checks. These checks do
+not establish semantic accuracy.
+
+If no valid response is available, the Weekly Drift Detection output remains
+available. An explicit Coach Digest retry uses the same weekly input and prior
+matching validation errors. Earlier attempts remain visible in Inspect, and
+historical responses keep their recorded validation policy.
 
 Inspect reads the same Profile, Journal Entries, Weekly Drift Reviewer
 Decisions, Drift state, Weekly Drift Detection output, and trace events as
-Experience. Inspect shows the source and model contract for saved and live work.
-It does not expose provider credentials.
+Experience. Inspect follows the visible Journal Entries or weekly result,
+preserves that context across reloads, and links to methods and implementation.
+It shows the source and model contract for saved and live work without exposing
+provider credentials.
 
 ## North Star Moment
 
@@ -104,9 +114,11 @@ The full-history review uses `gpt-5.6-luna` with reasoning effort `low`.
 Application checks enforce source ownership, exact quotation, chronology, and
 independent availability evidence for user nudge responses. The AI-written
 nudge is not a source. Experience places an accepted quotation within a valid
-Coach Digest, after its unchanged narrative and before the original reflective
-question. Inspect exposes the review, source, checks, and omission reason.
-North Star Moment does not change Drift states or generate a second question.
+Coach Digest, after its narrative and reflective question. Manual Experience
+preserves its original response; saved replay can display separate responses
+generated with and without the selected source context. Inspect exposes both
+prompts and responses, the source, checks, and omission reason. North Star
+Moment does not change Drift states or append a second question.
 
 Saved replay reads completed selections and no-card outcomes. Manual Experience
 supports a separate, serialized live runtime with a pinned US$1 allowance in a
@@ -122,13 +134,15 @@ each result as saved or live and verifies its recorded source data.
 
 The catalog contains Nisha, Noor, Lukas, Wei Jun, and Meera across 27 weeks.
 Bundles use Weekly Drift prompt v4 Run 1 and completed full-history North Star
-Moment outcomes. All 27 weeks have validated Coach Digest responses with matching
-input hashes: 17 compatible responses are retained for Nisha, Noor, and Wei Jun,
-and ten were generated for Lukas and Meera in the
-[Persona replacement run](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md).
-The replacement North Star Moment records reuse the pinned study's completed
-full-history outcomes and original receipts. Retired Persona replay files are
-removed; their source datasets and historical studies remain unchanged.
+Moment outcomes. All 27 weeks have validated baseline Coach Digest responses
+with matching input hashes, Luna-none generation, and prompt `4.4`, preserved in
+the [saved response reports](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md).
+Twenty-two eligible weeks also have saved with-context and without-context
+responses. Lukas's second-week pair uses prompt `4.5` and comparison extension
+`1.1`; the other 21 pairs use `4.4`/`1.0`. Each response keeps its recorded
+validation policy. The [comparison guide](../north_star/demo_coach_comparison.md)
+describes generation and repair commands. North Star Moment records reuse the
+pinned study's completed full-history outcomes and original receipts.
 Browser requests bypass the cache and verify each bundle's catalogued SHA-256 hash.
 
 The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
@@ -137,12 +151,14 @@ roster.
 Mechanical checks and exact provenance do not resolve those semantic issues or
 establish human validity; their follow-up is tracked in `twinkl-rklc.39`.
 
-The selected week shows all its Journal Entries immediately. **Review Weekly
+The selected week reveals its Journal Entries and nudge responses at 500 ms
+intervals, or immediately with reduced motion. **Review Weekly
 Drift Detection** opens the saved result in the full reading workspace;
 **Next week** advances without review and stops at the final week. Week navigation, reload, and
 returning from Inspect open Journal Entries first. All weeks are directly
 selectable before review, while projections exclude writing beyond the selected cutoff.
-Replay makes no provider calls or timed result reveals.
+Replay makes no provider calls. Source links open a Journal Entry dialog that
+restores keyboard focus and the underlying scroll position when closed.
 
 Saved Persona replay is an assessment input. It is not the only Experience
 input because manual Journal Entries use the same React and Python contract.

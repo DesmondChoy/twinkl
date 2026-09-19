@@ -23,7 +23,8 @@ or constitute human validation.
 The [experiment methodology](nsm_experiment_methodology.md) records the reset
 and the original 501-week AI comparison using Weekly Drift v2 repeat 1.
 Full history achieved higher Card precision and Opportunity recall than Nomic
-top-three retrieval in both partitions; human review remains deferred. It replaces the previous experimental
+top-three retrieval in both partitions; human review is not conducted and is
+outside capstone scope. The methodology replaces the previous experimental
 protocols, cohort decisions, and acceptance gates. This specification describes
 the existing product behavior and reusable implementation contracts; it does
 not establish results or authorize a new experiment.
@@ -302,7 +303,9 @@ Housekeeping is tracked in `twinkl-fz34.13`, the original experiment in
 `twinkl-fz34.7`, and the targeted update in `twinkl-fz34.14`. The saved replay
 integration is tracked in `twinkl-fz34.15`. Its five Personas demonstrate the
 current v4 Run 1 Drift patterns using the completed full-history outcomes.
-The final capstone walkthrough and human review remain separate work.
+The final capstone walkthrough remains open. Human review is not conducted;
+human calibration and the external user pilot are closed outside capstone
+scope under the [closeout decisions](../prd.md#capstone-closeout-decisions).
 
 ## Technical appendix
 

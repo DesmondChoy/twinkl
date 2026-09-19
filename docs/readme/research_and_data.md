@@ -30,8 +30,8 @@ Insufficient Evidence produces no card. Eligible Journal Entries and user
 nudge responses require ownership and availability evidence; AI-written nudges
 cannot supply the quotation. Full eligible history is the application method,
 using Luna-low source review and deterministic quotation, chronology, and
-selection checks. Live execution requires a finalized integration budget and
-fails closed when that budget is unavailable.
+selection checks. Live execution uses the pinned US$1 policy and a private ledger
+shared across sessions and restarts; invalid or exhausted budgets fail closed.
 
 The [targeted NSM comparison](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
 uses saved Weekly Drift v4 Run 1 outputs for 501 weeks from 105 Personas.
@@ -53,6 +53,41 @@ approval. The five saved Persona replays preserve full-history selections and
 no-card outcomes across 27 weeks. See the [feature specification](../north_star/north_star_moment.md),
 [experiment methodology](../north_star/nsm_experiment_methodology.md), and
 [research commands](status_and_setup.md#weekly-drift-and-north-star-moment-experiments).
+
+## Coach Digest evidence and saved comparisons
+
+Ordinary Coach Digest generation uses Luna-none with prompt `4.7`, complete
+displayed text from each selected Journal Entry, and separate current/prior-week
+evidence. Coach Digest Validations require exact quotations, three nonempty
+fields, one generated question, and at most 180 words. Source quotations are
+excluded from generated-question counts and unsupported-state-claim checks.
+Saved responses retain their original input and validation policy.
+
+The [saved voice run](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
+and its repair receipts cover all 27 baseline replay responses under prompt
+`4.4`. The [demo comparison](../north_star/demo_coach_comparison.md) provides
+two responses for each of 22 weeks with an accepted North Star Moment, using
+the same weekly input with or without the selected source context. Lukas's
+second-week pair uses prompt `4.5` and comparison extension `1.1`; the other
+21 pairs retain `4.4`/`1.0`. These saved demonstrations have deterministic
+checks and AI editorial review, with no human validation or evidence of user
+benefit.
+
+The [source-context experiment](../../logs/experiments/reports/coach_context_eval_20260913/report.md)
+compares short excerpts with complete selected Journal Entries for one
+synthetic week, using archived Coach prompt `4.6` and evaluator `3.1`. It records
+six generations and nine same-model evaluator assessments. Separate AI source
+review found clear chronology or dialogue errors in two of three short-context
+responses and none of three complete-context responses, while causal
+overgeneralization remained. The evaluator did not flag a known incorrect
+response. High scores and mechanical checks therefore do not establish factual
+accuracy or correct attribution.
+
+The reports retain compact request/response receipts and source hashes;
+[`coach_context_sources.py`](../../scripts/experiments/coach_context_sources.py)
+reconstructs and verifies the relevant historical source snapshot. See
+[saved response commands](status_and_setup.md#saved-persona-coach-digest-responses)
+and [source-context commands](status_and_setup.md#coach-digest-source-context-experiment).
 
 ## VIF Critic (Offline) — ✅ Complete Capstone Research
 
@@ -115,8 +150,9 @@ Key features:
 
 The displayed nudge interaction is complete for the capstone POC. It is a
 product interaction, not a method for improving the VIF Critic (Offline) or Weekly Drift
-Detection. A future external pilot can measure response rate, continued
-journaling, and perceived relevance.
+Detection. The external user pilot is closed outside capstone scope.
+Response rate, continued journaling, and perceived relevance have no collected
+user-study result.
 
 See `docs/pipeline/pipeline_specs.md` for implementation details.
 
@@ -198,7 +234,7 @@ Labels.
 - `src/synthetic/batch_preparation.py` — Baseline snapshots and frozen-holdout manifests for targeted data-lift experiments
 - `src/synthetic/batch_verification.py` — Raw-batch acceptance checks and spot-check export generation
 - `src/nudge/decision.py` + `src/nudge/generation.py` — Two-way conversational nudging logic
-- `scripts/journalling/generation_sanity_check.py` — Quick local sanity checks
+- `scripts/journalling/generation_sanity_check.py` and `judge_sanity_check.py` — Manual prompt previews; automated behavior checks live in `tests/synthetic/test_generation.py` and `tests/judge/test_labeling.py`
 - `scripts/journalling/twinkl_681_5_freeze_baseline.py` / `scripts/journalling/twinkl_691_2_prepare_batch.py` — Example baseline-freeze wrappers
 - `scripts/journalling/twinkl_681_5_verify_batch.py` / `scripts/journalling/twinkl_691_2_verify_batch.py` — Example targeted-batch verification wrappers
 - `scripts/journalling/twinkl_754_prepare_consensus.py` / `twinkl_754_validate_results.py` / `twinkl_754_merge_pass_results.py` / `twinkl_754_summarize_consensus.py` — Consensus rerun bundle preparation, validation, merge, and stability-first reporting
@@ -226,11 +262,16 @@ Digest generator. The deterministic Drift/control study selects one target for
 each of the 42 known development Drifts and 42 matched controls under the
 current committed inputs. Its default command writes the target catalog without
 provider calls. The paid generation, cross-provider AI review, and comparison
-report have no committed result. The August five-response result remains
-same-model AI review, not human validation. The five current saved Persona
-responses use Coach Digest prompt `4.2` and Luna-none, pass Coach Digest
-Validations, and match their current Weekly Drift inputs. They have no
-corresponding Coach Digest Evals result; the August scores do not describe them.
+report have no committed result. The independent-provider and 42-Drift/42-control
+workstream is Done under the accepted tooling scope; further paid execution
+is not required for capstone completion. Human calibration and the external
+user pilot are not conducted and are closed outside scope. The August five-response result remains
+same-model AI review, not human validation. The 27 saved baseline replay
+responses use Coach Digest prompt `4.4` and Luna-none, pass their versioned
+Coach Digest Validations, and match their recorded Weekly Drift inputs. The
+August scores do not describe these responses or the separate paired
+comparisons. The source-context experiment above has its own six-response
+sample and evaluator limitations.
 
 ## Embedding Explorer — ✅ Complete
 

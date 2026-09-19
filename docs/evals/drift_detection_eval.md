@@ -288,7 +288,10 @@ No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
 
-- Coach Digest feedback and perceived-accuracy capture for a future pilot
+- Coach Digest feedback and perceived-accuracy capture (`twinkl-rklc.28`)
+
+The external user pilot and human calibration are not conducted and are closed
+outside capstone scope. Feedback capture remains a separate open feature.
 
 The user-facing runtime can import Core Values from a confirmed onboarding
 Profile. Weekly Drift Detection and Coach Digest scenario tests cover Active

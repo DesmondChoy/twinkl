@@ -9,16 +9,19 @@
 | Capability | Status | Note |
 |---|---|---|
 | Onboarding (SVBWS Values Assessment) | 🧪 Experimental | The React POC implements the complete local, user-facing flow and a versioned Profile. Manual Experience synchronizes the confirmed Profile with the in-memory Python boundary. Production multi-user storage and generalized persistence remain outside the capstone. |
-| Coach Digest validation depth | ⚠️ Partial | The [August evaluation manifest](../../logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json) preserves five accepted key-week responses from the previous Persona roster and inputs. The [September refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md) and [completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md) preserve the earlier roster's generation provenance. The [Persona replacement run](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md) adds ten validated responses for Lukas and Meera and retains 17 compatible responses for Nisha, Noor, and Wei Jun, covering all 27 current replay weeks. All use Luna-none and prompt `4.2`, match current input hashes, and pass Coach Digest Validations. No new Coach Digest Evals or human validation was performed. The five historical August responses passed all Coach Digest Validations; their Coach Digest Evals scored mean correctness `4.80`, specificity `5.00`, non-prescriptive tone `5.00`, and tension honesty `4.60`; all reflective questions passed, with no failed verdicts or review flags. These scores are same-model AI review, not human validation. Cross-provider evaluator options and the deterministic 42-Drift/42-control study are implemented, but no paid independent-provider result is committed. Future human calibration of the AI review remains incomplete. |
-| Experience and Inspect completion | 🚧 In Progress | The shared app, five saved Persona replays, manual Journal Entries, displayed nudges, Weekly Drift Detection, Coach Digest, Inspect, privacy notice, confirmed session deletion, and release checks are implemented. Coach Digest feedback, longitudinal Core Value history, and the final professor walkthrough evidence remain open. |
-| Displayed nudge user evidence | ⚠️ Not collected | Displayed nudge implementation is complete. A future external pilot can measure response rate, continued journaling, and perceived relevance. Saved replays and regression tests do not establish those user outcomes. |
-| North Star Moment | 🧪 AI evaluation and saved replay | Full eligible history supplies exact supportive-action quotations and no-card outcomes across all five saved Persona replays. The [v4 Run 1 comparison](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md) covers 501 weeks from 105 synthetic Personas, with 38 reassessed cases and 463 retained observations. Human review and real-user benefit remain unestablished. A valid Coach Digest includes a selected passage before its original question. Live execution uses a pinned US$1 allowance shared across sessions and restarts; invalid or exhausted budgets fail closed. The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md) records tests and five AI editorial findings for the previous roster under `twinkl-rklc.39`, not human validation. The roster replacement does not resolve retained Personas' semantic concerns. |
+| Coach Digest validation depth | ⚠️ Partial | All 27 saved replay weeks have baseline responses from the [prompt-4.4 voice refresh and repairs](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md). Twenty-two eligible weeks have [paired responses with and without North Star Moment context](../north_star/demo_coach_comparison.md), with versioned inputs and checks. Ordinary live generation uses prompt `4.7`, complete displayed text from selected Journal Entries, exact quotations, three nonempty fields, and one generated question. Mechanical checks do not establish factual accuracy: the [source-context comparison](../../logs/experiments/reports/coach_context_eval_20260913/report.md) records attribution errors and missed evaluator flags. Historical August scores describe five earlier responses, not the current replay. The independent-provider and 42-Drift/42-control evaluation workstream is Done under its accepted tooling scope, with no committed paid result. Human calibration and the external user pilot are closed outside capstone scope without execution. |
+| Experience and Inspect completion | 🚧 In Progress | The shared app, five saved Persona replays, manual Journal Entries, displayed nudges, Weekly Drift Detection, Coach Digest, Inspect, privacy notice, confirmed session deletion, and release checks are implemented. Longitudinal Core Value history is Done: the Reviewed week selector opens retained results, Coach Digest responses, and linked Inspect events across session restore and recomputation. Coach Digest feedback and the final professor walkthrough evidence remain open. |
+| Displayed nudge user evidence | ⚠️ Not collected | Displayed nudge implementation is complete. The external user pilot is Not done and closed outside capstone scope. Response rate, continued journaling, and perceived relevance remain unmeasured. Saved replays and regression tests do not establish those user outcomes. |
+| North Star Moment | 🧪 AI evaluation and saved replay | Full eligible history supplies exact supportive-action quotations and no-card outcomes across all five saved Personas. The [v4 Run 1 comparison](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md) covers 501 weeks from 105 synthetic Personas, with 38 reassessed cases and 463 retained observations. Human review and real-user benefit remain unestablished. An accepted selection appears after the Coach Digest narrative and question. Saved replay can switch between paired generated responses; manual Experience preserves its original response and can recover an eligible historical Moment. Live execution uses a pinned US$1 allowance shared across sessions and restarts; invalid or exhausted budgets fail closed. |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic (Offline) embeddings |
 | Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. Prompt `4.0` includes the selected Core Values' definitions and core motivations. Its [comparison with v3](../../logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md) measures changes in detections across three Runs per variant; it does not establish accuracy. Evidence remains AI-reviewed synthetic development evidence without a fresh final test or deployment approval. |
 | Journaling anomaly radar | ❌ Not Started | Cadence/gap detection beyond the current prototype-router tooling |
 | Goal-aligned inspiration feed | ❌ Not Started | External API integration |
 
-For the full breakdown, see the [Implementation Status](../../docs/prd.md#implementation-status) table in prd.md.
+The [capstone closeout decisions](../prd.md#capstone-closeout-decisions) record
+the final Done or Not done status and accepted scope for history, independent
+evaluation, and human studies. For the full breakdown, see the
+[Implementation Status](../prd.md#implementation-status) table.
 
 ## Common Commands
 
@@ -28,7 +31,8 @@ where a frontend directory is specified. `uv run` uses the project environment.
 - Launch the annotation tool: `uv run shiny run src/annotation_tool/app.py`
 - Launch the Experience and Inspect Python boundary: `uv run uvicorn src.demo.api:app --port 8000`
 - Launch the React development server from `frontend/onboarding/`: `npm run dev`
-- Run the React checks from `frontend/onboarding/`: `npm test`, `npm run typecheck`, and `npm run build`
+- Run the React checks from `frontend/onboarding/`: `npm test`, `npm run test:watch`, `npm run typecheck`, and `npm run build`
+- Run deterministic Chromium checks from `frontend/onboarding/`: `npm run test:e2e` (install the browser once with `npx playwright install chromium`)
 - Regenerate the Experience and Inspect contracts: `uv run python -m src.demo.export_contract_schema`
 - Launch the Drift Inspection App: `uv run shiny run --host 127.0.0.1 --port 8000 --no-dev-mode src/drift_review_app/app.py`
 - Deploy the Drift Inspection App to Railway: `railway up`
@@ -48,7 +52,7 @@ where a frontend directory is specified. `uv run` uses the project environment.
 - Re-score the frozen Weekly Drift Reviewer model comparison: `uv run python -m scripts.experiments.compare_twinkl_52zz_models score`
 - Re-score the Luna higher-reasoning comparison: `uv run python -m scripts.experiments.compare_twinkl_ck3w_luna_higher_reasoning score`
 - Replay recall-aware checkpoint selection from saved traces without retraining: `uv run python scripts/experiments/replay_recall_aware_checkpoint_selection.py`
-- Inspect the saved per-week Coach completion plan without provider calls: `uv run python -m scripts.coach.complete_scenario_coach`
+- Inspect Coach completion options without provider calls or file writes: `uv run python -m scripts.coach.complete_scenario_coach --help`
 - Build the deterministic Coach Digest Drift/control target catalog without provider calls: `uv run python scripts/experiments/run_coach_drift_control_eval.py`
 - Dry-run cross-provider Coach Digest Evals over the historical August five-response manifest: `uv run python -m src.evals.coach_narrative_judge --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json --judge-provider gemini`
 - After paid Drift/control generation and Coach Digest Evals, build the saved comparison report: `uv run python -m src.evals.coach_drift_control_report --manifest logs/experiments/reports/coach_digest_drift_control/judge_sample_manifest.json --eval-metrics logs/experiments/reports/coach_digest_drift_control/evals/metrics.json --out logs/experiments/reports/coach_digest_drift_control/comparison`
@@ -120,37 +124,76 @@ and `north_star_integration` scripts support historical
 preparation and diagnostics. Their experiment outputs do not supply the current
 NSM comparison; use the two `nsm_*` runners and linked frozen records above.
 
-The obsolete `north_star_saved_checks` runner and its tests were retired after
-the saved Persona roster and North Star Moment eligibility changed. Its outputs
-remain historical records. Historical receipt tests replay temporary source
-archives at the published study revisions; current runtime tests use this checkout.
+Historical `north_star_saved_checks` outputs are retained as research records;
+the maintained commands are the `nsm_*` runners above. Historical receipt tests
+replay temporary source archives at the published study revisions; current
+runtime tests use this checkout.
 The full suite requires local Git history containing those recorded revisions.
 
 ### Saved Persona Coach Digest responses
 
-All 27 replay weeks have saved responses. Verify the completion plan and
-rebuild the public scenarios without provider calls:
+All 27 replay weeks have baseline Coach Digest responses; 22 weeks with an
+accepted North Star Moment also have paired responses. Saved responses use their
+recorded prompt and validation policy. Rebuild public scenarios without provider
+calls:
 
 ```sh
-uv run python -m scripts.coach.complete_scenario_coach
 uv run python -m scripts.export_demo_experiments
 ```
 
-Adding `--execute` to the completion runner generates only missing responses
-within authorized paid scope. It preserves compatible existing receipts, uses
-Luna-none with at most one validation-guided retry, and records every attempt.
-It makes no Weekly Drift Reviewer or NSM calls. Its `--output` argument selects
-the checkpoint/report directory; its default plan verifies the current 27
-responses with none missing. Choose a new directory when the roster, inputs,
-or generation policy change; incompatible frozen plans stop the run.
+`uv run python -m src.demo.scenarios` rebuilds only the scenario bundles from
+existing compact North Star Moment records. Both exporters verify provenance
+and input compatibility before retaining saved responses.
+
+The Coach runners prepare frozen plans without provider calls by default. Use
+a fresh directory under the repository for each plan; their defaults name
+preserved historical runs whose input or policy hashes may differ from the
+current checkout:
+
+```sh
+uv run python -m scripts.coach.complete_scenario_coach \
+  --output logs/experiments/reports/coach_completion_local
+uv run python -m scripts.coach.refresh_scenario_coach \
+  --output logs/experiments/reports/coach_refresh_local
+uv run python -m scripts.coach.compare_scenario_coach \
+  --output logs/experiments/reports/coach_comparison_local
+```
+
+| Runner | Purpose | Options |
+|---|---|---|
+| `complete_scenario_coach` | Retain compatible responses and generate missing weeks | `--output PATH`; `--execute` permits paid generation; `--repair-requirements PATH` supplies a frozen JSON mapping of case keys to repair instructions. |
+| `refresh_scenario_coach` | Generate a complete replacement baseline with preserved attempts | `--output PATH`; `--execute`; `--apply` installs a complete validated fixture; `--prior-run PATH` and a nonempty `--repair-requirements PATH` must be supplied together to repair selected cases while retaining other compatible responses. |
+| `compare_scenario_coach` | Generate paired responses with and without selected North Star Moment context | `--output PATH`; `--execute`; `--apply`; `--prior-run PATH`; `--editorial-repairs PATH`; repeatable `--case scenario::week-start` limits a pilot. Applying a pilot requires compatible coverage for the other eligible weeks. |
+
+These commands use Luna-none and record requests, attempts, validation, and
+provider usage. They make no Weekly Drift Reviewer or North Star Moment calls.
+`--execute` makes paid Coach Digest calls; `--apply` installs accepted saved
+responses without requiring further generation. Run the scenario exporter
+separately after installing responses. Frozen plans reject incompatible
+inputs or generation policies. See the [Coach Digest runbook](../evals/coach_narrative_test_and_eval_guide.md#3a-complete-saved-replay-weeks-and-retain-compatible-responses)
+and [comparison guide](../north_star/demo_coach_comparison.md) for retry limits,
+repair formats, and current saved evidence.
 
 The historical `generate_approved_judge_sample.py --reuse-scenario-key-weeks`
-command still targets only five key weeks and replaces its response fixture.
-Its default fixture path is unsuitable for maintaining the completed 27-week
-replay. The preserved five-response manifest remains an evaluation subset;
-it does not cover all 27 current replay responses or the new Lukas and Meera responses. See the
-[Coach Digest test and eval guide](../evals/coach_narrative_test_and_eval_guide.md)
-for commands and generation/evaluator provenance.
+command targets five key weeks and replaces its response fixture. Its default
+fixture path is unsuitable for maintaining the 27-week replay. The preserved
+August manifest is an evaluation subset with a different Persona roster.
+
+### Coach Digest source-context experiment
+
+Prepare the fixed short-excerpt/complete-entry comparison without provider calls:
+
+```sh
+uv run python -m scripts.experiments.run_coach_context_eval \
+  --out /tmp/twinkl-coach-context
+```
+
+The required `--out PATH` receives the frozen plan, inputs, and source hashes.
+Adding `--execute` makes six Coach Digest generation calls and nine AI evaluator
+calls. This comparison uses archived Coach prompt `4.6` and evaluator `3.1`;
+it does not follow ordinary prompt `4.7` generation. Completed calls are reused
+on resume. The [runbook](../evals/coach_narrative_test_and_eval_guide.md#source-context-comparison)
+describes compact receipts, source verification, and the limits of the result.
 
 ## Setup
 
@@ -187,8 +230,16 @@ This repo uses `uv` and `pyproject.toml` for dependency management.
    can select an independent evaluator with `--judge-provider` and
    `--judge-model`.
 
-   The Drift Inspection App reads committed files and does not require an API
-   key.
+   Onboarding, saved Persona replay, and the Drift Inspection App require no
+   provider key. Start the live Python boundary with
+   `uv run uvicorn src.demo.api:app --env-file .env --port 8000` to load `.env`.
+   Live North Star Moment review uses the policy in
+   [`config/evals/north_star_live_v1.json`](../../config/evals/north_star_live_v1.json)
+   and its private ledger under `logs/exports/demo_tool_runs/north_star/`.
+   The US$1 cap applies across sessions and restarts, with at most two attempts
+   per exact request and no SDK retries. Missing provider configuration or
+   invalid/exhausted accounting leaves the weekly result available without a
+   Moment.
 
 ### Installing dependencies
 
@@ -239,6 +290,30 @@ uv run pytest tests/e2e -q
 ```
 
 This smoke test exercises the offline path `synthetic_data -> wrangled markdown -> consolidated LLM-Judge VIF Labels -> VIF Critic (Offline) training` using tiny local fixtures and a mock text encoder, so it does not require live LLM calls.
+
+### Frontend and browser checks
+
+Install frontend dependencies from the committed lockfile and run the checks:
+
+```sh
+cd frontend/onboarding
+npm ci
+npm test
+npm run typecheck
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+`npm run test:watch` keeps unit tests running during editing. Playwright supports
+`npm run test:e2e -- --project=desktop-chromium` or `--project=narrow-chromium`
+for one viewport. It builds the app, starts the controlled Python boundary on
+port `8765`, and uses test doubles for model calls. The port must be free.
+Failures retain screenshots and traces under `frontend/onboarding/test-results/`.
+The checks cover replay, Inspect context and reload, onboarding, manual writing,
+closed-week review, Coach Digest retry, historical Moment recovery, source-dialog
+focus restoration, and session deletion. They establish application behavior,
+not model quality or human validation.
 
 ### Adding a dependency
 

@@ -7,8 +7,8 @@ Twinkl generates explanations at two levels:
 2. **Coach Digest responses**: User-facing responses based on structured Weekly
    Drift Detection output
 
-This evaluation defines the evidence, language, AI-review, and future
-user-perceived-accuracy checks for those two outputs.
+This evaluation defines the evidence, language, and AI-review checks for those
+two outputs. Human calibration and a user pilot are outside the capstone scope.
 
 > **Runbook:** for the exact commands to run every Coach Digest response and
 > Weekly Drift Detection output test and eval, see
@@ -18,7 +18,11 @@ user-perceived-accuracy checks for those two outputs.
 
 ## Implementation Status
 
-**Status:** 🟡 Partial
+**Status:** Done for the accepted Coach Digest evaluation workflow. Independent
+provider selection and the 42-Drift/42-control study are complete capstone
+deliverables. Human calibration and the user pilot are not done and closed
+outside the capstone. The separate rationale checks and factual-attribution
+follow-up remain not done.
 
 ### What's Implemented
 - Rationale generation working (1,594/1,651 Journal Entries have rationales in parquet)
@@ -33,10 +37,13 @@ user-perceived-accuracy checks for those two outputs.
   [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py)
 - Coach Digest Validations are implemented: an exact evidence quotation in
   `weekly_mirror`, source matching for every quotation, nonempty fields,
-  question form, non-circularity via score-jargon avoidance, raw Schwartz value
+  question form and a single generated question across the complete response,
+  non-circularity via score-jargon avoidance, raw Schwartz value
   leakage, unsupported current-state claims, and a 180-word maximum via
   [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
-  for ordinary Coach Digest prompt `4.6`. There is no minimum word count.
+  for ordinary Coach Digest prompt `4.7`. Verified source quotations are excluded
+  from generated-question counts and unsupported-state-claim checks. There is no
+  minimum word count.
   Historical receipts retain their recorded validation rules, including the
   original 25–180-word bounds.
 - Coach Digest Validations batch reporting: A batch runner
@@ -44,6 +51,10 @@ user-perceived-accuracy checks for those two outputs.
   runs `validate_weekly_digest_narrative()` over the exact public-scenario
   sample manifest or the persisted Weekly Drift Detection output parquet and
   reports per-check pass rates against targets.
+  Its default `--validation-policy recorded` reproduces saved validation checks
+  or the recorded generation prompt's policy. `--validation-policy current`
+  applies the current live checks in a separate assessment; neither mode
+  rewrites the saved response or its validation receipt.
 - Coach Digest Evals: An AI evaluator
   ([`src/evals/coach_narrative_judge.py`](../../src/evals/coach_narrative_judge.py),
   prompt [`prompts/coach_narrative_judge.yaml`](../../prompts/coach_narrative_judge.yaml))
@@ -51,8 +62,8 @@ user-perceived-accuracy checks for those two outputs.
   against the same selected Coach Digest policy, Core Value phrases, goal
   context, Weekly Drift Detection findings, and cited Journal Entries used for
   Coach Digest generation.
-  Scores are **AI review, not human validation**. Future human calibration
-  of the AI review remains separate work.
+  Scores are **AI review, not human validation**. Human calibration is not done
+  and is outside the capstone scope.
 - Coach Digest Evals can select an OpenAI or Gemini evaluator independently
   from the Coach Digest generator through `--judge-provider` and
   `--judge-model`. Reports record both model identities and apply the
@@ -70,6 +81,16 @@ user-perceived-accuracy checks for those two outputs.
 
 ### Current Result Status
 
+The saved Persona replay has 27 baseline responses from the
+[9 September voice refresh and editorial repair](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md),
+using prompt `4.4`. The 22 weeks with accepted North Star Moment selections have
+[paired Coach Digest responses](../north_star/demo_coach_comparison.md): 21 pairs
+use `4.4`/`1.0`, while Lukas's week beginning 16 June uses `4.5`/`1.1`.
+The five other weeks display their baseline response. Each receipt retains its
+generation version and matching validation policy. These responses have AI
+editorial review and code checks, without fresh Coach Digest Evals scores or
+human validation.
+
 The [13 September context comparison](../../logs/experiments/reports/coach_context_eval_20260913/report.md)
 contains six fresh generations and nine fresh evaluator 3.1 assessments of one
 synthetic Wei Jun week. Mean correctness was 4.33 with short generation excerpts
@@ -82,16 +103,16 @@ causal generalization. This small same-model development assessment is not a
 clean factual pass, human validation, or a replacement for earlier receipts.
 
 The [September replay refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
-contains five accepted responses for the current v4 Run 1 Persona key weeks.
+contains five accepted responses for the preceding v4 Run 1 Persona roster's key weeks.
 All passed Coach Digest Validations. Luna at reasoning effort `none`, using
 prompt `4.2`, made seven generation calls, including retries for Noor and Wei
 Jun. No new Coach Digest Evals or human review was performed, so these
 responses have no new semantic-quality scores.
 
 The [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
-preserves those five responses and adds 22, covering all 27 saved replay weeks.
-All pass Coach Digest Validations with matching current input hashes. A selected
-North Star Moment passage appears within a valid Coach Digest before its original
+preserves those five responses and 22 further responses for that roster.
+All pass their recorded Coach Digest Validations. A selected
+North Star Moment passage appears within a valid Coach Digest after its
 question, preserving both components' raw output. The [integrated validation report](../../logs/experiments/reports/integrated_coach_validation_20260908/report.md)
 records application checks and five unresolved AI editorial findings, including
 a contradiction between the Coach's selected excerpts and the fuller NSM source.
@@ -119,24 +140,31 @@ calculated published-rate cost was `$0.00607555`, and total request latency was
 
 This committed result uses Luna-none for both generation and AI review. The
 independent-provider options and Drift/control workflow have no committed paid
-result.
+result. Their accepted capstone scope is the implemented evaluation workflow;
+a paid independent study result is not required for closeout.
 
-### What's Missing
+### Completion and Evidence Limits
 
-- **Automated checks for LLM-Judge rationales:** No batch checker or report yet in `src/judge/`
-- **AI review of LLM-Judge rationales:** No rationale-review evaluation
-- **Independent Coach Digest study result:** No committed cross-provider
-  Drift/control generation, Coach Digest Evals report, or comparison report
-- **Human calibration:** No protocol or κ calculation for either explanation type
+| Item | Status | Evidence and scope |
+|---|---|---|
+| Coach Digest Validations and Coach Digest Evals | Done | Validation, AI scoring, batch reports, and saved historical results are implemented. |
+| Independent-provider Coach Digest evaluation | Done | Provider and model selection, identity reporting, and the reproduction commands are implemented. No paid independent-provider result is committed or required for capstone closeout. |
+| 42-Drift/42-control study | Done | Deterministic selection, generation, safe resume, and grouped reporting are implemented. No paid study result is committed or required for capstone closeout. |
+| Automated checks for LLM-Judge rationales | Not done | No batch checker or report in `src/judge/`. |
+| AI review of LLM-Judge rationales | Not done | No rationale-review evaluation. |
+| Coach factual-attribution evaluation | Not done | `twinkl-z5nr` tracks source-event and causal-claim assessment; `twinkl-rklc.39` tracks the saved-output semantic follow-up. |
+| Human calibration | Not done — closed | No human calibration result for either explanation type; outside capstone scope. |
+| User pilot | Not done — closed | No real-user explanation-quality study; outside capstone scope. |
 
-### Blocking Dependencies
+### Capstone Acceptance
+
 Coach Digest Validations, Coach Digest Evals, the historical five-response replacement,
-and approved-path evidence provenance are complete. The cross-provider and
-Drift/control commands are available, but their paid result is not part of the
-committed evidence. Neither the historical five-response sample nor the 27-week
-synthetic replay establishes product usefulness. Deeper end-to-end explanation
-evaluation still requires
-future human calibration. VIF Critic Predictions belong to offline research.
+approved-path evidence provenance, independent-provider evaluation, and the
+42-Drift/42-control workflow are complete within the accepted scope. The paid
+independent study, human calibration, and user pilot are not closeout
+requirements. Neither the historical five-response sample nor the 27-week
+synthetic replay establishes product usefulness or human validity. VIF Critic
+Predictions belong to offline research.
 
 ### Implementation Scope
 
@@ -146,16 +174,14 @@ validation, batch reporting, and Coach Digest Evals. The analogous batch
 checker for LLM-Judge rationales remains planned. Coach Digest Evals support
 provider separation, and the Drift/control workflow supports deterministic
 selection, safe resume, evaluation-only failure measurement, and grouped
-reporting. AI review of rationales and human calibration are later validation
-phases.
+reporting. AI review of rationales is unimplemented. Human calibration and the
+user pilot are closed outside the capstone scope.
 
-### Next Steps
+### Remaining Implementation Work
+
 1. Add an automated batch checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
-2. Run the paid Drift/control study with an evaluator provider that differs
-   from the Coach Digest generator, then publish the provider identities,
-   target catalog, validation rates, means from Coach Digest Evals, and
-   limitations
-3. Complete future human calibration of the AI review with 20-30 responses
+2. Address the factual-attribution and causal-claim evaluation under
+   `twinkl-z5nr` and the saved-output semantic findings under `twinkl-rklc.39`.
 
 ---
 
@@ -194,17 +220,19 @@ different from the plan you had in mind?"
 
 The approved path lives in `src/coach/weekly_drift_runtime.py` and
 `src/coach/weekly_digest.py`. The five historical August Persona responses
-completed Coach Digest Validations and same-model Coach Digest Evals. Provider-separated
-AI review and Drift/control comparison are supported but have no committed
-paid result. User-study calibration remains pending.
+completed Coach Digest Validations and same-model Coach Digest Evals.
+Independent-provider AI review and the 42-Drift/42-control study are done within
+their accepted workflow scope, with no committed paid result. Human calibration
+and the user pilot are not done and closed outside the capstone.
 
 ---
 
 ## Evaluation Approach
 
-### Future User Study: Likert Ratings
+### User Study Design (Not Done — Closed)
 
-Show users their Coach Digest response and ask: **"Did this feel accurate?"**
+The retained design is outside the capstone scope and has no collected user
+ratings. Its proposed question is: **"Did this feel accurate?"**
 
 | Rating | Meaning |
 |--------|---------|
@@ -234,11 +262,12 @@ Evaluator prompt `3.1` accepts a grounded, open-ended question as a way to
 preserve uncertainty under `more_reflection_needed`. An explicit statement of
 the evidence limit is optional. The response must still leave Drift undecided
 and avoid inventing decisions, motives, or outcomes. This matches ordinary
-Coach Digest prompt `4.6`; it does not change historical evaluation receipts.
+Coach Digest prompt `4.7`; historical evaluation receipts retain their rubric.
 
 The source-context regression compares the same Wei Jun week using its saved
-short excerpts and complete text for the same selected Journal Entries. Coach
-instructions, model settings, and Drift decisions remain fixed. Both sets of
+short excerpts and complete text for the same selected Journal Entries. Archived
+Coach prompt `4.6`, evaluator prompt `3.1`, model settings, and Drift decisions
+remain fixed. Both sets of
 fresh responses are scored against the same complete-context input, so the
 comparison measures factual accuracy against a common source. Separate controls
 score the recorded event misattribution with short and complete context, and a
@@ -248,6 +277,10 @@ diagnostic; repeated samples of one week do not establish population accuracy.
 See the [context comparison runbook](coach_narrative_test_and_eval_guide.md#source-context-comparison).
 
 ### Provider Separation and Drift/Control Comparison
+
+**Status: Done** for the accepted capstone workflow. The commands remain
+available for reproduction. No paid independent-provider or Drift/control
+result is committed, and neither is a capstone closeout requirement.
 
 `src.evals.coach_narrative_judge` accepts `--judge-provider {openai,gemini}`
 and `--judge-model`. When the evaluator provider differs from the generator
@@ -276,12 +309,14 @@ Fast, objective checks that don't require LLM calls:
 | **Non-circularity** | % of Coach Digest responses that avoid score and alignment jargon | > 95% |
 | **Raw value leakage** | Response does not expose raw Schwartz value labels | Reported |
 | **Current-state claims** | Response does not make an unsupported positive-change claim | Reported |
-| **Conversational voice** | New responses avoid calendar-recap openings and the narrow clinical finding phrases checked by code; quoted user wording is preserved | Reported from prompt `4.4` |
+| **Generated question** | Exactly one generated question across all three fields, in question form in `reflective_question`; verified source quotations do not count as generated questions | Reported for prompt `4.7` |
+| **Conversational voice** | Responses avoid calendar-recap openings and the narrow clinical finding phrases checked by code; quoted user wording is preserved | Reported from prompt `4.4` |
+| **Natural reflection voice** | Responses avoid date-led openings and commentary about the writing process | Reported from prompt `4.5` |
 | **Length** | Ordinary Coach Digest response has nonempty fields and at most 180 words, with no minimum word count | > 90% |
 
 **Current code status:**
 - Coach Digest responses: validated by `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
-- New generation and live display enable conversational-voice checks. Historical
+- Ordinary generation and live display enable conversational-voice checks. Historical
   responses retain their original validation rules. These wording checks do not
   establish warmth, semantic correctness, or human benefit; the
   [9 September refresh](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md)
@@ -296,8 +331,8 @@ results = {check.name: check.passed for check in validation.checks}
 
 #### AI Review of LLM-Judge Rationales
 
-> **Implementation phase:** Future — not required for the initial Coach Digest
-> response evaluation.
+> **Status:** Not done — separate from the accepted Coach Digest evaluation
+> workflow.
 
 For rationales that pass the automated code checks, evaluate them with an LLM:
 
@@ -316,18 +351,22 @@ For rationales that pass the automated code checks, evaluate them with an LLM:
 - Rationale-review LLM specificity < 3
 - Rationale-review LLM expresses uncertainty
 
-#### Human Calibration (Small Sample)
+#### Human Calibration (Not Done — Closed)
 
-> **Implementation phase:** Future human calibration of the AI review.
+Human calibration is outside the capstone scope. The retained design below
+does not represent collected ratings or a completed agreement calculation.
 
-Validate the rationale-review LLM against human judgment:
+The proposed design compares the rationale-review LLM with human judgment:
 
 1. Randomly sample 20-30 rationales
 2. Human rates same criteria (correctness, specificity)
 3. Calculate agreement with the rationale-review LLM (Cohen's κ)
 4. Target: κ > 0.6 (substantial agreement)
 
-### For User Study (Manual)
+### User Pilot Design (Not Done — Closed)
+
+The user pilot is outside the capstone scope. These parameters and the procedure
+below document an unexecuted design, not a remaining capstone requirement.
 
 1. **Sample size**: 5-10 users (from PRD)
 2. **Duration**: 1-2 weeks of journaling
@@ -349,11 +388,11 @@ Day 14:      Second Coach Digest response + rating
 
 ---
 
-## Planned LLM-Judge Rationale Evaluation Flow
+## LLM-Judge Rationale Evaluation Design
 
 The flow below applies only to the unimplemented LLM-Judge rationale review. It
 does not describe the implemented Coach Digest Validations or Coach Digest
-Evals.
+Evals. Its human-calibration stage is closed outside the capstone scope.
 
 ```
 LLM-Judge produces rationales for N Journal Entries
@@ -378,7 +417,7 @@ LLM-Judge produces rationales for N Journal Entries
        (Flagged or sampled)
               ↓
 ┌─────────────────────────────────────┐
-│  Human Calibration                  │
+│  Human Calibration (closed scope)    │
 │  - 20-30 rationales human-rated     │
 │  - Compare to rationale-review LLM  │
 │  Output: Cohen's κ agreement        │
@@ -407,41 +446,45 @@ LLM-Judge produces rationales for N Journal Entries
 | Non-circularity (code) | > 95% | Coach Digest Validations | **Current** | Responses should avoid score and alignment jargon |
 | Length compliance | > 90% | Coach Digest Validations | **Current** | Responses should have nonempty fields and at most 180 words; there is no minimum word count |
 | Correctness, specificity, non-prescriptive tone, and tension honesty | Mean > 3.5/5 for each dimension | Coach Digest Evals | **Current** | Measures the response contract; remains AI review rather than human validation |
-| Coach Digest Evals review flag | Any dimension < 3 | Coach Digest Evals | **Current** | Sends a low-scoring response to human review |
-| Correctness (rationale-review LLM) | Mean > 3.5/5 | AI review | Future | Rationales should be factually accurate |
-| Specificity (rationale-review LLM) | Mean > 3.5/5 | AI review | Future | Rationales should cite concrete details |
-| Human-LLM agreement | κ > 0.6 | Human calibration | Future | The rationale-review LLM should align with human judgment |
-| Mean Likert rating (users) | ≥ 3.5/5 | User study | Future | Above neutral = generally useful |
-| % ratings ≥ 4 (users) | > 50% | User study | Future | Majority find it "mostly accurate" or better |
+| Coach Digest Evals review flag | Any dimension < 3 | Coach Digest Evals | **Current** | Marks a low-scoring response for review; does not imply that human review occurred |
+| Correctness (rationale-review LLM) | Mean > 3.5/5 | AI review | Not done | Rationales should be factually accurate |
+| Specificity (rationale-review LLM) | Mean > 3.5/5 | AI review | Not done | Rationales should cite concrete details |
+| Human-LLM agreement | κ > 0.6 | Human calibration | Not done — closed | Unmeasured; outside capstone scope |
+| Mean Likert rating (users) | ≥ 3.5/5 | User study | Not done — closed | Unmeasured; outside capstone scope |
+| % ratings ≥ 4 (users) | > 50% | User study | Not done — closed | Unmeasured; outside capstone scope |
 
 ---
 
 ## Known Limitations
 
-1. **Subjectivity**: "Felt accurate" is inherently subjective
-2. **Small sample**: 5-10 users limits statistical power
-3. **Hawthorne effect**: Users may rate higher knowing researchers will see
-4. **Same-model committed result**: Luna-none generated and evaluated the five
+1. **No human calibration or user pilot**: Both are not done and closed outside
+   the capstone. No user ratings or human-agreement result is claimed.
+2. **Study-design limits**: The unexecuted 5–10-user design would have limited
+   statistical power. Perceived accuracy is subjective, and ratings could be
+   influenced by participants knowing that researchers would see them.
+3. **Same-model committed result**: Luna-none generated and evaluated the five
    historical August responses. Correlated errors can make those scores too
    favorable. The evaluator supports provider separation, but no paid cross-provider result is
-   committed.
-5. **Synthetic sample**: The historical evaluation covers five selected
+   committed or required for capstone closeout.
+4. **Synthetic sample**: The historical evaluation covers five selected
    responses. The current 27-week replay has code validation and qualitative
    AI editorial review, with five unresolved findings. Neither establishes a
    fresh final test, human validity, or user usefulness.
-6. **Drift/control reference source**: Known Drifts and no-known-Drift controls
+5. **Drift/control reference source**: Known Drifts and no-known-Drift controls
    come from AI-reviewed synthetic development evidence, not human ground truth.
 
-**Mitigations:**
+**Considerations for the unexecuted user-study design:**
+
 - Use consistent Likert anchors with behavioral definitions
 - Collect qualitative feedback to contextualize ratings
 - Compare ratings across different explanation types (LLM-Judge vs. Coach Digest)
 
 ---
 
-## Example Evaluation Output
+## Illustrative User-Study Output (Not Collected)
 
-After 10 users complete the study:
+The table and aggregates below are illustrative only. The closed user pilot
+has no collected results.
 
 | User | Week 1 Rating | Week 2 Rating | Exit Feedback |
 |------|---------------|---------------|---------------|
@@ -451,6 +494,7 @@ After 10 users complete the study:
 | ... | ... | ... | ... |
 
 **Aggregate**:
+
 - Mean: 3.8/5
 - % ≥ 4: 65%
 - Common feedback: "Helpful when specific, unhelpful when generic"

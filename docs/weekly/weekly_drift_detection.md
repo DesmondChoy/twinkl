@@ -303,15 +303,15 @@ are optional because a missing or invalid Coach Digest response must not remove
 the Weekly Drift Detection output. The Coach Digest run is not optional in the
 manual Experience sequence.
 
-New outputs from the Weekly Drift Reviewer path retain the complete displayed
+The Weekly Drift Reviewer path retains the complete displayed
 text of each selected Journal Entry in `excerpt`. A selected Conflict quotation
 alone can omit the conversation or action it refers to, and a fixed word prefix
 can omit a later decision. Selection remains limited to the existing recent
 decisions for each Core Value and week, with dates and prior/current grouping
 preserved. If displayed text is unavailable, the stored reviewer quotation is
-the fallback. This changes Coach Digest context, not Weekly Drift Reviewer
-Decisions or Drift states. Saved receipts retain their original excerpts; the
-frozen scenario exporter explicitly uses `evidence_policy="historical"` to
+the fallback. Weekly Drift Reviewer Decisions and Drift states determine which
+sources enter the Coach Digest context. Saved receipts retain their original
+excerpts; the frozen scenario exporter explicitly uses `evidence_policy="historical"` to
 reproduce them. The legacy numeric-signal builder retains its historical
 excerpt behavior. Displayed Nudge and Response labels remain intact, identifying
 the assistant's question separately from the user's reply.
@@ -446,7 +446,7 @@ when upstream results are absent.
 
 ## Coach Digest Prompt and Response Contract
 
-The Coach Digest prompt requires:
+Ordinary Coach Digest generation uses prompt `4.7`. The prompt requires:
 
 - preferred name;
 - one week window;
@@ -480,16 +480,23 @@ Coach Digest Validations:
 - `weekly_mirror_verbatim`: the opening field contains an exact quotation from
   `evidence_lines`;
 - `all_quotes_grounded`: every quotation matches a supplied source exactly;
-- `nonempty_fields` and `reflective_question_form`: all fields contain text and
-  the question field contains one question;
+- `nonempty_fields` and `reflective_question_form`: all three fields contain text
+  and the reflective question is in question form;
+- `single_generated_question`: the complete response contains exactly one
+  generated question, in `reflective_question`; verified source quotations are
+  excluded from this count;
 - `non_circularity`: the response avoids score or alignment jargon;
 - `value_leakage`: the response does not name raw Schwartz value labels
   (for example Benevolence or Self-Direction) sourced from
-  `config/schwartz_values.yaml`; and
-- `state_claims`: the response does not claim improvement, recovery, or another
-  positive change. A claim that a pattern ended requires an Active Drift to No
-  Active Drift comparison ended by a Not Conflict decision; and
-- `length`: at most 180 words in total, with no minimum for new responses.
+  `config/schwartz_values.yaml`;
+- `state_claims`: generated narration avoids unsupported improvement, recovery,
+  or other positive-change wording. A claim that a pattern ended requires an
+  Active Drift to No Active Drift comparison ended by a Not Conflict decision.
+  Verified source quotations are excluded from this wording check;
+- `conversational_voice` and `natural_reflection_voice`: generated narration
+  avoids recap or date-led openings, clinical finding language, and commentary
+  about how the person wrote; and
+- `length`: at most 180 words in total, with no minimum.
 
 The `tension_explanation` field follows the selected policy. Active Drift may
 be explained only when Weekly Drift Detection supplies it. No-current-Drift
@@ -497,17 +504,22 @@ responses offer warm, evidence-based encouragement without treating absence of
 Drift as proof of success. More-reflection-needed responses state ambiguity
 gently and ask for useful context without deciding whether Drift exists.
 
-These checks are narrow guardrails, not a complete explanation-quality claim.
+These checks do not establish semantic accuracy, correct attribution, or
+non-prescriptive tone. The prompt also preserves who did what, the means of
+interaction, and uncertainty about motives; those requirements still need
+source review.
 
-Prompt version `4.2` includes these conversational style requirements. Saved
-responses retain their original wording and prompt provenance. The sample
+Saved responses retain their original wording, prompt provenance, and validation
+policy: prompt `4.7` uses the current policy, `4.6` keeps its original quotation
+and question checks, and `4.1`–`4.5` retain their historical base checks and
+25–180-word bounds, with voice checks appropriate to the saved response. The sample
 generation report reads the prompt version from saved generation provenance
 for both JSON and Markdown output; empty or mixed-version manifests are
 rejected rather than assigned a misleading version.
 
 In Experience, an eligible closed-week result with a valid Coach Digest can
 include a [North Star Moment](../north_star/north_star_moment.md) passage
-between the unchanged narrative and its original reflective question. A
+after the narrative and reflective question. A
 separate review selects at most one exact quotation of a supportive action;
 it does not alter Weekly Drift Detection or generate a second question.
 Active Drift restricts sources to pre-onset writing, No Active Drift permits
@@ -516,6 +528,20 @@ omits the passage. Saved replay supplies completed records; live review uses
 a pinned US$1 allowance shared across sessions and restarts. Invalid or
 exhausted budgets fail closed. The batch Weekly Drift Detection CLI renders
 the Coach Digest prompt and does not run North Star Moment.
+
+### Explicit Coach Digest retries
+
+The Experience **Retry Coach Digest** action uses the frozen Weekly Drift
+Detection output for the requested week. A matching rejected response supplies
+its validation errors as repair instructions. The previous attempt remains in
+Inspect with its exact prompt and raw output; the retry has its own event.
+A completed valid response is reused, and an identical idempotency key does not
+repeat a call. Retrying an older week preserves the current week's result.
+
+OpenAI and Gemini provider adapters make one attempt per call with SDK retries
+disabled. Refused, blocked, or incomplete responses cannot become a displayed
+Coach Digest. The Weekly Drift Reviewer separately owns its two-attempt policy
+for transient failures; a Coach Digest retry does not rerun that review.
 
 ---
 
@@ -539,13 +565,21 @@ learned routing policies.
 
 ## Current Coach Digest Batch Status
 
+All 27 saved replay weeks have source-compatible baseline Coach Digest responses
+from the [9 September voice refresh and editorial repair](../../logs/experiments/reports/coach_voice_refresh_20260909/report.md).
+They use Luna at reasoning effort `none`, prompt `4.4`, and their recorded Coach
+Digest Validations. For the 22 weeks with an accepted North Star Moment, the
+[saved comparison](../north_star/demo_coach_comparison.md) supplies complete
+without-context and with-context responses. Twenty-one pairs use Coach prompt
+`4.4` and comparison extension `1.0`; Lukas's week beginning 16 June uses
+`4.5`/`1.1`. The remaining five weeks display the baseline response and an
+explanation of comparison availability. These receipts retain AI editorial
+review; they have no fresh Coach Digest Evals scores or human validation.
+
 The [Persona replacement run](../../logs/experiments/reports/demo_persona_replacement_20260908/report.md)
-provides ten accepted responses for Lukas and Meera. Together with 17 retained
-responses for Nisha, Noor, and Wei Jun, all 27 current replay weeks have
-source-compatible Coach Digest responses. Generation uses Luna at reasoning
-effort `none` and prompt `4.2`; every response passes Coach Digest Validations.
-Weekly Drift Reviewer and North Star Moment outputs are reused from the pinned
-studies. No new Coach Digest Evals or human review was performed.
+preserves the earlier prompt-`4.2` generation provenance: ten accepted responses
+for Lukas and Meera and 17 retained responses for Nisha, Noor, and Wei Jun.
+Weekly Drift Reviewer and North Star Moment outputs come from the pinned studies.
 
 The [September v4 Run 1 replay refresh](../../logs/experiments/reports/demo_v4_run1_20260907/report.md)
 and [8 September completion](../../logs/experiments/reports/demo_coach_all_weeks_20260908/report.md)
@@ -567,7 +601,10 @@ verdicts or review flags. Luna-none generated and evaluated the responses.
 These scores are same-model AI review, not human validation or a fresh final
 test.
 
-### Coach Digest Evals and Drift/control Tools
+### Coach Digest Evals and Drift/control Completion
+
+Independent-provider Coach Digest evaluation and the 42-Drift/42-control study
+are **Done** within their accepted capstone workflow scope.
 
 Coach Digest Evals accept `--judge-provider {openai,gemini}` and
 `--judge-model`. The report records the generator and evaluator identities and
@@ -583,15 +620,17 @@ Coach Digest Evals,
 known Drift state, input history, response mode, and control match quality.
 
 No paid cross-provider or Drift/control result is committed. These commands are
-available evaluation tooling, not additional evidence for the current Coach
-Digest result.
+available evaluation tooling. A paid independent study result is not required
+for capstone closeout. Current Coach Digest claims remain bound to the saved
+results described above.
 
-## Remaining Work
+## Unfinished and Closed Scope
 
-1. Run the paid Drift/control study with an evaluator provider that differs
-   from the Coach Digest generator and publish the bounded result.
-2. Complete future human calibration of the AI review.
-3. Capture the user's perceived-accuracy rating and make it queryable.
+| Item | Status | Scope |
+|---|---|---|
+| Coach Digest perceived-accuracy feedback capture | Not done | Rating capture and queryable feedback remain separate implementation work. |
+| Human calibration of AI review | Not done — closed | Outside the capstone scope; no human calibration result is claimed. |
+| User pilot | Not done — closed | Outside the capstone scope; no real-user pilot result is claimed. |
 
 Persisting full VIF Critic Predictions and adding independent disagreement
 review are not planned for the time-boxed capstone. A fresh final test and

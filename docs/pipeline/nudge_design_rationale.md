@@ -12,9 +12,10 @@ to improve VIF Critic training data or Weekly Drift Reviewer Decisions. Similar
 features in other journaling products support this choice. They do not prove
 that the displayed nudge in Twinkl improves retention or relevance.
 
-A future external pilot can measure response rate, continued journaling,
-and perceived relevance. Those user measures must remain separate from
-AI-reviewed synthetic evidence.
+The external user pilot is not conducted and is closed outside capstone scope.
+Response rate, continued journaling, and perceived relevance remain possible
+measures for research beyond the capstone; AI-reviewed synthetic evidence
+does not establish these user outcomes.
 
 ---
 
