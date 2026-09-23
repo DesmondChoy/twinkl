@@ -355,11 +355,16 @@ not a choice of variants or limits for the fresh experiment.
 
 #### North Star Moment review
 
-The current runtime uses a prompt and typed schema separate from the Weekly
-Drift Reviewer, with `gpt-5.6-luna` at reasoning effort `low`. Requested and
+The current live runtime uses a prompt and typed schema separate from the Weekly
+Drift Reviewer, with `gpt-6-luna` at reasoning effort `low`. Saved Persona replay
+and the integration experiment retain their `gpt-5.6-luna` receipts. Requested and
 actual model identifiers and reasoning settings are recorded. The reusable
 semantic assessment is implemented in
 [`src/north_star/assessment.py`](../../src/north_star/assessment.py).
+Earlier live receipts remain verifiable against their archived budget policy,
+and their spend carries into the current US$1 live allowance.
+The Weekly Drift Reviewer comparison does not measure North Star Moment quality,
+cost, or latency under GPT-6 Luna.
 
 For every requested source and Core Value, assess whether the writer reports
 an action, whether that action supports the approved Core Value definition,

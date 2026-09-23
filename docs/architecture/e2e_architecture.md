@@ -63,7 +63,7 @@ capstone app. A production background schedule is not implemented.
 ## Weekly Drift Detection
 
 The Weekly Drift Reviewer receives cumulative displayed Journal Entry history
-and the Profile Core Values. Its fixed contract is `gpt-5.6-luna` with reasoning
+and the Profile Core Values. Its fixed contract is `gpt-6-luna` with reasoning
 effort `low`. Prompt `4.0` supplies each selected Core Value's `definition` and
 `core_motivation` from `config/schwartz_values.yaml` as trusted context, separate
 from untrusted Journal Entry text. It does not receive VIF Critic Predictions.
@@ -110,7 +110,8 @@ only writing from before onset. No Active Drift prefers a current-week action,
 then an older reminder; it does not establish support by itself. Insufficient
 Evidence produces no card.
 
-The full-history review uses `gpt-5.6-luna` with reasoning effort `low`.
+The live full-history review uses `gpt-6-luna` with reasoning effort `low`.
+Saved Persona replay retains its recorded `gpt-5.6-luna` selections.
 Application checks enforce source ownership, exact quotation, chronology, and
 independent availability evidence for user nudge responses. The AI-written
 nudge is not a source. Experience places an accepted quotation within a valid

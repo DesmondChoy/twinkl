@@ -4,7 +4,7 @@ This document describes VIF Critic uncertainty and records how it could support
 an unplanned offline review, case-selection, and retraining loop. The approved
 user-facing Drift path does not run the VIF Critic or consume VIF Critic
 Predictions. Its Weekly Drift Reviewer model contract is fixed
-at `gpt-5.6-luna` with reasoning effort `low`. It is wired into the approved
+at `gpt-6-luna` with reasoning effort `low`. It is wired into the approved
 capstone POC runtime and remains separate from the explicitly deprecated
 crash/rut/evolution compatibility path.
 
@@ -144,7 +144,7 @@ candidate confirmation is outside the remaining capstone scope.
 |---|---|
 | Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value |
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
-| Weekly Drift Detection | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer Decisions without VIF Critic input, followed by the internal deterministic Drift Detector and structured output storage |
+| Weekly Drift Detection | Fixed `gpt-6-luna` reasoning-effort-`low` Weekly Drift Reviewer Decisions without VIF Critic input, followed by the internal deterministic Drift Detector and structured output storage |
 | VIF Critic path | Persist means and uncertainty for offline diagnostics; generalized independent review and retraining are not planned |
 | Coach Digest | Uses the structured output to produce an evidence-based user response; no fresh final test or deployment approval is claimed |
 

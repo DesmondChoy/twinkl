@@ -20,7 +20,7 @@ The current layers of the contract are deliberately different:
 | Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-752.4` reviewed every candidate discoverable from either legacy label source plus matched controls. |
 | Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active or planned for the time-boxed capstone. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` was closed as not planned. |
-| Weekly Drift Reviewer | The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic input. The fixed model choice is distinct from final-test validation and deployment approval. |
+| Weekly Drift Reviewer | The current model contract is fixed at `gpt-6-luna` with reasoning effort `low`, without VIF Critic input. The fixed model choice is distinct from final-test validation and deployment approval. |
 | Approved architecture | Weekly Drift Detection uses the internal Weekly Drift Reviewer and Drift Detector. The completed VIF Critic remains an offline research component. |
 | Capstone POC runtime | Weekly Drift Detection persists versioned Luna-low Weekly Drift Reviewer Decisions without VIF Critic input. It applies the deterministic Drift Detector and stores structured output. The deprecated crash/rut/evolution runtime remains only for compatibility. |
 | User delivery | The Coach Digest consumes the structured output. Its response cites relevant evidence without score jargon. No fresh final test or deployment approval is claimed. |
@@ -33,7 +33,7 @@ The current layers of the contract are deliberately different:
   first and false Drift alerts second.
 - Coverage and abstention are diagnostic metrics. They must be reported because
   they expose fail-closed behavior, but they do not gate development selection.
-- The three Luna-low development Runs are sufficient to freeze the contract:
+- The three historical GPT-5.6 Luna low development Runs supported the original freeze:
   their Drift recall was `0.571`, `0.548`, and `0.548`; their false Drift alert
   counts were 5, 4, and 4 across 256 non-Drift Core Value trajectories. Each
   Run therefore exceeded `0.50` Drift recall and stayed at or below a `2%`
@@ -43,6 +43,16 @@ The current layers of the contract are deliberately different:
   Twinkl retained Luna-`low`. Luna-`xhigh` is a more aggressive and more
   costly operating point, and it has no fresh final-test evidence. This
   no-change decision does not grant deployment approval.
+- `twinkl-q6pt` and `twinkl-gv3x` compare `gpt-5.6-luna` with `gpt-6-luna`
+  on the same 951 prompt-version-`4.0` requests at every reasoning effort
+  from `none` through `xhigh`, with three Runs per setup. No paired
+  Drift-recall interval excludes zero. GPT-6 Luna has higher coverage at
+  every effort, fewer false Drift alerts at `none` (paired median −7,
+  interval [−12, −2]), and lower calculated token cost. These development
+  results support a move to `gpt-6-luna` at `low` on cost and coverage. At
+  `low`, median attempt latency fell from 2.82 to 2.35 seconds and calculated
+  token cost fell from $1.2730 to $0.5083 across three Runs; the paired
+  Drift-recall difference was 0.000 [−0.095, +0.089].
 - Any future fresh final test should use the same response schema, fail-closed
   request handling, scoring, three-Run protocol, and reported metrics as the
   Luna-low development study. There is no separate efficiency gate.
@@ -77,7 +87,9 @@ See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
   coverage and abstention, cross-week hits, detection delay, entry-level and
   per-Core-Value metrics, response status, latency, token use, and cost.
 
-The prompt used for the reported accuracy results is version `2.0`. The
+The prompt used for the `twinkl-52zz` and `twinkl-ck3w` accuracy results is
+version `2.0`; the `twinkl-q6pt` and `twinkl-gv3x` model comparisons measure
+Drift recall and false Drift alerts with version `4.0`. The
 version `3.0` contract enforces confidence, reason, and exact-quote rules.
 Current runtime version `4.0` also supplies the selected Core Values' `definition` and `core_motivation`
 fields: Schwartz-based definitions plus project-specific elaborations.
@@ -199,8 +211,8 @@ approval.
   historical LLM-Judge Conflict Labels remain null inside a case with a frozen
   resolved Drift outcome.
 - `twinkl-52zz` compares three frozen Runs for each Weekly Drift Reviewer setup
-  on the complete development data. The fixed model contract, `gpt-5.6-luna`
-  at reasoning effort `low`, found a median 23/42 known Drifts, produced 4 false
+  on the complete development data. The historical `gpt-5.6-luna`
+  reasoning-effort-`low` setup found a median 23/42 known Drifts, produced 4 false
   Drift alerts, and had `0.637` coverage. The read-only
   [Drift Inspection App](../demo/weekly_drift_review_app.md) exposes the complete
   results, persona-level outcomes, Journal Entries, AI-reviewed LLM-Judge
@@ -393,7 +405,7 @@ and Core Values rather than VIF Critic Predictions.
 
 ### Phase 2: Freeze Before Final Test
 
-1. Keep `gpt-5.6-luna` and reasoning effort `low` fixed, then freeze the Weekly
+1. Keep `gpt-6-luna` and reasoning effort `low` fixed, then freeze the Weekly
    Drift Reviewer prompt, response schema, deterministic Drift Detector, and
    evaluation contract.
 2. Keep any future fresh final test locked and unscored while those choices are
@@ -435,10 +447,15 @@ above.
 | Complete development review (`twinkl-qtwz`) | 42 Drifts across 36 Drift trajectories; 292/292 case-level outcomes resolved | Frozen input used by `twinkl-52zz`; the nine newly found Drifts all have historical training provenance |
 | `gpt-5.4-mini` Weekly Drift Reviewer (`twinkl-52zz`) | 7/42 median Drift hits / recall 0.167 / precision 0.583 / 5 false Drift alerts / coverage 0.740 | Complete-development baseline over three repeats |
 | `gpt-5.6-luna` Weekly Drift Reviewer (`twinkl-52zz`) | 20/42 median Drift hits / recall 0.476 / precision 0.606 / 13 false Drift alerts / coverage 0.777 | Frozen reasoning-effort-`none` baseline for the follow-up; superseded by the fixed reasoning-effort-`low` contract |
-| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Fixed Weekly Drift Reviewer model contract; no final-test validation or deployment approval is claimed |
+| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Historical contract before the GPT-6 Luna low migration; no final-test validation or deployment approval is claimed |
 | `gpt-5.6-luna` reasoning-effort-`medium` (`twinkl-ck3w`) | 24/42 median Drift hits / recall 0.571 / precision 0.857 / 4 false Drift alerts / coverage 0.682 | Development-only follow-up; no established Drift-recall gain over Luna-low |
 | `gpt-5.6-luna` reasoning-effort-`high` (`twinkl-ck3w`) | 26/42 median Drift hits / recall 0.619 / precision 0.758 / 8 false Drift alerts / coverage 0.716 | Development-only follow-up; the paired Drift-recall interval against Luna-low includes zero |
 | `gpt-5.6-luna` reasoning-effort-`xhigh` (`twinkl-ck3w`) | 28/42 median Drift hits / recall 0.667 / precision 0.750 / 9 false Drift alerts / coverage 0.702 | Established both a Drift-recall gain and more false Drift alerts against Luna-low; not adopted because it is a more aggressive operating point |
+| Prompt-v4 `gpt-5.6-luna` / `gpt-6-luna`, effort `none` (`twinkl-q6pt`) | Median recall 0.357 / 0.357; false Drift alerts 9 / 2; coverage 0.918 / 0.976 | Paired false-alert difference −7 [−12, −2]; recall difference 0.000 [−0.073, +0.065] |
+| Prompt-v4 `gpt-5.6-luna` / `gpt-6-luna`, effort `low` (`twinkl-q6pt`) | Median recall 0.381 / 0.405; false Drift alerts 3 / 2; coverage 0.860 / 0.990 | Paired recall difference 0.000 [−0.095, +0.089]; false-alert interval crosses zero; fresh prompt-v4 comparator for the fixed contract |
+| Prompt-v4 `gpt-5.6-luna` / `gpt-6-luna`, effort `medium` (`twinkl-gv3x`) | Median recall 0.405 / 0.452; false Drift alerts 2 / 2; coverage 0.873 / 0.986 | Paired recall difference +0.048 [−0.065, +0.130] |
+| Prompt-v4 `gpt-5.6-luna` / `gpt-6-luna`, effort `high` (`twinkl-gv3x`) | Median recall 0.429 / 0.405; false Drift alerts 3 / 2; coverage 0.853 / 0.976 | Paired recall difference −0.048 [−0.128, +0.045] |
+| Prompt-v4 `gpt-5.6-luna` / `gpt-6-luna`, effort `xhigh` (`twinkl-gv3x`) | Median recall 0.500 / 0.452; false Drift alerts 5 / 2; coverage 0.849 / 0.966 | Paired recall difference −0.024 [−0.125, +0.050]; false-alert difference −2 [−4, 0] |
 | Legacy candidate confirmation (`twinkl-752.4`) | 22/44 (50.0%) | Resolved development candidates only; selection-biased diagnostic |
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
@@ -514,6 +531,8 @@ Re-score the committed Weekly Drift Reviewer responses without API calls:
 uv run python -m scripts.experiments.compare_twinkl_52zz_models score
 uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning score
 uv run python -m scripts.experiments.compare_twinkl_ck3w_luna_higher_reasoning score
+uv run python -m scripts.experiments.replay_luna_comparison q6pt score
+uv run python -m scripts.experiments.replay_luna_comparison gv3x score
 ```
 
 The model-comparison runner exposes `prepare`, `estimate`, `run`, and `score`;
@@ -528,6 +547,19 @@ The Luna higher-reasoning runner exposes `prepare`, `estimate`, `smoke`,
 `run`, and `score`. The committed responses are sufficient for `score`. The
 [`twinkl-ck3w` report](../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md)
 records the full protocol, amendments, results, and no-change decision.
+
+The prompt-v4 GPT-5.6/GPT-6 Luna runners, `compare_twinkl_q6pt_luna` and
+`compare_twinkl_gv3x_luna_higher`, expose `prepare`, `verify`, `smoke`, `run`,
+and `score`, and accept `--config`. After the live Reviewer model changed, use
+`replay_luna_comparison` for offline `verify` and `score`. It checks the
+Reviewer's source at the manifest revision and allows only the adopted model
+ID change; the frozen runner then checks the other hashes and request identities.
+`score` rewrites the artifact's `metrics.json` from saved responses. `smoke` and `run` make paid
+calls, require `--execute`, and resume from recorded terminal responses. The
+[`twinkl-q6pt`](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md)
+and
+[`twinkl-gv3x`](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_gv3x_luna_higher.md)
+reports record output caps, concurrency, spend ceilings, and provenance.
 
 ---
 
@@ -591,6 +623,12 @@ records the full protocol, amendments, results, and no-change decision.
 | [`../../config/evals/twinkl_ck3w_luna_higher_reasoning_v1.yaml`](../../config/evals/twinkl_ck3w_luna_higher_reasoning_v1.yaml) | Frozen Luna higher-reasoning comparison contract |
 | [`../../scripts/experiments/compare_twinkl_ck3w_luna_higher_reasoning.py`](../../scripts/experiments/compare_twinkl_ck3w_luna_higher_reasoning.py) | Higher-reasoning preparation, execution, receipt, and scoring workflow |
 | [`../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md`](../../logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md) | Development result and no-change Luna-low decision |
+| [`../../config/evals/twinkl_q6pt_luna_model_v1.yaml`](../../config/evals/twinkl_q6pt_luna_model_v1.yaml) | Prompt-v4 GPT-5.6/GPT-6 Luna comparison contract at `none` and `low` |
+| [`../../scripts/experiments/compare_twinkl_q6pt_luna.py`](../../scripts/experiments/compare_twinkl_q6pt_luna.py) | Preparation, verification, paid execution, and paired scoring for `twinkl-q6pt` |
+| [`../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md`](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md) | `none`/`low` model-comparison result, cost, provenance, and limits |
+| [`../../config/evals/twinkl_gv3x_luna_higher_v1.yaml`](../../config/evals/twinkl_gv3x_luna_higher_v1.yaml) | Prompt-v4 GPT-5.6/GPT-6 Luna comparison contract at `medium`, `high`, and `xhigh` |
+| [`../../scripts/experiments/compare_twinkl_gv3x_luna_higher.py`](../../scripts/experiments/compare_twinkl_gv3x_luna_higher.py) | Preparation, verification, paid execution, and paired scoring for `twinkl-gv3x` |
+| [`../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_gv3x_luna_higher.md`](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_gv3x_luna_higher.md) | Higher-reasoning model-comparison result, concurrency amendment, cost, and limits |
 | [`../../src/drift_review_app/data.py`](../../src/drift_review_app/data.py) | Frozen-input verification and result loading for the Drift Inspection App |
 | [`../demo/weekly_drift_review_app.md`](../demo/weekly_drift_review_app.md) | Drift Inspection App contract, launch commands, and input boundary |
 | [`../../scripts/experiments/resolve_twinkl_752_5_null_cases.py`](../../scripts/experiments/resolve_twinkl_752_5_null_cases.py) | Freezes and materializes the blind Opus follow-up |

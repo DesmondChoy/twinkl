@@ -31,7 +31,7 @@ Crucially, the VIF is designed to be:
 *   **Time-Aware:** The downstream timeline looks for repeated evidence rather than reacting to one Journal Entry. Drift v1 requires two consecutive Conflicts for the same Core Value.
 
 In the approved user-facing path, the Weekly Drift Reviewer is fixed at
-`gpt-5.6-luna` with reasoning effort `low`. It and the Drift Detector decide
+`gpt-6-luna` with reasoning effort `low`. It and the Drift Detector decide
 Drift so the Coach Digest can surface tensions. The completed VIF Critic is an
 offline research model, not a dependency of that path.
 

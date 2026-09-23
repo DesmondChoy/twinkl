@@ -10,7 +10,7 @@ inspection but does not represent approved product behavior. The
 separate [Drift Inspection App](weekly_drift_review_app.md) is read-only and
 compares frozen Weekly Drift Reviewer Runs without executing the VIF Critic
 runtime or making model or provider API calls. The current Weekly Drift Reviewer
-model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`.
+model contract is fixed at `gpt-6-luna` with reasoning effort `low`.
 
 The app is a review and debugging interface for the deprecated compatibility
 path. The approved capstone POC runtime is

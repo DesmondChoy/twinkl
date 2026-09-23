@@ -7,7 +7,7 @@
 ## Weekly Drift Detection and North Star Moment
 
 Weekly Drift Detection reviews Journal Entries against the confirmed Profile's
-Core Values using `gpt-5.6-luna` with reasoning effort `low`. Prompt `4.0`
+Core Values using `gpt-6-luna` with reasoning effort `low`. Prompt `4.0`
 includes only the selected Core Values' `definition` and `core_motivation`
 fields from `config/schwartz_values.yaml`: Schwartz-based definitions plus
 project-specific elaborations. This context belongs to trusted instructions;
@@ -22,6 +22,19 @@ terminations, changed entry decisions, and variation between Runs. These
 counts establish differences in detections, not better or worse accuracy.
 The historical Luna-low recall and false-alert results use prompt v2 and
 remain a separate development result.
+
+Two matched prompt-v4 studies compare `gpt-5.6-luna` with `gpt-6-luna` on
+the same 951 weeks, three Runs per setup, at every reasoning effort from
+`none` through `xhigh`
+([`none`/`low`](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md),
+[`medium`/`high`/`xhigh`](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_gv3x_luna_higher.md)).
+No paired Drift-recall interval excludes zero. GPT-6 Luna covers more Core
+Value trajectories at every effort, produces fewer false Drift alerts at
+`none`, and has lower calculated token cost. Its median Drift recall across
+`none`, `low`, `medium`, `high`, and `xhigh` is `0.357`, `0.405`, `0.452`,
+`0.405`, and `0.452`. The live GPT-6 Luna low contract is supported by lower
+calculated cost and higher coverage on this AI-reviewed synthetic development
+set. The comparison does not establish a Drift-recall gain.
 
 North Star Moment supplies at most one exact quotation of a supportive action
 beneath the Coach Digest. Active Drift uses writing from before onset; No
@@ -104,7 +117,7 @@ Key properties:
 
 The VIF Critic (Offline) research stack includes ordinal MLP heads with MC Dropout, a BNN baseline, config-driven frozen encoders with `nomic-embed-text-v1.5` as the active default, corrected-split experiment logging, checkpoint discovery, recall-first checkpoint selection, raw output export, runtime timeline reconstruction, and weekly aggregation. Its former crash/rut/evolution response routing is deprecated compatibility code. The 69-run / 133-config archive keeps `run_019`-`run_021` Balanced Softmax as the historical corrected-split reference. See [`logs/experiments/index.md`](../../logs/experiments/index.md) for the live board.
 
-**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. Weekly Drift Detection uses the internal Weekly Drift Reviewer and Drift Detector. It stores structured output with Core Values, cited Journal Entries, and Drift state. The fixed model contract is `gpt-5.6-luna` with reasoning effort `low`. The frozen development Runs are AI-reviewed synthetic evidence. They are not human validation, a fresh final test, or deployment approval. The completed VIF Critic (Offline) remains outside this path. See the [`twinkl-52zz` report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](../../docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](../../docs/evals/drift_detection_eval.md).
+**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. Weekly Drift Detection uses the internal Weekly Drift Reviewer and Drift Detector. It stores structured output with Core Values, cited Journal Entries, and Drift state. The current model contract is `gpt-6-luna` with reasoning effort `low`. The frozen development Runs are AI-reviewed synthetic evidence. They are not human validation, a fresh final test, or deployment approval. The completed VIF Critic (Offline) remains outside this path. See the [matched prompt-v4 model comparison](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md), the historical [`twinkl-52zz` report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](../../docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](../../docs/evals/drift_detection_eval.md).
 
 **Current runtime behavior:** `src.coach.weekly_drift_runtime` runs Weekly Drift Detection. It reads Journal Entries, imports Core Values and Coach Digest context from a confirmed Profile when supplied, calls the internal Weekly Drift Reviewer, persists versioned JSON receipts, and applies the internal Drift Detector across week boundaries. It stores structured output and renders one of three Coach Digest policies: Drift detected, no current Drift, or more reflection needed. When no Profile is supplied, synthetic personas retain their deterministic `core_values` compatibility path. `src.coach.runtime` and `src.vif.drift` are deprecated compatibility paths for the former VIF Critic (Offline) crash/rut/evolution runtime. See `docs/vif/`, [`docs/weekly/weekly_drift_detection.md`](../../docs/weekly/weekly_drift_detection.md), and [`docs/demo/review_app.md`](../../docs/demo/review_app.md).
 

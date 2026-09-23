@@ -170,7 +170,7 @@ shared improvements, without prioritizing a separate mobile redesign.
   onboarding implementation. Do not port it to Shiny or duplicate its SVBWS
   scoring in Python.
 - The user-facing Drift path is fixed: Journal Entries and Core Values go to
-  the `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer without VIF
+  the `gpt-6-luna` reasoning-effort-`low` Weekly Drift Reviewer without VIF
   Critic input, then the Drift Detector applies the two-consecutive-Conflict
   rule.
 - Saving a Journal Entry never reviews its open calendar week. Review cadence
@@ -862,8 +862,8 @@ framework:
   configuration never cross the boundary. Exact prompts and raw model
   responses may cross only after secret redaction. Errors expose a stable code,
   safe message, and retryable flag.
-- Weekly Drift Detection events require `gpt-5.6-luna` with reasoning effort
-  `low`. They contain Weekly Drift Reviewer Decisions. VIF Critic Predictions
+- Live Weekly Drift Detection events require `gpt-6-luna` with reasoning effort
+  `low`; saved replay events retain `gpt-5.6-luna` at `low`. They contain Weekly Drift Reviewer Decisions. VIF Critic Predictions
   and their uncertainty fields are rejected by this contract.
 - Saved replay and live results use the same payload shapes and differ through
   `source`. A saved result may use `reused`; caching remains optional.

@@ -15,6 +15,14 @@ Incremental costs and failures are reported separately from historical costs
 and latency. See the
 [NSM experiment log](north_star_moment.md) for the evidence lineage.
 
+## Weekly Drift Reviewer Luna higher-reasoning comparison (2026-09-23)
+
+The [`twinkl-gv3x` follow-up](reports/experiment_review_2026-09-23_twinkl_gv3x_luna_higher.md) completed fresh prompt-v4 matched GPT-5.6 and GPT-6 Luna requests at `medium`, `high`, and `xhigh` on the same 951 observed weeks, with three Runs at each effort. GPT-6 had higher trajectory coverage and lower calculated token cost at every new effort. The paired Drift-recall intervals include zero at all three efforts; median GPT-6 Drift recall across the combined prompt-v4 `none`/`low`/`medium`/`high`/`xhigh` series was `0.357`/`0.405`/`0.452`/`0.405`/`0.452`. The follow-up recorded 17,118 terminal responses and $10.2505 in receipt-based calculated cost, with unknown billing for interrupted and timed-out attempts. These are AI-reviewed synthetic development results; the live Weekly Drift Reviewer model later changed to `gpt-6-luna` at `low`.
+
+## Weekly Drift Reviewer Luna model comparison (2026-09-23)
+
+The [`twinkl-q6pt` experiment](reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md) made fresh prompt-v4 requests for `gpt-5.6-luna` and `gpt-6-luna`, each at reasoning effort `none` and `low`, on all 951 observed weeks and across three Runs. At `none`, GPT-6 matched median Drift recall (`0.357`), reduced median false Drift alerts from 9 to 2, and raised median coverage from `0.918` to `0.976`. At `low`, median Drift recall was `0.381` versus `0.405`, but the paired median difference was zero; false alerts fell from 3 to 2 with an interval crossing zero, and coverage rose from `0.860` to `0.990`. Calculated token cost fell by 54% at `none` and 60% at `low`. These are AI-reviewed synthetic development results. The live Weekly Drift Reviewer model later changed to `gpt-6-luna` at `low`.
+
 ## Weekly Drift Reviewer Core Value Definitions (2026-09-07)
 
 The [`twinkl-j3k7` comparison](reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md)

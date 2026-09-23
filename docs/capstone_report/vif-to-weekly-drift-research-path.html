@@ -971,6 +971,10 @@ html&gt;body{padding:0}&lt;/style&gt;
       width: 100%;
       min-height: 340px;
     }
+    #twinkl-research-path .chart-wrap[data-wrap=&quot;drift&quot;] {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
     #twinkl-research-path svg {
       display: block;
       width: 100%;
@@ -1130,23 +1134,24 @@ html&gt;body{padding:0}&lt;/style&gt;
       &lt;div&gt;
         &lt;div class=&quot;panel-kicker&quot;&gt;Stage 2 · user-facing decision&lt;/div&gt;
         &lt;h3 class=&quot;panel-title&quot; id=&quot;drift-panel-title&quot;&gt;Weekly Drift Detection experiments&lt;/h3&gt;
-        &lt;p class=&quot;panel-subtitle&quot;&gt;Drift recall, repeat range, false alerts, and median response latency&lt;/p&gt;
+        &lt;p class=&quot;panel-subtitle&quot;&gt;Drift recall, repeat range, and false alerts; inspect a point for coverage and latency&lt;/p&gt;
       &lt;/div&gt;
       &lt;div class=&quot;legend&quot; aria-label=&quot;Weekly Drift Detection chart series&quot;&gt;
         &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;integration&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch dot&quot; style=&quot;--swatch:var(--viz-series-5)&quot;&gt;&lt;/span&gt;VIF integration study&lt;/button&gt;
-        &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;model&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch dot&quot; style=&quot;--swatch:var(--viz-series-1)&quot;&gt;&lt;/span&gt;Model + reasoning&lt;/button&gt;
-        &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;best&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch&quot; style=&quot;--swatch:var(--viz-series-3)&quot;&gt;&lt;/span&gt;Best observed recall&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;model&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch dot&quot; style=&quot;--swatch:var(--viz-series-1)&quot;&gt;&lt;/span&gt;Model + reasoning · prompt v2&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;v4&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch dot&quot; style=&quot;--swatch:var(--viz-series-6)&quot;&gt;&lt;/span&gt;Matched model swap · v4 (○ 5.6, ● 6)&lt;/button&gt;
+        &lt;button type=&quot;button&quot; data-chart=&quot;drift&quot; data-toggle=&quot;best&quot; aria-pressed=&quot;true&quot;&gt;&lt;span class=&quot;swatch&quot; style=&quot;--swatch:var(--viz-series-3)&quot;&gt;&lt;/span&gt;Best observed recall · v2&lt;/button&gt;
       &lt;/div&gt;
     &lt;/div&gt;
     &lt;div class=&quot;chart-wrap&quot; data-wrap=&quot;drift&quot;&gt;
-      &lt;svg id=&quot;twinkl-drift-chart&quot; role=&quot;img&quot; aria-label=&quot;Point and range plot comparing VIF integration variants and LLM reasoning levels on Drift recall.&quot;&gt;&lt;/svg&gt;
+      &lt;svg id=&quot;twinkl-drift-chart&quot; role=&quot;img&quot; aria-label=&quot;Point and range plot showing the VIF integration study, the prompt-v2 model and reasoning series, and the matched prompt-v4 GPT-5.6 to GPT-6 Luna comparisons. Each marker shows median Drift recall and the range across three Runs; false Drift alerts appear below.&quot;&gt;&lt;/svg&gt;
     &lt;/div&gt;
-    &lt;figcaption class=&quot;panel-caption&quot;&gt;Current product contract: Luna low → Weekly Drift Reviewer Decision → deterministic two-Conflict Drift Detector. Xhigh has the highest recall, but it also has more false alerts and higher latency.&lt;/figcaption&gt;
+    &lt;figcaption class=&quot;panel-caption&quot;&gt;Current product contract: GPT-6 Luna low → Weekly Drift Reviewer Decision → deterministic two-Conflict Drift Detector. Across the five matched prompt-v4 model comparisons, GPT-6 raised trajectory coverage at every effort; none reduced median false Drift alerts from 9 to 2. No effort established a paired Drift-recall gain.&lt;/figcaption&gt;
   &lt;/figure&gt;
 
-  &lt;p class=&quot;figure-note&quot;&gt;The panels share a numerical scale, but not a metric: the VIF Critic uses per-entry Conflict recall; Weekly Drift Detection uses Drift recall. The integration study used 33 known Drifts and 106 trajectories. The model study used 42 known Drifts and 292 trajectories. Results use AI-reviewed synthetic development data.&lt;/p&gt;
+  &lt;p class=&quot;figure-note&quot;&gt;The panels share a numerical scale, but not a metric: the VIF Critic uses per-entry Conflict recall; Weekly Drift Detection uses Drift recall. The integration study used 33 known Drifts and 106 trajectories. Both model studies used 42 known Drifts and 292 trajectories. Prompt v2 and prompt v4 points are separate experiments; compare GPT-6 with the adjacent prompt-v4 GPT-5.6 point at the same reasoning effort. The prompt-v4 none/low study used a 2,000-token output cap; the later medium/high study used 8,000 and xhigh used 32,000, with caps matched between models at each effort. Latency uses terminal calls for v2 and finished attempts for v4, so it is diagnostic across studies. Results use AI-reviewed synthetic development data.&lt;/p&gt;
   &lt;div class=&quot;tooltip&quot; role=&quot;tooltip&quot;&gt;&lt;/div&gt;
-  &lt;p class=&quot;sr-only&quot;&gt;The VIF Critic experiments increased observed per-entry Conflict recall, but raw VIF Critic input did not improve weekly Drift recall. The current product uses Luna low for the weekly review. Luna xhigh reached higher recall with more false alerts and longer latency.&lt;/p&gt;
+  &lt;p class=&quot;sr-only&quot;&gt;The VIF Critic experiments increased observed per-entry Conflict recall, but raw VIF Critic input did not improve weekly Drift recall. The prompt-v2 series compares GPT-5.4 Mini with GPT-5.6 Luna at none, low, medium, high, and xhigh reasoning. The separate prompt-v4 series compares GPT-5.6 and GPT-6 Luna at all five efforts. GPT-6 median Drift recall is 0.357, 0.405, 0.452, 0.405, and 0.452 from none through xhigh; paired model differences in Drift recall remain uncertain at each effort. GPT-6 none had fewer false Drift alerts, and GPT-6 coverage was higher at all five efforts. The current product uses GPT-6 Luna low.&lt;/p&gt;
 
   &lt;script src=&quot;https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js&quot;&gt;&lt;/script&gt;
   &lt;script&gt;
@@ -1166,17 +1171,27 @@ html&gt;body{padding:0}&lt;/style&gt;
         {x:0, key:&#x27;weekly&#x27;, label:&#x27;Weekly only&#x27;, group:&#x27;integration&#x27;, recall:0.2727, min:0.2424, max:0.2727, fa:0, latency:null},
         {x:1, key:&#x27;raw-vif&#x27;, label:&#x27;Raw VIF input&#x27;, group:&#x27;integration&#x27;, recall:0.2121, min:0.1818, max:0.2121, fa:3, latency:null},
         {x:2, key:&#x27;vif-trigger&#x27;, label:&#x27;VIF-triggered&#x27;, group:&#x27;integration&#x27;, recall:0.2727, min:0.2727, max:0.2727, fa:1, latency:null},
-        {x:4, key:&#x27;mini&#x27;, label:&#x27;Mini · none&#x27;, group:&#x27;model&#x27;, recall:0.1667, min:0.1667, max:0.2381, fa:5, latency:1.61},
-        {x:5, key:&#x27;none&#x27;, label:&#x27;Luna · none&#x27;, group:&#x27;model&#x27;, recall:0.4762, min:0.4286, max:0.5238, fa:13, latency:1.38},
-        {x:6, key:&#x27;low&#x27;, label:&#x27;Luna · low&#x27;, group:&#x27;model&#x27;, recall:0.5476, min:0.5476, max:0.5714, fa:4, latency:2.81, current:true},
-        {x:7, key:&#x27;medium&#x27;, label:&#x27;Luna · medium&#x27;, group:&#x27;model&#x27;, recall:0.5714, min:0.5000, max:0.5714, fa:4, latency:2.96},
-        {x:8, key:&#x27;high&#x27;, label:&#x27;Luna · high&#x27;, group:&#x27;model&#x27;, recall:0.6190, min:0.5952, max:0.6190, fa:8, latency:3.66},
-        {x:9, key:&#x27;xhigh&#x27;, label:&#x27;Luna · xhigh&#x27;, group:&#x27;model&#x27;, recall:0.6667, min:0.6429, max:0.6667, fa:9, latency:4.91, peak:true}
+        {x:4, key:&#x27;mini&#x27;, label:&#x27;GPT-5.4 Mini · none&#x27;, axis:&#x27;5.4 none&#x27;, group:&#x27;model&#x27;, study:&#x27;twinkl-52zz&#x27;, recall:0.1667, min:0.1667, max:0.2381, fa:5, coverage:0.740, latency:1.61},
+        {x:5, key:&#x27;none&#x27;, label:&#x27;GPT-5.6 Luna · none&#x27;, axis:&#x27;5.6 none&#x27;, group:&#x27;model&#x27;, study:&#x27;twinkl-52zz&#x27;, recall:0.4762, min:0.4286, max:0.5238, fa:13, coverage:0.777, latency:1.38},
+        {x:6, key:&#x27;low&#x27;, label:&#x27;GPT-5.6 Luna · low&#x27;, axis:&#x27;5.6 low&#x27;, group:&#x27;model&#x27;, study:&#x27;twinkl-52zz&#x27;, recall:0.5476, min:0.5476, max:0.5714, fa:4, coverage:0.637, latency:2.81},
+        {x:7, key:&#x27;medium&#x27;, label:&#x27;GPT-5.6 Luna · medium&#x27;, axis:&#x27;5.6 med&#x27;, group:&#x27;model&#x27;, study:&#x27;twinkl-ck3w&#x27;, recall:0.5714, min:0.5000, max:0.5714, fa:4, coverage:0.682, latency:2.96},
+        {x:8, key:&#x27;high&#x27;, label:&#x27;GPT-5.6 Luna · high&#x27;, axis:&#x27;5.6 high&#x27;, group:&#x27;model&#x27;, study:&#x27;twinkl-ck3w&#x27;, recall:0.6190, min:0.5952, max:0.6190, fa:8, coverage:0.716, latency:3.66},
+        {x:9, key:&#x27;xhigh&#x27;, label:&#x27;GPT-5.6 Luna · xhigh&#x27;, axis:&#x27;5.6 xhigh&#x27;, group:&#x27;model&#x27;, study:&#x27;twinkl-ck3w&#x27;, recall:0.6667, min:0.6429, max:0.6667, fa:9, coverage:0.702, latency:4.91, peak:true},
+        {x:11, key:&#x27;v4-56-none&#x27;, label:&#x27;GPT-5.6 Luna · none · prompt v4&#x27;, axis:&#x27;5.6 none&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-q6pt&#x27;, recall:0.3571, min:0.3095, max:0.3571, fa:9, coverage:0.918, latency:1.75, comparator:true},
+        {x:12, key:&#x27;v4-6-none&#x27;, label:&#x27;GPT-6 Luna · none · prompt v4&#x27;, axis:&#x27;6 none&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-q6pt&#x27;, recall:0.3571, min:0.3095, max:0.3571, fa:2, coverage:0.976, latency:1.79, pairedRecall:&#x27;0.000 [−0.073, +0.065]&#x27;, pairedFa:&#x27;−7 [−12, −2]&#x27;},
+        {x:13, key:&#x27;v4-56-low&#x27;, label:&#x27;GPT-5.6 Luna · low · prompt v4&#x27;, axis:&#x27;5.6 low&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-q6pt&#x27;, recall:0.3810, min:0.3810, max:0.4048, fa:3, coverage:0.860, latency:2.82, comparator:true},
+        {x:14, key:&#x27;v4-6-low&#x27;, label:&#x27;GPT-6 Luna · low · prompt v4&#x27;, axis:&#x27;6 low&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-q6pt&#x27;, recall:0.4048, min:0.3571, max:0.4048, fa:2, coverage:0.990, latency:2.35, current:true, pairedRecall:&#x27;0.000 [−0.095, +0.089]&#x27;, pairedFa:&#x27;−1 [−4, +1]&#x27;},
+        {x:15, key:&#x27;v4-56-medium&#x27;, label:&#x27;GPT-5.6 Luna · medium · prompt v4&#x27;, axis:&#x27;5.6 med&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-gv3x&#x27;, recall:0.4048, min:0.4048, max:0.4524, fa:2, coverage:0.873, latency:3.50, comparator:true},
+        {x:16, key:&#x27;v4-6-medium&#x27;, label:&#x27;GPT-6 Luna · medium · prompt v4&#x27;, axis:&#x27;6 med&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-gv3x&#x27;, recall:0.4524, min:0.4286, max:0.4524, fa:2, coverage:0.986, latency:3.53, pairedRecall:&#x27;+0.048 [−0.065, +0.130]&#x27;, pairedFa:&#x27;0 [−3, +2]&#x27;},
+        {x:17, key:&#x27;v4-56-high&#x27;, label:&#x27;GPT-5.6 Luna · high · prompt v4&#x27;, axis:&#x27;5.6 high&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-gv3x&#x27;, recall:0.4286, min:0.4286, max:0.4524, fa:3, coverage:0.853, latency:3.88, comparator:true},
+        {x:18, key:&#x27;v4-6-high&#x27;, label:&#x27;GPT-6 Luna · high · prompt v4&#x27;, axis:&#x27;6 high&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-gv3x&#x27;, recall:0.4048, min:0.3571, max:0.4286, fa:2, coverage:0.976, latency:4.06, pairedRecall:&#x27;−0.048 [−0.128, +0.045]&#x27;, pairedFa:&#x27;−1 [−4, +2]&#x27;},
+        {x:19, key:&#x27;v4-56-xhigh&#x27;, label:&#x27;GPT-5.6 Luna · xhigh · prompt v4&#x27;, axis:&#x27;5.6 xhigh&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-gv3x&#x27;, recall:0.5000, min:0.4286, max:0.5000, fa:5, coverage:0.849, latency:5.60, comparator:true},
+        {x:20, key:&#x27;v4-6-xhigh&#x27;, label:&#x27;GPT-6 Luna · xhigh · prompt v4&#x27;, axis:&#x27;6 xhigh&#x27;, group:&#x27;v4&#x27;, study:&#x27;twinkl-gv3x&#x27;, recall:0.4524, min:0.3810, max:0.4762, fa:2, coverage:0.966, latency:4.86, pairedRecall:&#x27;−0.024 [−0.125, +0.050]&#x27;, pairedFa:&#x27;−2 [−4, 0]&#x27;}
       ];
       var sharedYMax = Math.ceil((d3.max(vif.map(function (d) { return d.recall; }).concat(drift.map(function (d) { return d.max; }))) + 0.04) * 20) / 20;
       var state = {
         vif:{candidate:true, ceiling:true, milestone:true},
-        drift:{integration:true, model:true, best:true}
+        drift:{integration:true, model:true, v4:true, best:true}
       };
       var format3 = d3.format(&#x27;.3f&#x27;);
 
@@ -1313,23 +1328,41 @@ html&gt;body{padding:0}&lt;/style&gt;
 
       function drawDrift() {
         var wrap = root.querySelector(&#x27;[data-wrap=&quot;drift&quot;]&#x27;);
-        var width = Math.max(320, Math.floor(wrap.getBoundingClientRect().width));
+        var width = Math.max(1600, Math.floor(wrap.getBoundingClientRect().width));
+        root.querySelector(&#x27;#twinkl-drift-chart&#x27;).style.width = width + &#x27;px&#x27;;
         var height = 340;
-        var margin = {top:36,right:width &lt; 520 ? 12 : 22,bottom:68,left:width &lt; 520 ? 58 : 68};
+        var margin = {top:36,right:22,bottom:68,left:68};
         var xExtent = d3.extent(drift, function (d) { return d.x; });
         var c = baseChart(root.querySelector(&#x27;#twinkl-drift-chart&#x27;), width, height, margin, &#x27;Drift recall&#x27;, &#x27;Ordered experiment configurations&#x27;, [xExtent[0] - 0.55, xExtent[1] + 0.55]);
-        var visibleTicks = width &lt; 480 ? [0,2,5,9] : drift.map(function (d) { return d.x; });
+        var visibleTicks = drift.map(function (d) { return d.x; });
         var byX = new Map(drift.map(function (d) { return [d.x,d]; }));
         c.g.select(&#x27;.x-axis&#x27;).call(d3.axisBottom(c.x).tickValues(visibleTicks).tickFormat(function (x) {
           var d = byX.get(x);
-          if (!d) return &#x27;&#x27;;
-          if (width &lt; 480) return {0:&#x27;Weekly&#x27;,2:&#x27;VIF trigger&#x27;,5:&#x27;None&#x27;,9:&#x27;Xhigh&#x27;}[x];
-          return d.label.replace(&#x27;Luna · &#x27;,&#x27;&#x27;);
-        })).selectAll(&#x27;text&#x27;).attr(&#x27;transform&#x27;,width &lt; 820 ? &#x27;rotate(-28)&#x27; : null).style(&#x27;text-anchor&#x27;,width &lt; 820 ? &#x27;end&#x27; : &#x27;middle&#x27;);
+          return d ? (d.axis || d.label) : &#x27;&#x27;;
+        })).selectAll(&#x27;text&#x27;).attr(&#x27;transform&#x27;,&#x27;rotate(-28)&#x27;).style(&#x27;text-anchor&#x27;,&#x27;end&#x27;);
 
         c.g.append(&#x27;line&#x27;).attr(&#x27;x1&#x27;,c.x(3)).attr(&#x27;x2&#x27;,c.x(3)).attr(&#x27;y1&#x27;,0).attr(&#x27;y2&#x27;,c.innerH).attr(&#x27;stroke&#x27;,&#x27;var(--border)&#x27;).attr(&#x27;stroke-dasharray&#x27;,&#x27;4 4&#x27;);
-        c.g.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label&#x27;).attr(&#x27;x&#x27;,c.x(1)).attr(&#x27;y&#x27;,-14).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(width &lt; 520 ? &#x27;33 Drifts · VIF input&#x27; : &#x27;VIF integration study · 33 known Drifts&#x27;);
-        c.g.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label&#x27;).attr(&#x27;x&#x27;,c.x(6.5)).attr(&#x27;y&#x27;,-14).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(width &lt; 520 ? &#x27;42 Drifts · model study&#x27; : &#x27;Model + reasoning study · 42 known Drifts&#x27;);
+        c.g.append(&#x27;line&#x27;).attr(&#x27;x1&#x27;,c.x(10)).attr(&#x27;x2&#x27;,c.x(10)).attr(&#x27;y1&#x27;,0).attr(&#x27;y2&#x27;,c.innerH).attr(&#x27;stroke&#x27;,&#x27;var(--border)&#x27;).attr(&#x27;stroke-dasharray&#x27;,&#x27;4 4&#x27;);
+        c.g.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label&#x27;).attr(&#x27;x&#x27;,c.x(1)).attr(&#x27;y&#x27;,-14).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(&#x27;VIF input · 33 Drifts&#x27;);
+        c.g.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label&#x27;).attr(&#x27;x&#x27;,c.x(6.5)).attr(&#x27;y&#x27;,-14).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(&#x27;Prompt v2 · 42 Drifts&#x27;);
+        c.g.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label&#x27;).attr(&#x27;x&#x27;,c.x(15.5)).attr(&#x27;y&#x27;,-14).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(&#x27;Matched prompt v4 · 42 Drifts&#x27;);
+
+        function driftTooltipRows(d) {
+          var rows = [
+            [&#x27;Median Drift recall&#x27;,format3(d.recall)],
+            [&#x27;Run range&#x27;,format3(d.min) + &#x27;–&#x27; + format3(d.max)],
+            [&#x27;Median false alerts&#x27;,d.fa]
+          ];
+          if (d.group === &#x27;integration&#x27;) return rows.concat([[&#x27;Benchmark&#x27;,&#x27;33 Drifts · 106 trajectories&#x27;]]);
+          rows = rows.concat([
+            [&#x27;Trajectory coverage&#x27;,format3(d.coverage)],
+            [d.group === &#x27;v4&#x27; ? &#x27;Median attempt latency&#x27; : &#x27;Median call latency&#x27;,d.latency.toFixed(2) + &#x27; s&#x27;],
+            [&#x27;Prompt&#x27;,d.group === &#x27;v4&#x27; ? &#x27;Version 4.0&#x27; : &#x27;Version 2.0&#x27;],
+            [&#x27;Source&#x27;,d.study]
+          ]);
+          if (d.pairedRecall) rows.push([&#x27;Paired Δ recall&#x27;,d.pairedRecall],[&#x27;Paired Δ false alerts&#x27;,d.pairedFa]);
+          return rows;
+        }
 
         function drawGroup(groupName, color) {
           var values = drift.filter(function (d) { return d.group === groupName; });
@@ -1349,50 +1382,27 @@ html&gt;body{padding:0}&lt;/style&gt;
           layer.selectAll(&#x27;circle.mark&#x27;).data(values).join(&#x27;circle&#x27;).attr(&#x27;class&#x27;,&#x27;mark&#x27;)
             .attr(&#x27;cx&#x27;,function (d) { return c.x(d.x); }).attr(&#x27;cy&#x27;,function (d) { return c.y(d.recall); })
             .attr(&#x27;r&#x27;,function (d) { return d.current || d.peak ? 6 : 4.5; })
-            .attr(&#x27;fill&#x27;,function (d) { return d.current ? &#x27;var(--viz-series-3)&#x27; : d.peak ? &#x27;var(--viz-series-2)&#x27; : color; })
-            .attr(&#x27;stroke&#x27;,&#x27;var(--popover)&#x27;).attr(&#x27;stroke-width&#x27;,1.5);
+            .attr(&#x27;fill&#x27;,function (d) { return d.comparator ? &#x27;var(--background)&#x27; : d.peak ? &#x27;var(--viz-series-2)&#x27; : color; })
+            .attr(&#x27;stroke&#x27;,function (d) { return d.current ? &#x27;var(--viz-series-3)&#x27; : d.comparator ? color : &#x27;var(--popover)&#x27;; })
+            .attr(&#x27;stroke-width&#x27;,function (d) { return d.current ? 2.5 : 1.5; });
           layer.selectAll(&#x27;text.value&#x27;).data(values).join(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;annotation value&#x27;)
             .attr(&#x27;x&#x27;,function (d) { return c.x(d.x); }).attr(&#x27;y&#x27;,function (d) { return c.y(d.max)-9; })
-            .attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(function (d) {
-              if (width &lt; 560 &amp;&amp; d.group === &#x27;model&#x27; &amp;&amp; [&#x27;mini&#x27;,&#x27;none&#x27;,&#x27;low&#x27;,&#x27;xhigh&#x27;].indexOf(d.key) === -1) return &#x27;&#x27;;
-              return format3(d.recall);
-            });
+            .attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(function (d) { return format3(d.recall); });
           layer.selectAll(&#x27;text.meta&#x27;).data(values).join(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;phase-label meta&#x27;)
             .attr(&#x27;x&#x27;,function (d) { return c.x(d.x); }).attr(&#x27;y&#x27;,function (d) { return c.y(d.min)+16; })
-            .attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).style(&#x27;display&#x27;,width &lt; 560 &amp;&amp; !d3.select ? &#x27;none&#x27; : null)
-            .text(function (d) {
-              if (width &lt; 560 &amp;&amp; !d.current &amp;&amp; !d.peak) return &#x27;&#x27;;
-              return d.latency === null ? &#x27;FA &#x27; + d.fa : &#x27;FA &#x27; + d.fa + &#x27; · &#x27; + d.latency.toFixed(1) + &#x27;s&#x27;;
-            });
+            .attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(function (d) { return &#x27;FA &#x27; + d.fa; });
           layer.selectAll(&#x27;rect.hit&#x27;).data(values).join(&#x27;rect&#x27;)
             .attr(&#x27;class&#x27;,&#x27;hit&#x27;)
             .attr(&#x27;data-chart-hit&#x27;,&#x27;&#x27;)
             .attr(&#x27;x&#x27;,function (d) { return c.x(d.x)-18; }).attr(&#x27;y&#x27;,function (d) { return c.y(d.recall)-18; })
             .attr(&#x27;width&#x27;,36).attr(&#x27;height&#x27;,36).attr(&#x27;fill&#x27;,&#x27;transparent&#x27;)
-            .on(&#x27;mouseenter&#x27;,function (event,d) {
-              var rows = [
-                [&#x27;Median recall&#x27;,format3(d.recall)],
-                [&#x27;Repeat range&#x27;,format3(d.min) + &#x27;–&#x27; + format3(d.max)],
-                [&#x27;Median false alerts&#x27;,d.fa]
-              ];
-              if (d.latency !== null) rows.push([&#x27;Median latency&#x27;,d.latency.toFixed(2) + &#x27; s&#x27;]);
-              else rows.push([&#x27;Benchmark&#x27;,&#x27;33 Drifts · 106 trajectories&#x27;]);
-              showTooltip(wrap,event,d.label,rows);
-            })
-            .on(&#x27;mousemove&#x27;,function (event,d) {
-              var rows = [
-                [&#x27;Median recall&#x27;,format3(d.recall)],
-                [&#x27;Repeat range&#x27;,format3(d.min) + &#x27;–&#x27; + format3(d.max)],
-                [&#x27;Median false alerts&#x27;,d.fa]
-              ];
-              if (d.latency !== null) rows.push([&#x27;Median latency&#x27;,d.latency.toFixed(2) + &#x27; s&#x27;]);
-              else rows.push([&#x27;Benchmark&#x27;,&#x27;33 Drifts · 106 trajectories&#x27;]);
-              showTooltip(wrap,event,d.label,rows);
-            })
+            .on(&#x27;mouseenter&#x27;,function (event,d) { showTooltip(wrap,event,d.label,driftTooltipRows(d)); })
+            .on(&#x27;mousemove&#x27;,function (event,d) { showTooltip(wrap,event,d.label,driftTooltipRows(d)); })
             .on(&#x27;mouseleave&#x27;,hideTooltip);
         }
         drawGroup(&#x27;integration&#x27;,&#x27;var(--viz-series-5)&#x27;);
         drawGroup(&#x27;model&#x27;,&#x27;var(--viz-series-1)&#x27;);
+        drawGroup(&#x27;v4&#x27;,&#x27;var(--viz-series-6)&#x27;);
 
         var modelValues = drift.filter(function (d) { return d.group === &#x27;model&#x27;; });
         var best = -Infinity;
@@ -1403,16 +1413,6 @@ html&gt;body{padding:0}&lt;/style&gt;
         var bestLayer = c.g.append(&#x27;g&#x27;).attr(&#x27;class&#x27;,&#x27;series-best&#x27;).style(&#x27;display&#x27;,state.drift.best ? null : &#x27;none&#x27;);
         bestLayer.append(&#x27;path&#x27;).datum(bestValues).attr(&#x27;fill&#x27;,&#x27;none&#x27;).attr(&#x27;stroke&#x27;,&#x27;var(--viz-series-3)&#x27;).attr(&#x27;stroke-width&#x27;,1.8).attr(&#x27;opacity&#x27;,0.78)
           .attr(&#x27;d&#x27;,d3.line().curve(d3.curveStepAfter).x(function (d) { return c.x(d.x); }).y(function (d) { return c.y(d.recall); }));
-
-        if (width &gt;= 700) {
-          var direct = drift.filter(function (d) { return d.current || d.peak; });
-          var labels = c.g.append(&#x27;g&#x27;).selectAll(&#x27;g&#x27;).data(direct).join(&#x27;g&#x27;);
-          labels.append(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;annotation-line&#x27;).attr(&#x27;d&#x27;,function (d) {
-            var dx = d.current ? -22 : -18, dy = d.current ? -54 : -34;
-            return &#x27;M&#x27; + c.x(d.x) + &#x27;,&#x27; + c.y(d.recall) + &#x27;L&#x27; + (c.x(d.x)+dx) + &#x27;,&#x27; + (c.y(d.recall)+dy);
-          });
-          labels.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;annotation&#x27;).attr(&#x27;x&#x27;,function (d) { return c.x(d.x) + (d.current ? -25 : -21); }).attr(&#x27;y&#x27;,function (d) { return c.y(d.recall) + (d.current ? -57 : -37); }).attr(&#x27;text-anchor&#x27;,&#x27;end&#x27;).text(function (d) { return d.current ? &#x27;Current · 4 FA · 2.8 s&#x27; : &#x27;Highest recall · 9 FA · 4.9 s&#x27;; });
-        }
 
         var guide = c.g.append(&#x27;line&#x27;).attr(&#x27;data-chart-hover-guide&#x27;,&#x27;&#x27;).attr(&#x27;y1&#x27;,0).attr(&#x27;y2&#x27;,c.innerH).attr(&#x27;stroke&#x27;,&#x27;var(--border)&#x27;).attr(&#x27;stroke-dasharray&#x27;,&#x27;3 3&#x27;).style(&#x27;display&#x27;,&#x27;none&#x27;);
         var guideMarker = c.g.append(&#x27;circle&#x27;).attr(&#x27;data-chart-hover-marker&#x27;,&#x27;&#x27;).attr(&#x27;r&#x27;,4).attr(&#x27;fill&#x27;,&#x27;var(--viz-series-3)&#x27;).attr(&#x27;stroke&#x27;,&#x27;var(--popover)&#x27;).style(&#x27;display&#x27;,&#x27;none&#x27;);

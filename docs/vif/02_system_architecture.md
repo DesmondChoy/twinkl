@@ -27,7 +27,7 @@ The current VIF implementation is intentionally narrow:
 - **Current executable paths**: the approved Weekly Drift Detection and Coach
   Digest path does not consume VIF Critic Predictions; a separate deprecated
   crash/rut/evolution path does consume them
-- **Fixed Weekly Drift Reviewer**: `gpt-5.6-luna` with reasoning effort `low`,
+- **Fixed Weekly Drift Reviewer**: `gpt-6-luna` with reasoning effort `low`,
   without VIF Critic input
 - **Approved user-facing runtime**: Weekly Drift Detection followed by the
   Coach Digest
@@ -275,7 +275,7 @@ automatically when no precomputed result is supplied. This is the route used by
 the deprecated `src.coach.runtime` entry point and Runtime Demo Review App.
 
 Weekly Drift Detection is narrower: the internal Weekly Drift Reviewer is fixed
-at `gpt-5.6-luna` with reasoning effort `low` and reads Journal Entries and Core
+at `gpt-6-luna` with reasoning effort `low` and reads Journal Entries and Core
 Values without VIF Critic predictions. The internal Drift Detector declares
 Drift after two consecutive Conflicts for the same Core Value. The workflow
 stores a current state and Historical Drift Records as structured output. The former
@@ -325,7 +325,7 @@ The VIF Critic:
 
 Weekly Drift Detection:
 
-- uses an internal Weekly Drift Reviewer with `gpt-5.6-luna` and reasoning
+- uses an internal Weekly Drift Reviewer with `gpt-6-luna` and reasoning
   effort `low`
 - reads Journal Entries and Core Values without VIF Critic Predictions
 - applies the internal Drift Detector after the reviewer decides Conflict, Not

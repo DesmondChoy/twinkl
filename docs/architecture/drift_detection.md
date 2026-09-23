@@ -1,8 +1,9 @@
 # VIF Critic (Offline) Role in Drift Detection
 
-**Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2` and wired
-as a capstone POC under `twinkl-a2w`. The Weekly Drift Reviewer model contract
-is fixed at `gpt-5.6-luna` with reasoning effort `low`. The runtime persists
+**Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2`, wired
+as a capstone POC under `twinkl-a2w`, and updated to GPT-6 Luna low on
+2026-09-23. The Weekly Drift Reviewer model contract
+is fixed at `gpt-6-luna` with reasoning effort `low`. The runtime persists
 versioned Weekly Drift Reviewer Decisions, applies the internal Drift Detector,
 and stores structured Weekly Drift Detection output. The time-boxed capstone
 stops without a fresh final test or deployment approval.
@@ -18,7 +19,7 @@ metric hierarchy live in the
 Twinkl has two user-facing workflows and one completed offline research path:
 
 1. **Weekly Drift Detection.** The internal Weekly Drift Reviewer is fixed at
-   `gpt-5.6-luna` with reasoning effort `low`. It reads Journal Entries and Core
+   `gpt-6-luna` with reasoning effort `low`. It reads Journal Entries and Core
    Values without VIF Critic Predictions and decides Conflict, Not Conflict, or
    Abstain for each relevant Journal Entry. The internal Drift Detector applies the
    deterministic rule: two consecutive Conflicts for the same Core Value form
@@ -38,7 +39,7 @@ Twinkl has two user-facing workflows and one completed offline research path:
 flowchart TB
   subgraph USER["Weekly Drift Detection"]
     direction LR
-    JE["Journal Entries"] --> WDR["Weekly Drift Reviewer<br/>gpt-5.6-luna · low<br/>without VIF Critic input"]
+    JE["Journal Entries"] --> WDR["Weekly Drift Reviewer<br/>gpt-6-luna · low<br/>without VIF Critic input"]
     CV["Core Values"] --> WDR
     WDR --> DD["Drift Detector<br/>two consecutive Conflicts<br/>for the same Core Value"]
     DD --> WD["Stored structured output"]
@@ -183,6 +184,7 @@ VIF Critic (Offline) review-and-retrain demonstration.
 - [`twinkl-752.4` reviewed development cohort](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
 - [`twinkl-752.5` raw-input and scheduling reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md)
 - [`twinkl-52zz` Luna reasoning-effort comparison](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
+- Prompt-v4 GPT-5.6/GPT-6 Luna comparisons: [`twinkl-q6pt`](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md) (`none`/`low`) and [`twinkl-gv3x`](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_gv3x_luna_higher.md) (`medium`/`high`/`xhigh`)
 - [Drift Inspection App](../demo/weekly_drift_review_app.md)
 - Beads: `twinkl-60l5` (review-and-retrain research closed as not planned), `twinkl-7vam`
   (weekly-only operating and deployment-approval criteria), `twinkl-a2w`

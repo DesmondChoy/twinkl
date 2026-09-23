@@ -29,7 +29,7 @@ Values. The reference records them separately by value; it never averages Core
 Values into one profile-wide verdict.
 
 In Weekly Drift Detection, the internal Weekly Drift Reviewer is fixed at
-`gpt-5.6-luna` with reasoning effort `low` and decides Conflict from Journal
+`gpt-6-luna` with reasoning effort `low` and decides Conflict from Journal
 Entry text without VIF Critic input. The internal Drift Detector then applies
 the two-consecutive-Conflict rule. The workflow stores structured output. The
 Coach Digest uses that output to produce the user response. The prior

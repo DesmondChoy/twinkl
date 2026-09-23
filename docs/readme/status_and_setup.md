@@ -51,6 +51,7 @@ where a frontend directory is specified. `uv run` uses the project environment.
 - Estimate the LLM context baseline cost without making API calls: `uv run python scripts/experiments/llm_critic_baseline.py estimate --split test --context-arms student_visible human_context`
 - Re-score the frozen Weekly Drift Reviewer model comparison: `uv run python -m scripts.experiments.compare_twinkl_52zz_models score`
 - Re-score the Luna higher-reasoning comparison: `uv run python -m scripts.experiments.compare_twinkl_ck3w_luna_higher_reasoning score`
+- Verify the prompt-v4 GPT-5.6/GPT-6 Luna comparisons without API calls: `uv run python -m scripts.experiments.replay_luna_comparison q6pt verify` and `uv run python -m scripts.experiments.replay_luna_comparison gv3x verify`
 - Replay recall-aware checkpoint selection from saved traces without retraining: `uv run python scripts/experiments/replay_recall_aware_checkpoint_selection.py`
 - Inspect Coach completion options without provider calls or file writes: `uv run python -m scripts.coach.complete_scenario_coach --help`
 - Build the deterministic Coach Digest Drift/control target catalog without provider calls: `uv run python scripts/experiments/run_coach_drift_control_eval.py`
@@ -67,6 +68,15 @@ and `score`; `run` requires `--execute` and accepts
 exposes `prepare`, `smoke`, `run`, and `score`; its paid `smoke` and `run`
 commands require `--execute`. Both runners accept `--root` and `--config`.
 Those global options must precede the subcommand.
+
+The prompt-v4 model-comparison runners, `compare_twinkl_q6pt_luna`
+(`none`/`low`) and `compare_twinkl_gv3x_luna_higher` (`medium`/`high`/`xhigh`),
+expose `prepare`, `verify`, `smoke`, `run`, and `score` with `--config` and
+`--execute`. Use `replay_luna_comparison` for offline `verify` and `score`
+after the live model migration. It checks the recorded Reviewer source and
+allows only the model ID change. `score` rewrites the saved `metrics.json`.
+`smoke` and `run` make paid calls, require `--execute`, and resume from
+recorded terminal responses under the configured spend ceiling.
 
 The Drift/control runner accepts source and output overrides through
 `--episodes-parquet`, `--case-outcomes-parquet`, `--wrangled-dir`,

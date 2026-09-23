@@ -15,6 +15,9 @@ capstone without deployment approval. The user then marked VIF Critic (Offline) 
 complete for the time-boxed capstone and closed further VIF Critic (Offline) research as
 not planned. On 2026-08-11, Twinkl reviewed `twinkl-ck3w` and retained Luna-low
 after Luna-`xhigh` raised both Drift recall and false Drift alerts.
+On 2026-09-23, the live Weekly Drift Reviewer moved to GPT-6 Luna at `low`
+after matched prompt-v4 development Runs showed lower calculated cost and higher
+coverage. The paired Drift-recall comparison did not establish a gain.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -60,7 +63,7 @@ named `qwk_then_recall_guarded` option.
 
 ### Weekly Drift Reviewer contract and deployment evaluation
 
-- The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`.
+- The model contract is fixed at `gpt-6-luna` with reasoning effort `low`.
 - Its development selection prioritized Drift recall first and false Drift
   alerts second.
 - Coverage and abstention are diagnostic metrics, not selection gates. They
@@ -101,7 +104,7 @@ writer making a behavior or choice against the same Core Value.
   Detector keeps that Drift in a Historical Drift Record and can set the current
   state to No Active Drift. This state does not prove improvement.
 
-The current user-facing path uses decisions from `gpt-5.6-luna` at reasoning
+The current user-facing path uses decisions from `gpt-6-luna` at reasoning
 effort `low`, without VIF Critic input. The deterministic Drift Detector then
 requires two consecutive Conflicts for the same Core Value. VIF Critic (Offline)
 probabilities and uncertainty remain offline research outputs, not inputs to
@@ -265,7 +268,7 @@ The experiment history and numeric evidence remain in
 The user approved the following architecture under `twinkl-752.2`:
 
 1. **Approved user-facing path:** Journal Entries and Core Values go to the
-   fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer without VIF
+   fixed `gpt-6-luna` reasoning-effort-`low` Weekly Drift Reviewer without VIF
    Critic input. The deterministic Drift Detector declares Drift only after two
    consecutive Weekly Drift Reviewer Conflicts for the same Core Value.
    Weekly Drift Detection stores confirmed Drift in its structured output. The

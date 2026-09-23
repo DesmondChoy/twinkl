@@ -192,7 +192,7 @@ alignment means and uncertainties; they do not persist the ordinal class
 probabilities and checkpoint provenance that an optional VIF Critic
 review-and-retrain demonstration would need. The deterministic Drift Detector
 consumes
-decisions from the fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift
+decisions from the fixed `gpt-6-luna` reasoning-effort-`low` Weekly Drift
 Reviewer, not these probabilities.
 
 The demo review UI stores those bundles under:

@@ -371,7 +371,7 @@ Drift is two consecutive Conflicts on the same Core Value:
 
 - student-visible target: two adjacent Journal Entries visibly show a behavior
   or choice against the same Core Value;
-- approved user-facing input: decisions from `gpt-5.6-luna` at reasoning effort
+- approved user-facing input: decisions from `gpt-6-luna` at reasoning effort
   `low`, the fixed Weekly Drift Reviewer model contract, made without VIF Critic
   Predictions; and
 - stored output: Weekly Drift Detection cites the supporting Journal Entries.
