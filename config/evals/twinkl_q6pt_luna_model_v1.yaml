@@ -1,0 +1,63 @@
+study_id: twinkl_q6pt_luna_model_v1
+issue: twinkl-q6pt
+status: preregistered
+created_at: '2026-09-23'
+
+source_requests: logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/requests.jsonl
+reference_config: config/evals/twinkl_52zz_model_comparison_v1.yaml
+output_dir: logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923
+
+study:
+  repeats: 3
+  expected_personas: 204
+  expected_persona_weeks: 951
+  expected_cases: 292
+  expected_drifts: 42
+  max_confirmation_lag_entries: 2
+  smoke_cases: 24
+
+models:
+  gpt_5_6_none:
+    model: gpt-5.6-luna
+    reasoning_effort: none
+    pricing_usd_per_million_tokens: {input: 0.20, cached_input: 0.02, cache_write: 0.25, output: 1.20}
+  gpt_6_none:
+    model: gpt-6-luna
+    reasoning_effort: none
+    pricing_usd_per_million_tokens: {input: 0.10, cached_input: 0.01, cache_write: 0.125, output: 0.50}
+  gpt_5_6_low:
+    model: gpt-5.6-luna
+    reasoning_effort: low
+    pricing_usd_per_million_tokens: {input: 0.20, cached_input: 0.02, cache_write: 0.25, output: 1.20}
+  gpt_6_low:
+    model: gpt-6-luna
+    reasoning_effort: low
+    pricing_usd_per_million_tokens: {input: 0.10, cached_input: 0.01, cache_write: 0.125, output: 0.50}
+
+api:
+  endpoint: responses
+  max_output_tokens: 2000
+  timeout_seconds: 60
+  max_attempts: 2
+  sdk_retries: 0
+  concurrency: 16
+  schedule_seed: 20260923
+  service_tier: default
+  store: false
+  max_calculated_spend_usd: 20.0
+
+bootstrap:
+  unit: trajectory
+  random_seed: 5256000
+  repeats: 10000
+  interval: 0.95
+
+comparison:
+  direction: gpt-6-luna minus gpt-5.6-luna within each reasoning effort
+  primary_metric: Drift recall
+  secondary_metric: false Drift alerts
+  diagnostics: [coverage, abstention, invalid responses, latency, tokens, calculated cost]
+  limitations:
+    - Complete development data with AI-reviewed reference labels; no fresh final test.
+    - Same current prompt version 4.0 and the same requests, schema, validation, and Drift Detector for all arms.
+    - This comparison does not change the runtime model contract or establish deployment approval.
