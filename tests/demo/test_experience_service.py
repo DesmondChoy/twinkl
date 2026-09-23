@@ -128,12 +128,12 @@ class DeterministicWeeklyReviewer:
             prompt_version=str(get_prompt_metadata(WEEKLY_DRIFT_REVIEWER_PROMPT)["version"]),
             prompt_sha256=request.prompt_sha256,
             runtime_text_sha256=request.runtime_text_sha256,
-            requested_model="gpt-5.6-luna",
+            requested_model="gpt-6-luna",
             reasoning_effort="low",
             status=status,  # type: ignore[arg-type]
             attempts=1,
             latency_seconds=0.25,
-            resolved_model="gpt-5.6-luna",
+            resolved_model="gpt-6-luna",
             response_id="weekly-response-1",
             refusal="Unable to answer." if status == "refusal" else None,
             validation_error=(

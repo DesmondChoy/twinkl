@@ -24,7 +24,7 @@ from src.prompt_boundary import (
     serialize_untrusted_data,
 )
 
-WEEKLY_DRIFT_REVIEWER_MODEL = "gpt-5.6-luna"
+WEEKLY_DRIFT_REVIEWER_MODEL = "gpt-6-luna"
 WEEKLY_DRIFT_REVIEWER_REASONING_EFFORT = "low"
 WEEKLY_DRIFT_REVIEWER_PROMPT = "weekly_vif_verifier"
 WEEKLY_DRIFT_REVIEWER_MAX_ATTEMPTS = 2

@@ -14,6 +14,7 @@ from src.drift_detector import detect_drift
 from src.north_star import assessment, input_budget
 from src.north_star.provider import BudgetedProvider, BudgetLedger, stable_hash
 from src.north_star.runtime import (
+    ARCHIVED_LIVE_POLICY_PATH,
     INTEGRATION_POLICY_PATH,
     LIVE_POLICY_PATH,
     NorthStarRequest,
@@ -475,7 +476,10 @@ async def test_invalid_response_stops_at_two_attempts_and_reuses_terminal_failur
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("policy_path", [INTEGRATION_POLICY_PATH, LIVE_POLICY_PATH])
+@pytest.mark.parametrize(
+    "policy_path",
+    [INTEGRATION_POLICY_PATH, ARCHIVED_LIVE_POLICY_PATH, LIVE_POLICY_PATH],
+)
 async def test_completed_record_accepts_only_its_pinned_budget_policy(
     tmp_path, policy_path,
 ):

@@ -242,7 +242,7 @@ class _FakeResponses:
         return SimpleNamespace(
             status="completed",
             output_parsed=self.parsed,
-            model="gpt-5.6-luna",
+            model="gpt-6-luna",
             id="response-1",
             usage=SimpleNamespace(input_tokens=100, output_tokens=20),
             output=[],
@@ -262,7 +262,7 @@ async def test_openai_caller_persists_effective_decision_and_frozen_contract(
 
     assert receipt.status == "ok"
     assert receipt.decisions[0].verdict == "conflict"
-    assert responses.kwargs["model"] == "gpt-5.6-luna"
+    assert responses.kwargs["model"] == "gpt-6-luna"
     assert responses.kwargs["reasoning"] == {"effort": "low"}
     assert responses.kwargs["store"] is False
     request = _request()

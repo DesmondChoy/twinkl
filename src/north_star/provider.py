@@ -190,9 +190,16 @@ def _record_gemini_usage(attempt: ProviderAttempt, usage: Any, settings: dict) -
 
 
 class BudgetLedger:
-    def __init__(self, path: Path = DEFAULT_LEDGER, policy_path: Path = POLICY_PATH):
+    def __init__(
+        self,
+        path: Path = DEFAULT_LEDGER,
+        policy_path: Path = POLICY_PATH,
+        *,
+        migration_from_policy_hash: str | None = None,
+    ):
         self.path = path.resolve()
         self.policy = json.loads(policy_path.read_text())
+        self.migration_from_policy_hash = migration_from_policy_hash
         lock_key = hashlib.sha256(str(self.path).encode()).hexdigest()
         self.lock_path = Path(tempfile.gettempdir()) / f"twinkl-nsm-{lock_key}.lock"
 
@@ -224,8 +231,12 @@ class BudgetLedger:
                     "policy_hash": stable_hash(self.policy),
                     "attempts": [],
                 }
-            if state["policy_hash"] != stable_hash(self.policy):
-                raise BudgetError("The ledger's frozen budget policy has changed")
+            current_policy_hash = stable_hash(self.policy)
+            if state["policy_hash"] != current_policy_hash:
+                if state["policy_hash"] != self.migration_from_policy_hash:
+                    raise BudgetError("The ledger's frozen budget policy has changed")
+                state["previous_policy_hash"] = state["policy_hash"]
+                state["policy_hash"] = current_policy_hash
             result = operation(state)
             temporary: Path | None = None
             try:

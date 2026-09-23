@@ -9,9 +9,14 @@ from pathlib import Path
 
 import pytest
 
-from src.north_star.live_runtime import LiveNorthStarRuntime, _SeededLiveLedger
+from src.north_star.live_runtime import (
+    PREVIOUS_LIVE_POLICY_HASH,
+    LiveNorthStarRuntime,
+    _SeededLiveLedger,
+)
 from src.north_star.provider import BudgetError, BudgetLedger, stable_hash
 from src.north_star.runtime import (
+    ARCHIVED_LIVE_POLICY_PATH,
     INTEGRATION_POLICY_PATH,
     LIVE_POLICY_PATH,
     build_north_star_request,
@@ -95,6 +100,41 @@ async def test_fresh_live_authorization_needs_no_experiment_and_redacts_receipts
         runner.close()
     assert not ledger.raw_responses
     assert sorted(path.name for path in tmp_path.iterdir()) == ["live"]
+
+
+@pytest.mark.asyncio
+async def test_live_model_migration_preserves_prior_spend_and_receipts(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("OPENAI_API_KEY", "test-no-network")
+    path = tmp_path / "live"
+    path.mkdir()
+    assert stable_hash(json.loads(ARCHIVED_LIVE_POLICY_PATH.read_text())) == (
+        PREVIOUS_LIVE_POLICY_HASH
+    )
+    old_ledger = BudgetLedger(path / "budget.json", ARCHIVED_LIVE_POLICY_PATH)
+    old_request = {
+        **source_review_requests(request())[0],
+        "policy_hash": PREVIOUS_LIVE_POLICY_HASH,
+    }
+    old_attempt = old_ledger.reserve(old_request, retry=False)
+    old_attempt.status = "completed"
+    old_attempt.calculated_cost_usd = 0.02
+    old_ledger.finish(old_attempt)
+    original = old_ledger.snapshot()["attempts"][0]
+
+    runner = fresh_live(path)
+    try:
+        result = await runner(request())
+        assert result.status == "complete"
+        migrated = runner._runtime.provider.ledger.snapshot()
+        assert migrated["previous_policy_hash"] == PREVIOUS_LIVE_POLICY_HASH
+        assert migrated["attempts"][0] == original
+        assert migrated["attempts"][1]["requested_model"] == "gpt-6-luna"
+        assert sum(row["calculated_cost_usd"] for row in migrated["attempts"]) == 0.021
+        assert runner._runtime.counts_path.name == "input-counts-gpt-6-luna.json"
+    finally:
+        runner.close()
 
 
 @pytest.mark.asyncio
@@ -366,7 +406,10 @@ async def test_concurrent_live_instances_keep_every_input_count_receipt(
     try:
         results = await asyncio.gather(one(first), two(second))
         assert all(result.status == "complete" for result in results)
-        counts = json.loads((live_path / "input-counts.json").read_text())["counts"]
+        counts_path = (
+            "input-counts-gpt-6-luna.json" if fresh else "input-counts.json"
+        )
+        counts = json.loads((live_path / counts_path).read_text())["counts"]
         expected = {
             stable_hash(item)
             for value in (first, second)

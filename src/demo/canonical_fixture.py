@@ -609,6 +609,7 @@ def build_canonical_fixture() -> ContractFixtureSet:
         event_id="event-13",
         event_type="weekly_review_completed",
         parent_event_id="event-07",
+        source="saved_replay",
         details={"receipt": invalid_receipt.model_dump()},
         status="invalid",
         model_contract=LUNA_LOW.model_dump(),

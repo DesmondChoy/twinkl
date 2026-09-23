@@ -1511,7 +1511,7 @@ class InMemoryExperienceService:
         week_id = f"{session.session_id}:{week_start.isoformat()}"
         model_contract = ModelContract(
             provider="openai",
-            model="gpt-5.6-luna",
+            model="gpt-6-luna",
             reasoning_effort="low",
         )
         requested_event_id = self._make_id("weekly-review-requested")
@@ -2198,7 +2198,7 @@ class InMemoryExperienceService:
                 ResourceRef(kind="week", id=f"{record.session_id}:{record.week_start}")
             ],
             model_contract=ModelContract(
-                provider="openai", model="gpt-5.6-luna", reasoning_effort="low"
+                provider="openai", model="gpt-6-luna", reasoning_effort="low"
             ),
             input_hash=record.input_hash,
             validation=EventValidation(

@@ -42,6 +42,9 @@ from src.north_star.runtime import (
 )
 
 DEFAULT_LIVE_DIRECTORY = ROOT / "logs/exports/demo_tool_runs/north_star"
+PREVIOUS_LIVE_POLICY_HASH = (
+    "fb574801bb71e5474720bc713c495be56c4521024435e546642c4e0c37b3fcdf"
+)
 T = TypeVar("T")
 
 
@@ -167,7 +170,9 @@ class LiveNorthStarRuntime:
             ledger: _PrivateResponseLedger
             if self.source_directory is None:
                 ledger = _PrivateResponseLedger(
-                    self.directory / "budget.json", policy_path
+                    self.directory / "budget.json",
+                    policy_path,
+                    migration_from_policy_hash=PREVIOUS_LIVE_POLICY_HASH,
                 )
             else:
                 policy_path = INTEGRATION_POLICY_PATH
@@ -181,7 +186,12 @@ class LiveNorthStarRuntime:
                 provider=self._provider_factory(ledger),
                 count_requests=self._measure_locked,
                 ledger_path=ledger.path,
-                counts_path=self.directory / "input-counts.json",
+                counts_path=self.directory
+                / (
+                    "input-counts-gpt-6-luna.json"
+                    if self.source_directory is None
+                    else "input-counts.json"
+                ),
                 policy_path=policy_path,
             )
         return asyncio.run(self._runtime(request, retry=retry))
@@ -191,7 +201,14 @@ class LiveNorthStarRuntime:
     ) -> NorthStarRecord:
         if not source_review_requests(request) or not os.environ.get("OPENAI_API_KEY"):
             # This path performs no ledger/count I/O and starts no worker thread.
-            return await OpenAINorthStarRuntime()(request, retry=retry)
+            policy_path = (
+                INTEGRATION_POLICY_PATH
+                if self.source_directory is not None
+                else LIVE_POLICY_PATH
+            )
+            return await OpenAINorthStarRuntime(policy_path=policy_path)(
+                request, retry=retry
+            )
         if self._executor is None:
             self._executor = ThreadPoolExecutor(
                 max_workers=1, thread_name_prefix="twinkl-north-star"

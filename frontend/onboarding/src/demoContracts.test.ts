@@ -83,6 +83,19 @@ describe("Experience and Inspect v1 contract", () => {
     expect(() => validateExperienceInspectFixture(fixture)).toThrow("Luna-low");
   });
 
+  it("requires GPT-6 Luna low for live review and preserves saved replay provenance", () => {
+    const fixture = fixtureCopy() as { trace_events: Array<Record<string, unknown>> };
+    const event = fixture.trace_events.find(
+      (candidate) => candidate.event_type === "weekly_review_completed" && candidate.status === "reused",
+    );
+    if (!event) throw new Error("Fixture lacks saved weekly review");
+    event.source = "live_run";
+    (event.model_contract as Record<string, unknown>).model = "gpt-6-luna";
+    expect(validateExperienceInspectFixture(fixture)).toBeTruthy();
+    (event.model_contract as Record<string, unknown>).model = "gpt-5.6-luna";
+    expect(() => validateExperienceInspectFixture(fixture)).toThrow("Luna-low");
+  });
+
   it("accepts explicit saved-history spacing checks and legacy enforced checks, but rejects non-boolean policy flags", () => {
     const fixture = validateExperienceInspectFixture(fixtureCopy());
     const event = fixture.trace_events.find((item) => item.event_type === "nudge_suppression_checked")!;

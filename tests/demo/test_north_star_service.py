@@ -143,7 +143,7 @@ async def test_fresh_live_policy_passes_service_publication_and_reuse_validation
     assert event.source == "live_run"
     assert event.details.record.status == "complete"
     assert event.details.record.selected.entry_id == snapshot.writing[0].entry_id
-    assert event.model_contract.model == "gpt-5.6-luna"
+    assert event.model_contract.model == "gpt-6-luna"
     generated = provider.generated
     charged = ledger.path.read_bytes()
 

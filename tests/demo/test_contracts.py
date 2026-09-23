@@ -138,6 +138,22 @@ def test_weekly_review_rejects_changed_model_contract() -> None:
         ContractFixtureSet.model_validate(payload)
 
 
+def test_live_weekly_review_requires_gpt_6_luna_low() -> None:
+    payload = _fixture_payload()
+    event = next(
+        item
+        for item in payload["trace_events"]
+        if item["event_type"] == "weekly_review_completed"
+        and item["status"] == "reused"
+    )
+    event["source"] = "live_run"
+    event["model_contract"]["model"] = "gpt-6-luna"
+    ContractFixtureSet.model_validate(payload)
+    event["model_contract"]["model"] = "gpt-5.6-luna"
+    with pytest.raises(ValidationError, match="gpt-6-luna at low"):
+        ContractFixtureSet.model_validate(payload)
+
+
 def test_safe_errors_reject_provider_secrets() -> None:
     payload = _fixture_payload()
     failed_event = next(

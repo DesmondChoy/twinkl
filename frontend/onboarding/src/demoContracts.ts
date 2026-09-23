@@ -490,9 +490,9 @@ function validateModelContract(value: unknown, name: string): JsonObject {
   return contract;
 }
 
-function validateLunaLow(value: unknown, name: string): void {
+function validateLunaLow(value: unknown, name: string, saved = false): void {
   const contract = validateModelContract(value, name);
-  if (contract.model !== "gpt-5.6-luna" || contract.reasoning_effort !== "low") {
+  if (contract.model !== (saved ? "gpt-5.6-luna" : "gpt-6-luna") || contract.reasoning_effort !== "low") {
     throw new Error(`${name} must preserve the Luna-low Weekly Drift Reviewer contract`);
   }
 }
@@ -995,7 +995,7 @@ function validateTraceEvent(value: unknown, name: string): TraceEventContract {
     if (validation.valid !== false) throw new Error(`${name} invalid status lacks failed validation`);
   }
   if (["weekly_review_requested", "weekly_review_completed"].includes(String(event.event_type))) {
-    validateLunaLow(event.model_contract, `${name}.model_contract`);
+    validateLunaLow(event.model_contract, `${name}.model_contract`, event.source === "saved_replay");
   } else if (event.model_contract !== null) {
     validateModelContract(event.model_contract, `${name}.model_contract`);
   }
@@ -1111,7 +1111,7 @@ function validateScenario(value: unknown, name: string): ScenarioBundleContract 
     throw new Error(`${name}.manifest has an incompatible hash`);
   }
   stringArray(manifest.source_files, `${name}.manifest.source_files`);
-  validateLunaLow(manifest.model_contract, `${name}.manifest.model_contract`);
+  validateLunaLow(manifest.model_contract, `${name}.manifest.model_contract`, true);
   stringArray(scenario.trace_event_ids, `${name}.trace_event_ids`);
   return scenario as ScenarioBundleContract;
 }

@@ -4114,7 +4114,7 @@
       "parent_event_id": "event-07",
       "event_type": "weekly_review_completed",
       "status": "invalid",
-      "source": "live_run",
+      "source": "saved_replay",
       "started_at": "2026-07-22T10:13:00.000Z",
       "completed_at": "2026-07-22T10:13:00.120Z",
       "duration_ms": 120,

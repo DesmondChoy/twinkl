@@ -39,6 +39,7 @@ from src.north_star.review import (
 ROOT = Path(__file__).resolve().parents[2]
 INTEGRATION_POLICY_PATH = ROOT / "config/evals/north_star_integration_v1.json"
 LIVE_POLICY_PATH = ROOT / "config/evals/north_star_live_v1.json"
+ARCHIVED_LIVE_POLICY_PATH = ROOT / "config/evals/north_star_live_20260905.json"
 DEFAULT_DIRECTORY = ROOT / "logs/experiments/reports/north_star_integration_20260906"
 PROTOCOL_VERSION = "north-star-integration-v1"
 RecordStatus = Literal["pending", "complete", "failed", "not_eligible"]
@@ -481,8 +482,18 @@ class RuntimeProvider(Protocol):
 class _PrivateResponseLedger(BudgetLedger):
     """Persist budget accounting while session-owned receipts retain source text."""
 
-    def __init__(self, path: Path, policy_path: Path):
-        super().__init__(path, policy_path)
+    def __init__(
+        self,
+        path: Path,
+        policy_path: Path,
+        *,
+        migration_from_policy_hash: str | None = None,
+    ):
+        super().__init__(
+            path,
+            policy_path,
+            migration_from_policy_hash=migration_from_policy_hash,
+        )
         self.raw_responses: dict[tuple[str, int], str] = {}
 
     def reserve(self, request: dict, *, retry: bool) -> ProviderAttempt:
@@ -523,7 +534,12 @@ class OpenAINorthStarRuntime:
         settings = self.policy["runtime"]
         if (
             settings["provider"] != "openai"
-            or settings["model"] != "gpt-5.6-luna"
+            or settings["model"]
+            != (
+                "gpt-6-luna"
+                if policy_path == LIVE_POLICY_PATH
+                else "gpt-5.6-luna"
+            )
             or settings["reasoning_effort"] != "low"
             or self.policy["max_attempts"] != 2
             or self.policy["input_token_limit"] != input_budget.INPUT_TOKEN_LIMIT
@@ -753,7 +769,11 @@ def validate_north_star_record(
     # policy settings or mix saved-experiment and live authorizations.
     policies = [
         json.loads(path.read_text())
-        for path in (INTEGRATION_POLICY_PATH, LIVE_POLICY_PATH)
+        for path in (
+            INTEGRATION_POLICY_PATH,
+            ARCHIVED_LIVE_POLICY_PATH,
+            LIVE_POLICY_PATH,
+        )
     ]
     matching_policies = [
         candidate

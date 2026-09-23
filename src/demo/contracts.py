@@ -654,10 +654,13 @@ class WeeklyReviewRequestedEvent(TraceEventBase):
     @model_validator(mode="after")
     def validate_reviewer_contract(self) -> WeeklyReviewRequestedEvent:
         contract = self.model_contract
+        expected_model = (
+            "gpt-5.6-luna" if self.source == "saved_replay" else "gpt-6-luna"
+        )
         if contract is None or (
-            contract.model != "gpt-5.6-luna" or contract.reasoning_effort != "low"
+            contract.model != expected_model or contract.reasoning_effort != "low"
         ):
-            raise ValueError("Weekly Drift Reviewer must use gpt-5.6-luna at low")
+            raise ValueError(f"Weekly Drift Reviewer must use {expected_model} at low")
         return self
 
 
@@ -668,10 +671,13 @@ class WeeklyReviewCompletedEvent(TraceEventBase):
     @model_validator(mode="after")
     def validate_reviewer_contract(self) -> WeeklyReviewCompletedEvent:
         contract = self.model_contract
+        expected_model = (
+            "gpt-5.6-luna" if self.source == "saved_replay" else "gpt-6-luna"
+        )
         if contract is None or (
-            contract.model != "gpt-5.6-luna" or contract.reasoning_effort != "low"
+            contract.model != expected_model or contract.reasoning_effort != "low"
         ):
-            raise ValueError("Weekly Drift Reviewer must use gpt-5.6-luna at low")
+            raise ValueError(f"Weekly Drift Reviewer must use {expected_model} at low")
         return self
 
 
