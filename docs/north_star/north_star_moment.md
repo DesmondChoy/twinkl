@@ -58,6 +58,12 @@ of the user-facing quotation panel. Inspect shows both exact prompts beside thei
 This comparison applies only to saved demo Personas; it preserves onboarding
 behavior and the frozen North Star Moment selection experiment.
 
+**Coach Digest impact (proposed):** The selection experiment measures whether
+the right quotation is shown. A separate, not-yet-run
+[impact evaluation](coach_digest_impact_eval.md) specifies how to measure
+whether adding the moment improves the Coach Digest, using blind, order-swapped
+pairwise AI review with guardrails and no human input.
+
 ## 1. Role in the weekly reflection
 
 Twinkl compares Journal Entries with the user's confirmed Core Values.

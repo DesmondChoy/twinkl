@@ -1,0 +1,442 @@
+{
+  "task-01": {
+    "pair_id": "two-values-meera:2025-12-08",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-02": {
+    "pair_id": "two-values-meera:2025-12-08",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-03": {
+    "pair_id": "two-values-meera:2025-11-17",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-04": {
+    "pair_id": "persistent-lukas:2025-06-16",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-05": {
+    "pair_id": "uncertain-wei-jun:2025-06-16",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-06": {
+    "pair_id": "stable-noor:2025-04-14",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-07": {
+    "pair_id": "active-nisha:2025-03-10",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-08": {
+    "pair_id": "persistent-lukas:2025-06-30",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-09": {
+    "pair_id": "stable-noor:2025-04-21",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-10": {
+    "pair_id": "stable-noor:2025-05-19",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-11": {
+    "pair_id": "active-nisha:2025-03-03",
+    "persona_id": "5fa8b540",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-12": {
+    "pair_id": "stable-noor:2025-05-12",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-13": {
+    "pair_id": "active-nisha:2025-03-10",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-14": {
+    "pair_id": "uncertain-wei-jun:2025-06-09",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-15": {
+    "pair_id": "stable-noor:2025-05-19",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-16": {
+    "pair_id": "two-values-meera:2025-11-24",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-17": {
+    "pair_id": "active-nisha:2025-02-17",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-18": {
+    "pair_id": "active-nisha:2025-03-03",
+    "persona_id": "5fa8b540",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-19": {
+    "pair_id": "stable-noor:2025-04-14",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-20": {
+    "pair_id": "uncertain-wei-jun:2025-06-02",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-21": {
+    "pair_id": "uncertain-wei-jun:2025-06-02",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-22": {
+    "pair_id": "persistent-lukas:2025-06-23",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-23": {
+    "pair_id": "active-nisha:2025-02-24",
+    "persona_id": "5fa8b540",
+    "mode": "reminder",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-24": {
+    "pair_id": "persistent-lukas:2025-07-07",
+    "persona_id": "a24b8d8f",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-25": {
+    "pair_id": "active-nisha:2025-02-17",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-26": {
+    "pair_id": "uncertain-wei-jun:2025-06-09",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-27": {
+    "pair_id": "persistent-lukas:2025-06-23",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-28": {
+    "pair_id": "two-values-meera:2025-12-01",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-29": {
+    "pair_id": "stable-noor:2025-05-05",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-30": {
+    "pair_id": "two-values-meera:2025-11-24",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-31": {
+    "pair_id": "stable-noor:2025-04-28",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-32": {
+    "pair_id": "two-values-meera:2025-11-17",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-33": {
+    "pair_id": "stable-noor:2025-05-05",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-34": {
+    "pair_id": "persistent-lukas:2025-06-16",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-35": {
+    "pair_id": "active-nisha:2025-02-24",
+    "persona_id": "5fa8b540",
+    "mode": "reminder",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-36": {
+    "pair_id": "active-nisha:2025-02-10",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-37": {
+    "pair_id": "uncertain-wei-jun:2025-06-16",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-38": {
+    "pair_id": "two-values-meera:2025-12-01",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-39": {
+    "pair_id": "stable-noor:2025-04-28",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-40": {
+    "pair_id": "stable-noor:2025-05-12",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-41": {
+    "pair_id": "active-nisha:2025-02-10",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-42": {
+    "pair_id": "stable-noor:2025-04-21",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-43": {
+    "pair_id": "persistent-lukas:2025-06-30",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-44": {
+    "pair_id": "persistent-lukas:2025-07-07",
+    "persona_id": "a24b8d8f",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  }
+}
