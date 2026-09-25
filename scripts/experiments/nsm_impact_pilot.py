@@ -2,9 +2,11 @@
 
 The pilot judges the 22 saved demo comparison pairs with the
 ``nsm-impact-judge`` Claude Code subagent (see
-``docs/north_star/coach_digest_impact_eval.md``). ``prepare`` writes one blinded
-task file per pair and order plus a sealed answer key; the judge writes one
-verdict file per task; ``score`` joins verdicts to the key.
+``docs/north_star/coach_digest_impact_eval.md``); ``prepare --pairs`` does the
+same for the main run's pairs from ``nsm_impact_generate --export``.
+``prepare`` writes one blinded task file per pair and order plus a sealed
+answer key; the judge writes one verdict file per task; ``score`` joins
+verdicts to the key.
 
 Judgments are AI review of synthetic Personas, not human validation.
 """
@@ -150,6 +152,12 @@ CHANGES = {
     "unchanged": "same as the previous week",
     "active_drift_started": "Active Drift started this week",
     "active_drift_ended": "Active Drift ended this week",
+    "active_drift_restarted": "a new Active Drift started this week after the "
+    "previous one ended",
+    "evidence_became_insufficient": "the latest review had too little evidence "
+    "for a decision this week",
+    "evidence_resolved": "the previous week had too little evidence for a "
+    "decision; this week had enough",
 }
 
 
@@ -230,8 +238,11 @@ def task_text(task_id: str, pair: dict[str, Any], first: str) -> str:
     return "\n\n".join(sections) + "\n"
 
 
-def prepare(out: Path, seed: int = DEFAULT_SEED) -> dict[str, Any]:
-    pairs = load_pairs()
+def prepare(
+    out: Path, seed: int = DEFAULT_SEED, pairs_path: Path | None = None
+) -> dict[str, Any]:
+    """Blind the saved demo pairs, or generated pairs from ``pairs_path``."""
+    pairs = load_pairs() if pairs_path is None else json.loads(pairs_path.read_text())
     rng = random.Random(seed)
     tasks = []
     for pair in pairs:
@@ -260,9 +271,22 @@ def prepare(out: Path, seed: int = DEFAULT_SEED) -> dict[str, Any]:
         "judge_agent_sha256": sha256_file(AGENT_PATH),
         "pairs": len(pairs),
         "tasks": len(key),
-        "scenario_sha256": {
-            s: sha256_file(SCENARIO_DIR / f"{s}.json") for s in SCENARIOS
-        },
+        **(
+            {
+                "scenario_sha256": {
+                    s: sha256_file(SCENARIO_DIR / f"{s}.json") for s in SCENARIOS
+                }
+            }
+            if pairs_path is None
+            else {
+                "pairs_path": str(
+                    pairs_path.relative_to(ROOT)
+                    if pairs_path.is_relative_to(ROOT)
+                    else pairs_path
+                ),
+                "pairs_sha256": sha256_file(pairs_path),
+            }
+        ),
         "label_source": "AI review (Claude Code subagent), not human validation",
     }
     write_json(out / "manifest.json", manifest)
@@ -402,6 +426,7 @@ def summarize(
     difference = win_difference(pairs)
     return {
         "pairs": len(pairs),
+        "personas": len({p["persona_id"] for p in pairs}),
         "judgments": len(judgments),
         "order_consistency": {
             "consistent_pairs": sum(p["consistent"] for p in pairs),
@@ -447,13 +472,19 @@ def report(summary: dict[str, Any], manifest: dict[str, Any]) -> str:
         for mode, v in summary["by_mode"].items()
     ]
     lines = [
-        "# North Star Moment impact pilot",
+        "# North Star Moment impact "
+        + ("main run" if "pairs_path" in manifest else "pilot"),
         "",
         f"Judge: `{judge['model']}` at effort `{judge['effort']}`, run as the "
         f"`{judge['name']}` Claude Code subagent "
         f"(prompt `{manifest['prompt_version']}`).",
-        f"Pairs: the {summary['pairs']} saved demo comparison pairs, "
-        "each judged in both orders.",
+        (
+            f"Pairs: {summary['pairs']} generated pairs from "
+            f"`{manifest['pairs_path']}`, each judged in both orders."
+            if "pairs_path" in manifest
+            else f"Pairs: the {summary['pairs']} saved demo comparison pairs, "
+            "each judged in both orders."
+        ),
         "These are AI review results on synthetic Personas, not human validation.",
         "",
         "## Judge reliability",
@@ -469,7 +500,8 @@ def report(summary: dict[str, Any], manifest: dict[str, Any]) -> str:
         "(inconsistent orders count as ties).",
         f"- Win difference: {summary['win_difference']} points; 95% "
         f"Persona-resampled range: {summary['win_difference_95']}.",
-        "  With only five Personas, this range is a rough indication.",
+        f"  With only {summary['personas']} Personas, this range is a rough "
+        "indication.",
         "",
         "| North Star Moment mode | Pairs | Wins | Losses | Ties |",
         "| --- | ---: | ---: | ---: | ---: |",
@@ -504,12 +536,18 @@ def main() -> None:
     parser.add_argument("command", choices=("prepare", "score"))
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
+    parser.add_argument(
+        "--pairs", type=Path, help="generated pairs.json instead of the demo pairs"
+    )
     args = parser.parse_args()
     out = args.out if args.out.is_absolute() else ROOT / args.out
     if args.command == "prepare":
         if (out / "sealed").exists():
             sys.exit(f"{out} already prepared; use a new --out directory")
-        print(json.dumps(prepare(out, args.seed), indent=2))
+        pairs = args.pairs
+        if pairs is not None and not pairs.is_absolute():
+            pairs = ROOT / pairs
+        print(json.dumps(prepare(out, args.seed, pairs), indent=2))
     else:
         print(json.dumps(score(out), indent=2))
 
