@@ -1,0 +1,7 @@
+{
+  "task_id": "task-28",
+  "preferred": "1",
+  "reason": "Response 1 names the person's own supportive act of telling Katja her lesson plan was good, along with saying yes to colleagues, and ties it explicitly to being there for newer colleagues, though it wrongly says 'all three requests'. Response 2 treats Katja's plan being good as something that simply happened and grounds support only in saying yes to Leon and Simone.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-122",
+  "preferred": "tie",
+  "reason": "Both responses center on the same concrete action, declining Marcus's offer, and connect it to keeping choices the person's own. Response 1 links the decline directly to control ('kept the decision in your own hands'). Response 2 names the value and quotes 'The rough years are mine', but its 'made room for your team' goes slightly past what the entry shows. Neither is clearly stronger on grounding.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

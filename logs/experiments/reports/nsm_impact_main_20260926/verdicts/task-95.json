@@ -1,0 +1,7 @@
+{
+  "task_id": "task-95",
+  "preferred": "1",
+  "reason": "Response 1 names the person's own action (after the Salem meeting, 'you stopped at Warm Springs' to check on the units) and ties it to the purpose of their work. Response 2 tells the same visit as something done to them ('David showed you'). Neither mentions the stronger supportive acts, such as the promise of a garden attachment or the choice not to pause donations.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

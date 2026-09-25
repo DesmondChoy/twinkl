@@ -1,0 +1,7 @@
+{
+  "task_id": "task-62",
+  "preferred": "2",
+  "reason": "Response 2 opens on a specific thing the person did, picking up the phone to call Hilde despite feeling drained, and notes they kept the laptop closed for the Eifel afternoon, tying both to being there for the people closest to them. Response 1 mostly describes what happened to the person (the parent evening, a memory brought back) and only states in general terms that they care about being there for people.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

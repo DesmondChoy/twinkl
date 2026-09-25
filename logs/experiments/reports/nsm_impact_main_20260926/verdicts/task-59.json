@@ -1,0 +1,7 @@
+{
+  "task_id": "task-59",
+  "preferred": "2",
+  "reason": "Response 2 names a specific supportive action the person actually took (spending two hours helping families with the essay unit and offering individual support) and ties it to their care for students and fairness. Response 1 relies on Diego's pride and a general reference to relationships built, without a concrete action by the person.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

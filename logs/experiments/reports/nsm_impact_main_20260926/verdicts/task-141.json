@@ -1,0 +1,7 @@
+{
+  "task_id": "task-141",
+  "preferred": "1",
+  "reason": "Response 1 names specific things Gerald wrote that he does for his mother (the driving, errands, and prescriptions) and ties them directly to being someone others can count on. Response 2 only says he was 'carrying real responsibility' in general terms and names no concrete action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

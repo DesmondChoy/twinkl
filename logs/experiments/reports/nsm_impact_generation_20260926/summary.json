@@ -1,0 +1,22 @@
+{
+  "weeks": 72,
+  "expected_arms": 144,
+  "accepted_arms": 144,
+  "attempts": 203,
+  "maximum_reserved_usd": "10.368",
+  "usage": {
+    "n_calls": 203,
+    "n_calls_with_usage": 203,
+    "input_tokens": 806007,
+    "cached_input_tokens": 381823,
+    "cache_write_input_tokens": 423575,
+    "output_tokens": 34429,
+    "total_tokens": 840436,
+    "calculated_cost_usd": 0.15496681,
+    "total_latency_seconds": 691.2238597048563,
+    "mean_latency_seconds": 3.405043643866287,
+    "median_latency_seconds": 3.1966807499993593,
+    "max_latency_seconds": 5.854318458004855
+  },
+  "limitations": "Synthetic Personas; deterministic Coach Digest validation only. Initial requests differ only in north_star_context; validation retries keep separate receipts."
+}

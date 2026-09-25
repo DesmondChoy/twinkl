@@ -1,0 +1,10 @@
+{
+  "task_id": "task-02",
+  "preferred": "2",
+  "reason": "Both name saying yes to Priya and the temple visit, but Response 2 adds further concrete things she did (letting Ravi and Vihaan help with the store room and the blue) and ties them to making space for her own path while keeping family practices. Response 1 frames the temple mostly as something she heard, and it guesses that Ravi's earlier offer 'stayed with you', which her writing does not show.",
+  "flags": {"1": true, "2": false},
+  "flag_reasons": {
+    "1": "It contrasts the dinner sting with 'More recently, you have both honoured the customs... without needing to set one aside for the other.' That presents this week's actions as proof she is now in line with both values, even though she wrote 'Why do I feel like I have to choose?'",
+    "2": null
+  }
+}

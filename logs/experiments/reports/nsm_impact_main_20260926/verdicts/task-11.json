@@ -1,0 +1,7 @@
+{
+  "task_id": "task-11",
+  "preferred": "tie",
+  "reason": "Neither response grounds its reflection in a concrete action that supports a Core Value. Response 1 cites the gift-basket run and resting in the void deck, and Response 2 cites watching fireworks from the rooftop and thinking about a different plan. These are real moments from the writing, but neither is linked to seeking new experiences or making the world fairer, and the week's entries show no such supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

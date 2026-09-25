@@ -1,0 +1,7 @@
+{
+  "task_id": "task-143",
+  "preferred": "1",
+  "reason": "Response 1 quotes the person's own words to Wei's family ('all the right things about Wei's potential and his need for more practice') and links that action to their value of doing right by others without causing needless hurt. Response 2 mentions the same evening but describes the effort in general terms ('worked hard to protect those relationships') and puts more weight on what was left unsaid.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

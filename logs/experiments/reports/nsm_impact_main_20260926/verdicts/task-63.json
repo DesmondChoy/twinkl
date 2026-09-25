@@ -1,0 +1,7 @@
+{
+  "task_id": "task-63",
+  "preferred": "2",
+  "reason": "Response 2 names something the person actually did: they reported Jia-Hui and followed procedure despite worrying about her trust. It ties this directly to their value of being someone others can count on to do the right thing. Response 1 focuses on not signing up for the ceramics class, which is something they held back from, and links it only loosely to showing up for family.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

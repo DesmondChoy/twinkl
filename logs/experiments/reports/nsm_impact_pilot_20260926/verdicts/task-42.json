@@ -1,0 +1,7 @@
+{
+  "task_id": "task-42",
+  "preferred": "2",
+  "reason": "Response 2 treats the person's own act of emailing the client for an extension as a choice they made and links it to making room for their own life, which is close to their value of choosing their own path. Response 1 names more actions (the email, laundry, soup, sweeping) but presents them only as signs of how much the person was carrying and never ties them to either Core Value. Neither mentions the clearest supportive action: working on the logo in the bathroom.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-68",
+  "preferred": "1",
+  "reason": "Response 1 quotes the person's own concrete action (printing and laminating worksheets) and ties having a plan, reading corner and borrowed books directly to a 'sense of calm', the stated Core Value. Response 2 also lists actions but spends its quote on 'The kids are sweet' and connects them only loosely to feeling grounded.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

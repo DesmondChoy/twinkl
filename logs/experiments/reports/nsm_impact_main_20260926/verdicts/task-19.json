@@ -1,0 +1,7 @@
+{
+  "task_id": "task-19",
+  "preferred": "1",
+  "reason": "Both responses name the same concrete supportive action, helping Amira debug the nonprofit intake form. Response 1 explicitly ties that action to the value of making things fairer. Response 2 quotes the action but only loosely frames it as 'a different kind of Tuesday' before making a general statement about the person's wish.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

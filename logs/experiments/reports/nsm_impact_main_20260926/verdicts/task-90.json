@@ -1,0 +1,7 @@
+{
+  "task_id": "task-90",
+  "preferred": "1",
+  "reason": "Response 1 names and quotes the person's concrete supportive action, taking twenty minutes to sit on the balcony with chai, and sets it against their enjoyment value. Response 2 only mentions 'the balcony chai' in passing and folds it into a general pattern of enjoyment being earned.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-20",
+  "preferred": "tie",
+  "reason": "Neither response points to something the person did that supports feeling calm and secure. Both mention actions like deleting the emails or turning down Edina, but those actions go against the value and are presented as unresolved tension. Response 2 is more concrete about what the person did, but none of it supports the value, so neither response is clearly better on this criterion.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

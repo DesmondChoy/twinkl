@@ -1,0 +1,7 @@
+{
+  "task_id": "task-16",
+  "preferred": "1",
+  "reason": "Response 1 names something the person actually did that supports the value: she told Farhan \"I'm deciding the menu, not his mother,\" and the response links it to her wish to have influence over how things go. Response 2 points to the doctor's reassurance and the response to her posts, which are mostly things that happened to her, not concrete actions she took.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

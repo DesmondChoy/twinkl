@@ -1,0 +1,7 @@
+{
+  "task_id": "task-100",
+  "preferred": "tie",
+  "reason": "Both responses name the same concrete action, telling Farhan 'I'm deciding the menu, not his mother,' along with the diet plan she put together for Zara, and both tie these to having influence or shaping what happens. Neither grounds the reflection in her own action clearly better than the other.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

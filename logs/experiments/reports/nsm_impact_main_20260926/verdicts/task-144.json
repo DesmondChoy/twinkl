@@ -1,0 +1,7 @@
+{
+  "task_id": "task-144",
+  "preferred": "1",
+  "reason": "Response 1 names the person's own concrete actions: spending two hours teaching Meera her mother's dhokla recipe, sending the recipe to her mother, and the call that followed. It ties these to how family customs are carried forward. Response 2 mentions cooking together, but it leans on Meera's actions (asking about Nani, writing the recipe down) and a general statement about staying connected.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

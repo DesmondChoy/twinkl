@@ -1,0 +1,7 @@
+{
+  "task_id": "task-98",
+  "preferred": "1",
+  "reason": "Response 1 names a concrete thing the person did, taking the regression question to the TA's office hours after class, and ties it to the tension between avoiding friction and acting responsibly. Response 2 describes the feeling at Sunday dinner and a general 'way of keeping things steady' without naming a specific supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

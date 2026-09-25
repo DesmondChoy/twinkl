@@ -1,0 +1,10 @@
+{
+  "task_id": "task-20",
+  "preferred": "2",
+  "reason": "Response 2 names the person's concrete supportive action, helping Suresh draft the letter to MOM through the difficult legal language, and ties it to fairness. Response 1 describes only listening to and witnessing Suresh's injury, and it wrongly says the person's own choice in his situation is unclear, even though the entry shows they acted.",
+  "flags": {"1": false, "2": true},
+  "flag_reasons": {
+    "1": null,
+    "2": "It says both moments, including stepping back from making the case at work (the Conflict), show 'different forms' of making the world fairer. That recasts the Conflict as an expression of the value, which softens it."
+  }
+}

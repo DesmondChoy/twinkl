@@ -1,0 +1,7 @@
+{
+  "task_id": "task-69",
+  "preferred": "tie",
+  "reason": "Both responses name the same concrete action: after the Flint email, the person chose not to pause the donation program despite the financial strain. Each ties that choice to the value of making the world fairer and better (Response 1 through clean water reaching a child, Response 2 through staying faithful to why they started), so neither is clearly better grounded.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-10",
+  "preferred": "1",
+  "reason": "Both name the same concrete action, moving the streak bonus straight into savings. Response 1 quotes it and ties it explicitly to the calm and security of having the insurance money set aside. Response 2 mentions the transfer but then moves to general system uncertainty and a shared dinner, so its link to the value is looser.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

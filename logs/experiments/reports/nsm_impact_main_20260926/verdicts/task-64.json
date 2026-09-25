@@ -1,0 +1,7 @@
+{
+  "task_id": "task-64",
+  "preferred": "2",
+  "reason": "Response 2 anchors on a concrete action the person took, quoting \"Wrote her a long reply\", and ties it to her knowledge reaching someone and mattering, which relates to having influence. Response 1 mentions replying to stroller questions, but the line it quotes (\"She asked where I got Zara's shoes\") describes something that happened to her, and it stays mostly on recognition she received.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-67",
+  "preferred": "tie",
+  "reason": "Both responses name the same concrete action, preparing food at Abuela's for the final night of the novena and setting up chairs as they have since age fourteen, and tie it to keeping the customs they were raised with. Response 2 states the link a bit more directly ('something you chose to show up for'), but it also suggests the chair setup had already happened. Response 1 describes it more accurately as still to come, so neither is clearly better.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

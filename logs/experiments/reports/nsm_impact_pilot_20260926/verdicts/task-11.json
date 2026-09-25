@@ -1,0 +1,10 @@
+{
+  "task_id": "task-11",
+  "preferred": "tie",
+  "reason": "Both responses name the same concrete supportive action, staying back to help the peon uncle fix the broken desk, and link it only loosely to care for people ('care for people around you' vs 'the care you showed at school'). Response 2 gives the action more weight by making it part of the question, but neither ties it clearly to the fairness value, so neither is clearly better.",
+  "flags": {"1": false, "2": true},
+  "flag_reasons": {
+    "1": null,
+    "2": "It blames the two Conflicts on outside factors ('tiredness, hierarchy, and convenience ... narrowed the space', 'moments where your energy and circumstances mattered') and never says they went against the value. This explains the Conflicts away, even though the person said it was 'bigger' than that."
+  }
+}

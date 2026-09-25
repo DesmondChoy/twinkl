@@ -1,0 +1,7 @@
+{
+  "task_id": "task-60",
+  "preferred": "1",
+  "reason": "Response 1 names and quotes a concrete action the person took, quietly looking at job postings and considering the Gothenburg startup, and ties it to wanting room to build things their own way. Response 2 only says the person was 'wondering' about the startup, backs it with a general complaint quote, and names the values in abstract terms without a specific supporting action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

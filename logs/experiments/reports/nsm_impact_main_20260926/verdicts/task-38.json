@@ -1,0 +1,7 @@
+{
+  "task_id": "task-38",
+  "preferred": "2",
+  "reason": "Both name the same concrete action (spending an hour quizzing Haojie on chemistry formulas at the table), but Response 2 explicitly ties that action to the Core Value of being there for the people closest to them, while Response 1 links it more loosely to a general 'devotion' and the person's chosen life.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

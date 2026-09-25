@@ -1,0 +1,7 @@
+{
+  "task_id": "task-112",
+  "preferred": "2",
+  "reason": "Response 2 names the specific thing the person did, quoting what they said to Wei's family about his potential and need for more practice, and ties that choice to their value of being counted on to do the right thing without causing hurt. Response 1 only says in general terms that they 'worked hard to protect those relationships' and focuses more on what they left unsaid.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

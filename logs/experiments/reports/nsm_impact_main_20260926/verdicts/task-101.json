@@ -1,0 +1,7 @@
+{
+  "task_id": "task-101",
+  "preferred": "1",
+  "reason": "Response 1 names the person's own supportive action ('Called Yuxin to plan' Ma's birthday) and treats the noodles with Haojie as something he did that brought some ease. Response 2 mentions the noodle lunch only as a sign of distance, and the birthday quote it uses is Haojie's action, not the person's.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

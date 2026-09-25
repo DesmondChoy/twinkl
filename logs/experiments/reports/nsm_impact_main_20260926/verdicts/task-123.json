@@ -1,0 +1,7 @@
+{
+  "task_id": "task-123",
+  "preferred": "2",
+  "reason": "Both responses name the person's decision to keep their savings out of Andrés's food truck. Response 2 is more concrete: it says they protected savings built over a year and a half, agreed to cafecito, and submitted a support ticket. It also ties these actions directly to the Core Value of feeling calm and secure. Response 1 mentions the savings decision but connects it to the value only loosely.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

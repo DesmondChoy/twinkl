@@ -1,0 +1,7 @@
+{
+  "task_id": "task-42",
+  "preferred": "2",
+  "reason": "Response 2 names a specific thing the person did, preparing food for the novena at Abuela's, and ties it to family customs carried through their community. Response 1 mostly describes the person's thoughts and an unspoken view, and the only action it names (telling Roberto the plan sounded fine) doesn't support the value.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

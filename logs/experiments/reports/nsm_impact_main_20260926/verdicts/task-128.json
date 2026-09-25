@@ -1,0 +1,7 @@
+{
+  "task_id": "task-128",
+  "preferred": "2",
+  "reason": "Response 2 opens on a specific action from this week, color-coding Ma's pill organizer and printing the times in large font, and ties it directly to being there for her. Response 1 relies on earlier decisions and a general 'staying present for Ma', and mentions the medication work only as a cost.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

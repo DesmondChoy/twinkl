@@ -1,0 +1,7 @@
+{
+  "task_id": "task-134",
+  "preferred": "tie",
+  "reason": "Neither response ties a specific action the person took to one of their Core Values. Response 1 relies on the rooftop fireworks and the dinner with Priya, and Response 2 relies on the gift-basket strain and the void-deck pause. Both are mostly things that happened to the person or passing moods, and neither links them to seeking new experiences or making the world fairer.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

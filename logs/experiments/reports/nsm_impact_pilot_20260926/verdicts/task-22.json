@@ -1,0 +1,7 @@
+{
+  "task_id": "task-22",
+  "preferred": "1",
+  "reason": "Response 1 names a specific thing the person actually did, helping Amira debug the nonprofit intake form, and ties it to using their time to make things better for someone else. Response 2 only discusses the Conflicts and never mentions any supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

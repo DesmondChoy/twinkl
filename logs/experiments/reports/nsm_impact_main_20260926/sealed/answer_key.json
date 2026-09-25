@@ -1,0 +1,1442 @@
+{
+  "task-01": {
+    "pair_id": "4a061287:2025-08-18",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-02": {
+    "pair_id": "cac7b9ce:2025-12-15",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-03": {
+    "pair_id": "c876219a:2025-04-07",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-04": {
+    "pair_id": "e448979e:2025-04-14",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-05": {
+    "pair_id": "a24b8d8f:2025-06-30",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-06": {
+    "pair_id": "4a061287:2025-07-14",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-07": {
+    "pair_id": "fa7d280a:2025-01-20",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-08": {
+    "pair_id": "e448979e:2025-03-17",
+    "persona_id": "e448979e",
+    "mode": "reminder",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-09": {
+    "pair_id": "c876219a:2025-04-14",
+    "persona_id": "c876219a",
+    "mode": "reminder",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-10": {
+    "pair_id": "c876219a:2025-05-12",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-11": {
+    "pair_id": "d28dbcc2:2025-12-29",
+    "persona_id": "d28dbcc2",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-12": {
+    "pair_id": "4a061287:2025-07-28",
+    "persona_id": "4a061287",
+    "mode": "reminder",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-13": {
+    "pair_id": "cac7b9ce:2025-11-24",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-14": {
+    "pair_id": "4236a5ff:2025-11-24",
+    "persona_id": "4236a5ff",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-15": {
+    "pair_id": "4a061287:2025-08-04",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-16": {
+    "pair_id": "e448979e:2025-03-17",
+    "persona_id": "e448979e",
+    "mode": "reminder",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-17": {
+    "pair_id": "663cb334:2025-05-12",
+    "persona_id": "663cb334",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-18": {
+    "pair_id": "65ed1278:2025-03-17",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-19": {
+    "pair_id": "a24b8d8f:2025-06-16",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-20": {
+    "pair_id": "abf1ce49:2025-09-15",
+    "persona_id": "abf1ce49",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-21": {
+    "pair_id": "cac7b9ce:2025-11-10",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-22": {
+    "pair_id": "fa7d280a:2025-01-27",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-23": {
+    "pair_id": "663cb334:2025-05-05",
+    "persona_id": "663cb334",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-24": {
+    "pair_id": "cac7b9ce:2025-11-24",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-25": {
+    "pair_id": "d7a0683f:2026-02-02",
+    "persona_id": "d7a0683f",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-26": {
+    "pair_id": "cac7b9ce:2025-11-10",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-27": {
+    "pair_id": "4a061287:2025-07-21",
+    "persona_id": "4a061287",
+    "mode": "reminder",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-28": {
+    "pair_id": "65ed1278:2025-03-03",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-29": {
+    "pair_id": "c876219a:2025-05-05",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-30": {
+    "pair_id": "a24b8d8f:2025-06-16",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-31": {
+    "pair_id": "ba3883ac:2025-12-08",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-32": {
+    "pair_id": "f418b74b:2025-09-15",
+    "persona_id": "f418b74b",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-33": {
+    "pair_id": "c876219a:2025-05-19",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-34": {
+    "pair_id": "ba3883ac:2025-12-01",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-35": {
+    "pair_id": "e448979e:2025-04-21",
+    "persona_id": "e448979e",
+    "mode": "reminder",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-36": {
+    "pair_id": "a24b8d8f:2025-06-30",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-37": {
+    "pair_id": "f418b74b:2025-09-08",
+    "persona_id": "f418b74b",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-38": {
+    "pair_id": "f6180c27:2025-07-14",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-39": {
+    "pair_id": "4a061287:2025-07-28",
+    "persona_id": "4a061287",
+    "mode": "reminder",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-40": {
+    "pair_id": "7253e69f:2025-09-15",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-41": {
+    "pair_id": "65ed1278:2025-02-24",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-42": {
+    "pair_id": "4a061287:2025-07-21",
+    "persona_id": "4a061287",
+    "mode": "reminder",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-43": {
+    "pair_id": "d28dbcc2:2025-12-08",
+    "persona_id": "d28dbcc2",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-44": {
+    "pair_id": "1f86f569:2025-12-01",
+    "persona_id": "1f86f569",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-45": {
+    "pair_id": "abf1ce49:2025-09-08",
+    "persona_id": "abf1ce49",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-46": {
+    "pair_id": "4a061287:2025-07-07",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-47": {
+    "pair_id": "dab3e9b9:2025-12-29",
+    "persona_id": "dab3e9b9",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-48": {
+    "pair_id": "fd063e8d:2025-12-15",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-49": {
+    "pair_id": "1ae9b1c1:2025-12-22",
+    "persona_id": "1ae9b1c1",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-50": {
+    "pair_id": "fa7d280a:2025-02-10",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-51": {
+    "pair_id": "fd063e8d:2026-01-05",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-52": {
+    "pair_id": "65ed1278:2025-02-24",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-53": {
+    "pair_id": "81e96381:2025-03-24",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-54": {
+    "pair_id": "e448979e:2025-03-31",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-55": {
+    "pair_id": "65ed1278:2025-03-03",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-56": {
+    "pair_id": "663cb334:2025-05-05",
+    "persona_id": "663cb334",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-57": {
+    "pair_id": "a24b8d8f:2025-06-23",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-58": {
+    "pair_id": "65ed1278:2025-03-10",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-59": {
+    "pair_id": "2a4a97ee:2025-10-20",
+    "persona_id": "2a4a97ee",
+    "mode": "reminder",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-60": {
+    "pair_id": "1f86f569:2025-12-01",
+    "persona_id": "1f86f569",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-61": {
+    "pair_id": "e448979e:2025-04-07",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-62": {
+    "pair_id": "65ed1278:2025-03-10",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-63": {
+    "pair_id": "b963f9bc:2025-12-08",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-64": {
+    "pair_id": "e448979e:2025-04-14",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-65": {
+    "pair_id": "1ae9b1c1:2025-12-22",
+    "persona_id": "1ae9b1c1",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-66": {
+    "pair_id": "c876219a:2025-04-07",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-67": {
+    "pair_id": "4a061287:2025-07-14",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-68": {
+    "pair_id": "abf1ce49:2025-09-01",
+    "persona_id": "abf1ce49",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-69": {
+    "pair_id": "dab3e9b9:2025-12-29",
+    "persona_id": "dab3e9b9",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-70": {
+    "pair_id": "abf1ce49:2025-09-01",
+    "persona_id": "abf1ce49",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-71": {
+    "pair_id": "c876219a:2025-05-19",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-72": {
+    "pair_id": "f6180c27:2025-07-28",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-73": {
+    "pair_id": "dab3e9b9:2026-01-05",
+    "persona_id": "dab3e9b9",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-74": {
+    "pair_id": "e448979e:2025-04-07",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-75": {
+    "pair_id": "7253e69f:2025-09-15",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-76": {
+    "pair_id": "b963f9bc:2025-12-08",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-77": {
+    "pair_id": "81e96381:2025-03-17",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-78": {
+    "pair_id": "81e96381:2025-03-10",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-79": {
+    "pair_id": "81e96381:2025-03-17",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-80": {
+    "pair_id": "a24b8d8f:2025-06-23",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-81": {
+    "pair_id": "fd063e8d:2025-12-22",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-82": {
+    "pair_id": "2a4a97ee:2025-10-06",
+    "persona_id": "2a4a97ee",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-83": {
+    "pair_id": "f6180c27:2025-07-28",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-84": {
+    "pair_id": "2a4a97ee:2025-10-06",
+    "persona_id": "2a4a97ee",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-85": {
+    "pair_id": "ba3883ac:2025-12-01",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-86": {
+    "pair_id": "fd063e8d:2026-01-05",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-87": {
+    "pair_id": "c876219a:2025-05-12",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-88": {
+    "pair_id": "fd063e8d:2025-12-22",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-89": {
+    "pair_id": "81e96381:2025-03-10",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-90": {
+    "pair_id": "f418b74b:2025-09-08",
+    "persona_id": "f418b74b",
+    "mode": "reflection",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-91": {
+    "pair_id": "f6180c27:2025-07-07",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-92": {
+    "pair_id": "f418b74b:2025-09-15",
+    "persona_id": "f418b74b",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-93": {
+    "pair_id": "d7a0683f:2026-02-02",
+    "persona_id": "d7a0683f",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-94": {
+    "pair_id": "7253e69f:2025-09-22",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-95": {
+    "pair_id": "dab3e9b9:2026-01-05",
+    "persona_id": "dab3e9b9",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-96": {
+    "pair_id": "c876219a:2025-04-14",
+    "persona_id": "c876219a",
+    "mode": "reminder",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-97": {
+    "pair_id": "ba3883ac:2025-12-08",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-98": {
+    "pair_id": "663cb334:2025-05-12",
+    "persona_id": "663cb334",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-99": {
+    "pair_id": "d28dbcc2:2025-12-08",
+    "persona_id": "d28dbcc2",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-100": {
+    "pair_id": "e448979e:2025-03-10",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-101": {
+    "pair_id": "f6180c27:2025-08-04",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-102": {
+    "pair_id": "cac7b9ce:2025-11-17",
+    "persona_id": "cac7b9ce",
+    "mode": "reminder",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-103": {
+    "pair_id": "ba3883ac:2025-12-15",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-104": {
+    "pair_id": "e448979e:2025-04-21",
+    "persona_id": "e448979e",
+    "mode": "reminder",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-105": {
+    "pair_id": "7253e69f:2025-09-08",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-106": {
+    "pair_id": "fa7d280a:2025-01-20",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-107": {
+    "pair_id": "81e96381:2025-03-24",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-108": {
+    "pair_id": "f6180c27:2025-07-14",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-109": {
+    "pair_id": "b963f9bc:2025-12-15",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-110": {
+    "pair_id": "abf1ce49:2025-09-22",
+    "persona_id": "abf1ce49",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-111": {
+    "pair_id": "ba3883ac:2025-12-15",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-112": {
+    "pair_id": "b963f9bc:2025-12-01",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-113": {
+    "pair_id": "7253e69f:2025-09-08",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-114": {
+    "pair_id": "b963f9bc:2025-12-15",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-115": {
+    "pair_id": "e448979e:2025-03-31",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-116": {
+    "pair_id": "65ed1278:2025-03-24",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-117": {
+    "pair_id": "fa7d280a:2025-01-27",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-118": {
+    "pair_id": "abf1ce49:2025-09-08",
+    "persona_id": "abf1ce49",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-119": {
+    "pair_id": "4236a5ff:2025-11-24",
+    "persona_id": "4236a5ff",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-120": {
+    "pair_id": "fd063e8d:2025-12-15",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-121": {
+    "pair_id": "cac7b9ce:2025-11-17",
+    "persona_id": "cac7b9ce",
+    "mode": "reminder",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-122": {
+    "pair_id": "ba3883ac:2025-12-22",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-123": {
+    "pair_id": "c876219a:2025-05-05",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-124": {
+    "pair_id": "abf1ce49:2025-09-15",
+    "persona_id": "abf1ce49",
+    "mode": "reflection",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-125": {
+    "pair_id": "65ed1278:2025-03-17",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-126": {
+    "pair_id": "4a061287:2025-08-18",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-127": {
+    "pair_id": "4a061287:2025-08-04",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-128": {
+    "pair_id": "f6180c27:2025-07-07",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-129": {
+    "pair_id": "abf1ce49:2025-09-22",
+    "persona_id": "abf1ce49",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-130": {
+    "pair_id": "ba3883ac:2025-12-22",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-131": {
+    "pair_id": "4a061287:2025-07-07",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-132": {
+    "pair_id": "1f86f569:2025-11-24",
+    "persona_id": "1f86f569",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-133": {
+    "pair_id": "1f86f569:2025-11-24",
+    "persona_id": "1f86f569",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-134": {
+    "pair_id": "d28dbcc2:2025-12-29",
+    "persona_id": "d28dbcc2",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-135": {
+    "pair_id": "65ed1278:2025-03-24",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-136": {
+    "pair_id": "7253e69f:2025-09-22",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-137": {
+    "pair_id": "c876219a:2025-03-31",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-138": {
+    "pair_id": "e448979e:2025-03-10",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-139": {
+    "pair_id": "2a4a97ee:2025-10-20",
+    "persona_id": "2a4a97ee",
+    "mode": "reminder",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-140": {
+    "pair_id": "f6180c27:2025-08-04",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-141": {
+    "pair_id": "fa7d280a:2025-02-10",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-142": {
+    "pair_id": "c876219a:2025-03-31",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "without",
+      "2": "with"
+    }
+  },
+  "task-143": {
+    "pair_id": "b963f9bc:2025-12-01",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "order": 1,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  },
+  "task-144": {
+    "pair_id": "cac7b9ce:2025-12-15",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "order": 0,
+    "label_of": {
+      "1": "with",
+      "2": "without"
+    }
+  }
+}

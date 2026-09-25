@@ -1,0 +1,7 @@
+{
+  "task_id": "task-25",
+  "preferred": "2",
+  "reason": "Response 1 names only Conflict actions (the store-brand coffee, turning down the housing complaint) and never mentions anything the person did that supports their value. Response 2 at least ties the reflection to the person's actual thesis work on climate policy and links it to their value of a fairer, better place, although it describes that work only loosely as 'wrestling'.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

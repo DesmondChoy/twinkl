@@ -1,0 +1,10 @@
+{
+  "task_id": "task-92",
+  "preferred": "1",
+  "reason": "Response 1 points to a specific choice the person made and wrote about: cooking egg curry and eating it slowly instead of scrolling Slack at the counter. It connects that choice to enjoyment. Response 2 treats ordering in because they were too tired as a chosen pause, and presents the chai moment as supportive while leaving out that the person cut it short.",
+  "flags": {"1": false, "2": true},
+  "flag_reasons": {
+    "1": null,
+    "2": "It describes the 2025-09-16 chai moment, which was reviewed as a Conflict, as 'you also let yourself sit with the chai'. It leaves out that the person caught themselves and opened the spreadsheet right away, so the Conflict is recast as a supportive action."
+  }
+}

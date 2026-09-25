@@ -1,0 +1,7 @@
+{
+  "task_id": "task-10",
+  "preferred": "1",
+  "reason": "Response 1 ties specific things the person did to her value of choosing her own path: she kept the freelance work as 'something of your own' and said she wanted to handle the situation herself instead of having Tariq talk to his mother. Response 2 names concrete actions too, but it frames them mainly as honesty, which is not one of her Core Values, and links them to her values only in general terms ('making your own choices about work').",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

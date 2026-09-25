@@ -1,0 +1,7 @@
+{
+  "task_id": "task-40",
+  "preferred": "1",
+  "reason": "Response 1 names a specific self-directed action (putting the 45 JD she earned into her savings envelope, 'but I earned it') and explicitly ties it, along with the park and village visits, to independent work and family customs. Response 2's main action is accepting the 80 JD project, which it frames mostly through the impulsive 'said yes before thinking', and its link from the park and grandfather visit to the value of her own customs is weaker.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

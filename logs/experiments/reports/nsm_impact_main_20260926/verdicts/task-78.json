@@ -1,0 +1,7 @@
+{
+  "task_id": "task-78",
+  "preferred": "2",
+  "reason": "Response 2 builds its reflection around a specific action the person took (coming home and reopening the Peru chapter, quoted directly), ties it explicitly to their value of freedom to choose their own path, and asks its question about that action. Response 1 also mentions going back to the chapter, but it spends more time on what the person held back from doing and on the general tension between the two roles.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

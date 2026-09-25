@@ -1,0 +1,7 @@
+{
+  "task_id": "task-124",
+  "preferred": "tie",
+  "reason": "Neither response grounds its reflection in an action that supports 'Feeling calm and secure in my life'. The concrete actions both name (deleting the emails, and in Response 1 turning down Edina) are the Conflict behaviors themselves. Response 1 is more action-focused and Response 2 leans more on what happened to the person (the memo), but neither shows a supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

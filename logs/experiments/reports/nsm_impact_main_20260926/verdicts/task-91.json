@@ -1,0 +1,7 @@
+{
+  "task_id": "task-91",
+  "preferred": "1",
+  "reason": "Response 1 opens with a specific action from this week: color-coding Ma's medication schedule and printing the times in large font. It ties that directly to being there for her. Response 2 mostly points to past decisions (taking Ma in, choosing Hong Kong for Yuxin) and a general 'staying present for Ma', and it frames the medication schedule mainly as a cost rather than as a supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-06",
+  "preferred": "tie",
+  "reason": "Both responses name the same concrete action, preparing food at Abuela's for the novena and setting up chairs, and tie it to the customs the person was raised with. Response 1 says the person chose to show up. Response 2 says they are making room for those customs and builds its question around setting up chairs since age fourteen. Neither is clearly better grounded.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

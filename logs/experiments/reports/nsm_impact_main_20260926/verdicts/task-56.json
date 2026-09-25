@@ -1,0 +1,7 @@
+{
+  "task_id": "task-56",
+  "preferred": "2",
+  "reason": "Response 2 names the person's own action of going to the TA's office hours after class. Response 1 describes that moment as something done for them ('the TA helped you find'). Neither response clearly ties the action to the Core Value, so Response 2's edge is small.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,10 @@
+{
+  "task_id": "task-26",
+  "preferred": "1",
+  "reason": "Both responses mention listening to Suresh at the worker center. Response 1 also names a second concrete choice from the writing: taking the bus instead of buying a car they could afford. It builds its closing question on that choice, so it is better grounded in what the person did. Response 2 names no concrete supportive action beyond the worker center visit.",
+  "flags": {"1": false, "2": true},
+  "flag_reasons": {
+    "1": null,
+    "2": "It says the 06-13 note about not speaking up is 'best held lightly rather than given a meaning it does not contain'. That treats a clear Conflict as trivial, even though the person openly regretted 'choosing comfort over what I actually think'. It also calls the styrofoam takeout 'an ordinary choice' shaped by tiredness, which excuses that moment."
+  }
+}

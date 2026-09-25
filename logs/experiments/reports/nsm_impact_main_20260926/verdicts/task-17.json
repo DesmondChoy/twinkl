@@ -1,0 +1,7 @@
+{
+  "task_id": "task-17",
+  "preferred": "2",
+  "reason": "Response 2 names a specific action the person took, bringing the regression discrepancy to the TA after class, and ties it to their pull between avoiding friction and doing the responsible thing. Response 1 stays with the feeling at Sunday dinner and a general 'way of keeping things steady' and never names a concrete action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

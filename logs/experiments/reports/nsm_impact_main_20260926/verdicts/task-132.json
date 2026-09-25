@@ -1,0 +1,7 @@
+{
+  "task_id": "task-132",
+  "preferred": "tie",
+  "reason": "Both responses quote the same action, nodding along and saying the review board made sense for quality control. Neither clearly ties that action to a Core Value: Response 1 just lists both values, and Response 2 only loosely says the responsibility to be counted on is 'present' in the conversation.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

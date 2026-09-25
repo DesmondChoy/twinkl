@@ -1,0 +1,7 @@
+{
+  "task_id": "task-66",
+  "preferred": "1",
+  "reason": "Response 1 builds its reflection around one specific supportive action: deleting the third app and going back to the familiar two-app routine. It quotes the person's own words and links that choice to keeping the workday steady. Response 2 also mentions returning to the routine and logging earnings, but it starts with the pay change that happened to the person and spreads its attention across several circumstances, so the supportive action is less central.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

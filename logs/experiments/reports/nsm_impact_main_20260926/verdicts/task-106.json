@@ -1,0 +1,7 @@
+{
+  "task_id": "task-106",
+  "preferred": "2",
+  "reason": "Neither response mentions the clearest supportive action (driving home to check on Mom), but Response 2 at least presents the policy-brief moment as something the person did, offering a sound and useful opinion. Response 1 treats it only as something that happened to them (their view was welcome), so Response 2 is somewhat better grounded in the person's own action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

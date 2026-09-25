@@ -1,0 +1,244 @@
+[
+  {
+    "pair_id": "active-nisha:2025-02-10",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "active-nisha:2025-02-17",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "tie"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "active-nisha:2025-02-24",
+    "persona_id": "5fa8b540",
+    "mode": "reminder",
+    "verdicts": [
+      "without",
+      "tie"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "active-nisha:2025-03-03",
+    "persona_id": "5fa8b540",
+    "mode": "reflection",
+    "verdicts": [
+      "tie",
+      "with"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "active-nisha:2025-03-10",
+    "persona_id": "5fa8b540",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "persistent-lukas:2025-06-16",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "persistent-lukas:2025-06-23",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "persistent-lukas:2025-06-30",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "persistent-lukas:2025-07-07",
+    "persona_id": "a24b8d8f",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "stable-noor:2025-04-14",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "stable-noor:2025-04-21",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "stable-noor:2025-04-28",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "stable-noor:2025-05-05",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "stable-noor:2025-05-12",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "stable-noor:2025-05-19",
+    "persona_id": "02fb94f3",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "two-values-meera:2025-11-17",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "two-values-meera:2025-11-24",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "two-values-meera:2025-12-01",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "two-values-meera:2025-12-08",
+    "persona_id": "961a4e3f",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "with"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "uncertain-wei-jun:2025-06-02",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "uncertain-wei-jun:2025-06-09",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "uncertain-wei-jun:2025-06-16",
+    "persona_id": "8f83c818",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  }
+]

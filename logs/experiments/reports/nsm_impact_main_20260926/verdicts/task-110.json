@@ -1,0 +1,7 @@
+{
+  "task_id": "task-110",
+  "preferred": "2",
+  "reason": "Response 2 names a specific thing the person did, saying yes to the fall-festival booth, quotes their words, and ties it to the steadiness and calm they value. Response 1 centres on things that happened to them (Mateo taking a book, the calm drive) and mentions lunch with colleagues only in general terms.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

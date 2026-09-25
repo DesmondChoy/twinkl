@@ -1,0 +1,7 @@
+{
+  "task_id": "task-13",
+  "preferred": "1",
+  "reason": "Both quote the desk-fixing act, but Response 1 also names this week's concrete action of reshaping lesson plans around a water and sanitation unit and ties it to what the person saw in the Ravi episode, then builds its question on that action. Response 2 relies only on the older desk moment and frames this week as routine demand-meeting.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

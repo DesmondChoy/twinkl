@@ -1,0 +1,7 @@
+{
+  "task_id": "task-34",
+  "preferred": "tie",
+  "reason": "Both responses name the same concrete action, holding back from changing Anna's deck and letting her present it. Both tie it to the value of choosing one's own path: Response 1 quotes the action directly, and Response 2 says a little more explicitly that giving others room is itself a choice about how to lead. Neither is clearly better grounded.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

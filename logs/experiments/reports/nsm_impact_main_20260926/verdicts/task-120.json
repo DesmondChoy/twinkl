@@ -1,0 +1,7 @@
+{
+  "task_id": "task-120",
+  "preferred": "2",
+  "reason": "Response 2 names specific things the person did, such as working out where the aesthetic influence lay at the Becker meeting and starting to plan a spring in Mallorca, and ties them to having a say and enjoying life. Response 1 mostly describes what happened to the person and the general setting. Its one concrete action, sitting alone with the model, does not clearly support either Core Value.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

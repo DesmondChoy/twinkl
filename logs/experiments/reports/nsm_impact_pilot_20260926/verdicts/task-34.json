@@ -1,0 +1,7 @@
+{
+  "task_id": "task-34",
+  "preferred": "1",
+  "reason": "Both responses name the same concrete action: helping Amira with the intake form. Response 1 explicitly ties it to the Core Value ('showing that this value also has a place in how you spend an ordinary evening'). Response 2 names the nonprofit setting but describes the help only as 'a practical way of supporting someone who was stuck', so the link to fairness is left implied.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

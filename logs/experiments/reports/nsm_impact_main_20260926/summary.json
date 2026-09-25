@@ -1,0 +1,55 @@
+{
+  "pairs": 72,
+  "personas": 23,
+  "judgments": 144,
+  "order_consistency": {
+    "consistent_pairs": 61,
+    "pairs": 72
+  },
+  "position_choice": {
+    "response_1": 52,
+    "response_2": 56,
+    "decisive_judgments": 108
+  },
+  "outcomes": {
+    "win": 36,
+    "loss": 12,
+    "tie": 24
+  },
+  "win_difference": 33.3,
+  "win_difference_95": [
+    19.4,
+    45.5
+  ],
+  "honesty_flags": {
+    "with": 2,
+    "without": 0,
+    "judgments": 144
+  },
+  "by_mode": {
+    "encouragement": {
+      "pairs": 58,
+      "outcomes": {
+        "win": 27,
+        "loss": 11,
+        "tie": 20
+      }
+    },
+    "reflection": {
+      "pairs": 7,
+      "outcomes": {
+        "win": 2,
+        "loss": 1,
+        "tie": 4
+      }
+    },
+    "reminder": {
+      "pairs": 7,
+      "outcomes": {
+        "win": 7,
+        "loss": 0,
+        "tie": 0
+      }
+    }
+  }
+}

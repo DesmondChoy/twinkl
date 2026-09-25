@@ -1,0 +1,7 @@
+{
+  "task_id": "task-94",
+  "preferred": "1",
+  "reason": "Response 1 opens with the person's own choice (\"You took Friday off, drove to Sayulita alone\") and ties it directly to the value (\"you are choosing experiences and room to breathe\"). Response 2 names the same actions but credits the waves with giving the day, and links to the values only through a general list.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

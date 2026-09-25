@@ -1,0 +1,7 @@
+{
+  "task_id": "task-45",
+  "preferred": "tie",
+  "reason": "Response 1 quotes a concrete action (printing and laminating worksheets), but ties it to devotion to the classroom rather than to feeling calm and secure, and the out-of-pocket cost arguably cuts against security; Response 2 names no supportive action, only the dilemma and worry. Neither grounds the reflection in an action that supports the person's actual Core Value (e.g., mapping out the unit and feeling prepared).",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

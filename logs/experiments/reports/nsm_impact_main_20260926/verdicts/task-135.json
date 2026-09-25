@@ -1,0 +1,7 @@
+{
+  "task_id": "task-135",
+  "preferred": "2",
+  "reason": "Response 2 names a specific supportive action from the writing (listening to Hilde without mentally drafting lesson plans) and ties it to being there for people close to them. Response 1 only drops in a garbled quote about submitting a conference request, with a weak connection to the person's values.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

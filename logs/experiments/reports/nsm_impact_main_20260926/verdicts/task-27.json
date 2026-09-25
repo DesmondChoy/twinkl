@@ -1,0 +1,7 @@
+{
+  "task_id": "task-27",
+  "preferred": "1",
+  "reason": "Response 1 names a specific supportive action the person took (preparing food at Abuela's for the novena, quoted directly) and ties it to family and community tradition. Response 2 mostly describes the person's thoughts and the unsupportive act of saying the plan sounded fine, with only a passing mention of staying rooted in Guadalajara.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

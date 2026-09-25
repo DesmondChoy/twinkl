@@ -1,0 +1,7 @@
+{
+  "task_id": "task-40",
+  "preferred": "1",
+  "reason": "Response 1 names concrete actions the person took, including solving the shipment problem, making the zarandeado, and especially booking the Oaxaca mezcal tasting, which it explicitly frames as making room for something new. Response 2 also describes the workday and evening, but it links them to the values only through a general 'sense of being alive' and never mentions the mezcal booking, the week's clearest supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-23",
+  "preferred": "1",
+  "reason": "Response 1 names a concrete action the person took, going to the TA's office hours afterward to resolve the discrepancy. Response 2 frames the same event passively ('the TA helped you find'), so it describes something that happened to them. Neither response explicitly ties that action to the Core Value, so Response 1 is only modestly better.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

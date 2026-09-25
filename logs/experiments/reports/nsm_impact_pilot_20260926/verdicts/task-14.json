@@ -1,0 +1,10 @@
+{
+  "task_id": "task-14",
+  "preferred": "2",
+  "reason": "Both responses name listening to Suresh at the worker center. Response 2 also names a deliberate choice the person described, taking the bus even though they could afford a car, and builds its closing question around that choice. Response 1 adds no other supportive action, and its question is about Suresh's bruises rather than what the person did. Neither response explicitly links these actions to the Core Value.",
+  "flags": {"1": true, "2": false},
+  "flag_reasons": {
+    "1": "It says the 2025-06-13 Conflict (staying silent at a biased comment) leaves the situation unclear and is 'best held lightly'. That explains away a Conflict the entry describes in detail.",
+    "2": null
+  }
+}

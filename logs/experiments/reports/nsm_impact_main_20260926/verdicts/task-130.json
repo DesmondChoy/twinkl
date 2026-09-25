@@ -1,0 +1,7 @@
+{
+  "task_id": "task-130",
+  "preferred": "2",
+  "reason": "Both responses name the same concrete action: declining Marcus's offer. Response 2 ties that action directly to the value by saying it 'kept the decision in your own hands'. Response 1 links the value more loosely to accepting the rough parts of the life it describes.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,10 @@
+{
+  "task_id": "task-99",
+  "preferred": "tie",
+  "reason": "Both responses use the same shelter moment, framed as Ramesh saying 'bureaucracy' and the person feeling proud. Neither names the person's own supportive actions (teaching Ramesh English on Saturdays, sorting donations) or clearly ties them to the fairness value, so neither is clearly better at grounding in a concrete supportive action.",
+  "flags": {"1": false, "2": true},
+  "flag_reasons": {
+    "1": null,
+    "2": "It recasts Priya's look, which the person read as embarrassment, as evidence that 'this way of living matters deeply'. Its question asks what was 'most worth protecting' in the sharp reply. Together these justify the Conflict at dinner instead of keeping its cost in view."
+  }
+}

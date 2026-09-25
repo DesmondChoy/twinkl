@@ -1,0 +1,7 @@
+{
+  "task_id": "task-04",
+  "preferred": "1",
+  "reason": "Response 1 puts the person's own action at the center. It quotes 'Wrote her a long reply' and ties her recommendation and follow-up to her knowledge having real weight with others, which fits her value of having influence. Response 2 mentions her replying to questions about the stroller, but the moment it quotes is something that happened to her (another mother asking about the shoes), and it focuses on being recognised rather than on what she did.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

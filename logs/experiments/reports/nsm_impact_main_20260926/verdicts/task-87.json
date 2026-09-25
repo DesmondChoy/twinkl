@@ -1,0 +1,7 @@
+{
+  "task_id": "task-87",
+  "preferred": "2",
+  "reason": "Both responses name the same concrete action: moving the streak bonus straight into savings. Response 2 quotes the person's own words about it and ties it directly to their aim of covering the insurance renewal without dipping into savings, which supports feeling calm and secure. Response 1 mentions the action, then drifts into general framing about systems the person cannot rely on.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

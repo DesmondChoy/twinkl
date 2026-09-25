@@ -1,0 +1,7 @@
+{
+  "task_id": "task-07",
+  "preferred": "1",
+  "reason": "Neither response mentions the clearest supportive action, driving home to check on Mom. Response 1 is slightly stronger because it treats the Priya moment as something the person did, offering a sound, useful answer. Response 2 describes the same moment only as something that happened to them: their perspective was welcome.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-81",
+  "preferred": "1",
+  "reason": "Response 1 names a specific action the person took (opening the 2015 Barolo he had saved after the Cologne dinner), quotes it, and links it to enjoying life as a moment that was his own. Response 2 mentions the bottle only in passing, never ties it to a value, and spends most of its text on what Hamburg did to him.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

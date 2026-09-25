@@ -1,0 +1,7 @@
+{
+  "task_id": "task-05",
+  "preferred": "2",
+  "reason": "Both responses name the person's concrete act of helping two new workers file their claims, but Response 2 explicitly ties it to the Core Value ('a clear connection to making the world a fairer, better place'). Response 1 names the act as 'concrete help' but never links it to what the person cares about.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

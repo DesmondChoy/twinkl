@@ -1,0 +1,7 @@
+{
+  "task_id": "task-33",
+  "preferred": "2",
+  "reason": "Response 2 builds its reflection around one specific action the person took, paying the bike insurance early, quotes 'One less thing on the list', ties it to feeling settled and secure, and asks about that action in its question. Response 1 lists the insurance payment among outcomes such as the rating and savings, credits him with 'handling Lina's invoices' when that is her habit, not his action, and ends on the future plumbing plan.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

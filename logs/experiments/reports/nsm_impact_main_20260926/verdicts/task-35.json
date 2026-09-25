@@ -1,0 +1,7 @@
+{
+  "task_id": "task-35",
+  "preferred": "1",
+  "reason": "Response 1 names a specific moment, being asked for her view on the stroller, and ties it to influence that comes from the work she has put in. Response 2 only says in general terms that she is 'someone strangers trust for careful advice'. Neither names her actual actions (posting the review, writing the long reply), but Response 1 is more concrete.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

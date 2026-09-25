@@ -1,0 +1,7 @@
+{
+  "task_id": "task-33",
+  "preferred": "2",
+  "reason": "Response 2 names several specific things the person did (saving the 45 JD, sketching the courtyard tile patterns on a napkin, sitting with the women over sage tea) and ties the sketch directly to keeping something of her own and the tea to family customs. Response 1 mentions the envelope but otherwise stays general about the village visit, and its quote is cut off mid-sentence (\"I don't know what...\").",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-97",
+  "preferred": "1",
+  "reason": "Response 1 names a concrete action the person took (leaving the association meeting early, quoted from the entry) and ties it to wanting to direct their own work. Response 2 describes the meeting as something they sat through, which is what happened to them, and grounds the value mainly in a quoted feeling rather than an action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

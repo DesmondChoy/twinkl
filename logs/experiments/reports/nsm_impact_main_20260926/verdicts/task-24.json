@@ -1,0 +1,7 @@
+{
+  "task_id": "task-24",
+  "preferred": "tie",
+  "reason": "Both responses name the same concrete actions the person wrote about (refilling Sunita auntie's chai and buying the biscuits Appa likes) and loosely connect them to carrying family customs. Neither grounds the reflection in a supportive action clearly better than the other: Response 1 frames the chai as quietly holding her ground, and Response 2 quotes it directly as a familiar family role.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

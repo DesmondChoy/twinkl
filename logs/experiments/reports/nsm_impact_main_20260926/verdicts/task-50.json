@@ -1,0 +1,7 @@
+{
+  "task_id": "task-50",
+  "preferred": "2",
+  "reason": "Response 2 names specific supportive actions from the writing (driving back, errands, filling prescriptions for his mother) and links them directly to being someone others can count on. Response 1 only refers generally to 'carrying real responsibility' and 'how much you take on quietly' without naming any concrete action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

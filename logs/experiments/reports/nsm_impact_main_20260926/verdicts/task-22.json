@@ -1,0 +1,7 @@
+{
+  "task_id": "task-22",
+  "preferred": "1",
+  "reason": "Both name the same concrete action (spending Saturday clearing a path for Mom's walker despite her protests), but Response 1 explicitly ties that practical care to the Core Value of being someone others can count on, while Response 2 calls it protecting Mom's safety without linking it to the person's stated value.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

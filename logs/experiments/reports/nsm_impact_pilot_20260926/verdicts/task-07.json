@@ -1,0 +1,10 @@
+{
+  "task_id": "task-07",
+  "preferred": "2",
+  "reason": "Response 2 cites the desk repair and also this week's concrete action: using the free Saturday to plan a water and sanitation unit because the children take these conversations home. It ties that action to what the person cares about. Response 1 uses only the earlier desk repair, and it describes this week as exam drilling, which is what the week demanded of them rather than a supportive choice.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {
+    "1": null,
+    "2": null
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-102",
+  "preferred": "2",
+  "reason": "Response 2 names a specific supportive action the person took, making Amma's kheer exactly how Nani used to make it, and ties it to the family rituals behind the Core Value about honoring customs. Response 1 mentions only the money set aside for Meera's wedding and the medical bills, and frames them as care for family without linking them clearly to the customs and practices the person was raised with.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

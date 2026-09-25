@@ -1,0 +1,7 @@
+{
+  "task_id": "task-18",
+  "preferred": "1",
+  "reason": "Both name the person's concrete act of staying back to help the peon uncle fix the desk, but Response 1 puts it first, connects it to the 'fairer or more considerate option' and the care shown at school, and builds its question around it. Response 2 mentions it only briefly as 'care for people around you'.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

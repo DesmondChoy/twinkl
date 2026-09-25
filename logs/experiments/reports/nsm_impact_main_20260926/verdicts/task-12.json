@@ -1,0 +1,7 @@
+{
+  "task_id": "task-12",
+  "preferred": "2",
+  "reason": "Response 2 names specific things the person actually did (preparing food at Abuela's and setting up chairs for the novena, from the 2025-07-17 entry) and ties them to her value of honoring family customs. Response 1 speaks only generally about 'the traditions that shaped you' and names no supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

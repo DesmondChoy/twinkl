@@ -1,0 +1,7 @@
+{
+  "task_id": "task-19",
+  "preferred": "2",
+  "reason": "Response 2 points to things the person actually did: she stayed awake through Sami's fever and kept track of his medicine and when he might need the clinic. It ties these to her wish to choose how Sami is cared for. Response 1 describes only what was done to her (the nap schedule change and the 5am takeover) and names no action of her own.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

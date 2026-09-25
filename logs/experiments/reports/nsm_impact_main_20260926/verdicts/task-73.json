@@ -1,0 +1,7 @@
+{
+  "task_id": "task-73",
+  "preferred": "2",
+  "reason": "Response 2 names the person's own action (after the Salem meeting, they chose to stop at Warm Springs and saw the units working) and ties it to what the work is meant to protect. Response 1 frames the visit around what David showed them, so it is more about what happened to them. Neither mentions the garden-attachment follow-up.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

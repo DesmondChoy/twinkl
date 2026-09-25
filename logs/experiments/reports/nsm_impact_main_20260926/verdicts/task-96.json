@@ -1,0 +1,7 @@
+{
+  "task_id": "task-96",
+  "preferred": "2",
+  "reason": "Response 2 quotes a specific supportive action the person took, deleting the third app because it added too much mental load, and ties it to their wish for steadiness. Response 1 only mentions in passing that the person priced the brake pads, and it centres the reflection on the Conflict.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

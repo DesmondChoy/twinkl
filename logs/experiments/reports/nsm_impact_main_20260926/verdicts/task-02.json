@@ -1,0 +1,7 @@
+{
+  "task_id": "task-02",
+  "preferred": "2",
+  "reason": "Response 2 names the person's own actions: spending two hours teaching Meera her mother's dhokla recipe and sending the recipe to her mother. It links both to carrying on family customs. Response 1 casts Meera as the one acting (she asked, she wrote the recipe down) and speaks more generally about the kitchen, so the person's own supportive action is less clear.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

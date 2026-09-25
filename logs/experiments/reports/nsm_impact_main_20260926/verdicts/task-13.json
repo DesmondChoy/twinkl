@@ -1,0 +1,7 @@
+{
+  "task_id": "task-13",
+  "preferred": "tie",
+  "reason": "Both name the same concrete actions from the entries (refilling Sunita auntie's chai, buying Appa's biscuits) and link them to family customs and care. Response 1 ties the chai directly to the family role, and Response 2 frames the actions as practical care, but it also slightly misplaces the biscuit purchase as during the shift. Neither is clearly better at grounding the reflection.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

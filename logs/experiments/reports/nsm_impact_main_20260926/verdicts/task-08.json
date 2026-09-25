@@ -1,0 +1,7 @@
+{
+  "task_id": "task-08",
+  "preferred": "2",
+  "reason": "Response 2 names a specific thing the person did that supports her value: she told Farhan \"I'm deciding the menu, not his mother.\" Response 1 only mentions things that happened to her, the doctor's reassurance and the reaction to her posts, and names no action she took.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-09",
+  "preferred": "1",
+  "reason": "Response 1 centers on a specific choice the person made (emailing the client for an extension) and frames it as an act of making room for her own life, which loosely connects to choosing her own path. Response 2 names more concrete actions (the email, laundry, soup, sweeping) but uses them mainly to show how much she was carrying, and its middle paragraph is about other people's choices, so it never ties her actions to what she values. Neither response mentions the clearest supportive action: working on the logo in the bathroom.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

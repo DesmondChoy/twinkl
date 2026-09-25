@@ -1,0 +1,7 @@
+{
+  "task_id": "task-39",
+  "preferred": "1",
+  "reason": "Response 1 names the specific action the person wrote about: they chose a dark green dress they liked, kept it despite the mother-in-law's comment, and wore it. It ties that to the choice feeling like their own, which fits their freedom value. Response 2 mentions wearing the dress but less concretely, quotes a cut-off excerpt, and adds loose claims such as 'stayed connected to parts of the celebration that mattered to you' and 'sharing the moment with Huda' that the entries don't clearly show.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

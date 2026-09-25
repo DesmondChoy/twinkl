@@ -1,0 +1,7 @@
+{
+  "task_id": "task-37",
+  "preferred": "2",
+  "reason": "Response 2 names and quotes the person's concrete supportive action, taking twenty minutes after lunch for chai on the balcony, and presents it as a real pause. Response 1 only mentions 'the balcony chai' in passing and groups it with the conflicts as another sign that enjoyment has to be earned, so the action itself is never grounded.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

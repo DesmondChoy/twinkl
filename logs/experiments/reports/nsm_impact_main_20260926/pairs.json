@@ -1,0 +1,794 @@
+[
+  {
+    "pair_id": "1ae9b1c1:2025-12-22",
+    "persona_id": "1ae9b1c1",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "1f86f569:2025-11-24",
+    "persona_id": "1f86f569",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "1f86f569:2025-12-01",
+    "persona_id": "1f86f569",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "2a4a97ee:2025-10-06",
+    "persona_id": "2a4a97ee",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "2a4a97ee:2025-10-20",
+    "persona_id": "2a4a97ee",
+    "mode": "reminder",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "4236a5ff:2025-11-24",
+    "persona_id": "4236a5ff",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "tie"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "4a061287:2025-07-07",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "tie"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "4a061287:2025-07-14",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "4a061287:2025-07-21",
+    "persona_id": "4a061287",
+    "mode": "reminder",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "4a061287:2025-07-28",
+    "persona_id": "4a061287",
+    "mode": "reminder",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "4a061287:2025-08-04",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "without"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "4a061287:2025-08-18",
+    "persona_id": "4a061287",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "with"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "65ed1278:2025-02-24",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "65ed1278:2025-03-03",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "with"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "65ed1278:2025-03-10",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "65ed1278:2025-03-17",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "65ed1278:2025-03-24",
+    "persona_id": "65ed1278",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "663cb334:2025-05-05",
+    "persona_id": "663cb334",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "663cb334:2025-05-12",
+    "persona_id": "663cb334",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "7253e69f:2025-09-08",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "7253e69f:2025-09-15",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "7253e69f:2025-09-22",
+    "persona_id": "7253e69f",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "81e96381:2025-03-10",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "81e96381:2025-03-17",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "81e96381:2025-03-24",
+    "persona_id": "81e96381",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "tie"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "a24b8d8f:2025-06-16",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "a24b8d8f:2025-06-23",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "a24b8d8f:2025-06-30",
+    "persona_id": "a24b8d8f",
+    "mode": "reflection",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "abf1ce49:2025-09-01",
+    "persona_id": "abf1ce49",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "abf1ce49:2025-09-08",
+    "persona_id": "abf1ce49",
+    "mode": "reflection",
+    "verdicts": [
+      "tie",
+      "with"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "abf1ce49:2025-09-15",
+    "persona_id": "abf1ce49",
+    "mode": "reflection",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "abf1ce49:2025-09-22",
+    "persona_id": "abf1ce49",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "b963f9bc:2025-12-01",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "b963f9bc:2025-12-08",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "b963f9bc:2025-12-15",
+    "persona_id": "b963f9bc",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "ba3883ac:2025-12-01",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "ba3883ac:2025-12-08",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "ba3883ac:2025-12-15",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "tie"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "ba3883ac:2025-12-22",
+    "persona_id": "ba3883ac",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "with"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "c876219a:2025-03-31",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "c876219a:2025-04-07",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "c876219a:2025-04-14",
+    "persona_id": "c876219a",
+    "mode": "reminder",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "c876219a:2025-05-05",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "c876219a:2025-05-12",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "c876219a:2025-05-19",
+    "persona_id": "c876219a",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "cac7b9ce:2025-11-10",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "cac7b9ce:2025-11-17",
+    "persona_id": "cac7b9ce",
+    "mode": "reminder",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "cac7b9ce:2025-11-24",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "cac7b9ce:2025-12-15",
+    "persona_id": "cac7b9ce",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "d28dbcc2:2025-12-08",
+    "persona_id": "d28dbcc2",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "d28dbcc2:2025-12-29",
+    "persona_id": "d28dbcc2",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "d7a0683f:2026-02-02",
+    "persona_id": "d7a0683f",
+    "mode": "reflection",
+    "verdicts": [
+      "with",
+      "tie"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "dab3e9b9:2025-12-29",
+    "persona_id": "dab3e9b9",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "dab3e9b9:2026-01-05",
+    "persona_id": "dab3e9b9",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "e448979e:2025-03-10",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "e448979e:2025-03-17",
+    "persona_id": "e448979e",
+    "mode": "reminder",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "e448979e:2025-03-31",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "e448979e:2025-04-07",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "e448979e:2025-04-14",
+    "persona_id": "e448979e",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "e448979e:2025-04-21",
+    "persona_id": "e448979e",
+    "mode": "reminder",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "f418b74b:2025-09-08",
+    "persona_id": "f418b74b",
+    "mode": "reflection",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "f418b74b:2025-09-15",
+    "persona_id": "f418b74b",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "f6180c27:2025-07-07",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "f6180c27:2025-07-14",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "tie"
+    ],
+    "consistent": false,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "f6180c27:2025-07-28",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  },
+  {
+    "pair_id": "f6180c27:2025-08-04",
+    "persona_id": "f6180c27",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "fa7d280a:2025-01-20",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "fa7d280a:2025-01-27",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "fa7d280a:2025-02-10",
+    "persona_id": "fa7d280a",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "fd063e8d:2025-12-15",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "verdicts": [
+      "without",
+      "without"
+    ],
+    "consistent": true,
+    "outcome": "loss"
+  },
+  {
+    "pair_id": "fd063e8d:2025-12-22",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "verdicts": [
+      "with",
+      "with"
+    ],
+    "consistent": true,
+    "outcome": "win"
+  },
+  {
+    "pair_id": "fd063e8d:2026-01-05",
+    "persona_id": "fd063e8d",
+    "mode": "encouragement",
+    "verdicts": [
+      "tie",
+      "tie"
+    ],
+    "consistent": true,
+    "outcome": "tie"
+  }
+]

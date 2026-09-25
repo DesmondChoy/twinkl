@@ -1,0 +1,7 @@
+{
+  "task_id": "task-36",
+  "preferred": "2",
+  "reason": "Response 2 names the person's specific choice to sit with Fatima for almost an hour while other activities went on, and ties it directly to their value of making the world fairer. Response 1 dwells on what the person noticed and only vaguely mentions 'spending time with a child', without clearly linking a concrete action to the value.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-09",
+  "preferred": "1",
+  "reason": "Response 1 names and quotes a specific supportive action from the writing (deleting the third app because it was not worth the mental load), which ties to wanting steadiness and calm. Response 2's only action on the supportive side is having priced the brake pads, which is preparation rather than an action that supports the value, and it does not clearly connect that action to what the person cares about.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

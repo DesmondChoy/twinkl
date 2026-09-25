@@ -1,0 +1,7 @@
+{
+  "task_id": "task-55",
+  "preferred": "1",
+  "reason": "Response 1 names the action the entry shows, saying yes to both Leon and Simone, and ties it to caring about colleagues. Response 2 adds the real action of telling Katja her plan was good, but it misstates the main action as saying yes to 'all three requests', which the writing does not show.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

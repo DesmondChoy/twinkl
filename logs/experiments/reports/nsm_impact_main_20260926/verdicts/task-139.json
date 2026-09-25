@@ -1,0 +1,7 @@
+{
+  "task_id": "task-139",
+  "preferred": "1",
+  "reason": "Response 1 names a specific supportive action the person took (spending two hours with families at the parent meeting and offering individual support to students) and connects it to caring about fairness and the students who rely on them. Response 2 grounds itself in Diego's pride, which is something that happened to someone else rather than the person's own action, plus their hesitation over Rojas's email.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

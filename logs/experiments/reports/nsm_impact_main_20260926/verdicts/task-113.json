@@ -1,0 +1,7 @@
+{
+  "task_id": "task-113",
+  "preferred": "1",
+  "reason": "Both responses name the same concrete action: turning down the director role. Response 1 ties it more directly to the Core Value of enjoying life. It quotes what the person told Camila ('I do good work, I enjoy my life') and names keeping Fridays, while Response 2 links the choice only to 'the life you want' and then moves to a general question about change.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

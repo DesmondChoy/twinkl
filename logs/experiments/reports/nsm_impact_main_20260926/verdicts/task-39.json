@@ -1,0 +1,7 @@
+{
+  "task_id": "task-39",
+  "preferred": "1",
+  "reason": "Response 1 names concrete things the person actually did that support their value of honoring the customs they were raised with: preparing food at Abuela's and setting up chairs for the novena. Response 2 only mentions tradition in general terms (their parents' marriage, their mother's imagined hurt) and names no supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

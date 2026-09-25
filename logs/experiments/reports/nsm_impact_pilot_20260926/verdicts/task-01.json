@@ -1,0 +1,10 @@
+{
+  "task_id": "task-01",
+  "preferred": "tie",
+  "reason": "Both responses name the same concrete actions from her writing (calling Priya back to say yes to the February order, taking the boys to the temple) and link them to her values of choosing her own path and honouring customs. Response 1 adds that she said yes to help from Ravi and Vihaan but calls the temple trip 'made room for Vihaan's connection', which reads into the entry. Response 2 gives the order's details but also leans on things that happened to her (hearing Vihaan recite) and guesses about Ravi's earlier offer. Neither is clearly better grounded.",
+  "flags": {"1": false, "2": true},
+  "flag_reasons": {
+    "1": null,
+    "2": "It says that 'more recently' she has 'honoured the customs you were raised with and made a concrete choice about your work, without needing to set one aside for the other.' Placed right after the difficult dinner, this treats the week's supportive actions as proof that she is now in line with both Core Values."
+  }
+}

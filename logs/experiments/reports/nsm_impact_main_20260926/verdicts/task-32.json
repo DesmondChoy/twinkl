@@ -1,0 +1,7 @@
+{
+  "task_id": "task-32",
+  "preferred": "2",
+  "reason": "Response 2 names a clear, concrete supportive action from the writing (cooking egg curry and eating it slowly, noticing the kitchen smell) and ties it to enjoyment without making it another task. Response 1 relies on ordering in on the couch, which is a weak reading of 'giving yourself a pause', and on sitting with the chai, a moment the person cut short in an entry reviewed as a Conflict.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

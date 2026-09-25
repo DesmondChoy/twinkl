@@ -1,0 +1,7 @@
+{
+  "task_id": "task-12",
+  "preferred": "2",
+  "reason": "Response 2 names specific things the person did, such as saving the 45 JD they earned in their envelope, staying with Sami at the park and visiting Tariq's family village, and ties them to independent work and family customs. Response 1 mentions similar moments only briefly and links them loosely to the tension, so it grounds its reflection in supportive action less clearly.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

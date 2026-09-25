@@ -1,0 +1,7 @@
+{
+  "task_id": "task-142",
+  "preferred": "1",
+  "reason": "Both name the same concrete action (running the numbers in the notebook between deliveries), but Response 1 ties it more directly to the value, saying the notebook gives the person something concrete to measure in pursuit of security, whereas Response 2 mainly frames the calculation as making the uncertainty feel more immediate.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-43",
+  "preferred": "tie",
+  "reason": "Both responses point to the same supportive moment, being at the shelter when Ramesh said \"bureaucracy\" correctly, and loosely link it to caring about people (\"seen fairly\" vs. \"people others overlook\"). Neither names the person's concrete actions (sorting donations, teaching Ramesh English on Saturdays), so neither is clearly better grounded.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

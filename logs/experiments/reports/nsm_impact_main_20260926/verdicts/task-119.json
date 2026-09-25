@@ -1,0 +1,7 @@
+{
+  "task_id": "task-119",
+  "preferred": "tie",
+  "reason": "Both responses start from the same concrete action, taking a half-day for omakase with Jun after finishing the work. Response 1 ties it more directly to enjoying life, and Response 2 frames it as the person choosing to be present. Neither is clearly better on grounding.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

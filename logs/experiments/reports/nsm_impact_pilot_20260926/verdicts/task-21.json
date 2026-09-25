@@ -1,0 +1,10 @@
+{
+  "task_id": "task-21",
+  "preferred": "1",
+  "reason": "Response 1 names what the person actually did (helped Suresh draft the letter to MOM, working through the legal language with him) and connects it to their value of fairness. Response 2 only describes listening and witnessing Suresh's injury, and even says the person's own choice remains unclear, even though the entry shows they helped write the letter.",
+  "flags": {"1": true, "2": false},
+  "flag_reasons": {
+    "1": "It calls not pushing at work one of 'two different kinds of involvement' and says both moments show how the fairness value 'can take different forms for you'. That treats the Conflict as a version of acting on the value, which explains it away.",
+    "2": null
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-80",
+  "preferred": "1",
+  "reason": "Response 1 names a specific supportive action the person took, helping Amira debug the intake form at the nonprofit, and links it to their concern for others. Response 2 only mentions conflict moments and never points to an action that supports the value.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

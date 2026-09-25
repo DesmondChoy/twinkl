@@ -58,11 +58,13 @@ of the user-facing quotation panel. Inspect shows both exact prompts beside thei
 This comparison applies only to saved demo Personas; it preserves onboarding
 behavior and the frozen North Star Moment selection experiment.
 
-**Coach Digest impact (proposed):** The selection experiment measures whether
-the right quotation is shown. A separate, not-yet-run
-[impact evaluation](coach_digest_impact_eval.md) specifies how to measure
-whether adding the moment improves the Coach Digest, using blind, order-swapped
-pairwise AI review with guardrails and no human input.
+**Coach Digest impact:** The selection experiment measures whether the right
+quotation is shown. The [impact evaluation](coach_digest_impact_eval.md)
+measures whether adding the moment improves the Coach Digest, using blind,
+order-swapped pairwise AI review. On 72 final-set weeks the version with the
+moment won 36, lost 12 and tied 24 (win difference +33.3, Persona-resampled
+range +19.4 to +45.5), but it was flagged twice for softening a Conflict
+against none without it. These are AI review results, not human validation.
 
 ## 1. Role in the weekly reflection
 

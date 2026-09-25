@@ -1,0 +1,16 @@
+{
+  "created_at": "2026-09-25T23:19:30.014428+00:00",
+  "seed": 20260926,
+  "prompt_version": "nsm-impact-judge-1.0",
+  "judge": {
+    "name": "nsm-impact-judge",
+    "model": "claude-opus-5-5",
+    "effort": "medium"
+  },
+  "judge_agent_sha256": "7005971f8ab5c1864ce7b24802b84dd63c3e6800aa1f4bd95ff616b7177fce94",
+  "pairs": 72,
+  "tasks": 144,
+  "pairs_path": "logs/experiments/reports/nsm_impact_generation_20260926/pairs.json",
+  "pairs_sha256": "103cce3824a35673b287f379c9e03c0c590a8a1dac4c533f253934e6ad031407",
+  "label_source": "AI review (Claude Code subagent), not human validation"
+}

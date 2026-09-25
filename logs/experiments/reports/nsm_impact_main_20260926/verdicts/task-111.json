@@ -1,0 +1,7 @@
+{
+  "task_id": "task-111",
+  "preferred": "tie",
+  "reason": "Both name the same concrete action (letting Erik handle diplomacy while drafting the revision scope) and tie it to choosing and owning the work. Response 1 quotes the entry accurately but its question implies the person said yes to Marcus, which the writing does not show. Response 2 keeps the action tied to the value throughout but pairs it with a quote that doesn't match, so neither is clearly better.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

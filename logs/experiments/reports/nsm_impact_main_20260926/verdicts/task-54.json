@@ -1,0 +1,7 @@
+{
+  "task_id": "task-54",
+  "preferred": "1",
+  "reason": "Response 1 opens with the person's own action (researching nursery options, visiting campuses, making a shortlist), quotes her own words about it, and links it and the live-session prep to having her voice and preparation count. Response 2 names the same actions but frames them mainly through what was done to her (being redirected and dismissed), so the action is less central.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

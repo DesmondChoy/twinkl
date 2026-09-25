@@ -1,0 +1,10 @@
+{
+  "task_id": "task-03",
+  "preferred": "2",
+  "reason": "Both responses name the paratha and the rangoli done the way the person was taught, which ties their own actions to honoring their customs. Response 2 also names the two hours they spent on the indigo pattern, quotes 'my hands doing what they wanted to do', and asks its question about that action, so it grounds the reflection in more of what the person actually did, including an action tied to their freedom value.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {
+    "1": null,
+    "2": null
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "task_id": "task-109",
+  "preferred": "2",
+  "reason": "Response 2 names concrete things the person did this week (giving the toast as expected, smiling politely at Teacher Lin, picking up the form) and ties showing up for family explicitly to the value of being someone others can count on. Response 1 mentions the form but frames it mainly as the person's own wish, set against being counted on, and refers to family commitment only in general terms.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

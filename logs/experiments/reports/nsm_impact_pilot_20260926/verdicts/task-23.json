@@ -1,0 +1,7 @@
+{
+  "task_id": "task-23",
+  "preferred": "2",
+  "reason": "Response 2 keeps the person's own water pollution lesson at the center, describing it as something Ravi could take home and ending with a question about that moment. Response 1 frames the moment mainly as Ravi sharing what he learned and then turns to the Didi call. Neither says outright that the person taught the lesson, so Response 2 is only modestly better.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

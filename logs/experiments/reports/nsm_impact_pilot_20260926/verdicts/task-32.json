@@ -1,0 +1,10 @@
+{
+  "task_id": "task-32",
+  "preferred": "1",
+  "reason": "Both name the paratha and the grandmother-style rangoli as custom-honoring actions, but Response 1 also names a concrete self-chosen action (two quiet hours working on an indigo pattern, 'my hands doing what they wanted to do') and ties it to the freedom value, grounding both Core Values in things the person actually did.",
+  "flags": {"1": false, "2": true},
+  "flag_reasons": {
+    "1": null,
+    "2": "It recasts the Conflicts as external pressure ('Mummyji's reaction' and 'the teacher's concern' put you in moments where others' expectations pressed on you). It leaves out the person's own choices to scrub off the indigo and agree to push Arjun to be more social, which explains the Conflicts away."
+  }
+}

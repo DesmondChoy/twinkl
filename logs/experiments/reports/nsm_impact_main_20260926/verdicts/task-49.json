@@ -1,0 +1,7 @@
+{
+  "task_id": "task-49",
+  "preferred": "1",
+  "reason": "Response 1 names a specific action the person took, organizing their savings spreadsheet, and ties it explicitly to feeling calm and secure. Response 2 only refers generally to having built a financial cushion, and the concrete moment it highlights (hugging Rania) does not support either Core Value.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

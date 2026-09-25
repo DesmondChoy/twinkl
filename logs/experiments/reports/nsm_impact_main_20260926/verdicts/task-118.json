@@ -1,0 +1,7 @@
+{
+  "task_id": "task-118",
+  "preferred": "2",
+  "reason": "Response 2 names and quotes a specific action the person actually took: printing and laminating worksheets over the weekend to set up the classroom, which connects to the preparedness and footing they wrote about. Response 1 only describes the person sitting in the parking lot and thinking about the children, with no concrete supportive action.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}

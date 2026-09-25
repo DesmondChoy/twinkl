@@ -1,0 +1,7 @@
+{
+  "task_id": "task-05",
+  "preferred": "tie",
+  "reason": "Neither response names a concrete supportive action the person took; both skip the only one in the writing (helping Amira debug the nonprofit intake form). Both mention only that they noticed Tomasz's discomfort. Response 2 frames the noticing a bit more as attentiveness, but noticing is not an action that supports the value, so neither is clearly better.",
+  "flags": {"1": false, "2": false},
+  "flag_reasons": {"1": null, "2": null}
+}
