@@ -62,27 +62,33 @@ describe("Coach Digest composition", () => {
     reflective_question: "What do you remember about cooking for your sister that evening?",
   };
 
-  it("switches both paragraphs, the question, and the source panel together without making a request", async () => {
+  it("reveals the with-context response beside the unchanged original without making a request", async () => {
     const user = userEvent.setup();
     const request = vi.spyOn(globalThis, "fetch");
     const event = await momentEvent();
     const coach = comparisonEvent(event, narrative, withNarrative);
     const original = JSON.stringify({ digest, event, coach });
     render(card(event, { northStar: { profile, driftResult, traceEvents: [coach, event], presentation: "demo" } }));
-    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
     await act(async () => { await northStarProfileRef(profile); });
-    for (const text of Object.values(narrative)) expect(screen.getByText(text)).toBeTruthy();
+    const without = within(screen.getByRole("region", { name: "Without North Star Moment" }));
+    const withColumn = () => screen.queryByRole("region", { name: "With North Star Moment" });
+    for (const text of Object.values(narrative)) expect(without.getByText(text)).toBeTruthy();
     expect(screen.getByRole("status").textContent).toBe("Showing: Without North Star Moment");
-    expect(screen.queryByText(quote)).toBeNull();
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(withColumn()).toBeNull();
     await user.click(toggle);
-    for (const text of Object.values(withNarrative)) expect(screen.getByText(text)).toBeTruthy();
-    for (const text of Object.values(narrative)) expect(screen.queryByText(text)).toBeNull();
-    expect(await screen.findByText(quote)).toBeTruthy();
-    expect(screen.getByRole("status").textContent).toBe("Showing: With North Star Moment");
-    await user.click(screen.getByRole("button", { name: "Without North Star Moment" }));
-    for (const text of Object.values(narrative)) expect(screen.getByText(text)).toBeTruthy();
-    for (const text of Object.values(withNarrative)) expect(screen.queryByText(text)).toBeNull();
-    expect(screen.queryByText(quote)).toBeNull();
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(withColumn()!.id).toBe(toggle.getAttribute("aria-controls"));
+    const revealed = within(withColumn()!);
+    for (const text of Object.values(withNarrative)) expect(revealed.getByText(text)).toBeTruthy();
+    for (const text of Object.values(narrative)) expect(without.getByText(text)).toBeTruthy();
+    expect(await revealed.findByText(quote)).toBeTruthy();
+    expect(without.queryByText(quote)).toBeNull();
+    expect(screen.getByRole("status").textContent).toBe("Showing: Without and with North Star Moment, side by side");
+    await user.click(screen.getByRole("button", { name: "Hide comparison" }));
+    expect(withColumn()).toBeNull();
+    for (const text of Object.values(narrative)) expect(without.getByText(text)).toBeTruthy();
     expect(request).not.toHaveBeenCalled();
     expect(JSON.stringify({ digest, event, coach })).toBe(original);
     request.mockRestore();
@@ -93,10 +99,10 @@ describe("Coach Digest composition", () => {
     const coach = comparisonEvent(event, narrative, withNarrative);
     const props = { northStar: { profile, driftResult, traceEvents: [coach, event], presentation: "demo" as const } };
     const { rerender } = render(card(event, props));
-    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
     await act(async () => { await northStarProfileRef(profile); });
     await userEvent.click(toggle);
-    expect(screen.getByText(withNarrative.reflective_question)).toBeTruthy();
+    expect(screen.getByRole("region", { name: "With North Star Moment" })).toBeTruthy();
     rerender(card(event, change === "week"
       ? { ...props, weeklyDigest: { ...digest, week_start: "2026-07-13", week_end: "2026-07-19" } }
       : { northStar: { ...props.northStar, profile: { ...profile, user_id: "another-persona", session_id: "scenario-session:another-persona" } } }));
@@ -105,7 +111,8 @@ describe("Coach Digest composition", () => {
     rerender(card(event, props));
     await act(async () => { await northStarProfileRef(profile); });
     expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
-    expect(screen.queryByText(quote)).toBeNull();
+    expect(screen.queryByRole("region", { name: "With North Star Moment" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Compare with North Star Moment" }).getAttribute("aria-expanded")).toBe("false");
   });
 
   it.each(["missing", "failed validation", "missing comparison validation", "mismatched context", "mismatched raw response", "live event", "changed source"])(
@@ -125,11 +132,11 @@ describe("Coach Digest composition", () => {
         northStar: { profile, driftResult, traceEvents: [coach, event], presentation: "demo" },
       }));
       await act(async () => { await northStarProfileRef(profile); });
-      const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+      const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
       expect(toggle.hasAttribute("disabled")).toBe(false);
       await userEvent.click(toggle);
       expect(screen.getByRole("heading", { name: "Comparison unavailable for this week" })).toBeTruthy();
-      expect(screen.getByRole("button", { name: "Hide explanation" })).toBeTruthy();
+      expect(screen.getByRole("button", { name: "Hide comparison" })).toBeTruthy();
       expect(screen.getByRole("status").textContent).toBe("Showing: Without North Star Moment");
       for (const text of Object.values(narrative)) expect(screen.getByText(text)).toBeTruthy();
       expect(screen.queryByText(withNarrative.reflective_question)).toBeNull();
@@ -143,7 +150,7 @@ describe("Coach Digest composition", () => {
       northStar: { profile, driftResult, traceEvents: [event], presentation: "demo" },
     }));
     await act(async () => { await northStarProfileRef(profile); });
-    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
     expect(toggle.hasAttribute("disabled")).toBe(false);
     await userEvent.click(toggle);
     expect(screen.getByRole("heading", { name: "Why there’s no North Star Moment" })).toBeTruthy();
@@ -152,8 +159,8 @@ describe("Coach Digest composition", () => {
     const selected = await momentEvent();
     const coach = comparisonEvent(selected, narrative, withNarrative);
     rerender(card(selected, { northStar: { profile, driftResult, traceEvents: [coach, selected], presentation: "personal" } }));
-    expect(screen.queryByRole("button", { name: "With North Star Moment" })).toBeNull();
-    expect(screen.queryByRole("button", { name: "Hide explanation" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Compare with North Star Moment" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Hide comparison" })).toBeNull();
     expect(await screen.findByText(quote)).toBeTruthy();
     expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
     expect(screen.queryByText(withNarrative.reflective_question)).toBeNull();
@@ -165,10 +172,10 @@ describe("Coach Digest composition", () => {
     const request = vi.spyOn(globalThis, "fetch");
     render(card(event, { northStar: { profile, driftResult, traceEvents: [event], presentation: "demo", inspectMoment } }));
     await act(async () => { await northStarProfileRef(profile); });
-    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
     toggle.focus();
     await userEvent.keyboard("{Enter}");
-    expect(screen.getByRole("button", { name: "Hide explanation" })).toBe(toggle);
+    expect(screen.getByRole("button", { name: "Hide comparison" })).toBe(toggle);
     expect(document.activeElement).toBe(toggle);
     expect(toggle.getAttribute("aria-expanded")).toBe("true");
     expect(document.getElementById(toggle.getAttribute("aria-controls")!)?.textContent)
@@ -191,16 +198,16 @@ describe("Coach Digest composition", () => {
     const northStar = { profile, driftResult, traceEvents: [event], presentation: "demo" as const };
     const { rerender } = render(card(event, { northStar }));
     await act(async () => { await northStarProfileRef(profile); });
-    await userEvent.click(screen.getByRole("button", { name: "With North Star Moment" }));
+    await userEvent.click(screen.getByRole("button", { name: "Compare with North Star Moment" }));
     expect(screen.getByRole("heading", { name: "Why there’s no North Star Moment" })).toBeTruthy();
     rerender(card(event, change === "week"
       ? { northStar, weeklyDigest: { ...digest, week_start: "2026-07-13", week_end: "2026-07-19" } }
       : { northStar: { ...northStar, profile: { ...profile, user_id: "another-persona", session_id: "scenario-session:another-persona" } } }));
-    expect(screen.queryByRole("button", { name: "Hide explanation" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Hide comparison" })).toBeNull();
     expect(screen.queryByRole("heading", { name: "Why there’s no North Star Moment" })).toBeNull();
     rerender(card(event, { northStar }));
     await act(async () => { await northStarProfileRef(profile); });
-    expect(screen.queryByRole("button", { name: "Hide explanation" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Hide comparison" })).toBeNull();
     for (const text of Object.values(narrative)) expect(screen.getByText(text)).toBeTruthy();
   });
 
@@ -217,7 +224,7 @@ describe("Coach Digest composition", () => {
         profile, driftResult, traceEvents: reason === "missing review" ? [] : [event], presentation: "demo", inspectMoment,
       } }));
       await act(async () => { await northStarProfileRef(profile); });
-      await userEvent.click(screen.getByRole("button", { name: "With North Star Moment" }));
+      await userEvent.click(screen.getByRole("button", { name: "Compare with North Star Moment" }));
       expect(screen.getByRole("heading", { name: "Comparison unavailable for this week" })).toBeTruthy();
       expect(screen.queryByRole("heading", { name: "Why there’s no North Star Moment" })).toBeNull();
       expect(screen.queryByText(/The saved AI review did not find an action/)).toBeNull();
@@ -234,7 +241,7 @@ describe("Coach Digest composition", () => {
     const coach = comparisonEvent(event, narrative, withNarrative);
     const northStar = { profile, driftResult, traceEvents: [coach, event], presentation: "demo" as const };
     const { rerender } = render(card(event, { northStar }));
-    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
     await act(async () => { await northStarProfileRef(profile); });
     await userEvent.click(toggle);
     expect(await screen.findByText(quote)).toBeTruthy();
@@ -242,11 +249,11 @@ describe("Coach Digest composition", () => {
     expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
     expect(screen.queryByText(withNarrative.reflective_question)).toBeNull();
     expect(screen.queryByText(quote)).toBeNull();
-    expect(screen.getByRole("button", { name: "With North Star Moment" }).hasAttribute("disabled")).toBe(false);
+    expect(screen.getByRole("button", { name: "Compare with North Star Moment" }).hasAttribute("disabled")).toBe(false);
     rerender(card(event, { northStar }));
     await act(async () => { await northStarProfileRef(profile); });
     expect(screen.getByText(narrative.reflective_question)).toBeTruthy();
-    expect(screen.queryByText(quote)).toBeNull();
+    expect(screen.queryByRole("region", { name: "With North Star Moment" })).toBeNull();
   });
 
   it("accepts an optional null parent in a typed receipt while Inspect preserves the actual injected object", async () => {
@@ -255,7 +262,7 @@ describe("Coach Digest composition", () => {
     const pair = coach.details.comparison as CoachComparison;
     pair.north_star_context.parent_journal_entry = null;
     const view = render(card(event, { northStar: { profile, driftResult, traceEvents: [coach, event], presentation: "demo" } }));
-    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
     await act(async () => { await northStarProfileRef(profile); });
     await userEvent.click(toggle);
     expect(await screen.findByText(quote)).toBeTruthy();
@@ -292,7 +299,7 @@ describe("Coach Digest composition", () => {
     expect(comparison.getByText(/includes repair feedback/)).toBeTruthy();
   });
 
-  it.each(["personal", "demo"] as const)("keeps the %s moment inside the response after the existing question", async (presentation) => {
+  it("keeps the personal moment inside the response after the existing question", async () => {
     const user = userEvent.setup();
     const event = await momentEvent();
     const onOpenEntry = vi.fn();
@@ -301,14 +308,8 @@ describe("Coach Digest composition", () => {
     const original = JSON.stringify({ digest, event, coachEvent });
     render(card(event, {
       onOpenEntry,
-      northStar: { profile, driftResult, traceEvents: [coachEvent, event], presentation, inspectMoment },
+      northStar: { profile, driftResult, traceEvents: [coachEvent, event], presentation: "personal", inspectMoment },
     }));
-    if (presentation === "demo") {
-      expect(screen.queryByText(quote)).toBeNull();
-      const toggle = screen.getByRole("button", { name: "With North Star Moment" });
-      await act(async () => { await northStarProfileRef(profile); });
-      await user.click(toggle);
-    }
     const quotation = await screen.findByText(quote);
     const coach = screen.getByRole("complementary", { name: "Coach Digest" });
     const introduction = screen.getByText(northStarFraming("reflection")!);
@@ -324,14 +325,45 @@ describe("Coach Digest composition", () => {
     expect(coach.querySelectorAll(".coach-digest__question")).toHaveLength(1);
     expect(quotation.textContent).toBe(quote);
     expect(within(coach).getByRole("heading", { level: 3, name: "A past moment in your own words" })).toBeTruthy();
-    if (presentation === "demo") {
-      expect(within(coach).getByText("North Star Moment")).toBeTruthy();
-    } else {
-      expect(within(coach).queryByText(/North Star Moment/)).toBeNull();
-    }
+    expect(within(coach).queryByText(/North Star Moment/)).toBeNull();
     await user.click(within(coach).getByRole("button", { name: "Inspect this moment" }));
     expect(inspectMoment).toHaveBeenCalledWith(event.event_id);
     await user.click(within(coach).getByRole("link", { name: /^Open Journal Entry/ }));
+    expect(onOpenEntry).toHaveBeenCalledWith(entry);
+    expect(JSON.stringify({ digest, event, coachEvent })).toBe(original);
+  });
+
+  it("shows the demo moment as added Coach Digest input above the with-context response", async () => {
+    const user = userEvent.setup();
+    const event = await momentEvent();
+    const onOpenEntry = vi.fn();
+    const inspectMoment = vi.fn();
+    const coachEvent = comparisonEvent(event, narrative, withNarrative);
+    const original = JSON.stringify({ digest, event, coachEvent });
+    render(card(event, {
+      onOpenEntry,
+      northStar: { profile, driftResult, traceEvents: [coachEvent, event], presentation: "demo", inspectMoment },
+    }));
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
+    await act(async () => { await northStarProfileRef(profile); });
+    await user.click(toggle);
+    const withColumn = screen.getByRole("region", { name: "With North Star Moment" });
+    const input = withColumn.querySelector<HTMLElement>(".coach-compare__input--added")!;
+    expect(input.querySelector(".coach-compare__input-quote")!.textContent).toBe(quote);
+    expect(input.nextElementSibling).toBe(within(withColumn).getByText(withNarrative.weekly_mirror).closest(".coach-compare__cell"));
+    expect(within(input).getByText(/^Benevolence · Journal Entry,/)).toBeTruthy();
+    expect(within(input).getByText(/Active Drift this week, so the moment comes from writing before the Drift began/)).toBeTruthy();
+    expect(within(input).getByText(/An AI review accepted it/)).toBeTruthy();
+    // Test fixtures have no annotated links, so the panel makes no link claim.
+    expect(within(input).queryByText(/Highlighted phrases|does not directly reference/)).toBeNull();
+    expect(withColumn.querySelector("mark")).toBeNull();
+    expect(screen.queryByText(northStarFraming("reflection")!)).toBeNull();
+    expect(screen.queryByRole("heading", { name: "A past moment in your own words" })).toBeNull();
+    expect(within(screen.getByRole("region", { name: "Without North Star Moment" }))
+      .getByText("This week’s Journal Entries and Weekly Drift Detection result.")).toBeTruthy();
+    await user.click(within(input).getByRole("button", { name: "Inspect this moment" }));
+    expect(inspectMoment).toHaveBeenCalledWith(event.event_id);
+    await user.click(within(input).getByRole("link", { name: /^Open Journal Entry/ }));
     expect(onOpenEntry).toHaveBeenCalledWith(entry);
     expect(JSON.stringify({ digest, event, coachEvent })).toBe(original);
   });
@@ -471,7 +503,7 @@ describe("Coach Digest composition", () => {
       cumulativeEntryCount={1} resultVisible onRevealResult={vi.fn()} driftResult={driftResult}
       weeklyDigest={digest} inspectRun={vi.fn()} inspectEventId={event.event_id}
       onSelectJournalEntry={vi.fn()} />);
-    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
     await act(async () => { await northStarProfileRef(profile); });
     await user.click(toggle);
     const sourceLink = await screen.findByRole("link", { name: /^Open response in Journal Entry/ });

@@ -23,6 +23,16 @@ responses need not differ in every field.
 
 ## 1. Toggle behavior and mockups
 
+> **Superseded layout (twinkl-6a4m):** The Experience now shows both saved
+> responses side by side instead of swapping them. The without-context response
+> stays in the left column. **Compare with North Star Moment** reveals the
+> with-context response and source panel in the right column, and
+> **Hide comparison** empties it. Weeks without a valid pair use the same
+> layout and reveal the explanation in the right column. The demo replaces the
+> user-facing source panel with a **Coach Digest input** row that shows the injected
+> quotation and links it to highlighted response phrases. The provenance,
+> reset, and explanation-reason rules below still apply. The swap-toggle table and mockups record the original design.
+
 The Coach Digest card contains the narrative, date links, reflective question,
 and optional source panel. One button at the top names the version the next
 click will show; a small status line names the visible version.

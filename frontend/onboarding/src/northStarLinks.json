@@ -1,0 +1,432 @@
+{
+  "schema_version": "nsm-response-links-v1",
+  "description": "Phrases in each saved with-North-Star-Moment Coach Digest response that draw on the injected North Star Moment. Display-only annotation; not model output.",
+  "annotation_source": "ai_draft",
+  "annotator": "Claude (claude-opus-5-5), drafted 2026-09-25 for author review",
+  "links": [
+    {
+      "scenario_id": "active-nisha",
+      "week_start": "2025-02-10",
+      "north_star_input_hash": "7a2c04869d8297e1a9974667d6371a92441805bcfaa816b2a97cb2b63f0bbe71",
+      "with_response_sha256": "17d9bac37b65fe57aafdc06ab9f53125c7d3d8f4af22faf255b30c4529c7e370",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you stayed with Fatima as she worked through the first letters of her name"
+        },
+        {
+          "field": "weekly_mirror",
+          "text": "sitting with Fatima for almost an hour"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "the choice to stay with one child when other activities were underway"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "that unhurried attention to Fatima"
+        },
+        {
+          "field": "reflective_question",
+          "text": "sitting with Fatima for almost an hour"
+        }
+      ]
+    },
+    {
+      "scenario_id": "active-nisha",
+      "week_start": "2025-02-17",
+      "north_star_input_hash": "f327f85a85717fe041438832c6a6b52ae988bcc24c3e709b3f070dd352772015",
+      "with_response_sha256": "5cf6c48672317fd57ce89760e4bdaab3ec2291eb74a75f9eb024bb202439d65b",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "Ravi was carrying your water-pollution lesson home to his family"
+        },
+        {
+          "field": "weekly_mirror",
+          "text": "one household was paying attention to its brown water"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "Ravi’s conversation with his mother gave the lesson a life beyond school"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "without making the situation larger than it was"
+        },
+        {
+          "field": "reflective_question",
+          "text": "Ravi explaining the water pollution lesson at home"
+        }
+      ]
+    },
+    {
+      "scenario_id": "active-nisha",
+      "week_start": "2025-02-24",
+      "north_star_input_hash": "f76b86297f635485ce1054658b800b1516d110dc210f5adc7d545261e4959259",
+      "with_response_sha256": "c22006339739e5d82e3de86ab3ba8525f70d5d5363b67b980d29f4a9d2b7c06b",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "After Ravi brought the water pollution lesson home"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "a classroom moment that opened a wider family conversation"
+        }
+      ]
+    },
+    {
+      "scenario_id": "active-nisha",
+      "week_start": "2025-03-03",
+      "north_star_input_hash": "454d631aff0b11e357e0e4f31af826aff12a00d0904afd5a0e74b06df0ee8a8e",
+      "with_response_sha256": "7285bade6ca80ca5e3792aa7561af7b761a6ae6742d69fd31460670ad71edba9",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "You stayed back to help the peon uncle fix a broken desk"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "the care you showed at school"
+        },
+        {
+          "field": "reflective_question",
+          "text": "staying to fix the desk"
+        }
+      ]
+    },
+    {
+      "scenario_id": "active-nisha",
+      "week_start": "2025-03-10",
+      "north_star_input_hash": "850efda32645c5c4a226cae71f8fbf458d0bb422fb33953fa709e17230b66b9d",
+      "with_response_sha256": "06f41deb5d641c9ad23d6a09378146234e132b209ac0f9e11b54ff94fa8fbaa6",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you also reshaped future lesson plans around water and sanitation because Ravi’s experience showed you that the children carry classroom conversations home"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "you are holding space for broader, more meaningful learning after the exams"
+        },
+        {
+          "field": "reflective_question",
+          "text": "the water and sanitation unit"
+        }
+      ]
+    },
+    {
+      "scenario_id": "persistent-lukas",
+      "week_start": "2025-06-16",
+      "north_star_input_hash": "ce127dc44a9b478f0d5239e906b35bce092d5d40434511ad52805a55b1cbdbf9",
+      "with_response_sha256": "6d413f4bcf8e445d10f60513460a3709f879ddf4752b4c386577d181b6415b35",
+      "spans": [
+        {
+          "field": "tension_explanation",
+          "text": "Earlier, you helped Amira debug the intake form at the nonprofit, a practical way of supporting someone who was stuck."
+        }
+      ]
+    },
+    {
+      "scenario_id": "persistent-lukas",
+      "week_start": "2025-06-23",
+      "north_star_input_hash": "245a95b24abacfeb02660fad3f102115099ca261a1ea705548f7a89f1051f8fc",
+      "with_response_sha256": "767031b6fe479a6c1080da552c405d9c82b1885fcb2e1286ffef2881be874b18",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "the time you helped Amira untangle the intake form shows how meaningful it can feel to use your time to make something easier for someone else"
+        }
+      ]
+    },
+    {
+      "scenario_id": "persistent-lukas",
+      "week_start": "2025-06-30",
+      "north_star_input_hash": "af79d4e4e837cf798c1382860cf7f5e5248c534d2f123744a83a09936c9acc0b",
+      "with_response_sha256": "8b7411fb56681610103d087a15274ad19d393fc2287aee07137cb50dd895883e",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "the memory of helping Amira debug the nonprofit intake form, when giving your time felt like the right use of a Tuesday evening"
+        }
+      ]
+    },
+    {
+      "scenario_id": "persistent-lukas",
+      "week_start": "2025-07-07",
+      "north_star_input_hash": "9dcc9082cb3e05f3a7529bab474f18603b80e4df3994b4cb64376f8b634451e8",
+      "with_response_sha256": "c72fe13cdc11584b9cfdc4220bde694c530668cd8a94d208d4a6c59bc0ea7ef9",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you told Katharina that the onboarding comment bothered you and that the team could be more careful about comments like it"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "the later choice to name what had bothered you to someone who could listen"
+        },
+        {
+          "field": "reflective_question",
+          "text": "speaking to Katharina"
+        }
+      ]
+    },
+    {
+      "scenario_id": "stable-noor",
+      "week_start": "2025-04-14",
+      "north_star_input_hash": "14ec562a08459149ccd246b999869037ee761808d6e2b62642e4bea55e8159b4",
+      "with_response_sha256": "40618c17fdd36a8964976bd572d34d09ec677e0328ca6aee1632c47e3d523ccd",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "after being awake with Sami’s fever"
+        }
+      ]
+    },
+    {
+      "scenario_id": "stable-noor",
+      "week_start": "2025-04-21",
+      "north_star_input_hash": "5c0c89e3f9c1eeb6cccbf118dd1df865e12b8b74d09f213df67e753d0ccc4369",
+      "with_response_sha256": "07e386f23f3be28829332e85d8d20994577482b29166657f20a18da64ce22576",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "I had to email the client and ask for an extension on the logo revisions."
+        },
+        {
+          "field": "tension_explanation",
+          "text": "Asking for an extension made room for what your life was actually holding"
+        },
+        {
+          "field": "reflective_question",
+          "text": "emailing the client"
+        }
+      ]
+    },
+    {
+      "scenario_id": "stable-noor",
+      "week_start": "2025-04-28",
+      "north_star_input_hash": "2470d52b01b9ad5a1dd736bb85cb74f7977afa0e757f1341cc20900023b4b6b9",
+      "with_response_sha256": "8bede38b6e88e0aebe9ad7b4064d9084123d0c0832936fe908b64d3c85de088c",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you chose a dark green dress you liked and wore it anyway"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "still making room for a choice that felt like yours"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "The dress seems to hold that small, personal decision"
+        },
+        {
+          "field": "reflective_question",
+          "text": "put on the dress despite the comments"
+        }
+      ]
+    },
+    {
+      "scenario_id": "stable-noor",
+      "week_start": "2025-05-05",
+      "north_star_input_hash": "dd42e85f50ea9f62427ed07ccbd7c833e8f7690ce04897561d4fbac973002bd0",
+      "with_response_sha256": "d8a6d1eca0cc704d4357982a73c0f3b5122e7e66131f09cc8deb7702fe4e0241",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you quietly drew the tile patterns you’ve been wanting to use"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "kept a private creative thread alive in your napkin sketch"
+        },
+        {
+          "field": "reflective_question",
+          "text": "hiding that napkin sketch in plain sight"
+        }
+      ]
+    },
+    {
+      "scenario_id": "stable-noor",
+      "week_start": "2025-05-12",
+      "north_star_input_hash": "5682a3fefb16ba891c36efb16c499303817a717b5b560892ebe91b0e0cdea224",
+      "with_response_sha256": "a60d27a56f3a54382553e3e746bfe51a4eee6034d36021a2d94ac55567aba503",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "You accepted the 80 JD logo project"
+        },
+        {
+          "field": "weekly_mirror",
+          "text": "I said yes before thinking about when I'd actually do the work."
+        },
+        {
+          "field": "tension_explanation",
+          "text": "earning through work you choose for yourself"
+        },
+        {
+          "field": "reflective_question",
+          "text": "the 80 JD project"
+        }
+      ]
+    },
+    {
+      "scenario_id": "stable-noor",
+      "week_start": "2025-05-19",
+      "north_star_input_hash": "da54dcd2e13e85f15fd6928b89efd5104dd17bf4686f9dc91b6ef591acca7e52",
+      "with_response_sha256": "517a68274816a9f465cb6cff3869c07ee87aa6d58a231974696ed90c33321b73",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "You were trying to keep something of your own"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "you wanted to handle the situation yourself"
+        },
+        {
+          "field": "reflective_question",
+          "text": "not wanting him to fight the battle for you"
+        }
+      ]
+    },
+    {
+      "scenario_id": "two-values-meera",
+      "week_start": "2025-11-17",
+      "north_star_input_hash": "c42a607ab32adc803a94cc82ceda115288ef1497769550aef8b152d32496efb5",
+      "with_response_sha256": "1ff23f8880d7cbdfd9264eae1269c4d0115aa0fce6ac1dd95b30643067da657b",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you also found two quiet hours for an indigo pattern"
+        },
+        {
+          "field": "weekly_mirror",
+          "text": "my hands doing what they wanted to do"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "the more self-chosen space you described later"
+        },
+        {
+          "field": "reflective_question",
+          "text": "those two quiet hours with the indigo, without anyone commenting on what your hands were doing"
+        }
+      ]
+    },
+    {
+      "scenario_id": "two-values-meera",
+      "week_start": "2025-11-24",
+      "north_star_input_hash": "dd4d34b11e45d8b38c3094e2948e8e371b7d6ad2ef9f1de76133e3308a6f041d",
+      "with_response_sha256": "0dc8bae351abcbdb2266aad468c058bbcfb042db4066dde1384713838e5d2a33",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "while developing your indigo dyes, you were also making room for your own way of working"
+        },
+        {
+          "field": "weekly_mirror",
+          "text": "I have fourteen shades of indigo now"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "experimenting, recording, and deciding how your dye work might fit around the children and the terrace setup"
+        }
+      ]
+    },
+    {
+      "scenario_id": "two-values-meera",
+      "week_start": "2025-12-01",
+      "north_star_input_hash": "e210a34564727443b6e81adb4ddbebfbf74dbde44b6e5fc8d41af34584360f17",
+      "with_response_sha256": "506bca054990ed5869e75738930fbbbdd68e605bc594b45c2996b339b1c582b1",
+      "spans": [
+        {
+          "field": "tension_explanation",
+          "text": "caring for the home and carrying forward what you were taught"
+        }
+      ]
+    },
+    {
+      "scenario_id": "two-values-meera",
+      "week_start": "2025-12-08",
+      "north_star_input_hash": "133ba992ab4729d707880e980f4636881796b072435035418923f795b34f1c18",
+      "with_response_sha256": "1484a92e9f8474af64031c624d3e29e887e109e1af46895aabd218e544395d71",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "Calling Priya back and saying yes to the February order"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "You are making space for your own work"
+        },
+        {
+          "field": "reflective_question",
+          "text": "your February order"
+        }
+      ]
+    },
+    {
+      "scenario_id": "uncertain-wei-jun",
+      "week_start": "2025-06-02",
+      "north_star_input_hash": "6dc61c68caae1677be352834ea0a13f0bc2155fdce9282110133a3f47b6f133f",
+      "with_response_sha256": "2a6313ea6093fb5fd0720a4c44f04822f7781a007725ed8fcd17d466ebc9893b",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you sat with Suresh through difficult legal language and helped him draft a letter to MOM"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "with Suresh, you stayed present through uncertainty and helped get something important done"
+        },
+        {
+          "field": "reflective_question",
+          "text": "helping Suresh with his letter"
+        }
+      ]
+    },
+    {
+      "scenario_id": "uncertain-wei-jun",
+      "week_start": "2025-06-09",
+      "north_star_input_hash": "ac39c1beabfdbb968d8b262febb7de4aea4c89cc4f33cbe32e5e9948f25af1e9",
+      "with_response_sha256": "765dadb3ac5e4eb645ad0afda83c645b09bcb4dc27ddeaa81b5f9e7bccc71044",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you chose the bus with Xiao Yu and told her that you like taking it, while your journal holds the fuller explanation behind that choice"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "choosing the bus instead of a car"
+        },
+        {
+          "field": "reflective_question",
+          "text": "Xiao Yu asked about the bus"
+        }
+      ]
+    },
+    {
+      "scenario_id": "uncertain-wei-jun",
+      "week_start": "2025-06-16",
+      "north_star_input_hash": "fcb85e0327af281bc496024307065fe6d60ea9085b51967b024fd74fcb6b96e6",
+      "with_response_sha256": "134d03506bb26eb2364496909b73fa13a74a515ac02b4b370e7f4b59c0c49b8c",
+      "spans": [
+        {
+          "field": "weekly_mirror",
+          "text": "you helped two new guys file their claims"
+        },
+        {
+          "field": "tension_explanation",
+          "text": "a specific act of standing with workers in a difficult situation"
+        },
+        {
+          "field": "reflective_question",
+          "text": "helping those two men file their claims"
+        }
+      ]
+    }
+  ]
+}

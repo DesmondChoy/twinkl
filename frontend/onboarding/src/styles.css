@@ -6887,6 +6887,250 @@ h2 {
   }
 }
 
+/* Saved replay: without- and with-North Star Moment responses side by side. */
+.coach-digest--comparison {
+  container: coach-digest / inline-size;
+}
+
+.coach-compare {
+  display: grid;
+  gap: 12px;
+}
+
+.coach-compare__column {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.coach-compare__label {
+  margin: 0;
+  color: #617078;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.coach-compare__column--with .coach-compare__label {
+  color: #246e66;
+}
+
+.coach-compare__cell > p {
+  margin: 0;
+  color: rgba(20, 34, 59, 0.85);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.coach-compare__placeholder {
+  display: none;
+}
+
+/* Narrow cards stack the revealed version below the original. */
+.coach-compare__column--with {
+  display: none;
+  border-top: 1px solid #dce3e5;
+  padding-top: 14px;
+}
+
+.coach-compare--revealed .coach-compare__column--with {
+  display: grid;
+  animation: coach-compare-arrive 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes coach-compare-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@container coach-digest (min-width: 640px) {
+  .coach-compare {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(5, auto);
+    column-gap: 28px;
+    row-gap: 12px;
+  }
+
+  .coach-compare__column {
+    grid-row: 1 / span 5;
+    grid-template-rows: subgrid;
+  }
+
+  .coach-compare__column--without {
+    grid-column: 1;
+  }
+
+  /* Hidden but laid out, so rows stay aligned before and after the reveal. */
+  .coach-compare__column--with,
+  .coach-compare--revealed .coach-compare__column--with {
+    display: grid;
+    grid-column: 2;
+    border-top: 0;
+    padding-top: 0;
+    animation: none;
+    visibility: hidden;
+    transition: visibility 0s linear 240ms;
+  }
+
+  .coach-compare__column--with > * {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+
+  .coach-compare--revealed .coach-compare__column--with {
+    visibility: visible;
+    transition: none;
+  }
+
+  /* The column label stays visible so both columns read as a pair from the start. */
+  .coach-compare__column--with > .coach-compare__label {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+
+  .coach-compare--revealed .coach-compare__column--with > * {
+    opacity: 1;
+    transform: none;
+    transition: opacity 460ms cubic-bezier(0.22, 1, 0.36, 1), transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .coach-compare--revealed .coach-compare__column--with > :nth-child(2) { transition-delay: 60ms; }
+  .coach-compare--revealed .coach-compare__column--with > :nth-child(3) { transition-delay: 120ms; }
+  .coach-compare--revealed .coach-compare__column--with > :nth-child(4) { transition-delay: 180ms; }
+  .coach-compare--revealed .coach-compare__column--with > :nth-child(5) { transition-delay: 240ms; }
+
+  .coach-compare__placeholder {
+    display: flex;
+    grid-column: 2;
+    grid-row: 2 / span 4;
+    align-items: flex-start;
+    justify-content: center;
+    border: 1px dashed rgba(46, 140, 130, 0.35);
+    border-radius: 12px;
+    padding: 56px 24px 24px;
+    background: rgba(46, 140, 130, 0.035);
+    transition: opacity 260ms ease;
+  }
+
+  .coach-compare__placeholder p {
+    max-width: 24ch;
+    margin: 0;
+    color: #7a878d;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .coach-compare--revealed .coach-compare__placeholder {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.coach-compare .coach-digest__comparison-explanation {
+  align-self: start;
+  margin: 0;
+  border: 1px solid #dce3e5;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.coach-compare__cell--input {
+  align-self: start;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: rgba(20, 34, 59, 0.035);
+}
+
+.coach-compare__cell--input > p {
+  margin: 0;
+  color: #42545c;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.coach-compare__cell--input > p.coach-compare__input-label {
+  margin-bottom: 4px;
+  color: #7a878d;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.coach-compare__input--added {
+  background: rgba(46, 140, 130, 0.07);
+}
+
+.coach-compare__input-quote {
+  margin: 8px 0;
+  border-left: 3px solid #2e8c82;
+  border-radius: 0 6px 6px 0;
+  padding: 6px 10px;
+  background: rgba(46, 140, 130, 0.12);
+  color: rgba(20, 34, 59, 0.9);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  transition: background 160ms ease;
+}
+
+.coach-compare__cell--input > p.coach-compare__input-meta {
+  margin-top: 4px;
+  color: #617078;
+  font-size: 0.78rem;
+}
+
+.coach-compare__input-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+}
+
+.coach-compare__input-actions .inspect-run-link {
+  padding-block: 2px;
+}
+
+mark.coach-compare__link {
+  border-bottom: 2px solid rgba(46, 140, 130, 0.55);
+  border-radius: 2px;
+  padding: 0 1px;
+  background: rgba(46, 140, 130, 0.12);
+  color: inherit;
+  transition: background 160ms ease;
+}
+
+/* Hovering either end of a link highlights the other. */
+.coach-compare__column--with:has(mark.coach-compare__link:hover) .coach-compare__input-quote,
+.coach-compare__column--with:has(.coach-compare__input-quote:hover) mark.coach-compare__link {
+  background: rgba(46, 140, 130, 0.26);
+}
+
+@container coach-digest (min-width: 640px) {
+  .coach-compare__cell--explanation {
+    grid-row: span 4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coach-compare__column--with,
+  .coach-compare__column--with > *,
+  .coach-compare__placeholder {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 .replay-column__inspect {
   justify-self: start;
   margin: 0 2px 2px;
@@ -8399,5 +8643,95 @@ h2 {
     & .replay-column__header { padding: 12px; }
     & .replay-column__actions { width: 100%; justify-content: space-between; }
     & .replay-column__actions .button { width: 100%; }
+  }
+}
+
+/* Saved replay: every week shows the Drift state as a strip above a full-width Coach Digest. */
+.replay-result-columns,
+.app-shell.app-shell--journal.app-shell--saved-persona .replay-result-columns {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.replay-result-column--state {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 18px;
+}
+
+.replay-result-column--state .replay-result {
+  margin: 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.replay-result-column--state .replay-result__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 14px;
+  padding-right: 140px;
+}
+
+.replay-result-column--state .replay-result__body > header {
+  flex: 0 0 auto;
+}
+
+.replay-result-column--state .replay-result__body h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.replay-result-column--state .replay-result__body > p {
+  flex: 1 1 16rem;
+  margin: 0;
+}
+
+.replay-result-column--state .replay-result__details {
+  flex: 0 0 100%;
+  margin: 0;
+  border-top: 0;
+  padding-top: 0;
+}
+
+.replay-result-column--state .replay-result__details > summary {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  margin: 0;
+}
+
+.replay-result-column--state .replay-result__details[open] {
+  margin-top: 10px;
+  border-top: 1px solid rgba(20, 34, 59, 0.1);
+  padding-top: 10px;
+}
+
+.replay-result__combined {
+  margin: 0 0 10px;
+  color: rgba(20, 34, 59, 0.65);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.replay-result-column--state .replay-column__inspect {
+  margin: 12px 0 0;
+}
+
+@media (max-width: 620px) {
+  .replay-result-column--state {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .replay-result-column--state .replay-result__body {
+    padding-right: 0;
+  }
+
+  .replay-result-column--state .replay-result__details > summary {
+    position: static;
+    margin-top: 6px;
+  }
+
+  .replay-result-column--state .replay-column__inspect {
+    margin: 0;
   }
 }

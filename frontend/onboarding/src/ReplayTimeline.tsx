@@ -357,17 +357,17 @@ export default function ReplayTimeline({
                       <h3 id="replay-result-title">{replayStateLabel(state)}</h3>
                     </header>
                     <p>{stateExplanation(state)}</p>
-                    {profile.top_values.length > 1 ? (
-                      <p>
-                        This overall result combines {profile.top_values.length} Core Values.
-                        Each has its own state below; they can differ.
-                      </p>
-                    ) : null}
                     <details
                       className="replay-result__details"
                       key={week.week_id}
                     >
                       <summary>Why this state</summary>
+                      {profile.top_values.length > 1 ? (
+                        <p className="replay-result__combined">
+                          This overall result combines {profile.top_values.length} Core Values.
+                          Each has its own state below; they can differ.
+                        </p>
+                      ) : null}
                       <DriftStateExplanation
                         profile={profile}
                         journalEntries={reviewedJournalEntries}

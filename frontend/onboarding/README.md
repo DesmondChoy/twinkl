@@ -123,16 +123,22 @@ the same content area, with **Read Journal Entries** beside its heading. **Read 
 Detection** restores a reviewed result. **Why this state** keeps detailed
 evidence collapsed; Journal Entry source links open a centered reading dialog.
 Journal Entry and AI review dialogs retain keyboard focus and make the
-background inactive until dismissal. The Drift state and Coach Digest appear side by side on wide screens
-and stack on phones. The North Star Moment remains within the Coach Digest. A uniquely
+background inactive until dismissal. The Drift state appears as a one-line strip above the Coach Digest. The North Star Moment remains within the Coach Digest. A uniquely
 matched abbreviated Coach Digest quotation expands to its full source below
 the paragraph, while Inspect preserves the original model response.
 
-Saved replay starts with the Coach Digest generated without selected North Star
-Moment context. **With North Star Moment** switches both narrative paragraphs
-and the reflective question to a separate saved response that uses the selected
-source, then displays its exact quotation. **Without North Star Moment** restores
-the complete baseline response. If a selection or valid pair is unavailable,
+Saved replay shows the Coach Digest as a side-by-side comparison. The left
+column holds the response generated without selected North Star Moment context;
+the right column starts empty. **Compare with North Star Moment** slides in a
+separate saved response that uses the selected source, with its exact quotation,
+beside the unchanged original. A **Coach Digest input** row above each column names
+what the Coach received; the right one shows the added quotation, Core Value,
+source, and why it qualified. Response phrases that draw on the moment are
+highlighted from `src/northStarLinks.json`, a display-only annotation whose
+`annotation_source` records its review status. Weeks without a valid pair
+reveal the reason there instead. **Hide comparison** empties the right column. Every week uses
+the same layout, with the Drift state as a one-line strip above the Coach Digest.
+Narrow cards stack the two versions. If a selection or valid pair is unavailable,
 the control explains why and offers **View review in Inspect** when a matching
 review exists. Changing Persona or week resets the comparison. This toggle
 makes no provider call; personal Experience keeps its original response.

@@ -419,25 +419,44 @@ Detection** returns to the completed result without changing its evidence.
 Every week change opens Journal Entries, including key-week jumps and returning
 to a completed week, and returns the page to the top. The review button opens its result again.
 
-The result uses two columns on wide desktops: a compact Drift state on the
-left and one integrated Coach Digest on the right. Phones and narrower screens
-stack these in the same order. In saved replay, the Coach Digest starts with its
-without-context response and a **With North Star Moment** button. Clicking it
-switches both narrative paragraphs and the reflective question to the saved
-with-context response and shows the selected source panel. The button becomes
-**Without North Star Moment** and restores the complete baseline when clicked.
-A **Showing** status identifies the current version. The same button stacks
-above the heading on phones; changing Persona or week resets the comparison.
-When no selection or valid pair is available, the same enabled button expands
-an inline reason and becomes **Hide explanation**. Both narrative paragraphs
-and the reflective question remain unchanged, and the status stays **Showing:
-Without North Star Moment**. Reasons distinguish missing earlier writing, saved
+The saved replay result uses the same layout every week. A one-line Drift
+state strip shows the state, its short explanation, and **Why this state**, with
+**Inspect decision** beside it. Opening **Why this state** expands the per-value
+evidence below the strip; for Personas with several Core Values it begins by
+noting that each Core Value has its own state. The Coach Digest spans the full
+result width below the strip as a side-by-side comparison. Its left column,
+**Without North Star Moment**, shows the without-context response. The right
+column, **With North Star Moment**, starts as an empty dashed placeholder beneath
+its label. **Compare with North Star Moment** fills the right column with a
+short staggered slide-in; reduced-motion settings disable the animation. When the
+week has a valid saved pair, the right column shows the saved with-context
+narrative and reflective question. Both columns open with a **Coach Digest input** row.
+The left row names this week's Journal Entries and Weekly Drift Detection result.
+The right row adds the North Star Moment: its exact quotation, Core Value, source
+and date, a plain-language reason it qualified for its mode, and **Open Journal
+Entry** and **Inspect this moment** links. The demo comparison omits the
+user-facing North Star Moment card; personal onboarding keeps it. Phrases in the
+with-context response that draw on the moment share the quotation's highlight,
+and hovering either end emphasizes the other. These links come from
+`frontend/onboarding/src/northStarLinks.json`, a display-only annotation bound to
+each pair by its North Star input hash and with-context response hash. The
+file's `annotation_source` records whether the links are an AI draft or
+author-reviewed; the panel does not display it. Paragraph rows align
+across the columns, and the right column keeps its space while hidden, so the
+left text never moves. When no selection or valid pair is available, the
+placeholder says there is no North Star Moment version that week, and the same
+button reveals the reason in the right column instead. The button becomes
+**Hide comparison** and empties the right column again. A screen-reader-only
+**Showing** status names the visible versions. When the card is narrower than
+640 px, the revealed column stacks below the original, and on phones the strip
+wraps with **Inspect decision** below it. Changing Persona or week resets the
+comparison. Reasons distinguish missing earlier writing, saved
 AI rejection, Insufficient Evidence, and an unavailable comparison. A bound
 review offers **View review in Inspect**. Changing Persona or week closes the
 explanation. Toggling performs no provider call. Onboarding continues to show its
 original narrative, optional validated passage, and original question.
 The reflective question closes the **Coach Digest** as an ordinary paragraph,
-without a separate label or callout. The optional North Star Moment and source-date links follow the complete response. The card uses **Coach Digest** as its sole
+without a separate label or callout. In personal Experience, the optional North Star Moment follows the complete response; in the saved replay comparison it appears as added Coach Digest input above the with-context response. Source-date links follow the response in both. The card uses **Coach Digest** as its sole
 heading. The replay result heading reads **Drift Detection (End of Week)**.
 Saved comparison responses use their recorded prompt versions and validation
 rules. Manual Coach Digest prompt `4.7` asks for conversational prose that opens

@@ -13,6 +13,7 @@ import { validateExperienceInspectFixture } from "./demoContracts";
 import { projectScenarioWeek } from "./scenarioReplay";
 import { northStarProfileRef, type NorthStarRecord } from "./northStar";
 import { savedCoachComparison } from "./coachComparison";
+import { northStarLinks } from "./northStarLinks";
 
 afterEach(cleanup);
 
@@ -126,25 +127,33 @@ describe("Coach Digest quotations", () => {
         const view = render(<CoachDigestCard weeklyDigest={session.weekly_digest}
           headingId="coach-title" journalEntries={session.journal_entries}
           northStar={{ profile: session.profile, driftResult: session.drift_result!, traceEvents: events, presentation: "demo" }} />);
-        const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+        const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
         expect(toggle.hasAttribute("disabled")).toBe(false);
         await act(async () => { await northStarProfileRef(session.profile); });
         const reflection = () => ["mirror", "tension", "question"].map((part) =>
           document.querySelector(`.coach-digest__${part}`)!.textContent);
         const baseline = reflection();
-        expect(document.querySelector(".north-star-moment")).toBeNull();
+        const withColumn = () => screen.queryByRole("region", { name: "With North Star Moment" });
         if (record.selected) {
           expect(pair, `${fixture.scenario.scenario_id} ${week.week_start}`).not.toBeNull();
+          expect(withColumn()).toBeNull();
           await userEvent.click(toggle);
-          await waitFor(() => expect(document.querySelector(".north-star-moment blockquote")!.textContent)
+          await waitFor(() => expect(withColumn()!.querySelector(".coach-compare__input-quote")!.textContent)
             .toBe(record.selected!.evidence_quote));
-          expect(document.querySelector(".coach-digest__question")!.textContent)
+          // Every drafted link must still land on its exact phrase in the rendered response.
+          const links = northStarLinks(pair!);
+          expect(links, `${fixture.scenario.scenario_id} ${week.week_start} links`).not.toBeNull();
+          const marks = [...withColumn()!.querySelectorAll("mark.coach-compare__link")].map((mark) => mark.textContent);
+          expect(marks).toEqual(Object.values(links!.spans).flat());
+          expect(withColumn()!.querySelector(".coach-digest__question")!.textContent)
             .toBe(pair!.with_north_star.narrative.reflective_question);
-          await userEvent.click(screen.getByRole("button", { name: "Without North Star Moment" }));
           expect(reflection()).toEqual(baseline);
-          expect(document.querySelector(".north-star-moment")).toBeNull();
+          await userEvent.click(screen.getByRole("button", { name: "Hide comparison" }));
+          expect(reflection()).toEqual(baseline);
+          expect(withColumn()).toBeNull();
         } else {
           expect(pair).toBeNull();
+          expect(document.querySelector(".north-star-moment")).toBeNull();
           expect(screen.queryByRole("heading", { name: "Why there’s no North Star Moment" })).toBeNull();
           await userEvent.click(toggle);
           expect(await screen.findByRole("heading", { name: "Why there’s no North Star Moment" })).toBeTruthy();
@@ -159,7 +168,7 @@ describe("Coach Digest quotations", () => {
           }
           expect(reflection()).toEqual(baseline);
           expect(document.querySelector(".north-star-moment")).toBeNull();
-          await userEvent.click(screen.getByRole("button", { name: "Hide explanation" }));
+          await userEvent.click(screen.getByRole("button", { name: "Hide comparison" }));
           expect(screen.queryByRole("heading", { name: "Why there’s no North Star Moment" })).toBeNull();
           expect(reflection()).toEqual(baseline);
         }

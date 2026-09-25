@@ -897,16 +897,19 @@ describe("persona replay", () => {
       const record = saved.trace_events.find((event) =>
         keyWeek.event_ids.includes(event.event_id) && event.event_type === "north_star_reviewed"
       )!.details.record as NorthStarRecord;
-      expect(document.querySelector(".north-star-moment")).toBeNull();
-      const toggle = screen.getByRole("button", { name: "With North Star Moment" });
+      const withColumn = () => screen.queryByRole("region", { name: "With North Star Moment" });
+      expect(withColumn()).toBeNull();
+      const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
       if (record.selected) {
         const comparison = savedCoachComparison(coachEvent);
         expect(comparison).not.toBeNull();
         await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
         await user.click(toggle);
         expect(document.querySelector(".coach-digest__question")?.textContent)
+          .toBe(savedNarrative.reflective_question);
+        expect(withColumn()!.querySelector(".coach-digest__question")?.textContent)
           .toBe(comparison!.with_north_star.narrative.reflective_question);
-        await waitFor(() => expect(document.querySelector(".north-star-moment blockquote")?.textContent)
+        await waitFor(() => expect(withColumn()!.querySelector(".coach-compare__input-quote")?.textContent)
           .toBe(record.selected!.evidence_quote));
         await user.click(screen.getByRole("link", { name: /^Open (response in )?Journal Entry ·/ }));
         const source = saved.scenario.journal_entries.find((entry) => entry.journal_entry_id === record.selected!.entry_id)!;
@@ -917,6 +920,7 @@ describe("persona replay", () => {
         expect(screen.getByRole("heading", { name: /^Drift Detection \(End of Week\)/ })).toBeTruthy();
         expect(screen.queryByRole("heading", { name: "Journal Entries" })).toBeNull();
       } else {
+        expect(document.querySelector(".north-star-moment")).toBeNull();
         expect(toggle.hasAttribute("disabled")).toBe(false);
         const reflection = () => ["mirror", "tension", "question"].map((part) =>
           document.querySelector(`.coach-digest__${part}`)?.textContent);
@@ -924,7 +928,7 @@ describe("persona replay", () => {
         await user.click(toggle);
         expect(await screen.findByRole("heading", { name: "Why there’s no North Star Moment" })).toBeTruthy();
         expect(reflection()).toEqual(baseline);
-        await user.click(screen.getByRole("button", { name: "Hide explanation" }));
+        await user.click(screen.getByRole("button", { name: "Hide comparison" }));
         expect(screen.queryByRole("heading", { name: "Why there’s no North Star Moment" })).toBeNull();
         expect(reflection()).toEqual(baseline);
         expect(["insufficient_evidence", "no_eligible_writing"]).toContain(record.reason);
@@ -1092,28 +1096,31 @@ describe("persona replay", () => {
     )).toBeNull();
   });
 
-  it("places the moment inside Coach Digest after its question and links to the exact review event", async () => {
+  it("shows the moment as added Coach Digest input above the response and links to the exact review event", async () => {
     matchMedia(false);
     const user = userEvent.setup();
     const inspectRun = vi.fn();
     render(<ScenarioReplayHarness inspectRun={inspectRun} />);
     await user.click(screen.getByRole("button", { name: "Show Active Drift — week 4" }));
     await user.click(screen.getByRole("button", { name: "Review Weekly Drift Detection" }));
-    const toggle = screen.getByRole("button", { name: "With North Star Moment" });
-    expect(document.querySelector(".north-star-moment")).toBeNull();
+    const toggle = screen.getByRole("button", { name: "Compare with North Star Moment" });
+    expect(screen.queryByRole("region", { name: "With North Star Moment" })).toBeNull();
     await waitFor(() => expect(toggle.hasAttribute("disabled")).toBe(false));
     await user.click(toggle);
-    await screen.findByRole("heading", { name: "A past moment in your own words" });
+    const withColumn = await screen.findByRole("region", { name: "With North Star Moment" });
     const columns = document.querySelectorAll<HTMLElement>(".replay-result-columns > section");
     expect(columns).toHaveLength(2);
     expect(within(columns[0]).getByRole("article", { name: "Active Drift" })).toBeTruthy();
     expect(within(columns[0]).getByRole("button", { name: "Inspect decision" })).toBeTruthy();
     expect(within(columns[1]).getByRole("heading", { name: "Coach Digest" })).toBeTruthy();
-    const momentHeading = within(columns[1]).getByRole("heading", { level: 4, name: "A past moment in your own words" });
-    const coach = momentHeading.closest(".coach-digest")!;
-    expect(coach.querySelector(".coach-digest__tension")?.nextElementSibling)
-      .toBe(coach.querySelector(".coach-digest__question"));
-    expect(within(coach as HTMLElement).getByText("North Star Moment")).toBeTruthy();
+    expect(columns[1].contains(withColumn)).toBe(true);
+    const input = withColumn.querySelector(".coach-compare__input--added")!;
+    const coach = input.closest(".coach-digest")!;
+    const cell = (part: string) => withColumn.querySelector(`.coach-digest__${part}`)?.closest(".coach-compare__cell");
+    expect(input.nextElementSibling).toBe(cell("mirror"));
+    expect(cell("tension")?.nextElementSibling).toBe(cell("question"));
+    expect(within(input as HTMLElement).getByText(/Active Drift this week, so the moment comes from writing before the Drift began/)).toBeTruthy();
+    expect(withColumn.querySelector(".north-star-moment")).toBeNull();
     expect(screen.queryByRole("navigation", { name: "Weekly reflection sections" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Coach Digest" })).toBeNull();
     expect(screen.queryByRole("button", { name: "North Star Moment" })).toBeNull();

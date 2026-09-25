@@ -49,10 +49,12 @@ Insufficient Evidence produces no card.
 
 **Saved demo comparison:** The [five-Persona comparison](demo_coach_comparison.md)
 specifies the toggle, exact Coach Digest prompts, injected field, and paired
-response provenance. The default is **Without North Star Moment**. Switching to
-**With North Star Moment** replaces both narrative paragraphs and the reflective
-question for the same Persona and week, and displays the existing quotation
-panel. Inspect shows both exact prompts beside their associated responses.
+response provenance. The Experience shows **Without North Star Moment** in the
+left column by default. **Compare with North Star Moment** reveals the
+with-context narrative paragraphs and reflective question for the same Persona
+and week in the right column, beside the unchanged original. The right column
+opens with the North Star Moment quotation as added Coach Digest input instead
+of the user-facing quotation panel. Inspect shows both exact prompts beside their associated responses.
 This comparison applies only to saved demo Personas; it preserves onboarding
 behavior and the frozen North Star Moment selection experiment.
 
