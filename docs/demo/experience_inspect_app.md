@@ -490,6 +490,10 @@ when repair feedback changed the accepted prompt. The changed
 inspectable independently of the Experience toggle. The paired record is
 bound to the same Persona, reviewed week, weekly input hash, and validated
 North Star Moment source; it is not accepted on live-session events.
+The Inspect comparison fills the event details width. Nested technical and
+source disclosures show their expanded or collapsed state, and event shortcuts
+keep the selected heading below the fixed header. Technical labels wrap within
+their panels.
 
 The expanded **Why this state** section omits the repeated Core Value and state
 header for single-Core-Value Personas and the generic No Active Drift summary.

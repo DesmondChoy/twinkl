@@ -717,7 +717,8 @@ h2 {
 #replay-entries-title,
 #replay-result-column-title,
 #inspect-overview-section,
-#inspect-events-section {
+#inspect-events-section,
+.trace-event__card > summary {
   scroll-margin-top: 112px;
 }
 
@@ -1180,7 +1181,7 @@ h2 {
     0 16px 36px rgba(20, 34, 59, 0.1);
 }
 
-.trace-event__card summary {
+.trace-event__card > summary {
   display: grid;
   min-width: 0;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -1190,7 +1191,7 @@ h2 {
   list-style: none;
 }
 
-.trace-event__card summary::-webkit-details-marker {
+.trace-event__card > summary::-webkit-details-marker {
   display: none;
 }
 
@@ -4624,7 +4625,7 @@ h2 {
     border-radius: 15px;
   }
 
-  .trace-event__card summary {
+  .trace-event__card > summary {
     display: block;
     padding: 15px 14px;
   }
@@ -4950,7 +4951,7 @@ h2 {
     padding-left: 32px;
   }
 
-  .trace-event__card summary {
+  .trace-event__card > summary {
     padding-inline: 12px;
   }
 
@@ -8425,6 +8426,15 @@ mark.coach-compare__link {
     font-family: var(--demo-font-heading);
     font-size: var(--demo-type-subheading);
     line-height: 1.25;
+  }
+
+  & .stage--inspect .inspect-detail > h3 {
+    font-family: var(--demo-font-body);
+    font-size: var(--demo-type-secondary);
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-transform: none;
+    overflow-wrap: anywhere;
   }
 
   & :is(.eyebrow, small, .replay-entry__meta, .replay-entry__open,

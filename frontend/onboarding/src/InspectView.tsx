@@ -670,9 +670,9 @@ function NorthStarInspection({ event, comparison }: { event: TraceEventContract;
           <div className="nsm-inspect__composition">
             <h5>Where it appears in Coach Digest</h5>
             <p>{comparison
-              ? "The saved demo starts with the response generated without North Star Moment. Switching to the with-context response replaces both narrative paragraphs and its reflective question, and displays this exact quotation after the complete response. The selected quotation and its full source were supplied to the with-context request; both prompts and responses are recorded in the Coach Digest comparison."
+              ? "The saved demo starts with the response generated without North Star Moment. Compare with North Star Moment reveals the saved with-context response beside it, or below it on narrow screens. This exact quotation appears as added Coach Digest input above the with-context response. The quotation and its full source were supplied to that request; both prompts and responses are recorded in the Coach Digest comparison."
               : "The full selected quotation is inserted as a North Star Moment passage after the Coach Digest narrative and reflective question. Its wording is preserved; the selected text is not sent back to rewrite the narrative."}</p>
-            <p>Introduction: {framing}</p>
+            {!comparison ? <p>Introduction: {framing}</p> : null}
           </div>
         ) : null}
       </section>
