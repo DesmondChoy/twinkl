@@ -139,16 +139,23 @@ not hits. Honest caveat, one sentence: no matched Luna-low ablation was run.
 *Visual:* `images/vif-handoff-ablation.png`
 
 **12. Choosing the operating point, and what it produces**
-Reviewing cumulative history is the stronger path. Low reasoning effort: 0.548
-recall, 4 false alerts, 0.852 precision, 0.637 coverage. Xhigh buys recall and
-pays in false alerts. Low was retained as a documented capstone choice, after
-replacing a preregistered rule that no longer fit — say so.
+Reviewing cumulative history is the stronger path. The historical GPT-5.6
+Luna prompt-v2 study selected low reasoning effort: 0.548 recall, 4 false
+alerts, 0.852 precision, 0.637 coverage. Xhigh increased both recall and false
+alerts. Explain the original capstone choice and the replaced preregistered
+rule with those results explicitly labelled as historical.
 
-Then land the chosen contract in the running system, so the operating point
-is not left as an abstraction: this is the reviewer the professors will see
-in the demo.
-*Visual:* `images/weekly-drift-tradeoff.png`, then Weekly Drift Reviewer
-screenshots.
+The live Reviewer moved to GPT-6 Luna low on 23 September. In the matched
+prompt-v4 comparison, GPT-6 low had 0.405 median recall, 2 false alerts, and
+0.990 coverage; GPT-5.6 low had 0.381, 3, and 0.860. The paired recall interval
+includes zero. Higher coverage and 60% lower calculated token cost supported
+the migration. Cite the [matched comparison](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md)
+and keep its prompt-v4 results distinct from the earlier chart.
+
+Saved Persona replays retain GPT-5.6 Luna receipts. Identify whether each demo
+example is a saved replay or a live GPT-6 review when showing its model.
+*Visual:* `images/weekly-drift-tradeoff.png` labelled as the historical
+GPT-5.6 study, then Weekly Drift Reviewer screenshots.
 
 **Screenshots needed — none of these exist yet.** Capture from a saved replay
 so they are reproducible and require no provider key:
@@ -160,7 +167,7 @@ so they are reproducible and require no provider key:
   demonstrates the fail-closed path that the coverage number implies.
 
 Prefer the second if only one fits. Recall and coverage are abstract, and
-Insufficient Evidence is the visible consequence of choosing low effort.
+Insufficient Evidence makes an abstention or blocked Drift claim visible.
 
 ## Part 6 — The application (2 slides, ~3.5 min)
 
@@ -248,10 +255,11 @@ system. Mechanical checks catch a broken evidence link, not whether a person
 found a response helpful or well timed.
 
 Then the trade-off worth volunteering, because a professor may find it
-anyway: Luna-low failed its original preregistered coverage gate. The project
+anyway: GPT-5.6 Luna-low failed its original preregistered coverage gate. The project
 replaced that rule with the recall-first hierarchy and then kept low even
 though xhigh scored higher on recall. That is a documented capstone judgment,
-not a preregistered optimum, and the deck should say so before Q&A does.
+not a preregistered optimum, and the deck should say so before Q&A does. Keep
+this historical selection account separate from the later GPT-6 migration.
 
 Close the part in one line: none of this invalidates the findings, it bounds
 them, and the bounds are what the next slides work within.

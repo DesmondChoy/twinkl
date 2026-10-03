@@ -68,9 +68,13 @@ named `qwk_then_recall_guarded` option.
   alerts second.
 - Coverage and abstention are diagnostic metrics, not selection gates. They
   must still be reported because Abstain produces no Drift claim.
-- The three complete Luna-low development Runs provide sufficient evidence to
-  freeze the contract. Drift recall was `0.571`, `0.548`, and `0.548`; false
-  Drift alerts were 5, 4, and 4 across 256 non-Drift Core Value trajectories.
+- The three historical GPT-5.6 Luna low development Runs with prompt `2.0`
+  supported the original freeze. Drift recall was `0.571`, `0.548`, and `0.548`;
+  total false Drift alerts were 5, 4, and 4 across all 292 Core Value histories.
+  Each Run had three false alerts within the 256 non-Drift histories.
+- The current GPT-6 Luna low choice follows the [matched prompt-v4 comparison](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md),
+  which found lower calculated cost and higher coverage without an established
+  paired Drift-recall gain.
 - Any future fresh final test should reuse the Luna-low response schema,
   fail-closed request handling, one-to-one Drift scoring with a two-Entry
   confirmation allowance, three-Run protocol, and reported metrics. No
@@ -251,14 +255,15 @@ rather than substituted.
   reasoning-effort-`low` follow-up raised median Drift recall to `0.548` and cut
   false Drift alerts to 4, while coverage fell from `0.777` to `0.637`. `low`
   mechanically failed the preregistered coverage gate, but the approved metric
-  hierarchy treats coverage as diagnostic. The comparison selected Luna at
-  reasoning effort `low`, and the model contract is fixed on that setup.
+  hierarchy treats coverage as diagnostic. The comparison selected GPT-5.6 Luna
+  at reasoning effort `low` as the original model contract.
   `twinkl-ck3w` later compared Luna `medium`, `high`, and `xhigh` on
   the same development data. Luna-`xhigh` raised median Drift recall to `0.667`
-  and raised median false Drift alerts to 9. Luna-low remains the fixed contract
-  because `xhigh` is a more aggressive operating point, not a clean improvement.
-  This no-change decision does not change the approved component boundaries,
-  validate the fixed setup on a fresh final test, or grant deployment approval.
+  and raised median false Drift alerts to 9. Twinkl retained GPT-5.6 Luna low on
+  2026-08-11 because `xhigh` was a more aggressive operating point, not a clean
+  improvement. This historical decision did not change the approved component
+  boundaries, validate the setup on a fresh final test, or grant deployment
+  approval.
 
 The experiment history and numeric evidence remain in
 [`logs/experiments/index.md`](../../logs/experiments/index.md).

@@ -150,7 +150,12 @@ def draw_adopted_architecture() -> None:
     core_nodes = [
         (0.45, 4.38, 1.35, "Profile"),
         (2.15, 4.38, 2.05, "Journal Entries\n+ displayed-nudge response"),
-        (4.58, 4.38, 2.12, "Weekly Drift Reviewer\ncumulative history · Luna-low"),
+        (
+            4.58,
+            4.38,
+            2.12,
+            "Weekly Drift Reviewer\nGPT-6 Luna · low\ncumulative history",
+        ),
         (7.08, 4.38, 1.72, "Drift Detector\ndeterministic rule"),
         (9.18, 4.38, 2.42, "Weekly Drift Detection output\nstate + cited evidence"),
     ]
@@ -755,8 +760,8 @@ def draw_per_value_conflict_recall() -> None:
             axes[1],
             weekly_recall,
             weekly_support,
-            "(b) Weekly Drift Reviewer · Luna-low",
-            "LLM-Judge Conflict Labels · complete development data",
+            "(b) Weekly Drift Reviewer",
+            "GPT-5.6 Luna low · prompt v2 · complete development data",
             BLUE,
         ),
     )
@@ -934,7 +939,7 @@ def draw_vif_handoff() -> None:
 
 
 def draw_weekly_drift_tradeoff() -> None:
-    """Show the selected Weekly Drift Reviewer operating point."""
+    """Show the historical GPT-5.6 Luna prompt-v2 operating points."""
     source = (
         ROOT
         / "logs"
@@ -986,6 +991,7 @@ def draw_weekly_drift_tradeoff() -> None:
     ax.set_ylim(0.43, 0.70)
     ax.set_xlabel("Median false Drift alerts (lower is better)")
     ax.set_ylabel("Median Drift recall (higher is better)")
+    ax.set_title("Historical GPT-5.6 Luna · prompt v2", loc="left", pad=14)
     ax.grid(True, color=GRID, linewidth=0.8)
     ax.set_axisbelow(True)
     for spine in ("top", "right"):

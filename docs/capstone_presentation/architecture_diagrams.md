@@ -2,7 +2,8 @@
 
 Presentation diagrams for the capstone final presentation. Both render as
 Mermaid in GitHub, VS Code, and Quarto. Verified against the working tree at
-commit `2659673` on 14 September 2026; the verification notes at the end record
+commit `2659673` on 14 September 2026; model labels were reconciled with the
+current callers on 3 October 2026. The verification notes at the end record
 what was checked and where each diagram simplifies.
 
 Canonical nouns follow [`docs/canonical_nouns.md`](../canonical_nouns.md).
@@ -24,7 +25,7 @@ flowchart TB
         PROF["Confirmed Profile<br/><i>deterministic scoring, ≤2 Core Values</i>"]
         JE["Journal Entries<br/><i>chronological, append-only</i>"]
         NUDGE["Displayed nudge<br/><i>classified from content</i>"]
-        WDR["Weekly Drift Reviewer<br/><i>gpt-5.6-luna, low effort</i><br/><i>reads cumulative history</i>"]
+        WDR["Weekly Drift Reviewer<br/><i>gpt-6-luna, low effort</i><br/><i>reads cumulative history</i>"]
         GUARD["Fail-closed validation<br/><i>structured output or no decision</i>"]
         DD["Drift Detector<br/><i>deterministic, 2 consecutive Conflicts</i>"]
         STATE["Weekly Drift Detection<br/><b>Active Drift · No Active Drift · Insufficient Evidence</b>"]
@@ -92,6 +93,11 @@ never decides Drift on its own.
 The assessment stages write to Inspect, including the recorded onboarding
 selections, which makes the path contestable rather than merely explainable.
 
+The model label describes live review. Saved Persona replays retain their
+GPT-5.6 Luna decisions. Live North Star Moment selection also uses GPT-6 Luna
+at low effort; Coach Digest and nudge generation default to GPT-5.6 Luna at
+no reasoning effort.
+
 ---
 
 ## 2. Physical architecture
@@ -118,7 +124,7 @@ flowchart TB
     end
 
     subgraph PROVIDER[" External "]
-        LLM["OpenAI Responses API<br/><i>gpt-5.6-luna · store: false</i>"]
+        LLM["OpenAI Responses API<br/><i>gpt-6-luna low: Reviewer, North Star Moment</i><br/><i>gpt-5.6-luna none: Coach Digest, nudges</i><br/><i>store: false</i>"]
     end
 
     subgraph OFFLINE[" Offline research workflow — not used by assessed runtime "]
@@ -213,6 +219,12 @@ Checked against the working tree on 14 September 2026:
 | Five persona replays baked into the image | `frontend/onboarding/Dockerfile` COPY layers |
 | OpenAI Responses API, `store: false` | `src/coach/llm_client.py:224-241`, `src/weekly_drift_reviewer.py:458-495` |
 | VIF unreachable from deployed path | No `src.vif` import in `src/demo/`, `src/north_star/`, `src/nudge/`, `src/weekly_drift_reviewer.py`, or `src/drift_detector.py` |
+
+Model labels checked on 3 October 2026 against
+`src/weekly_drift_reviewer.py`, `config/evals/north_star_live_v1.json`,
+`src/coach/llm_client.py`, and `src/nudge/runtime.py`. The 23 September
+migration changed the two live low-effort callers; saved replay model
+contracts remain tied to their original receipts.
 
 Two simplifications worth knowing before Q&A.
 

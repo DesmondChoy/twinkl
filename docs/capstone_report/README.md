@@ -9,7 +9,7 @@ supporting capstone report materials. Submitted milestone files remain under
 - [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
   the Phase 2 Technical Paper
 - [`capstone_project_report.pdf`](capstone_project_report.pdf) — rendered report,
-  with all 45 pages visually verified on 14 September 2026
+  with all 46 pages visually verified on 3 October 2026
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
 - [`images/`](images/) — report figures, interface captures, and evaluation
@@ -28,7 +28,9 @@ supporting capstone report materials. Submitted milestone files remain under
   Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
 - **Evidence date:** Core paper 2026-08-31; North Star Moment targeted v4 Run 1
   results and saved Persona evidence 2026-09-07; application verification
-  2026-09-12; local Coach source-context diagnostic 2026-09-13
+  2026-09-12; local Coach source-context diagnostic 2026-09-13; matched Luna
+  model comparisons and live migration 2026-09-23. Current model descriptions
+  reconciled on 2026-10-03.
 - **Status key:** complete, partial, development-only, experimental, in progress,
   or outside the time-boxed capstone
 - Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
@@ -54,6 +56,17 @@ and Markdown reports. It writes two architecture diagrams and five evaluation
 charts under
 [`images/`](images/). The Quarto front matter selects XeLaTeX and records the
 fonts, page geometry, table of contents, and PDF presentation settings.
+
+The current live Weekly Drift Reviewer and North Star Moment selection use
+GPT-6 Luna at low reasoning effort. Coach Digest and nudge generation still
+default to GPT-5.6 Luna at no reasoning effort. Saved Persona replays and
+historical experiments retain their recorded model identities. Section 4.3
+distinguishes the original GPT-5.6 prompt-v2 operating-point study from the
+[matched prompt-v4 comparison](../../logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md)
+that supported the September migration through higher coverage and lower
+calculated token cost, without an established Drift-recall gain. The NSM
+comparison retains GPT-5.6 selection and evaluation provenance; it does not
+measure live GPT-6 NSM quality.
 
 The paper cites the historical August
 [Coach Digest sample](../../logs/experiments/reports/coach_digest_sample_20260824/report.md),

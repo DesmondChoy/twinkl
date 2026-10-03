@@ -43,8 +43,9 @@ reasoning effort `none`, and `gpt-5.6-luna` at reasoning effort `low`. It shows
 complete development results, persona-level outcomes, Journal Entries,
 AI-reviewed LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, and Run
 variability without merging Runs or calculating a majority vote.
-The first two setups are historical comparisons; `gpt-5.6-luna` at reasoning
-effort `low` is the fixed Weekly Drift Reviewer model contract.
+All three setups are historical comparisons. `gpt-5.6-luna` at reasoning
+effort `low` was the original selected setup; the live Weekly Drift Reviewer
+now uses `gpt-6-luna` at reasoning effort `low`.
 
 **Run the app:**
 

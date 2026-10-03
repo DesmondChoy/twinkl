@@ -52,7 +52,7 @@ That means the VIF Critic predicts the LLM-Judge's labels for the current
 Journal Entry. Its outputs can support optional offline analysis rather than a
 learned discounted-return target.
 The approved user-facing Drift path uses decisions from the fixed
-`gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer.
+`gpt-6-luna` reasoning-effort-`low` Weekly Drift Reviewer.
 
 ### 2.2 Exploratory Alternatives
 

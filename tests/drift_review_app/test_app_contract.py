@@ -232,8 +232,10 @@ def test_at_a_glance_combines_dataset_llms_and_results() -> None:
     table_start = html.index('class="aggregate-table"')
     table_html = html[table_start : html.index("</table>", table_start)]
     assert "coverage" not in table_html.lower()
-    assert "Fixed model contract" in html
-    assert "Why Luna at reasoning low is the fixed model contract" in html
+    assert "Historical selection" in html
+    assert "Why GPT-5.6 Luna low was selected" in html
+    assert "historical prompt-v2 results" in html
+    assert "Reviewer uses GPT-6 Luna at reasoning low" in html
     assert "coverage as a diagnostic" in html
     assert "65%, 63%, and 64% coverage" in html
     assert "Abstain left more adjacent pairs unresolved" in html
@@ -292,6 +294,9 @@ def test_detail_controls_have_overflow_safe_desktop_structure() -> None:
     assert "show_reference_labels" not in html
     assert "What each Weekly Drift Reviewer found" in html
     assert "Compare all setups and Runs" in html
+    assert "Historical selection" in html
+    assert "Luna — reasoning low · historical selection" in html
+    assert "fixed model contract" not in html.lower()
     assert 'class="scoreboard-comparison"' in html
     assert "How it works" not in html
     assert "FROZEN WEEKLY DRIFT REVIEWER INPUT CONTRACT" not in html
