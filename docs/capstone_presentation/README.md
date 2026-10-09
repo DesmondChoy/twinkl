@@ -8,8 +8,9 @@
   Mermaid diagrams with implementation references and verification notes
 - [Twinkl — Final Presentation](<Twinkl - Final Presentation.pptx>) — editable
   PowerPoint deck
-- [Technical Paper](../capstone_report/capstone_project_report.md) and
-  [report instructions](../capstone_report/README.md) — supporting research
+- [Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) (Google Doc), with a
+  [reference-only Quarto copy](../capstone_report/capstone_report_reference_only.md)
+  and [report instructions](../capstone_report/README.md) — supporting research
   evidence, figures, and PDF reproduction
 - [Experience and Inspect walkthrough](../demo/experience_inspect_app.md#13-professor-assessment-walkthrough)
   — application demonstration and evidence boundaries

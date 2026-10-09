@@ -41,6 +41,11 @@ monofontoptions:
   - Scale=0.88
 ---
 
+> **For reference only.** This Quarto copy of the Phase 2 Technical Paper is
+> stale and no longer maintained. The current paper is the
+> [Google Doc](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit), tab “Twinkl Report (Sept ’26)”. Some facts here may
+> still be accurate; check them against the Google Doc before reuse.
+
 ## Abstract
 
 AI-assisted reflection can support self-examination, but a response that defaults to agreement may reinforce a user's account without testing it against the available evidence. Twinkl investigates a narrower role: evidence-grounded accountability. It compares longitudinal Journal Entries with a confirmed Profile of Core Values, cites the reported behaviour behind each conclusion, and returns Insufficient Evidence when a failed review prevents a current Drift claim or when an Abstain decision or Journal Entry gap blocks such a claim after recent Conflict evidence. Schwartz's Theory of Basic Human Values supplies an established theoretical foundation and a vocabulary of competing priorities.

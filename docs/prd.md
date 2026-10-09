@@ -53,8 +53,9 @@ context. Its high scores do not establish reliable factual accuracy.
 | Human calibration and external user pilot | Not done — closed | Neither study is conducted. Both are excluded from capstone completion requirements; existing AI review and synthetic results do not establish human validity or user benefit. |
 
 Coach Digest feedback (`twinkl-rklc.28`), historical semantic concerns
-(`twinkl-rklc.39`), factual-attribution evaluator coverage (`twinkl-z5nr`), and
-the final professor walkthrough (`twinkl-rklc.10`) remain open.
+(`twinkl-rklc.39`), and factual-attribution evaluator coverage (`twinkl-z5nr`)
+remain open. The final walkthrough of all five saved Personas (`twinkl-rklc.10`)
+is complete.
 
 **Data Pipeline Progress:**
 ```
@@ -490,5 +491,5 @@ and is closed outside capstone scope.
 | [demo/experience_inspect_app.md](demo/experience_inspect_app.md) | Implemented React capstone app with synchronized Experience and Inspect views |
 | [01_value_evolution.md](evolution/01_value_evolution.md) | Concept note for a possible future filter distinguishing value evolution from Drift |
 | [onboarding_spec.md](onboarding/onboarding_spec.md) | BWS-based onboarding flow, item design, and data output schema |
-| [capstone_report/capstone_project_report.md](capstone_report/capstone_project_report.md) | Phase 2 Technical Paper source; rendering and evidence snapshot documented in the [report guide](capstone_report/README.md) |
+| [Phase 2 Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) | Current Technical Paper (Google Doc); [capstone_report/capstone_report_reference_only.md](capstone_report/capstone_report_reference_only.md) is a stale Quarto copy kept for reference only, described in the [report guide](capstone_report/README.md) |
 | [April 2026 proposal submission](archive/capstone/2026-04-proposal-submission/) | Immutable snapshot of the already-submitted proposal, slides, figures, and sources |

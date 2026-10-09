@@ -107,6 +107,6 @@ checks, scenario export, and experiment commands.
 - [`docs/evals/overview.md`](docs/evals/overview.md) and [`docs/evals/coach_narrative_test_and_eval_guide.md`](docs/evals/coach_narrative_test_and_eval_guide.md) — evaluation status, offline checks, paid Coach Digest Evals, and the Drift/control study
 - [`docs/demo/weekly_drift_review_app.md`](docs/demo/weekly_drift_review_app.md) — read-only Drift inspection of the frozen Weekly Drift Reviewer comparison Runs
 - [`docs/demo/review_app.md`](docs/demo/review_app.md) — deprecated Runtime Demo Review App for the VIF Critic (Offline) compatibility path
-- [`docs/capstone_report/capstone_project_report.md`](docs/capstone_report/capstone_project_report.md) — maintained Phase 2 Technical Paper source; [report instructions](docs/capstone_report/README.md) cover PDF generation and visual verification
+- [Phase 2 Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) — current Technical Paper (Google Doc); [`docs/capstone_report/capstone_report_reference_only.md`](docs/capstone_report/capstone_report_reference_only.md) is a stale Quarto copy kept for reference only, described in the [report guide](docs/capstone_report/README.md)
 - [`docs/capstone_presentation/README.md`](docs/capstone_presentation/README.md) — presentation outline, editable deck, and architecture diagrams
 - [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research

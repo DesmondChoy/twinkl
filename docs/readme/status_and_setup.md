@@ -58,7 +58,7 @@ where a frontend directory is specified. `uv run` uses the project environment.
 - Dry-run cross-provider Coach Digest Evals over the historical August five-response manifest: `uv run python -m src.evals.coach_narrative_judge --manifest logs/experiments/reports/coach_digest_sample_20260824/judge_sample_manifest.json --judge-provider gemini`
 - After paid Drift/control generation and Coach Digest Evals, build the saved comparison report: `uv run python -m src.evals.coach_drift_control_report --manifest logs/experiments/reports/coach_digest_drift_control/judge_sample_manifest.json --eval-metrics logs/experiments/reports/coach_digest_drift_control/evals/metrics.json --out logs/experiments/reports/coach_digest_drift_control/comparison`
 - Regenerate the capstone report figures: `MPLCONFIGDIR=/tmp/twinkl-matplotlib uv run python scripts/capstone/generate_report_figures.py`
-- Render the capstone report PDF: `quarto render docs/capstone_report/capstone_project_report.md --to pdf`
+- Render the reference-only Quarto report PDF: `quarto render docs/capstone_report/capstone_report_reference_only.md --to pdf`. The current Technical Paper is the [Google Doc](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit).
 
 The Drift EDA accepts `--labels {consensus,judge}` (default: `consensus`) and `--week-mode {runtime,persona_anchor}` (default: `runtime`). The LLM baseline exposes `estimate`, `run`, `score`, and `report`; `run` writes dry-run records unless `--execute` is supplied.
 

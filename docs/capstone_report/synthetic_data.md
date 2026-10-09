@@ -10,7 +10,7 @@ After extensive web research across 15+ searches covering frontier lab publicati
 
 This research note records design corroboration and risk hypotheses. Current
 implementation status and empirical conclusions come from the maintained
-[Phase 2 Technical Paper](capstone_project_report.md).
+[Phase 2 Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) (Google Doc).
 
 Twinkl contains 204 synthetic personas and 1,651 longitudinal Journal Entries.
 Generation runs in parallel between personas and sequentially within each

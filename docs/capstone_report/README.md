@@ -1,15 +1,18 @@
 # Capstone Report Materials
 
-This directory contains the maintained Phase 2 Technical Paper and its
-supporting capstone report materials. Submitted milestone files remain under
-`docs/archive/capstone/`.
+This directory contains supporting capstone report materials. The current
+Phase 2 Technical Paper is the [Google Doc](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit), tab
+“Twinkl Report (Sept ’26)”. It is the ground truth for the report’s direction
+and wording. Submitted milestone files remain under `docs/archive/capstone/`.
 
-## Current Report
+## Report Files
 
-- [`capstone_project_report.md`](capstone_project_report.md) — Quarto source for
-  the Phase 2 Technical Paper
-- [`capstone_project_report.pdf`](capstone_project_report.pdf) — rendered report,
-  with all 46 pages visually verified on 3 October 2026
+- [Phase 2 Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) — current Technical Paper (Google Doc)
+- [`capstone_report_reference_only.md`](capstone_report_reference_only.md) —
+  stale Quarto copy of the paper, kept for reference only and no longer
+  maintained
+- [`capstone_report_reference_only.pdf`](capstone_report_reference_only.pdf) —
+  PDF rendered from that copy on 3 October 2026
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
 - [`images/`](images/) — report figures, interface captures, and evaluation
@@ -19,8 +22,10 @@ supporting capstone report materials. Submitted milestone files remain under
 
 ## Report Controls
 
-- **Document status:** Maintained Phase 2 Technical Paper source and verified PDF;
-  regenerate and visually verify the PDF after source or figure changes
+- **Document status:** The Quarto copy and its PDF are for reference only.
+  Some facts may still be accurate; check them against the Google Doc and the
+  cited evidence before reuse. The sections below describe the Quarto copy as
+  of 3 October 2026
 - **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
 - **Product source:** [`../prd.md`](../prd.md)
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
@@ -48,7 +53,7 @@ export UV_CACHE_DIR=/tmp/twinkl-uv-cache
 MPLCONFIGDIR=/tmp/twinkl-matplotlib \
   uv run python scripts/capstone/generate_report_figures.py
 cd docs/capstone_report
-quarto render capstone_project_report.md --to pdf
+quarto render capstone_report_reference_only.md --to pdf
 ```
 
 The figure script reads committed configuration, Parquet data, JSON metrics,

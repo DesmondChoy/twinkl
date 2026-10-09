@@ -573,7 +573,7 @@ carried forward by this specification.
 - [Product Requirements Document](../prd.md)
 - [Canonical Nouns and Communication Rules](../canonical_nouns.md)
 - [Capstone Requirements](../capstone_report/capstone_requirements.pdf)
-- [Technical Paper source](../capstone_report/capstone_project_report.md)
+- [Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) (Google Doc); [stale Quarto copy](../capstone_report/capstone_report_reference_only.md), reference only
 - [Experience and Inspect design](../demo/experience_inspect_app.md)
 - [Coach Digest explanation quality](../evals/explanation_quality_eval.md)
 - [VIF Critic (Offline) concepts and roadmap](../vif/01_concepts_and_roadmap.md)

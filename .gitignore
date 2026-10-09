@@ -230,3 +230,6 @@ logs/exports/demo_tool_runs/
 *.db
 .beads-credential-key
 .beads/
+
+# Local artifacts: RQ review reports, diagrams, presentation exports
+/output/
