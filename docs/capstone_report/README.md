@@ -65,7 +65,9 @@ quarto render capstone_report.md --to pdf
 ```
 
 Rendering checks consecutive section and appendix numbers, figure and table
-labels, and the numbers shown in figure and table links.
+labels, and the numbers shown in figure and table links. Academic citation
+numbers link to their exact bibliography entries; rendering also checks that
+each citation number matches its reference anchor.
 
 On macOS with TinyTeX, add its binary directory to `PATH` if XeLaTeX is not
 already available:

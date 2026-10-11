@@ -3,6 +3,21 @@ local section_numbers = {}
 local appendix_count = 0
 local caption_counts = {Figure = 0, Table = 0}
 local caption_numbers = {}
+local reference_count = 0
+local reference_numbers = {}
+
+function Span(element)
+  if not element.identifier:match('^ref%-') then return end
+  local number = tonumber(element.identifier:match('^ref%-(%d+)$'))
+  assert(number, 'Invalid bibliography anchor: ' .. element.identifier)
+  reference_count = reference_count + 1
+  assert(number == reference_count, 'Bibliography sequence has a gap or duplicate')
+  assert(pandoc.utils.stringify(element) == '[' .. number .. ']',
+    'Bibliography anchor number differs from its visible marker')
+  reference_numbers[number] = true
+  -- Start the paragraph before its anchor so both move across a page break.
+  return pandoc.RawInline('latex', '\\leavevmode\\phantomsection\\label{ref-' .. number .. '}[' .. number .. ']')
+end
 
 function Header(element)
   local title = pandoc.utils.stringify(element)
@@ -46,6 +61,13 @@ end
 
 function Pandoc(document)
   document:walk({Link = function(link)
+    if link.target:match('^#ref%-') then
+      local number = tonumber(link.target:match('^#ref%-(%d+)$'))
+      assert(number and reference_numbers[number], 'Undefined academic citation: ' .. link.target)
+      assert(pandoc.utils.stringify(link) == '[' .. number .. ']',
+        'Academic citation number differs from its bibliography destination')
+      return
+    end
     if not (link.target:match('^#fig%-') or link.target:match('^#tbl%-')) then return end
     local expected = caption_numbers[link.target:sub(2)]
     assert(expected, 'Undefined figure/table reference: ' .. link.target)

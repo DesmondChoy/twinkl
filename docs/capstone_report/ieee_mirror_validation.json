@@ -1,7 +1,7 @@
 {
   "status": "passed",
   "validated_date": "2026-10-11",
-  "scope": "Corrected edition of the selected 50-page IEEE report, with checklist findings and the subsequent complete numbering/cross-reference pass applied. The numbering pass corrects inherited appendix gaps, stale references in text and images, and first-appearance order. This edition intentionally differs from the original PDF.",
+  "scope": "Corrected edition of the selected 50-page IEEE report, with checklist findings, complete numbering/cross-reference corrections, and clickable academic citations applied. All academic citations jump to their exact numbered bibliography entry. This edition intentionally differs from the original PDF.",
   "source": {
     "path": "output/Twinkl__An_Inner_Compass_for_Longitudinal_Alignment_Between_Behaviour_and_Core_Values__1_/Twinkl IEEE Single Column.pdf",
     "sha256": "df45c03ec7126497b1392d9735ad1e3145e4b837ac02785a47bfce14b6d46094",
@@ -22,11 +22,11 @@
   "outputs": {
     "markdown": {
       "path": "docs/capstone_report/capstone_report.md",
-      "sha256": "956ea3e7ad2be410dd3b0826176f5be967b691db429cffd70a3355f05abc3bde"
+      "sha256": "08c711931bf920549f0ea8f9a78cd5a8eca8b8332bb8f07d6e66f67f2c040b8e"
     },
     "pdf": {
       "path": "docs/capstone_report/capstone_report.pdf",
-      "sha256": "0d36922710a88d75cbb58f24a4bc693977eaf9aa54d12766d2fb7390262919a6",
+      "sha256": "992c506a1678f35386fff03fb0f7dbcd10c5a06e7822cfbb01a88e13190166a6",
       "pages": 49
     }
   },
@@ -1479,7 +1479,8 @@
       ],
       "only_change": "Table 10: 0362 corrected to 0.362",
       "method": "Compare all numeric table data, excluding corrected section pointers"
-    }
+    },
+    "citation_markup_visible_text_preserved": true
   },
   "pdf_checks": {
     "figures": [
@@ -1805,7 +1806,7 @@
       }
     ],
     "pages": 49,
-    "internal_annotations": 104,
+    "internal_annotations": 171,
     "unresolved_pdf_destinations": [],
     "expected_external_urls": 104,
     "rendered_external_urls": 104,
@@ -2107,8 +2108,8 @@
         "line_fragment_in_bounds": null
       }
     ],
-    "markdown_sha256": "956ea3e7ad2be410dd3b0826176f5be967b691db429cffd70a3355f05abc3bde",
-    "pdf_sha256": "0d36922710a88d75cbb58f24a4bc693977eaf9aa54d12766d2fb7390262919a6",
+    "markdown_sha256": "08c711931bf920549f0ea8f9a78cd5a8eca8b8332bb8f07d6e66f67f2c040b8e",
+    "pdf_sha256": "992c506a1678f35386fff03fb0f7dbcd10c5a06e7822cfbb01a88e13190166a6",
     "passed": true
   },
   "independent_reviews": {
@@ -2460,6 +2461,20 @@
         ],
         "maintained_document_references_checked": true
       }
+    },
+    "citation_links": {
+      "passed": true,
+      "failures": [],
+      "pdf_sha256": "992c506a1678f35386fff03fb0f7dbcd10c5a06e7822cfbb01a88e13190166a6",
+      "markdown_sha256": "08c711931bf920549f0ea8f9a78cd5a8eca8b8332bb8f07d6e66f67f2c040b8e",
+      "pdf_pages": 49,
+      "academic_citation_annotations": 67,
+      "reference_entries": 51,
+      "existing_internal_annotations": 104,
+      "total_link_annotations": 297,
+      "external_annotations": 126,
+      "entry_top_delta_min_points": 4.139321600000017,
+      "entry_top_delta_max_points": 4.149321600000064
     }
   },
   "visual_checks": {
@@ -2984,6 +2999,71 @@
       ],
       "status": "passed",
       "reviewers": "root and three independent fresh reviewers"
+    },
+    "citation_pass": {
+      "pdf_sha256": "992c506a1678f35386fff03fb0f7dbcd10c5a06e7822cfbb01a88e13190166a6",
+      "pages": 49,
+      "scale_to_pixels": 1300,
+      "changed_pages": [
+        3,
+        4,
+        5,
+        6,
+        10,
+        13,
+        18,
+        20,
+        21,
+        23,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45
+      ],
+      "pixel_identical_pages": [
+        1,
+        2,
+        7,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        19,
+        22,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        46,
+        47,
+        48,
+        49
+      ],
+      "contact_sheets": 5,
+      "all_changed_pages_reviewed": true,
+      "individual_pages_reviewed": [
+        41,
+        46
+      ],
+      "layout_findings": []
     }
   },
   "render": {
@@ -5080,5 +5160,1784 @@
     "original_33_rasters_retained_and_verified": true,
     "current_33_image_placements_verified": true,
     "limitations": "Numbering and cross-reference scope; no model experiments or application suite rerun."
+  },
+  "citation_link_pass": {
+    "date": "2026-10-11",
+    "issue": "twinkl-xklp",
+    "status": "passed",
+    "prior_outputs": {
+      "markdown": {
+        "path": "docs/capstone_report/capstone_report.md",
+        "sha256": "956ea3e7ad2be410dd3b0826176f5be967b691db429cffd70a3355f05abc3bde"
+      },
+      "pdf": {
+        "path": "docs/capstone_report/capstone_report.pdf",
+        "sha256": "0d36922710a88d75cbb58f24a4bc693977eaf9aa54d12766d2fb7390262919a6",
+        "pages": 49
+      }
+    },
+    "scope": "Turn all 67 body and caption academic citations into internal links to 51 stable ref-N anchors, preserving displayed text and external DOI/article links.",
+    "guard_file": "docs/capstone_report/render-support/ieee-mirror.lua",
+    "guard_sha256": "6df8930bc1bda9eb3420520a09d6e3cdf75c4bc15ceb8a70de57049f61fd595f",
+    "guard_cases": {
+      "missing_reference": {
+        "passed": true,
+        "expected": "reject",
+        "diagnostic": "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:66: Undefined academic citation: #ref-51"
+      },
+      "reference_gap": {
+        "passed": true,
+        "expected": "reject",
+        "diagnostic": "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:14: Bibliography sequence has a gap or duplicate"
+      },
+      "marker_mismatch": {
+        "passed": true,
+        "expected": "reject",
+        "diagnostic": "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:15: Bibliography anchor number differs from its visible marker"
+      },
+      "citation_target_mismatch": {
+        "passed": true,
+        "expected": "reject",
+        "diagnostic": "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:67: Academic citation number differs from its bibliography destination"
+      },
+      "undefined_citation": {
+        "passed": true,
+        "expected": "reject",
+        "diagnostic": "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:66: Undefined academic citation: #ref-52"
+      },
+      "valid_report": {
+        "passed": true,
+        "expected": "pass",
+        "diagnostic": null
+      }
+    },
+    "render_iterations": 2,
+    "page_break_anchor_repair": {
+      "first_render_failed_references": [
+        13,
+        35
+      ],
+      "failure": "Default inline span anchors remained on the preceding page when the reference paragraph moved to the next page.",
+      "repair": "Begin the paragraph with leavevmode before phantomsection and label so the anchor follows the first line.",
+      "final_recheck": "All 67 destinations on the same page as their matching entry, approximately 4.14 points above its first glyph row."
+    },
+    "visible_text_preserved": true,
+    "destination_check_method": "For each PDF academic citation annotation, read its visible bracketed number and named destination; compare destination page and coordinates with the first line of the actual numbered bibliography entry. Root and independent reviewer checks agree.",
+    "bibliography_entries": {
+      "1": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 382.4953216,
+        "bottom": 392.45792159999996,
+        "full_text": "[1] E. P. S. Baumer, “Reflective informatics: Conceptual dimensions for designing technologies of reflection,” in Proc. 33rd\nAnnu. ACM Conf. Human Factors Comput. Syst. (CHI ’15), 2015, pp. 585–594, doi: 10.1145/2702123.2702234.",
+        "destination_name": "section*.104",
+        "destination_page": 44,
+        "destination_top": 378.34999999999997,
+        "vertical_delta_points": 4.145321600000045
+      },
+      "2": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 409.3943216,
+        "bottom": 419.35692159999996,
+        "full_text": "[2] M. Sharma et al., “Towards understanding sycophancy in language models,” in Proc. Int. Conf. Learn. Represent. (ICLR),\n2024. [Online]. Available: https://proceedings.iclr.cc/paper_files/paper/2024/file/0105f797\n2202c1d4fb817da9f21a9663 -Paper-Conference.pdf",
+        "destination_name": "section*.105",
+        "destination_page": 44,
+        "destination_top": 405.25,
+        "vertical_delta_points": 4.144321600000012
+      },
+      "3": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 448.24932160000003,
+        "bottom": 458.2119216,
+        "full_text": "[3] H. Gaffney, W. Mansell, and S. Tai, “Conversational agents in the treatment of mental health problems: Mixed-method\nsystematic review,” JMIR Ment. Health, vol. 6, no. 10, Art. no. e14166, 2019, doi: 10.2196/14166.",
+        "destination_name": "section*.106",
+        "destination_page": 44,
+        "destination_top": 444.09999999999997,
+        "vertical_delta_points": 4.149321600000064
+      },
+      "4": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 475.14832160000003,
+        "bottom": 485.1109216,
+        "full_text": "[4]S.H.Schwartz,“Universalsinthecontentandstructureofvalues:Theoreticaladvancesandempiricaltestsin20countries,”\ninAdvancesinExperimentalSocialPsychology,vol.25,M.P.Zanna,Ed.,1992,pp.1–65,doi:10.1016/S0065-2601(08)60281-\n6.",
+        "destination_name": "section*.107",
+        "destination_page": 44,
+        "destination_top": 471.0,
+        "vertical_delta_points": 4.148321600000031
+      },
+      "5": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 514.0023216,
+        "bottom": 523.9649216,
+        "full_text": "[5] S. H. Schwartz et al., “Refining the theory of basic individual values,” J. Pers. Soc. Psychol., vol. 103, no. 4, pp. 663–688,\n2012, doi: 10.1037/a0029393.",
+        "destination_name": "section*.108",
+        "destination_page": 44,
+        "destination_top": 509.86,
+        "vertical_delta_points": 4.142321599999946
+      },
+      "6": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 540.9013216,
+        "bottom": 550.8639215999999,
+        "full_text": "[6] S. H. Schwartz, “An overview of the Schwartz theory of basic values,” Online Readings Psychol. Cult., vol. 2, no. 1,\nDec. 2012, doi: 10.9707/2307-0919.1116.",
+        "destination_name": "section*.109",
+        "destination_page": 44,
+        "destination_top": 536.76,
+        "vertical_delta_points": 4.141321599999969
+      },
+      "7": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 567.8003216,
+        "bottom": 577.7629216,
+        "full_text": "[7] E. Davidov, P. Schmidt, and S. H. Schwartz, “Bringing values back in: The adequacy of the European Social Survey to\nmeasure values in 20 countries,” Public Opinion Quart., vol. 72, no. 3, pp. 420–445, 2008, doi: 10.1093/poq/nfn035.",
+        "destination_name": "section*.110",
+        "destination_page": 44,
+        "destination_top": 563.66,
+        "vertical_delta_points": 4.140321599999993
+      },
+      "8": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 594.7003215999999,
+        "bottom": 604.6629216,
+        "full_text": "[8] J. Kiesel et al., “SemEval-2023 Task 4: ValueEval: Identification of human values behind arguments,” in Proc. 17th Int.\nWorkshop Semantic Evaluation (SemEval-2023), Toronto, Canada, Jul. 2023, pp. 2287–2303, doi: 10.18653/v1/2023.semeval-\n1.313.",
+        "destination_name": "section*.111",
+        "destination_page": 44,
+        "destination_top": 590.56,
+        "vertical_delta_points": 4.140321599999993
+      },
+      "9": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 633.5543216,
+        "bottom": 643.5169216,
+        "full_text": "[9] Y. Ren, H. Ye, H. Fang, X. Zhang, and G. Song, “ValueBench: Towards comprehensively evaluating value orientations\nand understanding of large language models,” in Proc. 62nd Annu. Meeting Assoc. Comput. Linguistics, Vol. 1: Long Papers,\nBangkok, Thailand, Aug. 2024, pp. 2015–2040, doi: 10.18653/v1/2024.acl-long.111.",
+        "destination_name": "section*.112",
+        "destination_page": 44,
+        "destination_top": 629.41,
+        "vertical_delta_points": 4.144321600000012
+      },
+      "10": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 672.4083216,
+        "bottom": 682.3709216000001,
+        "full_text": "[10] J. A. Lee, G. Soutar, and J. Louviere, “The best–worst scaling approach: An alternative to Schwartz’s Values Survey,” J.\nPers. Assess., vol. 90, no. 4, pp. 335–347, 2008, doi: 10.1080/00223890802107925.",
+        "destination_name": "section*.113",
+        "destination_page": 44,
+        "destination_top": 668.26,
+        "vertical_delta_points": 4.148321600000031
+      },
+      "11": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 699.3073216,
+        "bottom": 709.2699216000001,
+        "full_text": "[11] I. Li, A. Dey, and J. Forlizzi, “A stage-based model of personal informatics systems,” in Proc. SIGCHI Conf. Human\nFactors Comput. Syst. (CHI ’10), 2010, pp. 557–566, doi: 10.1145/1753326.1753409.",
+        "destination_name": "section*.114",
+        "destination_page": 44,
+        "destination_top": 695.16,
+        "vertical_delta_points": 4.147321600000055
+      },
+      "12": {
+        "page": 44,
+        "left": 40.602000000000004,
+        "top": 726.2063216,
+        "bottom": 736.1689216000001,
+        "full_text": "[12] D. A. Epstein, A. Ping, J. Fogarty, and S. A. Munson, “A lived informatics model of personal informatics,” in Proc. 2015\nACM Int. Joint Conf. Pervasive Ubiquitous Comput. (UbiComp ’15), 2015, pp. 731–742, doi: 10.1145/2750858.2804250.",
+        "destination_name": "section*.115",
+        "destination_page": 44,
+        "destination_top": 722.06,
+        "vertical_delta_points": 4.146321600000078
+      },
+      "13": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 56.71732159999999,
+        "bottom": 66.67992160000006,
+        "full_text": "[13] S. Nepal et al., “MindScape Study: Integrating LLM and behavioral sensing for personalized AI-driven journaling\nexperiences,”Proc.ACMInteract.Mob.WearableUbiquitousTechnol.,vol.8,no.4,Art.no.186,2024,doi:10.1145/3699761.",
+        "destination_name": "section*.116",
+        "destination_page": 45,
+        "destination_top": 52.569999999999936,
+        "vertical_delta_points": 4.147321600000055
+      },
+      "14": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 83.61632159999999,
+        "bottom": 93.57892160000006,
+        "full_text": "[14] S. Wu, Y. R. Fung, C. Qian, J. Kim, D. Hakkani-Tur, and H. Ji, “Aligning LLMs with individual preferences via\ninteraction,” in Proc. 31st Int. Conf. Comput. Linguistics (COLING), 2025, pp. 7648–7662. [Online]. Available: https:\n//aclanthology.org/2025.coling-main.511/",
+        "destination_name": "section*.117",
+        "destination_page": 45,
+        "destination_top": 79.47000000000003,
+        "vertical_delta_points": 4.146321599999965
+      },
+      "15": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 122.47032159999992,
+        "bottom": 132.4329216,
+        "full_text": "[15]Z. Tanet al., “In prospect and retrospect:Reflective memory management for long-term personalized dialogue agents,” in\nProc. 63rd Annu. Meeting Assoc. Comput. Linguistics, Vol. 1: Long Papers, 2025, pp. 8416–8439, doi: 10.18653/v1/2025.acl-\nlong.413.",
+        "destination_name": "section*.118",
+        "destination_page": 45,
+        "destination_top": 118.33000000000004,
+        "vertical_delta_points": 4.140321599999879
+      },
+      "16": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 161.32532159999994,
+        "bottom": 171.2879216,
+        "full_text": "[16] M. Cheng, C. Lee, P. Khadpe, S. Yu, D. Han, and D. Jurafsky, “Sycophantic AI decreases prosocial intentions and\npromotes dependence,” Science, vol. 391, no. 6792, Art. no. eaec8352, 2026, doi: 10.1126/science.aec8352.",
+        "destination_name": "section*.119",
+        "destination_page": 45,
+        "destination_top": 157.17999999999995,
+        "vertical_delta_points": 4.145321599999988
+      },
+      "17": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 188.22432159999994,
+        "bottom": 198.1869216,
+        "full_text": "[17] X. He, I. Nassar, J. Kiros, G. Haffari, and M. Norouzi, “Generate, annotate, and learn: NLP with synthetic text,” Trans.\nAssoc. Comput. Linguistics, vol. 10, pp. 826–842, 2022, doi: 10.1162/tacl_a_00492.",
+        "destination_name": "section*.120",
+        "destination_page": 45,
+        "destination_top": 184.08000000000004,
+        "vertical_delta_points": 4.144321599999898
+      },
+      "18": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 215.12332159999994,
+        "bottom": 225.0859216,
+        "full_text": "[18] L. Zheng et al., “Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena,” in Advances in Neural Information\nProcessing Systems, vol. 36, Datasets and Benchmarks Track, 2023, pp. 46595–46623, doi: 10.52202/075280-2020.",
+        "destination_name": "section*.121",
+        "destination_page": 45,
+        "destination_top": 210.98000000000002,
+        "vertical_delta_points": 4.143321599999922
+      },
+      "19": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 242.02232159999994,
+        "bottom": 251.9849216,
+        "full_text": "[19] J. Cohen, “Weighted kappa: Nominal scale agreement with provision for scaled disagreement or partial credit,” Psychol.\nBull., vol. 70, no. 4, pp. 213–220, 1968, doi: 10.1037/h0026256.",
+        "destination_name": "section*.122",
+        "destination_page": 45,
+        "destination_top": 237.88,
+        "vertical_delta_points": 4.142321599999946
+      },
+      "20": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 268.92132159999994,
+        "bottom": 278.8839216,
+        "full_text": "[20] W. Cao, V. Mirjalili, and S. Raschka, “Rank consistent ordinal regression for neural networks with application to age\nestimation,” Pattern Recognit. Lett., vol. 140, pp. 325–331, Dec. 2020, doi: 10.1016/j.patrec.2020.11.008.",
+        "destination_name": "section*.123",
+        "destination_page": 45,
+        "destination_top": 264.78,
+        "vertical_delta_points": 4.141321599999969
+      },
+      "21": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 295.82032159999994,
+        "bottom": 305.7829216,
+        "full_text": "[21] J. Ren et al., “Balanced Meta-Softmax for long-tailed visual recognition,” in Advances in Neural Information Processing\nSystems, vol. 33, 2020, pp. 4175–4186. [Online]. Available: https://proceedings.neurips.cc/paper_files\n/paper/2020/hash/2ba61cc3a8f44143e1f2f13b2b7 29ab3-Abstract.html",
+        "destination_name": "section*.124",
+        "destination_page": 45,
+        "destination_top": 291.67999999999995,
+        "vertical_delta_points": 4.140321599999993
+      },
+      "22": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 334.67532159999996,
+        "bottom": 344.63792159999997,
+        "full_text": "[22] Y. Gal and Z. Ghahramani, “Dropout as a Bayesian approximation: Representing model uncertainty in deep learning,” in\nProc. 33rd Int. Conf. Mach. Learn. (ICML), ser. Proceedings of Machine Learning Research, vol. 48, 2016, pp. 1050–1059.\n[Online]. Available: https://proceedings.mlr.press/v48/gal16.html",
+        "destination_name": "section*.125",
+        "destination_page": 45,
+        "destination_top": 330.53,
+        "vertical_delta_points": 4.145321599999988
+      },
+      "23": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 373.5293216,
+        "bottom": 383.49192159999996,
+        "full_text": "[23] A. Tsakalidis, F. Nanni, A. Hills, J. Chim, J. Song, and M. Liakata, “Identifying moments of change from longitu-\ndinal user text,” Proc. 60th Annu. Meeting Assoc. Comput. Linguistics., vol. 1: Long papers, 2022, pp. 4647–4660, doi:\n10.18653/v1/2022.acl-long.318.",
+        "destination_name": "section*.126",
+        "destination_page": 45,
+        "destination_top": 369.39,
+        "vertical_delta_points": 4.139321600000017
+      },
+      "24": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 412.38332160000004,
+        "bottom": 422.3459216,
+        "full_text": "[24] Y. Geifman and R. El-Yaniv, \"Selective classification for deep neural networks,\" in Advances in Neural Information\nProcessing Systems, vol. 30, 2017. [Online]. Available: https://proceedings.neurips.cc/paper/2017/ha\nsh/4a8423d5e91fda00bb7e46540e2b0cf1-Abs tract.html",
+        "destination_name": "section*.127",
+        "destination_page": 45,
+        "destination_top": 408.24,
+        "vertical_delta_points": 4.143321600000036
+      },
+      "25": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 451.23832159999995,
+        "bottom": 461.20092159999996,
+        "full_text": "[25] J. Maynez, S. Narayan, B. Bohnet, and R. McDonald, \"On faithfulness and factuality in abstractive summarization,\" in\nProc. 58th Annu. Meeting Assoc. Comput. Linguistics, 2020, pp. 1906–1919, doi: 10.18653/v1/2020.acl-main.173.",
+        "destination_name": "section*.128",
+        "destination_page": 45,
+        "destination_top": 447.09,
+        "vertical_delta_points": 4.148321599999974
+      },
+      "26": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 478.13732159999995,
+        "bottom": 488.09992159999996,
+        "full_text": "[26] T. Gao, H. Yen, J. Yu, and D. Chen, \"Enabling large language models to generate text with citations,\" in Proc. 2023 Conf.\nEmpirical Methods Natural Lang. Process., 2023, pp. 6465–6488, doi: 10.18653/v1/2023.emnlp-main.398.",
+        "destination_name": "section*.129",
+        "destination_page": 45,
+        "destination_top": 473.99,
+        "vertical_delta_points": 4.147321599999941
+      },
+      "27": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 505.03632159999995,
+        "bottom": 514.9989215999999,
+        "full_text": "[27]S.Minetal.,\"FActScore:Fine-grainedatomicevaluationoffactualprecisioninlongformtextgeneration,\"inProc.2023\nConf. Empirical Methods Natural Lang. Process., 2023, pp. 12076–12100, doi: 10.18653/v1/2023.emnlp-main.741.",
+        "destination_name": "section*.130",
+        "destination_page": 45,
+        "destination_top": 500.89,
+        "vertical_delta_points": 4.146321599999965
+      },
+      "28": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 531.9353216,
+        "bottom": 541.8979216,
+        "full_text": "[28] P. Lewis et al., \"Retrieval-augmented generation for knowledge-intensive NLP tasks,\" in Advances in Neural Information\nProcessing Systems, vol. 33, 2020. [Online]. Available: https://proceedings.neurips.cc/paper/2020/ha\nsh/6b493230205f780e1bc26945df7481e5-Abs tract.html",
+        "destination_name": "section*.131",
+        "destination_page": 45,
+        "destination_top": 527.79,
+        "vertical_delta_points": 4.145321599999988
+      },
+      "29": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 570.7893216,
+        "bottom": 580.7519216000001,
+        "full_text": "[29]N.F.Liuetal.,\"Lostinthemiddle:Howlanguagemodelsuselongcontexts,\"Trans.Assoc.Comput.Linguistics,vol.12,\npp. 157–173, 2024, doi: 10.1162/tacl_a_00638.",
+        "destination_name": "section*.132",
+        "destination_page": 45,
+        "destination_top": 566.65,
+        "vertical_delta_points": 4.139321600000017
+      },
+      "30": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 597.6883216,
+        "bottom": 607.6509216000001,
+        "full_text": "[30] W. R. Miller and S. Rollnick, Motivational Interviewing: Helping People Change, 3rd ed. New York, NY, USA: Guilford\nPress, 2013.",
+        "destination_name": "section*.133",
+        "destination_page": 45,
+        "destination_top": 593.54,
+        "vertical_delta_points": 4.148321600000031
+      },
+      "31": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 624.5883216,
+        "bottom": 634.5509216,
+        "full_text": "[31] J. L. Fleiss, “Measuring nominal scale agreement among many raters,” Psychol. Bull., vol. 76, no. 5, pp. 378–382,\nNov. 1971, doi: 10.1037/h0031619.",
+        "destination_name": "section*.134",
+        "destination_page": 45,
+        "destination_top": 620.44,
+        "vertical_delta_points": 4.1483215999999175
+      },
+      "32": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 651.4873216,
+        "bottom": 661.4499216,
+        "full_text": "[32] J. Cohen, “A coefficient of agreement for nominal scales,” Educ. Psychol. Meas., vol. 20, no. 1, pp. 37–46, Apr. 1960,\ndoi: 10.1177/001316446002000104.",
+        "destination_name": "section*.135",
+        "destination_page": 45,
+        "destination_top": 647.3399999999999,
+        "vertical_delta_points": 4.147321600000055
+      },
+      "33": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 678.3863216,
+        "bottom": 688.3489216,
+        "full_text": "[33] J. R. Landis and G. G. Koch, “The measurement of observer agreement for categorical data,” Biometrics, vol. 33, no. 1,\npp. 159–174, Mar. 1977, doi: 10.2307/2529310.",
+        "destination_name": "section*.136",
+        "destination_page": 45,
+        "destination_top": 674.24,
+        "vertical_delta_points": 4.146321599999965
+      },
+      "34": {
+        "page": 45,
+        "left": 40.602000000000004,
+        "top": 705.2853216,
+        "bottom": 715.2479216,
+        "full_text": "[34] Z. Nussbaum, J. X. Morris, B. Duderstadt, and A. Mulyar, “Nomic Embed: Training a reproducible long context text\nembedder,” Trans. Mach. Learn. Res., Feb. 2025. [Online]. Available: https://openreview.net/forum?id=IPmz\nyQSiQE",
+        "destination_name": "section*.137",
+        "destination_page": 45,
+        "destination_top": 701.14,
+        "vertical_delta_points": 4.145321599999988
+      },
+      "35": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 56.71732159999999,
+        "bottom": 66.67992160000006,
+        "full_text": "[35] Nomic AI, “nomic-embed-text-v1.5,” official model card. Accessed: Oct. 11, 2026. [Online]. Available: https://hu\nggingface.co/nomic-ai/nomic-embed-text-v1.5.\nhttps://deve",
+        "destination_name": "section*.138",
+        "destination_page": 46,
+        "destination_top": 52.569999999999936,
+        "vertical_delta_points": 4.147321600000055
+      },
+      "36": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 83.61632159999999,
+        "bottom": 93.57892160000006,
+        "full_text": "[36] OpenAI. “GPT-5.6 Luna.” OpenAI API documentation. Accessed: Oct. 11, 2026. [Online]. Available: https://deve\nlopers.openai.com/api/docs/models/gpt-5.6-luna",
+        "destination_name": "section*.139",
+        "destination_page": 46,
+        "destination_top": 79.47000000000003,
+        "vertical_delta_points": 4.146321599999965
+      },
+      "37": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 110.5153216,
+        "bottom": 120.47792160000006,
+        "full_text": "[37] A. A. J. Marley and J. J. Louviere, “Some probabilistic models of best, worst, and best–worst choices,” J. Math. Psychol.,\nvol. 49, no. 6, pp. 464–480, 2005, doi: 10.1016/j.jmp.2005.05.003.",
+        "destination_name": "section*.140",
+        "destination_page": 46,
+        "destination_top": 106.37,
+        "vertical_delta_points": 4.145321599999988
+      },
+      "38": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 137.4143216,
+        "bottom": 147.37692160000006,
+        "full_text": "[38] Z. C. Lipton, \"The mythos of model interpretability,\" Commun. ACM, vol. 61, no. 10, pp. 36–43, Oct. 2018, doi:\n10.1145/3233231.",
+        "destination_name": "section*.141",
+        "destination_page": 46,
+        "destination_top": 133.26999999999998,
+        "vertical_delta_points": 4.144321600000012
+      },
+      "39": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 164.31432159999997,
+        "bottom": 174.27692160000004,
+        "full_text": "[39] Z. Epstein et al., “Whose values? Measuring the (subjective) expression of basic human values in social media posts,”\nProc. Int. AAAI Conf. Web Social Media, vol. 20, no. 1, pp. 738–759, 2026, doi: 10.1609/icwsm.v20i1.42664.",
+        "destination_name": "section*.142",
+        "destination_page": 46,
+        "destination_top": 160.16999999999996,
+        "vertical_delta_points": 4.144321600000012
+      },
+      "40": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 191.21332159999997,
+        "bottom": 201.17592160000004,
+        "full_text": "[40]A.BardiandS.H.Schwartz,“Valuesandbehavior:Strengthandstructureofrelations,”Pers.Soc.Psychol.Bull.,vol.29,\nno. 10, pp. 1207–1220, 2003, doi: 10.1177/0146167203254602.",
+        "destination_name": "section*.143",
+        "destination_page": 46,
+        "destination_top": 187.06999999999994,
+        "vertical_delta_points": 4.143321600000036
+      },
+      "41": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 218.11232159999997,
+        "bottom": 228.07492160000004,
+        "full_text": "[41] V. Yeste and P. Rosso, “Do Schwartz Higher-Order Values Help Sentence-Level Human Value Detection? A Study of\nHierarchical Gating and Calibration,” arXiv:2602.00913, 2026. https://arxiv.org/abs/2602.00913v3",
+        "destination_name": "section*.144",
+        "destination_page": 46,
+        "destination_top": 213.97000000000003,
+        "vertical_delta_points": 4.142321599999946
+      },
+      "42": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 245.01132159999997,
+        "bottom": 254.97392160000004,
+        "full_text": "[42] M. Spranca, E. Minsk, and J. Baron, “Omission and commission in judgment and choice,” J. Exp. Soc. Psychol., vol. 27,\nno. 1, pp. 76–105, 1991, doi: 10.1016/0022-1031(91)90011-T.",
+        "destination_name": "section*.145",
+        "destination_page": 46,
+        "destination_top": 240.87,
+        "vertical_delta_points": 4.141321599999969
+      },
+      "43": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 271.9103216,
+        "bottom": 281.87292160000004,
+        "full_text": "[43] Z. Sprague et al., “To CoT or not to CoT? Chain-of-thought helps mainly on math and symbolic reasoning,” in Proc. Int.\nConf. Learn. Represent. (ICLR), 2025. [Online]. Available: https://arxiv.org/abs/2409.12183",
+        "destination_name": "section*.146",
+        "destination_page": 46,
+        "destination_top": 267.77,
+        "vertical_delta_points": 4.140321599999993
+      },
+      "44": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 298.8093216,
+        "bottom": 308.77192160000004,
+        "full_text": "[44] S. Kapoor, B. Stroebl, Z. S. Siegel, N. Nadgir, and A. Narayanan, “AI agents that matter,” Trans. Mach. Learn. Res.,\n2025. [Online]. Available: https://arxiv.org/abs/2407.01502\nhttp://www.incompleteid",
+        "destination_name": "section*.147",
+        "destination_page": 46,
+        "destination_top": 294.66999999999996,
+        "vertical_delta_points": 4.139321600000017
+      },
+      "45": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 325.7083216,
+        "bottom": 335.6709216,
+        "full_text": "[45] R. Sutton, “The bitter lesson,” Incomplete Ideas, Mar. 13, 2019. [Online]. Available: http://www.incompleteid\neas.net/IncIdeas/BitterLesson.html",
+        "destination_name": "section*.148",
+        "destination_page": 46,
+        "destination_top": 321.55999999999995,
+        "vertical_delta_points": 4.148321600000031
+      },
+      "46": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 352.6073216,
+        "bottom": 362.5699216,
+        "full_text": "[46] C. Snell, J. Lee, K. Xu, and A. Kumar, “Scaling LLM test-time compute optimally can be more effective than scaling\nmodel parameters,” arXiv:2408.03314, 2024. https://arxiv.org/pdf/2408.03314",
+        "destination_name": "section*.149",
+        "destination_page": 46,
+        "destination_top": 348.46,
+        "vertical_delta_points": 4.147321599999998
+      },
+      "47": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 379.50732159999995,
+        "bottom": 389.46992159999996,
+        "full_text": "[47] T. Byrt, J. Bishop, and J. B. Carlin, “Bias, prevalence and kappa,” J. Clin. Epidemiol., vol. 46, no. 5, pp. 423–429, May\n1993, doi: 10.1016/0895-4356(93)90018-V.",
+        "destination_name": "section*.150",
+        "destination_page": 46,
+        "destination_top": 375.36,
+        "vertical_delta_points": 4.147321599999941
+      },
+      "48": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 406.40632159999996,
+        "bottom": 416.36892159999996,
+        "full_text": "[48] P. Röttger, B. Vidgen, D. Hovy, and J. Pierrehumbert, “Two contrasting data annotation paradigms for subjective NLP\ntasks,” in Proc. 2022 Conf. North American Chapter Assoc. Comput. Linguistics: Human Language Technologies, 2022,\npp. 175–190, doi: 10.18653/v1/2022.naacl-main.13.",
+        "destination_name": "section*.151",
+        "destination_page": 46,
+        "destination_top": 402.26,
+        "vertical_delta_points": 4.146321599999965
+      },
+      "49": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 445.2603216,
+        "bottom": 455.2229216,
+        "full_text": "[49] W. Fleeson, “Toward a structure- and process-integrated view of personality: Traits as density distributions of states,” J.\nPers. Soc. Psychol., vol. 80, no. 6, pp. 1011–1027, 2001, doi: 10.1037/0022-3514.80.6.1011.",
+        "destination_name": "section*.152",
+        "destination_page": 46,
+        "destination_top": 441.12,
+        "vertical_delta_points": 4.140321599999993
+      },
+      "50": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 472.1593216,
+        "bottom": 482.1219216,
+        "full_text": "[50] P. Lally, C. H. M. van Jaarsveld, H. W. W. Potts, and J. Wardle, “How are habits formed: Modelling habit formation in\nthe real world,” Eur. J. Soc. Psychol., vol. 40, no. 6, pp. 998–1009, 2010, doi: 10.1002/ejsp.674.",
+        "destination_name": "section*.153",
+        "destination_page": 46,
+        "destination_top": 468.02,
+        "vertical_delta_points": 4.139321600000017
+      },
+      "51": {
+        "page": 46,
+        "left": 40.602000000000004,
+        "top": 499.0583216,
+        "bottom": 509.0209216,
+        "full_text": "[51] K. Hines, G. Lopez, M. Hall, F. Zarfati, Y. Zunger, and E. Kiciman, \"Defending against indirect prompt injection attacks\nwith spotlighting,\" arXiv:2403.14720, 2024.\nAppendix A. Reproduction and Evidence Map\nThecorehistoricalexperimentevidencesnapshotusedforthispaperiscommitdd4bfa9d.Commit44ebcf25preservestheearlier\napplication walkthrough and 30 August verification. The 12 September implementation, prompt telemetry, later evaluation\nrecords, and test checkpoint use commit 3dbb3e43. Table 19 keeps these snapshots distinct so that later implementation",
+        "destination_name": "section*.154",
+        "destination_page": 46,
+        "destination_top": 494.90999999999997,
+        "vertical_delta_points": 4.148321600000031
+      }
+    },
+    "citation_annotations": [
+      {
+        "reference_number": 1,
+        "source_page": 3,
+        "source_rect": [
+          444.16,
+          721.148,
+          455.777,
+          732.181
+        ],
+        "annotation_text": "[1]",
+        "destination_name": "section*.104",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 378.34999999999997,
+        "entry_top_delta_points": 4.145321600000045
+      },
+      {
+        "reference_number": 2,
+        "source_page": 3,
+        "source_rect": [
+          480.538,
+          622.518,
+          492.154,
+          633.55
+        ],
+        "annotation_text": "[2]",
+        "destination_name": "section*.105",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 405.25,
+        "entry_top_delta_points": 4.144321600000012
+      },
+      {
+        "reference_number": 3,
+        "source_page": 3,
+        "source_rect": [
+          40.602,
+          538.831,
+          52.218,
+          549.864
+        ],
+        "annotation_text": "[3]",
+        "destination_name": "section*.106",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 444.09999999999997,
+        "entry_top_delta_points": 4.149321600000064
+      },
+      {
+        "reference_number": 4,
+        "source_page": 4,
+        "source_rect": [
+          516.389,
+          253.994,
+          528.006,
+          265.026
+        ],
+        "annotation_text": "[4]",
+        "destination_name": "section*.107",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 471.0,
+        "entry_top_delta_points": 4.148321600000031
+      },
+      {
+        "reference_number": 5,
+        "source_page": 4,
+        "source_rect": [
+          381.399,
+          242.038,
+          393.016,
+          253.071
+        ],
+        "annotation_text": "[5]",
+        "destination_name": "section*.108",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 509.86,
+        "entry_top_delta_points": 4.142321599999946
+      },
+      {
+        "reference_number": 6,
+        "source_page": 5,
+        "source_rect": [
+          424.715,
+          566.685,
+          434.008,
+          575.511
+        ],
+        "annotation_text": "[6]",
+        "destination_name": "section*.109",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 536.76,
+        "entry_top_delta_points": 4.141321599999969
+      },
+      {
+        "reference_number": 6,
+        "source_page": 5,
+        "source_rect": [
+          139.883,
+          524.709,
+          151.499,
+          535.742
+        ],
+        "annotation_text": "[6]",
+        "destination_name": "section*.109",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 536.76,
+        "entry_top_delta_points": 4.141321599999969
+      },
+      {
+        "reference_number": 7,
+        "source_page": 5,
+        "source_rect": [
+          88.501,
+          512.754,
+          100.117,
+          523.787
+        ],
+        "annotation_text": "[7]",
+        "destination_name": "section*.110",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 563.66,
+        "entry_top_delta_points": 4.140321599999993
+      },
+      {
+        "reference_number": 8,
+        "source_page": 5,
+        "source_rect": [
+          131.138,
+          500.799,
+          142.755,
+          511.832
+        ],
+        "annotation_text": "[8]",
+        "destination_name": "section*.111",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 590.56,
+        "entry_top_delta_points": 4.140321599999993
+      },
+      {
+        "reference_number": 9,
+        "source_page": 5,
+        "source_rect": [
+          426.933,
+          500.799,
+          438.55,
+          511.832
+        ],
+        "annotation_text": "[9]",
+        "destination_name": "section*.112",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 629.41,
+        "entry_top_delta_points": 4.144321600000012
+      },
+      {
+        "reference_number": 10,
+        "source_page": 5,
+        "source_rect": [
+          202.149,
+          461.945,
+          218.747,
+          472.977
+        ],
+        "annotation_text": "[10]",
+        "destination_name": "section*.113",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 668.26,
+        "entry_top_delta_points": 4.148321600000031
+      },
+      {
+        "reference_number": 5,
+        "source_page": 5,
+        "source_rect": [
+          477.816,
+          449.989,
+          489.432,
+          461.022
+        ],
+        "annotation_text": "[5]",
+        "destination_name": "section*.108",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 509.86,
+        "entry_top_delta_points": 4.142321599999946
+      },
+      {
+        "reference_number": 11,
+        "source_page": 5,
+        "source_rect": [
+          85.428,
+          357.056,
+          101.656,
+          368.089
+        ],
+        "annotation_text": "[11]",
+        "destination_name": "section*.114",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 695.16,
+        "entry_top_delta_points": 4.147321600000055
+      },
+      {
+        "reference_number": 12,
+        "source_page": 5,
+        "source_rect": [
+          60.742,
+          345.101,
+          77.34,
+          356.134
+        ],
+        "annotation_text": "[12]",
+        "destination_name": "section*.115",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 722.06,
+        "entry_top_delta_points": 4.146321600000078
+      },
+      {
+        "reference_number": 1,
+        "source_page": 5,
+        "source_rect": [
+          107.347,
+          321.191,
+          118.963,
+          332.224
+        ],
+        "annotation_text": "[1]",
+        "destination_name": "section*.104",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 378.34999999999997,
+        "entry_top_delta_points": 4.145321600000045
+      },
+      {
+        "reference_number": 13,
+        "source_page": 5,
+        "source_rect": [
+          76.956,
+          294.292,
+          93.554,
+          305.325
+        ],
+        "annotation_text": "[13]",
+        "destination_name": "section*.116",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 52.569999999999936,
+        "entry_top_delta_points": 4.147321600000055
+      },
+      {
+        "reference_number": 14,
+        "source_page": 5,
+        "source_rect": [
+          302.459,
+          294.292,
+          319.057,
+          305.325
+        ],
+        "annotation_text": "[14]",
+        "destination_name": "section*.117",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 79.47000000000003,
+        "entry_top_delta_points": 4.146321599999965
+      },
+      {
+        "reference_number": 15,
+        "source_page": 5,
+        "source_rect": [
+          40.602,
+          282.337,
+          57.2,
+          293.369
+        ],
+        "annotation_text": "[15]",
+        "destination_name": "section*.118",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 118.33000000000004,
+        "entry_top_delta_points": 4.140321599999879
+      },
+      {
+        "reference_number": 2,
+        "source_page": 5,
+        "source_rect": [
+          305.319,
+          270.381,
+          316.936,
+          281.414
+        ],
+        "annotation_text": "[2]",
+        "destination_name": "section*.105",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 405.25,
+        "entry_top_delta_points": 4.144321600000012
+      },
+      {
+        "reference_number": 16,
+        "source_page": 5,
+        "source_rect": [
+          157.438,
+          246.471,
+          174.036,
+          257.504
+        ],
+        "annotation_text": "[16]",
+        "destination_name": "section*.119",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 157.17999999999995,
+        "entry_top_delta_points": 4.145321599999988
+      },
+      {
+        "reference_number": 17,
+        "source_page": 5,
+        "source_rect": [
+          265.2,
+          105.717,
+          281.798,
+          116.75
+        ],
+        "annotation_text": "[17]",
+        "destination_name": "section*.120",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 184.08000000000004,
+        "entry_top_delta_points": 4.144321599999898
+      },
+      {
+        "reference_number": 18,
+        "source_page": 6,
+        "source_rect": [
+          537.329,
+          748.308,
+          553.927,
+          759.34
+        ],
+        "annotation_text": "[18]",
+        "destination_name": "section*.121",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 210.98000000000002,
+        "entry_top_delta_points": 4.143321599999922
+      },
+      {
+        "reference_number": 8,
+        "source_page": 6,
+        "source_rect": [
+          162.781,
+          685.543,
+          174.397,
+          696.576
+        ],
+        "annotation_text": "[8]",
+        "destination_name": "section*.111",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 590.56,
+        "entry_top_delta_points": 4.140321599999993
+      },
+      {
+        "reference_number": 19,
+        "source_page": 6,
+        "source_rect": [
+          536.831,
+          649.677,
+          553.429,
+          660.71
+        ],
+        "annotation_text": "[19]",
+        "destination_name": "section*.122",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 237.88,
+        "entry_top_delta_points": 4.142321599999946
+      },
+      {
+        "reference_number": 20,
+        "source_page": 6,
+        "source_rect": [
+          371.638,
+          637.722,
+          388.235,
+          648.755
+        ],
+        "annotation_text": "[20]",
+        "destination_name": "section*.123",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 264.78,
+        "entry_top_delta_points": 4.141321599999969
+      },
+      {
+        "reference_number": 21,
+        "source_page": 6,
+        "source_rect": [
+          420.686,
+          598.868,
+          437.284,
+          609.901
+        ],
+        "annotation_text": "[21]",
+        "destination_name": "section*.124",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 291.67999999999995,
+        "entry_top_delta_points": 4.140321599999993
+      },
+      {
+        "reference_number": 22,
+        "source_page": 6,
+        "source_rect": [
+          361.089,
+          586.913,
+          377.687,
+          597.946
+        ],
+        "annotation_text": "[22]",
+        "destination_name": "section*.125",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 330.53,
+        "entry_top_delta_points": 4.145321599999988
+      },
+      {
+        "reference_number": 23,
+        "source_page": 6,
+        "source_rect": [
+          343.333,
+          508.422,
+          359.931,
+          519.455
+        ],
+        "annotation_text": "[23]",
+        "destination_name": "section*.126",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 369.39,
+        "entry_top_delta_points": 4.139321600000017
+      },
+      {
+        "reference_number": 24,
+        "source_page": 6,
+        "source_rect": [
+          127.018,
+          421.747,
+          143.616,
+          432.78
+        ],
+        "annotation_text": "[24]",
+        "destination_name": "section*.127",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 408.24,
+        "entry_top_delta_points": 4.143321600000036
+      },
+      {
+        "reference_number": 25,
+        "source_page": 6,
+        "source_rect": [
+          141.655,
+          355.211,
+          158.253,
+          366.244
+        ],
+        "annotation_text": "[25]",
+        "destination_name": "section*.128",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 447.09,
+        "entry_top_delta_points": 4.148321599999974
+      },
+      {
+        "reference_number": 26,
+        "source_page": 6,
+        "source_rect": [
+          225.802,
+          343.256,
+          242.4,
+          354.289
+        ],
+        "annotation_text": "[26]",
+        "destination_name": "section*.129",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 473.99,
+        "entry_top_delta_points": 4.147321599999941
+      },
+      {
+        "reference_number": 27,
+        "source_page": 6,
+        "source_rect": [
+          536.831,
+          319.346,
+          553.429,
+          330.379
+        ],
+        "annotation_text": "[27]",
+        "destination_name": "section*.130",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 500.89,
+        "entry_top_delta_points": 4.146321599999965
+      },
+      {
+        "reference_number": 28,
+        "source_page": 6,
+        "source_rect": [
+          40.602,
+          268.536,
+          57.2,
+          279.569
+        ],
+        "annotation_text": "[28]",
+        "destination_name": "section*.131",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 527.79,
+        "entry_top_delta_points": 4.145321599999988
+      },
+      {
+        "reference_number": 29,
+        "source_page": 6,
+        "source_rect": [
+          423.35,
+          256.581,
+          439.948,
+          267.614
+        ],
+        "annotation_text": "[29]",
+        "destination_name": "section*.132",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 566.65,
+        "entry_top_delta_points": 4.139321600000017
+      },
+      {
+        "reference_number": 30,
+        "source_page": 6,
+        "source_rect": [
+          135.768,
+          217.727,
+          152.366,
+          228.76
+        ],
+        "annotation_text": "[30]",
+        "destination_name": "section*.133",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 593.54,
+        "entry_top_delta_points": 4.148321600000031
+      },
+      {
+        "reference_number": 31,
+        "source_page": 10,
+        "source_rect": [
+          140.181,
+          425.947,
+          156.779,
+          436.98
+        ],
+        "annotation_text": "[31]",
+        "destination_name": "section*.134",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 620.44,
+        "entry_top_delta_points": 4.1483215999999175
+      },
+      {
+        "reference_number": 32,
+        "source_page": 10,
+        "source_rect": [
+          105.147,
+          402.037,
+          121.745,
+          413.07
+        ],
+        "annotation_text": "[32]",
+        "destination_name": "section*.135",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 647.3399999999999,
+        "entry_top_delta_points": 4.147321600000055
+      },
+      {
+        "reference_number": 33,
+        "source_page": 10,
+        "source_rect": [
+          302.071,
+          385.1,
+          318.669,
+          396.133
+        ],
+        "annotation_text": "[33]",
+        "destination_name": "section*.136",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 674.24,
+        "entry_top_delta_points": 4.146321599999965
+      },
+      {
+        "reference_number": 33,
+        "source_page": 10,
+        "source_rect": [
+          337.412,
+          286.47,
+          354.01,
+          297.503
+        ],
+        "annotation_text": "[33]",
+        "destination_name": "section*.136",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 674.24,
+        "entry_top_delta_points": 4.146321599999965
+      },
+      {
+        "reference_number": 34,
+        "source_page": 13,
+        "source_rect": [
+          412.145,
+          722.405,
+          428.743,
+          733.438
+        ],
+        "annotation_text": "[34]",
+        "destination_name": "section*.137",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 701.14,
+        "entry_top_delta_points": 4.145321599999988
+      },
+      {
+        "reference_number": 35,
+        "source_page": 13,
+        "source_rect": [
+          442.966,
+          710.45,
+          459.564,
+          721.482
+        ],
+        "annotation_text": "[35]",
+        "destination_name": "section*.138",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 52.569999999999936,
+        "entry_top_delta_points": 4.147321600000055
+      },
+      {
+        "reference_number": 36,
+        "source_page": 18,
+        "source_rect": [
+          445.94,
+          474.329,
+          462.538,
+          485.362
+        ],
+        "annotation_text": "[36]",
+        "destination_name": "section*.139",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 79.47000000000003,
+        "entry_top_delta_points": 4.146321599999965
+      },
+      {
+        "reference_number": 10,
+        "source_page": 20,
+        "source_rect": [
+          523.166,
+          93.762,
+          539.764,
+          104.795
+        ],
+        "annotation_text": "[10]",
+        "destination_name": "section*.113",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 668.26,
+        "entry_top_delta_points": 4.148321600000031
+      },
+      {
+        "reference_number": 10,
+        "source_page": 21,
+        "source_rect": [
+          195.561,
+          751.296,
+          212.159,
+          762.329
+        ],
+        "annotation_text": "[10]",
+        "destination_name": "section*.113",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 668.26,
+        "entry_top_delta_points": 4.148321600000031
+      },
+      {
+        "reference_number": 37,
+        "source_page": 21,
+        "source_rect": [
+          218.137,
+          751.296,
+          234.735,
+          762.329
+        ],
+        "annotation_text": "[37]",
+        "destination_name": "section*.140",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 106.37,
+        "entry_top_delta_points": 4.145321599999988
+      },
+      {
+        "reference_number": 10,
+        "source_page": 21,
+        "source_rect": [
+          279.674,
+          736.352,
+          296.272,
+          747.385
+        ],
+        "annotation_text": "[10]",
+        "destination_name": "section*.113",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 668.26,
+        "entry_top_delta_points": 4.148321600000031
+      },
+      {
+        "reference_number": 38,
+        "source_page": 23,
+        "source_rect": [
+          461.861,
+          110.181,
+          478.459,
+          121.214
+        ],
+        "annotation_text": "[38]",
+        "destination_name": "section*.141",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 133.26999999999998,
+        "entry_top_delta_points": 4.144321600000012
+      },
+      {
+        "reference_number": 33,
+        "source_page": 24,
+        "source_rect": [
+          519.882,
+          405.947,
+          536.48,
+          416.98
+        ],
+        "annotation_text": "[33]",
+        "destination_name": "section*.136",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 674.24,
+        "entry_top_delta_points": 4.146321599999965
+      },
+      {
+        "reference_number": 39,
+        "source_page": 38,
+        "source_rect": [
+          40.602,
+          356.776,
+          57.2,
+          367.809
+        ],
+        "annotation_text": "[39]",
+        "destination_name": "section*.142",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 160.16999999999996,
+        "entry_top_delta_points": 4.144321600000012
+      },
+      {
+        "reference_number": 40,
+        "source_page": 38,
+        "source_rect": [
+          450.271,
+          344.821,
+          466.869,
+          355.854
+        ],
+        "annotation_text": "[40]",
+        "destination_name": "section*.143",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 187.06999999999994,
+        "entry_top_delta_points": 4.143321600000036
+      },
+      {
+        "reference_number": 41,
+        "source_page": 38,
+        "source_rect": [
+          70.659,
+          246.191,
+          87.257,
+          257.223
+        ],
+        "annotation_text": "[41]",
+        "destination_name": "section*.144",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 213.97000000000003,
+        "entry_top_delta_points": 4.142321599999946
+      },
+      {
+        "reference_number": 21,
+        "source_page": 38,
+        "source_rect": [
+          453.747,
+          207.336,
+          470.345,
+          218.369
+        ],
+        "annotation_text": "[21]",
+        "destination_name": "section*.124",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 291.67999999999995,
+        "entry_top_delta_points": 4.140321599999993
+      },
+      {
+        "reference_number": 42,
+        "source_page": 39,
+        "source_rect": [
+          40.602,
+          621.996,
+          57.2,
+          633.029
+        ],
+        "annotation_text": "[42]",
+        "destination_name": "section*.145",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 240.87,
+        "entry_top_delta_points": 4.141321599999969
+      },
+      {
+        "reference_number": 24,
+        "source_page": 39,
+        "source_rect": [
+          125.82,
+          327.316,
+          142.418,
+          338.349
+        ],
+        "annotation_text": "[24]",
+        "destination_name": "section*.127",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 408.24,
+        "entry_top_delta_points": 4.143321600000036
+      },
+      {
+        "reference_number": 43,
+        "source_page": 39,
+        "source_rect": [
+          177.764,
+          198.798,
+          194.361,
+          209.831
+        ],
+        "annotation_text": "[43]",
+        "destination_name": "section*.146",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 267.77,
+        "entry_top_delta_points": 4.140321599999993
+      },
+      {
+        "reference_number": 44,
+        "source_page": 39,
+        "source_rect": [
+          186.984,
+          174.888,
+          203.582,
+          185.92
+        ],
+        "annotation_text": "[44]",
+        "destination_name": "section*.147",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 294.66999999999996,
+        "entry_top_delta_points": 4.139321600000017
+      },
+      {
+        "reference_number": 45,
+        "source_page": 39,
+        "source_rect": [
+          139.365,
+          124.078,
+          155.963,
+          135.111
+        ],
+        "annotation_text": "[45]",
+        "destination_name": "section*.148",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 321.55999999999995,
+        "entry_top_delta_points": 4.148321600000031
+      },
+      {
+        "reference_number": 46,
+        "source_page": 40,
+        "source_rect": [
+          417.501,
+          763.252,
+          434.098,
+          774.284
+        ],
+        "annotation_text": "[46]",
+        "destination_name": "section*.149",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 348.46,
+        "entry_top_delta_points": 4.147321599999998
+      },
+      {
+        "reference_number": 25,
+        "source_page": 40,
+        "source_rect": [
+          372.196,
+          228.926,
+          388.794,
+          239.959
+        ],
+        "annotation_text": "[25]",
+        "destination_name": "section*.128",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 447.09,
+        "entry_top_delta_points": 4.148321599999974
+      },
+      {
+        "reference_number": 27,
+        "source_page": 40,
+        "source_rect": [
+          380.123,
+          216.971,
+          396.721,
+          228.003
+        ],
+        "annotation_text": "[27]",
+        "destination_name": "section*.130",
+        "destination_page": 45,
+        "destination_left": 40.6,
+        "destination_top": 500.89,
+        "entry_top_delta_points": 4.146321599999965
+      },
+      {
+        "reference_number": 47,
+        "source_page": 41,
+        "source_rect": [
+          365.3,
+          763.252,
+          381.898,
+          774.284
+        ],
+        "annotation_text": "[47]",
+        "destination_name": "section*.150",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 375.36,
+        "entry_top_delta_points": 4.147321599999941
+      },
+      {
+        "reference_number": 48,
+        "source_page": 41,
+        "source_rect": [
+          173.09,
+          392.855,
+          189.688,
+          403.888
+        ],
+        "annotation_text": "[48]",
+        "destination_name": "section*.151",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 402.26,
+        "entry_top_delta_points": 4.146321599999965
+      },
+      {
+        "reference_number": 49,
+        "source_page": 42,
+        "source_rect": [
+          336.825,
+          775.207,
+          353.423,
+          786.24
+        ],
+        "annotation_text": "[49]",
+        "destination_name": "section*.152",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 441.12,
+        "entry_top_delta_points": 4.140321599999993
+      },
+      {
+        "reference_number": 50,
+        "source_page": 42,
+        "source_rect": [
+          485.601,
+          763.252,
+          502.198,
+          774.284
+        ],
+        "annotation_text": "[50]",
+        "destination_name": "section*.153",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 468.02,
+        "entry_top_delta_points": 4.139321600000017
+      },
+      {
+        "reference_number": 40,
+        "source_page": 42,
+        "source_rect": [
+          235.943,
+          751.296,
+          252.541,
+          762.329
+        ],
+        "annotation_text": "[40]",
+        "destination_name": "section*.143",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 187.06999999999994,
+        "entry_top_delta_points": 4.143321600000036
+      },
+      {
+        "reference_number": 51,
+        "source_page": 42,
+        "source_rect": [
+          537.329,
+          538.31,
+          553.927,
+          549.343
+        ],
+        "annotation_text": "[51]",
+        "destination_name": "section*.154",
+        "destination_page": 46,
+        "destination_left": 40.6,
+        "destination_top": 494.90999999999997,
+        "entry_top_delta_points": 4.148321600000031
+      },
+      {
+        "reference_number": 3,
+        "source_page": 43,
+        "source_rect": [
+          419.23,
+          363.993,
+          430.847,
+          375.026
+        ],
+        "annotation_text": "[3]",
+        "destination_name": "section*.106",
+        "destination_page": 44,
+        "destination_left": 40.6,
+        "destination_top": 444.09999999999997,
+        "entry_top_delta_points": 4.149321600000064
+      }
+    ],
+    "example_reference_48": {
+      "reference_number": 48,
+      "source_page": 41,
+      "source_rect": [
+        173.09,
+        392.855,
+        189.688,
+        403.888
+      ],
+      "annotation_text": "[48]",
+      "destination_name": "section*.151",
+      "destination_page": 46,
+      "destination_left": 40.6,
+      "destination_top": 402.26,
+      "entry_top_delta_points": 4.146321599999965
+    },
+    "existing_internal_annotations_preserved": 104,
+    "external_annotations_preserved": 126,
+    "distinct_external_urls_preserved": 104,
+    "visual_comparison": {
+      "pages": 49,
+      "scale_to_pixels": 1300,
+      "changed_pages": [
+        3,
+        4,
+        5,
+        6,
+        10,
+        13,
+        18,
+        20,
+        21,
+        23,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45
+      ],
+      "pixel_identical_pages": [
+        1,
+        2,
+        7,
+        8,
+        9,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        19,
+        22,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        46,
+        47,
+        48,
+        49
+      ],
+      "contact_sheets": 5
+    },
+    "visual_result": "All 49 pages rendered. Eighteen changed pages inspected in contact sheets, with pages 41 and 46 also inspected individually. Remaining 31 pages are pixel identical to the previously reviewed baseline. No clipping, overlap or lost content.",
+    "content_result": "All 373 prose units and 74 headings match the rendered PDF; visible source text is identical to the pre-link baseline."
   }
 }
