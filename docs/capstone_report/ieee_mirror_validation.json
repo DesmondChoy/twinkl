@@ -1,7 +1,7 @@
 {
   "status": "passed",
   "validated_date": "2026-10-11",
-  "scope": "Corrected edition of the selected 50-page IEEE report. All checklist-audit findings were applied or confirmed already resolved, using the selected edition’s current figure/table numbering. Independent source, citation and page reviews are included. This edition intentionally differs from the original PDF.",
+  "scope": "Corrected edition of the selected 50-page IEEE report, with checklist findings and the subsequent complete numbering/cross-reference pass applied. The numbering pass corrects inherited appendix gaps, stale references in text and images, and first-appearance order. This edition intentionally differs from the original PDF.",
   "source": {
     "path": "output/Twinkl__An_Inner_Compass_for_Longitudinal_Alignment_Between_Behaviour_and_Core_Values__1_/Twinkl IEEE Single Column.pdf",
     "sha256": "df45c03ec7126497b1392d9735ad1e3145e4b837ac02785a47bfce14b6d46094",
@@ -22,11 +22,11 @@
   "outputs": {
     "markdown": {
       "path": "docs/capstone_report/capstone_report.md",
-      "sha256": "78e883f15369730837ba441b5bbb51efe651fd427825321618342860f929ea29"
+      "sha256": "956ea3e7ad2be410dd3b0826176f5be967b691db429cffd70a3355f05abc3bde"
     },
     "pdf": {
       "path": "docs/capstone_report/capstone_report.pdf",
-      "sha256": "61b08648568a3df38f91218b249c0b73b5d050808171382c72cec50bc75506c3",
+      "sha256": "0d36922710a88d75cbb58f24a4bc693977eaf9aa54d12766d2fb7390262919a6",
       "pages": 49
     }
   },
@@ -1068,12 +1068,12 @@
       {
         "id": 88,
         "audit_locator": "Line 1801 | Key Terms: names",
-        "section": "Visible Appendix D (source anchor appendix-c)",
+        "section": "Appendix C (scope and academic contribution)",
         "current_lines": [
           1539
         ],
         "disposition": "corrected_with_adaptation",
-        "verification": "Current visible AppendixDTable20names LLM-Judge bias.",
+        "verification": "Appendix C Table 20 names LLM-Judge bias.",
         "remaining_audit_action": null
       },
       {
@@ -1805,7 +1805,7 @@
       }
     ],
     "pages": 49,
-    "internal_annotations": 107,
+    "internal_annotations": 104,
     "unresolved_pdf_destinations": [],
     "expected_external_urls": 104,
     "rendered_external_urls": 104,
@@ -2107,19 +2107,9 @@
         "line_fragment_in_bounds": null
       }
     ],
-    "markdown_sha256": "78e883f15369730837ba441b5bbb51efe651fd427825321618342860f929ea29",
-    "pdf_sha256": "61b08648568a3df38f91218b249c0b73b5d050808171382c72cec50bc75506c3",
-    "passed": true,
-    "github_markdown_heading_fragments": [
-      {
-        "url": "https://github.com/DesmondChoy/twinkl/blob/main/docs/evals/explanation_quality_eval.md#coach-digest-evals",
-        "heading_fragment_found": true
-      },
-      {
-        "url": "https://github.com/DesmondChoy/twinkl/blob/main/logs/experiments/reports/demo_coach_nsm_comparison_20260909/report.md#generation-and-editorial-repair",
-        "heading_fragment_found": true
-      }
-    ]
+    "markdown_sha256": "956ea3e7ad2be410dd3b0826176f5be967b691db429cffd70a3355f05abc3bde",
+    "pdf_sha256": "0d36922710a88d75cbb58f24a4bc693977eaf9aa54d12766d2fb7390262919a6",
+    "passed": true
   },
   "independent_reviews": {
     "audit_scope": {
@@ -2299,7 +2289,178 @@
       "no_material_bibliography_errors_found": true,
       "reviewed_sha256": "0baadec669244c6d8ae053879d8de013cda547bf55409e496c23d4f934015f6d"
     },
-    "final_delta": "After full content reviews, the final page pass added Section 2.5 to contents, identified Figures 3/4 as historical model snapshots and repaired one limitations sentence. The scope reviewer verified these final edits; publication citations and numeric results are unchanged."
+    "final_delta": "After full content reviews, the final page pass added Section 2.5 to contents, identified Figures 3/4 as historical model snapshots and repaired one limitations sentence. The scope reviewer verified these final edits; publication citations and numeric results are unchanged.",
+    "prior_review_scope": "The earlier source/citation/factual reviews refer to their recorded hashes. Their acceptance of inherited appendix A,B,D,F,G was incorrect and is superseded by numbering_pass.",
+    "numbering_pass": {
+      "markdown_sha256": "956ea3e7ad2be410dd3b0826176f5be967b691db429cffd70a3355f05abc3bde",
+      "pdf_sha256": "0d36922710a88d75cbb58f24a4bc693977eaf9aa54d12766d2fb7390262919a6",
+      "section_reviewer": {
+        "status": "passed",
+        "numbered_headings": 62,
+        "levels": [
+          7,
+          28,
+          27
+        ],
+        "total_headings": 74,
+        "appendices": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "unique_explicit_ids": 124,
+        "numeric_section_references": 62,
+        "appendix_references": 7,
+        "semantic_result_references": "4.3.1 and 4.2.5 point to matching results",
+        "visual_pages": [
+          2,
+          7,
+          13,
+          36,
+          46,
+          48,
+          49
+        ],
+        "render_guard_negative_cases_passed": 9
+      },
+      "caption_reviewer": {
+        "status": "passed",
+        "figure_captions": 31,
+        "table_captions": 20,
+        "first_appearances_sequential": true,
+        "corrected_image_labels": "Figure22→Figure19; Figure29→Table15",
+        "all_33_images_inspected": true,
+        "edited_chart_values_and_diagram_text_match_originals": true,
+        "visual_pages": [
+          29,
+          37
+        ]
+      },
+      "pdf_reference_reviewer": {
+        "status": "passed",
+        "contents_links_matching_heading": 47,
+        "body_links_matching_caption": 57,
+        "unresolved_or_mismatched_links": 0,
+        "printed_page_numbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "appendices_in_contents_and_body": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "equations": [
+          1,
+          2
+        ],
+        "references_and_citation_first_use": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "maintained_document_references_checked": true
+      }
+    }
   },
   "visual_checks": {
     "all_pages_reviewed": true,
@@ -2766,6 +2927,63 @@
         "findings": []
       },
       "all_final_pages_visually_reviewed": true
+    },
+    "numbering_pass": {
+      "changed_pages_reviewed": [
+        2,
+        7,
+        13,
+        29,
+        36,
+        37,
+        46,
+        48,
+        49
+      ],
+      "unchanged_pages_pixel_identical": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        47
+      ],
+      "status": "passed",
+      "reviewers": "root and three independent fresh reviewers"
     }
   },
   "render": {
@@ -3054,14 +3272,34 @@
     {
       "figure": 22,
       "panel": 1,
-      "path": "docs/capstone_report/images/ieee-source/figure-36-9.png",
-      "sha256": "1dbbf80aa6de42b22b72e422070e28f44a0ccc98bdf90be9d58a298d8c4cd05a",
-      "width": 2048,
-      "height": 875,
-      "decoded_rgb_sha256": "3d33810e950e33eb1e1a323e3d8678697e0f634f604c222b2831edc0b9631113",
+      "path": "docs/capstone_report/images/corrected/figure-22.png",
+      "sha256": "2f6cf3626c8c01a3f0f47f8e959a3fec5c06dd61fc0ca0dbf395d0ee6cdf2e93",
+      "width": 1918,
+      "height": 820,
+      "decoded_rgb_sha256": "074ca50113b1ccc3d0bb1ba0c0a804cc7fc71ba221cede82aa478bed035d7bda",
       "source_pdf_pages": [
         29
-      ]
+      ],
+      "original_asset": {
+        "figure": 22,
+        "panel": 1,
+        "path": "docs/capstone_report/images/ieee-source/figure-36-9.png",
+        "sha256": "1dbbf80aa6de42b22b72e422070e28f44a0ccc98bdf90be9d58a298d8c4cd05a",
+        "width": 2048,
+        "height": 875,
+        "decoded_rgb_sha256": "3d33810e950e33eb1e1a323e3d8678697e0f634f604c222b2831edc0b9631113",
+        "source_pdf_pages": [
+          29
+        ]
+      },
+      "modification": {
+        "method": "Built-in image_gen text-localization edit",
+        "old_reference": "Figure 6",
+        "new_reference": "Figure 19",
+        "original_asset_retained": true,
+        "all_other_text_and_chart_values_independently_verified": true,
+        "prompt": "Use case: text-localization. Asset type: scientific capstone chart. Input image is the edit target. Replace ONLY the embedded text 'Figure 6' in the subtitle near the top with 'Figure 19'. Exact corrected line: \"QWK dipped slightly and Conflict recall stayed within the reference's seed range; Section 4.1 and Figure 19\". Retain its wrap continuing 'report the value-specific gains and regressions.' Preserve all other text, all chart bars, all whiskers, numbers, axes, fonts, layout, background and dimensions exactly. Values must remain Conflict recall 0.342,0.328,0.313 and QWK0.349,0.346,0.362. No other changes."
+      }
     },
     {
       "figure": 23,
@@ -3138,14 +3376,34 @@
     {
       "figure": 29,
       "panel": 1,
-      "path": "docs/capstone_report/images/ieee-source/figure-49-14.png",
-      "sha256": "0d1dc278ee798eb23fbc7901a45c3932b924f79b7ced488c1628d9630e8342aa",
-      "width": 2048,
-      "height": 1273,
-      "decoded_rgb_sha256": "bb71471856c06967f6690172eae2ca38c4f52edd99d0e90c6f76b06f6baa3c30",
+      "path": "docs/capstone_report/images/corrected/figure-29.png",
+      "sha256": "78b70cb1f2bd376b0b56b20ef0d21efeddc8de96b557f9982605296b4af9781a",
+      "width": 1591,
+      "height": 989,
+      "decoded_rgb_sha256": "e0a87f87fc43310d7a64bd8eae179592cdf3b6cd88a19890f76d117a051cc1d9",
       "source_pdf_pages": [
         37
-      ]
+      ],
+      "original_asset": {
+        "figure": 29,
+        "panel": 1,
+        "path": "docs/capstone_report/images/ieee-source/figure-49-14.png",
+        "sha256": "0d1dc278ee798eb23fbc7901a45c3932b924f79b7ced488c1628d9630e8342aa",
+        "width": 2048,
+        "height": 1273,
+        "decoded_rgb_sha256": "bb71471856c06967f6690172eae2ca38c4f52edd99d0e90c6f76b06f6baa3c30",
+        "source_pdf_pages": [
+          37
+        ]
+      },
+      "modification": {
+        "method": "Built-in image_gen text-localization edit",
+        "old_reference": "Table 5",
+        "new_reference": "Table 15",
+        "original_asset_retained": true,
+        "all_other_text_and_chart_values_independently_verified": true,
+        "prompt": "Use case: text-localization. Asset type: capstone verification diagram. Input image is the edit target. Replace ONLY '(Table 5)' with '(Table 15)' in the Automated tests row / Confirmed column near the top. Exact corrected second line: 'failures, retry and deletion (Table 15)'. Preserve every other word, every diagram card, headings, layout, colors, dimensions, and all other references including '(Section 5.3)' at bottom exactly. No other changes."
+      }
     },
     {
       "figure": 30,
@@ -3172,12 +3430,1655 @@
       ]
     }
   ],
-  "limitations": "Validation covers the report and frozen evidence, without rerunning model experiments or application suites. Architecture diagrams preserve source raster pixels; their historical model labels are explained in captions. Original source PDF and adjacent original LaTeX snapshots are preserved.",
+  "limitations": "Validation covers the report and frozen evidence without rerunning model experiments or application suites. Original source PDF, adjacent original LaTeX snapshots and all33 original rasters are preserved. Figures22/29 use separately saved built-in image_gen edits for embedded reference corrections, with all other text and numerical chart values independently checked.",
   "file_rename": {
     "date": "2026-10-11",
     "previous_stem": "capstone_report_reference_only",
     "current_stem": "capstone_report",
     "report_bytes_unchanged": true,
     "note": "Markdown and PDF were renamed after validation; report content and all validated hashes remain unchanged. Linked documentation and validation paths were updated."
+  },
+  "numbering_pass": {
+    "date": "2026-10-11",
+    "issue": "twinkl-pgyy",
+    "status": "passed",
+    "prior_outputs": {
+      "markdown": {
+        "path": "docs/capstone_report/capstone_report.md",
+        "sha256": "78e883f15369730837ba441b5bbb51efe651fd427825321618342860f929ea29"
+      },
+      "pdf": {
+        "path": "docs/capstone_report/capstone_report.pdf",
+        "sha256": "61b08648568a3df38f91218b249c0b73b5d050808171382c72cec50bc75506c3",
+        "pages": 49
+      }
+    },
+    "reason_prior_check_missed_issue": "Earlier validation tested whether appendix targets existed and preserved source lettering, but did not require consecutive appendix letters. The render guard now rejects the old report.",
+    "fixes": [
+      {
+        "line": 187,
+        "change": "Hand-off result reference: Section3.4→4.3.1"
+      },
+      {
+        "line": 377,
+        "change": "Premature Figure24/Table10/Table11 references→Section4.2.5, preserving seed distinctions"
+      },
+      {
+        "line": 832,
+        "change": "Figure22 embedded pointer Figure6→Figure19; corrected asset path"
+      },
+      {
+        "line": 1073,
+        "change": "AppendicesB,D→B,C"
+      },
+      {
+        "line": 1114,
+        "change": "Figure29 embedded pointer Table5→Table15; corrected asset path"
+      },
+      {
+        "line": 1425,
+        "change": "Scope appendix pointer D→C"
+      },
+      {
+        "line": 1528,
+        "change": "Scope appendix D→C and matching heading ID"
+      },
+      {
+        "line": 1548,
+        "change": "Architectures appendix F→D and explicit matching heading ID"
+      },
+      {
+        "line": 1558,
+        "change": "Value-weights appendix G→E and matching heading ID"
+      },
+      {
+        "file": "docs/capstone_report/README.md",
+        "change": "NSM sections3.9/4.5→3.5.2/4.4.2; saved replay AppendixC→B"
+      }
+    ],
+    "guard_file": "docs/capstone_report/render-support/ieee-mirror.lua",
+    "guard_sha256": "a3f2f487da4bfc0130ba098e7095e06a53495d3f9e4307b212db17f32209c669",
+    "guard_cases": {
+      "baseline_appendix_gaps": {
+        "expected": "rejects",
+        "passed": true,
+        "diagnostic": [
+          "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:13: Expected Appendix C, found Appendix D. Scope and Academic Contribution",
+          "stack traceback:"
+        ]
+      },
+      "appendix_gap": {
+        "expected": "rejects",
+        "passed": true,
+        "diagnostic": [
+          "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:13: Expected Appendix C, found Appendix D. Scope and Academic Contribution",
+          "stack traceback:"
+        ]
+      },
+      "section_gap": {
+        "expected": "rejects",
+        "passed": true,
+        "diagnostic": [
+          "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:26: Section sequence has a gap or duplicate: 3.2.4 Additional batch generations:",
+          "stack traceback:"
+        ]
+      },
+      "figure_source_gap": {
+        "expected": "rejects",
+        "passed": true,
+        "diagnostic": [
+          "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:34: Figure source-number is out of sequence: source-fig-106",
+          "stack traceback:"
+        ]
+      },
+      "table_source_gap": {
+        "expected": "rejects",
+        "passed": true,
+        "diagnostic": [
+          "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:34: Table source-number is out of sequence: source-tbl-119",
+          "stack traceback:"
+        ]
+      },
+      "caption_mismatch": {
+        "expected": "rejects",
+        "passed": true,
+        "diagnostic": [
+          "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:39: Figure caption number differs from rendered number",
+          "stack traceback:"
+        ]
+      },
+      "link_mismatch": {
+        "expected": "rejects",
+        "passed": true,
+        "diagnostic": [
+          "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:52: Figure/table link number differs from its destination: #fig-106",
+          "stack traceback:"
+        ]
+      },
+      "undefined_target": {
+        "expected": "rejects",
+        "passed": true,
+        "diagnostic": [
+          "...inkl/docs/capstone_report/render-support/ieee-mirror.lua:51: Undefined figure/table reference: #fig-missing",
+          "stack traceback:"
+        ]
+      },
+      "valid_report": {
+        "expected": "passes",
+        "passed": true,
+        "diagnostic": []
+      }
+    },
+    "render_guard_scope": "Reject section gaps/duplicates/wrong hierarchy, appendix gaps, source-caption number mismatches and undefined/misnumbered figure/table links. Human reviewers separately check semantics and embedded raster text.",
+    "render_iterations": 1,
+    "section_heading_inventory": [
+      {
+        "line": 40,
+        "number": "1"
+      },
+      {
+        "line": 42,
+        "number": "1.1"
+      },
+      {
+        "line": 48,
+        "number": "1.2"
+      },
+      {
+        "line": 72,
+        "number": "1.3"
+      },
+      {
+        "line": 103,
+        "number": "2"
+      },
+      {
+        "line": 105,
+        "number": "2.1"
+      },
+      {
+        "line": 123,
+        "number": "2.2"
+      },
+      {
+        "line": 131,
+        "number": "2.3"
+      },
+      {
+        "line": 141,
+        "number": "2.4"
+      },
+      {
+        "line": 147,
+        "number": "2.5"
+      },
+      {
+        "line": 155,
+        "number": "3"
+      },
+      {
+        "line": 159,
+        "number": "3.1"
+      },
+      {
+        "line": 207,
+        "number": "3.2"
+      },
+      {
+        "line": 217,
+        "number": "3.2.1"
+      },
+      {
+        "line": 238,
+        "number": "3.2.2"
+      },
+      {
+        "line": 271,
+        "number": "3.2.3"
+      },
+      {
+        "line": 299,
+        "number": "3.3"
+      },
+      {
+        "line": 303,
+        "number": "3.3.1"
+      },
+      {
+        "line": 321,
+        "number": "3.3.2"
+      },
+      {
+        "line": 325,
+        "number": "3.3.3"
+      },
+      {
+        "line": 353,
+        "number": "3.3.4"
+      },
+      {
+        "line": 375,
+        "number": "3.3.5"
+      },
+      {
+        "line": 379,
+        "number": "3.4"
+      },
+      {
+        "line": 381,
+        "number": "3.4.1"
+      },
+      {
+        "line": 434,
+        "number": "3.4.2"
+      },
+      {
+        "line": 461,
+        "number": "3.4.3"
+      },
+      {
+        "line": 505,
+        "number": "3.4.4"
+      },
+      {
+        "line": 557,
+        "number": "3.5"
+      },
+      {
+        "line": 561,
+        "number": "3.5.1"
+      },
+      {
+        "line": 577,
+        "number": "3.5.2"
+      },
+      {
+        "line": 615,
+        "number": "3.6"
+      },
+      {
+        "line": 625,
+        "number": "3.6.1"
+      },
+      {
+        "line": 676,
+        "number": "3.6.2"
+      },
+      {
+        "line": 706,
+        "number": "3.6.3"
+      },
+      {
+        "line": 740,
+        "number": "4"
+      },
+      {
+        "line": 742,
+        "number": "4.1"
+      },
+      {
+        "line": 792,
+        "number": "4.2"
+      },
+      {
+        "line": 796,
+        "number": "4.2.1"
+      },
+      {
+        "line": 808,
+        "number": "4.2.2"
+      },
+      {
+        "line": 828,
+        "number": "4.2.3"
+      },
+      {
+        "line": 840,
+        "number": "4.2.4"
+      },
+      {
+        "line": 858,
+        "number": "4.2.5"
+      },
+      {
+        "line": 920,
+        "number": "4.3"
+      },
+      {
+        "line": 924,
+        "number": "4.3.1"
+      },
+      {
+        "line": 940,
+        "number": "4.3.2"
+      },
+      {
+        "line": 996,
+        "number": "4.3.3"
+      },
+      {
+        "line": 1006,
+        "number": "4.4"
+      },
+      {
+        "line": 1010,
+        "number": "4.4.1"
+      },
+      {
+        "line": 1026,
+        "number": "4.4.2"
+      },
+      {
+        "line": 1065,
+        "number": "5"
+      },
+      {
+        "line": 1069,
+        "number": "5.1"
+      },
+      {
+        "line": 1077,
+        "number": "5.2"
+      },
+      {
+        "line": 1122,
+        "number": "5.3"
+      },
+      {
+        "line": 1128,
+        "number": "6"
+      },
+      {
+        "line": 1132,
+        "number": "6.1"
+      },
+      {
+        "line": 1158,
+        "number": "6.2"
+      },
+      {
+        "line": 1166,
+        "number": "6.3"
+      },
+      {
+        "line": 1186,
+        "number": "6.4"
+      },
+      {
+        "line": 1215,
+        "number": "6.5"
+      },
+      {
+        "line": 1227,
+        "number": "6.6"
+      },
+      {
+        "line": 1243,
+        "number": "6.7"
+      },
+      {
+        "line": 1285,
+        "number": "7"
+      }
+    ],
+    "appendix_inventory": [
+      {
+        "line": 1421,
+        "letter": "A"
+      },
+      {
+        "line": 1520,
+        "letter": "B"
+      },
+      {
+        "line": 1528,
+        "letter": "C"
+      },
+      {
+        "line": 1548,
+        "letter": "D"
+      },
+      {
+        "line": 1558,
+        "letter": "E"
+      }
+    ],
+    "all_prose_and_headings_match_final_pdf": {
+      "prose_units": 373,
+      "prose_units_matching_case_and_punctuation": 373,
+      "actual_prose_differences": 0,
+      "math_plain_writer_artifacts": 1,
+      "headings": 74,
+      "expected_headings": 74,
+      "actual_heading_differences": 0,
+      "required_special_headings_present": true
+    },
+    "page_comparison": {
+      "pages": 49,
+      "pixel_identical_pages": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        47
+      ],
+      "changed_pages": [
+        2,
+        7,
+        13,
+        29,
+        36,
+        37,
+        46,
+        48,
+        49
+      ],
+      "contact_sheets": [
+        "/private/tmp/twinkl-numbering-contact-1.png",
+        "/private/tmp/twinkl-numbering-contact-2.png",
+        "/private/tmp/twinkl-numbering-contact-3.png"
+      ]
+    },
+    "final_reference_audit": {
+      "summary": {
+        "pdf_sha256": "0d36922710a88d75cbb58f24a4bc693977eaf9aa54d12766d2fb7390262919a6",
+        "md_sha256": "956ea3e7ad2be410dd3b0826176f5be967b691db429cffd70a3355f05abc3bde",
+        "page_count": 49,
+        "counts": {
+          "internal_links": 104,
+          "toc_links": 47,
+          "body_links": 57
+        },
+        "missing_page_numbers": [],
+        "figure_numbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31
+        ],
+        "table_numbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "section_numbers": [
+          "1",
+          "1.1",
+          "1.2",
+          "1.3",
+          "2",
+          "2.1",
+          "2.2",
+          "2.3",
+          "2.4",
+          "2.5",
+          "3",
+          "3.1",
+          "3.2",
+          "3.2.1",
+          "3.2.2",
+          "3.2.3",
+          "3.3",
+          "3.3.1",
+          "3.3.2",
+          "3.3.3",
+          "3.3.4",
+          "3.3.5",
+          "3.4",
+          "3.4.1",
+          "3.4.2",
+          "3.4.3",
+          "3.4.4",
+          "3.5",
+          "3.5.1",
+          "3.5.2",
+          "3.6",
+          "3.6.1",
+          "3.6.2",
+          "3.6.3",
+          "4",
+          "4.1",
+          "4.2",
+          "4.2.1",
+          "4.2.2",
+          "4.2.3",
+          "4.2.4",
+          "4.2.5",
+          "4.3",
+          "4.3.1",
+          "4.3.2",
+          "4.3.3",
+          "4.4",
+          "4.4.1",
+          "4.4.2",
+          "5",
+          "5.1",
+          "5.2",
+          "5.3",
+          "6",
+          "6.1",
+          "6.2",
+          "6.3",
+          "6.4",
+          "6.5",
+          "6.6",
+          "6.7",
+          "7"
+        ],
+        "missing_section_refs": [],
+        "md_first_citation_order": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "pdf_first_citation_order": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "bibliography": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "appendix_source": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "appendix_toc": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "appendix_body": [
+          {
+            "page": 46,
+            "letter": "A"
+          },
+          {
+            "page": 48,
+            "letter": "B"
+          },
+          {
+            "page": 48,
+            "letter": "C"
+          },
+          {
+            "page": 49,
+            "letter": "D"
+          },
+          {
+            "page": 49,
+            "letter": "E"
+          }
+        ],
+        "errors": []
+      },
+      "links": [
+        {
+          "source_page": 2,
+          "source": "Abstract",
+          "destination": "section*.1",
+          "destination_page": 1,
+          "target": "Abstract",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "1. Introduction",
+          "destination": "section*.3",
+          "destination_page": 3,
+          "target": "1. Introduction",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "1.1 Problem and objective",
+          "destination": "section*.4",
+          "destination_page": 3,
+          "target": "1.1 Problem and objective",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "1.2 Research objective and empirical investigations",
+          "destination": "section*.5",
+          "destination_page": 3,
+          "target": "1.2 Research objective and empirical investigations",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "1.3 Key Terms",
+          "destination": "section*.6",
+          "destination_page": 4,
+          "target": "1.3 Key Terms",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "2. Literature Review",
+          "destination": "section*.7",
+          "destination_page": 4,
+          "target": "2. Literature Review",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "2.1 Schwartz’s Theory of Basic Human Values",
+          "destination": "section*.8",
+          "destination_page": 4,
+          "target": "2.1 Schwartz’s Theory of Basic Human Values",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "2.2 AI-assisted Reflection",
+          "destination": "section*.10",
+          "destination_page": 5,
+          "target": "2.2 AI-assisted Reflection",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "2.3 Synthetic data, LLM labels, and imbalanced ordinal targets",
+          "destination": "section*.11",
+          "destination_page": 5,
+          "target": "2.3 Synthetic data, LLM labels, and imbalanced ordinal targets",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "2.4 Sustained change in personal writing",
+          "destination": "section*.12",
+          "destination_page": 6,
+          "target": "2.4 Sustained change in personal writing",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "2.5 Grounded reflection and evidence retrieval",
+          "destination": "section*.13",
+          "destination_page": 6,
+          "target": "2.5 Grounded reflection and evidence retrieval",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "3. Methodology",
+          "destination": "section*.14",
+          "destination_page": 6,
+          "target": "3. Methodology",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "3.1 Overall Architecture",
+          "destination": "section*.15",
+          "destination_page": 7,
+          "target": "3.1 Overall Architecture",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "3.2 RQ1: Generating and validating a synthetic journal corpus",
+          "destination": "section*.19",
+          "destination_page": 8,
+          "target": "3.2 RQ1: Generating and validating a synthetic journal corpus",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "3.3 RQ2: Training a lightweight MLP to identify Alignment and Conflict",
+          "destination": "section*.25",
+          "destination_page": 11,
+          "target": "3.3 RQ2: Training a lightweight MLP to identify Alignment and Conflict",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "3.4 RQ3: Detecting Drift over time with an LLM reviewer",
+          "destination": "section*.32",
+          "destination_page": 13,
+          "target": "3.4 RQ3: Detecting Drift over time with an LLM reviewer",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "3.5 RQ4: Preserving and retrieving the user’s words (Coach Digest & North Star Moment)",
+          "destination": "section*.41",
+          "destination_page": 19,
+          "target": "3.5 RQ4: Preserving and retrieving the user’s words (Coach Digest & North Star Moment)",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "3.6 Application Foundations",
+          "destination": "section*.45",
+          "destination_page": 20,
+          "target": "3.6 Application Foundations",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "4. Results",
+          "destination": "section*.55",
+          "destination_page": 24,
+          "target": "4. Results",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "4.1 RQ1: LLM-Judge VIF Labels match human agreement, making synthetic data suitable for model development",
+          "destination": "section*.56",
+          "destination_page": 24,
+          "target": "4.1 RQ1: LLM-Judge VIF Labels match human agreement, making synthetic data suitable for model development",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "4.2 RQ2: The lightweight VIF Critic learns partial signals but misses most Conflicts",
+          "destination": "section*.60",
+          "destination_page": 27,
+          "target": "4.2 RQ2: The lightweight VIF Critic learns partial signals but misses most Conflicts",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "4.3 RQ3: Weekly Drift Detection identifies two in five Drifts with few false alerts",
+          "destination": "section*.72",
+          "destination_page": 32,
+          "target": "4.3 RQ3: Weekly Drift Detection identifies two in five Drifts with few false alerts",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "4.4 RQ4: The right North Star Moment depends on when, not just what",
+          "destination": "section*.78",
+          "destination_page": 34,
+          "target": "4.4 RQ4: The right North Star Moment depends on when, not just what",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "5. Implementation and Verification",
+          "destination": "section*.82",
+          "destination_page": 36,
+          "target": "5. Implementation and Verification",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "5.1 Implementation and demonstration:",
+          "destination": "section*.83",
+          "destination_page": 36,
+          "target": "5.1 Implementation and demonstration:",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "5.2 Verification and failure recovery:",
+          "destination": "section*.84",
+          "destination_page": 36,
+          "target": "5.2 Verification and failure recovery:",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "5.3 Deployment and limits:",
+          "destination": "section*.86",
+          "destination_page": 38,
+          "target": "5.3 Deployment and limits:",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "6. Discussion",
+          "destination": "section*.87",
+          "destination_page": 38,
+          "target": "6. Discussion",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "6.1 Most label disagreements concern whether value evidence is present",
+          "destination": "section*.88",
+          "destination_page": 38,
+          "target": "6.1 Most label disagreements concern whether value evidence is present",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "6.2 Conflict detection remains poor across all models",
+          "destination": "section*.89",
+          "destination_page": 39,
+          "target": "6.2 Conflict detection remains poor across all models",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "6.3 Model choice moved Drift recall most; extra reasoning gave smaller, uneven returns",
+          "destination": "section*.90",
+          "destination_page": 39,
+          "target": "6.3 Model choice moved Drift recall most; extra reasoning gave smaller, uneven returns",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "6.4 Preserving exact words does not guarantee preserving meaning",
+          "destination": "section*.91",
+          "destination_page": 40,
+          "target": "6.4 Preserving exact words does not guarantee preserving meaning",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "6.5 Limitations",
+          "destination": "section*.92",
+          "destination_page": 40,
+          "target": "6.5 Limitations",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "6.6 Future Work",
+          "destination": "section*.93",
+          "destination_page": 41,
+          "target": "6.6 Future Work",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "6.7 Safety, privacy, and ethics",
+          "destination": "section*.94",
+          "destination_page": 42,
+          "target": "6.7 Safety, privacy, and ethics",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "7. Conclusion",
+          "destination": "section*.97",
+          "destination_page": 43,
+          "target": "7. Conclusion",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Declarations",
+          "destination": "section*.98",
+          "destination_page": 44,
+          "target": "Declarations",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "AI Tool Declaration",
+          "destination": "section*.99",
+          "destination_page": 44,
+          "target": "AI Tool Declaration",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Data Availability",
+          "destination": "section*.100",
+          "destination_page": 44,
+          "target": "Data Availability",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Code Availability",
+          "destination": "section*.101",
+          "destination_page": 44,
+          "target": "Code Availability",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Author Contribution",
+          "destination": "section*.102",
+          "destination_page": 44,
+          "target": "Author Contribution",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "References",
+          "destination": "section*.103",
+          "destination_page": 44,
+          "target": "References",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Appendix A. Reproduction and Evidence Map",
+          "destination": "section*.104",
+          "destination_page": 46,
+          "target": "Appendix A. Reproduction and Evidence Map",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Appendix B. NSM Saved Replay and Walkthrough",
+          "destination": "section*.105",
+          "destination_page": 48,
+          "target": "Appendix B. NSM Saved Replay and Walkthrough",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Appendix C. Scope and Academic Contribution",
+          "destination": "section*.106",
+          "destination_page": 48,
+          "target": "Appendix C. Scope and Academic Contribution",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Appendix D. Logical and Physical Architectures",
+          "destination": "section*.107",
+          "destination_page": 49,
+          "target": "Appendix D. Logical and Physical Architectures",
+          "matches": true
+        },
+        {
+          "source_page": 2,
+          "source": "Appendix E. User Profile Value Weights",
+          "destination": "section*.108",
+          "destination_page": 49,
+          "target": "Appendix E. User Profile Value Weights",
+          "matches": true
+        },
+        {
+          "source_page": 4,
+          "source": "1,",
+          "destination": "figure.caption.9",
+          "destination_page": 5,
+          "target": "Figure 1: Schwartz’s ten basic values on a circular continuum, grouped into four higher-order values. Adapted from [6].",
+          "matches": true
+        },
+        {
+          "source_page": 7,
+          "source": "2",
+          "destination": "figure.caption.16",
+          "destination_page": 7,
+          "target": "Figure 2: Twinkl architecture. The user interface and runtime services form the online path; the offline research path produced the reference labels and the",
+          "matches": true
+        },
+        {
+          "source_page": 7,
+          "source": "3",
+          "destination": "figure.caption.17",
+          "destination_page": 8,
+          "target": "Figure 3: Logical architecture snapshot with the earlier gpt-5.6-luna reviewer. The current Weekly Drift Reviewer uses gpt-6-luna at low reasoning effort.",
+          "matches": true
+        },
+        {
+          "source_page": 7,
+          "source": "4,",
+          "destination": "figure.caption.18",
+          "destination_page": 8,
+          "target": "Figure 4: Physical architecture snapshot with the earlier gpt-5.6-luna API label; current Weekly Drift Reviewer and North Star Moment selection use",
+          "matches": true
+        },
+        {
+          "source_page": 9,
+          "source": "5",
+          "destination": "figure.caption.22",
+          "destination_page": 9,
+          "target": "Figure 5: Batch Generation of Synthetic Data. Training lane demonstrates the change in each batch, and locked holdout demonstrates the frozen Personas.",
+          "matches": true
+        },
+        {
+          "source_page": 10,
+          "source": "3",
+          "destination": "table.3",
+          "destination_page": 10,
+          "target": "Table 3: Distribution recomputed from the persisted LLM-Judge VIF Labels in judge_labels.parquet (see Appendix A for the source path).",
+          "matches": true
+        },
+        {
+          "source_page": 10,
+          "source": "6.",
+          "destination": "figure.caption.24",
+          "destination_page": 11,
+          "target": "Figure 6: The human annotation tool. Annotators see the Persona’s bio, the Journal Entry with any nudge and response, and score each Schwartz value as",
+          "matches": true
+        },
+        {
+          "source_page": 11,
+          "source": "3),",
+          "destination": "table.3",
+          "destination_page": 10,
+          "target": "Table 3: Distribution recomputed from the persisted LLM-Judge VIF Labels in judge_labels.parquet (see Appendix A for the source path).",
+          "matches": true
+        },
+        {
+          "source_page": 11,
+          "source": "7.",
+          "destination": "figure.caption.27",
+          "destination_page": 12,
+          "target": "Figure 7: VIF Critic MLP",
+          "matches": true
+        },
+        {
+          "source_page": 13,
+          "source": "8",
+          "destination": "figure.caption.34",
+          "destination_page": 14,
+          "target": "Figure 8: Evolution of VIF Critic to the Weekly Drift Detection.",
+          "matches": true
+        },
+        {
+          "source_page": 14,
+          "source": "9",
+          "destination": "figure.caption.35",
+          "destination_page": 15,
+          "target": "Figure 9: Drift State Diagram. The 5 nodes distinguish the current state and run-length or resolution status, while edges illustrate required conditions.",
+          "matches": true
+        },
+        {
+          "source_page": 17,
+          "source": "11",
+          "destination": "figure.caption.39",
+          "destination_page": 17,
+          "target": "Figure 11: Predicted Drift matching logic",
+          "matches": true
+        },
+        {
+          "source_page": 19,
+          "source": "12",
+          "destination": "figure.caption.44",
+          "destination_page": 20,
+          "target": "Figure 12: Inspect’s recorded source assessment for Nisha’s fourth-week North Star Moment. The selected quotation describes an action before Drift onset.",
+          "matches": true
+        },
+        {
+          "source_page": 20,
+          "source": "2:",
+          "destination": "figure.caption.16",
+          "destination_page": 7,
+          "target": "Figure 2: Twinkl architecture. The user interface and runtime services form the online path; the offline research path produced the reference labels and the",
+          "matches": true
+        },
+        {
+          "source_page": 21,
+          "source": "13).",
+          "destination": "figure.caption.47",
+          "destination_page": 21,
+          "target": "Figure 13: One onboarding group presents six selection cards and requires separate Most and Least choices without exposing Schwartz labels or scores.",
+          "matches": true
+        },
+        {
+          "source_page": 21,
+          "source": "8).",
+          "destination": "table.8",
+          "destination_page": 21,
+          "target": "Table 8: Calculation of a user’s Core Values from one completed onboarding questionnaire: Most and Least counts, raw score (Equation (1)), display weight",
+          "matches": true
+        },
+        {
+          "source_page": 22,
+          "source": "14.",
+          "destination": "figure.caption.51",
+          "destination_page": 22,
+          "target": "Figure 14: Journal Entry and weekly result screens in the user interface",
+          "matches": true
+        },
+        {
+          "source_page": 23,
+          "source": "14",
+          "destination": "figure.caption.51",
+          "destination_page": 22,
+          "target": "Figure 14: Journal Entry and weekly result screens in the user interface",
+          "matches": true
+        },
+        {
+          "source_page": 23,
+          "source": "15).",
+          "destination": "figure.caption.53",
+          "destination_page": 23,
+          "target": "Figure 15: Inspect for one closed week of saved replay",
+          "matches": true
+        },
+        {
+          "source_page": 23,
+          "source": "15).",
+          "destination": "figure.caption.53",
+          "destination_page": 23,
+          "target": "Figure 15: Inspect for one closed week of saved replay",
+          "matches": true
+        },
+        {
+          "source_page": 24,
+          "source": "16.",
+          "destination": "figure.caption.54",
+          "destination_page": 24,
+          "target": "Figure 16: Saved replay synthetic Personas",
+          "matches": true
+        },
+        {
+          "source_page": 24,
+          "source": "9",
+          "destination": "table.9",
+          "destination_page": 24,
+          "target": "Table 9: Kappa agreement measurements",
+          "matches": true
+        },
+        {
+          "source_page": 26,
+          "source": "19).",
+          "destination": "figure.caption.59",
+          "destination_page": 26,
+          "target": "Figure 19: Selected within-metric target-dimension changes from the two train-only targeted synthetic batches. QWK and Conflict recall rows are not",
+          "matches": true
+        },
+        {
+          "source_page": 26,
+          "source": "18.",
+          "destination": "figure.caption.58",
+          "destination_page": 26,
+          "target": "Figure 18: Synthetic dataset batch evolution",
+          "matches": true
+        },
+        {
+          "source_page": 27,
+          "source": "20).",
+          "destination": "figure.caption.62",
+          "destination_page": 27,
+          "target": "Figure 20: Text representation on the frozen 221-Journal-Entry test set. Teal bars are Nomic-256, the encoder the project kept; grey bars are alternatives in",
+          "matches": true
+        },
+        {
+          "source_page": 28,
+          "source": "21).",
+          "destination": "figure.caption.64",
+          "destination_page": 28,
+          "target": "Figure 21: Loss and training objective. Teal bars are Balanced Softmax, the loss the project kept; grey bars are alternatives on the same data and seeds.",
+          "matches": true
+        },
+        {
+          "source_page": 29,
+          "source": "22).",
+          "destination": "figure.caption.66",
+          "destination_page": 29,
+          "target": "Figure 22: Training data. Teal bars are the 1,022-entry reference; grey bars add train-only targeted Journal Entries. Only the training set changes.",
+          "matches": true
+        },
+        {
+          "source_page": 29,
+          "source": "19",
+          "destination": "figure.caption.59",
+          "destination_page": 26,
+          "target": "Figure 19: Selected within-metric target-dimension changes from the two train-only targeted synthetic batches. QWK and Conflict recall rows are not",
+          "matches": true
+        },
+        {
+          "source_page": 30,
+          "source": "23),",
+          "destination": "figure.caption.68",
+          "destination_page": 29,
+          "target": "Figure 23: Labels and context. Teal bars are the setup the project kept; each group is scored against its own labels, so compare bars only within a group.",
+          "matches": true
+        },
+        {
+          "source_page": 30,
+          "source": "24),",
+          "destination": "figure.caption.70",
+          "destination_page": 30,
+          "target": "Figure 24: Comparison of QWK and Conflict recall by Schwartz value",
+          "matches": true
+        },
+        {
+          "source_page": 31,
+          "source": "10",
+          "destination": "table.10",
+          "destination_page": 30,
+          "target": "Table 10: VIF Critic and LLMs given the same input, scored on the same 221-Journal-Entry test set. Each LLM was run once. The VIF Critic reference row",
+          "matches": true
+        },
+        {
+          "source_page": 31,
+          "source": "11,",
+          "destination": "table.11",
+          "destination_page": 31,
+          "target": "Table 11: Per-value QWK, VIF Critic (seed 22) against gpt-5.4-mini given the same input.",
+          "matches": true
+        },
+        {
+          "source_page": 32,
+          "source": "26).",
+          "destination": "figure.caption.74",
+          "destination_page": 32,
+          "target": "Figure 26: VIF Critic hand-off on 106 development histories containing 33 Drifts, with gpt-5.4-mini at no reasoning effort. Bars are medians of three",
+          "matches": true
+        },
+        {
+          "source_page": 33,
+          "source": "12",
+          "destination": "table.12",
+          "destination_page": 33,
+          "target": "Table 12: Weekly Drift Detection results using gpt-5.4-mini or gpt-5.6-luna as the Weekly Drift Reviewer across different reasoning effort levels.",
+          "matches": true
+        },
+        {
+          "source_page": 33,
+          "source": "27(a),",
+          "destination": "figure.caption.76",
+          "destination_page": 33,
+          "target": "Figure 27: Weekly Drift Detection operating points on 292 development histories containing 42 Drifts. (a) Prompt v0: gpt-5.6-luna at each reasoning effort,",
+          "matches": true
+        },
+        {
+          "source_page": 34,
+          "source": "13.",
+          "destination": "table.13",
+          "destination_page": 34,
+          "target": "Table 13: Weekly Drift Detection results using gpt-5.6-luna or gpt-6-luna as the Weekly Drift Reviewer across different reasoning effort levels. gpt-5.6-luna",
+          "matches": true
+        },
+        {
+          "source_page": 34,
+          "source": "27(b).",
+          "destination": "figure.caption.76",
+          "destination_page": 33,
+          "target": "Figure 27: Weekly Drift Detection operating points on 292 development histories containing 42 Drifts. (a) Prompt v0: gpt-5.6-luna at each reasoning effort,",
+          "matches": true
+        },
+        {
+          "source_page": 34,
+          "source": "12",
+          "destination": "table.12",
+          "destination_page": 33,
+          "target": "Table 12: Weekly Drift Detection results using gpt-5.4-mini or gpt-5.6-luna as the Weekly Drift Reviewer across different reasoning effort levels.",
+          "matches": true
+        },
+        {
+          "source_page": 35,
+          "source": "14",
+          "destination": "table.14",
+          "destination_page": 35,
+          "target": "Table 14: AI-reviewed NSM results across 391 development and 110 qualified-final weeks.",
+          "matches": true
+        },
+        {
+          "source_page": 36,
+          "source": "28",
+          "destination": "figure.caption.81",
+          "destination_page": 35,
+          "target": "Figure 28: North Star Moment selection after the targeted update, on 391 development and 110 qualified-final weeks from 105 synthetic Personas.",
+          "matches": true
+        },
+        {
+          "source_page": 36,
+          "source": "28.",
+          "destination": "figure.caption.81",
+          "destination_page": 35,
+          "target": "Figure 28: North Star Moment selection after the targeted update, on 391 development and 110 qualified-final weeks from 105 synthetic Personas.",
+          "matches": true
+        },
+        {
+          "source_page": 36,
+          "source": "15",
+          "destination": "table.15",
+          "destination_page": 36,
+          "target": "Table 15: Application behaviours checked by automated tests.",
+          "matches": true
+        },
+        {
+          "source_page": 37,
+          "source": "16",
+          "destination": "table.16",
+          "destination_page": 37,
+          "target": "Table 16: Verification completed without paid model calls.",
+          "matches": true
+        },
+        {
+          "source_page": 37,
+          "source": "29",
+          "destination": "figure.caption.85",
+          "destination_page": 37,
+          "target": "Figure 29: Verification layers, from controlled tests to real use. Each layer is marked by the model responses it used: simulated or recorded, or live.",
+          "matches": true
+        },
+        {
+          "source_page": 38,
+          "source": "3),",
+          "destination": "table.3",
+          "destination_page": 10,
+          "target": "Table 3: Distribution recomputed from the persisted LLM-Judge VIF Labels in judge_labels.parquet (see Appendix A for the source path).",
+          "matches": true
+        },
+        {
+          "source_page": 39,
+          "source": "12).",
+          "destination": "table.12",
+          "destination_page": 33,
+          "target": "Table 12: Weekly Drift Detection results using gpt-5.4-mini or gpt-5.6-luna as the Weekly Drift Reviewer across different reasoning effort levels.",
+          "matches": true
+        },
+        {
+          "source_page": 39,
+          "source": "12).",
+          "destination": "table.12",
+          "destination_page": 33,
+          "target": "Table 12: Weekly Drift Detection results using gpt-5.4-mini or gpt-5.6-luna as the Weekly Drift Reviewer across different reasoning effort levels.",
+          "matches": true
+        },
+        {
+          "source_page": 39,
+          "source": "13,",
+          "destination": "table.13",
+          "destination_page": 34,
+          "target": "Table 13: Weekly Drift Detection results using gpt-5.6-luna or gpt-6-luna as the Weekly Drift Reviewer across different reasoning effort levels. gpt-5.6-luna",
+          "matches": true
+        },
+        {
+          "source_page": 39,
+          "source": "27(b)).",
+          "destination": "figure.caption.76",
+          "destination_page": 33,
+          "target": "Figure 27: Weekly Drift Detection operating points on 292 development histories containing 42 Drifts. (a) Prompt v0: gpt-5.6-luna at each reasoning effort,",
+          "matches": true
+        },
+        {
+          "source_page": 39,
+          "source": "13,",
+          "destination": "table.13",
+          "destination_page": 34,
+          "target": "Table 13: Weekly Drift Detection results using gpt-5.6-luna or gpt-6-luna as the Weekly Drift Reviewer across different reasoning effort levels. gpt-5.6-luna",
+          "matches": true
+        },
+        {
+          "source_page": 39,
+          "source": "27(b)).",
+          "destination": "figure.caption.76",
+          "destination_page": 33,
+          "target": "Figure 27: Weekly Drift Detection operating points on 292 development histories containing 42 Drifts. (a) Prompt v0: gpt-5.6-luna at each reasoning effort,",
+          "matches": true
+        },
+        {
+          "source_page": 40,
+          "source": "18",
+          "destination": "table.18",
+          "destination_page": 40,
+          "target": "Table 18: Short excerpts and relevant restored context from the synthetic Persona writing used in the Coach Digest diagnostic. The ellipsis in the June 25",
+          "matches": true
+        },
+        {
+          "source_page": 43,
+          "source": "31):",
+          "destination": "figure.caption.96",
+          "destination_page": 43,
+          "target": "Figure 31: Defense against prompt injection",
+          "matches": true
+        },
+        {
+          "source_page": 46,
+          "source": "19",
+          "destination": "table.19",
+          "destination_page": 46,
+          "target": "Table 19: Stable repository evidence for the paper’s principal factual and methodological claims.",
+          "matches": true
+        },
+        {
+          "source_page": 48,
+          "source": "20",
+          "destination": "table.20",
+          "destination_page": 48,
+          "target": "Table 20: Capstone implementation status and the evidence boundary for each component.",
+          "matches": true
+        },
+        {
+          "source_page": 49,
+          "source": "3",
+          "destination": "figure.caption.17",
+          "destination_page": 8,
+          "target": "Figure 3: Logical architecture snapshot with the earlier gpt-5.6-luna reviewer. The current Weekly Drift Reviewer uses gpt-6-luna at low reasoning effort.",
+          "matches": true
+        },
+        {
+          "source_page": 49,
+          "source": "4",
+          "destination": "figure.caption.18",
+          "destination_page": 8,
+          "target": "Figure 4: Physical architecture snapshot with the earlier gpt-5.6-luna API label; current Weekly Drift Reviewer and North Star Moment selection use",
+          "matches": true
+        }
+      ]
+    },
+    "original_33_rasters_retained_and_verified": true,
+    "current_33_image_placements_verified": true,
+    "limitations": "Numbering and cross-reference scope; no model experiments or application suite rerun."
   }
 }

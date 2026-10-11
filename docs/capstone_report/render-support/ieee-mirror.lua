@@ -1,4 +1,59 @@
--- Render the editable source captions and tables with the original numbering.
+-- Render the editable captions and reject inconsistent report numbering.
+local section_numbers = {}
+local appendix_count = 0
+local caption_counts = {Figure = 0, Table = 0}
+local caption_numbers = {}
+
+function Header(element)
+  local title = pandoc.utils.stringify(element)
+  local appendix = title:match('^Appendix ([A-Z])%.')
+  if appendix then
+    appendix_count = appendix_count + 1
+    local expected = string.char(string.byte('A') + appendix_count - 1)
+    assert(appendix == expected, 'Expected Appendix ' .. expected .. ', found ' .. title)
+    return
+  end
+
+  local prefix = title:match('^(%d[%d%.]*)%s')
+  if not prefix then return end
+  local parts = {}
+  for number in prefix:gmatch('%d+') do parts[#parts + 1] = tonumber(number) end
+  assert(#parts == element.level, 'Section number and heading depth differ: ' .. title)
+  for index = 1, element.level - 1 do
+    assert(parts[index] == section_numbers[index], 'Section has the wrong parent: ' .. title)
+  end
+  local expected = (section_numbers[element.level] or 0) + 1
+  assert(parts[element.level] == expected, 'Section sequence has a gap or duplicate: ' .. title)
+  section_numbers[element.level] = expected
+  for index = element.level + 1, 6 do section_numbers[index] = nil end
+end
+
+local function check_caption(element, kind)
+  caption_counts[kind] = caption_counts[kind] + 1
+  local expected = caption_counts[kind]
+  assert(tonumber(element.attributes['source-number']) == expected,
+    kind .. ' source-number is out of sequence: ' .. element.identifier)
+  for _, block in ipairs(element.content) do
+    local displayed = pandoc.utils.stringify(block):match('^' .. kind .. ' (%d+):')
+    if displayed then
+      assert(tonumber(displayed) == expected, kind .. ' caption number differs from rendered number')
+      caption_numbers[element.identifier:gsub('^source%-', '')] = expected
+      return
+    end
+  end
+  error(kind .. ' is missing its numbered caption: ' .. element.identifier)
+end
+
+function Pandoc(document)
+  document:walk({Link = function(link)
+    if not (link.target:match('^#fig%-') or link.target:match('^#tbl%-')) then return end
+    local expected = caption_numbers[link.target:sub(2)]
+    assert(expected, 'Undefined figure/table reference: ' .. link.target)
+    assert(pandoc.utils.stringify(link) == tostring(expected),
+      'Figure/table link number differs from its destination: ' .. link.target)
+  end})
+end
+
 local function has_class(element, name)
   return element.classes:includes(name)
 end
@@ -62,6 +117,7 @@ function Div(element)
   end
 
   if has_class(element, 'source-figure') then
+    check_caption(element, 'Figure')
     local content = pandoc.List()
     local panels = {}
     local caption
@@ -88,6 +144,7 @@ function Div(element)
   end
 
   if has_class(element, 'source-table') then
+    check_caption(element, 'Table')
     local caption
     local table_block
     for _, block in ipairs(element.content) do

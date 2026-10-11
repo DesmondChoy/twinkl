@@ -19,6 +19,8 @@ with the checklist audit applied and validated on 11 October 2026. Submitted mil
   briefing and requirements
 - [`images/ieee-source/`](images/ieee-source/) — all 33 original raster images
   used by the selected IEEE PDF, verified against its embedded images
+- [`images/corrected/`](images/corrected/) — Figures 22 and 29 with corrected
+  embedded figure and table references
 - [`ieee_mirror_validation.json`](ieee_mirror_validation.json) — source and output
   hashes, audit dispositions, independent reviews, and rendering validation
 - [`render-support/`](render-support/) and [`IEEEtran.cls`](IEEEtran.cls) —
@@ -61,6 +63,9 @@ The figures are already stored locally and do not need to be regenerated.
 cd docs/capstone_report
 quarto render capstone_report.md --to pdf
 ```
+
+Rendering checks consecutive section and appendix numbers, figure and table
+labels, and the numbers shown in figure and table links.
 
 On macOS with TinyTeX, add its binary directory to `PATH` if XeLaTeX is not
 already available:
@@ -130,12 +135,12 @@ the source for that experiment's findings.
 
 The [NSM experiment methodology](../north_star/nsm_experiment_methodology.md)
 and [targeted v4 Run 1 results](../../logs/experiments/reports/north_star_v4_run1_20260907/report.md)
-support Sections 3.9 and 4.5. The comparison covers 501 weeks from 105 synthetic
+support Sections 3.5.2 and 4.4.2. The comparison covers 501 weeks from 105 synthetic
 Personas, with 38 reassessed cases and 463 retained observations. Full eligible
 history has higher Card precision and Opportunity recall than Nomic top-three
 retrieval in both partitions. These are AI assessments with qualified final
 histories that have prior upstream research exposure, not human validation or
-an untouched final test. Appendix C describes saved full-history outcomes for
+an untouched final test. Appendix B describes saved full-history outcomes for
 five Personas and 27 weeks. Live North Star Moment review uses its separately
 pinned US$1 allowance across sessions and restarts. The final professor
 walkthrough evidence remains open.
