@@ -491,5 +491,5 @@ and is closed outside capstone scope.
 | [demo/experience_inspect_app.md](demo/experience_inspect_app.md) | Implemented React capstone app with synchronized Experience and Inspect views |
 | [01_value_evolution.md](evolution/01_value_evolution.md) | Concept note for a possible future filter distinguishing value evolution from Drift |
 | [onboarding_spec.md](onboarding/onboarding_spec.md) | BWS-based onboarding flow, item design, and data output schema |
-| [Phase 2 Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) | Current Technical Paper (Google Doc); [capstone_report/capstone_report_reference_only.md](capstone_report/capstone_report_reference_only.md) is a stale Quarto copy kept for reference only, described in the [report guide](capstone_report/README.md) |
+| [Phase 2 Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) | Current Technical Paper (Google Doc); [capstone_report/capstone_report.md](capstone_report/capstone_report.md) is the audited local report, described in the [report guide](capstone_report/README.md) |
 | [April 2026 proposal submission](archive/capstone/2026-04-proposal-submission/) | Immutable snapshot of the already-submitted proposal, slides, figures, and sources |

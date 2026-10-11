@@ -1,0 +1,3183 @@
+{
+  "status": "passed",
+  "validated_date": "2026-10-11",
+  "scope": "Corrected edition of the selected 50-page IEEE report. All checklist-audit findings were applied or confirmed already resolved, using the selected edition’s current figure/table numbering. Independent source, citation and page reviews are included. This edition intentionally differs from the original PDF.",
+  "source": {
+    "path": "output/Twinkl__An_Inner_Compass_for_Longitudinal_Alignment_Between_Behaviour_and_Core_Values__1_/Twinkl IEEE Single Column.pdf",
+    "sha256": "df45c03ec7126497b1392d9735ad1e3145e4b837ac02785a47bfce14b6d46094",
+    "pages": 50,
+    "conversion_scaffold": "output/Twinkl__An_Inner_Compass_for_Longitudinal_Alignment_Between_Behaviour_and_Core_Values__1_/assets/mainv2.tex",
+    "scaffold_note": "The adjacent LaTeX versions differ from the PDF. Body wording, captions, table entries, headings, panel captions and hyperlink differences were restored from the PDF."
+  },
+  "audit_source": {
+    "path": "output/pdf/twinkl-report-checklist-audit.pdf",
+    "sha256": "f2bc1f64e3cb29673e08f59b10595e2053492c2433fab6c9b0074f4f19f79c20",
+    "source_snapshot": "Older 68-page main.tex snapshot; audit locations adapted to selected 50-page edition"
+  },
+  "baseline_mirror": {
+    "markdown_sha256": "6e45020c15dfdf98cd6176e0e7c7e6c927ac07d4c677ca320a9535ab381c3514",
+    "pdf_sha256": "836e6340c8003fb3a8b9f22ca4fd982a194bc5b5dc0fa1ff146a16c5008a6da3",
+    "pages": 48
+  },
+  "outputs": {
+    "markdown": {
+      "path": "docs/capstone_report/capstone_report.md",
+      "sha256": "78e883f15369730837ba441b5bbb51efe651fd427825321618342860f929ea29"
+    },
+    "pdf": {
+      "path": "docs/capstone_report/capstone_report.pdf",
+      "sha256": "61b08648568a3df38f91218b249c0b73b5d050808171382c72cec50bc75506c3",
+      "pages": 49
+    }
+  },
+  "audit_resolution": {
+    "findings": 90,
+    "all_disposed": true,
+    "disposition_counts": {
+      "corrected": 79,
+      "corrected_with_adaptation": 7,
+      "already_satisfied": 3,
+      "obsolete_premise": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "audit_locator": "Line 120 | Key Terms",
+        "section": "Abstract",
+        "current_lines": [
+          32
+        ],
+        "disposition": "corrected",
+        "verification": "Core Values replaces North Star values.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 2,
+        "audit_locator": "Line 122 | Key Terms",
+        "section": "Abstract",
+        "current_lines": [
+          34
+        ],
+        "disposition": "corrected",
+        "verification": "Weekly Drift Detection is named as workflow; reviewer assigns Conflict decisions and fixed Drift Detector identifies Drift; recall attributed to workflow.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 3,
+        "audit_locator": "Line 122 | Key Terms",
+        "section": "Abstract",
+        "current_lines": [
+          34
+        ],
+        "disposition": "corrected",
+        "verification": "Coach Digest and North Star Moment presentation is conditional on eligible supportive quotation.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 4,
+        "audit_locator": "Line 137 | Key Terms / canonical terminology",
+        "section": "1.1",
+        "current_lines": [
+          46
+        ],
+        "disposition": "corrected",
+        "verification": "Profile and Conflicts capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 5,
+        "audit_locator": "Lines 141, 145, 149, 151, 153, 161 | Key Terms: names",
+        "section": "1.2",
+        "current_lines": [
+          50,
+          54,
+          58,
+          60,
+          62,
+          70
+        ],
+        "disposition": "corrected",
+        "verification": "All six requested names corrected at their current equivalents.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 6,
+        "audit_locator": "Line 155 | Key Terms",
+        "section": "1.2",
+        "current_lines": [
+          64
+        ],
+        "disposition": "corrected",
+        "verification": "Duplicated value removed.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 7,
+        "audit_locator": "Line 159 | Key Terms",
+        "section": "1.2",
+        "current_lines": [
+          68
+        ],
+        "disposition": "corrected",
+        "verification": "All three Drift states named; valid Coach Digest and eligible source made conditional.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 8,
+        "audit_locator": "Line 189 | Key Terms: names",
+        "section": "1.3 Table 1",
+        "current_lines": [
+          93
+        ],
+        "disposition": "corrected",
+        "verification": "Neutral and Alignment capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 9,
+        "audit_locator": "Line 195 | Key Terms",
+        "section": "1.3 Table 1",
+        "current_lines": [
+          99
+        ],
+        "disposition": "corrected",
+        "verification": "At most one, exact quotation, valid Coach Digest, closed-week eligibility, no Insufficient Evidence card and no-source outcome stated.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 10,
+        "audit_locator": "Line 229 | Citation",
+        "section": "2.3",
+        "current_lines": [
+          133
+        ],
+        "disposition": "corrected",
+        "verification": "Synthetic NLP statement now cites He et al. [17]; bias statement retains Zheng et al. [18].",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 11,
+        "audit_locator": "Lines 229, 231 | Key Terms: names",
+        "section": "2.3",
+        "current_lines": [
+          133,
+          135
+        ],
+        "disposition": "corrected",
+        "verification": "Persona and LLM-Judge named consistently.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 12,
+        "audit_locator": "Line 245 | Citation",
+        "section": "2.5 (currently I2.5)",
+        "current_lines": [
+          149
+        ],
+        "disposition": "corrected",
+        "verification": "Gao result scoped to2023ELI5 and evaluated systems [26]; Min scoped to generated biographies/evaluated ChatGPT [27].",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 13,
+        "audit_locator": "Line 255 | Section reference",
+        "section": "3 Methodology",
+        "current_lines": [
+          157
+        ],
+        "disposition": "corrected",
+        "verification": "Method overview points to Section4.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 14,
+        "audit_locator": "Line 271 | Canonical terminology (project glossary)",
+        "section": "3.1",
+        "current_lines": [
+          173
+        ],
+        "disposition": "corrected",
+        "verification": "User-confirmed Profile capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 15,
+        "audit_locator": "Line 304 | Key Terms",
+        "section": "3.2",
+        "current_lines": [
+          213
+        ],
+        "disposition": "corrected",
+        "verification": "Offline classes correctly Neutral or Alignment.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 16,
+        "audit_locator": "Line 306 | Key Terms: names",
+        "section": "3.2",
+        "current_lines": [
+          215
+        ],
+        "disposition": "corrected",
+        "verification": "LLM-Judge VIF Label source and three ordinal classes named; LLM-Judge retains role.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 17,
+        "audit_locator": "Lines 344, 346, 348, 367 | Key Terms: names",
+        "section": "3.2.2",
+        "current_lines": [
+          250,
+          252,
+          254,
+          269
+        ],
+        "disposition": "corrected",
+        "verification": "All batch Persona, Neutral and VIF Critic naming defects corrected.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 18,
+        "audit_locator": "Lines 378, 387, 392 | Key Terms: names",
+        "section": "3.2.3",
+        "current_lines": [
+          279,
+          287,
+          293
+        ],
+        "disposition": "corrected",
+        "verification": "All Neutral/Persona/LLM-Judge VIF Labels naming defects corrected.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 19,
+        "audit_locator": "Lines 381-382 | Citation",
+        "section": "3.2.3",
+        "current_lines": [
+          281,
+          283
+        ],
+        "disposition": "corrected",
+        "verification": "Fleiss and Cohen method bullets cite31and32.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 20,
+        "audit_locator": "Lines 385-387 | Citation",
+        "section": "3.2.3",
+        "current_lines": [
+          285,
+          287
+        ],
+        "disposition": "corrected",
+        "verification": "Landis/Koch cited33in both interpretation statements;>0.60target retained.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 21,
+        "audit_locator": "Line 398 | Key Terms: names",
+        "section": "3.3 heading",
+        "current_lines": [
+          299
+        ],
+        "disposition": "corrected",
+        "verification": "Heading uses Alignment and Conflict.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 22,
+        "audit_locator": "Lines 408, 411 | Key Terms: names",
+        "section": "3.3.1",
+        "current_lines": [
+          309,
+          311
+        ],
+        "disposition": "corrected",
+        "verification": "Core Value vector and VIF Critic named correctly.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 23,
+        "audit_locator": "Lines 433, 436, 438, 439 | Key Terms: names",
+        "section": "3.3.3",
+        "current_lines": [
+          333,
+          335,
+          339,
+          341
+        ],
+        "disposition": "corrected",
+        "verification": "Conflict,LLM-Judge VIF Labels,Neutral class names corrected.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 24,
+        "audit_locator": "Line 468 | Key Terms: names",
+        "section": "3.3.4",
+        "current_lines": [
+          371
+        ],
+        "disposition": "corrected",
+        "verification": "Persona capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 25,
+        "audit_locator": "Line 468 | Section reference",
+        "section": "3.3.4",
+        "current_lines": [
+          371
+        ],
+        "disposition": "corrected",
+        "verification": "Repeated-pass source correctly3.2.3.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 26,
+        "audit_locator": "Line 474 | Figure / table comparison",
+        "section": "3.3.5",
+        "current_lines": [
+          377
+        ],
+        "disposition": "corrected_with_adaptation",
+        "verification": "Current Figure24 described as per-value three-seed medians; Table10 aggregate and Table11seed22 clarified. Visually verified current Figure24 has medians only, without seed range bars.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 27,
+        "audit_locator": "Lines 480, 482, 495 | Key Terms: names",
+        "section": "3.4.1",
+        "current_lines": [
+          383,
+          385,
+          399
+        ],
+        "disposition": "corrected",
+        "verification": "All named reviewer/critic/Persona/Journal Entry/Conflict/Drift terms corrected.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 28,
+        "audit_locator": "Line 500 | Key Terms",
+        "section": "3.4.1 Table 4 caption",
+        "current_lines": [
+          403
+        ],
+        "disposition": "corrected_with_adaptation",
+        "verification": "Current Table4 caption identifies LLM-Judge VIF Labels/Core Values as source.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 29,
+        "audit_locator": "Line 542 | Key Terms: names",
+        "section": "3.4.2",
+        "current_lines": [
+          446
+        ],
+        "disposition": "corrected",
+        "verification": "Reference labels and Drift heading corrected.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 30,
+        "audit_locator": "Lines 549-556 | Key Terms",
+        "section": "3.4.2 Table 5",
+        "current_lines": [
+          450,
+          452,
+          455
+        ],
+        "disposition": "corrected",
+        "verification": "Current Table5header separates reference labels/reviewer decisions and source row names Weekly Drift Reviewer Decisions.Tables12/13headers correctly identify Weekly Drift Reviewer models; all reasoning settings represented as variable.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 31,
+        "audit_locator": "Line 555 | Key Terms",
+        "section": "3.4.2 Table 5",
+        "current_lines": [
+          454
+        ],
+        "disposition": "corrected",
+        "verification": "Table5calls labels AI-reviewed reference.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 32,
+        "audit_locator": "Lines 566-585 | Key Terms",
+        "section": "3.4.3",
+        "current_lines": [
+          465,
+          467,
+          475,
+          485,
+          487
+        ],
+        "disposition": "corrected",
+        "verification": "Metrics/matching use reference Drifts derived from LLM-Judge Conflict Labels; no ground-truth claims remain in prose.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 33,
+        "audit_locator": "Line 570 | Key Terms",
+        "section": "3.4.3",
+        "current_lines": [
+          473
+        ],
+        "disposition": "corrected",
+        "verification": "Journal Entry typo repaired.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 34,
+        "audit_locator": "Line 635 | Key Terms: names",
+        "section": "3.4.4",
+        "current_lines": [
+          547
+        ],
+        "disposition": "corrected",
+        "verification": "Weekly Drift Reviewer input named fully.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 35,
+        "audit_locator": "Line 647 | Key Terms",
+        "section": "3.5",
+        "current_lines": [
+          559
+        ],
+        "disposition": "corrected",
+        "verification": "Quotation sourced from eligible Journal Entry, not restricted to earlier week.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 36,
+        "audit_locator": "Lines 660-661 | Canonical method names / roles",
+        "section": "3.5.1",
+        "current_lines": [
+          571,
+          573
+        ],
+        "disposition": "corrected",
+        "verification": "Coach Digest Validations and Coach Digest Evals distinguish deterministic checking and AI review.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 37,
+        "audit_locator": "Lines 672, 673, 674 | Key Terms: names",
+        "section": "3.5.2",
+        "current_lines": [
+          583,
+          585,
+          587
+        ],
+        "disposition": "corrected",
+        "verification": "All three explicit state names used.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 38,
+        "audit_locator": "Lines 716, 741 | Canonical terminology (project glossary)",
+        "section": "3.6.1",
+        "current_lines": [
+          627,
+          653
+        ],
+        "disposition": "corrected",
+        "verification": "Profile capitalization corrected in onboarding.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 39,
+        "audit_locator": "Line 735 | Key Terms",
+        "section": "3.6.1",
+        "current_lines": [
+          647,
+          1560
+        ],
+        "disposition": "corrected_with_adaptation",
+        "verification": "Display weight defined for every Schwartz value in method and AppendixG.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 40,
+        "audit_locator": "Line 785 | Canonical terminology (project glossary)",
+        "section": "3.6.2",
+        "current_lines": [
+          678
+        ],
+        "disposition": "corrected",
+        "verification": "Confirmed Profile capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 41,
+        "audit_locator": "Line 808 | Key Terms",
+        "section": "3.6.2",
+        "current_lines": [
+          704
+        ],
+        "disposition": "corrected",
+        "verification": "Figure14described as weekly result including Drift Detector,Coach Digest,North Star Moment.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 42,
+        "audit_locator": "Lines 821, 828 | Key Terms / canonical terminology",
+        "section": "3.6.3",
+        "current_lines": [
+          728,
+          736
+        ],
+        "disposition": "corrected_with_adaptation",
+        "verification": "Profile calculation corrected; Figure16caption repaired and Personas capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 43,
+        "audit_locator": "Lines 836, 865 | Key Terms: names",
+        "section": "4.1",
+        "current_lines": [
+          742,
+          768
+        ],
+        "disposition": "corrected",
+        "verification": "RQ1heading uses LLM-Judge VIF Labels; body LLM-Judge/LLM-Judge-human corrected.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 44,
+        "audit_locator": "Line 856 | Citation",
+        "section": "4.1",
+        "current_lines": [
+          758
+        ],
+        "disposition": "corrected",
+        "verification": "Landis/Koch33cited beside moderate interpretation.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 45,
+        "audit_locator": "Line 865 | Figure / section references",
+        "section": "4.1",
+        "current_lines": [
+          768
+        ],
+        "disposition": "corrected",
+        "verification": "Power comparison says marginally lower; repaired Security pointer4.2.4.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 46,
+        "audit_locator": "Lines 869, 874 | Broken figure references",
+        "section": "4.1",
+        "current_lines": [
+          772,
+          776,
+          780,
+          786
+        ],
+        "disposition": "already_satisfied",
+        "verification": "Figure18exists atsource-fig-293and references correctly retain18.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 47,
+        "audit_locator": "Line 882 | Key Terms",
+        "section": "4.2",
+        "current_lines": [
+          794
+        ],
+        "disposition": "corrected",
+        "verification": "Labels used as evaluation reference replaces ground-truth phrasing.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 48,
+        "audit_locator": "Line 892 | Caption reference",
+        "section": "4.2",
+        "current_lines": [
+          792,
+          794,
+          796
+        ],
+        "disposition": "obsolete_premise",
+        "verification": "Audited scatter-caption text absent; existing Table19is evidence map, so no old substitution applied.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 49,
+        "audit_locator": "Line 895 | Duplicate figure label",
+        "section": "4.2",
+        "current_lines": [
+          798,
+          802,
+          806
+        ],
+        "disposition": "already_satisfied",
+        "verification": "Only one source-fig-302definition, Figure20; removed scatter figure does not duplicate.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 50,
+        "audit_locator": "Lines 920, 924, 926 | Key Terms: names",
+        "section": "4.2.2",
+        "current_lines": [
+          820,
+          824,
+          826
+        ],
+        "disposition": "corrected",
+        "verification": "Neutral and Alignment names capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 51,
+        "audit_locator": "Line 950 | Key Terms: names",
+        "section": "4.2.4",
+        "current_lines": [
+          852
+        ],
+        "disposition": "corrected",
+        "verification": "Persona biography capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 52,
+        "audit_locator": "Line 972 | Caption accuracy",
+        "section": "4.2.5 Table 10",
+        "current_lines": [
+          874
+        ],
+        "disposition": "corrected_with_adaptation",
+        "verification": "Table10caption correctly distinguishes three-seed reference aggregate, separate seed22row, Figure24median values and Table11seed22QWK; no false range-bar claim.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 53,
+        "audit_locator": "Line 980 | Table reference accuracy",
+        "section": "4.2.5 Table 10",
+        "current_lines": [
+          878
+        ],
+        "disposition": "corrected_with_adaptation",
+        "verification": "Current Table10median QWK corrected0.362.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 54,
+        "audit_locator": "Line 988 | Broken figure reference",
+        "section": "4.2.5",
+        "current_lines": [
+          862,
+          906
+        ],
+        "disposition": "already_satisfied",
+        "verification": "No undefined x; current Figure24link and added Table11link resolve correctly.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 55,
+        "audit_locator": "Line 999 | Key Terms: names",
+        "section": "4.2.5",
+        "current_lines": [
+          918
+        ],
+        "disposition": "corrected",
+        "verification": "User-facing Drift capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 56,
+        "audit_locator": "Line 1018 | Section reference",
+        "section": "4.3.1",
+        "current_lines": [
+          938
+        ],
+        "disposition": "corrected",
+        "verification": "Later Luna studies pointer4.3.2.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 57,
+        "audit_locator": "Line 1077 | Key Terms: names",
+        "section": "4.3.2",
+        "current_lines": [
+          990
+        ],
+        "disposition": "corrected",
+        "verification": "False Drift alerts capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 58,
+        "audit_locator": "Line 1087 | Key Terms",
+        "section": "4.3.3",
+        "current_lines": [
+          1000
+        ],
+        "disposition": "corrected",
+        "verification": "Invalid review outcomes explicitly scoped to offline Abstain encoding; application failed reviews yield Insufficient Evidence.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 59,
+        "audit_locator": "Line 1101 | Key Terms: names",
+        "section": "4.4.1",
+        "current_lines": [
+          1014
+        ],
+        "disposition": "corrected",
+        "verification": "Coach Digest prompt4.1named fully.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 60,
+        "audit_locator": "Line 1110 | Section reference",
+        "section": "4.4.1",
+        "current_lines": [
+          1024
+        ],
+        "disposition": "corrected",
+        "verification": "Event-attribution discussion pointer6.4.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 61,
+        "audit_locator": "Line 1166 | Section reference",
+        "section": "5.1",
+        "current_lines": [
+          1075
+        ],
+        "disposition": "corrected",
+        "verification": "Prompt trust boundary pointer6.7.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 62,
+        "audit_locator": "Line 1184 | Key Terms",
+        "section": "5.2 Table 15",
+        "current_lines": [
+          1088
+        ],
+        "disposition": "corrected",
+        "verification": "Gap/Abstain condition limited to blocking current claim after recent Conflict; failures stated separately.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 63,
+        "audit_locator": "Lines 1262, 1274 | Key Terms: names",
+        "section": "6.1",
+        "current_lines": [
+          1143,
+          1150
+        ],
+        "disposition": "corrected",
+        "verification": "Original Security LLM-Judge VIF Labels and VIF Critic naming corrected.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 64,
+        "audit_locator": "Lines 1262, 1280 | Section references",
+        "section": "6.1",
+        "current_lines": [
+          1143,
+          1156
+        ],
+        "disposition": "corrected",
+        "verification": "Security repair pointers correctly4.2.4.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 65,
+        "audit_locator": "Line 1272 | Citation",
+        "section": "6.1",
+        "current_lines": [
+          1148
+        ],
+        "disposition": "corrected",
+        "verification": "Epstein numbered39and multiple valid interpretations scoped to some posts.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 66,
+        "audit_locator": "Line 1272 | Citation",
+        "section": "6.1",
+        "current_lines": [
+          1148
+        ],
+        "disposition": "corrected",
+        "verification": "Bardi/Schwartz40cited; normative pressure phrased as proposed explanation; colleague example explicitly Twinkl interpretation.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 67,
+        "audit_locator": "Line 1272 | Section reference",
+        "section": "6.1",
+        "current_lines": [
+          1148
+        ],
+        "disposition": "corrected",
+        "verification": "Nonexistent7.1replaced6.6.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 68,
+        "audit_locator": "Line 1286 | Citation",
+        "section": "6.2",
+        "current_lines": [
+          1162
+        ],
+        "disposition": "corrected",
+        "verification": "Human omission result cited42and distinguished as analogy requiring direct Twinkl evaluation.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 69,
+        "audit_locator": "Lines 1297, 1300 | Figure-panel reference",
+        "section": "6.3",
+        "current_lines": [
+          1174,
+          1176
+        ],
+        "disposition": "corrected",
+        "verification": "Figure27(b)parenthesis repaired; low-effort13to4statement explicitlyv0/panel(a);26history example explicitly separatev2.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 70,
+        "audit_locator": "Line 1300 | Citation",
+        "section": "6.3",
+        "current_lines": [
+          1176
+        ],
+        "disposition": "corrected",
+        "verification": "Selective classification citation deduplicated to24.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 71,
+        "audit_locator": "Lines 1312, 1314 | Canonical terminology (project glossary)",
+        "section": "6.4",
+        "current_lines": [
+          1188,
+          1190
+        ],
+        "disposition": "corrected",
+        "verification": "Coach Digest Validations names both deterministic-check occurrences.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 72,
+        "audit_locator": "Line 1316 | Evidence link placement",
+        "section": "6.4",
+        "current_lines": [
+          1192
+        ],
+        "disposition": "corrected",
+        "verification": "Therefore hyperlink repaired; final manifest link specifically identifies six-response diagnostic inputs/provenance while separate report covers nine repaired responses.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 73,
+        "audit_locator": "Line 1360 | Citation",
+        "section": "6.6",
+        "current_lines": [
+          1231
+        ],
+        "disposition": "corrected",
+        "verification": "Rottger48cited; binary hate-speech task/200posts explicit; value-guideline benefit clearly future test.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 74,
+        "audit_locator": "Line 1361 | Key Terms: names",
+        "section": "6.6",
+        "current_lines": [
+          1233
+        ],
+        "disposition": "corrected",
+        "verification": "Conflict examples capitalized.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 75,
+        "audit_locator": "Line 1368 | Citation",
+        "section": "6.6",
+        "current_lines": [
+          1239
+        ],
+        "disposition": "corrected",
+        "verification": "Provisional threshold,Big Five states,habit formation specifics and numbered49/50/40citations stated; studies motivate alternative-rule evaluation.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 76,
+        "audit_locator": "Line 1376 | Citation",
+        "section": "6.7",
+        "current_lines": [
+          1247
+        ],
+        "disposition": "corrected",
+        "verification": "Hines51used on principle of instruction/content distinction; spotlighting implementation equivalence removed.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 77,
+        "audit_locator": "Line 1396 | Citation",
+        "section": "6.7",
+        "current_lines": [
+          1269
+        ],
+        "disposition": "corrected",
+        "verification": "Hines source removed from local-control list; local code link and test limitations retained.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 78,
+        "audit_locator": "Line 1406 | Key Terms",
+        "section": "6.7",
+        "current_lines": [
+          1281
+        ],
+        "disposition": "corrected",
+        "verification": "Conflict definition explicitly scoped to Weekly Drift Detection/confirmed Core Value.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 79,
+        "audit_locator": "Line 1416 | Key Terms",
+        "section": "7 Conclusion",
+        "current_lines": [
+          1289
+        ],
+        "disposition": "corrected",
+        "verification": "Conclusion attributes Drift-level approach to combined reviewer/fixed Drift Detector.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 80,
+        "audit_locator": "Line 1426 | Section reference",
+        "section": "AI Tool Declaration",
+        "current_lines": [
+          1297,
+          1450
+        ],
+        "disposition": "corrected",
+        "verification": "Nonexistent3.8replaced AppendixA/eight-pair corpus.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 81,
+        "audit_locator": "Lines 1486, 1496, 1498, 1504, 1506, 1510, 1526, 1528 | Unused references",
+        "section": "References",
+        "current_lines": [
+          281,
+          283,
+          365,
+          533,
+          728,
+          1317,
+          1419
+        ],
+        "disposition": "corrected",
+        "verification": "NIST/Page/EUentries removed; Fleiss31,Cohen32,Luna36,Nomic34,officialv1.5card35,Lipton38cited. All51references have body citations.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 82,
+        "audit_locator": "Line 1508 | Incorrect DOI hyperlink",
+        "section": "References [30]",
+        "current_lines": [
+          1363
+        ],
+        "disposition": "corrected",
+        "verification": "Current Tsakalidis23DOIdestination correctly10.18653/v1/2022.acl-long.318.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 83,
+        "audit_locator": "Line 1538 | Duplicate reference",
+        "section": "References [45]",
+        "current_lines": [
+          1365,
+          145,
+          1176
+        ],
+        "disposition": "corrected",
+        "verification": "One Geifman selective-classification entry24remains and both body cites point24.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 84,
+        "audit_locator": "Lines 1448-1542 | Missing bibliography entries",
+        "section": "References",
+        "current_lines": [
+          285,
+          287,
+          758,
+          1148,
+          1162,
+          1231,
+          1239,
+          1383,
+          1395,
+          1397,
+          1401,
+          1413,
+          1415,
+          1417
+        ],
+        "disposition": "corrected",
+        "verification": "Allsevenmissing entries present and cited:Landis33,Epstein39,Bardi40,Spranca42,Rottger48,Fleeson49,Lally50.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 85,
+        "audit_locator": "Line 1552 | Key Terms: names",
+        "section": "Appendix A",
+        "current_lines": [
+          1425
+        ],
+        "disposition": "corrected",
+        "verification": "AppendixAuses Coach Digest changes.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 86,
+        "audit_locator": "Line 1552 | Repository evidence reference",
+        "section": "Appendix A",
+        "current_lines": [
+          1425
+        ],
+        "disposition": "corrected",
+        "verification": "AppendixAstates af22ab45contains September14reports/Coach Digest changes absent from earlier3dbb3e43snapshot.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 87,
+        "audit_locator": "Line 1781 | Section reference",
+        "section": "Appendix B",
+        "current_lines": [
+          1526
+        ],
+        "disposition": "corrected",
+        "verification": "AppendixBpoints Chromium journeys to5.2.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 88,
+        "audit_locator": "Line 1801 | Key Terms: names",
+        "section": "Visible Appendix D (source anchor appendix-c)",
+        "current_lines": [
+          1539
+        ],
+        "disposition": "corrected_with_adaptation",
+        "verification": "Current visible AppendixDTable20names LLM-Judge bias.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 89,
+        "audit_locator": "Line 540 | Evaluation population: 292 histories, rather than 2,377",
+        "section": "3.4.2",
+        "current_lines": [
+          444
+        ],
+        "disposition": "corrected",
+        "verification": "292histories/2377Journal Entry-Core Value combinations/42referenceDrifts across36histories stated correctly.",
+        "remaining_audit_action": null
+      },
+      {
+        "id": 90,
+        "audit_locator": "Line 1286 | Tradition Conflict detections: 1 of 10, rather than zero",
+        "section": "6.2",
+        "current_lines": [
+          1162
+        ],
+        "disposition": "corrected",
+        "verification": "Tradition result corrected10%(1of10).",
+        "remaining_audit_action": null
+      }
+    ],
+    "additional_review_issues": [
+      {
+        "id": "new_headers",
+        "severity": "required_regression_fix",
+        "lines": [
+          950,
+          979
+        ],
+        "finding": "Results tables now call model/settings columns Weekly Drift Reviewer Decisions.",
+        "action": "Restore Weekly Drift Reviewer for these two headers. Keep Table5decision-source row as Weekly Drift Reviewer Decisions.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          950,
+          979
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 950,
+            "text": "| **Weekly Drift Reviewer**<br><br>**(Model, Reasoning Effort Level)** | **Median Drift hits** | **Median recall** | **Median false alerts** | **Median coverage** | **Paired recall difference (95% interval)** | **Paired false-alert difference (95% interval)** |"
+          },
+          {
+            "line": 979,
+            "text": "| **Prompt Version** | **Weekly Drift Reviewer** | **Median Drift hits** | **Median recall** | **Median false alerts** | **Median coverage** | **Calculated token cost, three Runs** |"
+          }
+        ]
+      },
+      {
+        "id": "table5_efforts",
+        "severity": "accuracy",
+        "lines": [
+          455
+        ],
+        "finding": "Table5says reasoning efforts none or low, while Table12/13include medium/high/xhigh.",
+        "action": "Use model and reasoning effort vary by experiment setup.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          455
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 455,
+            "text": "| **Weekly Drift Reviewer Decisions** | model and reasoning effort vary by experiment setup (gpt-5.4-mini, gpt-5.6-luna, gpt-6-luna) | One call per Persona-week, as the product would run it |"
+          }
+        ]
+      },
+      {
+        "id": "walkthrough_claim",
+        "severity": "accuracy",
+        "lines": [
+          1073,
+          1562,
+          1579
+        ],
+        "finding": "Implementation prose implies completed final all-five walkthrough, while AppendicesB/Dsay pending.",
+        "action": "Replace and a final walkthrough covering all five(AppendixD)with with verification scope recorded in AppendicesB andD.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          1073,
+          1526,
+          1543
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 1073,
+            "text": "The application runs in two modes. Saved replay presents the five synthetic Personas from recorded model responses and makes no model calls. Together they show Drift forming and continuing, No Active Drift, Insufficient Evidence, and two Core Values in different states, with verification scope recorded in Appendices B and D. Section 3.6 shows the main screens. Manual journaling runs the same steps on the user's own Journal Entries with live model calls."
+          },
+          {
+            "line": 1526,
+            "text": "Subsequent browser checks examined Lukas's paired Coach Digest responses and Nisha's fourth-week prompt records in Inspect. The report's current interface captures were taken on 12 September from Nisha's saved fourth-week replay, using the existing responses without new model calls. The two automated Chromium journeys reported in Section 5.2 additionally verified saved replay, reload, and the manual review and recovery path. These checks cover selected application behaviour; the final walkthrough across all five Personas remains pending."
+          },
+          {
+            "line": 1543,
+            "text": "| North Star Moment | AI evaluation integrated in saved replay | The 501-week comparison and targeted September update favour full eligible history for Card precision and Opportunity recall. The saved replay uses completed full-history outcomes for five Personas and 27 reviewed weeks. These are AI assessments of synthetic histories. Live execution requires a valid separately configured budget, and the final source-level walkthrough remains pending. |"
+          }
+        ]
+      },
+      {
+        "id": "medium_matching",
+        "severity": "accuracy",
+        "lines": [
+          963,
+          954,
+          955
+        ],
+        "finding": "Medium matched low on Drift recall conflicts with marginal median values0.571/0.548. Paired difference does not establish a gain.",
+        "action": "Use Medium did not establish a Drift-recall gain over low.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          963,
+          954,
+          955
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 963,
+            "text": "Low reasoning effort cut false Drift alerts from 13 to 4 and found 23 Drifts against 20, but its recall gain was not established (+0.071). It also abstained more, covering 186 rather than 227 of 292 histories, the loss that failed the preregistered rule in Section 3.4.4 and resulted in a lower median coverage. Medium did not establish a Drift-recall gain over low. High and xhigh found more Drifts (26 and 28) but at least doubled the false Drift alerts (8 and 9), and only xhigh's recall gain was established (+0.095). Because Drifts found and false Drift alerts rose together above low, we kept l"
+          },
+          {
+            "line": 954,
+            "text": "| gpt-5.6-luna, low | **23/42** | 0.548 | **4** | **0.637** | (Baseline) | (Baseline) |"
+          },
+          {
+            "line": 955,
+            "text": "| gpt-5.6-luna, medium | 24/42 | 0.571 | 4 | 0.682 | 0.000 \\[−0.085, +0.077\\] | −1 \\[−2, +3\\] vs low |"
+          }
+        ]
+      },
+      {
+        "id": "abstract_human_source",
+        "severity": "evidence_boundary",
+        "lines": [
+          36,
+          50,
+          287
+        ],
+        "finding": "All evidence synthetic and AI-reviewed omits project-team human agreement annotations.",
+        "action": "Use The evaluations use synthetic Journal Entries, with project-team human annotation for label agreement and AI review of downstream outputs;the benefit to real users remains untested.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          36,
+          50,
+          287
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 36,
+            "text": "Twinkl contributes a deployed, inspectable proof of concept. The evaluations use synthetic Journal Entries, with project-team human annotation for label agreement and AI review of downstream outputs; the benefit to real users remains untested."
+          },
+          {
+            "line": 50,
+            "text": "The following research questions guide a technical evaluation using synthetic Journal Entries, with human annotation used to assess agreement on a subset of LLM-Judge VIF Labels. Overarching question: To what extent can AI identify and explain divergence between a person's stated values and the behaviour described in their journal writing?"
+          },
+          {
+            "line": 287,
+            "text": "Agreement with human annotators. Three project members independently annotated 115 Journal Entries from 19 of the 204 Personas using an annotation tool as seen in Figure [6](#fig-141). These 19 Personas were selected to give a fair representation of all Schwartz values: each value was a Core Value for at least three Personas, except Stimulation, which had two. Annotators scored all ten values for each Journal Entry as −1, 0 or +1, the same scale the LLM-Judge used. They were given the same inputs as the LLM-Judge, and the LLM-Judge VIF Labels were revealed only after each annotator had saved t"
+          }
+        ]
+      },
+      {
+        "id": "agreement_ceiling",
+        "severity": "evidence_boundary",
+        "lines": [
+          32,
+          758,
+          1217
+        ],
+        "finding": "At least as dependable as human and practical ceiling interpretation conflict with Limitations rejecting such interpretation.",
+        "action": "Abstract: labelled it with an LLM-Judge.Project-team annotation on a shared subset and repeated judging measured label agreement and consistency.Results758: remove and sets a practical ceiling;describe agreement values without declaring dependence/reliability superiority.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          32,
+          758,
+          1217
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 32,
+            "text": "Can AI notice when a person's everyday choices move away from their Core Values? Twinkl studies this question as evidence-grounded accountability rather than affirmation, comparing longitudinal Journal Entries with user-confirmed Core Values drawn from Schwartz's Theory of Basic Human Values. Because real journals are private and slow to accumulate, we built a synthetic corpus of 1,651 Journal Entries from 204 Personas and labelled it with an LLM-Judge, after assessing its label agreement with project-team human annotators and its consistency across repeated passes."
+          },
+          {
+            "line": 758,
+            "text": "Agreement with human annotators. Human--human agreement of 0.56 is \\\"moderate\\\" on the Landis and Koch scale \\[33\\] and indicates annotation difficulty on the shared benchmark: three careful annotators often disagreed about which values a Journal Entry supports or works against. The LLM-Judge agreed with each annotator more closely (0.66) than the annotators agreed with one another; the mean pairwise human--human Cohen's $\\kappa$ is also 0.56, so the comparison is like-for-like."
+          },
+          {
+            "line": 1217,
+            "text": "The synthetic corpus provides designed demographic and narrative coverage rather than population representativeness. Generation and original labelling used the same model family, so their errors may be correlated, but this was not measured, and the original generation and labelling procedures could not be reproduced because their model identifiers were not recorded. Human agreement was assessed on only 115 Journal Entries from 19 Personas by three project-team annotators, with just two Personas having Stimulation as a Core Value. Kappa's sensitivity to prevalence \\[47\\] and the different rater"
+          }
+        ]
+      },
+      {
+        "id": "fig24_all_values",
+        "severity": "terminology",
+        "lines": [
+          868
+        ],
+        "finding": "Figure24covers alltenSchwartz values, but caption calls them Core Values.",
+        "action": "Use by Schwartz value.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          868
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 868,
+            "text": "**Figure 24: Comparison of QWK and Conflict recall by Schwartz value**"
+          }
+        ]
+      },
+      {
+        "id": "withhold_invalid",
+        "severity": "clarity",
+        "lines": [
+          1245
+        ],
+        "finding": "invalid model output fails to be closed is unclear and reverses fail-closed phrasing.",
+        "action": "Use invalid model output is withheld.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          1245
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 1245,
+            "text": "Journal Entries can contain sensitive personal information, so Twinkl keeps them in as few places as possible. The application gives a first-use notice for browser storage, temporary Python memory, provider use, assessment-only scope, and the non-therapy boundary; invalid model output is withheld, and Inspect shows saved model evidence. Confirmed deletion clears browser state and the matching temporary Python session."
+          }
+        ]
+      },
+      {
+        "id": "python_snippet_indent",
+        "severity": "reproduction",
+        "lines": [
+          1514,
+          1516,
+          1518
+        ],
+        "finding": "Extracted AppendixAPython does not compile:loop body lost indentation.",
+        "action": "Indent mean_cohen and print one level under for beyond the four-space Markdown block indent.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          1491,
+          1492,
+          1493
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 1491,
+            "text": "    for value in [*SCHWARTZ_VALUE_ORDER, \"aggregate\"]:"
+          },
+          {
+            "line": 1492,
+            "text": "        mean_cohen = mean(result[value] for result in cohen)"
+          },
+          {
+            "line": 1493,
+            "text": "        print(f\"{value}: fleiss={fleiss[value]:.3f}, mean_cohen={mean_cohen:.3f}\")"
+          }
+        ]
+      },
+      {
+        "id": "shell_snippet_continuations",
+        "severity": "reproduction",
+        "lines": [
+          1522,
+          1524,
+          1526,
+          1528,
+          1532,
+          1534,
+          1536,
+          1538
+        ],
+        "finding": "Blank lines after shell continuation backslashes end logical commands before their arguments.",
+        "action": "Remove intervening blank lines within continued shell commands.",
+        "disposition": "corrected_and_verified",
+        "current_lines": [
+          1496,
+          1497,
+          1498,
+          1499,
+          1502,
+          1503,
+          1505,
+          1506
+        ],
+        "remaining_action": null,
+        "evidence_excerpts": [
+          {
+            "line": 1496,
+            "text": "    uv run python -c \\"
+          },
+          {
+            "line": 1497,
+            "text": "    \"import polars as pl; \\"
+          },
+          {
+            "line": 1498,
+            "text": "    d = pl.read_parquet('logs/judge_labels/judge_labels.parquet'); \\"
+          },
+          {
+            "line": 1499,
+            "text": "    print(d.select(pl.col('alignment_vector').explode().alias('label')) \\"
+          },
+          {
+            "line": 1502,
+            "text": "    uv run python -m \\"
+          },
+          {
+            "line": 1503,
+            "text": "    scripts.experiments.compare_twinkl_ck3w_luna_higher_reasoning score"
+          },
+          {
+            "line": 1505,
+            "text": "    MPLCONFIGDIR=/tmp/twinkl-matplotlib \\"
+          },
+          {
+            "line": 1506,
+            "text": "    uv run python scripts/capstone/generate_report_figures.py"
+          }
+        ]
+      }
+    ]
+  },
+  "content_checks": {
+    "prose_units": 373,
+    "prose_units_matching_case_and_punctuation": 373,
+    "actual_prose_differences": 0,
+    "math_plain_writer_artifacts": 1,
+    "headings": 74,
+    "expected_headings": 74,
+    "actual_heading_differences": 0,
+    "required_special_headings_present": true,
+    "figures": 31,
+    "tables": 20,
+    "captions": 51,
+    "image_placements": 33,
+    "bibliography_entries": 51,
+    "reproduction_python_compile": "passed without execution",
+    "reproduction_shell_syntax": "zsh -n passed without execution",
+    "table_numeric_preservation": {
+      "tables_checked": 20,
+      "changed_numeric_tables": [
+        {
+          "table": "10",
+          "before": [
+            "0362",
+            "0.313",
+            "0.448",
+            "0.621",
+            "22",
+            "020",
+            "0.378",
+            "0.342",
+            "0.449",
+            "0.621",
+            "5.4",
+            "0.434",
+            "0.188",
+            "0.428",
+            "0.789",
+            "5.4",
+            "0.350",
+            "0.134",
+            "0.327",
+            "0.861"
+          ],
+          "after": [
+            "0.362",
+            "0.313",
+            "0.448",
+            "0.621",
+            "22",
+            "020",
+            "0.378",
+            "0.342",
+            "0.449",
+            "0.621",
+            "5.4",
+            "0.434",
+            "0.188",
+            "0.428",
+            "0.789",
+            "5.4",
+            "0.350",
+            "0.134",
+            "0.327",
+            "0.861"
+          ]
+        }
+      ],
+      "only_change": "Table 10: 0362 corrected to 0.362",
+      "method": "Compare all numeric table data, excluding corrected section pointers"
+    }
+  },
+  "pdf_checks": {
+    "figures": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "tables": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "references": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "figures_sequential": true,
+    "tables_sequential": true,
+    "references_sequential": true,
+    "citations_first_appearance": true,
+    "missing_citation_numbers": [],
+    "uncited_references": [],
+    "duplicate_md_ids": [],
+    "unresolved_md_links": [],
+    "captions": [
+      {
+        "caption": "Table 1: Key terms used in this report, grouped by role",
+        "present": true
+      },
+      {
+        "caption": "Figure 1: Schwartz’s ten basic values on a circular continuum, grouped into four higher-order values. Adapted from [6].",
+        "present": true
+      },
+      {
+        "caption": "Figure 2: Twinkl architecture. The user interface and runtime services form the online path; the offline research path produced the reference labels and the model comparisons. The VIF Critic (Offline) (dashed) has no connection to the runtime.",
+        "present": true
+      },
+      {
+        "caption": "Figure 3: Logical architecture snapshot with the earlier gpt-5.6-luna reviewer. The current Weekly Drift Reviewer uses gpt-6-luna at low reasoning effort.",
+        "present": true
+      },
+      {
+        "caption": "Figure 4: Physical architecture snapshot with the earlier gpt-5.6-luna API label; current Weekly Drift Reviewer and North Star Moment selection use gpt-6-luna.",
+        "present": true
+      },
+      {
+        "caption": "Table 2: Synthetic corpus generation phases.Targeted batches added Personas to the training split only, the validation and test Personas stayed fixed.",
+        "present": true
+      },
+      {
+        "caption": "Figure 5: Batch Generation of Synthetic Data. Training lane demonstrates the change in each batch, and locked holdout demonstrates the frozen Personas.",
+        "present": true
+      },
+      {
+        "caption": "Table 3: Distribution recomputed from the persisted LLM-Judge VIF Labels in judge_labels.parquet (see Appendix A for the source path).",
+        "present": true
+      },
+      {
+        "caption": "Figure 6: The human annotation tool. Annotators see the Persona’s bio, the Journal Entry with any nudge and response, and score each Schwartz value as −1, 0 or +1, without seeing LLM-Judge VIF Labels.",
+        "present": true
+      },
+      {
+        "caption": "Figure 7: VIF Critic MLP",
+        "present": true
+      },
+      {
+        "caption": "Figure 8: Evolution of VIF Critic to the Weekly Drift Detection.",
+        "present": true
+      },
+      {
+        "caption": "Table 4: Distribution of Conflict runs in the LLM-Judge VIF Labels for Core Values",
+        "present": true
+      },
+      {
+        "caption": "Figure 9: Drift State Diagram. The 5 nodes distinguish the current state and run-length or resolution status, while edges illustrate required conditions.",
+        "present": true
+      },
+      {
+        "caption": "Figure 10: Multiple uses of the same synthetic data",
+        "present": true
+      },
+      {
+        "caption": "Table 5: Reference labels and Weekly Drift Reviewer Decisions",
+        "present": true
+      },
+      {
+        "caption": "Figure 11: Predicted Drift matching logic",
+        "present": true
+      },
+      {
+        "caption": "Table 6: Sample Conflict detection patterns and Drift results. The Reasoning column explains each Drift result.Each complete-development Weekly Drift Reviewer setup used 951 Persona-week prompts across 204 Personas and three repeats.",
+        "present": true
+      },
+      {
+        "caption": "Table 7: Study design questions and data",
+        "present": true
+      },
+      {
+        "caption": "Figure 12: Inspect’s recorded source assessment for Nisha’s fourth-week North Star Moment. The selected quotation describes an action before Drift onset. This saved synthetic replay illustrates the inspection process; the assessment is AI-generated.",
+        "present": true
+      },
+      {
+        "caption": "Figure 13: One onboarding group presents six selection cards and requires separate Most and Least choices without exposing Schwartz labels or scores.",
+        "present": true
+      },
+      {
+        "caption": "Table 8: Calculation of a user’s Core Values from one completed onboarding questionnaire: Most and Least counts, raw score (Equation (1)), display weight (Equation (2)) and the phrase shown in the user interface.",
+        "present": true
+      },
+      {
+        "caption": "Figure 14: Journal Entry and weekly result screens in the user interface",
+        "present": true
+      },
+      {
+        "caption": "Figure 15: Inspect for one closed week of saved replay",
+        "present": true
+      },
+      {
+        "caption": "Figure 16: Saved replay synthetic Personas",
+        "present": true
+      },
+      {
+        "caption": "Table 9: Kappa agreement measurements",
+        "present": true
+      },
+      {
+        "caption": "Figure 17: Chance-corrected agreement on the shared 115-Journal-Entry benchmark. Grey markers show human-human Fleiss’ kappa; green markers show mean LLM-Judge-human Cohen’s kappa.",
+        "present": true
+      },
+      {
+        "caption": "Figure 18: Synthetic dataset batch evolution",
+        "present": true
+      },
+      {
+        "caption": "Figure 19: Selected within-metric target-dimension changes from the two train-only targeted synthetic batches. QWK and Conflict recall rows are not compared with each other. Corpus growth is shown in Figure 18.",
+        "present": true
+      },
+      {
+        "caption": "Figure 20: Text representation on the frozen 221-Journal-Entry test set. Teal bars are Nomic-256, the encoder the project kept; grey bars are alternatives in the same comparison group.",
+        "present": true
+      },
+      {
+        "caption": "Figure 21: Loss and training objective. Teal bars are Balanced Softmax, the loss the project kept; grey bars are alternatives on the same data and seeds. CORN and SoftOrdinal used their own tuned learning rates, and CORN had a slightly smaller prediction head (22,804 against 23,454 parameters).",
+        "present": true
+      },
+      {
+        "caption": "Figure 22: Training data. Teal bars are the 1,022-entry reference; grey bars add train-only targeted Journal Entries. Only the training set changes.",
+        "present": true
+      },
+      {
+        "caption": "Figure 23: Labels and context. Teal bars are the setup the project kept; each group is scored against its own labels, so compare bars only within a group.",
+        "present": true
+      },
+      {
+        "caption": "Figure 24: Comparison of QWK and Conflict recall by Schwartz value",
+        "present": true
+      },
+      {
+        "caption": "Table 10: VIF Critic and LLMs given the same input, scored on the same 221-Journal-Entry test set. Each LLM was run once. The VIF Critic reference row is the median over seeds 11, 22 and 33, with the seed-22 aggregate shown separately. Figure 24 reports three-seed per-value medians; Table 11 reports seed-22 per-value QWK.",
+        "present": true
+      },
+      {
+        "caption": "Table 11: Per-value QWK, VIF Critic (seed 22) against gpt-5.4-mini given the same input.",
+        "present": true
+      },
+      {
+        "caption": "Figure 25: Per-value entry-level Conflict recall under the two completed but non-comparable evaluation regimes. Panel (a) uses LLM-Judge VIF Labels for the VIF Critic on the frozen 221-Journal-Entry test set; panel (b) uses LLM-Judge Conflict Labels for luna-low on complete development data. Each label gives median recall and Conflict support.",
+        "present": true
+      },
+      {
+        "caption": "Figure 26: VIF Critic hand-off on 106 development histories containing 33 Drifts, with gpt-5.4-mini at no reasoning effort. Bars are medians of three repeats; whiskers span the lowest to highest repeat.",
+        "present": true
+      },
+      {
+        "caption": "Table 12: Weekly Drift Detection results using gpt-5.4-mini or gpt-5.6-luna as the Weekly Drift Reviewer across different reasoning effort levels.",
+        "present": true
+      },
+      {
+        "caption": "Figure 27: Weekly Drift Detection operating points on 292 development histories containing 42 Drifts. (a) Prompt v0: gpt-5.6-luna at each reasoning effort, and gpt-5.4-mini. (b) Prompt v2: gpt-5.6-luna against gpt-6-luna, with arrows for the model change. Points are medians of three repeats; lines span the lowest to highest repeat. The panels use different prompts.",
+        "present": true
+      },
+      {
+        "caption": "Table 13: Weekly Drift Detection results using gpt-5.6-luna or gpt-6-luna as the Weekly Drift Reviewer across different reasoning effort levels. gpt-5.6-luna performance was also compared across the prompt versions.",
+        "present": true
+      },
+      {
+        "caption": "Table 14: AI-reviewed NSM results across 391 development and 110 qualified-final weeks.",
+        "present": true
+      },
+      {
+        "caption": "Figure 28: North Star Moment selection after the targeted update, on 391 development and 110 qualified-final weeks from 105 synthetic Personas. Correctness is AI review by gpt-5.6-luna at xhigh reasoning effort, not human validation. Paired 95% intervals come from 10,000 resamples of whole Personas. Each method ran once.",
+        "present": true
+      },
+      {
+        "caption": "Table 15: Application behaviours checked by automated tests.",
+        "present": true
+      },
+      {
+        "caption": "Table 16: Verification completed without paid model calls.",
+        "present": true
+      },
+      {
+        "caption": "Figure 29: Verification layers, from controlled tests to real use. Each layer is marked by the model responses it used: simulated or recorded, or live.",
+        "present": true
+      },
+      {
+        "caption": "Table 17: Comparison of three kinds of disagreement that arise from different sources, yet all three concentrate on the first.",
+        "present": true
+      },
+      {
+        "caption": "Table 18: Short excerpts and relevant restored context from the synthetic Persona writing used in the Coach Digest diagnostic. The ellipsis in the June 25 short excerpt was present in the supplied input.",
+        "present": true
+      },
+      {
+        "caption": "Figure 30: Weekly Drift Reviewer prompt boundary: Journal Entry text is passed as untrusted content.",
+        "present": true
+      },
+      {
+        "caption": "Figure 31: Defense against prompt injection",
+        "present": true
+      },
+      {
+        "caption": "Table 19: Stable repository evidence for the paper’s principal factual and methodological claims.",
+        "present": true
+      },
+      {
+        "caption": "Table 20: Capstone implementation status and the evidence boundary for each component.",
+        "present": true
+      }
+    ],
+    "pages": 49,
+    "internal_annotations": 107,
+    "unresolved_pdf_destinations": [],
+    "expected_external_urls": 104,
+    "rendered_external_urls": 104,
+    "missing_external_urls": [],
+    "additional_external_urls": [],
+    "out_of_bounds": [],
+    "image_assets": 33,
+    "image_byte_failures": [],
+    "missing_rendered_rgb_images": [],
+    "repo_links": [
+      {
+        "url": "http://github.com/DesmondChoy/twinkl/blob/main/docs/pipeline/claude_gen_instructions.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/config/evals/coach_behavioral_regressions_v1.json",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/docs/demo/experience_inspect_app.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/docs/evals/drift_detection_eval.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/docs/north_star/nsm_experiment_methodology.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/docs/onboarding/onboarding_spec.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/docs/prd.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/frontend/onboarding/e2e/experience.spec.ts",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/frontend/onboarding/public/scenarios/active-nisha.json",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/frontend/onboarding/src/InspectView.test.tsx",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/frontend/onboarding/src/InspectView.tsx",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/frontend/onboarding/src/JournalExperience.tsx",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/frontend/onboarding/src/PersonaReplay.tsx",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/logs/experiments/reports/coach_voice_pilot_selected_20260909/report.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/logs/experiments/reports/coach_voice_refresh_20260909/report.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/logs/experiments/reports/demo_coach_nsm_comparison_20260909/report.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/logs/experiments/reports/north_star_v4_run1_20260907/nsm_experiment.json",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/logs/experiments/reports/north_star_v4_run1_20260907/report.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/logs/experiments/reports/test_guardrail_audit_20260912/report.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/logs/experiments/reports/test_guardrail_audit_20260912/saved_response_checks.json",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/src/demo/experience_service.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/src/prompt_boundary.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/tests/demo/test_experience_service.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/tests/historical.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/tests/test_model_provider_boundaries.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/44ebcf259537156e36f52dd489916d296dddd515/docs/evals/judge_validation_summary.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/44ebcf259537156e36f52dd489916d296dddd515/docs/evals/live_prompt_boundary_verification.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/45c2dc709ec51488c6391678abd6f57a21ef2ffe/src/weekly_drift_reviewer.py#L508-L519",
+        "target_exists": true,
+        "line_fragment_in_bounds": true
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/662be5f37f2de01b0ea27c142d812f3924d93709/logs/judge_labels/judge_labels.parquet",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/af22ab457994fd2863fe5b5b7735f768f211519b/docs/north_star/nsm_experiment_methodology.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/af22ab457994fd2863fe5b5b7735f768f211519b/logs/experiments/reports/coach_context_eval_20260913/report.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/af22ab457994fd2863fe5b5b7735f768f211519b/logs/experiments/reports/coach_prompt_audit_20260913/report.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/af22ab457994fd2863fe5b5b7735f768f211519b/logs/experiments/reports/experiment_review_2026-09-07_twinkl_j3k7_core_value_definitions.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/docs/drift/trajectory_eda.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/docs/evals/explanation_quality_eval.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/docs/evals/overview.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/docs/evals/value_modeling_eval.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/docs/pipeline/pipeline_specs.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/metrics.json",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/logs/experiments/reports/experiment_review_2026-08-09_twinkl_ck3w_luna_higher_reasoning.md",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/logs/experiments/runs/run_019_BalancedSoftmax.yaml",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/logs/experiments/runs/run_020_BalancedSoftmax.yaml",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/logs/experiments/runs/run_021_BalancedSoftmax.yaml",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/logs/judge_labels/judge_labels.parquet",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/scripts/experiments/reassess_twinkl_752_5.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/scripts/experiments/weekly_verifier_ablation.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/src/drift_rules.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533/src/vif/eval.py",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/main/docs/evals/explanation_quality_eval.md#coach-digest-evals",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/main/logs/experiments/reports/coach_context_eval_20260913/manifest.json",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/main/logs/experiments/reports/demo_coach_nsm_comparison_20260909/report.md#generation-and-editorial-repair",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/main/prompts/journal_entry.yaml",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/tree/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/tree/3dbb3e4389ceb9bec126d2191a40ac7107ab5a07/frontend/onboarding/src",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/tree/44ebcf259537156e36f52dd489916d296dddd515",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/tree/662be5f37f2de01b0ea27c142d812f3924d93709/logs/synthetic_data",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/tree/dd4bfa9d4e0ff26c6ecfe34bf2dcfa2c5e0a5533",
+        "target_exists": true,
+        "line_fragment_in_bounds": null
+      }
+    ],
+    "markdown_sha256": "78e883f15369730837ba441b5bbb51efe651fd427825321618342860f929ea29",
+    "pdf_sha256": "61b08648568a3df38f91218b249c0b73b5d050808171382c72cec50bc75506c3",
+    "passed": true,
+    "github_markdown_heading_fragments": [
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/main/docs/evals/explanation_quality_eval.md#coach-digest-evals",
+        "heading_fragment_found": true
+      },
+      {
+        "url": "https://github.com/DesmondChoy/twinkl/blob/main/logs/experiments/reports/demo_coach_nsm_comparison_20260909/report.md#generation-and-editorial-repair",
+        "heading_fragment_found": true
+      }
+    ]
+  },
+  "independent_reviews": {
+    "audit_scope": {
+      "reviewed_sha256": "78e883f15369730837ba441b5bbb51efe651fd427825321618342860f929ea29",
+      "content_review_passed": true,
+      "checks": {
+        "reference_count": 51,
+        "consecutive_1_to_51": true,
+        "uncited_references": [],
+        "undefined_citations": [],
+        "figure_count": 31,
+        "table_count": 20,
+        "duplicate_ids": [],
+        "undefined_fig_table_links": [],
+        "mismatched_fig_table_link_numbers": [],
+        "figure24_image_inspected": true,
+        "figure24_representation": "Three-seed medians without range bars",
+        "appendix_letters": "A,B,D,F,G retained; visibleD/G anchors corrected; no AppendixCpointer remains",
+        "python_snippet_compile": "PASS:compile()without execution",
+        "shell_snippet_parse": "PASS:zsh-n without execution",
+        "annotation_disagreement_prose": "Correctly584of607disagreements;no unsupportedhalf-the-timeagreementclaim"
+      }
+    },
+    "facts": {
+      "reviewed_file": "/Users/desmondchoy/Projects/twinkl/docs/capstone_report/capstone_report.md",
+      "sha256": "0baadec669244c6d8ae053879d8de013cda547bf55409e496c23d4f934015f6d",
+      "scope": "Fresh-eyes review of audit-related numerical and methodological claims; complete source read, verified against saved factual evidence and local authorities. No unrelated interpretive critique.",
+      "numeric_or_provenance_errors_introduced": [],
+      "verified_checks": {
+        "development_population": true,
+        "Tradition_1_of_10": true,
+        "Power_lower": true,
+        "QWK_0.362": true,
+        "seed22_separate": true,
+        "Figure24_no_ranges": true,
+        "LLM_reference_not_ground_truth": true,
+        "NSM_optional": true,
+        "no_insufficient_unconditional_gap": true,
+        "invalid_review_qualification": true,
+        "AppendixA_committed_af22ab45": true,
+        "six_response_manifest_scope": true,
+        "weekly_Conflict_scope": true,
+        "abstract_combined_workflow": true,
+        "conclusion_combined_workflow": true,
+        "display_weights_all_ten": true,
+        "prompt_v0_panel_a_scoped": true,
+        "prompt_boundary_scope": true,
+        "Figure24_Schwartz_value": true,
+        "RQ3_combined_workflow_lead": true,
+        "RQ3_combined_workflow_heading": true,
+        "Table12_model_heading": true,
+        "Table13_model_heading": true,
+        "annotation_involvement_half_time_removed": true,
+        "abstract_discloses_human_annotation": true,
+        "abstract_label_reliability_scoped": true,
+        "walkthrough_stays_pending": true
+      },
+      "findings": [],
+      "status": "All audited numerical, methodological and provenance corrections passed fresh-eyes review; no remaining audit-related factual findings.",
+      "annotation_recount": {
+        "shared_entries": 115,
+        "values": 10,
+        "pairwise_comparisons": 3450,
+        "pairwise_exact_agreement": 2843,
+        "pairwise_exact_agreement_rate": 0.8240579710144927,
+        "pairwise_presence_agreement": 2866,
+        "pairwise_presence_agreement_rate": 0.8307246376811595,
+        "pairwise_label_disagreements": 607,
+        "presence_disagreements": 584,
+        "direction_disagreements": 23,
+        "all_three_exact_agreement": 850,
+        "all_three_exact_agreement_rate": 0.7391304347826086,
+        "all_three_presence_agreement": 858,
+        "all_three_presence_agreement_rate": 0.7460869565217392,
+        "pairs": [
+          {
+            "annotators": [
+              "jl",
+              "km"
+            ],
+            "coordinates": 1150,
+            "exact_agreement": 982,
+            "presence_agreement": 986,
+            "presence_disagreement": 164,
+            "direction_disagreement": 4
+          },
+          {
+            "annotators": [
+              "jl",
+              "des"
+            ],
+            "coordinates": 1150,
+            "exact_agreement": 908,
+            "presence_agreement": 920,
+            "presence_disagreement": 230,
+            "direction_disagreement": 12
+          },
+          {
+            "annotators": [
+              "km",
+              "des"
+            ],
+            "coordinates": 1150,
+            "exact_agreement": 953,
+            "presence_agreement": 960,
+            "presence_disagreement": 190,
+            "direction_disagreement": 7
+          }
+        ],
+        "source_paths": [
+          "logs/annotations/des.parquet",
+          "logs/annotations/jl.parquet",
+          "logs/annotations/km.parquet"
+        ]
+      },
+      "resolved_findings": [
+        "F1: Figure24 now names Schwartz values.",
+        "F2: RQ3 lead, heading and findings now identify combined Weekly Drift Detection.",
+        "F3: Tables12/13 model columns restored.",
+        "F4: annotation-involvement claim now correctly states 584 of 607 pairwise annotation disagreements; no unsupported raw agreement percentage."
+      ]
+    },
+    "citations": {
+      "checked_at": "2026-10-11",
+      "report": "/Users/desmondchoy/Projects/twinkl/docs/capstone_report/capstone_report.md",
+      "status": "PASS: requested citation corrections and both fresh review suggestions verified in the latest source.",
+      "checks": {
+        "bibliography_entries": 51,
+        "consecutive_numbering": true,
+        "first_appearance_order": true,
+        "all_references_cited": true,
+        "missing_citation_numbers": [],
+        "unreferenced_entries": [],
+        "duplicate_geifman": false,
+        "removed_unused_entries": [
+          "NIST AI RMF (old 19)",
+          "Page CUSUM (old 31)",
+          "EU ethics guidelines (old 39)"
+        ],
+        "added_sources": {
+          "Landis/Koch": 33,
+          "Nomic v1.5 model card": 35,
+          "Epstein": 39,
+          "Bardi/Schwartz": 40,
+          "Spranca/Minsk/Baron": 42,
+          "Röttger": 48,
+          "Fleeson": 49,
+          "Lally": 50
+        },
+        "retained_and_now_cited": {
+          "He synthetic text": 17,
+          "Fleiss": 31,
+          "Cohen nominal kappa": 32,
+          "Nomic original": 34,
+          "GPT-5.6 Luna official": 36,
+          "Lipton": 38
+        },
+        "updated_doi_target": {
+          "reference": 23,
+          "doi": "10.18653/v1/2022.acl-long.318"
+        },
+        "all_linked_doi_labels_match_targets": true,
+        "author_year_citation_placeholders": [],
+        "safety_citation_is_hines": 51,
+        "hines_not_used_for_local_control_list": true,
+        "scoped_epstein_and_bardi_claims": true,
+        "scoped_omission_analogy": true,
+        "scoped_rottger_experiment": true,
+        "scoped_habit_and_personality_motivation": true,
+        "scoped_nomic_original_vs_v1_5": true,
+        "geifman_coverage_claim_cites_single_entry": 24,
+        "min_result_individual_facts_scope": true,
+        "snell_math_palm2_scope": true,
+        "gpt_access_date_refreshed": true
+      },
+      "findings": [],
+      "no_material_bibliography_errors_found": true,
+      "reviewed_sha256": "0baadec669244c6d8ae053879d8de013cda547bf55409e496c23d4f934015f6d"
+    },
+    "final_delta": "After full content reviews, the final page pass added Section 2.5 to contents, identified Figures 3/4 as historical model snapshots and repaired one limitations sentence. The scope reviewer verified these final edits; publication citations and numeric results are unchanged."
+  },
+  "visual_checks": {
+    "all_pages_reviewed": true,
+    "initial_page_reviews": [
+      {
+        "report_pdf": "/Users/desmondchoy/Projects/twinkl/docs/capstone_report/capstone_report.pdf",
+        "report_markdown": "/Users/desmondchoy/Projects/twinkl/docs/capstone_report/capstone_report.md",
+        "markdown_sha256_at_review": "e8d5f3474a4ae6ab9fe71df0af999a0175cc16d72040b858af8d07e06bb9b66f",
+        "review_scope": "Fresh visual review of rendered pages 1 through 16; no repository or tracker edits.",
+        "pages_inspected": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "contact_sheets": [
+          "/private/tmp/twinkl-corrected-pages/contact-01-04.png",
+          "/private/tmp/twinkl-corrected-pages/contact-05-08.png",
+          "/private/tmp/twinkl-corrected-pages/contact-09-12.png",
+          "/private/tmp/twinkl-corrected-pages/contact-13-16.png"
+        ],
+        "individual_pages_inspected": [
+          "/private/tmp/twinkl-corrected-pages/page-08.png",
+          "/private/tmp/twinkl-page-08-detail.png",
+          "/private/tmp/twinkl-architecture-page-08.png"
+        ],
+        "visual_method": "Viewed all four contact sheets at original resolution; inspected page 8 individually and in a 180-dpi rendering.",
+        "page_results": [
+          {
+            "page": 1,
+            "layout_status": "passed",
+            "observation": "Title and abstract are complete and legible; no crop, overlap, or blank region indicating lost content."
+          },
+          {
+            "page": 2,
+            "layout_status": "passed",
+            "observation": "Contents is legible and within margins; Section 2.5 Grounded reflection and evidence retrieval now appears with page 6."
+          },
+          {
+            "page": 3,
+            "layout_status": "passed",
+            "observation": "Introduction and research question paragraphs are legible and fit within margins."
+          },
+          {
+            "page": 4,
+            "layout_status": "passed",
+            "observation": "Table 1 has a complete caption and readable cells; no split row or crop."
+          },
+          {
+            "page": 5,
+            "layout_status": "passed",
+            "observation": "Figure 1 circle and caption are complete; body prose is legible."
+          },
+          {
+            "page": 6,
+            "layout_status": "passed",
+            "observation": "Section 2.5 heading and text are complete; Methodology heading has its introductory paragraph; no overlap or crop after Contents-related re-render."
+          },
+          {
+            "page": 7,
+            "layout_status": "passed",
+            "observation": "Figure 2 architecture and caption are intact; detailed diagram labels remain legible when enlarged."
+          },
+          {
+            "page": 8,
+            "layout_status": "passed",
+            "observation": "Figures 3 and 4 retain intact images and legible captions. Captions explicitly identify historical gpt-5.6-luna labels and current gpt-6-luna models. Caption wrapping does not overlap figures or prose; internal labels are sharp with zoom."
+          },
+          {
+            "page": 9,
+            "layout_status": "passed",
+            "observation": "Table 2 and Figure 5 are complete and legible; no collision between caption and prose."
+          },
+          {
+            "page": 10,
+            "layout_status": "passed",
+            "observation": "Table 3 and methodology paragraphs fit within margins without overlapping."
+          },
+          {
+            "page": 11,
+            "layout_status": "passed",
+            "observation": "Figure 6 UI screenshot and caption are complete; screenshot text is sharp when enlarged."
+          },
+          {
+            "page": 12,
+            "layout_status": "passed",
+            "observation": "Figure 7 MLP diagram is complete and legible. Section 3.3.4 includes a paragraph after its heading."
+          },
+          {
+            "page": 13,
+            "layout_status": "passed",
+            "observation": "Prose remains legible and within margins."
+          },
+          {
+            "page": 14,
+            "layout_status": "passed",
+            "observation": "Figure 8 and Table 4 are complete with correct captions and no crop."
+          },
+          {
+            "page": 15,
+            "layout_status": "passed",
+            "observation": "Figure 9 state diagram is complete and sharp; surrounding whitespace does not indicate a blank or omitted page."
+          },
+          {
+            "page": 16,
+            "layout_status": "passed",
+            "observation": "Figure 10 and Table 5 are complete and legible. Continued prose is separated safely from the lower margin."
+          }
+        ],
+        "layout_findings": [],
+        "layout_review_passed": true,
+        "caption_and_contents_findings": [
+          {
+            "id": "toc_section_2_5",
+            "page": 2,
+            "severity": "minor",
+            "status": "corrected_and_verified_in_final_render",
+            "finding": "Section 2.5 appears in body but was omitted from Contents in the reviewed render because its Markdown heading retained .unlisted.",
+            "action": "Remove .unlisted from Section 2.5 and verify updated Contents."
+          },
+          {
+            "id": "architecture_model_labels",
+            "page": 8,
+            "severity": "consistency",
+            "status": "corrected_and_verified_in_final_render",
+            "finding": "Figure 3 labels Weekly Drift Reviewer gpt-5.6-luna, low effort; retained contract is gpt-6-luna at low effort. Figure 4 labels the external Responses API gpt-5.6-luna. Captions do not identify these as earlier architecture snapshots.",
+            "action": "Clarify snapshot status in caption or adjacent prose, or correct source figure labels. Suggested adjacent sentence: These figures retain the architecture snapshot before the reviewer model update; the current Weekly Drift Reviewer uses gpt-6-luna at low reasoning effort, while the Coach Digest uses gpt-5.6-luna."
+          }
+        ],
+        "advisory_observations": [
+          {
+            "page": 8,
+            "finding": "Figures 3 and 4 have small internal type at normal print width, but their labels are sharp and readable when the PDF is enlarged; no label is cropped or obscured.",
+            "status": "accepted_for_digital_zoom; original image pixel dimensions retained"
+          }
+        ],
+        "new_copy_edit_observation": {
+          "line": 1217,
+          "finding": "and the could not be reproduced is grammatically incomplete.",
+          "status": "source_corrected_and_verified"
+        },
+        "ready_for_final_delivery": true,
+        "pending": null,
+        "final_source_sha256": "78e883f15369730837ba441b5bbb51efe651fd427825321618342860f929ea29",
+        "final_pdf_sha256": "61b08648568a3df38f91218b249c0b73b5d050808171382c72cec50bc75506c3",
+        "final_changed_pages_inspected": [
+          2,
+          6,
+          8
+        ],
+        "final_changed_page_images": [
+          "/private/tmp/twinkl-delivery-pages/page-02.png",
+          "/private/tmp/twinkl-delivery-pages/page-06.png",
+          "/private/tmp/twinkl-delivery-pages/page-08.png"
+        ],
+        "final_render_review_passed": true,
+        "review_complete": true,
+        "material_visual_findings": [],
+        "reused_previous_page_checks": {
+          "pages": [
+            1,
+            3,
+            4,
+            5,
+            7,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "basis": "Parent pixel comparison reports these pages identical to previously inspected output."
+        }
+      },
+      {
+        "pages_reviewed": [
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "source_images": "/private/tmp/twinkl-corrected-pages",
+        "contact_sheets": [
+          "contact-17-20.png",
+          "contact-21-24.png",
+          "contact-25-28.png",
+          "contact-29-32.png"
+        ],
+        "individual_pages_reviewed": [
+          "page-24.png",
+          "page-25.png",
+          "page-30.png",
+          "page-31.png"
+        ],
+        "status": "passed",
+        "findings": [],
+        "checks": {
+          "clipping": false,
+          "overlap": false,
+          "caption_legibility": true,
+          "table9_kappa_readable": true,
+          "Power_0_60_lower_than_0_61_visible": true,
+          "table10_QWK_0_362_visible": true,
+          "seed_comparison_distinctions_visible": true,
+          "figures_legible": true
+        },
+        "page_notes": [
+          {
+            "page": 17,
+            "result": "passed",
+            "note": "Evaluation metrics and reference matching diagram are clear. Table 6 remains within margins; caption and rows do not overlap."
+          },
+          {
+            "page": 18,
+            "result": "passed",
+            "note": "Table 7 and method/study lists are legible, with no clipped cells or text."
+          },
+          {
+            "page": 19,
+            "result": "passed",
+            "note": "Coach Digest and NSM methodology is legible. Optional quotation and Insufficient Evidence wording renders correctly."
+          },
+          {
+            "page": 20,
+            "result": "passed",
+            "note": "Figure 12 source-assessment screenshot and caption are clear, with full image and normal text spacing."
+          },
+          {
+            "page": 21,
+            "result": "passed",
+            "note": "Onboarding screenshot and both display-weight equations render correctly. Table 8 begins cleanly at the bottom."
+          },
+          {
+            "page": 22,
+            "result": "passed",
+            "note": "Table 8 continues with repeated header. Figure 14 panels and captions fit within margins with no overlap."
+          },
+          {
+            "page": 23,
+            "result": "passed",
+            "note": "Figure 15 Inspect panels, panel captions, and figure caption are clear and complete."
+          },
+          {
+            "page": 24,
+            "result": "passed",
+            "note": "Saved Persona figure and Table 9 render correctly. Targets and aggregate kappa values remain readable."
+          },
+          {
+            "page": 25,
+            "result": "passed",
+            "note": "Figure 17 Power markers show mean LLM-Judge-human 0.60 and human-human 0.61. Body correction says marginally lower. Caption and other labels are legible."
+          },
+          {
+            "page": 26,
+            "result": "passed",
+            "note": "Figures 18 and 19 fit cleanly, with readable annotations, legends, and captions."
+          },
+          {
+            "page": 27,
+            "result": "passed",
+            "note": "Figure 20 encoder comparison is sharp; axes, row labels, legend, caption, and surrounding text are not clipped."
+          },
+          {
+            "page": 28,
+            "result": "passed",
+            "note": "Figure 21 loss/objective comparison and longer body text fit without overlap or clipping."
+          },
+          {
+            "page": 29,
+            "result": "passed",
+            "note": "Figures 22 and 23 fit within margins; their axes, labels, legends, and captions are readable."
+          },
+          {
+            "page": 30,
+            "result": "passed",
+            "note": "Figure 24 caption identifies Schwartz values, and image legend identifies seeds 11/22/33 medians. Table 10 shows 0.362, separate seed-22 row 0.378, and correct caption distinction from Table 11."
+          },
+          {
+            "page": 31,
+            "result": "passed",
+            "note": "Table 11 clearly identifies seed 22. Figure 25 has legible panels and comparison-scope caption; no overlap."
+          },
+          {
+            "page": 32,
+            "result": "passed",
+            "note": "RQ3 lead identifies the combined Weekly Drift Detection workflow. Figure 26 panels, values, whiskers, and caption remain legible."
+          }
+        ]
+      },
+      {
+        "checked_at": "2026-10-11",
+        "reviewer": "fresh_citation_sources",
+        "status": "PASS",
+        "source": "/Users/desmondchoy/Projects/twinkl/docs/capstone_report/capstone_report.md",
+        "source_sha256": "78e883f15369730837ba441b5bbb51efe651fd427825321618342860f929ea29",
+        "pdf": "/Users/desmondchoy/Projects/twinkl/docs/capstone_report/capstone_report.pdf",
+        "pdf_sha256": "61b08648568a3df38f91218b249c0b73b5d050808171382c72cec50bc75506c3",
+        "pages_reviewed": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "method": {
+          "contact_sheets": [
+            "/private/tmp/twinkl-corrected-pages/contact-33-36.png",
+            "/private/tmp/twinkl-corrected-pages/contact-37-40.png",
+            "/private/tmp/twinkl-corrected-pages/contact-41-44.png",
+            "/private/tmp/twinkl-corrected-pages/contact-45-48.png",
+            "/private/tmp/twinkl-corrected-pages/contact-49-49.png"
+          ],
+          "individual_pages_inspected_at_original_resolution": [
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ],
+          "final_delivery_spot_check": {
+            "pages": [
+              40,
+              41
+            ],
+            "images": [
+              "/private/tmp/twinkl-delivery-pages/page-40.png",
+              "/private/tmp/twinkl-delivery-pages/page-41.png"
+            ],
+            "result": "PASS: limitations paragraph repair reflows cleanly; no clipping, overlap, citation presentation defects, or table overflow."
+          },
+          "checks": [
+            "clipping",
+            "overlap",
+            "tables and figures within margins",
+            "URL wrapping",
+            "citation and reference presentation",
+            "reproduction command indentation and wrapping"
+          ]
+        },
+        "findings": [],
+        "observations": [
+          "Tables 12 through 18 and Figures 27 through 31 fit the page content area; no clipping or text/figure overlap was observed.",
+          "References on pages 44 through 46 are numbered consistently from 1 through 51. No author-year citation placeholders or missing bracketed citation presentation was observed.",
+          "The eight added bibliography entries, including the Nomic v1.5 model card, are readable. The official GPT-5.6 Luna reference shows the refreshed Oct. 11, 2026 access date.",
+          "Long DOI, arXiv, proceedings, model-card, and repository URLs wrap inside the margins. The repository URL on page 44 breaks inside the account name, but remains legible and complete.",
+          "Reproduction commands on pages 47 and 48 retain indentation and remain within the content area. Their compact monospace font is readable at original resolution.",
+          "Appendix tables and equations on pages 48 and 49 fit within margins; the remaining whitespace on the last page follows the final content.",
+          "Final delivery pages 40 and 41 were inspected at original resolution after the limitations sentence repair. The repaired paragraph remains within margins and the page break before the continuation is clean. The parent reports the other reviewed pages are pixel-identical to the preceding render."
+        ],
+        "material_layout_defects": false,
+        "remaining_citation_placeholders_observed": false,
+        "repository_edits_made": false
+      }
+    ],
+    "final_reflow_comparison": {
+      "final_pages": 49,
+      "previous_pages": 49,
+      "changed_pages": [
+        2,
+        6,
+        8,
+        40,
+        41
+      ],
+      "pixel_identical_reviewed_pages": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "final_changed_page_review": "passed: root and assigned fresh reviewers checked all five changed pages",
+      "images_directory": "/private/tmp/twinkl-delivery-pages",
+      "root_spot_checks": {
+        "pages": [
+          2,
+          6,
+          8,
+          40,
+          41
+        ],
+        "findings": []
+      },
+      "all_final_pages_visually_reviewed": true
+    }
+  },
+  "render": {
+    "tool": "Quarto 1.10.18 / Pandoc 3.10 / XeLaTeX TeX Live 2026",
+    "working_directory": "docs/capstone_report",
+    "command": "PATH=/Users/desmondchoy/Library/TinyTeX/bin/universal-darwin:$PATH /Users/desmondchoy/.local/bin/quarto render capstone_report.md --to pdf",
+    "result": "success"
+  },
+  "images": [
+    {
+      "figure": 1,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-7-8.png",
+      "sha256": "84a5655109a7cf6ad1600af39af293ef46e93fb5fe1affdb5abe8a04bd915913",
+      "width": 500,
+      "height": 356,
+      "decoded_rgb_sha256": "cca2f8768675257f57b86715929404520535c481741d99726e55f040fd510f45",
+      "source_pdf_pages": [
+        5
+      ]
+    },
+    {
+      "figure": 2,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-10-14.png",
+      "sha256": "717f88b467f73ec32d832cc25af34975a280d9a0d9befa385e8980aa6e6ee22e",
+      "width": 2048,
+      "height": 1477,
+      "decoded_rgb_sha256": "bfbe0b9a8b8f7b4e7afdb6c6ad6c52898cbaa835e17555cef9912613ceecc9b1",
+      "source_pdf_pages": [
+        7
+      ]
+    },
+    {
+      "figure": 3,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-67-11.png",
+      "sha256": "905b510bb282a841ba4c9d51e7714674d5ef83954e6b66ad7aeb8b7144595e13",
+      "width": 2048,
+      "height": 768,
+      "decoded_rgb_sha256": "f93acc71dfa264bbc006f36cca3a4a2a9145e9b904dc7d267b4e76c30c24447b",
+      "source_pdf_pages": [
+        8
+      ]
+    },
+    {
+      "figure": 4,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-67-12.png",
+      "sha256": "4265ffaa6e38d58a707359ec4e739364a5c85691fc1331bf6e31fe0f831f529e",
+      "width": 2048,
+      "height": 588,
+      "decoded_rgb_sha256": "25c34c6d9cf0c7f803e9c3d157d6cf4ef9d56d87c3447c41d709c5a0fc4289df",
+      "source_pdf_pages": [
+        8
+      ]
+    },
+    {
+      "figure": 5,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-12-18.png",
+      "sha256": "0f820628ecb46f7ee35cc96a5ebf6f32896f6b3012f12005fb3df907a13ae591",
+      "width": 1536,
+      "height": 1024,
+      "decoded_rgb_sha256": "1d2e935977c7e4002da8111b2838a7b4762cbcf577eb78c8a659a89cdfa06d91",
+      "source_pdf_pages": [
+        9
+      ]
+    },
+    {
+      "figure": 6,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-14-6.png",
+      "sha256": "eb9ad2b4bc9a95cdfc9389a551f0099475f60e38ad13c435304201fe289533a3",
+      "width": 2048,
+      "height": 1280,
+      "decoded_rgb_sha256": "cbdeeeaf89afb9164a599e56ccb89c7afb4739f1ee1321bee19e9043bf9fb0ad",
+      "source_pdf_pages": [
+        11
+      ]
+    },
+    {
+      "figure": 7,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-15-13.png",
+      "sha256": "6d234d1bf0d46aa0da1a427f10a641dffd48a0dd5dabcd56f64ce5f1d3810932",
+      "width": 1692,
+      "height": 653,
+      "decoded_rgb_sha256": "4228361bbdb0ab168b2ec19e1208bcfb024df205194bfacde092ace2226b3c83",
+      "source_pdf_pages": [
+        12
+      ]
+    },
+    {
+      "figure": 8,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-18-27.png",
+      "sha256": "e56566993c599fa2660858b786288621c769cec982e151db94f877ffd4810677",
+      "width": 2048,
+      "height": 1081,
+      "decoded_rgb_sha256": "eaa9f95c33474de3d72952d16e3987b988c071015f9078fb30f04710c1258af6",
+      "source_pdf_pages": [
+        14
+      ]
+    },
+    {
+      "figure": 9,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-19-3.png",
+      "sha256": "f4aab35939b024c3d559572f75aa23bd391f9987898fe59c195519b99f9150f5",
+      "width": 2500,
+      "height": 1862,
+      "decoded_rgb_sha256": "7e5865a46f8c466a4982c9399e3f19a9560b38371cba5626da33de85e7a2976e",
+      "source_pdf_pages": [
+        15
+      ]
+    },
+    {
+      "figure": 10,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-20-5.png",
+      "sha256": "599236617dec15f7a68feb22e32eed9f17e7afa3ba9b5740b95c1c77dee6ee66",
+      "width": 2048,
+      "height": 1826,
+      "decoded_rgb_sha256": "8314eff818c84b9b14d7462eb6bbcd8361e1c52f25991cf434c984f98d1fc14f",
+      "source_pdf_pages": [
+        16
+      ]
+    },
+    {
+      "figure": 11,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-22-51.png",
+      "sha256": "1e87f67124ddc9563d5d7a39b35a4f64ce1bf37192794e8aa8f0f60ce6921687",
+      "width": 1774,
+      "height": 887,
+      "decoded_rgb_sha256": "ff7a4f76c9924a0481be17e1ef573036864bae20df84f73af34a78c2b3076278",
+      "source_pdf_pages": [
+        17
+      ]
+    },
+    {
+      "figure": 12,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-26-10.png",
+      "sha256": "0a3ce94569bab19da68e5370d4fa7cf79e501304d1d8f3f96567e024cee60f49",
+      "width": 1214,
+      "height": 1494,
+      "decoded_rgb_sha256": "9cb87859e9a6687775fcfb9d5b48e2e86d160eede3a6361ead6518ff45b7e5ba",
+      "source_pdf_pages": [
+        20
+      ]
+    },
+    {
+      "figure": 13,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-27-13.png",
+      "sha256": "7bb27f4644a775e08fc41a9d561ab4651e96ffff9aa9417240adde2645918e70",
+      "width": 1280,
+      "height": 720,
+      "decoded_rgb_sha256": "2ad2a2560a74f2776837d34482af8a5522aba3db7963455f59e97c7e31302a44",
+      "source_pdf_pages": [
+        21
+      ]
+    },
+    {
+      "figure": 14,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-29-12.png",
+      "sha256": "45d8451ec5d731fc49765914994c71900101939b0ae3ea64882ffdf6dff52154",
+      "width": 501,
+      "height": 777,
+      "decoded_rgb_sha256": "4f9a18f1161f5f2f8f340409ca062560c7b0c46a17090c144838da1dee23620c",
+      "source_pdf_pages": [
+        22
+      ]
+    },
+    {
+      "figure": 14,
+      "panel": 2,
+      "path": "docs/capstone_report/images/ieee-source/figure-29-13.png",
+      "sha256": "9f56b1e0cb774bdf618a847e9e13dce0eea68be48b1a50ae3ebe56015baacd43",
+      "width": 672,
+      "height": 833,
+      "decoded_rgb_sha256": "c9b1ea990ff0d610fde29face80b3826dc1a107e6dccdb5b41403a6449bdbd7b",
+      "source_pdf_pages": [
+        22
+      ]
+    },
+    {
+      "figure": 15,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-30-10.png",
+      "sha256": "fb1f9f0b70ce8ad0fa4c1a24f442c088fc83657ea9cdd87b5c9177e83a3f04c3",
+      "width": 455,
+      "height": 854,
+      "decoded_rgb_sha256": "63c333b1678a9ca28b2b6056104718cbae098bf965208140f50ff744071bd6af",
+      "source_pdf_pages": [
+        23
+      ]
+    },
+    {
+      "figure": 15,
+      "panel": 2,
+      "path": "docs/capstone_report/images/ieee-source/figure-30-11.png",
+      "sha256": "48c77053e588ffd133309bc880f15264064bd49e4516367b8a0550cfe9c1bc27",
+      "width": 455,
+      "height": 469,
+      "decoded_rgb_sha256": "264fdf5821c765d6e82815a1c5b96f82c4f5f0c242680ff2c0e4daa878e6aa4c",
+      "source_pdf_pages": [
+        23
+      ]
+    },
+    {
+      "figure": 16,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-30-12.png",
+      "sha256": "b29819fe2e91927510015601c871e61bc62ac0599ece4321839309a87908ccaf",
+      "width": 1394,
+      "height": 428,
+      "decoded_rgb_sha256": "0e727ffda808f03b5030531d0a758359610037b3cc71b55a584c1a4626094042",
+      "source_pdf_pages": [
+        24
+      ]
+    },
+    {
+      "figure": 17,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-31-22.png",
+      "sha256": "c7ab279b7025a16a299c169672889715f759cde95aee7e64206f77aa5c33e44c",
+      "width": 1523,
+      "height": 1032,
+      "decoded_rgb_sha256": "fdc2a3ce25f8cb718363ab9564b2823a3c09e23460ac5230a7d9b4221ff7f7b1",
+      "source_pdf_pages": [
+        25
+      ]
+    },
+    {
+      "figure": 18,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-32-6.png",
+      "sha256": "63682ecbf74974a8cad4171d2eb4c26644a18fbdfb974f89690187efe8163714",
+      "width": 1536,
+      "height": 1024,
+      "decoded_rgb_sha256": "503b011ebffb56ec3e121aa1023ca0da98e046e05a0e382bf0c3f09e34d00171",
+      "source_pdf_pages": [
+        26
+      ]
+    },
+    {
+      "figure": 19,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-33-4.png",
+      "sha256": "da703f1e5b5483cc4105868f43407fea59bb5081367fe8f216d3e6221dbd002e",
+      "width": 1774,
+      "height": 887,
+      "decoded_rgb_sha256": "31a1438ac15addcaf77d81dd33097a53934ebfdb706ee237c3c43efc79d3ecae",
+      "source_pdf_pages": [
+        26
+      ]
+    },
+    {
+      "figure": 20,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-34-4.png",
+      "sha256": "583787c2ce319bc51db3571309fc30d413320f4f51ac4e279bef0cd5b2e7bb74",
+      "width": 2048,
+      "height": 1497,
+      "decoded_rgb_sha256": "fd6082a63d3be4897f43e355e77f914e8e8ab3b0db689787bc1bc07001ec0288",
+      "source_pdf_pages": [
+        27
+      ]
+    },
+    {
+      "figure": 21,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-35-5.png",
+      "sha256": "be810559b13a54e339cdfb92cf9c04027e099de0f419612e75770eb442c60da3",
+      "width": 2048,
+      "height": 1654,
+      "decoded_rgb_sha256": "d3e8feb188254e4dda6a464760c2e5139fffd2b5fda8ad5c7d73c32438cf0f78",
+      "source_pdf_pages": [
+        28
+      ]
+    },
+    {
+      "figure": 22,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-36-9.png",
+      "sha256": "1dbbf80aa6de42b22b72e422070e28f44a0ccc98bdf90be9d58a298d8c4cd05a",
+      "width": 2048,
+      "height": 875,
+      "decoded_rgb_sha256": "3d33810e950e33eb1e1a323e3d8678697e0f634f604c222b2831edc0b9631113",
+      "source_pdf_pages": [
+        29
+      ]
+    },
+    {
+      "figure": 23,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-37-8.png",
+      "sha256": "a2645c053e358df7d5781a58284007a56d9b6d85f537de92cee74716772fdbde",
+      "width": 2048,
+      "height": 1548,
+      "decoded_rgb_sha256": "0ddd763d11c69e29e39c9915027de00d3da67ff34f1e8b39c8256b925987a334",
+      "source_pdf_pages": [
+        29
+      ]
+    },
+    {
+      "figure": 24,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-38-32.png",
+      "sha256": "a89c0cdff90d51ffbb38dc982a8e51f0051ad3425e4ed65e8cc75e9583194cb9",
+      "width": 2048,
+      "height": 1242,
+      "decoded_rgb_sha256": "eddb82d3cded937ed146648d50973c6fe6d4bc7b7de59dad96441e49aee2d7ba",
+      "source_pdf_pages": [
+        30
+      ]
+    },
+    {
+      "figure": 25,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-40-3.png",
+      "sha256": "fa29fc6acbc96b054b0842bdf65c1b6c74b5700ccb7424fb60898f0b009ccc49",
+      "width": 1927,
+      "height": 2222,
+      "decoded_rgb_sha256": "9630f7665ca836129d07ad03589751d16a2401522ee14978604359fd8a3510f7",
+      "source_pdf_pages": [
+        31
+      ]
+    },
+    {
+      "figure": 26,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-41-8.png",
+      "sha256": "e9e4770be129bf1b22cf2947203f2bf791077977e5018ac9cc5914a913c5bf45",
+      "width": 2048,
+      "height": 1623,
+      "decoded_rgb_sha256": "cd17b5cbc5bcdca34fadf7453c2318417f3df5946b8cbefe11769e7e9c7c24b1",
+      "source_pdf_pages": [
+        32
+      ]
+    },
+    {
+      "figure": 27,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-43-45.png",
+      "sha256": "12802f67c15860832a2822c5d710ce6b5a7e6182d3eeb15b8da0f8cc488cc4a5",
+      "width": 2048,
+      "height": 1093,
+      "decoded_rgb_sha256": "87596b6f970df0d742fbbc34cb71ba947ad1b69b6b11a69c535cd0d1e0f8a0b4",
+      "source_pdf_pages": [
+        33
+      ]
+    },
+    {
+      "figure": 28,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-46-14.png",
+      "sha256": "9cb858961a20c67df47ed7f58eae65733b82a21f190822f8929d6f9ea377d1d3",
+      "width": 2048,
+      "height": 1092,
+      "decoded_rgb_sha256": "6eac71011862441b126ddd4851bd2bec6be4fa507284285529ce219044b97d13",
+      "source_pdf_pages": [
+        35
+      ]
+    },
+    {
+      "figure": 29,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-49-14.png",
+      "sha256": "0d1dc278ee798eb23fbc7901a45c3932b924f79b7ced488c1628d9630e8342aa",
+      "width": 2048,
+      "height": 1273,
+      "decoded_rgb_sha256": "bb71471856c06967f6690172eae2ca38c4f52edd99d0e90c6f76b06f6baa3c30",
+      "source_pdf_pages": [
+        37
+      ]
+    },
+    {
+      "figure": 30,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-57-11.png",
+      "sha256": "928c729c12ec777520a6768b0b3beca211d0b73f45ad5390ca6f8a4b235a5f03",
+      "width": 1498,
+      "height": 296,
+      "decoded_rgb_sha256": "b25d6b3418911e7960f4fc40d42cfa022773097fbba25647406482f8e5339984",
+      "source_pdf_pages": [
+        42
+      ]
+    },
+    {
+      "figure": 31,
+      "panel": 1,
+      "path": "docs/capstone_report/images/ieee-source/figure-57-12.png",
+      "sha256": "21aafc9ce52f770b8d4bfcab1c19083eac4a81e0e6e0650bc5bab0156540e309",
+      "width": 2048,
+      "height": 1079,
+      "decoded_rgb_sha256": "732be4fde384f7433fe4ee2e963a253f1885e84ac092e92497762b8682e83167",
+      "source_pdf_pages": [
+        42
+      ]
+    }
+  ],
+  "limitations": "Validation covers the report and frozen evidence, without rerunning model experiments or application suites. Architecture diagrams preserve source raster pixels; their historical model labels are explained in captions. Original source PDF and adjacent original LaTeX snapshots are preserved.",
+  "file_rename": {
+    "date": "2026-10-11",
+    "previous_stem": "capstone_report_reference_only",
+    "current_stem": "capstone_report",
+    "report_bytes_unchanged": true,
+    "note": "Markdown and PDF were renamed after validation; report content and all validated hashes remain unchanged. Linked documentation and validation paths were updated."
+  }
+}

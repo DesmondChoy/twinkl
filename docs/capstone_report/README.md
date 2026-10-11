@@ -1,31 +1,39 @@
 # Capstone Report Materials
 
-This directory contains supporting capstone report materials. The current
-Phase 2 Technical Paper is the [Google Doc](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit), tab
-“Twinkl Report (Sept ’26)”. It is the ground truth for the report’s direction
-and wording. Submitted milestone files remain under `docs/archive/capstone/`.
+This directory contains supporting capstone report materials. The
+Phase 2 Technical Paper is also available in the [Google Doc](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit), tab
+“Twinkl Report (Sept ’26)”. The reference Markdown and its PDF are corrected editions of the
+user-selected 50-page `Twinkl IEEE Single Column.pdf`
+with the checklist audit applied and validated on 11 October 2026. Submitted milestone files remain under
+`docs/archive/capstone/`.
 
 ## Report Files
 
 - [Phase 2 Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) — current Technical Paper (Google Doc)
-- [`capstone_report_reference_only.md`](capstone_report_reference_only.md) —
-  stale Quarto copy of the paper, kept for reference only and no longer
-  maintained
-- [`capstone_report_reference_only.pdf`](capstone_report_reference_only.pdf) —
-  PDF rendered from that copy on 3 October 2026
+- [`capstone_report.md`](capstone_report.md) —
+  editable corrected edition of the selected IEEE PDF; applies the
+  checklist audit, including factual corrections and verified citation updates
+- [`capstone_report.pdf`](capstone_report.pdf) —
+  PDF rendered from the corrected Markdown on 11 October 2026
 - [`capstone_requirements.pdf`](capstone_requirements.pdf) — NUS-ISS capstone
   briefing and requirements
-- [`images/`](images/) — report figures, interface captures, and evaluation
-  charts
+- [`images/ieee-source/`](images/ieee-source/) — all 33 original raster images
+  used by the selected IEEE PDF, verified against its embedded images
+- [`ieee_mirror_validation.json`](ieee_mirror_validation.json) — source and output
+  hashes, audit dispositions, independent reviews, and rendering validation
+- [`render-support/`](render-support/) and [`IEEEtran.cls`](IEEEtran.cls) —
+  local PDF rendering support
+- [`images/`](images/) — also retains figures from earlier report versions
 - [`../../scripts/capstone/generate_report_figures.py`](../../scripts/capstone/generate_report_figures.py)
   — deterministic figure generation from committed evidence
 
 ## Report Controls
 
-- **Document status:** The Quarto copy and its PDF are for reference only.
-  Some facts may still be accurate; check them against the Google Doc and the
-  cited evidence before reuse. The sections below describe the Quarto copy as
-  of 3 October 2026
+- **Document status:** The Markdown and its PDF are corrected reference editions of the
+  selected IEEE PDF with `twinkl-report-checklist-audit.pdf`
+  applied. The audit refers to an earlier 68-page LaTeX snapshot, so fixes use
+  the selected edition’s figure and table numbering. Fonts and page breaks may
+  differ from the source; the validation record documents the final output.
 - **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
 - **Product source:** [`../prd.md`](../prd.md)
 - **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
@@ -45,22 +53,33 @@ and wording. Submitted milestone files remain under `docs/archive/capstone/`.
 
 ## Reproduce the Report
 
-Run the following commands from the repository root:
+Run from the repository root with Quarto and XeLaTeX installed. The report
+uses Times New Roman, Arial, and Courier New; these fonts must be available.
+The figures are already stored locally and do not need to be regenerated.
 
 ```sh
-source .venv/bin/activate
-export UV_CACHE_DIR=/tmp/twinkl-uv-cache
-MPLCONFIGDIR=/tmp/twinkl-matplotlib \
-  uv run python scripts/capstone/generate_report_figures.py
 cd docs/capstone_report
-quarto render capstone_report_reference_only.md --to pdf
+quarto render capstone_report.md --to pdf
 ```
 
-The figure script reads committed configuration, Parquet data, JSON metrics,
-and Markdown reports. It writes two architecture diagrams and five evaluation
-charts under
-[`images/`](images/). The Quarto front matter selects XeLaTeX and records the
-fonts, page geometry, table of contents, and PDF presentation settings.
+On macOS with TinyTeX, add its binary directory to `PATH` if XeLaTeX is not
+already available:
+
+```sh
+export PATH="$HOME/Library/TinyTeX/bin/universal-darwin:$PATH"
+```
+
+The front matter selects the local IEEE class and rendering support. The Lua
+filter preserves the explicit figure and table numbers, renders pipe tables,
+and retains working internal destinations. The LaTeX header fits images
+without changing their aspect ratio and permits long visible URLs to wrap.
+The selected source PDF and its adjacent LaTeX files are left intact.
+
+## Historical Evidence Notes
+
+The following notes were recorded for the earlier 3 October reference copy;
+the selected IEEE PDF supplies the baseline wording and section numbers, with
+the checklist corrections recorded in the validation file.
 
 The current live Weekly Drift Reviewer and North Star Moment selection use
 GPT-6 Luna at low reasoning effort. Coach Digest and nudge generation still
