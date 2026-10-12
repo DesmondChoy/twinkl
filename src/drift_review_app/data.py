@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from collections import Counter
 from dataclasses import dataclass, replace
 from datetime import date, timedelta
@@ -23,6 +24,15 @@ REFERENCE_DIR = Path(
     "logs/experiments/artifacts/"
     "twinkl_qtwz_complete_development_review_20260714/results"
 )
+CURRENT_SETUP_KEY = "gpt6_low"
+HIGHER_DIR = Path(
+    "logs/experiments/artifacts/twinkl_ck3w_luna_higher_reasoning_20260809"
+)
+DEFINITIONS_DIR = Path(
+    "logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907"
+)
+CURRENT_DIR = Path("logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923")
+CURRENT_HIGHER_DIR = Path("logs/experiments/artifacts/twinkl_gv3x_luna_higher_20260923")
 
 EXPECTED_COUNTS = {
     "personas": 204,
@@ -76,6 +86,13 @@ class SetupSpec:
     expected_invalid: int
     aggregate_key: str
     aggregate_path: Path
+    report_prompt_version: str = "v0"
+    archive_prompt_version: str = "2.0"
+    study_id: str = "historical"
+    study_label: str = "Historical model and reasoning comparison"
+    selected: bool = False
+    accuracy_evaluated: bool = True
+    expected_errors: int = 0
 
 
 SETUP_SPECS = {
@@ -93,8 +110,8 @@ SETUP_SPECS = {
     ),
     "luna_none": SetupSpec(
         key="luna_none",
-        label="Luna — reasoning none",
-        short_label="Luna none",
+        label="GPT-5.6 Luna — reasoning none",
+        short_label="GPT-5.6 none",
         model="gpt-5.6-luna",
         reasoning_effort="none",
         response_path=MODEL_DIR / "responses_gpt_5_6_luna.jsonl",
@@ -105,8 +122,8 @@ SETUP_SPECS = {
     ),
     "luna_low": SetupSpec(
         key="luna_low",
-        label="Luna — reasoning low",
-        short_label="Luna low",
+        label="GPT-5.6 Luna — reasoning low",
+        short_label="GPT-5.6 low",
         model="gpt-5.6-luna",
         reasoning_effort="low",
         response_path=LOW_DIR / "responses_gpt_5_6_luna_low.jsonl",
@@ -116,6 +133,82 @@ SETUP_SPECS = {
         aggregate_path=LOW_DIR / "metrics.json",
     ),
 }
+HISTORICAL_SETUP_KEYS = tuple(SETUP_SPECS)
+
+for _effort, _valid, _invalid in (
+    ("medium", 2839, 14),
+    ("high", 2844, 9),
+    ("xhigh", 2845, 8),
+):
+    _key = f"luna_{_effort}"
+    SETUP_SPECS[_key] = SetupSpec(
+        key=_key,
+        label=f"GPT-5.6 Luna — reasoning {_effort}",
+        short_label=f"GPT-5.6 {_effort}",
+        model="gpt-5.6-luna",
+        reasoning_effort=_effort,
+        response_path=HIGHER_DIR / f"responses_gpt_5_6_luna_{_effort}.jsonl",
+        expected_valid=_valid,
+        expected_invalid=_invalid,
+        aggregate_key=_key,
+        aggregate_path=HIGHER_DIR / "metrics.json",
+    )
+
+for _key, _version, _archive, _variant, _valid, _invalid in (
+    ("definitions_off_low", "v1", "3.0", "baseline", 2845, 8),
+    ("definitions_on_low", "v2", "4.0", "definitions", 2839, 14),
+):
+    SETUP_SPECS[_key] = SetupSpec(
+        key=_key,
+        label="GPT-5.6 Luna — low",
+        short_label=f"Definitions study {_version}",
+        model="gpt-5.6-luna",
+        reasoning_effort="low",
+        response_path=DEFINITIONS_DIR / "responses.jsonl",
+        expected_valid=_valid,
+        expected_invalid=_invalid,
+        aggregate_key=_variant,
+        aggregate_path=DEFINITIONS_DIR / "results.json",
+        report_prompt_version=_version,
+        archive_prompt_version=_archive,
+        study_id="j3k7",
+        study_label="Core Value definitions study",
+        accuracy_evaluated=False,
+    )
+
+for _generation, _effort, _valid, _invalid, _errors in (
+    ("56", "none", 2841, 12, 0),
+    ("6", "none", 2841, 7, 5),
+    ("56", "low", 2841, 12, 0),
+    ("6", "low", 2851, 2, 0),
+    ("56", "medium", 2842, 11, 0),
+    ("6", "medium", 2851, 2, 0),
+    ("56", "high", 2838, 15, 0),
+    ("6", "high", 2852, 1, 0),
+    ("56", "xhigh", 2834, 19, 0),
+    ("6", "xhigh", 2849, 4, 0),
+):
+    _key = f"gpt{_generation}_{_effort}"
+    _model_version = "5.6" if _generation == "56" else "6"
+    _directory = CURRENT_DIR if _effort in {"none", "low"} else CURRENT_HIGHER_DIR
+    SETUP_SPECS[_key] = SetupSpec(
+        key=_key,
+        label=f"GPT-{_model_version} Luna — reasoning {_effort}",
+        short_label=f"GPT-{_model_version} {_effort}",
+        model=f"gpt-{_model_version}-luna",
+        reasoning_effort=_effort,
+        response_path=_directory / "responses.jsonl",
+        expected_valid=_valid,
+        expected_invalid=_invalid,
+        expected_errors=_errors,
+        aggregate_key=f"gpt_{_model_version.replace('.', '_')}_{_effort}",
+        aggregate_path=_directory / "metrics.json",
+        report_prompt_version="v2",
+        archive_prompt_version="4.0",
+        study_id="current_model_comparison",
+        study_label="Current model and reasoning comparison",
+        selected=_key == CURRENT_SETUP_KEY,
+    )
 
 
 @dataclass(frozen=True)
@@ -230,6 +323,28 @@ class ReviewData:
     case_metrics: dict[tuple[str, int, str], dict[str, Any]]
     aggregate_results: dict[str, tuple[dict[str, Any], ...]]
     integrity: dict[str, Any]
+    boundaries_by_setup: dict[str, dict[tuple[str, str], PromptBoundary]]
+
+    def setups_for_prompt(self, version: str) -> dict[str, SetupSpec]:
+        model_order = {"gpt-5.6-luna": 0, "gpt-6-luna": 1}
+        effort_order = {"none": 0, "low": 1, "medium": 2, "high": 3, "xhigh": 4}
+        setups = (
+            (key, spec)
+            for key, spec in self.setup_specs.items()
+            if spec.report_prompt_version == version
+        )
+        return dict(
+            sorted(
+                setups,
+                key=lambda item: (
+                    model_order.get(item[1].model, 2),
+                    item[1].model,
+                    effort_order.get(item[1].reasoning_effort, 5),
+                    not item[1].accuracy_evaluated,
+                    item[0],
+                ),
+            )
+        )
 
     def case(self, persona_id: str, dimension: str) -> CaseRecord:
         return self.cases[f"{persona_id}:{dimension}"]
@@ -247,12 +362,14 @@ class ReviewData:
     ) -> Decision:
         return self.decisions[(setup_key, run, case_id, t_index)]
 
-    def boundaries_for_persona(self, persona_id: str) -> tuple[PromptBoundary, ...]:
+    def boundaries_for_persona(
+        self, persona_id: str, setup_key: str = "luna_low"
+    ) -> tuple[PromptBoundary, ...]:
         return tuple(
             sorted(
                 (
                     boundary
-                    for boundary in self.prompt_boundaries.values()
+                    for boundary in self.boundaries_by_setup[setup_key].values()
                     if boundary.persona_id == persona_id
                 ),
                 key=lambda boundary: boundary.week_start,
@@ -274,7 +391,9 @@ class ReviewData:
             }
         if queue == "Model disagreement":
             return {
-                case_id for case_id in self.cases if self.model_disagreement(case_id)
+                case_id
+                for case_id in self.cases
+                if self.model_disagreement(case_id, setup_key)
             }
         if queue == "Run disagreement":
             return {
@@ -338,8 +457,17 @@ class ReviewData:
         }
         return len(run_spans) > 1
 
-    def model_disagreement(self, case_id: str) -> bool:
+    def model_disagreement(self, case_id: str, setup_key: str | None = None) -> bool:
         case = self.cases[case_id]
+        specs = self.setup_specs
+        if setup_key is not None:
+            selected = specs[setup_key]
+            specs = {
+                key: spec
+                for key, spec in specs.items()
+                if spec.report_prompt_version == selected.report_prompt_version
+                and spec.study_id == selected.study_id
+            }
         for entry in case.entries:
             groups = {
                 preserved_group_signature(
@@ -348,7 +476,7 @@ class ReviewData:
                         for run in (1, 2, 3)
                     ]
                 )
-                for setup in self.setup_specs
+                for setup in specs
             }
             if len(groups) > 1:
                 return True
@@ -362,7 +490,7 @@ class ReviewData:
                     for run in (1, 2, 3)
                 )
             )
-            for setup in self.setup_specs
+            for setup in specs
         }
         return len(drift_groups) > 1
 
@@ -471,6 +599,7 @@ def _require_paths(root: Path) -> dict[str, Path]:
         {
             f"responses_{key}": root / spec.response_path
             for key, spec in SETUP_SPECS.items()
+            if key in HISTORICAL_SETUP_KEYS
         }
     )
     missing = [str(path) for path in paths.values() if not path.exists()]
@@ -614,7 +743,8 @@ def _validate_protocol_hashes(paths: dict[str, Path]) -> tuple[dict, dict, dict,
         str(item["key"]): (str(item["model"]), str(item["reasoning_effort"]))
         for item in base_manifest["models"]
     }
-    for key, spec in SETUP_SPECS.items():
+    for key in HISTORICAL_SETUP_KEYS:
+        spec = SETUP_SPECS[key]
         source_key = {
             "mini_none": "gpt_5_4_mini",
             "luna_none": "gpt_5_6_luna",
@@ -813,13 +943,15 @@ def _load_cases(
 
 
 def _load_prompts(
-    paths: dict[str, Path], cases: dict[str, CaseRecord]
+    paths: dict[str, Path],
+    cases: dict[str, CaseRecord],
+    records: list[dict[str, Any]] | None = None,
 ) -> tuple[
     dict[tuple[str, str], dict[str, Any]],
     dict[tuple[str, str, int], tuple[str, str]],
     dict[tuple[str, str], PromptBoundary],
 ]:
-    records = _read_jsonl(paths["prompts"])
+    records = records if records is not None else _read_jsonl(paths["prompts"])
     if len(records) != EXPECTED_COUNTS["persona_weeks"]:
         raise ValueError(f"Prompt count mismatch: {len(records)}")
     prompt_map = {}
@@ -919,6 +1051,12 @@ def _load_prompts(
             raise ValueError(f"Duplicate expected prompt coordinate: {key}")
         if not expected_coordinates <= case_coordinates:
             raise ValueError(f"Unknown expected prompt coordinate: {key}")
+        if expected_coordinates != {
+            (persona_id, dimension, t_index)
+            for dimension in declared_values
+            for t_index in current_t_indices
+        }:
+            raise ValueError(f"Prompt current-week coordinate mismatch: {key}")
         for coordinate in expected_coordinates:
             if coordinate in coordinate_to_prompt:
                 raise ValueError(
@@ -937,7 +1075,7 @@ def _load_prompts(
 
 
 def _validate_assessments(
-    response: dict[str, Any], record: dict[str, Any]
+    response: dict[str, Any], record: dict[str, Any], *, strict_quotes: bool = False
 ) -> dict[tuple[str, int], dict[str, Any]]:
     parsed = response.get("parsed")
     if not isinstance(parsed, dict) or not isinstance(parsed.get("assessments"), list):
@@ -946,6 +1084,15 @@ def _validate_assessments(
     entry_text = record["entry_text_by_t_index"]
     valid_verdicts = {"conflict", "not_conflict", "abstain"}
     valid_confidences = {"low", "medium", "high"}
+    valid_reasons = {
+        "ambiguous",
+        "direct_aligned_or_neutral_behavior",
+        "direct_behavior_or_choice",
+        "external_constraint",
+        "feeling_or_intent_only",
+        "missing_text",
+        "needs_hidden_context",
+    }
     for assessment in parsed["assessments"]:
         key = (
             _normalize_value(str(assessment["dimension"])),
@@ -957,10 +1104,21 @@ def _validate_assessments(
         confidence = str(assessment["confidence"])
         if verdict not in valid_verdicts or confidence not in valid_confidences:
             raise ValueError(f"Invalid assessment values: {key}")
-        quote = str(assessment.get("evidence_quote") or "")
-        if verdict == "conflict" and (
-            not quote or quote not in entry_text[str(key[1])]
+        reason_code = str(assessment.get("reason_code"))
+        if strict_quotes and (
+            reason_code not in valid_reasons
+            or (
+                verdict == "conflict"
+                and (reason_code != "direct_behavior_or_choice" or confidence == "low")
+            )
         ):
+            raise ValueError(f"Invalid assessment reasoning: {key}")
+        quote = str(assessment.get("evidence_quote") or "")
+        if (
+            (strict_quotes or verdict == "conflict")
+            and quote
+            and quote not in entry_text.get(str(key[1]), "")
+        ) or (verdict == "conflict" and not quote):
             raise ValueError(f"Conflict quote is not exact: {key}")
         assessments[key] = assessment
     expected = {
@@ -978,6 +1136,8 @@ def _load_decisions(
     paths: dict[str, Path],
     cases: dict[str, CaseRecord],
     prompt_map: dict[tuple[str, str], dict[str, Any]],
+    setup_keys: tuple[str, ...] = HISTORICAL_SETUP_KEYS,
+    response_rows: dict[str, list[dict[str, Any]]] | None = None,
 ) -> tuple[
     dict[tuple[str, int, str, int], Decision],
     dict[tuple[str, int, str, str], str],
@@ -991,8 +1151,13 @@ def _load_decisions(
         for persona_id, week_start in prompt_map
         for run in (1, 2, 3)
     }
-    for setup_key, spec in SETUP_SPECS.items():
-        rows = _read_jsonl(paths[f"responses_{setup_key}"])
+    for setup_key in setup_keys:
+        spec = SETUP_SPECS[setup_key]
+        rows = (
+            response_rows[setup_key]
+            if response_rows is not None
+            else _read_jsonl(paths[f"responses_{setup_key}"])
+        )
         if len(rows) != EXPECTED_COUNTS["persona_weeks"] * 3:
             raise ValueError(f"{spec.label} receipt count mismatch: {len(rows)}")
         observed_keys = set()
@@ -1010,12 +1175,28 @@ def _load_decisions(
             prompt = prompt_map[(key[0], key[1])]
             if str(response["prompt_sha256"]) != str(prompt["prompt_sha256"]):
                 raise ValueError(f"{spec.label} prompt receipt mismatch: {key}")
+            if response.get("week_end") != prompt["week_end"]:
+                raise ValueError(f"{spec.label} week boundary mismatch: {key}")
+            if response.get("arm") != "weekly_without_critic":
+                raise ValueError(f"{spec.label} receipt setup mismatch: {key}")
+            if response.get("runtime_text_sha256") != prompt["runtime_text_sha256"]:
+                raise ValueError(f"{spec.label} receipt history mismatch: {key}")
+            if (
+                "reasoning_effort" in response
+                and response["reasoning_effort"] != spec.reasoning_effort
+            ):
+                raise ValueError(
+                    f"{spec.label} receipt reasoning effort mismatch: {key}"
+                )
             if response.get("requested_model") != spec.model:
                 raise ValueError(f"{spec.label} requested model mismatch: {key}")
-            if response.get("resolved_model") != spec.model:
+            if response.get("resolved_model") not in (None, spec.model) or (
+                response.get("status") == "ok"
+                and response.get("resolved_model") != spec.model
+            ):
                 raise ValueError(f"{spec.label} resolved model mismatch: {key}")
             status = str(response.get("status"))
-            if status not in {"ok", "invalid"}:
+            if status not in {"ok", "invalid", "error"}:
                 raise ValueError(f"Unexpected {spec.label} receipt status: {status}")
             status_counts[status] += 1
             run_counts[key[2]] += 1
@@ -1059,6 +1240,8 @@ def _load_decisions(
             "ok": spec.expected_valid,
             "invalid": spec.expected_invalid,
         }
+        if spec.expected_errors:
+            expected_statuses["error"] = spec.expected_errors
         if dict(status_counts) != expected_statuses:
             raise ValueError(
                 f"{spec.label} response validity mismatch: "
@@ -1070,7 +1253,9 @@ def _load_decisions(
             )
         summaries[setup_key] = dict(status_counts)
 
-    expected_decisions = sum(len(case.entries) for case in cases.values()) * 9
+    expected_decisions = (
+        sum(len(case.entries) for case in cases.values()) * 3 * len(setup_keys)
+    )
     if len(decisions) != expected_decisions:
         raise ValueError(
             f"Decision join mismatch: {len(decisions)}/{expected_decisions}"
@@ -1308,11 +1493,27 @@ def _validate_aggregate_parity(
                 "coverage_count": sum(bool(item["covered"]) for item in observed),
             }
             for key, actual in totals.items():
+                if key not in row and not SETUP_SPECS[setup_key].accuracy_evaluated:
+                    continue
                 if actual != int(row[key]):
                     raise ValueError(
                         f"Aggregate parity mismatch for {setup_key} Run {run} {key}: "
                         f"{actual} != {row[key]}"
                     )
+            if SETUP_SPECS[setup_key].accuracy_evaluated:
+                ratios = {
+                    "drift_recall": totals["drift_hits"] / totals["known_drifts"],
+                    "drift_precision": totals["drift_hits"]
+                    / totals["predicted_drift_alerts"]
+                    if totals["predicted_drift_alerts"]
+                    else 0.0,
+                    "coverage": totals["coverage_count"] / len(cases),
+                }
+                for key, actual_ratio in ratios.items():
+                    if not math.isclose(actual_ratio, float(row[key]), abs_tol=1e-12):
+                        raise ValueError(
+                            f"Aggregate parity mismatch for {setup_key} Run {run} {key}"
+                        )
 
 
 def _find_examples(data: ReviewData) -> dict[str, str]:
@@ -1345,6 +1546,11 @@ def _find_examples(data: ReviewData) -> dict[str, str]:
 
 def load_review_data(root: Path) -> ReviewData:
     """Load all frozen inputs and fail before rendering if integrity drifts."""
+    from src.drift_review_app.experiments import (
+        definitions_summary,
+        load_expanded_inputs,
+    )
+
     root = root.resolve()
     paths = _require_paths(root)
     base_config, base_manifest, base_metrics, low_metrics = _validate_protocol_hashes(
@@ -1358,6 +1564,58 @@ def load_review_data(root: Path) -> ReviewData:
     decisions, receipt_statuses, response_summaries = _load_decisions(
         paths, cases, prompt_map
     )
+    reference_cases = [
+        {
+            "canonical_case_id": case.case_id,
+            "persona_id": case.persona_id,
+            "dimension": case.dimension,
+            "full_core_values": [
+                _normalize_value(value)
+                for value in profiles[case.persona_id]["core_values"]
+            ],
+            "historical_split": case.historical_split,
+            "cohort_source": case.cohort_source,
+            "entries": [
+                {
+                    "position": entry.position,
+                    "t_index": entry.t_index,
+                    "date": entry.date,
+                    "initial_entry": entry.initial_entry,
+                    "nudge_text": entry.nudge_text,
+                    "response_text": entry.response_text,
+                    "text": entry.runtime_text,
+                }
+                for entry in case.entries
+            ],
+        }
+        for case in cases.values()
+    ]
+    expanded = load_expanded_inputs(
+        root, reference_cases_sha256=_sha256_text(_canonical_json(reference_cases))
+    )
+    boundaries_by_setup = {key: prompt_boundaries for key in HISTORICAL_SETUP_KEYS}
+    cached_prompts = {}
+    for setup_key, responses in expanded.response_rows.items():
+        records = expanded.prompt_groups.get(setup_key)
+        if records is None:
+            setup_prompts, setup_boundaries = prompt_map, prompt_boundaries
+        else:
+            cache_key = id(records)
+            if cache_key not in cached_prompts:
+                loaded, _coordinates, boundaries = _load_prompts(paths, cases, records)
+                cached_prompts[cache_key] = (loaded, boundaries)
+            setup_prompts, setup_boundaries = cached_prompts[cache_key]
+        boundaries_by_setup[setup_key] = setup_boundaries
+        setup_decisions, setup_statuses, setup_summaries = _load_decisions(
+            paths,
+            cases,
+            setup_prompts,
+            setup_keys=(setup_key,),
+            response_rows={setup_key: responses},
+        )
+        decisions.update(setup_decisions)
+        receipt_statuses.update(setup_statuses)
+        response_summaries.update(setup_summaries)
     max_confirmation_lag = int(base_config["study"]["max_confirmation_lag_entries"])
     predicted_drifts, case_metrics = _derive_drifts_and_metrics(
         cases=cases,
@@ -1367,6 +1625,76 @@ def load_review_data(root: Path) -> ReviewData:
         max_confirmation_lag=max_confirmation_lag,
     )
     aggregate_results = _aggregate_results(base_metrics, low_metrics)
+    aggregate_results.update(expanded.aggregates)
+    # This study reports changes in detected Drift identities. Its original
+    # outputs did not evaluate accuracy against the reference labels.
+    for setup_key in ("definitions_off_low", "definitions_on_low"):
+        variant = SETUP_SPECS[setup_key].aggregate_key
+        rows = []
+        for run in (1, 2, 3):
+            detected = sum(
+                case_metrics[(setup_key, run, case_id)]["predicted_drift_alerts"]
+                for case_id in cases
+            )
+            original = expanded.definitions_results["counts"]["all"][variant]["runs"][
+                run - 1
+            ]
+            if detected != original:
+                raise ValueError(
+                    "Definitions study detected Drift parity mismatch: "
+                    f"{setup_key} Run {run}"
+                )
+            preserved_spans = {
+                (
+                    row["persona_id"],
+                    row["core_value"],
+                    row["onset_t_index"],
+                    row["confirmation_t_index"],
+                    row["end_t_index"],
+                )
+                for row in expanded.definitions_results["runs"][str(run)]["drifts"][
+                    variant
+                ]
+            }
+            replayed_spans = {
+                (
+                    span.persona_id,
+                    span.dimension,
+                    span.onset_t_index,
+                    span.confirmation_t_index,
+                    span.end_t_index,
+                )
+                for case_id in cases
+                for span in predicted_drifts[(setup_key, run, case_id)]
+            }
+            if replayed_spans != preserved_spans:
+                raise ValueError("Definitions study Drift identity parity mismatch")
+            rows.append(
+                {
+                    "repeat": run,
+                    "predicted_drift_alerts": detected,
+                    "detected_drifts": detected,
+                    "accuracy_evaluated": False,
+                }
+            )
+        aggregate_results[setup_key] = tuple(rows)
+    for run in (1, 2, 3):
+        changed = 0
+        for case_id, case in cases.items():
+            for entry in case.entries:
+                pair = [
+                    decisions[(key, run, case_id, entry.t_index)]
+                    for key in ("definitions_off_low", "definitions_on_low")
+                ]
+                labels = [
+                    row.verdict if row.response_status == "ok" else "abstain"
+                    for row in pair
+                ]
+                changed += labels[0] != labels[1]
+        if changed != len(
+            expanded.definitions_results["runs"][str(run)]["changed_entry_decisions"]
+        ):
+            raise ValueError("Definitions study changed decision parity mismatch")
     _validate_aggregate_parity(
         cases=cases,
         case_metrics=case_metrics,
@@ -1399,7 +1727,10 @@ def load_review_data(root: Path) -> ReviewData:
                 "input block."
             ),
             "base_manifest_schema": base_manifest["schema_version"],
+            "definitions_study": definitions_summary(expanded.definitions_results),
+            "calculated_cost_usd": expanded.calculated_cost_usd,
         },
+        boundaries_by_setup=boundaries_by_setup,
     )
     data.integrity["examples"] = _find_examples(data)
     return data

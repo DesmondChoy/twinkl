@@ -1,15 +1,27 @@
 from __future__ import annotations
 
+import json
+from collections import defaultdict
+from copy import deepcopy
 from pathlib import Path
+from statistics import median
 
 import pytest
 
 from src.drift_review_app.data import (
+    CURRENT_SETUP_KEY,
     EXPECTED_COUNTS,
+    HISTORICAL_SETUP_KEYS,
     QUEUE_LABELS,
     ReviewData,
+    _read_jsonl,
+    _sha256_file,
     load_review_data,
     preserved_group_signature,
+)
+from src.drift_review_app.experiments import (
+    _normalize_prompts,
+    _normalize_responses,
 )
 from src.drift_rules import drift_spans, trajectory_covered
 
@@ -25,7 +37,7 @@ def test_source_counts_and_join_completeness(review_data: ReviewData) -> None:
     for key, expected in EXPECTED_COUNTS.items():
         assert review_data.integrity[key] == expected
     assert len(review_data.cases) == 292
-    assert len(review_data.decisions) == 2377 * 3 * 3
+    assert len(review_data.decisions) == 2377 * 3 * len(review_data.setup_specs)
     assert {
         (entry.persona_id, entry.t_index)
         for case in review_data.cases.values()
@@ -45,6 +57,7 @@ def test_three_manifest_backed_setup_mappings(review_data: ReviewData) -> None:
     assert {
         key: (spec.model, spec.reasoning_effort)
         for key, spec in review_data.setup_specs.items()
+        if key in HISTORICAL_SETUP_KEYS
     } == {
         "mini_none": ("gpt-5.4-mini-2026-03-17", "none"),
         "luna_none": ("gpt-5.6-luna", "none"),
@@ -64,7 +77,10 @@ def test_each_run_has_exactly_951_receipts(review_data: ReviewData) -> None:
                 if key[0] == setup_key and key[1] == run
             ]
             assert len(rows) == 951
-    assert review_data.integrity["response_summaries"] == {
+    assert {
+        key: review_data.integrity["response_summaries"][key]
+        for key in HISTORICAL_SETUP_KEYS
+    } == {
         "mini_none": {"ok": 2815, "invalid": 38},
         "luna_none": {"ok": 2837, "invalid": 16},
         "luna_low": {"ok": 2845, "invalid": 8},
@@ -99,15 +115,14 @@ def test_frozen_prompt_boundaries_exclude_later_journal_entries(
 
 
 def test_runs_are_isolated_and_align_to_shared_entries(review_data: ReviewData) -> None:
+    observed_by_run = defaultdict(set)
+    for setup_key, run, case_id, t_index in review_data.decisions:
+        observed_by_run[(setup_key, run, case_id)].add(t_index)
     for case_id, case in review_data.cases.items():
         expected = {entry.t_index for entry in case.entries}
         for setup_key in review_data.setup_specs:
             for run in (1, 2, 3):
-                observed = {
-                    key[3]
-                    for key in review_data.decisions
-                    if key[:3] == (setup_key, run, case_id)
-                }
+                observed = observed_by_run[(setup_key, run, case_id)]
                 assert observed == expected
     example = review_data.integrity["examples"]["run_disagreement"]
     assert review_data.run_disagreement("luna_low", example)
@@ -257,3 +272,202 @@ def test_known_02fb94f3_tradition_cross_setup_difference(
     )
     assert mini_hits == 0
     assert low_hits == 1
+
+
+def test_report_prompt_groups_preserve_all_studies(review_data: ReviewData) -> None:
+    assert len(review_data.setup_specs) == 18
+    assert set(review_data.setups_for_prompt("v0")) == {
+        "mini_none",
+        "luna_none",
+        "luna_low",
+        "luna_medium",
+        "luna_high",
+        "luna_xhigh",
+    }
+    assert set(review_data.setups_for_prompt("v1")) == {"definitions_off_low"}
+    assert len(review_data.setups_for_prompt("v2")) == 11
+    for version, archive in (("v0", "2.0"), ("v1", "3.0"), ("v2", "4.0")):
+        assert all(
+            spec.archive_prompt_version == archive
+            for spec in review_data.setups_for_prompt(version).values()
+        )
+    assert review_data.setup_specs[CURRENT_SETUP_KEY].selected
+    assert not review_data.setup_specs["definitions_on_low"].accuracy_evaluated
+    assert review_data.setup_specs["definitions_on_low"].study_id != (
+        review_data.setup_specs[CURRENT_SETUP_KEY].study_id
+    )
+
+
+def test_submitted_report_current_and_historical_medians(
+    review_data: ReviewData,
+) -> None:
+    for key, hits, false_alerts, coverage in (
+        ("mini_none", 7, 5, 0.740),
+        ("luna_none", 20, 13, 0.777),
+        ("luna_low", 23, 4, 0.637),
+        (CURRENT_SETUP_KEY, 17, 2, 0.990),
+    ):
+        rows = review_data.aggregate_results[key]
+        assert median(row["drift_hits"] for row in rows) == hits
+        assert median(row["false_drift_alerts"] for row in rows) == false_alerts
+        assert round(median(row["coverage"] for row in rows), 3) == coverage
+        assert median(row["drift_recall"] for row in rows) == hits / 42
+    assert [
+        row["drift_hits"] for row in review_data.aggregate_results[CURRENT_SETUP_KEY]
+    ] == [17, 15, 17]
+    costs = review_data.integrity["calculated_cost_usd"]
+    assert round(costs["gpt56_low"], 4) == 1.2730
+    assert round(costs[CURRENT_SETUP_KEY], 4) == 0.5083
+
+
+def test_definition_counts_have_original_scope(review_data: ReviewData) -> None:
+    summary = review_data.integrity["definitions_study"]
+    assert summary["baseline_counts"] == [22, 22, 21]
+    assert summary["definitions_counts"] == [19, 21, 18]
+    assert summary["changed_entry_decisions"] == [305, 308, 319]
+    assert summary["response_statuses"] == {"ok": 5684, "invalid": 22}
+    for key in ("definitions_off_low", "definitions_on_low"):
+        assert all(
+            "drift_recall" not in row and "false_drift_alerts" not in row
+            for row in review_data.aggregate_results[key]
+        )
+
+
+def test_inspector_boundaries_belong_to_selected_prompt(
+    review_data: ReviewData,
+) -> None:
+    before = review_data.boundaries_for_persona("02fb94f3", "luna_low")
+    split = review_data.boundaries_for_persona("02fb94f3", "definitions_off_low")
+    after = review_data.boundaries_for_persona("02fb94f3", CURRENT_SETUP_KEY)
+    assert len(before) == len(split) == len(after)
+    assert before[0].prompt_sha256 != split[0].prompt_sha256 != after[0].prompt_sha256
+    assert (
+        before[0].visible_t_indices
+        == split[0].visible_t_indices
+        == after[0].visible_t_indices
+    )
+    assert after == review_data.boundaries_for_persona("02fb94f3", "gpt56_none")
+    assert before == review_data.boundaries_for_persona("02fb94f3")
+
+
+def test_current_error_and_invalid_receipts_stay_fail_closed(
+    review_data: ReviewData,
+) -> None:
+    failures = [
+        decision
+        for key, decision in review_data.decisions.items()
+        if key[0] == "gpt6_none" and decision.response_status != "ok"
+    ]
+    assert {decision.response_status for decision in failures} == {"error", "invalid"}
+    assert all(
+        decision.verdict is None
+        and decision.confidence is None
+        and not decision.evidence_quote
+        for decision in failures
+    )
+    assert review_data.integrity["response_summaries"]["gpt6_none"] == {
+        "ok": 2841,
+        "invalid": 7,
+        "error": 5,
+    }
+
+
+def test_model_disagreement_does_not_cross_prompt_studies(
+    review_data: ReviewData,
+) -> None:
+    assert not any(
+        review_data.model_disagreement(case_id, "definitions_off_low")
+        for case_id in review_data.cases
+    )
+
+
+@pytest.fixture(scope="module")
+def frozen_current_example() -> tuple[dict, list[dict], list[dict]]:
+    directory = ROOT / "logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923"
+    with (directory / "responses.jsonl").open() as stream:
+        receipt = json.loads(stream.readline())
+    source = (
+        ROOT
+        / "logs/experiments/artifacts"
+        / "twinkl_j3k7_core_value_definitions_20260907/requests.jsonl"
+    )
+    row = next(
+        row for row in _read_jsonl(source) if row["case_id"] == receipt["case_id"]
+    )
+    row["variants"] = {receipt["variant"]: row["variants"]["definitions"]}
+    receipts = [
+        item
+        for item in _read_jsonl(directory / "responses.jsonl")
+        if item["variant"] == receipt["variant"]
+        and item["case_id"] == receipt["case_id"]
+    ]
+    events = [
+        event
+        for event in _read_jsonl(directory / "attempts.jsonl")
+        if event["request_key"] in {item["request_key"] for item in receipts}
+    ]
+    return row, receipts, events
+
+
+def test_frozen_prompt_payload_hash_rejects_edits(
+    frozen_current_example: tuple,
+) -> None:
+    row = deepcopy(frozen_current_example[0])
+    row["variants"]["gpt_6_none"]["instructions"] += " altered"
+    with pytest.raises(ValueError, match="request hash mismatch"):
+        _normalize_prompts([row], "gpt_6_none")
+
+
+def test_frozen_history_hash_rejects_edits(frozen_current_example: tuple) -> None:
+    row = deepcopy(frozen_current_example[0])
+    row["request"]["history"][0]["text"] += " altered"
+    with pytest.raises(ValueError, match="history hash mismatch"):
+        _normalize_prompts([row], "gpt_6_none")
+
+
+@pytest.mark.parametrize("tamper", ["model", "request", "coordinate", "failed_output"])
+def test_current_receipt_provenance_and_fail_closed_validation(
+    frozen_current_example: tuple,
+    tmp_path: Path,
+    tamper: str,
+) -> None:
+    row, receipts, events = deepcopy(frozen_current_example)
+    receipt = receipts[0]
+    final = next(
+        event
+        for event in reversed(events)
+        if event["request_key"] == receipt["request_key"]
+    )
+    if tamper == "model":
+        final["resolved_model"] = "gpt-5.6-luna"
+        expected_error = "Unexpected provider model"
+    elif tamper == "request":
+        receipt["request_sha256"] = "incorrect"
+        expected_error = "receipt request hash differs"
+    elif tamper == "coordinate":
+        receipt["decisions"][0]["week_end"] = "2025-03-03"
+        expected_error = "decision boundary differs"
+    else:
+        final["status"] = "error"
+        receipt["status"] = "error"
+        for decision in receipt["decisions"]:
+            decision["review_status"] = "error"
+        expected_error = "decision differs from validated provider output"
+    (tmp_path / "responses.jsonl").write_text(
+        "\n".join(json.dumps(item) for item in receipts) + "\n"
+    )
+    (tmp_path / "attempts.jsonl").write_text(
+        "\n".join(json.dumps(event) for event in events) + "\n"
+    )
+    metrics = {
+        "responses_sha256": _sha256_file(tmp_path / "responses.jsonl"),
+        "attempts_sha256": _sha256_file(tmp_path / "attempts.jsonl"),
+    }
+    with pytest.raises(ValueError, match=expected_error):
+        _normalize_responses(
+            directory=tmp_path,
+            rows=[row],
+            prompts={"gpt_6_none": _normalize_prompts([row], "gpt_6_none")},
+            arm_keys={"gpt_6_none": "gpt6_none"},
+            metrics=metrics,
+        )

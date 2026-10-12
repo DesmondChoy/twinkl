@@ -9,12 +9,15 @@ WORKDIR /app
 COPY requirements-review-app.txt ./
 RUN pip install --no-cache-dir -r requirements-review-app.txt
 
-COPY src/__init__.py src/drift_rules.py ./src/
+COPY src/__init__.py src/drift_rules.py src/prompt_boundary.py ./src/
 COPY src/drift_review_app ./src/drift_review_app
 COPY src/wrangling/parse_wrangled_data.py ./src/wrangling/
 
 COPY config/evals/twinkl_52zz_model_comparison_v1.yaml \
      config/evals/twinkl_52zz_luna_low_v1.yaml \
+     config/evals/twinkl_ck3w_luna_higher_reasoning_v1.yaml \
+     config/evals/twinkl_q6pt_luna_model_v1.yaml \
+     config/evals/twinkl_gv3x_luna_higher_v1.yaml \
      ./config/evals/
 COPY logs/wrangled ./logs/wrangled
 
@@ -29,6 +32,36 @@ COPY logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/manifest.json \
      logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/metrics.json \
      logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/responses_gpt_5_6_luna_low.jsonl \
      ./logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/
+
+COPY logs/experiments/artifacts/twinkl_ck3w_luna_higher_reasoning_20260809/manifest.json \
+     logs/experiments/artifacts/twinkl_ck3w_luna_higher_reasoning_20260809/metrics.json \
+     logs/experiments/artifacts/twinkl_ck3w_luna_higher_reasoning_20260809/responses_gpt_5_6_luna_medium.jsonl \
+     logs/experiments/artifacts/twinkl_ck3w_luna_higher_reasoning_20260809/responses_gpt_5_6_luna_high.jsonl \
+     logs/experiments/artifacts/twinkl_ck3w_luna_higher_reasoning_20260809/responses_gpt_5_6_luna_xhigh.jsonl \
+     ./logs/experiments/artifacts/twinkl_ck3w_luna_higher_reasoning_20260809/
+
+COPY logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/manifest.json \
+     logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/attempts.jsonl \
+     logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/requests.jsonl \
+     logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/baseline_snapshot.json \
+     logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/responses.jsonl \
+     logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/results.json \
+     ./logs/experiments/artifacts/twinkl_j3k7_core_value_definitions_20260907/
+
+COPY logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923/manifest.json \
+     logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923/attempts.jsonl \
+     logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923/metrics.json \
+     logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923/responses.jsonl \
+     ./logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923/
+
+COPY logs/experiments/artifacts/twinkl_gv3x_luna_higher_20260923/manifest.json \
+     logs/experiments/artifacts/twinkl_gv3x_luna_higher_20260923/attempts.jsonl \
+     logs/experiments/artifacts/twinkl_gv3x_luna_higher_20260923/metrics.json \
+     logs/experiments/artifacts/twinkl_gv3x_luna_higher_20260923/responses.jsonl \
+     ./logs/experiments/artifacts/twinkl_gv3x_luna_higher_20260923/
+
+COPY logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md \
+     ./logs/experiments/reports/
 
 COPY logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_entry_target.parquet \
      logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_drift_episodes.parquet \

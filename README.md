@@ -10,6 +10,13 @@ topics, Twinkl starts with a confirmed Profile, reviews Journal Entries over
 time, and shows evidence when behavior conflicts with Core Values. The current
 POC keeps the Profile fixed. Profile evolution is future work.
 
+## Frontends
+
+Twinkl has **two frontends**:
+
+- **[Onboarding, Experience and Inspect](https://onboarding-production-1dd2.up.railway.app/)** — try the values assessment, replay five synthetic Personas, or use manual Journal Entries and weekly reflections. Inspect traces the same session's inputs, decisions, and responses.
+- **[Drift Inspection App](https://twinkl-drift-review-production.up.railway.app/)** — explore the synthetic corpus and its Drift characteristics. Click counts to inspect the contributing Personas, Journal Entries, Core Value histories, and Drift spans across preserved prompt versions and Runs.
+
 ## Experience
 
 - **Try the Demo** compares five saved synthetic Personas: Nisha, Noor, Lukas,

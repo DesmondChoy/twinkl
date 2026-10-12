@@ -1,16 +1,20 @@
 from __future__ import annotations
 
+import re
+from functools import lru_cache
 from hashlib import sha256
 from html import unescape
+from html.parser import HTMLParser
 from pathlib import Path
 
 from src.drift_review_app.app import (
     ABSTAIN_EXPLANATIONS,
-    DATA_QUALITY_BADGE_SPECS,
+    CURRENT_SETUP_KEY,
     EXPLAINER_SCRIPT_VERSION,
     STYLESHEET_VERSION,
-    _at_a_glance,
-    _data_quality_badges,
+    _contributor_screen,
+    _cutoff_evidence,
+    _data_breakdowns,
     _decision_cell,
     _default_inspection_point,
     _default_period,
@@ -18,9 +22,8 @@ from src.drift_review_app.app import (
     _dimension_choices,
     _filter_screen,
     _how_it_works_panel,
-    _matching_cases,
     _period_choices,
-    _personas_screen,
+    _prompt_explanation,
     _provenance_summary,
     _reference_cell,
     _scoreboard,
@@ -32,13 +35,88 @@ from src.drift_review_app.app import (
     _visible_entries,
     app_ui,
 )
-from src.drift_review_app.data import load_review_data
+from src.drift_review_app.data import ReviewData, load_review_data
+from src.drift_review_app.exploration import ExplorationQuery, explore
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
+@lru_cache(maxsize=1)
+def _review_data() -> ReviewData:
+    return load_review_data(ROOT)
+
+
+class _CountParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.buttons: list[tuple[dict[str, str], str]] = []
+        self.current: dict[str, str] | None = None
+        self.text = ""
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        values = {key: value or "" for key, value in attrs}
+        if tag == "button" and "data-exploration-kind" in values:
+            self.current = values
+            self.text = ""
+
+    def handle_data(self, data: str) -> None:
+        if self.current is not None:
+            self.text += data
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "button" and self.current is not None:
+            number = re.search(r"[\d,]+", self.text)
+            assert number is not None
+            self.buttons.append((self.current, number.group()))
+            self.current = None
+
+
+def test_contributor_pagination_and_multiple_core_values_preserve_membership() -> None:
+    data = _review_data()
+    query = ExplorationQuery("corpus_personas")
+    result = explore(data, query)
+    first = str(_contributor_screen(data, query, result, page=0))
+    last = str(_contributor_screen(data, query, result, page=4))
+    assert result.count == 204
+    assert first.count('class="contributor-row"') == 50
+    assert last.count('class="contributor-row"') == 4
+    assert 'id="next_contributors"' in first
+    two_values = next(row for row in result.rows if len(row.related_case_ids) == 2)
+    page = result.rows.index(two_values) // 50
+    html = str(_contributor_screen(data, query, result, page=page))
+    for case_id in two_values.related_case_ids:
+        assert f'data-inspect-case-id="{case_id}"' in html
+
+
+def test_core_value_contributors_open_histories_without_arbitrary_personas() -> None:
+    data = _review_data()
+    query = ExplorationQuery("core_values")
+    result = explore(data, query)
+    html = str(_contributor_screen(data, query, result))
+    assert result.count == 10
+    assert "Universalism" in html and "Achievement" in html
+    assert "Inspect contributing histories" in html
+    assert "data-inspect-case-id" not in html
+
+
+def test_entry_and_span_contributors_retain_explicit_positions_and_run() -> None:
+    data = _review_data()
+    query = ExplorationQuery("missed", run=2)
+    result = explore(data, query)
+    html = str(_contributor_screen(data, query, result))
+    assert result.count == 27
+    assert "Run 2" in html
+    assert html.count('class="contributor-row"') == 27
+    for row in result.rows:
+        assert row.run == 2
+        assert row.t_index in {
+            entry.t_index
+            for entry in _visible_entries(data.cases[row.case_id], row.period)
+        }
+
+
 def test_reference_and_predicted_periods_show_the_selected_span() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     case = data.cases["02fb94f3:tradition"]
     choices = _period_choices(data, case, "luna_low")
     reference = next(key for key in choices if key.startswith("ref|"))
@@ -48,7 +126,7 @@ def test_reference_and_predicted_periods_show_the_selected_span() -> None:
 
 
 def test_full_timeline_is_selected_before_narrower_evidence_periods() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     known_drift_case = data.cases["02fb94f3:tradition"]
     false_alert_case = data.cases["f6180c27:benevolence"]
     quiet_case = next(
@@ -66,14 +144,24 @@ def test_full_timeline_is_selected_before_narrower_evidence_periods() -> None:
     assert _default_period(data, quiet_case, "luna_low") == "full"
 
 
-def test_main_page_opens_on_two_filters_without_password_gate() -> None:
-    data = load_review_data(ROOT)
-    shell_html = str(app_ui)
-    dependency_html = "".join(
-        str(dependency.head or "") for dependency in app_ui.get_dependencies()
-    )
-    html = shell_html + str(_filter_screen(data))
-    assert "Drift inspection app" in html
+def test_main_page_prioritizes_data_controls_and_prunes_model_comparisons() -> None:
+    data = _review_data()
+    html = str(app_ui) + str(_filter_screen(data))
+    dependency_html = "".join(str(dep.head or "") for dep in app_ui.get_dependencies())
+    assert "Inspect the synthetic data and Drift evidence" in html
+    for name in (
+        "report_prompt",
+        "landing_setup",
+        "landing_run",
+        "reference_drift_filter",
+        "core_value_filter",
+        "show_personas",
+    ):
+        assert f'id="{name}"' in html
+    assert 'value="all" selected' in html
+    assert 'value="gpt6_low" selected' in html
+    assert 'id="data_breakdowns"' in html
+    assert 'id="prompt_explanation"' in html
     assert f'href="styles.css?v={STYLESHEET_VERSION}"' in dependency_html
     assert f'src="drift_explainer.js?v={EXPLAINER_SCRIPT_VERSION}"' in dependency_html
     assert (
@@ -88,39 +176,19 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
             (ROOT / "src/drift_review_app/static/drift_explainer.js").read_bytes()
         ).hexdigest()[:12]
     )
-    assert "204 synthetic personas" not in shell_html
-    for input_id in ("reference_drift_filter", "core_value_filter", "show_personas"):
-        assert f'id="{input_id}"' in html
-    assert 'id="review_focus_filter"' not in html
-    for input_id in ("persona_id", "period", "setup"):
-        assert f'id="{input_id}"' not in html
-    assert "Journal Entries stay hidden until you choose a persona" in html
-    assert "How it works" in html
-    assert "FROZEN WEEKLY DRIFT REVIEWER INPUT CONTRACT" in html
-    assert "gpt-5.6-sol lanes at reasoning xhigh" in html
-    assert "Known Drift status" in html
-    assert "Achievement (0)" in html
-    assert "Advanced review focus" not in html
-    assert "At a glance" in html
-    assert html.index("At a glance") < html.index("How it works")
-    assert "Development evidence and review method" in html
-    assert "Dataset, LLM roles, complete results, and input boundary" in html
-    assert 'class="evidence-library"' in html
-    assert 'open="open"' in html
-    assert "WHAT COUNTS AS CONFLICT" in html
-    assert "A Journal Entry is a Conflict when the displayed text clearly" in html
-    assert "WHAT DOES NOT COUNT" in html
-    assert (
-        "Two consecutive Weekly Drift Reviewer Conflict decisions for the same "
-        "Core Value form one Drift" in html
-    )
-    assert "about four days slower" in html
-    assert "MutationObserver" in html
-    assert "heading === window.__twinklPreviousStageHeading" in html
-    assert "focus({preventScroll: true})" in html
-    assert "setTimeout" not in html
-    assert "review_password" not in html
-    assert "sign_in" not in html
+    for removed in (
+        "Table 12",
+        "Table 11",
+        "Calculated token cost",
+        "Current contract:",
+        "operating-points.png",
+        "per-value.png",
+        "figure-09-corpus.png",
+    ):
+        assert removed not in html
+    assert "figure-10-matching.png" in html
+    assert "Known Drift status" in html and "All Core Values" in html
+    assert "MutationObserver" in html and "review_password" not in html
 
 
 def test_how_it_works_animation_preserves_the_input_contract() -> None:
@@ -154,19 +222,8 @@ def test_how_it_works_animation_preserves_the_input_contract() -> None:
     assert "animation-duration: 0.01ms" in styles
 
 
-def test_reference_drift_and_core_value_filter_cases() -> None:
-    data = load_review_data(ROOT)
-    with_drift = _matching_cases(data, "has", "universalism")
-    without_drift = _matching_cases(data, "none", "universalism")
-    assert len(with_drift) == 11
-    assert len(without_drift) == 21
-    assert all(data.reference_drifts[case.case_id] for case in with_drift)
-    assert all(not data.reference_drifts[case.case_id] for case in without_drift)
-    assert all(case.dimension == "universalism" for case in with_drift + without_drift)
-
-
 def test_core_value_counts_are_scoped_to_known_drift_status() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     with_drift = _dimension_choices(data, "has")
     without_drift = _dimension_choices(data, "none")
     assert with_drift["achievement"] == "Achievement (0)"
@@ -174,159 +231,104 @@ def test_core_value_counts_are_scoped_to_known_drift_status() -> None:
     assert without_drift["universalism"] == "Universalism (21)"
 
 
-def test_data_quality_badges_match_only_the_rare_diagnostic_queues() -> None:
-    data = load_review_data(ROOT)
-    badges = _data_quality_badges(data)
+def test_every_data_breakdown_count_routes_to_its_exact_population() -> None:
+    data = _review_data()
+    query = ExplorationQuery("cases")
+    html = str(_data_breakdowns(data, query))
+    parser = _CountParser()
+    parser.feed(html)
+    assert len(parser.buttons) > 50
+    for attrs, text in parser.buttons:
+        kind = attrs["data-exploration-kind"]
+        dimension = attrs.get("data-exploration-dimension", "") or ""
+        expected = explore(data, ExplorationQuery(kind, dimension=dimension))
+        assert int(text.replace(",", "")) == expected.count
+        assert "Shiny.setInputValue('inspect_query'" in attrs["onclick"]
+        assert str(expected.count) in attrs["aria-label"].replace(",", "")
+    assert "17" in html and "42" in html and "204" in html and "1,651" in html
+    assert "median" not in html.lower() and "token cost" not in html.lower()
 
-    assert set(DATA_QUALITY_BADGE_SPECS) == {
+
+def test_prompt_explanation_keeps_versions_without_static_results() -> None:
+    initial = unescape(str(_prompt_explanation("v0")))
+    tightened = unescape(str(_prompt_explanation("v1")))
+    definitions = unescape(str(_prompt_explanation("v2")))
+    assert "2.0 / 3.0 / 4.0" in initial
+    assert "Low-confidence cases become Abstain" in tightened
+    assert "definition and core motivation" in definitions
+    assert "<table" not in initial + tightened + definitions
+    data = _review_data()
+    html = str(
+        _data_breakdowns(
+            data, ExplorationQuery("cases", setup_key="definitions_off_low")
+        )
+    )
+    assert 'data-exploration-kind="detected"' in html
+    for kind in ("found", "missed", "false"):
+        assert f'data-exploration-kind="{kind}"' not in html
+
+
+def test_selected_setup_controls_verified_prompt_cutoffs() -> None:
+    data = _review_data()
+    case = data.cases["02fb94f3:tradition"]
+    historical = str(_cutoff_evidence(data, case, "luna_low"))
+    current = str(_cutoff_evidence(data, case, "gpt6_low"))
+    historical_hash = data.boundaries_for_persona(case.persona_id, "luna_low")[
+        0
+    ].prompt_sha256[:12]
+    current_hash = data.boundaries_for_persona(case.persona_id, "gpt6_low")[
+        0
+    ].prompt_sha256[:12]
+    assert historical_hash != current_hash
+    assert historical_hash in historical and current_hash in current
+
+
+def test_definition_study_trajectory_has_no_unreported_accuracy_labels() -> None:
+    data = _review_data()
+    case = data.cases["0d42f985:benevolence"]
+    index, run = _default_inspection_point(data, case, "definitions_off_low", "full")
+    html = unescape(
+        str(_trajectory_review(data, case, "definitions_off_low", "full", index, run))
+    )
+    for phrase in (
         "False Drift alert",
-        "Invalid response",
-        "Uncertain LLM-Judge Conflict Label",
-    }
-    for queue, (label, class_name, _) in DATA_QUALITY_BADGE_SPECS.items():
-        badge = (label, class_name)
-        actual = {
-            case_id for case_id, case_badges in badges.items() if badge in case_badges
-        }
-        assert actual == data.queue_case_ids(queue, "luna_low")
-
-
-def test_at_a_glance_combines_dataset_llms_and_results() -> None:
-    data = load_review_data(ROOT)
-    html = unescape(str(_at_a_glance(data)))
-
-    assert "Dataset" in html
-    assert "204 synthetic personas" in html
-    assert "35 with at least one known Drift" in html
-    assert "169 with none" in html
-    assert "292 review cases" in html
-    assert "one persona × one Core Value" in html
-    assert "36 with known Drift" in html
-    assert "256 with no known Drift" in html
-    assert "42 known Drifts across the 36 cases" in html
-    assert "1,651" in html
-    assert "2,377" in html
-    assert "269 Conflict" in html
-    assert "2,106 Not Conflict" in html
-    assert "28 cross-week · 14 same-week" in html
-
-    assert "LLMs used" in html
-    for model_url in (
-        "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
-        "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
-        "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
-        "https://platform.claude.com/docs/en/about-claude/models/overview",
+        "false Drift alert",
+        "Missed known Drift",
+        "matched known Drift",
     ):
-        assert model_url in html
-    assert html.count('target="_blank"') == 4
-    assert html.count('rel="noopener noreferrer"') == 4
-
-    assert "Results" in html
-    assert "No Core Value or known Drift filter has been applied" in html
-    assert "24/42 known Drifts found" in html
-    assert "57% Drift recall" in html
-    assert "5 false Drift alerts · 83% Drift precision" in html
-    assert "23/42 known Drifts found" in html
-    assert "Median Drift recall" in html
-    assert "55%" in html
-    table_start = html.index('class="aggregate-table"')
-    table_html = html[table_start : html.index("</table>", table_start)]
-    assert "coverage" not in table_html.lower()
-    assert "Historical selection" in html
-    assert "Why GPT-5.6 Luna low was selected" in html
-    assert "historical prompt-v2 results" in html
-    assert "Reviewer uses GPT-6 Luna at reasoning low" in html
-    assert "coverage as a diagnostic" in html
-    assert "65%, 63%, and 64% coverage" in html
-    assert "Abstain left more adjacent pairs unresolved" in html
-    assert "95% interval from −0.071 to +0.205" in html
-    assert "observed Drift recall gain is not statistically clear" in html
-
-
-def test_persona_results_use_one_list_heading() -> None:
-    data = load_review_data(ROOT)
-    cases = _matching_cases(data, "has", "conformity")
-    html = str(_personas_screen(data, cases, "has", "conformity"))
-    assert html.count("MATCHING PERSONAS") == 1
-    assert "Badges use all three Runs of Luna at reasoning low" not in html
-    assert "One case can have several" not in html
-    assert "Missed known Drift" not in html
-    assert "Run variability" not in html
-    assert "Experiment setup disagreement" not in html
-    assert "Unresolved because of Abstain" not in html
-    assert "Data-quality badge legend" not in html
-    assert 'aria-label="Data-quality badges for ' not in html
-    assert "At a glance" not in html
-    assert "24/42 hits" not in html
-
-
-def test_persona_results_explain_each_visible_data_quality_badge() -> None:
-    data = load_review_data(ROOT)
-    badges = _data_quality_badges(data)
-    case_ids = tuple(case_id for case_id, case_badges in badges.items() if case_badges)
-    cases = tuple(data.cases[case_id] for case_id in case_ids)
-    html = str(_personas_screen(data, cases, "none", cases[0].dimension))
-
-    assert 'aria-label="Data-quality badge legend"' in html
-    assert (
-        "These badges flag review evidence to check; they are not persona traits."
-        in html
-    )
-    assert "A Drift alert did not match a known Drift in the frozen reference." in html
-    assert (
-        "A Weekly Drift Reviewer response could not be validated, so it was ignored."
-        in html
-    )
-    assert (
-        "The LLM-Judge could not resolve Conflict versus Not Conflict for a "
-        "Journal Entry." in html
-    )
-    assert 'aria-label="Data-quality badges for ' in html
+        assert phrase not in html
+    assert "Detected Drift" in html
+    assert "LLM-Judge Conflict Label" in html
 
 
 def test_detail_controls_have_overflow_safe_desktop_structure() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     case = data.cases["02fb94f3:tradition"]
     html = str(_detail_screen(data, case))
+    scoreboard = str(_scoreboard(data, case))
     styles = (ROOT / "src/drift_review_app/static/styles.css").read_text()
     for class_name in ("setup-control", "period-control"):
         assert class_name in html
     assert "show_reference_labels" not in html
-    assert "What each Weekly Drift Reviewer found" in html
-    assert "Compare all setups and Runs" in html
-    assert "Historical selection" in html
-    assert "Luna — reasoning low · historical selection" in html
+    assert "What the selected Weekly Drift Reviewer found" in scoreboard
+    assert "Inspect the three preserved Runs" in scoreboard
+    assert "Current contract" in scoreboard
+    assert "GPT-6 Luna — reasoning low" in html
     assert "fixed model contract" not in html.lower()
-    assert 'class="scoreboard-comparison"' in html
+    assert 'class="scoreboard-comparison"' in scoreboard
     assert "How it works" not in html
     assert "FROZEN WEEKLY DRIFT REVIEWER INPUT CONTRACT" not in html
-    assert "Verified Weekly Drift Reviewer input cutoffs" in html
+    assert 'id="cutoff_evidence"' in html
+    assert 'id="detail_experiment"' in html
+    assert 'id="persona_scoreboard"' in html
     assert "Journal Entry trajectory and evidence" in html
     assert 'aria-current="step"' in html
     assert '"setup"' in styles
     assert "grid-template-columns: repeat(3, minmax(0, 1fr))" in styles
-    assert (
-        "grid-template-columns: minmax(23rem, 0.38fr) minmax(0, 0.62fr)"
-        in styles
-    )
+    assert "grid-template-columns: minmax(23rem, 0.38fr) minmax(0, 0.62fr)" in styles
     radio_start = styles.index(".review-controls .radio-inline {")
     radio_end = styles.index("}", radio_start)
     assert "white-space: normal" in styles[radio_start:radio_end]
-
-
-def test_filter_spacing_overrides_bootstrap_generated_rules() -> None:
-    styles = (ROOT / "src/drift_review_app/static/styles.css").read_text()
-
-    assert (
-        ".filter-form .control-label {\n"
-        "    margin-bottom: var(--space-md);\n"
-        "}" in styles
-    )
-    assert (
-        ".filter-form .shiny-input-radiogroup .shiny-options-group {\n"
-        "    margin-top: 0;\n"
-        "}" in styles
-    )
 
 
 def test_visual_direction_keeps_bokeh_behind_crisp_evidence_panels() -> None:
@@ -342,26 +344,8 @@ def test_visual_direction_keeps_bokeh_behind_crisp_evidence_panels() -> None:
     assert ".timeline-row" in styles
 
 
-def test_contract_dividers_stay_aligned() -> None:
-    styles = (ROOT / "src/drift_review_app/static/styles.css").read_text()
-
-    assert ".boundary-grid,\n.contract-notes" in styles
-    assert "grid-template-columns: repeat(2, minmax(0, 1fr))" in styles
-    assert (
-        ".dataset-map {\n"
-        "    display: grid;\n"
-        "    grid-template-columns: minmax(0, 1fr) 13rem minmax(0, 1fr);\n"
-        "    gap: var(--space-xl);\n"
-        "    align-items: start;" in styles
-    )
-    assert (
-        ".dataset-connector {\n    position: relative;\n    align-self: center;"
-        in styles
-    )
-
-
 def test_timeline_uses_semantic_roles_and_collapses_decision_evidence() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     case = data.cases["02fb94f3:tradition"]
     timeline_html = str(_timeline(data, case, "luna_low", "full"))
     assert 'role="table"' in timeline_html
@@ -409,7 +393,7 @@ def test_timeline_uses_semantic_roles_and_collapses_decision_evidence() -> None:
 
 
 def test_trajectory_review_links_the_plot_to_selected_evidence() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     styles = (ROOT / "src/drift_review_app/static/styles.css").read_text()
     case = data.cases["02fb94f3:tradition"]
     t_index, run = _default_inspection_point(data, case, "luna_low", "full")
@@ -453,7 +437,7 @@ def test_trajectory_review_links_the_plot_to_selected_evidence() -> None:
 
 
 def test_trajectory_scores_resolved_label_abstains_as_mismatches() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     lukas = data.cases["d7a0683f:universalism"]
     conflict_entry = next(entry for entry in lukas.entries if entry.t_index == 1)
     abstain = data.decision("luna_low", 1, lukas.case_id, 1)
@@ -467,7 +451,7 @@ def test_trajectory_scores_resolved_label_abstains_as_mismatches() -> None:
 
 
 def test_trajectory_keeps_unscorable_comparisons_neutral() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     invalid = next(
         decision
         for decision in data.decisions.values()
@@ -500,7 +484,7 @@ def test_trajectory_keeps_unscorable_comparisons_neutral() -> None:
 
 
 def test_trajectory_marks_false_missed_and_invalid_outcomes() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     lukas = data.cases["d7a0683f:universalism"]
     t_index, run = _default_inspection_point(data, lukas, "luna_low", "full")
     lukas_html = unescape(
@@ -520,8 +504,7 @@ def test_trajectory_marks_false_missed_and_invalid_outcomes() -> None:
     assert 'class="trajectory-alert-label is-false"' in lukas_html
     assert "Run 1 · False Drift alert · t9–t10" in lukas_html
     assert (
-        "Run 1 · Journal Entry 10 · Decision: Conflict · "
-        "LLM-Judge: Not Conflict"
+        "Run 1 · Journal Entry 10 · Decision: Conflict · LLM-Judge: Not Conflict"
     ) in lukas_html
 
     mini_html = unescape(
@@ -558,18 +541,13 @@ def test_trajectory_marks_false_missed_and_invalid_outcomes() -> None:
         )
     )
     assert "trajectory-alert-label is-invalid is-point" in invalid_html
-    assert (
-        f"Run {invalid.run} · Invalid response · t{invalid.t_index}"
-        in invalid_html
-    )
+    assert f"Run {invalid.run} · Invalid response · t{invalid.t_index}" in invalid_html
 
 
 def test_trajectory_separates_nearby_rare_annotation_labels() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     lukas_vetter = data.cases["a24b8d8f:universalism"]
-    t_index, run = _default_inspection_point(
-        data, lukas_vetter, "luna_low", "full"
-    )
+    t_index, run = _default_inspection_point(data, lukas_vetter, "luna_low", "full")
     html = unescape(
         str(
             _trajectory_review(
@@ -591,7 +569,7 @@ def test_trajectory_separates_nearby_rare_annotation_labels() -> None:
 
 
 def test_every_abstain_reason_has_a_plain_english_explanation() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     reason_codes = {
         decision.reason_code
         for decision in data.decisions.values()
@@ -607,7 +585,7 @@ def test_every_abstain_reason_has_a_plain_english_explanation() -> None:
 
 
 def test_invalid_response_always_explains_fail_closed_behavior() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     decision = next(
         decision
         for decision in data.decisions.values()
@@ -625,22 +603,22 @@ def test_invalid_response_always_explains_fail_closed_behavior() -> None:
 
 
 def test_erik_scoreboard_makes_the_missed_reference_drift_explicit() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     case = data.cases["1f86f569:conformity"]
     html = unescape(str(_scoreboard(data, case)))
 
     assert "1 known Drift" in html
     assert "t1–t2" in html
-    assert html.count("Missed 1 Drift") == 9
-    assert html.count("No Drift alert") == 9
-    for spec in data.setup_specs.values():
-        assert spec.label in html
+    assert html.count("Missed 1 Drift") == 3
+    assert html.count("No Drift alert") == 3
+    assert data.setup_specs[CURRENT_SETUP_KEY].label in html
+    assert data.setup_specs["gpt56_low"].label not in html
 
 
 def test_scoreboard_preserves_partial_drift_hits() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     case = data.cases["02fb94f3:tradition"]
-    html = unescape(str(_scoreboard(data, case)))
+    html = unescape(str(_scoreboard(data, case, "luna_low")))
 
     assert "2 known Drifts" in html
     assert "Found 1/2 · missed 1" in html
@@ -650,7 +628,7 @@ def test_scoreboard_preserves_partial_drift_hits() -> None:
 
 
 def test_persona_provenance_and_detection_delay_are_explained() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     training_case = next(
         case for case in data.cases.values() if case.historical_split == "training"
     )
@@ -672,7 +650,7 @@ def test_persona_provenance_and_detection_delay_are_explained() -> None:
 
 
 def test_no_drift_scoreboard_distinguishes_resolved_from_unresolved() -> None:
-    data = load_review_data(ROOT)
+    data = _review_data()
     unresolved_case = next(
         case
         for case in data.cases.values()

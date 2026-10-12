@@ -37,15 +37,14 @@ Open `http://127.0.0.1:8000` in your browser.
 
 ## Drift Inspection App — ✅ Complete
 
-The read-only Python Shiny app compares Runs 1–3 for three frozen Weekly Drift
-Reviewer setups: `gpt-5.4-mini` at reasoning effort `none`, `gpt-5.6-luna` at
-reasoning effort `none`, and `gpt-5.6-luna` at reasoning effort `low`. It shows
-complete development results, persona-level outcomes, Journal Entries,
-AI-reviewed LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, and Run
-variability without merging Runs or calculating a majority vote.
-All three setups are historical comparisons. `gpt-5.6-luna` at reasoning
-effort `low` was the original selected setup; the live Weekly Drift Reviewer
-now uses `gpt-6-luna` at reasoning effort `low`.
+The read-only Python Shiny app inspects synthetic Personas, Journal Entries,
+Core Value cases, and Drift characteristics. Select report prompt v0, v1, or
+v2, a preserved reviewer setup, and an individual Run. Every exploration count
+opens its exact contributing records and links to the relevant Journal Entry
+or Drift span. GPT-6 Luna at reasoning effort `low` is the default; historical
+setups remain available. The existing known Drift and Core Value filters scope
+the corpus and selected-Run breakdowns. Model comparison charts, costs, and
+static report-results tables are excluded. Runs remain separate.
 
 **Run the app:**
 
@@ -60,9 +59,12 @@ Open `http://127.0.0.1:8000`. The `drift-review-app` entry in
 **Features:**
 
 - filters for known Drift status and Core Value before persona selection
-- complete development summaries for known Drift hits, false Drift alerts,
-  coverage, and all preserved Runs
-- persona scoreboards with exact known Drift and Drift alert spans
+- prompt version and experiment selection that continues into case inspection
+- clickable corpus, Core Value, Drift timing, and selected-Run breakdowns
+- paginated contributor lists with direct entry and Drift-span inspection
+- exact contributing records for found and missed Drift, false alerts,
+  coverage, invalid decisions, and Abstain in the selected Run
+- case scoreboards for the selected setup with exact known Drift and alert spans
 - side-by-side Journal Entries, LLM-Judge Conflict Labels, Weekly Drift
   Reviewer Decisions, cited evidence, and verified weekly cutoffs
 - fail-closed checks for prompt hashes, setup identities, model identifiers,
@@ -80,6 +82,8 @@ for the review contract, input boundary, launch options, and frozen files.
 
 - `src/drift_review_app/app.py` — Shiny interface
 - `src/drift_review_app/data.py` — frozen-input loading and validation
+- `src/drift_review_app/exploration.py` — scoped contributor queries and counts
+- `src/drift_review_app/report_figures.py` — preserved matching diagram and provenance
 - `src/drift_rules.py` — shared deterministic Drift rules
 - `Dockerfile.review_app`, `requirements-review-app.txt`, and `railway.json` —
   deployment boundary

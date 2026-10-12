@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "source_pdf": {
+    "filename": "Twinkl Final Report (AIS PT07 Group 5)-1.pdf",
+    "sha256": "4335740e6a1b3d05cc822bedf4b8d5dc814262de5894f5a3d49443835d99e9f8",
+    "page_count": 65,
+    "page_numbering": "PDF pages are one-based; printed_page follows the submitted report."
+  },
+  "notes": "Figure 10 is extracted from the submitted PDF, preserving its matching example, colors and layout. The caption is excluded from the PNG crop and rendered as accessible HTML. Reproduction commands take the PDF and output directory as environment variables; the application uses only packaged assets and metadata. Report result charts and the corpus diagram are presented through interactive evidence routes instead of static report images.",
+  "figures": {
+    "matching": {
+      "file": "figure-10-matching.png",
+      "figure_number": 10,
+      "pdf_page": 23,
+      "printed_page": 19,
+      "alt": "Report Figure 10: a reference Conflict run at Journal Entries J3 to J5 is confirmed at J4. Predicted Drift confirmation at J3 to J7 matches; J8 falls outside the matching window.",
+      "caption": "Predicted Drift matching logic. In this example the reference Conflict run covers Journal Entries J3–J5 and is confirmed at J4, the second consecutive Conflict; a predicted confirmation from J3 to J7 matches, while one at J8 falls outside the window. Matching uses Journal Entry positions; detection delay uses calendar days.",
+      "description": "Three horizontal tracks share Journal Entry positions J1 through J8. The reference Conflict run marks J3, J4 and J5. The reference confirmation is J4, the second consecutive Conflict. The allowed predicted confirmation window includes J3 through J7, from the first reference Conflict through two Journal Entry positions after the last reference Conflict. A predicted confirmation at J8 is outside the window. Matches are one-to-one within the same Persona and Core Value.",
+      "sha256": "e0177319f6e4eae52a045722776e3308358e9821d1be721ea50fad246d8220a2",
+      "width_px": 1725,
+      "height_px": 488,
+      "extraction": {
+        "method": "Poppler pdftoppm PNG crop of submitted PDF vector figure",
+        "dpi": 300,
+        "coordinate_origin": "top-left of page, at 300 dpi",
+        "bounds_px": {
+          "x": 375,
+          "y": 283,
+          "width": 1725,
+          "height": 488
+        },
+        "bounds_pdf_points": {
+          "x": 90.0,
+          "y": 67.92,
+          "width": 414.0,
+          "height": 117.12
+        },
+        "command": "pdftoppm -f 23 -l 23 -r 300 -x 375 -y 283 -W 1725 -H 488 -png -singlefile \"$REPORT_PDF\" \"$REPORT_ASSET_DIR/figure-10-matching\"",
+        "poppler_version": "26.04.0"
+      }
+    }
+  }
+}

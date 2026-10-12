@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import sys
-from collections import Counter
 from datetime import date, timedelta
 from hashlib import sha256
 from pathlib import Path
-from statistics import median
-from typing import Any
+from typing import Any, cast, get_args
 
 from htmltools import Tag
 from shiny import App, Inputs, Outputs, Session, reactive, render, req, ui
@@ -23,6 +22,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.drift_review_app.data import (  # noqa: E402
+    CURRENT_SETUP_KEY,
     CaseRecord,
     Decision,
     DriftSpan,
@@ -63,23 +63,50 @@ _STAGE_FOCUS_SCRIPT = """
     }
 })();
 """
-CURRENT_SETUP_KEY = "luna_low"
-DATA_QUALITY_BADGE_SPECS = {
-    "False Drift alert": (
-        "False Drift alert",
-        "is-false",
-        "A Drift alert did not match a known Drift in the frozen reference.",
+from src.drift_review_app.exploration import (  # noqa: E402
+    ExplorationQuery,
+    ExplorationResult,
+    QueryKind,
+    ReferenceStatus,
+    explore,
+)
+from src.drift_review_app.report_figures import report_figure  # noqa: E402
+
+PROMPT_DEFAULTS = {
+    "v0": "luna_low",
+    "v1": "definitions_off_low",
+    "v2": CURRENT_SETUP_KEY,
+}
+PROMPT_CHOICES = {
+    "v0": "v0 · Initial evidence rules",
+    "v1": "v1 · Confidence and evidence rules",
+    "v2": "v2 · Core Value definitions and motivation",
+}
+PROMPT_NOTES = {
+    "v0": (
+        "The initial evidence rules",
+        "Assess current-week Journal Entries against declared Core Values using "
+        "cumulative history. Count clear behavior or choices as Conflict and cite "
+        "exact text.",
+        "Inspect the original preserved Decisions on the same synthetic "
+        "Journal Entry histories.",
     ),
-    "Invalid response": (
-        "Invalid Weekly Drift Reviewer response",
-        "is-invalid",
-        "A Weekly Drift Reviewer response could not be validated, so it was ignored.",
+    "v1": (
+        "Confidence and evidence rules",
+        "Require a direct behavior or choice with at least medium confidence for "
+        "Conflict. Low-confidence cases become Abstain; Not Conflict does not "
+        "prove improvement. Add confidence, reason, and exact-quote rules.",
+        "The effect of these changes against v0 was not measured separately. "
+        "This version is the baseline for the Core Value definition study in "
+        "Section 4.3.3.",
     ),
-    "Uncertain LLM-Judge Conflict Label": (
-        "Uncertain LLM-Judge Conflict Label",
-        "is-uncertain",
-        "The LLM-Judge could not resolve Conflict versus Not Conflict for a "
-        "Journal Entry.",
+    "v2": (
+        "Core Value definitions and motivation",
+        "Keep v1's evidence rules and add each selected Core Value's existing "
+        "definition and core motivation. This is the current prompt contract.",
+        "Inspect Decisions made with explicit Core Value context. The separate "
+        "definition study preserves detection changes rather than an accuracy "
+        "evaluation.",
     ),
 }
 ABSTAIN_EXPLANATIONS = {
@@ -105,14 +132,6 @@ ABSTAIN_EXPLANATIONS = {
     "missing_text": "The displayed Journal Entry is missing or incomplete.",
     "needs_hidden_context": (
         "A decision would require information not shown to the Weekly Drift Reviewer."
-    ),
-}
-MODEL_LINKS = {
-    "gpt-5.4-mini": "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
-    "gpt-5.6-luna": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
-    "gpt-5.6-sol": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
-    "claude-opus-4-8": (
-        "https://platform.claude.com/docs/en/about-claude/models/overview"
     ),
 }
 
@@ -173,81 +192,20 @@ def _week_key(value: str) -> str:
     return (parsed - timedelta(days=parsed.weekday())).isoformat()
 
 
-def _matching_cases(
-    data: ReviewData,
-    drift_status: str,
-    dimension: str,
-) -> tuple[CaseRecord, ...]:
-    """Return cases for one Core Value and known Drift status."""
-    has_drift = drift_status == "has"
-    return tuple(
-        sorted(
-            (
-                case
-                for case in data.cases.values()
-                if case.dimension == dimension
-                and bool(data.reference_drifts[case.case_id]) is has_drift
-            ),
-            key=lambda case: (
-                str(data.profiles[case.persona_id]["name"]),
-                case.persona_id,
-            ),
-        )
-    )
-
-
 def _dimension_choices(data: ReviewData, drift_status: str) -> dict[str, str]:
-    has_drift = drift_status == "has"
     dimensions = sorted({case.dimension for case in data.cases.values()})
     choices = {}
     for dimension in dimensions:
         count = sum(
-            bool(data.reference_drifts[case.case_id]) is has_drift
+            (
+                drift_status == "all"
+                or bool(data.reference_drifts[case.case_id]) is (drift_status == "has")
+            )
             for case in data.cases.values()
             if case.dimension == dimension
         )
         choices[dimension] = f"{value_label(dimension)} ({count})"
     return choices
-
-
-def _data_quality_badges(
-    data: ReviewData,
-) -> dict[str, tuple[tuple[str, str], ...]]:
-    badges: dict[str, list[tuple[str, str]]] = {case_id: [] for case_id in data.cases}
-    for queue, (label, class_name, _) in DATA_QUALITY_BADGE_SPECS.items():
-        for case_id in data.queue_case_ids(queue, CURRENT_SETUP_KEY):
-            badges[case_id].append((label, class_name))
-    return {case_id: tuple(case_badges) for case_id, case_badges in badges.items()}
-
-
-def _data_quality_badge_legend(
-    entries: tuple[tuple[str, str, str], ...],
-) -> ui.Tag | None:
-    if not entries:
-        return None
-    return ui.tags.aside(
-        ui.div(
-            ui.p("DATA-QUALITY FLAGS", class_="eyebrow"),
-            ui.p(
-                "These badges flag review evidence to check; they are not persona "
-                "traits.",
-                class_="data-quality-legend-intro",
-            ),
-        ),
-        ui.div(
-            *[
-                ui.div(
-                    _pill(label, f"data-quality-badge {class_name}"),
-                    ui.p(explanation),
-                    class_="data-quality-legend-item",
-                )
-                for label, class_name, explanation in entries
-            ],
-            class_="data-quality-legend-list",
-        ),
-        class_="data-quality-legend",
-        aria_label="Data-quality badge legend",
-    )
 
 
 def _period_choices(
@@ -274,9 +232,7 @@ def _period_choices(
     return choices
 
 
-def _default_period(
-    _data: ReviewData, _case: CaseRecord, _setup_key: str
-) -> str:
+def _default_period(_data: ReviewData, _case: CaseRecord, _setup_key: str) -> str:
     """Open on the complete chronology; narrower evidence periods remain available."""
     return "full"
 
@@ -417,6 +373,18 @@ def _reference_cell(data: ReviewData, case: CaseRecord, entry: EntryRecord) -> u
     )
 
 
+def _predicted_drift_pill(data: ReviewData, setup_key: str, span: DriftSpan) -> ui.Tag:
+    if not data.setup_specs[setup_key].accuracy_evaluated:
+        return _pill(
+            "Detected Drift · " + _format_span(span.onset_t_index, span.end_t_index)
+        )
+    return _pill(
+        "Drift alert · "
+        + ("matched known Drift" if span.result == "hit" else "false Drift alert"),
+        "is-hit" if span.result == "hit" else "is-false",
+    )
+
+
 def _decision_cell(
     data: ReviewData,
     case: CaseRecord,
@@ -491,18 +459,7 @@ def _decision_cell(
             role="alert",
         ),
         ui.div(
-            *[
-                _pill(
-                    "Drift alert · "
-                    + (
-                        "matched known Drift"
-                        if row.result == "hit"
-                        else "false Drift alert"
-                    ),
-                    "is-hit" if row.result == "hit" else "is-false",
-                )
-                for row in predictions
-            ],
+            *[_predicted_drift_pill(data, setup_key, row) for row in predictions],
             _pill("Adjacent pair unresolved because of Abstain", "is-abstain")
             if unresolved
             else None,
@@ -531,7 +488,7 @@ def _format_indices(indices: tuple[int, ...]) -> str:
 def _stage_trail(active: str) -> ui.Tag:
     labels = (
         ("filters", "1 · Filter"),
-        ("personas", "2 · Personas"),
+        ("contributors", "2 · Contributors"),
         ("detail", "3 · Journal Entries"),
     )
     return ui.tags.nav(
@@ -548,36 +505,312 @@ def _stage_trail(active: str) -> ui.Tag:
     )
 
 
+def _query_onclick(kind: str, dimension: str | None = None) -> str:
+    payload = json.dumps({"kind": kind, "dimension": dimension})
+    return (
+        "Shiny.setInputValue('inspect_query', "
+        + payload
+        + ", {priority: 'event'}); "
+        + _RESET_VIEW_ONCLICK
+    )
+
+
+def _count_button(
+    result: ExplorationResult,
+    kind: str,
+    dimension: str | None = None,
+    *,
+    label: str | None = None,
+    prominent: bool = False,
+) -> ui.Tag:
+    text = label or result.title
+    return ui.tags.button(
+        ui.strong(f"{result.count:,}"),
+        ui.span(text) if prominent else None,
+        type="button",
+        class_="contributor-count is-prominent" if prominent else "contributor-count",
+        onclick=_query_onclick(kind, dimension),
+        aria_label=f"Inspect {result.count:,} {text} · Run {result.query.run}",
+        **{
+            "data-exploration-kind": kind,
+            "data-exploration-dimension": dimension or "",
+            "data-exploration-run": str(result.query.run),
+        },
+    )
+
+
+def _scoped_result(
+    data: ReviewData, query: ExplorationQuery, kind: str, dimension: str | None = None
+) -> ExplorationResult:
+    return explore(
+        data,
+        ExplorationQuery(
+            kind=cast(QueryKind, kind),
+            setup_key=query.setup_key,
+            run=query.run,
+            reference_status=query.reference_status,
+            dimension=query.dimension if dimension is None else dimension,
+        ),
+    )
+
+
+def _data_breakdowns(data: ReviewData, query: ExplorationQuery) -> ui.Tag:
+    spec = data.setup_specs[query.setup_key]
+    corpus = (
+        ("corpus_personas", "Personas"),
+        ("corpus_entries", "Journal Entries"),
+        ("cases", "Persona/Core Value histories"),
+        ("reference_drifts", "Known Drifts"),
+    )
+    outcome_kinds = [
+        ("detected", "Detected Drifts"),
+        *(
+            (
+                ("found", "Known Drifts found"),
+                ("missed", "Known Drifts missed"),
+                ("false", "False Drift alerts"),
+            )
+            if spec.accuracy_evaluated
+            else ()
+        ),
+        ("covered", "Covered histories"),
+        ("unresolved", "Unresolved histories"),
+        ("invalid", "Decisions affected by invalid reviews"),
+    ]
+    return ui.div(
+        ui.div(
+            ui.h2("Explore the contributing data"),
+            ui.p(
+                "Select a number to see every contributing Persona, Journal "
+                "Entry, history, or Drift. Counts follow the filters above.",
+                class_="section-note",
+            ),
+            class_="exploration-heading",
+        ),
+        ui.div(
+            *[
+                _count_button(
+                    _scoped_result(data, query, kind),
+                    kind,
+                    label=label,
+                    prominent=True,
+                )
+                for kind, label in corpus
+            ],
+            class_="corpus-counts",
+            aria_label="Corpus counts and contributors",
+        ),
+        ui.div(
+            ui.div(
+                ui.h3("Known Drift breakdown"),
+                ui.tags.dl(
+                    *[
+                        ui.div(
+                            ui.tags.dt(label),
+                            ui.tags.dd(
+                                _count_button(
+                                    _scoped_result(data, query, kind), kind, label=label
+                                )
+                            ),
+                        )
+                        for kind, label in (
+                            ("known_cases", "Histories with known Drift"),
+                            ("no_known_cases", "Histories with no known Drift"),
+                            ("reference_same_week", "Same-week known Drifts"),
+                            ("reference_cross_week", "Cross-week known Drifts"),
+                        )
+                    ],
+                    class_="count-breakdown",
+                ),
+            ),
+            ui.div(
+                ui.h3(f"{spec.label} · Run {query.run}"),
+                ui.p(
+                    "One preserved Run. Outcomes below link to its contributing "
+                    "Drifts, histories, or Journal Entry/Core Value Decisions.",
+                    class_="overview-note",
+                ),
+                ui.tags.dl(
+                    *[
+                        ui.div(
+                            ui.tags.dt(label),
+                            ui.tags.dd(
+                                _count_button(
+                                    _scoped_result(data, query, kind), kind, label=label
+                                )
+                            ),
+                        )
+                        for kind, label in outcome_kinds
+                    ],
+                    class_="count-breakdown",
+                ),
+                ui.p(
+                    "The Core Value definition study reported detection changes. "
+                    "These reference comparisons are descriptive replay; it "
+                    "did not establish accuracy."
+                )
+                if not spec.accuracy_evaluated
+                else None,
+            ),
+            class_="exploration-breakdowns",
+        ),
+        ui.tags.details(
+            ui.tags.summary("Explore Core Values and entry-level labels"),
+            ui.div(
+                ui.tags.table(
+                    ui.tags.caption("Contributors by Core Value"),
+                    ui.tags.thead(
+                        ui.tags.tr(
+                            *[
+                                ui.tags.th(label, scope="col")
+                                for label in (
+                                    "Core Value",
+                                    "Histories",
+                                    "With known Drift",
+                                    "With no known Drift",
+                                    "Known Drifts",
+                                    "Reference Conflict labels",
+                                )
+                            ]
+                        )
+                    ),
+                    ui.tags.tbody(
+                        *[
+                            ui.tags.tr(
+                                ui.tags.th(value_label(dimension), scope="row"),
+                                *[
+                                    ui.tags.td(
+                                        _count_button(
+                                            _scoped_result(
+                                                data, query, kind, dimension
+                                            ),
+                                            kind,
+                                            dimension,
+                                        )
+                                    )
+                                    for kind in (
+                                        "cases",
+                                        "known_cases",
+                                        "no_known_cases",
+                                        "reference_drifts",
+                                        "reference_conflict",
+                                    )
+                                ],
+                            )
+                            for dimension in sorted(
+                                {case.dimension for case in data.cases.values()}
+                            )
+                            if not query.dimension
+                            or query.dimension == "all"
+                            or query.dimension == dimension
+                        ]
+                    ),
+                    class_="results-table contributor-breakdown-table",
+                ),
+                class_="table-scroll",
+            ),
+            ui.div(
+                *[
+                    ui.div(
+                        ui.span(label),
+                        _count_button(_scoped_result(data, query, kind), kind),
+                    )
+                    for kind, label in (
+                        ("core_values", "Core Values"),
+                        ("entry_value_cells", "Journal Entry/Core Value combinations"),
+                        ("reference_conflict", "Reference Conflict labels"),
+                        ("reference_not_conflict", "Reference Not Conflict labels"),
+                        ("uncertain", "Uncertain reference labels"),
+                        ("conflict", "Run Conflict Decisions"),
+                        ("not_conflict", "Run Not Conflict Decisions"),
+                        ("abstain", "Run Abstain Decisions"),
+                    )
+                ],
+                class_="entry-counts",
+            ),
+            class_="exploration-detail-breakdown",
+        ),
+        ui.p(
+            "Known Drift comes from consecutive AI-reviewed LLM-Judge Conflict "
+            "Labels. It is synthetic development evidence. Coverage means a "
+            "Run detected Drift or ruled out every adjacent pair; Abstain can "
+            "leave a history unresolved.",
+            class_="exploration-provenance",
+        ),
+        class_="data-exploration",
+    )
+
+
+def _prompt_explanation(prompt_version: str) -> ui.Tag:
+    title, change, context = PROMPT_NOTES[prompt_version]
+    return ui.tags.details(
+        ui.tags.summary(f"Prompt {prompt_version}: {title} · what changed"),
+        ui.p(change),
+        ui.p(context),
+        ui.p(
+            "The synthetic corpus, weekly cutoffs, cumulative Journal Entry "
+            "history, and deterministic Drift rules stay fixed. Report versions "
+            "v0 / v1 / v2 correspond to archived prompt versions 2.0 / 3.0 / 4.0."
+        ),
+        class_="prompt-explanation",
+    )
+
+
 def _filter_screen(
     data: ReviewData,
     *,
-    selected_drift: str = "has",
+    selected_drift: str = "all",
     selected_dimension: str = "",
+    selected_prompt: str = "v2",
+    selected_setup: str = CURRENT_SETUP_KEY,
+    selected_run: int = 1,
     error: str | None = None,
 ) -> ui.Tag:
-    dimensions = _dimension_choices(data, selected_drift)
     return ui.tags.main(
-        _stage_trail("filters"),
         ui.div(
+            ui.h2(
+                "Inspect the synthetic data and Drift evidence",
+                id="stage-heading",
+                tabindex="-1",
+            ),
+            ui.p(
+                "Choose a preserved experiment and Run, then open any count "
+                "to inspect the Journal Entries and Decisions behind it.",
+                class_="report-lede",
+            ),
+            class_="inspection-intro",
+        ),
+        ui.tags.section(
             ui.div(
-                ui.p("START A REVIEW", class_="eyebrow"),
-                ui.h2(
-                    "Choose the persona cases to inspect",
-                    id="stage-heading",
-                    tabindex="-1",
+                ui.input_select(
+                    "report_prompt",
+                    "Report prompt version",
+                    choices=PROMPT_CHOICES,
+                    selected=selected_prompt,
                 ),
-                ui.p(
-                    "Filter by known Drift status and Core Value. Journal Entries "
-                    "stay hidden until you choose a persona.",
-                    class_="lede",
+                ui.input_select(
+                    "landing_setup",
+                    "Preserved experiment",
+                    choices={
+                        key: spec.label
+                        for key, spec in data.setups_for_prompt(selected_prompt).items()
+                    },
+                    selected=selected_setup,
                 ),
-                class_="filter-intro",
+                ui.input_select(
+                    "landing_run",
+                    "Run",
+                    choices={str(run): f"Run {run}" for run in (1, 2, 3)},
+                    selected=str(selected_run),
+                ),
+                class_="experiment-filter-row",
             ),
             ui.div(
-                ui.input_radio_buttons(
+                ui.input_select(
                     "reference_drift_filter",
-                    "1. Known Drift status",
+                    "Known Drift status",
                     choices={
+                        "all": "All histories",
                         "has": "Has known Drift",
                         "none": "Has no known Drift",
                     },
@@ -585,554 +818,207 @@ def _filter_screen(
                 ),
                 ui.input_select(
                     "core_value_filter",
-                    "2. Core Value",
-                    choices={"": "Choose a Core Value", **dimensions},
+                    "Core Value",
+                    choices={
+                        "": "All Core Values",
+                        **_dimension_choices(data, selected_drift),
+                    },
                     selected=selected_dimension,
                 ),
-                ui.p(error, class_="form-error", role="alert") if error else None,
                 ui.input_action_button(
                     "show_personas",
-                    "Show matching personas",
+                    "Inspect matching histories",
                     class_="primary-action",
                     onclick=_RESET_VIEW_ONCLICK,
                 ),
-                class_="filter-form",
+                class_="case-filter-row",
             ),
-            class_="filter-panel",
+            ui.p(error, class_="form-error", role="alert") if error else None,
+            ui.output_ui("prompt_explanation"),
+            class_="inspection-filters",
         ),
+        ui.output_ui("data_breakdowns"),
         ui.tags.details(
-            ui.tags.summary(
-                ui.span(
-                    "Development evidence and review method",
-                    class_="evidence-library-title",
-                ),
-                ui.span(
-                    "Dataset, LLM roles, complete results, and input boundary",
-                    class_="evidence-library-note",
-                ),
-            ),
+            ui.tags.summary("How the review uses Journal Entries and reference labels"),
             ui.div(
-                _at_a_glance(data),
                 _how_it_works_panel(),
+                report_figure("matching"),
                 class_="evidence-library-body",
             ),
             class_="evidence-library",
-            open="open",
         ),
         class_="stage-main filter-stage",
         id="main-content",
     )
 
 
-def _inspect_id(case_id: str) -> str:
-    return "inspect_" + case_id.replace(":", "__")
-
-
-def _glance_heading(title: str, note: str) -> ui.Tag:
-    return ui.div(
-        ui.h3(title),
-        ui.p(note),
-        class_="glance-block-heading",
+def _contributor_onclick(index: int, case_id: str) -> str:
+    payload = json.dumps({"index": index, "case_id": case_id})
+    return (
+        "Shiny.setInputValue('inspect_contributor', "
+        + payload
+        + ", {priority: 'event'}); "
+        + _RESET_VIEW_ONCLICK
     )
 
 
-def _core_value_breakdown(data: ReviewData) -> ui.Tag:
-    dimensions = sorted(
-        {case.dimension for case in data.cases.values()}, key=value_label
-    )
-    return ui.div(
-        ui.tags.table(
-            ui.tags.caption("Development data by Core Value"),
-            ui.tags.thead(
-                ui.tags.tr(
-                    ui.tags.th("Core Value", scope="col"),
-                    ui.tags.th("Cases", scope="col"),
-                    ui.tags.th("With known Drift", scope="col"),
-                    ui.tags.th("With no known Drift", scope="col"),
-                    ui.tags.th("Known Drifts", scope="col"),
-                )
-            ),
-            ui.tags.tbody(
-                *[
-                    ui.tags.tr(
-                        ui.tags.th(value_label(dimension), scope="row"),
-                        ui.tags.td(
-                            str(
-                                sum(
-                                    case.dimension == dimension
-                                    for case in data.cases.values()
-                                )
-                            )
-                        ),
-                        ui.tags.td(
-                            str(
-                                sum(
-                                    case.dimension == dimension
-                                    and bool(data.reference_drifts[case.case_id])
-                                    for case in data.cases.values()
-                                )
-                            )
-                        ),
-                        ui.tags.td(
-                            str(
-                                sum(
-                                    case.dimension == dimension
-                                    and not data.reference_drifts[case.case_id]
-                                    for case in data.cases.values()
-                                )
-                            )
-                        ),
-                        ui.tags.td(
-                            str(
-                                sum(
-                                    len(data.reference_drifts[case.case_id])
-                                    for case in data.cases.values()
-                                    if case.dimension == dimension
-                                )
-                            )
-                        ),
-                    )
-                    for dimension in dimensions
-                ]
-            ),
-            class_="core-value-breakdown-table",
-        ),
-        class_="table-scroll",
-    )
-
-
-def _dataset_overview(data: ReviewData) -> ui.Tag:
-    cases = tuple(data.cases.values())
-    cases_with_drift = tuple(
-        case for case in cases if data.reference_drifts[case.case_id]
-    )
-    personas_with_drift = {case.persona_id for case in cases_with_drift}
-    reference_drifts = tuple(
-        row for case in cases for row in data.reference_drifts[case.case_id]
-    )
-    label_counts = Counter(
-        entry.final_conflict for case in cases for entry in case.entries
-    )
-    historical_training_drifts = sum(
-        data.cases[row.case_id].historical_split == "training"
-        for row in reference_drifts
-    )
-    cross_week_drifts = sum(row.crosses_week for row in reference_drifts)
-
-    return ui.div(
-        _glance_heading(
-            "Dataset",
-            "The same complete synthetic development data underlies every filter.",
-        ),
-        ui.div(
-            ui.div(
-                ui.span("PERSONAS", class_="field-name"),
-                ui.strong(f"{len(data.profiles)} synthetic personas"),
+def _contributor_screen(
+    data: ReviewData,
+    query: ExplorationQuery,
+    result: ExplorationResult,
+    page: int = 0,
+) -> ui.Tag:
+    page_size = 50
+    start = page * page_size
+    stop = min(start + page_size, result.count)
+    spec = data.setup_specs[query.setup_key]
+    articles = []
+    for index, row in enumerate(result.rows[start:stop], start=start):
+        case_ids = row.related_case_ids or (row.case_id,)
+        if query.kind == "core_values":
+            case_ids = ()
+        case = data.cases.get(row.case_id)
+        entry = (
+            next(
+                (entry for entry in case.entries if entry.t_index == row.t_index), None
+            )
+            if case
+            else None
+        )
+        articles.append(
+            ui.tags.article(
                 ui.div(
-                    ui.span(
-                        f"{len(personas_with_drift)} with at least one known Drift"
+                    ui.h3(
+                        value_label(row.dimension)
+                        if query.kind == "core_values"
+                        else str(data.profiles[row.persona_id]["name"])
+                        if row.persona_id
+                        else row.label
                     ),
-                    ui.span(
-                        f"{len(data.profiles) - len(personas_with_drift)} with none"
-                    ),
-                    class_="dataset-split",
-                ),
-                class_="dataset-stage",
-            ),
-            ui.div(
-                "one persona × one Core Value",
-                class_="dataset-connector",
-            ),
-            ui.div(
-                ui.span("REVIEW UNIT", class_="field-name"),
-                ui.strong(f"{len(cases)} review cases"),
-                ui.div(
-                    ui.span(f"{len(cases_with_drift)} with known Drift"),
-                    ui.span(
-                        f"{len(cases) - len(cases_with_drift)} with no known Drift"
-                    ),
-                    class_="dataset-split",
-                ),
-                ui.p(
-                    f"{len(reference_drifts)} known Drifts across the "
-                    f"{len(cases_with_drift)} cases",
-                    class_="dataset-drift-total",
-                ),
-                class_="dataset-stage",
-            ),
-            class_="dataset-map",
-        ),
-        ui.p(
-            "Known Drift is derived from AI-reviewed LLM-Judge Conflict Labels. "
-            "These counts are development evidence, not human validation or "
-            "real-user prevalence.",
-            class_="dataset-provenance",
-        ),
-        ui.tags.details(
-            ui.tags.summary("More about the development data"),
-            ui.div(
-                ui.tags.dl(
-                    ui.div(
-                        ui.tags.dt("Journal Entries"),
-                        ui.tags.dd(f"{int(data.integrity['entries']):,}"),
-                    ),
-                    ui.div(
-                        ui.tags.dt("Persona-weeks"),
-                        ui.tags.dd(f"{int(data.integrity['persona_weeks']):,}"),
-                    ),
-                    ui.div(
-                        ui.tags.dt("Journal Entry/Core Value combinations"),
-                        ui.tags.dd(f"{int(data.integrity['entry_value_cells']):,}"),
-                    ),
-                    ui.div(
-                        ui.tags.dt("Known Drift timing"),
-                        ui.tags.dd(
-                            f"{cross_week_drifts} cross-week · "
-                            f"{len(reference_drifts) - cross_week_drifts} same-week"
+                    ui.p(row.label, class_="contributor-unit-detail")
+                    if query.kind != "core_values"
+                    else None,
+                    ui.p(
+                        row.start_date
+                        + (
+                            f" to {row.end_date}"
+                            if row.end_date != row.start_date
+                            else ""
                         ),
-                    ),
-                    class_="dataset-facts",
-                ),
-                ui.p(
-                    f"Across {int(data.integrity['entry_value_cells']):,} Journal "
-                    f"Entry/Core Value combinations: {label_counts[True]:,} "
-                    f"Conflict, {label_counts[False]:,} Not Conflict, and "
-                    f"{label_counts[None]:,} Uncertain. All {len(cases)} case-level "
-                    "Drift outcomes are resolved.",
-                    class_="dataset-method-note",
-                ),
-                ui.p(
-                    f"{historical_training_drifts} of {len(reference_drifts)} known "
-                    "Drifts have historical VIF Critic training provenance. This "
-                    "matters when interpreting VIF Critic results; the Weekly Drift "
-                    "Reviewers shown here received no VIF Critic predictions.",
-                    class_="dataset-method-note",
-                ),
-                _core_value_breakdown(data),
-                class_="dataset-disclosure-body",
-            ),
-            class_="dataset-disclosure",
-        ),
-        class_="glance-block dataset-overview",
-    )
-
-
-def _model_link(name: str, model_key: str, description: str) -> ui.Tag:
-    return ui.div(
-        ui.a(
-            name,
-            ui.span(" ↗", aria_hidden="true"),
-            href=MODEL_LINKS[model_key],
-            target="_blank",
-            rel="noopener noreferrer",
-            aria_label=f"{name} official model page",
-        ),
-        ui.p(description),
-        class_="model-entry",
-    )
-
-
-def _aggregate_recall(row: dict[str, Any]) -> float:
-    known_drifts = int(row["known_drifts"])
-    return int(row["drift_hits"]) / known_drifts if known_drifts else 0.0
-
-
-def _aggregate_precision(row: dict[str, Any]) -> float:
-    predicted_alerts = int(row["predicted_drift_alerts"])
-    return int(row["drift_hits"]) / predicted_alerts if predicted_alerts else 0.0
-
-
-def _llm_overview() -> ui.Tag:
-    return ui.div(
-        _glance_heading(
-            "LLMs used",
-            "The Weekly Drift Reviewers and LLM-Judge review had separate roles.",
-        ),
-        ui.div(
-            ui.div(
-                ui.p("WEEKLY DRIFT REVIEWER", class_="model-role-title"),
-                _model_link(
-                    "GPT-5.4 mini",
-                    "gpt-5.4-mini",
-                    "Frozen baseline at reasoning none; a faster, efficient "
-                    "OpenAI model for high-volume work.",
-                ),
-                _model_link(
-                    "GPT-5.6 Luna",
-                    "gpt-5.6-luna",
-                    "Compared at reasoning none and low; an OpenAI model designed "
-                    "for cost-sensitive, high-volume work.",
-                ),
-                class_="model-role",
-            ),
-            ui.div(
-                ui.p("LLM-JUDGE CONFLICT LABEL REVIEW", class_="model-role-title"),
-                _model_link(
-                    "GPT-5.6 Sol",
-                    "gpt-5.6-sol",
-                    "Used in two isolated review lanes and disagreement-only "
-                    "adjudication at reasoning xhigh; OpenAI's frontier GPT-5.6 "
-                    "model.",
-                ),
-                _model_link(
-                    "Claude Opus 4.8",
-                    "claude-opus-4-8",
-                    "Separately reviewed four earlier Uncertain LLM-Judge Conflict "
-                    "Labels at reasoning high; Anthropic's model for complex "
-                    "agentic and enterprise work.",
-                ),
-                class_="model-role",
-            ),
-            class_="model-roster",
-        ),
-        class_="glance-block llm-overview",
-    )
-
-
-def _aggregate_overview(data: ReviewData) -> ui.Tag:
-    return ui.div(
-        _glance_heading(
-            "Results",
-            "All three preserved Runs across the complete development data. No "
-            "Core Value or known Drift filter has been applied.",
-        ),
-        ui.div(
-            ui.tags.table(
-                ui.tags.caption(
-                    "Known Drifts found, Drift recall, false Drift alerts, and "
-                    "Drift precision for all three preserved Runs, with median "
-                    "Drift recall by Weekly Drift Reviewer setup"
-                ),
-                ui.tags.thead(
-                    ui.tags.tr(
-                        ui.tags.th("Weekly Drift Reviewer setup", scope="col"),
-                        ui.tags.th("Run 1", scope="col"),
-                        ui.tags.th("Run 2", scope="col"),
-                        ui.tags.th("Run 3", scope="col"),
-                        ui.tags.th("Median Drift recall", scope="col"),
+                        class_="contributor-date",
                     )
+                    if row.start_date and query.kind != "core_values"
+                    else None,
+                    _pill(row.status)
+                    if row.status and query.kind != "core_values"
+                    else None,
+                    ui.p(
+                        f"{row.persona_id} · "
+                        + ", ".join(
+                            value_label(data.cases[case_id].dimension)
+                            for case_id in case_ids
+                            if case_id in data.cases
+                        ),
+                        class_="persona-id",
+                    )
+                    if row.persona_id and query.kind != "core_values"
+                    else None,
+                    ui.p(
+                        entry.runtime_text[:320]
+                        + ("…" if len(entry.runtime_text) > 320 else ""),
+                        class_="contributor-entry",
+                    )
+                    if entry and query.kind != "core_values"
+                    else None,
                 ),
-                ui.tags.tbody(
+                ui.div(
                     *[
-                        ui.tags.tr(
-                            ui.tags.th(
-                                ui.div(
-                                    ui.strong(spec.label),
-                                    _pill(
-                                        "Historical selection",
-                                        "is-selected-value",
-                                    )
-                                    if setup_key == CURRENT_SETUP_KEY
-                                    else None,
-                                    class_="aggregate-setup-name",
-                                ),
-                                scope="row",
-                            ),
-                            *[
-                                ui.tags.td(
-                                    ui.strong(
-                                        f"{int(row['drift_hits'])}/"
-                                        f"{int(row['known_drifts'])} known Drifts "
-                                        "found"
-                                    ),
-                                    ui.span(
-                                        f"{_format_percent(_aggregate_recall(row))} "
-                                        "Drift recall",
-                                        class_="aggregate-recall",
-                                    ),
-                                    ui.span(
-                                        f"{int(row['false_drift_alerts'])} false Drift "
-                                        "alerts · "
-                                        f"{_format_percent(_aggregate_precision(row))} "
-                                        "Drift precision"
-                                    ),
-                                )
-                                for row in data.aggregate_results[setup_key]
-                            ],
-                            ui.tags.td(
-                                ui.strong(
-                                    _format_percent(
-                                        median(
-                                            _aggregate_recall(row)
-                                            for row in data.aggregate_results[setup_key]
-                                        )
-                                    )
-                                ),
-                                class_="aggregate-median",
-                            ),
+                        ui.tags.button(
+                            f"Inspect {value_label(data.cases[case_id].dimension)} "
+                            "Journal Entries",
+                            type="button",
+                            class_="secondary-action",
+                            onclick=_contributor_onclick(index, case_id),
+                            **{
+                                "data-inspect-case-id": case_id,
+                                "data-inspect-index": str(index),
+                            },
                         )
-                        for setup_key, spec in data.setup_specs.items()
-                    ]
+                        for case_id in case_ids
+                        if case_id in data.cases
+                    ],
+                    ui.tags.button(
+                        "Inspect contributing histories",
+                        type="button",
+                        class_="secondary-action",
+                        onclick=_query_onclick("cases", row.dimension),
+                    )
+                    if query.kind == "core_values"
+                    else None,
+                    class_="contributor-actions",
                 ),
-                class_="aggregate-table",
-            ),
-            class_="table-scroll",
+                class_="contributor-row",
+                **{
+                    "data-contributor-index": str(index),
+                    "data-contributor-period": row.period or "full",
+                },
+            )
+        )
+    return ui.tags.main(
+        _stage_trail("contributors"),
+        ui.input_action_button(
+            "change_filters",
+            "← Back to data exploration",
+            class_="text-action",
+            onclick=_RESET_VIEW_ONCLICK,
         ),
-        ui.p(
-            "Drift precision is the share of Drift alerts that matched known Drift.",
-            class_="overview-note",
-        ),
-        ui.p(
-            "These are historical prompt-v2 results. The live Weekly Drift "
-            "Reviewer uses GPT-6 Luna at reasoning low.",
-            class_="overview-note",
-        ),
-        ui.tags.details(
-            ui.tags.summary("Why GPT-5.6 Luna low was selected"),
-            ui.div(
-                ui.p(
-                    "It did not pass the earlier preregistered gate that allowed at "
-                    "most 0.05 coverage loss. It was later selected under the "
-                    "approved hierarchy: known Drift recall first, false Drift "
-                    "alerts second, and coverage as a diagnostic. Coverage is the "
-                    "share of review cases where a Run either produced a Drift "
-                    "alert or actively ruled out every adjacent pair. Across Runs "
-                    "1–3, Luna at reasoning low had 65%, 63%, and 64% coverage, "
-                    "versus 77%, 80%, and 78% at reasoning none. Lower coverage "
-                    "means Abstain left more adjacent pairs unresolved, which can "
-                    "reduce both Drift recall and false Drift alerts."
-                ),
-                ui.p(
-                    "Against Luna at reasoning none, the paired recall difference "
-                    "was +0.071 with a 95% interval from −0.071 to +0.205. The false "
-                    "Drift alert reduction and coverage loss were clearer. Because "
-                    "the interval includes zero, the observed Drift recall gain is "
-                    "not statistically clear. This is development evidence, not "
-                    "deployment approval."
-                ),
-                class_="selection-disclosure-body",
-            ),
-            class_="selection-disclosure",
-        ),
-        class_="glance-block aggregate-overview",
-        role="region",
-        aria_label="Complete development results",
-    )
-
-
-def _at_a_glance(data: ReviewData) -> ui.Tag:
-    return ui.tags.section(
         ui.div(
-            ui.div(
-                ui.p("COMPLETE SYNTHETIC DEVELOPMENT DATA", class_="eyebrow"),
-                ui.h2("At a glance", id="at-a-glance-heading"),
+            ui.h2(result.title, id="stage-heading", tabindex="-1"),
+            ui.p(f"{result.count:,} {result.unit}", class_="contributor-total"),
+            ui.p(result.description, class_="section-note"),
+            ui.p(
+                f"Prompt {spec.report_prompt_version} · {spec.label} · "
+                f"Run {query.run} · "
+                + (
+                    {
+                        "all": "All histories",
+                        "has": "Has known Drift",
+                        "none": "Has no known Drift",
+                    }[query.reference_status]
+                )
+                + " · "
+                + (
+                    value_label(query.dimension)
+                    if query.dimension and query.dimension != "all"
+                    else "All Core Values"
+                ),
+                class_="selected-query-context",
+            ),
+            class_="contributor-heading",
+        ),
+        ui.div(*articles, class_="contributor-list")
+        if articles
+        else ui.div(
+            ui.h3("No contributors for these filters"),
+            ui.p("Choose another Core Value, known Drift status, or preserved Run."),
+            class_="empty-state",
+        ),
+        ui.div(
+            ui.input_action_button(
+                "previous_contributors",
+                "Previous 50",
+                disabled=page == 0,
             ),
             ui.p(
-                "Dataset, LLM roles, and complete development results before any "
-                "filter is applied.",
-                class_="section-note",
+                f"Showing {start + 1 if result.count else 0}–{stop} "
+                f"of {result.count:,} {result.unit}"
             ),
-            class_="section-heading at-a-glance-heading",
-        ),
-        _dataset_overview(data),
-        _llm_overview(),
-        _aggregate_overview(data),
-        class_="at-a-glance",
-        aria_labelledby="at-a-glance-heading",
-    )
-
-
-def _personas_screen(
-    data: ReviewData,
-    cases: tuple[CaseRecord, ...],
-    drift_status: str,
-    dimension: str,
-) -> ui.Tag:
-    status_label = "Has known Drift" if drift_status == "has" else "Has no known Drift"
-    data_quality_badges = _data_quality_badges(data)
-    visible_badges = {
-        badge for case in cases for badge in data_quality_badges[case.case_id]
-    }
-    legend_entries = tuple(
-        (label, class_name, explanation)
-        for label, class_name, explanation in DATA_QUALITY_BADGE_SPECS.values()
-        if (label, class_name) in visible_badges
-    )
-    return ui.tags.main(
-        _stage_trail("personas"),
-        ui.div(
-            ui.div(
-                ui.input_action_button(
-                    "change_filters",
-                    "← Change filters",
-                    class_="text-action",
-                    onclick=_RESET_VIEW_ONCLICK,
-                ),
-                ui.p("MATCHING PERSONAS", class_="eyebrow"),
-                ui.h2(
-                    "Choose a persona to inspect",
-                    id="stage-heading",
-                    tabindex="-1",
-                ),
-                ui.p(
-                    f"{value_label(dimension)} · {status_label} · "
-                    f"{len(cases)} matching "
-                    f"{'persona' if len(cases) == 1 else 'personas'}",
-                    class_="result-count",
-                ),
+            ui.input_action_button(
+                "next_contributors",
+                "Next 50",
+                disabled=stop >= result.count,
             ),
-            class_="results-heading persona-list-heading",
-        ),
-        _data_quality_badge_legend(legend_entries),
-        ui.div(
-            *[
-                ui.tags.article(
-                    ui.div(
-                        ui.h3(str(data.profiles[case.persona_id]["name"])),
-                        ui.p(case.persona_id, class_="persona-id"),
-                    ),
-                    ui.div(
-                        ui.div(
-                            ui.span(f"{len(case.entries)} Journal Entries"),
-                            ui.span(
-                                f"{len(data.reference_drifts[case.case_id])} known "
-                                + (
-                                    "Drift"
-                                    if len(data.reference_drifts[case.case_id]) == 1
-                                    else "Drifts"
-                                )
-                            ),
-                            class_="result-facts",
-                        ),
-                        ui.div(
-                            *[
-                                _pill(label, f"data-quality-badge {class_name}")
-                                for label, class_name in data_quality_badges[
-                                    case.case_id
-                                ]
-                            ],
-                            class_="data-quality-badges",
-                            aria_label=(
-                                "Data-quality badges for "
-                                f"{data.profiles[case.persona_id]['name']}"
-                            ),
-                        )
-                        if data_quality_badges[case.case_id]
-                        else None,
-                        class_="persona-summary",
-                    ),
-                    ui.input_action_button(
-                        _inspect_id(case.case_id),
-                        "Inspect Journal Entries",
-                        class_="secondary-action",
-                        onclick=_RESET_VIEW_ONCLICK,
-                        aria_label=(
-                            "Inspect Journal Entries for "
-                            f"{data.profiles[case.persona_id]['name']}"
-                        ),
-                    ),
-                    class_="persona-row",
-                )
-                for case in cases
-            ],
-            ui.div(
-                ui.h3("No matching personas"),
-                ui.p("Change the known Drift status or Core Value."),
-                class_="empty-state",
-            )
-            if not cases
-            else None,
-            class_="persona-list",
+            class_="contributor-pagination",
         ),
         class_="stage-main results-stage",
         id="main-content",
@@ -1700,7 +1586,8 @@ def _how_it_works_panel() -> ui.Tag:
                     "Abstain produces no Drift claim. t0 is the first Journal Entry. "
                     "A cross-week Drift spans two review weeks, so its second "
                     "Conflict is not assessed until the next weekly review. In "
-                    "these development Runs, detection was about four days slower "
+                    "the historical v0 development Runs, detection was about four "
+                    "days slower "
                     "than for same-week Drift."
                 ),
                 class_="contract-disclosure-body",
@@ -1711,8 +1598,10 @@ def _how_it_works_panel() -> ui.Tag:
     )
 
 
-def _cutoff_evidence(data: ReviewData, case: CaseRecord) -> ui.Tag:
-    boundaries = data.boundaries_for_persona(case.persona_id)
+def _cutoff_evidence(
+    data: ReviewData, case: CaseRecord, setup_key: str = CURRENT_SETUP_KEY
+) -> ui.Tag:
+    boundaries = data.boundaries_for_persona(case.persona_id, setup_key)
     all_indices = tuple(entry.t_index for entry in case.entries)
     return ui.tags.details(
         ui.tags.summary("Verified Weekly Drift Reviewer input cutoffs"),
@@ -1841,17 +1730,99 @@ def _scoreboard_cell(
     )
 
 
-def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
+def _setup_context(data: ReviewData, setup_key: str) -> ui.Tag:
+    spec = data.setup_specs[setup_key]
+    return ui.tags.aside(
+        _pill(f"Prompt {spec.report_prompt_version}", "is-selected-value"),
+        ui.strong(spec.label),
+        ui.span(spec.study_label),
+        ui.p(
+            "Detection study: reference comparisons below are descriptive replay; "
+            "the submitted report makes no accuracy claim for this study."
+        )
+        if not spec.accuracy_evaluated
+        else None,
+        class_="selected-experiment",
+        aria_label="Selected experiment",
+    )
+
+
+def _detection_scoreboard(
+    data: ReviewData, case: CaseRecord, setups: dict[str, Any]
+) -> ui.Tag:
+    return ui.tags.section(
+        ui.h2("Detected Drifts in the selected prompt study"),
+        ui.p(
+            "These preserved decisions support the Core Value definition study. "
+            "Counts describe detected Drifts; the study did not measure accuracy "
+            "against reference labels.",
+            class_="section-note",
+        ),
+        ui.div(
+            ui.tags.table(
+                ui.tags.thead(
+                    ui.tags.tr(
+                        ui.tags.th("Setup", scope="col"),
+                        *[ui.tags.th(f"Run {run}", scope="col") for run in (1, 2, 3)],
+                    )
+                ),
+                ui.tags.tbody(
+                    *[
+                        ui.tags.tr(
+                            ui.tags.th(spec.label, scope="row"),
+                            *[
+                                ui.tags.td(
+                                    *[
+                                        _pill(
+                                            _format_span(
+                                                row.onset_t_index, row.end_t_index
+                                            )
+                                        )
+                                        for row in data.predicted_drifts[
+                                            (key, run, case.case_id)
+                                        ]
+                                    ],
+                                    "No Drift alert"
+                                    if not data.predicted_drifts[
+                                        (key, run, case.case_id)
+                                    ]
+                                    else None,
+                                )
+                                for run in (1, 2, 3)
+                            ],
+                        )
+                        for key, spec in setups.items()
+                    ]
+                ),
+                class_="scoreboard-table",
+            ),
+            class_="table-scroll",
+        ),
+        class_="scoreboard-panel",
+    )
+
+
+def _scoreboard(
+    data: ReviewData, case: CaseRecord, setup_key: str = CURRENT_SETUP_KEY
+) -> ui.Tag:
+    selected = data.setup_specs[setup_key]
+    setups = {setup_key: selected}
+    if not selected.accuracy_evaluated:
+        return _detection_scoreboard(data, case, setups)
     references = data.reference_drifts[case.case_id]
     reference_count = len(references)
     return ui.tags.section(
         ui.div(
             ui.div(
                 ui.p("PERSONA SCOREBOARD", class_="eyebrow"),
-                ui.h2("What each Weekly Drift Reviewer found", id="scoreboard-heading"),
+                ui.h2(
+                    "What the selected Weekly Drift Reviewer found",
+                    id="scoreboard-heading",
+                ),
             ),
             ui.p(
-                "All experiment setups and Runs are compared against the same "
+                f"Three preserved Runs of prompt {selected.report_prompt_version}, "
+                f"{selected.label}, are compared against the same "
                 "known outcome derived from AI-reviewed LLM-Judge Conflict Labels.",
                 class_="section-note",
             ),
@@ -1885,8 +1856,11 @@ def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
         ),
         ui.tags.details(
             ui.tags.summary(
-                ui.span("Compare all setups and Runs"),
-                ui.span("3 setups · 9 frozen Runs", class_="comparison-note"),
+                ui.span("Inspect the three preserved Runs"),
+                ui.span(
+                    f"{len(setups)} setups · {len(setups) * 3} preserved Runs",
+                    class_="comparison-note",
+                ),
             ),
             ui.div(
                 ui.tags.table(
@@ -1909,10 +1883,12 @@ def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
                                     ui.div(
                                         ui.strong(spec.label),
                                         _pill(
-                                            "Historical selection",
+                                            "Current contract"
+                                            if setup_key == CURRENT_SETUP_KEY
+                                            else "Selected experiment",
                                             "is-selected-value",
                                         )
-                                        if setup_key == CURRENT_SETUP_KEY
+                                        if setup_key == selected.key
                                         else None,
                                         class_="score-setup-name",
                                     ),
@@ -1924,7 +1900,7 @@ def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
                                     for run in (1, 2, 3)
                                 ],
                             )
-                            for setup_key, spec in data.setup_specs.items()
+                            for setup_key, spec in setups.items()
                         ]
                     ),
                     class_="scoreboard-table",
@@ -1949,17 +1925,23 @@ def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
     )
 
 
-def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
+def _detail_screen(
+    data: ReviewData,
+    case: CaseRecord,
+    setup_key: str = CURRENT_SETUP_KEY,
+    selected_period: str = "full",
+) -> ui.Tag:
     profile = data.profiles[case.persona_id]
     training_provenance, evidence_role = _provenance_summary(case)
-    period_choices = _period_choices(data, case, CURRENT_SETUP_KEY)
-    default_period = _default_period(data, case, CURRENT_SETUP_KEY)
+    period_choices = _period_choices(data, case, setup_key)
+    default_period = selected_period if selected_period in period_choices else "full"
+    selected_spec = data.setup_specs[setup_key]
     return ui.tags.main(
         _stage_trail("detail"),
         ui.div(
             ui.input_action_button(
                 "back_to_personas",
-                "← Back to personas",
+                "← Back to contributors",
                 class_="text-action",
                 onclick=_RESET_VIEW_ONCLICK,
             ),
@@ -1987,7 +1969,8 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
             ),
             class_="detail-heading",
         ),
-        _scoreboard(data, case),
+        ui.output_ui("detail_experiment"),
+        ui.output_ui("persona_scoreboard"),
         ui.tags.section(
             ui.div(
                 ui.div(
@@ -1995,14 +1978,12 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
                         "setup",
                         "Weekly Drift Reviewer setup",
                         choices={
-                            key: (
-                                f"{spec.label} · historical selection"
-                                if key == CURRENT_SETUP_KEY
-                                else spec.label
-                            )
-                            for key, spec in data.setup_specs.items()
+                            key: spec.label
+                            for key, spec in data.setups_for_prompt(
+                                selected_spec.report_prompt_version
+                            ).items()
                         },
-                        selected=CURRENT_SETUP_KEY,
+                        selected=setup_key,
                         inline=True,
                     ),
                     class_="review-control setup-control",
@@ -2020,7 +2001,8 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
             ),
             ui.p(
                 "Choose one setup for the Journal Entry comparison below; the "
-                "scoreboard always compares all setups. Full timeline opens first; "
+                "scoreboard compares three Runs of the selected setup. "
+                "The contributor opens at its Journal Entry or Drift span; "
                 "use the period control to isolate a known Drift, Drift alert, or "
                 "review week.",
                 class_="controls-note",
@@ -2050,7 +2032,7 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
             ui.output_ui("supporting_results"),
             class_="drawer",
         ),
-        _cutoff_evidence(data, case),
+        ui.output_ui("cutoff_evidence"),
         ui.tags.details(
             ui.tags.summary(
                 "Human-only persona context — not Weekly Drift Reviewer input"
@@ -2161,9 +2143,7 @@ def _trajectory_category(decision: Decision) -> str:
     return "invalid"
 
 
-def _trajectory_comparison(
-    entry: EntryRecord, decision: Decision
-) -> tuple[str, str]:
+def _trajectory_comparison(entry: EntryRecord, decision: Decision) -> tuple[str, str]:
     if decision.response_status != "ok":
         return (
             "neutral",
@@ -2219,9 +2199,7 @@ def _trajectory_annotation_tags(
             setup_key, run, case.case_id, confirmation_t_index
         )
         category = _trajectory_category(confirmation_decision)
-        y_percent = (
-            (category_index[category] + 0.5) / len(category_index)
-        ) * 100
+        y_percent = ((category_index[category] + 0.5) / len(category_index)) * 100
         confirmation_x = x_positions[confirmation_t_index]
         onset_x = x_positions.get(onset_t_index)
         if onset_x is not None:
@@ -2238,8 +2216,7 @@ def _trajectory_annotation_tags(
                 )
             )
         description = (
-            f"Run {run} · {label} · "
-            f"{_format_span(onset_t_index, confirmation_t_index)}"
+            f"Run {run} · {label} · {_format_span(onset_t_index, confirmation_t_index)}"
         )
         label_specs.append(
             (
@@ -2253,37 +2230,36 @@ def _trajectory_annotation_tags(
             )
         )
 
-    for span in predictions:
-        if span.result == "false Drift alert":
-            add_pair_annotation(
-                span.onset_t_index,
-                span.confirmation_t_index,
-                "False Drift alert",
-                "is-false",
-            )
+    if data.setup_specs[setup_key].accuracy_evaluated:
+        for span in predictions:
+            if span.result == "false Drift alert":
+                add_pair_annotation(
+                    span.onset_t_index,
+                    span.confirmation_t_index,
+                    "False Drift alert",
+                    "is-false",
+                )
 
-    matched_reference_ids = {
-        span.matched_reference_id
-        for span in predictions
-        if span.result == "hit" and span.matched_reference_id
-    }
-    for span in data.reference_drifts[case.case_id]:
-        if span.drift_id not in matched_reference_ids:
-            add_pair_annotation(
-                span.onset_t_index,
-                span.confirmation_t_index,
-                "Missed known Drift",
-                "is-missed",
-            )
+        matched_reference_ids = {
+            span.matched_reference_id
+            for span in predictions
+            if span.result == "hit" and span.matched_reference_id
+        }
+        for span in data.reference_drifts[case.case_id]:
+            if span.drift_id not in matched_reference_ids:
+                add_pair_annotation(
+                    span.onset_t_index,
+                    span.confirmation_t_index,
+                    "Missed known Drift",
+                    "is-missed",
+                )
 
     for entry in entries:
         decision = data.decision(setup_key, run, case.case_id, entry.t_index)
         if decision.response_status == "ok":
             continue
         category = _trajectory_category(decision)
-        y_percent = (
-            (category_index[category] + 0.5) / len(category_index)
-        ) * 100
+        y_percent = ((category_index[category] + 0.5) / len(category_index)) * 100
         x_percent = x_positions[entry.t_index]
         description = f"Run {run} · Invalid response · t{entry.t_index}"
         label_specs.append(
@@ -2299,8 +2275,8 @@ def _trajectory_annotation_tags(
         )
 
     occupied_rects: list[tuple[float, float, float, float]] = []
-    for label, class_name, x_percent, y_percent, description, is_point, side in (
-        sorted(label_specs, key=lambda spec: spec[2])
+    for label, class_name, x_percent, y_percent, description, is_point, side in sorted(
+        label_specs, key=lambda spec: spec[2]
     ):
         leading = x_percent < 24
         estimated_width = min(42.0, max(24.0, 10.0 + len(label) * 1.2))
@@ -2410,9 +2386,7 @@ def _default_inspection_point(
                 return span.confirmation_t_index, run
     for entry in entries:
         for run in (1, 2, 3):
-            decision = data.decision(
-                setup_key, run, case.case_id, entry.t_index
-            )
+            decision = data.decision(setup_key, run, case.case_id, entry.t_index)
             if _trajectory_category(decision) == "conflict":
                 return entry.t_index, run
     return entries[0].t_index, 1
@@ -2425,9 +2399,7 @@ def _trajectory_step_path(points: list[tuple[float, float]]) -> str:
     previous_x = points[0][0]
     for x, y in points[1:]:
         midpoint = (previous_x + x) / 2
-        commands.extend(
-            (f"H {midpoint:.2f}", f"V {y:.2f}", f"H {x:.2f}")
-        )
+        commands.extend((f"H {midpoint:.2f}", f"V {y:.2f}", f"H {x:.2f}"))
         previous_x = x
     return " ".join(commands)
 
@@ -2540,26 +2512,19 @@ def _trajectory_plot(
                         *[
                             ui.span(
                                 _TRAJECTORY_CATEGORY_LABELS[key],
-                                class_=(
-                                    f"trajectory-category-label is-{key}"
-                                ),
+                                class_=(f"trajectory-category-label is-{key}"),
                             )
                             for key in category_keys
                         ],
                         class_="trajectory-y-axis",
-                        style=(
-                            f"--trajectory-row-count: {len(category_keys)};"
-                        ),
+                        style=(f"--trajectory-row-count: {len(category_keys)};"),
                         aria_hidden="true",
                     ),
                     ui.div(
                         *[
                             ui.span(
                                 class_="known-drift-window",
-                                style=(
-                                    f"left: {left:.3f}%; "
-                                    f"width: {width:.3f}%;"
-                                ),
+                                style=(f"left: {left:.3f}%; width: {width:.3f}%;"),
                             )
                             for _span, left, width in reference_positions
                         ],
@@ -2586,9 +2551,7 @@ def _trajectory_plot(
                         *point_buttons,
                         *alert_annotations,
                         class_="trajectory-canvas",
-                        style=(
-                            f"--trajectory-row-count: {len(category_keys)};"
-                        ),
+                        style=(f"--trajectory-row-count: {len(category_keys)};"),
                     ),
                     class_="trajectory-chart",
                 ),
@@ -2658,9 +2621,7 @@ def _trajectory_plot(
             *run_plots,
             class_="trajectory-run-stack",
             role="group",
-            aria_label=(
-                "Three date-aligned Weekly Drift Reviewer Run plots"
-            ),
+            aria_label=("Three date-aligned Weekly Drift Reviewer Run plots"),
         ),
         ui.div(
             ui.span("Journal date", class_="trajectory-axis-label"),
@@ -2727,9 +2688,7 @@ def _trajectory_inspector(
     )
     unresolved = any(
         entry.t_index in pair
-        for pair in data.unresolved_pairs(
-            setup_key, selected_run, case.case_id
-        )
+        for pair in data.unresolved_pairs(setup_key, selected_run, case.case_id)
     )
     abstain_explanation = ABSTAIN_EXPLANATIONS.get(
         selected_decision.reason_code or "",
@@ -2810,9 +2769,7 @@ def _trajectory_inspector(
         ui.div(
             ui.div(
                 ui.p("WEEKLY DRIFT REVIEWER DECISION", class_="eyebrow"),
-                ui.h3(
-                    f"Run {selected_run} · {_verdict_label(selected_decision)}"
-                ),
+                ui.h3(f"Run {selected_run} · {_verdict_label(selected_decision)}"),
                 class_="inspector-decision-title",
             ),
             (
@@ -2860,18 +2817,7 @@ def _trajectory_inspector(
                 )
             ),
             ui.div(
-                *[
-                    _pill(
-                        "Drift alert · "
-                        + (
-                            "matched known Drift"
-                            if span.result == "hit"
-                            else "false Drift alert"
-                        ),
-                        "is-hit" if span.result == "hit" else "is-false",
-                    )
-                    for span in predictions
-                ],
+                *[_predicted_drift_pill(data, setup_key, span) for span in predictions],
                 _pill("Adjacent pair unresolved because of Abstain", "is-abstain")
                 if unresolved
                 else None,
@@ -2880,9 +2826,7 @@ def _trajectory_inspector(
             class_="inspector-decision",
         ),
         class_="trajectory-inspector",
-        aria_label=(
-            f"Journal Entry {entry.t_index} and Run {selected_run} evidence"
-        ),
+        aria_label=(f"Journal Entry {entry.t_index} and Run {selected_run} evidence"),
     )
 
 
@@ -2944,6 +2888,7 @@ def _trajectory_review(
 
 def _supporting_results(data: ReviewData, case: CaseRecord, setup_key: str) -> ui.Tag:
     references = data.reference_drifts[case.case_id]
+    accuracy_evaluated = data.setup_specs[setup_key].accuracy_evaluated
     tracks = [
         ui.div(
             ui.strong("Known Drift"),
@@ -2975,8 +2920,12 @@ def _supporting_results(data: ReviewData, case: CaseRecord, setup_key: str) -> u
                                 "matched known Drift"
                                 if row.result == "hit"
                                 else "false Drift alert"
-                            ),
-                            "is-hit" if row.result == "hit" else "is-false",
+                            )
+                            if accuracy_evaluated
+                            else _format_span(row.onset_t_index, row.end_t_index),
+                            ("is-hit" if row.result == "hit" else "is-false")
+                            if accuracy_evaluated
+                            else "",
                         )
                         for row in rows
                     ],
@@ -2985,6 +2934,17 @@ def _supporting_results(data: ReviewData, case: CaseRecord, setup_key: str) -> u
                 ),
                 class_="drift-track",
             )
+        )
+    if not accuracy_evaluated:
+        return ui.div(
+            ui.div(*tracks, class_="drift-map"),
+            ui.p(
+                "The prompt definition study measured detected Drifts. Shared "
+                "reference labels are shown for descriptive inspection; no "
+                "accuracy result was reported for this study.",
+                class_="supporting-note",
+            ),
+            class_="drawer-body supporting-results",
         )
     metric_rows = [
         data.case_metrics[(setup_key, run, case.case_id)] for run in (1, 2, 3)
@@ -3039,14 +2999,23 @@ def _app_shell() -> ui.Tag:
         ui.tags.header(
             ui.div(
                 ui.p(
-                    "READ-ONLY EVIDENCE INSPECTION · FROZEN DEVELOPMENT INPUTS",
+                    "Twinkl synthetic data inspection",
                     class_="eyebrow",
                 ),
-                ui.h1("Drift inspection app"),
+                ui.h1(
+                    ui.input_action_link(
+                        "go_home",
+                        "Drift inspection app",
+                        class_="app-home-link",
+                        title="Return to homepage",
+                        aria_label="Drift inspection app homepage",
+                        onclick=_RESET_VIEW_ONCLICK,
+                    )
+                ),
             ),
             ui.div(
                 _pill("Read only"),
-                _pill("No provider calls"),
+                _pill("Preserved experiments"),
                 class_="header-facts",
             ),
             class_="app-header",
@@ -3082,59 +3051,195 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
     data = _get_review_data()
     stage: reactive.Value[str] = reactive.value("filters")
     selected_case_id: reactive.Value[str | None] = reactive.value(None)
-    selected_drift: reactive.Value[str] = reactive.value("has")
+    selected_drift: reactive.Value[str] = reactive.value("all")
     selected_dimension: reactive.Value[str] = reactive.value("")
+    selected_prompt: reactive.Value[str] = reactive.value("v2")
+    selected_setup: reactive.Value[str] = reactive.value(CURRENT_SETUP_KEY)
+    selected_landing_run: reactive.Value[int] = reactive.value(1)
+    selected_period: reactive.Value[str] = reactive.value("full")
     selected_t_index: reactive.Value[int | None] = reactive.value(None)
     selected_run: reactive.Value[int] = reactive.value(1)
-    filter_error: reactive.Value[str | None] = reactive.value(None)
+    active_query: reactive.Value[ExplorationQuery | None] = reactive.value(None)
+    contributor_page: reactive.Value[int] = reactive.value(0)
 
-    def matching_cases() -> tuple[CaseRecord, ...]:
-        dimension = selected_dimension.get()
-        if not dimension:
-            return ()
-        return _matching_cases(data, selected_drift.get(), dimension)
+    def landing_query(
+        kind: str = "cases", dimension: str | None = None
+    ) -> ExplorationQuery:
+        prompt_version = str(input.report_prompt() or selected_prompt.get())
+        setup_key = str(input.landing_setup() or selected_setup.get())
+        if setup_key not in data.setups_for_prompt(prompt_version):
+            setup_key = PROMPT_DEFAULTS[prompt_version]
+        return ExplorationQuery(
+            kind=cast(QueryKind, kind),
+            setup_key=setup_key,
+            run=int(input.landing_run() or selected_landing_run.get()),
+            reference_status=cast(
+                ReferenceStatus, str(input.reference_drift_filter() or "all")
+            ),
+            dimension=str(input.core_value_filter() or "")
+            if dimension is None
+            else dimension,
+        )
+
+    def open_query(query: ExplorationQuery) -> None:
+        selected_setup.set(query.setup_key)
+        selected_prompt.set(data.setup_specs[query.setup_key].report_prompt_version)
+        selected_landing_run.set(query.run)
+        selected_drift.set(query.reference_status)
+        selected_dimension.set(query.dimension)
+        active_query.set(query)
+        contributor_page.set(0)
+        stage.set("contributors")
 
     @render.ui
     def screen() -> ui.Tag:
         current = stage.get()
+        with reactive.isolate():
+            prompt_version = selected_prompt.get()
+            setup_key = selected_setup.get()
+            landing_run = selected_landing_run.get()
+            period = selected_period.get()
         if current == "filters":
             return _filter_screen(
                 data,
                 selected_drift=selected_drift.get(),
                 selected_dimension=selected_dimension.get(),
-                error=filter_error.get(),
+                selected_prompt=prompt_version,
+                selected_setup=setup_key,
+                selected_run=landing_run,
             )
-        if current == "personas":
-            return _personas_screen(
-                data,
-                matching_cases(),
-                selected_drift.get(),
-                selected_dimension.get(),
+        if current == "contributors":
+            query = active_query.get()
+            req(query)
+            assert query is not None
+            return _contributor_screen(
+                data, query, explore(data, query), contributor_page.get()
             )
         case_id = selected_case_id.get()
         req(case_id)
         assert case_id is not None
-        return _detail_screen(data, data.cases[case_id])
+        return _detail_screen(data, data.cases[case_id], setup_key, period)
+
+    @render.ui
+    def prompt_explanation() -> ui.Tag:
+        req(stage.get() == "filters")
+        version = str(input.report_prompt() or "v2")
+        return _prompt_explanation(version if version in PROMPT_CHOICES else "v2")
+
+    @render.ui
+    def data_breakdowns() -> ui.Tag:
+        req(stage.get() == "filters")
+        return _data_breakdowns(data, landing_query())
+
+    @reactive.effect
+    @reactive.event(input.report_prompt)
+    def _sync_landing_setups() -> None:
+        req(stage.get() == "filters")
+        version = str(input.report_prompt() or "v2")
+        if version not in PROMPT_CHOICES:
+            return
+        choices = data.setups_for_prompt(version)
+        current = selected_setup.get()
+        ui.update_select(
+            "landing_setup",
+            choices={key: spec.label for key, spec in choices.items()},
+            selected=current if current in choices else PROMPT_DEFAULTS[version],
+        )
+        selected_prompt.set(version)
+        if current not in choices:
+            selected_setup.set(PROMPT_DEFAULTS[version])
+
+    @reactive.effect
+    @reactive.event(input.landing_setup)
+    def _remember_landing_setup() -> None:
+        req(stage.get() == "filters")
+        key = str(input.landing_setup() or "")
+        if key in data.setups_for_prompt(selected_prompt.get()):
+            selected_setup.set(key)
+
+    @reactive.effect
+    @reactive.event(input.landing_run)
+    def _remember_landing_run() -> None:
+        req(stage.get() == "filters")
+        run = int(input.landing_run() or 1)
+        if run in {1, 2, 3}:
+            selected_landing_run.set(run)
+
+    @reactive.effect
+    @reactive.event(input.setup)
+    def _remember_detail_setup() -> None:
+        req(stage.get() == "detail")
+        key = str(input.setup() or "")
+        if key in data.setups_for_prompt(selected_prompt.get()):
+            selected_setup.set(key)
 
     @reactive.effect
     @reactive.event(input.show_personas)
     def _show_personas() -> None:
-        dimension = str(input.core_value_filter() or "")
-        selected_drift.set(str(input.reference_drift_filter() or "has"))
-        if not dimension:
-            filter_error.set("Choose a Core Value to continue.")
+        open_query(landing_query())
+
+    @reactive.effect
+    @reactive.event(input.inspect_query)
+    def _open_contributors() -> None:
+        payload = input.inspect_query()
+        if not isinstance(payload, dict):
             return
-        selected_dimension.set(dimension)
-        filter_error.set(None)
-        stage.set("personas")
+        kind = str(payload.get("kind", "cases"))
+        if kind not in get_args(QueryKind):
+            return
+        dimension = payload.get("dimension")
+        if stage.get() == "filters":
+            query = landing_query(kind, dimension)
+        else:
+            current = active_query.get()
+            req(current)
+            assert current is not None
+            query = ExplorationQuery(
+                kind=cast(QueryKind, kind),
+                setup_key=current.setup_key,
+                run=current.run,
+                reference_status=current.reference_status,
+                dimension=current.dimension if dimension is None else str(dimension),
+            )
+        open_query(query)
+
+    @reactive.effect
+    @reactive.event(input.inspect_contributor)
+    def _inspect_contributor() -> None:
+        query = active_query.get()
+        payload = input.inspect_contributor()
+        req(query)
+        assert query is not None
+        if not isinstance(payload, dict):
+            return
+        rows = explore(data, query).rows
+        index = int(payload.get("index", -1))
+        if not 0 <= index < len(rows):
+            return
+        row = rows[index]
+        case_id = str(payload.get("case_id", row.case_id))
+        related = tuple(getattr(row, "related_case_ids", ())) or (row.case_id,)
+        if case_id not in related or case_id not in data.cases:
+            return
+        case = data.cases[case_id]
+        selected_case_id.set(case_id)
+        selected_setup.set(query.setup_key)
+        selected_landing_run.set(query.run)
+        selected_period.set(row.period or "full")
+        t_index, _ = _default_inspection_point(
+            data, case, query.setup_key, row.period or "full"
+        )
+        selected_t_index.set(row.t_index if row.t_index is not None else t_index)
+        selected_run.set(row.run if row.run is not None else query.run)
+        stage.set("detail")
 
     @reactive.effect
     @reactive.event(input.reference_drift_filter)
     def _sync_core_value_counts() -> None:
         req(stage.get() == "filters")
-        drift_status = str(input.reference_drift_filter() or "has")
+        status = str(input.reference_drift_filter() or "all")
         current = str(input.core_value_filter() or "")
-        choices = {"": "Choose a Core Value", **_dimension_choices(data, drift_status)}
+        choices = {"": "All Core Values", **_dimension_choices(data, status)}
         ui.update_select(
             "core_value_filter",
             choices=choices,
@@ -3142,32 +3247,37 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
         )
 
     @reactive.effect
-    @reactive.event(input.change_filters)
-    def _change_filters() -> None:
+    @reactive.event(input.change_filters, input.go_home)
+    def _return_home() -> None:
         selected_case_id.set(None)
         selected_t_index.set(None)
         stage.set("filters")
 
     @reactive.effect
     @reactive.event(input.back_to_personas)
-    def _back_to_personas() -> None:
+    def _back_to_contributors() -> None:
+        query = active_query.get()
+        req(query)
+        assert query is not None
         selected_case_id.set(None)
         selected_t_index.set(None)
-        stage.set("personas")
+        selected_setup.set(query.setup_key)
+        selected_landing_run.set(query.run)
+        stage.set("contributors")
 
-    for case_id in sorted(data.cases):
+    @reactive.effect
+    @reactive.event(input.previous_contributors)
+    def _previous_page() -> None:
+        contributor_page.set(max(0, contributor_page.get() - 1))
 
-        @reactive.effect
-        @reactive.event(getattr(input, _inspect_id(case_id)))
-        def _inspect(case_id: str = case_id) -> None:
-            selected_case_id.set(case_id)
-            case = data.cases[case_id]
-            t_index, run = _default_inspection_point(
-                data, case, CURRENT_SETUP_KEY, "full"
-            )
-            selected_t_index.set(t_index)
-            selected_run.set(run)
-            stage.set("detail")
+    @reactive.effect
+    @reactive.event(input.next_contributors)
+    def _next_page() -> None:
+        query = active_query.get()
+        req(query)
+        assert query is not None
+        last = max(0, (explore(data, query).count - 1) // 50)
+        contributor_page.set(min(last, contributor_page.get() + 1))
 
     @reactive.calc
     def selected_case() -> CaseRecord:
@@ -3177,73 +3287,81 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
         return data.cases[case_id]
 
     @reactive.effect
+    @reactive.event(input.period)
+    def _remember_detail_period() -> None:
+        req(stage.get() == "detail")
+        period = str(input.period() or "full")
+        if period in _period_choices(data, selected_case(), selected_setup.get()):
+            selected_period.set(period)
+
+    @reactive.effect
     def _sync_periods() -> None:
-        req(stage.get() == "detail", input.setup())
-        case = selected_case()
-        choices = _period_choices(data, case, str(input.setup()))
-        current = str(input.period() or "full")
-        ui.update_select(
-            "period",
-            choices=choices,
-            selected=(
-                current
-                if current in choices
-                else _default_period(data, case, str(input.setup()))
-            ),
-        )
+        req(stage.get() == "detail")
+        choices = _period_choices(data, selected_case(), selected_setup.get())
+        current = selected_period.get()
+        if current not in choices:
+            current = "full"
+            selected_period.set(current)
+        ui.update_select("period", choices=choices, selected=current)
 
     @reactive.effect
     @reactive.event(input.trajectory_point)
     def _select_trajectory_point() -> None:
-        raw = str(input.trajectory_point() or "")
-        parts = raw.split("|")
+        parts = str(input.trajectory_point() or "").split("|")
         if len(parts) != 2:
             return
         try:
             t_index, run = (int(value) for value in parts)
         except ValueError:
             return
-        case = selected_case()
-        if run not in {1, 2, 3} or t_index not in {
-            entry.t_index for entry in case.entries
+        if run in {1, 2, 3} and t_index in {
+            entry.t_index for entry in selected_case().entries
         }:
-            return
-        selected_t_index.set(t_index)
-        selected_run.set(run)
+            selected_t_index.set(t_index)
+            selected_run.set(run)
 
     @reactive.effect
     def _sync_trajectory_selection() -> None:
         req(stage.get() == "detail")
         case = selected_case()
-        setup_key = str(input.setup() or CURRENT_SETUP_KEY)
-        period = str(input.period() or "full")
-        visible_indices = {
-            entry.t_index for entry in _visible_entries(case, period)
-        }
-        if selected_t_index.get() in visible_indices:
-            return
-        t_index, run = _default_inspection_point(
-            data, case, setup_key, period
-        )
-        selected_t_index.set(t_index)
-        selected_run.set(run)
+        setup_key = selected_setup.get()
+        period = selected_period.get()
+        indices = {entry.t_index for entry in _visible_entries(case, period)}
+        if selected_t_index.get() not in indices:
+            t_index, _ = _default_inspection_point(data, case, setup_key, period)
+            selected_t_index.set(t_index)
 
     @render.ui
     def timeline() -> ui.Tag:
-        req(stage.get() == "detail", input.setup())
+        req(stage.get() == "detail")
         return _trajectory_review(
             data,
             selected_case(),
-            str(input.setup()),
-            str(input.period() or "full"),
+            selected_setup.get(),
+            selected_period.get(),
             selected_t_index.get(),
             selected_run.get(),
         )
 
     @render.ui
+    def detail_experiment() -> ui.Tag:
+        req(stage.get() == "detail")
+        return _setup_context(data, selected_setup.get())
+
+    @render.ui
+    def persona_scoreboard() -> ui.Tag:
+        req(stage.get() == "detail")
+        return _scoreboard(data, selected_case(), selected_setup.get())
+
+    @render.ui
+    def cutoff_evidence() -> ui.Tag:
+        req(stage.get() == "detail")
+        return _cutoff_evidence(data, selected_case(), selected_setup.get())
+
+    @render.ui
     def supporting_results() -> ui.Tag:
-        req(stage.get() == "detail", input.setup())
-        return _supporting_results(data, selected_case(), str(input.setup()))
+        req(stage.get() == "detail")
+        return _supporting_results(data, selected_case(), selected_setup.get())
 
 
 app = App(app_ui, _server, static_assets=STATIC_DIR)
