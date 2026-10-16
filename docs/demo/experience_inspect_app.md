@@ -18,9 +18,10 @@ sessions and restarts; offline replay does not use that budget. The [methodology
 discloses retained observations and the limits of AI assessment.
 
 North Star Moment implementation, evaluation, and integration are complete
-for the capstone (`twinkl-fz34` and `twinkl-fz34.8`). The final source-level
-walkthrough, reconciliation of affected capstone documentation, and report
-PDF/figure generation with visual verification belong to `twinkl-rklc.10`.
+for the capstone (`twinkl-fz34` and `twinkl-fz34.8`). The final professor
+walkthrough of all five saved Personas is complete (`twinkl-rklc.10`,
+user-confirmed 9 October 2026). The report guide records the
+[PDF and figure verification](../capstone_report/README.md).
 The integrated Coach Digest semantic concerns remain a separate follow-up in
 `twinkl-rklc.39`.
 
@@ -92,9 +93,8 @@ and recomputation replaces an affected week without duplicate results. This
 implementation satisfies the accepted capstone scope without a separate
 weekly-summary collection.
 
-Remaining feature and finalization work is Coach Digest feedback capture and
-the final professor walkthrough. The
-optional live rerun does not block the final walkthrough. The versioned
+Coach Digest feedback capture remains future work. The optional live rerun
+is Not done and closed outside capstone scope. The versioned
 React-Python boundary, JSON Schema, and
 canonical fixtures are implemented in
 [`src/demo/contracts.py`](../../src/demo/contracts.py) and
@@ -1182,9 +1182,8 @@ real trace events rather than reconstructing backend behavior in the browser.
 ## 15. Tracked Implementation Work
 
 The parent Beads epic is `twinkl-rklc`. The core P0 quality gate is complete.
-The current Beads record controls the remaining feature-freeze and finalization
-work. Each remaining feature must complete, move to future work, or leave the
-capstone scope before the professor walkthrough starts.
+The current Beads record controls implementation status. The final professor
+walkthrough is complete; Coach Digest feedback capture remains future work.
 
 | Beads issue | Priority | Scope | Blocked by |
 |---|---:|---|---|
@@ -1199,9 +1198,9 @@ capstone scope before the professor walkthrough starts.
 | `twinkl-rklc.9` | P0 | End-to-end demo quality gate | `.4`, `.5`, `.6`, `.7` |
 | `twinkl-rklc.26` | P0 | Minimum privacy controls for manual journaling (complete) | — |
 | `twinkl-rklc.27` | P0 | Current Coach Digest Validations and Coach Digest Evals results | — |
-| `twinkl-rklc.28` | P1 | Coach Digest feedback and perceived accuracy | — |
+| `twinkl-rklc.28` | P1 | Coach Digest feedback and perceived accuracy (future work) | — |
 | `twinkl-rklc.30` | P1 | Longitudinal Core Value history (Done; existing reviewed-week selection accepted) | — |
-| `twinkl-rklc.10` | P4 | Professor walkthrough and capstone evidence | `.28` (other dependencies complete) |
+| `twinkl-rklc.10` | P4 | Professor walkthrough and capstone evidence (complete) | — |
 
 The P0 quality gate intentionally does not depend on optional live reruns. A
 saved, deterministic replay is sufficient for the complete Persona

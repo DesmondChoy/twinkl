@@ -145,7 +145,8 @@ histories that have prior upstream research exposure, not human validation or
 an untouched final test. Appendix B describes saved full-history outcomes for
 five Personas and 27 weeks. Live North Star Moment review uses its separately
 pinned US$1 allowance across sessions and restarts. The final professor
-walkthrough evidence remains open.
+walkthrough of all five saved Personas is complete (`twinkl-rklc.10`,
+user-confirmed 9 October 2026); Coach Digest feedback remains future work.
 
 ## Submission Checks
 

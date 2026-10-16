@@ -1,119 +1,84 @@
 # Twinkl
 
-**Overview** | [Onboarding and Experience](docs/readme/onboarding_and_experience.md) | [Review Apps](docs/readme/review_apps.md) | [Research and Data](docs/readme/research_and_data.md) | [Status and Setup](docs/readme/status_and_setup.md)
+**[Open Onboarding, Experience and Inspect →](https://onboarding-production-1dd2.up.railway.app/)**
 
----
+Try the values assessment or select **Try the Demo → Nisha** to explore saved Journal Entries, Weekly Drift Detection, Coach Digest, and their Inspect traces.
 
-Twinkl is an "inner compass" that helps users compare daily behavior with
-confirmed Core Values. Unlike traditional journaling apps that summarize moods and
-topics, Twinkl starts with a confirmed Profile, reviews Journal Entries over
-time, and shows evidence when behavior conflicts with Core Values. The current
-POC keeps the Profile fixed. Profile evolution is future work.
+**[Open the Drift Inspection App →](https://twinkl-drift-review-production.up.railway.app/)**
 
-## Frontends
+Browse the synthetic corpus, reference labels, reviewer decisions, and detected or missed Drift. Select a count to inspect its source records.
 
-Twinkl has **two frontends**:
+Both apps are deployed on Railway. Saved demo replay and Drift inspection require no API key or paid model calls.
 
-- **[Onboarding, Experience and Inspect](https://onboarding-production-1dd2.up.railway.app/)** — try the values assessment, replay five synthetic Personas, or use manual Journal Entries and weekly reflections. Inspect traces the same session's inputs, decisions, and responses.
-- **[Drift Inspection App](https://twinkl-drift-review-production.up.railway.app/)** — explore the synthetic corpus and its Drift characteristics. Click counts to inspect the contributing Personas, Journal Entries, Core Value histories, and Drift spans across preserved prompt versions and Runs.
+Twinkl is an NUS-ISS capstone proof of concept for comparing daily behavior with a confirmed Profile and Core Values. The **[capstone report (PDF)](docs/capstone_report/capstone_report.pdf)** presents the research; this README points to its data and code. Evaluation uses synthetic data, project-team human annotation for label agreement, and AI review of downstream outputs. Benefit to real users remains untested.
 
-## Experience
+## Inspect the report's data and evidence
 
-- **Try the Demo** compares five saved synthetic Personas: Nisha, Noor, Lukas,
-  Wei Jun, and Meera. A selectable table shows their weekly Drift states, with
-  a short explanation and one action to start or continue the selected replay.
-  Each week reveals its Journal Entries, nudges, and responses in sequence,
-  with immediate display for reduced motion. Every week is directly selectable;
-  **Review Weekly Drift Detection** opens its saved result. The 27-week replay
-  uses recorded model responses and requires no provider key.
-- **Try Onboarding** begins the values assessment and manual Experience.
-  A confirmed Profile holds at most two Core Values. Manual Journal Entries
-  support contextual nudges, replies, skips, deletion, and closed-week review.
-  Failed Coach Digest responses can be retried against their original weekly
-  context, and earlier reviewed weeks remain accessible.
-- **Weekly Drift Detection** uses a Luna-low Weekly Drift Reviewer and the
-  deterministic rule that two consecutive Conflicts for one Core Value form
-  Drift. The **Coach Digest** explains the result with cited writing and one
-  reflective question. Its current prompt uses complete displayed text from
-  selected Journal Entries, with checks for exact quotations, response structure,
-  and a single generated question. These checks do not establish factual accuracy.
-- **North Star Moment** shows at most one exact quotation of a supportive
-  action beneath an eligible weekly reflection. Saved replay includes its
-  selections and no-card outcomes. Eligible demo weeks offer complete Coach
-  Digest responses generated with and without the selected source context;
-  other weeks explain why a comparison is unavailable. Manual Experience
-  preserves its original narrative and question. Live review uses a pinned
-  US$1 allowance shared across sessions and restarts; invalid or exhausted
-  accounting leaves the card unavailable.
-- **Inspect** exposes the same evidence, model provenance, decisions, and
-  trace events as Experience. It follows the visible Journal Entries or weekly
-  result, preserves that context across reloads, and links decisions to their
-  methods and implementation. Source links open Journal Entries in a dialog
-  that restores the reader's place when closed. The VIF Critic (Offline) is a
-  separate research component.
+| Report topic | Inspect the data | Read the evidence |
+|---|---|---|
+| **RQ1 · Synthetic data and label reliability** (§3.2, §4.1) | [Cleaned Journal Entries](logs/wrangled/), [Persona registry](logs/registry/personas.parquet), [LLM-Judge VIF Labels](logs/judge_labels/judge_labels.parquet), [human annotations](logs/annotations/) | [Schemas and queries](docs/pipeline/data_schema.md), [label-agreement study](docs/evals/judge_validation_summary.md) |
+| **RQ2 · VIF Critic (Offline)** (§3.3, §4.2) | [run_060 predictions and checkpoint](logs/experiments/artifacts/ordinal_v4_s2025_m22_20260711_162502/BalancedSoftmax/), [configuration and metrics](logs/experiments/runs/run_060_BalancedSoftmax.yaml) | [Experiment index](logs/experiments/index.md), [VIF Critic evaluation](docs/evals/value_modeling_eval.md) |
+| **RQ3 · Weekly Drift Detection** (§3.4, §4.3) | [Drift Inspection App](https://twinkl-drift-review-production.up.railway.app/), [saved model-comparison responses and metrics](logs/experiments/artifacts/twinkl_q6pt_luna_model_20260923/) | [Drift evaluation](docs/evals/drift_detection_eval.md), [matched model comparison](logs/experiments/reports/experiment_review_2026-09-23_twinkl_q6pt_luna_model.md) |
+| **RQ4 · Coach Digest and North Star Moment** (§3.5, §4.4) | [Saved Persona scenarios](frontend/onboarding/public/scenarios/), [Coach Digest responses](src/demo/coach_digest_responses.json), [North Star Moment records](src/demo/north_star_replay_records.json) | [Coach Digest evaluation scope and limits](docs/evals/explanation_quality_eval.md), [North Star Moment study](logs/experiments/reports/north_star_v4_run1_20260907/report.md) |
 
-> **Project status:** Twinkl is an academic capstone proof of concept. The
-> [capstone closeout decisions](docs/prd.md#capstone-closeout-decisions) mark
-> accepted work Done and excluded studies Not done. Longitudinal Core Value
-> history and the independent-provider evaluation workflow are Done. Human
-> calibration and the user pilot are closed without execution.
-> See [Known Gaps](docs/readme/status_and_setup.md#known-gaps) for remaining work
-> and [Implementation Status](docs/prd.md#implementation-status) for the evidence.
+The corpus contains **204 Personas and 1,651 Journal Entries**. Weekly Drift Detection uses the Weekly Drift Reviewer and a deterministic rule: two consecutive Conflicts for the same Core Value form Drift. The VIF Critic (Offline) remains a research component: `run_019`–`run_021` are the historical reference; `run_060` is the nominated checkpoint with repaired Security labels. The [research guide](docs/readme/research_and_data.md) explains these distinctions; report Appendix A preserves historical evidence snapshots.
 
 ## Run locally
 
-From the repository root, install the Python dependencies and start the API:
+From the repository root, with **Python 3.12+, uv, and Node.js 22 (22.12+)**:
 
 ```sh
-uv sync --group dev
+uv sync --locked --group dev
 source .venv/bin/activate
 uv run uvicorn src.demo.api:app --port 8000
 ```
 
-In a second terminal, start React:
+In a second terminal, start the frontend and open the URL printed by Vite:
 
 ```sh
-cd frontend/onboarding
-npm ci
-npm run dev
+npm --prefix frontend/onboarding ci
+npm --prefix frontend/onboarding run dev
 ```
 
-Open the URL printed by Vite. Onboarding and saved replay work without a
-provider key. Live Journal Entry processing and Weekly Drift Detection require
-`OPENAI_API_KEY`; use `--env-file .env` on the API command to load a local key.
-Desktop and laptop browsers are the primary assessment target; the app also
-supports narrow screens.
+Live Journal Entry processing and Weekly Drift Detection require `OPENAI_API_KEY` in a local `.env`; add `--env-file .env` to the API command. Saved replay works without it. See the [setup guide](docs/readme/status_and_setup.md) for provider settings.
 
-[Status and Setup](docs/readme/status_and_setup.md) covers Python and browser
-checks, provider configuration, saved Coach Digest completion and comparisons,
-scenario export, and experiment commands. The
-[Research and Data guide](docs/readme/research_and_data.md) describes the
-evaluation evidence.
+Launch the read-only Drift Inspection App:
 
-## Architecture
+```sh
+uv run shiny run --host 127.0.0.1 --port 8001 --no-dev-mode src/drift_review_app/app.py
+```
 
-See the [end-to-end architecture](docs/architecture/e2e_architecture.md) for the
-Experience, Weekly Drift Detection, North Star Moment, and offline research
-paths. [Status and Setup](docs/readme/status_and_setup.md) covers local launch,
-checks, scenario export, and experiment commands.
+Inspect saved VIF Critic test predictions without loading a model:
 
-## Documentation Guide
+```sh
+uv run python - <<'PY'
+import polars as pl
 
-- [`docs/prd.md`](docs/prd.md) — authoritative product intent and implementation status
-- [`docs/canonical_nouns.md`](docs/canonical_nouns.md) — required Twinkl product terms and evidence-language rules
-- [`docs/architecture/e2e_architecture.md`](docs/architecture/e2e_architecture.md) — current Experience, Weekly Drift Detection, and offline research paths
-- [`docs/demo/experience_inspect_app.md`](docs/demo/experience_inspect_app.md) and [`frontend/onboarding/README.md`](frontend/onboarding/README.md) — Experience and Inspect behavior, local launch, checks, and assessment deployment
-- [`docs/vif/01_concepts_and_roadmap.md`](docs/vif/01_concepts_and_roadmap.md), [`docs/vif/02_system_architecture.md`](docs/vif/02_system_architecture.md), [`docs/vif/03_model_training.md`](docs/vif/03_model_training.md), [`docs/vif/04_uncertainty_logic.md`](docs/vif/04_uncertainty_logic.md) — VIF design, runtime, training, and uncertainty logic
-- [`docs/pipeline/pipeline_specs.md`](docs/pipeline/pipeline_specs.md), [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md), [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md) — data generation, label datasets, and consensus diagnostics
-- [`docs/drift/trajectory_eda.md`](docs/drift/trajectory_eda.md) — historical Drift-definition analysis comparing five-pass LLM-Judge consensus with persisted labels
-- [`docs/evals/drift_v1_student_visible_target.md`](docs/evals/drift_v1_student_visible_target.md) — historical five-Drift development result and withheld former final-test score
-- [`docs/weekly/weekly_drift_detection.md`](docs/weekly/weekly_drift_detection.md) — Weekly Drift Detection and Coach Digest contracts and runtime CLI
-- [`docs/north_star/north_star_moment.md`](docs/north_star/north_star_moment.md) — North Star Moment eligibility, exact-quotation checks, Experience, and Inspect
-- [`docs/north_star/nsm_experiment_methodology.md`](docs/north_star/nsm_experiment_methodology.md) — full-history and retrieval comparison, cohort selection, reproducibility, and AI evaluation limits
-- [`docs/north_star/demo_coach_comparison.md`](docs/north_star/demo_coach_comparison.md) — saved Coach Digest comparison, prompts, generation, repair, and export commands
-- [`docs/evals/overview.md`](docs/evals/overview.md) and [`docs/evals/coach_narrative_test_and_eval_guide.md`](docs/evals/coach_narrative_test_and_eval_guide.md) — evaluation status, offline checks, paid Coach Digest Evals, and the Drift/control study
-- [`docs/demo/weekly_drift_review_app.md`](docs/demo/weekly_drift_review_app.md) — read-only Drift inspection of the frozen Weekly Drift Reviewer comparison Runs
-- [`docs/demo/review_app.md`](docs/demo/review_app.md) — deprecated Runtime Demo Review App for the VIF Critic (Offline) compatibility path
-- [Phase 2 Technical Paper](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit) — current Technical Paper (Google Doc); [`docs/capstone_report/capstone_report.md`](docs/capstone_report/capstone_report.md) is the audited local report, described in the [report guide](docs/capstone_report/README.md)
-- [`docs/capstone_presentation/README.md`](docs/capstone_presentation/README.md) — presentation outline, editable deck, and architecture diagrams
-- [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research
+path = "logs/experiments/artifacts/ordinal_v4_s2025_m22_20260711_162502/BalancedSoftmax/selected_test_outputs.parquet"
+outputs = pl.read_parquet(path)
+print(outputs.select("persona_id", "t_index", "dimension", "target", "predicted_class").head(10))
+PY
+```
+
+Verify frozen model-comparison inputs and run application checks:
+
+```sh
+uv run python -m scripts.experiments.replay_luna_comparison q6pt verify
+uv run python -m scripts.experiments.replay_luna_comparison gv3x verify
+uv run pytest
+npm --prefix frontend/onboarding test
+npm --prefix frontend/onboarding run build
+```
+
+These commands make no paid model calls. Frozen-study verification and the full Python suite require a Git clone with recorded history; a source ZIP or shallow clone is insufficient. Further commands: [VIF training](docs/vif/03_model_training.md) and [experiments and checks](docs/readme/status_and_setup.md).
+
+## Repository map
+
+| Path | Contents |
+|---|---|
+| [`frontend/onboarding/`](frontend/onboarding/) | React Onboarding, Experience, saved replay, and Inspect |
+| [`src/`](src/) | Python API (`demo/`), Drift inspector (`drift_review_app/`), Weekly Drift Detection and Coach Digest (`coach/`), VIF Critic (`vif/`), data workflows, and evaluations |
+| [`scripts/`](scripts/), [`config/`](config/), [`prompts/`](prompts/) | Experiment runners, data tools, study configurations, and prompt templates |
+| [`logs/`](logs/) | Synthetic data, labels, annotations, saved predictions, and experiment reports |
+| [`tests/`](tests/) | Python verification; frontend tests also live under `frontend/onboarding/` |
+| [`docs/`](docs/) | [Report](docs/capstone_report/), [architecture](docs/architecture/e2e_architecture.md), [product scope](docs/prd.md), and guides; `archive/` and `future_work/` identify historical and proposed work |
