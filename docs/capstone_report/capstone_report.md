@@ -1308,11 +1308,11 @@ The code that supports the findings of this study is available on the GitHub rep
 
 ## Author Contribution {#author-contribution .unnumbered}
 
-First author: Choy Yong Yi Desmond \[A0315402W\]
+First author: Choy Yong Yi Desmond
 
-Second author: Leong Kay Mei \[A0188702Y\]
+Second author: Leong Kay Mei
 
-Third author: Loke Yuen Ying, Jodie \[A0310555M\]
+Third author: Loke Yuen Ying, Jodie
 
 # References {#references .unnumbered}
 

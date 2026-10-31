@@ -1,6 +1,18 @@
 {
   "status": "passed",
   "validated_date": "2026-10-11",
+  "post_validation_changes": [
+    {
+      "date": "2026-10-31",
+      "issue": "twinkl-zdbc",
+      "change": "Removed student IDs from the reference Markdown, rendering title, and PDF. Author names and all other content are unchanged, and the PDF was redacted in place rather than re-rendered. The hashes elsewhere in this record identify the versions that were validated.",
+      "current_sha256": {
+        "docs/capstone_report/capstone_report.md": "b83d15bcc0bd3f26c6de458035e2eb1e7314c8526d4b8a8a8ae197842e19c2df",
+        "docs/capstone_report/capstone_report.pdf": "643c352c007311d3b358d3daa14df55102b6f644bad2a6b74ee8e073bea53991",
+        "docs/capstone_report/render-support/ieee-mirror-title.tex": "5279b5a8a60562f881c678d004bc138978f62cdc996b1dc7f1671f8336014075"
+      }
+    }
+  ],
   "scope": "Corrected edition of the selected 50-page IEEE report, with checklist findings, complete numbering/cross-reference corrections, and clickable academic citations applied. All academic citations jump to their exact numbered bibliography entry. This edition intentionally differs from the original PDF.",
   "source": {
     "path": "output/Twinkl__An_Inner_Compass_for_Longitudinal_Alignment_Between_Behaviour_and_Core_Values__1_/Twinkl IEEE Single Column.pdf",

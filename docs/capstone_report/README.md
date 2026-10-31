@@ -4,7 +4,8 @@ This directory contains supporting capstone report materials. The
 Phase 2 Technical Paper is also available in the [Google Doc](https://docs.google.com/document/d/1L_tMcrcF9yuJz3tMs0yCMw5NAAszKsA63nY64dsgbnM/edit), tab
 “Twinkl Report (Sept ’26)”. The reference Markdown and its PDF are corrected editions of the
 user-selected 50-page `Twinkl IEEE Single Column.pdf`
-with the checklist audit applied and validated on 11 October 2026. Submitted milestone files remain under
+with the checklist audit applied and validated on 11 October 2026. Student IDs were removed from these
+editions and the April proposal on 31 October 2026. Submitted milestone files remain under
 `docs/archive/capstone/`.
 
 ## Report Files
